@@ -22,18 +22,18 @@ export class RateOfInterestModel {
     constructor(_rateOfInterest: any)
     {
         this.id = _rateOfInterest.id || '';
-        this.conditionType = _rateOfInterest.conditionType || '';
+        this.conditionType = _rateOfInterest.conditionType || '201';
         this.validFromDate = _rateOfInterest.validFromDate || undefined;
         this.interestTypeIndicator = _rateOfInterest.interestTypeIndicator || '0';
         this.referenceInterestRate = _rateOfInterest.referenceInterestRate || '';
         this.refInterestSign = _rateOfInterest.refInterestSign || '';
-        this.interestRate = _rateOfInterest.interestRate || 0;
+        this.interestRate = _rateOfInterest.interestRate;
         this.calculationDate = _rateOfInterest.calculationDate || undefined;
         this.isCalculationDateOnMonthEnd = _rateOfInterest.isCalculationDateOnMonthEnd || false;
         this.dueDate = _rateOfInterest.dueDate || undefined;
         this.isDueDateOnMonthEnd = _rateOfInterest.isDueDateOnMonthEnd || false;
-        this.interestPaymentFrequency = _rateOfInterest.interestPaymentFrequency || 0;
-        this.paymentForm = _rateOfInterest.paymentForm || '';
-        this.interestCalculationMethod = _rateOfInterest.interestCalculationMethod || '';
+        this.interestPaymentFrequency = _rateOfInterest.interestPaymentFrequency;
+        this.paymentForm = _rateOfInterest.paymentForm || 'MN';
+        this.interestCalculationMethod = _rateOfInterest.interestCalculationMethod || '3';
     }
 }

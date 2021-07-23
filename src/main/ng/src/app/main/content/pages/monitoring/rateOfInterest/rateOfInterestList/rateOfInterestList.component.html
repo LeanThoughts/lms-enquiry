@@ -28,7 +28,7 @@
             <ng-container matColumnDef="validFromDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Valid From Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.rateOfInterest.validFromDate }}</p>
+                    <p class="text-truncate">{{ obj.rateOfInterest.validFromDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
             
@@ -63,14 +63,14 @@
             <ng-container matColumnDef="calculationDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Calc Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.rateOfInterest.calculationDate }}</p>
+                    <p class="text-truncate">{{ obj.rateOfInterest.calculationDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="dueDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Due Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.rateOfInterest.dueDate }}</p>
+                    <p class="text-truncate">{{ obj.rateOfInterest.dueDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
             

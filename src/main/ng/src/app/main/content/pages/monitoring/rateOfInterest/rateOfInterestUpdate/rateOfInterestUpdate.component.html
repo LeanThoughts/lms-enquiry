@@ -71,7 +71,7 @@
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
-                <mat-checkbox color="primary" formControlName="isCalculationDateOnMonthEnd" class="mt-16">
+                <mat-checkbox color="primary" formControlName="isCalculationDateOnMonthEnd" class="mt-16" (change)="setCalculationDate($event)">
                     Month End Ind. Calc Date
                 </mat-checkbox>
             </div>
@@ -81,7 +81,7 @@
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker> 
                 </mat-form-field>
-                <mat-checkbox color="primary" formControlName="isDueDateOnMonthEnd" class="mt-16">
+                <mat-checkbox color="primary" formControlName="isDueDateOnMonthEnd" class="mt-16" (change)="setDueDate($event)">
                     Month End Ind. Due Date
                 </mat-checkbox>
             </div>

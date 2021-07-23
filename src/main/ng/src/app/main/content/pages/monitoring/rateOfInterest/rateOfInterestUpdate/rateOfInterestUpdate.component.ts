@@ -1,12 +1,10 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatCheckboxChange } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { RateOfInterestModel } from 'app/main/content/model/rateOfInterest.model';
-import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
-import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 
 @Component({
     selector: 'fuse-rate-of-interest-update-dialog',
@@ -102,12 +100,19 @@ export class RateOfInterestUpdateDialogComponent {
     submit(): void {
         if (this.rateOfInterestUpdateForm.valid) {
             var rateOfInterest: RateOfInterestModel = new RateOfInterestModel(this.rateOfInterestUpdateForm.value);
-            var dt = new Date(rateOfInterest.validFromDate);
-            rateOfInterest.validFromDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));            
-            dt = new Date(rateOfInterest.calculationDate);
-            rateOfInterest.validFromDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));            
-            dt = new Date(rateOfInterest.dueDate);
-            rateOfInterest.validFromDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));            
+
+            const dt1 = new Date(rateOfInterest.validFromDate);
+            rateOfInterest.validFromDate = new Date(Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()));
+            rateOfInterest.validFromDate.setDate(rateOfInterest.validFromDate.getDate() + 1);
+
+            const dt2 = new Date(rateOfInterest.calculationDate);
+            rateOfInterest.calculationDate = new Date(Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()));
+            rateOfInterest.calculationDate.setDate(rateOfInterest.calculationDate.getDate() + 1);
+
+            const dt3 = new Date(rateOfInterest.dueDate);
+            rateOfInterest.dueDate = new Date(Date.UTC(dt3.getFullYear(), dt3.getMonth(), dt3.getDate()));
+            rateOfInterest.dueDate.setDate(rateOfInterest.dueDate.getDate() + 1);
+
             if (this._dialogData.operation === 'addRateOfInterest') {
                 this._loanMonitoringService.saveRateOfInterest(rateOfInterest, this._dialogData.loanApplicationId).subscribe(() => {
                     this._matSnackBar.open('Rate Of Interest details added successfully.', 'OK', { duration: 7000 });
@@ -133,6 +138,28 @@ export class RateOfInterestUpdateDialogComponent {
                     this._dialogRef.close({ 'refresh': true });
                 });            
             }
+        }
+    }
+
+    /**
+     * setCalculationDate()
+     */
+    setCalculationDate(event: MatCheckboxChange): void {
+        const validFromDate = new Date(this.rateOfInterestUpdateForm.controls.validFromDate.value);
+        if (event.checked && validFromDate.getFullYear() !== 1970) {
+            const d = new Date(validFromDate.getFullYear(), validFromDate.getMonth() + 1, 0);
+            this.rateOfInterestUpdateForm.controls.calculationDate.setValue(d);
+        }
+    }
+
+    /**
+     * setDueDate()
+     */
+    setDueDate(event: MatCheckboxChange): void {
+        const validFromDate = new Date(this.rateOfInterestUpdateForm.controls.validFromDate.value);
+        if (event.checked && validFromDate.getFullYear() !== 1970) {
+            const d = new Date(validFromDate.getFullYear(), validFromDate.getMonth() + 1, 0);
+            this.rateOfInterestUpdateForm.controls.dueDate.setValue(d);
         }
     }
 }

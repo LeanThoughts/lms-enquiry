@@ -7,10 +7,8 @@ import {
   MatPaginatorModule, MatToolbarModule, MatIconModule, MatSelectModule, MatProgressSpinnerModule, MatDatepickerModule,
   MatTabsModule,
   MAT_DATE_LOCALE,
-  DateAdapter,
   MatAutocompleteModule,
   MatCardModule,
-  MatDividerModule,
   MatRadioModule,
   MatCheckboxModule
 } from '@angular/material';
@@ -46,8 +44,6 @@ import { FinancialCovenantsListComponent } from './financialCovenants/financialC
 import { FinancialCovenantsUpdateDialogComponent } from './financialCovenants/financialCovenantsUpdate/financialCovenantsUpdate.component';
 import { PromoterDetailsUpdateDialogComponent } from './promoterDetails/promoterDetailsUpdate/promoterDetailsUpdate.component';
 import { PromoterDetailsItemListComponent } from './promoterDetails/promoterDetailsList/promoterDetailsList.component';
-import { MAT_DATE_FORMATS } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { OperatingParameterUpdateDialogComponent } from './operatingParameter/operatingParameterUpdate/operatingParameterUpdate.component';
 import { OperatingParameterListComponent } from './operatingParameter/operatingParameterList/operatingParameterList.component';
 import { OperatingParameterPLFUpdateDialogComponent } from './operatingParameterPLF/operatingParameterPLFUpdate/operatingParameterPLFUpdate.component';
@@ -67,18 +63,6 @@ const routes = [
         },
     }
 ];
-
-const MY_FORMATS = {
-    parse: {
-        dateInput: ['DD/MM/YYYY'],
-    },
-    display: {
-        dateInput: 'DD/MM/YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
-};
 
 @NgModule({
     imports: [
@@ -146,9 +130,7 @@ const MY_FORMATS = {
         {
             provide: MAT_DATE_LOCALE,
             useValue: 'en-in'
-        },
-        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-        {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
+        }
     ],
     exports: [
         LoanMonitoringComponent,
