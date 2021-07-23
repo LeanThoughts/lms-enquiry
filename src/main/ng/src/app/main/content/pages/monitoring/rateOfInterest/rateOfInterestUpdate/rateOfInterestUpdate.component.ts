@@ -103,15 +103,12 @@ export class RateOfInterestUpdateDialogComponent {
 
             const dt1 = new Date(rateOfInterest.validFromDate);
             rateOfInterest.validFromDate = new Date(Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()));
-            rateOfInterest.validFromDate.setDate(rateOfInterest.validFromDate.getDate() + 1);
 
             const dt2 = new Date(rateOfInterest.calculationDate);
             rateOfInterest.calculationDate = new Date(Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()));
-            rateOfInterest.calculationDate.setDate(rateOfInterest.calculationDate.getDate() + 1);
 
             const dt3 = new Date(rateOfInterest.dueDate);
             rateOfInterest.dueDate = new Date(Date.UTC(dt3.getFullYear(), dt3.getMonth(), dt3.getDate()));
-            rateOfInterest.dueDate.setDate(rateOfInterest.dueDate.getDate() + 1);
 
             if (this._dialogData.operation === 'addRateOfInterest') {
                 this._loanMonitoringService.saveRateOfInterest(rateOfInterest, this._dialogData.loanApplicationId).subscribe(() => {
