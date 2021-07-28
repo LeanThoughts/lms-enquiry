@@ -206,27 +206,26 @@ public class LoanApplicationContoller {
         loanContractExtensionResource.setLoanApplicationId(loanApplication.getId());
         loanContractExtensionResource.setLoanContractExtension(loanContractExtension);
 
-
-        System.out .println("-----------------------------------------------------");
-        System.out.println("Migrating Extension : " + loanContractExtensionResource.getLoanContractExtension().toString());
-        System.out.println("-----------------------------------------------------");
-
-
-        LoanContractExtension existingLoanContractExtension =
-                loanContractExtensionRepository.getLoanContractExtensionByLoanNumber(loanApplication.getLoanContractId());
-        if ( existingLoanContractExtension == null) {
-            loanContractExtensionService.save(loanContractExtensionResource, request.getUserPrincipal().getName());
-        }
-            else {
-            loanContractExtensionResource.getLoanContractExtension().setId(existingLoanContractExtension.getId());
-            loanContractExtensionResource.getLoanContractExtension().setLoanApplication(existingLoanContractExtension.getLoanApplication());
-            loanContractExtensionService.update(loanContractExtensionResource, request.getUserPrincipal().getName());
-        }
-        System.out .println("-----------------------------------------------------");
-        System.out.println("Finished Migrating Extension : ") ;
-        System.out.println("-----------------------------------------------------");
+if (loanContractExtensionResource.getLoanContractExtension() != null) {
+    System.out.println("-----------------------------------------------------");
+    System.out.println("Migrating Extension : " + loanContractExtensionResource.getLoanContractExtension().toString());
+    System.out.println("-----------------------------------------------------");
 
 
+    LoanContractExtension existingLoanContractExtension =
+            loanContractExtensionRepository.getLoanContractExtensionByLoanNumber(loanApplication.getLoanContractId());
+    if (existingLoanContractExtension == null) {
+        loanContractExtensionService.save(loanContractExtensionResource, request.getUserPrincipal().getName());
+    } else {
+        loanContractExtensionResource.getLoanContractExtension().setId(existingLoanContractExtension.getId());
+        loanContractExtensionResource.getLoanContractExtension().setLoanApplication(existingLoanContractExtension.getLoanApplication());
+        loanContractExtensionService.update(loanContractExtensionResource, request.getUserPrincipal().getName());
+    }
+    System.out.println("-----------------------------------------------------");
+    System.out.println("Finished Migrating Extension : ");
+    System.out.println("-----------------------------------------------------");
+
+}
 
         return ResponseEntity.ok(loanApplication);
     }

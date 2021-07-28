@@ -50,26 +50,15 @@ public class SAPInterestRateResource {
 
         detailedResource.setInterestRate(String.format("%.7f",rateOfInterest.getInterestRate()));
 
-
         if (rateOfInterest.getCalculationDate() !=null)
-            detailedResource.setValidFromDate(dataConversionUtility.convertDateToSAPFormat(rateOfInterest.getCalculationDate()));
+            detailedResource.setCalculationDate(dataConversionUtility.convertDateToSAPFormat(rateOfInterest.getCalculationDate()));
         else
-            detailedResource.setValidFromDate(null);
+            detailedResource.setCalculationDate(null);
 
         if (rateOfInterest.getIsCalculationDateOnMonthEnd() == true)
             detailedResource.setIsDueDateOnMonthEnd('X');
         else
             detailedResource.setIsDueDateOnMonthEnd(' ');
-
-        if (rateOfInterest.getValidFromDate() !=null)
-            detailedResource.setValidFromDate(dataConversionUtility.convertDateToSAPFormat(rateOfInterest.getValidFromDate()));
-        else
-            detailedResource.setValidFromDate(null);
-
-        if (rateOfInterest.getCalculationDate() !=null)
-            detailedResource.setCalculationDate(dataConversionUtility.convertDateToSAPFormat(rateOfInterest.getCalculationDate()));
-        else
-            detailedResource.setValidFromDate(null);
 
         if (rateOfInterest.getDueDate() !=null)
             detailedResource.setDueDate(dataConversionUtility.convertDateToSAPFormat(rateOfInterest.getDueDate()));
@@ -82,7 +71,7 @@ public class SAPInterestRateResource {
             detailedResource.setIsDueDateOnMonthEnd(' ');
 
         if (rateOfInterest.getIsCalculationDateOnMonthEnd() == true)
-            detailedResource.setIsCalculationDateOnMonthEnd('X');
+             detailedResource.setIsCalculationDateOnMonthEnd('X');
         else
             detailedResource.setIsDueDateOnMonthEnd(' ');
 

@@ -41,9 +41,9 @@ public class InterestRateConfigInitializer implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        ReferenceInterestRate referenceInterestRate = referenceInterestRateRepository.findByCode("PFS_BR");
+        ReferenceInterestRate referenceInterestRate = referenceInterestRateRepository.findByCode("PFS RATE");
         if (referenceInterestRate == null) {
-            referenceInterestRate = new ReferenceInterestRate(null, "PFS_BR", "PFS Base Rate");
+            referenceInterestRate = new ReferenceInterestRate(null, "PFS RATE", "PFS Base Rate");
             referenceInterestRateRepository.save(referenceInterestRate);
         }
         referenceInterestRate = referenceInterestRateRepository.findByCode("AXIS RATE");
@@ -158,7 +158,7 @@ public class InterestRateConfigInitializer implements CommandLineRunner {
                 }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("1");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 1","360E/360");
+            interestCalculationMethod = new InterestCalculationMethod(null,"1","360E/360");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("B");
@@ -168,108 +168,108 @@ public class InterestRateConfigInitializer implements CommandLineRunner {
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("L");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," L","360/360 (German)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"L","360/360 (German)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("F");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," F","360/360 (ISDA)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"F","360/360 (ISDA)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("H");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," H","360/365 (ISDA)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"H","360/365 (ISDA)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("7");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 7","360/360");
+            interestCalculationMethod = new InterestCalculationMethod(null,"7","360/360");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("2");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 2","act/360");
+            interestCalculationMethod = new InterestCalculationMethod(null,"2","act/360");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("E");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," E","act/364");
+            interestCalculationMethod = new InterestCalculationMethod(null,"E","act/364");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("3");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 3","act/365");
+            interestCalculationMethod = new InterestCalculationMethod(null,"3","act/365");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("4");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 4","act/366");
+            interestCalculationMethod = new InterestCalculationMethod(null,"4","act/366");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("M");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," M","act/365P");
+            interestCalculationMethod = new InterestCalculationMethod(null,"M","act/365P");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("5");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 5","act/actP (ICMA)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"5","act/actP (ICMA)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
 
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("6");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 6","act/actY (ISDA)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"6","act/actY (ISDA)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("G");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," G","act/actE (AFB)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"G","act/actE (AFB)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("Q");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," Q","act/actEP (AFB)");
+            interestCalculationMethod = new InterestCalculationMethod(null,"Q","act/actEP (AFB)");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("N");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," N","act/365L");
+            interestCalculationMethod = new InterestCalculationMethod(null,"N","act/365L");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("A");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," A","actW/252");
+            interestCalculationMethod = new InterestCalculationMethod(null,"A","actW/252");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("D");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," D","365/360");
+            interestCalculationMethod = new InterestCalculationMethod(null,"D","365/360");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("C");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," C","365/365");
+            interestCalculationMethod = new InterestCalculationMethod(null,"C","365/365");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("I");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," I","360E/actY");
+            interestCalculationMethod = new InterestCalculationMethod(null,"I","360E/actY");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("8");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 8","30.42E/360");
+            interestCalculationMethod = new InterestCalculationMethod(null,"8","30.42E/360");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("9");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," 9","*365.25/360");
+            interestCalculationMethod = new InterestCalculationMethod(null,"9","*365.25/360");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
         interestCalculationMethod = interestCalculationMethodRepository.findByCode("P");
         if (interestCalculationMethod == null) {
-            interestCalculationMethod = new InterestCalculationMethod(null," P","1/1");
+            interestCalculationMethod = new InterestCalculationMethod(null,"P","1/1");
             interestCalculationMethodRepository.save(interestCalculationMethod);
         }
 

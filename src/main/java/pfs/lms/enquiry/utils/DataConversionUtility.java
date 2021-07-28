@@ -2,7 +2,7 @@ package pfs.lms.enquiry.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -11,14 +11,26 @@ import java.util.Date;
 public class DataConversionUtility {
 
 
-    public  String convertDateToSAPFormat (LocalDate date) throws ParseException {
+    public  String convertDateToSAPFormat (LocalDate localDate) throws ParseException {
 
         String dateOut  = new String();
 
+        Long epochSeconds = localDate.atTime(LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toEpochSecond();
 
-        if (date != null) {
-            dateOut =date.toString();
-            dateOut = dateOut + " 01:01:01";
+        // create a LocalTime object
+        LocalTime time
+                = LocalTime.parse("20:00:00");
+        // create ZoneId
+        ZoneOffset zone = ZoneOffset.of("Z");
+
+
+        dateOut = "\\/Date(" + epochSeconds.toString() + ")\\/";
+        //return dateOut;
+
+
+        if (localDate != null) {
+            dateOut = localDate.toString();
+            dateOut = dateOut + " 18:01:01";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date datedParsed = sdf.parse(dateOut);
             long millis = datedParsed.getTime();
