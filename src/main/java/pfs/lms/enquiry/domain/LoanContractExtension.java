@@ -55,4 +55,18 @@ public class LoanContractExtension extends AggregateRoot<LoanContractExtension> 
 //  Applicable ROI as on Date
     private Double applicableROI;
 
+//    Interest Period Start Date
+    private LocalDate interestPeriodStartDate;
+//    Interest Period Unit
+    private Integer interestPeriodUnit;
+//    Interest Period Frequency
+    private Integer interestPeriodFrequency;
+//    Next Interest Reset Date
+    private LocalDate nextInterestResetDate;
+//    Interest Rate Pre Sanc
+    private Double interestRatePreSanction;
+//    Interest Rate Post Sanc
+    private Double interestRatePostSanction;
+
+
 }

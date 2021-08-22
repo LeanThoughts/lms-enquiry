@@ -53,18 +53,17 @@ public class LoanApplicationContoller {
     private final ILoanContractExtensionService loanContractExtensionService;
 
     @GetMapping("/loanApplications")
-    public ResponseEntity get(@RequestParam(value = "status",required = false) Integer status, HttpServletRequest request,
+    public ResponseEntity get(@RequestParam(value = "status", required = false) Integer status, HttpServletRequest request,
                               @PageableDefault(sort = "UNSORTED", size = 9999, direction = Sort.Direction.DESC) Pageable pageable)
-                                                     //Pageable pageable)
+    //Pageable pageable)
     {
         List<LoanApplication> loanApplications = new ArrayList<LoanApplication>();
 
 
         User user;
-        if(request.getUserPrincipal().getName().equals("admin")) {
+        if (request.getUserPrincipal().getName().equals("admin")) {
             user = userRepository.findByEmail("admin@gmail.com");
-        }
-        else {
+        } else {
             user = userRepository.findByEmail(request.getUserPrincipal().getName());
         }
 
@@ -78,8 +77,7 @@ public class LoanApplicationContoller {
                 loanApplications = loanApplicationRepository.findAll(pageable).getContent();
             else
                 loanApplications = loanApplicationRepository.findByFunctionalStatus(status, pageable).getContent();
-        }
-        else {
+        } else {
             Partner partner = partnerRepository.findByEmail(user.getEmail());
             if (partner != null)
                 loanApplications = loanApplicationRepository.findByLoanApplicant(partner.getId(), pageable).getContent();
@@ -109,10 +107,10 @@ public class LoanApplicationContoller {
                 //System.out.println(" Loan Application Applicant:" + loanApplication.getLoanApplicant());
 
                 if (loanApplication.getLoanApplicant() != null &&
-                            ( loanApplication.getPostedInSAP() == null ||
-                                    loanApplication.getPostedInSAP() == 0 ||
-                                        loanApplication.getPostedInSAP() == 2) ) {
-                   // System.out.println(" Loan Applicant is not NULL:" + partnerRepository.findById(loanApplication.getLoanApplicant()));
+                        (loanApplication.getPostedInSAP() == null ||
+                                loanApplication.getPostedInSAP() == 0 ||
+                                loanApplication.getPostedInSAP() == 2)) {
+                    // System.out.println(" Loan Applicant is not NULL:" + partnerRepository.findById(loanApplication.getLoanApplicant()));
 
                     Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
                     resources.add(new LoanApplicationResource(loanApplication, partner));
@@ -146,13 +144,13 @@ public class LoanApplicationContoller {
         }
 
         // Set the project location state name
-        for ( LoanApplicationResource loanApplicationResource : resources) {
+        for (LoanApplicationResource loanApplicationResource : resources) {
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
                     loanApplicationResource.getLoanApplication().setProjectLocationState(
                             stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
                 }
-            }
+        }
 
 
         return ResponseEntity.ok(resources);
@@ -187,7 +185,7 @@ public class LoanApplicationContoller {
         System.out.println("LOAN APPLICATION : " + resource.getLoanApplication());
         System.out.println("PARTNER : " + resource.getPartner());
 
-        System.out .println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
         System.out.println("PARTNER : " + resource.getPartner());
         System.out.println("-----------------------------------------------------");
 
@@ -206,33 +204,33 @@ public class LoanApplicationContoller {
         loanContractExtensionResource.setLoanApplicationId(loanApplication.getId());
         loanContractExtensionResource.setLoanContractExtension(loanContractExtension);
 
-if (loanContractExtensionResource.getLoanContractExtension() != null) {
-    System.out.println("-----------------------------------------------------");
-    System.out.println("Migrating Extension : " + loanContractExtensionResource.getLoanContractExtension().toString());
-    System.out.println("-----------------------------------------------------");
+        if (loanContractExtensionResource.getLoanContractExtension() != null) {
+            System.out.println("-----------------------------------------------------");
+            System.out.println("Migrating Extension : " + loanContractExtensionResource.getLoanContractExtension().toString());
+            System.out.println("-----------------------------------------------------");
 
 
-    LoanContractExtension existingLoanContractExtension =
-            loanContractExtensionRepository.getLoanContractExtensionByLoanNumber(loanApplication.getLoanContractId());
-    if (existingLoanContractExtension == null) {
-        loanContractExtensionService.save(loanContractExtensionResource, request.getUserPrincipal().getName());
-    } else {
-        loanContractExtensionResource.getLoanContractExtension().setId(existingLoanContractExtension.getId());
-        loanContractExtensionResource.getLoanContractExtension().setLoanApplication(existingLoanContractExtension.getLoanApplication());
-        loanContractExtensionService.update(loanContractExtensionResource, request.getUserPrincipal().getName());
-    }
-    System.out.println("-----------------------------------------------------");
-    System.out.println("Finished Migrating Extension : ");
-    System.out.println("-----------------------------------------------------");
+            LoanContractExtension existingLoanContractExtension =
+                    loanContractExtensionRepository.getLoanContractExtensionByLoanNumber(loanApplication.getLoanContractId());
+            if (existingLoanContractExtension == null) {
+                loanContractExtensionService.save(loanContractExtensionResource, request.getUserPrincipal().getName());
+            } else {
+                loanContractExtensionResource.getLoanContractExtension().setId(existingLoanContractExtension.getId());
+                loanContractExtensionResource.getLoanContractExtension().setLoanApplication(existingLoanContractExtension.getLoanApplication());
+                loanContractExtensionService.update(loanContractExtensionResource, request.getUserPrincipal().getName());
+            }
+            System.out.println("-----------------------------------------------------");
+            System.out.println("Finished Migrating Extension : ");
+            System.out.println("-----------------------------------------------------");
 
-}
+        }
 
         return ResponseEntity.ok(loanApplication);
     }
 
 
     @PutMapping("/loanApplications/{id}")
-    public ResponseEntity update(@PathVariable("id") String loanApplicationId,@RequestBody LoanApplicationResource resource, HttpServletRequest request) {
+    public ResponseEntity update(@PathVariable("id") String loanApplicationId, @RequestBody LoanApplicationResource resource, HttpServletRequest request) {
 
 
 //        //Set Technical Status to 2 - "Changed"
@@ -274,8 +272,8 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
         LoanApplication loanApplication = loanApplicationService.save(resource, httpServletRequest.getUserPrincipal().getName());
 
 
-         loanApplication = loanApplicationRepository.getOne(resource.getLoanApplication().getId());
-         Partner partner = partnerRepository.findById(resource.getPartner().getId()).get();
+        loanApplication = loanApplicationRepository.getOne(resource.getLoanApplication().getId());
+        Partner partner = partnerRepository.findById(resource.getPartner().getId()).get();
 //        BeanUtils.copyProperties(resource.getLoanApplication(), loanApplication,"id", "enquiryNo");
 //        BeanUtils.copyProperties(resource.getPartner(), partner,"id");
 //        resource = engine.onLoanApplicationApproved(LoanApplication.LoanApplicationApproved.of(loanApplication));
@@ -296,7 +294,7 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
                                  HttpServletRequest request) {
         Partner partner = partnerRepository.findByUserName(request.getUserPrincipal().getName());
         loanApplication.setTechnicalStatus(6);
-        loanApplication.reject(enquiryRejectReason.getRejectionCategory(),enquiryRejectReason.getRejectReason(), partner);
+        loanApplication.reject(enquiryRejectReason.getRejectionCategory(), enquiryRejectReason.getRejectReason(), partner);
         loanApplication = loanApplicationRepository.save(loanApplication);
 
         loanNotificationService.sendRejectNotification(
@@ -321,8 +319,6 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
 
         return ResponseEntity.ok(loanApplication);
     }
-
-
 
 
     // Get Loan Application by EnquiryId - Cross Application Call
@@ -376,15 +372,14 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
             loanApplicationResource.setLoanApplication(loanApplication);
             loanApplicationResource.setPartner(partner);
             return ResponseEntity.ok(loanApplicationResource);
-        }
-        else {
+        } else {
             return (ResponseEntity) ResponseEntity.notFound();
         }
     }
 
     // Fetch Loan Application by Loan Number - Cross Application Call
     @RequestMapping(value = "/loanApplicationByLoanNumber", method = RequestMethod.GET,
-                                     produces = "application/json; charset=utf-8")
+            produces = "application/json; charset=utf-8")
     public ResponseEntity fetchEnquiryByLoanNumber(@RequestParam("loanNumber") String loanNumber, HttpServletRequest request) {
 
         LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
@@ -404,11 +399,10 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
 
     @PutMapping("/loanApplications/search")
     public ResponseEntity search(@RequestBody SearchResource resource, HttpServletRequest request,
-                                 @PageableDefault(sort = "loanContractId", size = 9999, direction = Sort.Direction.DESC) Pageable pageable)
-    {
+                                 @PageableDefault(sort = "loanContractId", size = 9999, direction = Sort.Direction.DESC) Pageable pageable) {
         //List<LoanApplication> loanApplications = new ArrayList<>(loanApplicationRepository.findAll(pageable).getContent());
         //System.out.println("Search Loans............: search resource: " + resource);
-        List<LoanApplication> loanApplications = new ArrayList<>(loanApplicationService.searchLoans(request,pageable));
+        List<LoanApplication> loanApplications = new ArrayList<>(loanApplicationService.searchLoans(request, pageable));
 
         //System.out.println("Loans Search Intermin Results: " + loanApplications );
 
@@ -420,7 +414,7 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
 //            }
 //        }
 
-        if (resource.getEnquiryDateTo() == null){
+        if (resource.getEnquiryDateTo() == null) {
             if (resource.getEnquiryDateFrom() != null) {
                 resource.setEnquiryDateTo(resource.getEnquiryDateFrom().plusDays(1));
 
@@ -456,13 +450,11 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
                     && !loanApplication.getLoanContractId().isEmpty())
                     .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberFrom() + "")).collect(Collectors.toList());
-        }
-        else if (resource.getLoanNumberFrom() == null && resource.getLoanNumberTo() != null) {
+        } else if (resource.getLoanNumberFrom() == null && resource.getLoanNumberTo() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
                     && !loanApplication.getLoanContractId().isEmpty())
                     .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberTo() + "")).collect(Collectors.toList());
-        }
-        else if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() != null) {
+        } else if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) >=
                     resource.getLoanNumberFrom()).collect(Collectors.toList());
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) <=
@@ -502,14 +494,13 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
                     .filter(
                             loanApplication ->
                                     loanApplication.getTechnicalStatus()
-                                            == Integer.parseInt(resource.getTechnicalStatus() ))
+                                            == Integer.parseInt(resource.getTechnicalStatus()))
                     .collect(Collectors.toList());
 
         User user;
-        if(request.getUserPrincipal().getName().equals("admin")) {
+        if (request.getUserPrincipal().getName().equals("admin")) {
             user = userRepository.findByEmail("admin@gmail.com");
-        }
-        else {
+        } else {
             user = userRepository.findByEmail(request.getUserPrincipal().getName());
         }
 
@@ -524,7 +515,7 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
         List<LoanApplicationResource> resources = new ArrayList<>(0);
 
 
-       // System.out.println("-------------- Loans Applications Count :" + loanApplications.size());
+        // System.out.println("-------------- Loans Applications Count :" + loanApplications.size());
 
         loanApplications.forEach(loanApplication -> {
             //System.out.println("Loan Contract Id     : " + loanApplication.getLoanContractId());
@@ -563,15 +554,15 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
         });
 
         // Set the project location state name
-        for ( LoanApplicationResource loanApplicationResource : resources) {
+        for (LoanApplicationResource loanApplicationResource : resources) {
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
                 System.out.println("Loan Number : " + loanApplicationResource.getLoanApplication().getLoanContractId());
-                System.out.println("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());
+            System.out.println("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());
 
             if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
-                    loanApplicationResource.getLoanApplication().setProjectLocationState(
-                            stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
-                }
+                loanApplicationResource.getLoanApplication().setProjectLocationState(
+                        stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
+            }
 
         }
 
@@ -583,9 +574,8 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
 
 
     @PutMapping("/loanApplications/{id}/updateStatus")
-    public ResponseEntity approve(@PathVariable("id") Long enquiryNo, @RequestParam("status")Integer status,
-                                  @RequestParam("amount")Double amount) throws Exception
-    {
+    public ResponseEntity approve(@PathVariable("id") Long enquiryNo, @RequestParam("status") Integer status,
+                                  @RequestParam("amount") Double amount) throws Exception {
         EnquiryNo enqNo = new EnquiryNo();
         enqNo.setId(enquiryNo);
         LoanApplication loanApplication = loanApplicationRepository.findByEnquiryNo(enqNo);
@@ -596,22 +586,19 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
 
     @PutMapping("/loanApplications/loanContracts/search")
     public ResponseEntity search(@RequestBody LoanContractSearchResource resource, HttpServletRequest request,
-                                 @PageableDefault(sort = "loanContractId", size = 9999, direction = Sort.Direction.DESC) Pageable pageable)
-    {
-        List<LoanApplication> loanApplications = new ArrayList<>(loanApplicationService.searchLoans(request,pageable));
+                                 @PageableDefault(sort = "loanContractId", size = 9999, direction = Sort.Direction.DESC) Pageable pageable) {
+        List<LoanApplication> loanApplications = new ArrayList<>(loanApplicationService.searchLoans(request, pageable));
 
 
         if (resource.getBorrowerCodeFrom() != null && resource.getBorrowerCodeTo() == null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getbusPartnerNumber() != null
                     && !loanApplication.getbusPartnerNumber().isEmpty())
                     .filter(loanApplication -> loanApplication.getbusPartnerNumber().contains(resource.getBorrowerCodeFrom() + "")).collect(Collectors.toList());
-        }
-        else if (resource.getBorrowerCodeFrom() == null && resource.getBorrowerCodeTo() != null) {
+        } else if (resource.getBorrowerCodeFrom() == null && resource.getBorrowerCodeTo() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getbusPartnerNumber() != null
                     && !loanApplication.getbusPartnerNumber().isEmpty())
                     .filter(loanApplication -> loanApplication.getbusPartnerNumber().contains(resource.getBorrowerCodeTo() + "")).collect(Collectors.toList());
-        }
-        else if (resource.getBorrowerCodeFrom() != null && resource.getBorrowerCodeTo() != null) {
+        } else if (resource.getBorrowerCodeFrom() != null && resource.getBorrowerCodeTo() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getbusPartnerNumber() != null && !loanApplication.getbusPartnerNumber().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getbusPartnerNumber()) >=
                     resource.getBorrowerCodeFrom()).collect(Collectors.toList());
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getbusPartnerNumber() != null && !loanApplication.getbusPartnerNumber().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getbusPartnerNumber()) <=
@@ -622,13 +609,11 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
                     && !loanApplication.getLoanContractId().isEmpty())
                     .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberFrom() + "")).collect(Collectors.toList());
-        }
-        else if (resource.getLoanNumberFrom() == null && resource.getLoanNumberTo() != null) {
+        } else if (resource.getLoanNumberFrom() == null && resource.getLoanNumberTo() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
                     && !loanApplication.getLoanContractId().isEmpty())
                     .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberTo() + "")).collect(Collectors.toList());
-        }
-        else if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() != null) {
+        } else if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() != null) {
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) >=
                     resource.getLoanNumberFrom()).collect(Collectors.toList());
             loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) <=
@@ -663,20 +648,19 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
                     .filter(
                             loanApplication ->
                                     loanApplication.getTechnicalStatus()
-                                            == Integer.parseInt(resource.getTechnicalStatus() ))
+                                            == Integer.parseInt(resource.getTechnicalStatus()))
                     .collect(Collectors.toList());
 
         if (resource.getAccountStatus() != null)
             loanApplications = loanApplications.stream().filter(loanApplication ->
                     loanApplication.getFunctionalStatus() ==
-                    Integer.parseInt(resource.getAccountStatus())).
+                            Integer.parseInt(resource.getAccountStatus())).
                     collect(Collectors.toList());
 
         User user;
-        if(request.getUserPrincipal().getName().equals("admin")) {
+        if (request.getUserPrincipal().getName().equals("admin")) {
             user = userRepository.findByEmail("admin@gmail.com");
-        }
-        else {
+        } else {
             user = userRepository.findByEmail(request.getUserPrincipal().getName());
         }
 
@@ -722,7 +706,7 @@ if (loanContractExtensionResource.getLoanContractExtension() != null) {
             }
         });
 
-        for ( LoanApplicationResource loanApplicationResource : resources) {
+        for (LoanApplicationResource loanApplicationResource : resources) {
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
                     loanApplicationResource.getLoanApplication().setProjectLocationState(
