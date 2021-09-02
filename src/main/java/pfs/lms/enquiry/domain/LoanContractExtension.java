@@ -39,6 +39,7 @@ public class LoanContractExtension extends AggregateRoot<LoanContractExtension> 
     private String disbursementStatus;
 
     private LocalDate scheduledCOD;
+    private LocalDate actualCOD;
 
 //  Percentage rate for condition items
     private Double baseRate;
