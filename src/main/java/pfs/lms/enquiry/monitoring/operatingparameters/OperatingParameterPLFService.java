@@ -72,6 +72,8 @@ public class OperatingParameterPLFService implements IOperatingParameterPLFServi
         existingOperatingParameterPLF.setSerialNumber(resource.getOperatingParameterPLF().getSerialNumber());
         existingOperatingParameterPLF.setYear(resource.getOperatingParameterPLF().getYear());
         existingOperatingParameterPLF.setRemarks(resource.getOperatingParameterPLF().getRemarks());
+        existingOperatingParameterPLF.setDesignPlfCuf(resource.getOperatingParameterPLF().getDesignPlfCuf());
+        existingOperatingParameterPLF.setMiUnGenerated(resource.getOperatingParameterPLF().getMiUnGenerated());
         existingOperatingParameterPLF.setActualYearlyAveragePlfCuf(resource.getOperatingParameterPLF().getActualYearlyAveragePlfCuf());
         existingOperatingParameterPLF = operatingParameterPLFRepository.save(existingOperatingParameterPLF);
 

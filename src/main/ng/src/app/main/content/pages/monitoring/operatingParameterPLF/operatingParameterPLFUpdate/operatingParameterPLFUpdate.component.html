@@ -13,14 +13,23 @@
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Serial Number" formControlName="serialNumber" readonly>          
                 </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Year" formControlName="year" maxlength="4">          
+                </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Year" formControlName="year" maxlength="4">          
+                    <input matInput placeholder="Design PLF CUF" formControlName="designPlfCuf" maxlength="50">          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Actual Yearly Average (PLF CUF)" formControlName="actualYearlyAveragePlfCuf" maxlength="10">          
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="MU Generated" formControlName="miUnGenerated" maxlength="10">
                 </mat-form-field>
             </div>
 

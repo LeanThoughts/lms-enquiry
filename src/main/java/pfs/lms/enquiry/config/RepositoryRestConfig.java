@@ -7,10 +7,6 @@ import pfs.lms.enquiry.domain.EnquiryNo;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 
-/**
- * @author : Fahad Fazil
- * @since : 16/01/18
- */
 @Configuration
 public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
 

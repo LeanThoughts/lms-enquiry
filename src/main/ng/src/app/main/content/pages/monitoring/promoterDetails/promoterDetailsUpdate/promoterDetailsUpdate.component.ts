@@ -67,6 +67,11 @@ export class PromoterDetailsUpdateDialogComponent {
                     this.selectedPromoterDetails = new PromoterDetailsModel({});
                 }
                 promoterDetailsItem.serialNumber = this.selectedPromoterDetails.promoterDetailItemSet.length + 1;
+                promoterDetailsItem.paidupCapitalEquitySanction = +promoterDetailsItem.paidupCapitalEquitySanction;
+                promoterDetailsItem.paidupCapitalEquityCurrent = +promoterDetailsItem.paidupCapitalEquityCurrent;
+                promoterDetailsItem.equityLinkInstrumentSanction = +promoterDetailsItem.equityLinkInstrumentSanction;
+                promoterDetailsItem.equityLinkInstrumentCurrent = +promoterDetailsItem.equityLinkInstrumentCurrent;
+                
                 this.selectedPromoterDetails.promoterDetailItemSet.push(promoterDetailsItem);
                 
                 if (!this.selectedPromoterDetails.id) { // If promoter details information is not available
@@ -86,10 +91,10 @@ export class PromoterDetailsUpdateDialogComponent {
                 this.selectedPromoterDetails.promoterDetailItemSet.forEach(item => {
                     if (item.id === this.selectedPromoterDetailsItem.id) {
                         item.shareHoldingCompany = promoterDetailsItem.shareHoldingCompany;
-                        item.paidupCapitalEquitySanction = promoterDetailsItem.paidupCapitalEquitySanction;
-                        item.paidupCapitalEquityCurrent  = promoterDetailsItem.paidupCapitalEquityCurrent;
-                        item.equityLinkInstrumentSanction  = promoterDetailsItem.equityLinkInstrumentSanction;
-                        item.equityLinkInstrumentCurrent  = promoterDetailsItem.equityLinkInstrumentCurrent;
+                        item.paidupCapitalEquitySanction = +promoterDetailsItem.paidupCapitalEquitySanction;
+                        item.paidupCapitalEquityCurrent  = +promoterDetailsItem.paidupCapitalEquityCurrent;
+                        item.equityLinkInstrumentSanction  = +promoterDetailsItem.equityLinkInstrumentSanction;
+                        item.equityLinkInstrumentCurrent  = +promoterDetailsItem.equityLinkInstrumentCurrent;
                     }
                 })
                 this._loanMonitoringService.updatePromoterDetails(this.selectedPromoterDetails).subscribe(() => {

@@ -58,7 +58,6 @@ export class OperatingParameterUpdateDialogComponent {
             dateOfPaymentReceipt: [this.selectedOperatingParameter.dateOfPaymentReceipt || ''],
             carbonDiOxideEmission: [this.selectedOperatingParameter.carbonDiOxideEmission, [Validators.pattern(MonitoringRegEx.environmentParameters)]],
             waterSaved: [this.selectedOperatingParameter.waterSaved, [Validators.pattern(MonitoringRegEx.environmentParameters)]],
-            designPlfCuf: [this.selectedOperatingParameter.designPlfCuf],
             documentType: [this.selectedOperatingParameter.documentType],
             documentTitle: [this.selectedOperatingParameter.documentTitle],
             file: ['']

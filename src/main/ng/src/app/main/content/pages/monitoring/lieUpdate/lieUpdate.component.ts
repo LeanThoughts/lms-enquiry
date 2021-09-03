@@ -63,6 +63,7 @@ export class LIEUpdateDialogComponent implements OnInit {
             name: [this.selectedLIE.name || ''],
             dateOfAppointment: [this.selectedLIE.dateOfAppointment || ''],
             contactPerson: [this.selectedLIE.contactPerson],
+            contactNumber: [this.selectedLIE.contactNumber],
             contractPeriodFrom: [this.selectedLIE.contractPeriodFrom || ''],
             contractPeriodTo: [this.selectedLIE.contractPeriodTo || ''],
             email: [this.selectedLIE.email || '', [Validators.pattern(EnquiryApplicationRegEx.email)]]
@@ -96,6 +97,7 @@ export class LIEUpdateDialogComponent implements OnInit {
                 this.selectedLIE.contactPerson = lie.contactPerson;
                 this.selectedLIE.contractPeriodFrom = lie.contractPeriodFrom;
                 this.selectedLIE.contractPeriodTo = lie.contractPeriodTo;
+                this.selectedLIE.contactNumber = lie.contactNumber;
                 this.selectedLIE.email = lie.email;
 
                 this._loanMonitoringService.updateLIE(this.selectedLIE).subscribe(() => {
@@ -120,5 +122,22 @@ export class LIEUpdateDialogComponent implements OnInit {
      */
     getPartyNumberAndName(party: any): string {
         return party.partyNumber + " - " + party.partyName1 + ' ' + party.partyName2;
+    }
+
+    /**
+     * dateOfAppointmentFilter()
+     * @param d 
+     */
+    public dateOfAppointmentFilter = (d: Date): boolean => {
+        const value = this.lieUpdateForm.value;
+        return (d >= this.toDate(value.contractPeriodFrom)) && (d <= this.toDate(value.contractPeriodTo));
+    }
+
+    /**
+     * toDate()
+     * @param d 
+     */
+    protected toDate(d: Date | string): Date {
+        return (typeof d === 'string') ? new Date(d) : d;
     }
 }

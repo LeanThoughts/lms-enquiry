@@ -20,6 +20,14 @@
                 </mat-cell>
             </ng-container>
 
+            <!-- siteVisitType Column -->
+            <ng-container matColumnDef="siteVisitType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.siteVisit.siteVisitType }}</p>
+                </mat-cell>
+            </ng-container>
+
             <!-- actualCOD Column -->
             <ng-container matColumnDef="actualCOD">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Actual COD</mat-header-cell>
@@ -41,6 +49,23 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Date of Lenders Meet</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.siteVisit.dateOfLendersMeet | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentType Column -->
+            <ng-container matColumnDef="documentType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.siteVisit.documentType }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- download Column -->
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <a [href]="getFileURL(obj.siteVisit.fileReference)" 
+                            *ngIf="obj.siteVisit.fileReference !== ''">Download</a>
                 </mat-cell>
             </ng-container>
 

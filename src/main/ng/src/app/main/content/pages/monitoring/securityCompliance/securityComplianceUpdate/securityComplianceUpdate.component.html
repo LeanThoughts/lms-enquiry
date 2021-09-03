@@ -7,7 +7,7 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+    <mat-dialog-content style="padding: 16px !important;">
         <form [formGroup]="securityComplianceUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
@@ -102,14 +102,19 @@
                     <input matInput [matDatepicker]="picker4" placeholder="Event Date" formControlName="eventDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4></mat-datepicker> 
-                </mat-form-field>            
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Validity Period" formControlName="validityPeriod">          
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput [matDatepicker]="picker5" placeholder="Timeline Date" formControlName="timelineDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker> 
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="100">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Validity Period" formControlName="validityPeriod">          
+                </mat-form-field>
+                <mat-form-field fxFlex="67">
                     <input matInput placeholder="Location" formControlName="location" maxlength="100">          
                 </mat-form-field>
             </div>
@@ -161,5 +166,5 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>

@@ -36,7 +36,6 @@ export class LoanPartnerUpdateComponent implements OnInit {
                 private _matSnackBar: MatSnackBar) { 
 
         // Fetch selected loan officer details from the dialog's data attribute
-        console.log('_dialogData', _dialogData);
         this.selectedLoanOfficer = _dialogData.loanOfficer;
 
         // Change diglog title and fetch partners based on the role assigned ...

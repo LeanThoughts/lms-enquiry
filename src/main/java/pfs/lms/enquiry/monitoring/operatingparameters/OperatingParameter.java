@@ -33,7 +33,6 @@ public class OperatingParameter extends AbstractEntity implements Cloneable {
     private Double carbonDiOxideEmission; // (Tonnes)
     private Double waterSaved;
 //    private String remarks;
-    private String designPlfCuf;
 //    private String actualYearlyAveragePlfCuf;
     private String documentType;
     private String documentTitle;

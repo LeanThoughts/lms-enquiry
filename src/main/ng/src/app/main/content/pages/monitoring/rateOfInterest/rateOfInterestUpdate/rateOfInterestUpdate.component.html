@@ -7,8 +7,29 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+    <mat-dialog-content style="padding: 16px !important;">
         <form [formGroup]="rateOfInterestDisplayForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker4" placeholder="Interest Period Start Date" formControlName="interestPeriodStartDate" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Interest Period Number" formControlName="interestPeriodUnit" maxlength="6" required>          
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Frequency (Days, Months, Year)" formControlName="interestPeriodFrequency" maxlength="6" required>          
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker5" placeholder="Next Int. Reset Date" formControlName="nextInterestResetDate" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <mat-card style="padding: 8px; background: antiquewhite;">Sanction Details</mat-card>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Sanction (Pre COD)" formControlName="sanctionPreCod" readonly>          
@@ -23,8 +44,8 @@
                 </mat-form-field>
             </div>
         </form>
-        <mat-card style="padding: 8px; background: antiquewhite;">New Rate of Interest</mat-card>
         <form [formGroup]="rateOfInterestUpdateForm" class="mt-8">
+            <mat-card style="padding: 8px; background: antiquewhite;">New Rate of Interest</mat-card>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Condition Type" formControlName="conditionType" required>
@@ -90,10 +111,11 @@
                     <input matInput placeholder="Payment Frequency" formControlName="interestPaymentFrequency" maxlength="3" required>          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Payment Form" formControlName="paymentForm" required>
-                      <mat-option *ngFor="let obj of paymentForms" [value]="obj.code">
-                        {{ obj.description }}
-                      </mat-option>
+                    <mat-select placeholder="Payment Form" formControlName="paymentForm">
+                        <mat-option [value]=""></mat-option>
+                        <mat-option *ngFor="let obj of paymentForms" [value]="obj.code">
+                            {{ obj.description }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -115,5 +137,5 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>

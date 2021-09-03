@@ -59,7 +59,7 @@ export class TRAUpdateDialogComponent implements OnInit {
             accountNumber: [this.selectedTRA.accountNumber || ''],
             contactName: [this.selectedTRA.contactName || ''],
             contactNumber: [this.selectedTRA.contactNumber || ''],
-            typeOfAccount: [this.selectedTRA.typeOfAccount || ''],
+            typeOfAccount: [this.selectedTRA.typeOfAccount || 'TRA Account'],
             email: [this.selectedTRA.email || '', [Validators.pattern(EnquiryApplicationRegEx.email)]],
             pfsAuthorisedPersonBPCode: [this.selectedTRA.pfsAuthorisedPersonBPCode || ''],
             pfsAuthorisedPerson: [this.selectedTRA.pfsAuthorisedPerson || ''],

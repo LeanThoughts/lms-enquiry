@@ -64,6 +64,7 @@ export class LFAUpdateDialogComponent implements OnInit {
             contactPerson: [this.selectedLFA.contactPerson],
             contractPeriodFrom: [this.selectedLFA.contractPeriodFrom || ''],
             contractPeriodTo: [this.selectedLFA.contractPeriodTo || ''],
+            contactNumber: [this.selectedLFA.contactNumber || ''],
             email: [this.selectedLFA.email, [Validators.pattern(EnquiryApplicationRegEx.email)]]
         });
     }
@@ -95,6 +96,7 @@ export class LFAUpdateDialogComponent implements OnInit {
                 this.selectedLFA.contactPerson = lfa.contactPerson;
                 this.selectedLFA.contractPeriodFrom = lfa.contractPeriodFrom;
                 this.selectedLFA.contractPeriodTo = lfa.contractPeriodTo;
+                this.selectedLFA.contactNumber = lfa.contactNumber;
                 this.selectedLFA.email = lfa.email;
                 this._loanMonitoringService.updateLFA(this.selectedLFA).subscribe(() => {
                     this._matSnackBar.open('LFA updated successfully.', 'OK', { duration: 7000 });
@@ -118,5 +120,22 @@ export class LFAUpdateDialogComponent implements OnInit {
      */
     getPartyNumberAndName(party: any): string {
         return party.partyNumber + " - " + party.partyName1 + ' ' + party.partyName2;
+    }
+    
+    /**
+     * dateOfAppointmentFilter()
+     * @param d 
+     */
+     public dateOfAppointmentFilter = (d: Date): boolean => {
+        const value = this.lfaUpdateForm.value;
+        return (d >= this.toDate(value.contractPeriodFrom)) && (d <= this.toDate(value.contractPeriodTo));
+    }
+
+    /**
+     * toDate()
+     * @param d 
+     */
+    protected toDate(d: Date | string): Date {
+        return (typeof d === 'string') ? new Date(d) : d;
     }
 }

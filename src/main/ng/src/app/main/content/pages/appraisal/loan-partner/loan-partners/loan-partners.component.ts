@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { LoanPartnerUpdateComponent } from '../loan-partner-update/loan-partner-update.component';
 
@@ -21,19 +22,17 @@ export class LoanPartnersComponent implements OnInit {
     selectedLoanOfficer: any;
 
     _loanApplicationId: string;
-    @Input() set loanApplicationId(value: string) {
-        this._loanApplicationId = value;
-        this.getLoanOfficers();
-    }
 
     /**
      * constructor()
      * @param _dialogRef 
      * @param _loanAppraisalService 
      */
-    constructor(private _dialogRef: MatDialog, 
+    constructor(private _dialogRef: MatDialog,
+                _loanEnquiryService: LoanEnquiryService,
                 private _loanAppraisalService: LoanAppraisalService) { 
 
+        this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.dataSource = new MatTableDataSource([]);
     }
 

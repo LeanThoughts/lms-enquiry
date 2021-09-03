@@ -54,6 +54,8 @@ public class SecurityCompliance extends AbstractEntity implements Cloneable {
 
     private LocalDate eventDate;
 
+    private LocalDate timelineDate;
+
     private String location;
 
     private String additionalText;

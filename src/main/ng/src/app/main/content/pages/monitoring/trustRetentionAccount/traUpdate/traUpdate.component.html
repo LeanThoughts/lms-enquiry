@@ -7,22 +7,19 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+    <mat-dialog-content style="padding: 16px !important;">
         <form [formGroup]="traUpdateForm">
             <div fxLayout="row">
-                <!-- <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Type Of Account" formControlName="typeOfAccount" required>
-                    <mat-error>
-                        Provide valid input for Type Of Account
-                    </mat-error>
-                </mat-form-field> -->
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Type Of Account" formControlName="typeOfAccount" required>
+                    <input matInput placeholder="Type Of Account" formControlName="typeOfAccount" readonly>
+                </mat-form-field>
+                <!-- <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Type Of Account" formControlName="typeOfAccount" required readonly>
                         <mat-option *ngFor="let accountType of accountTypes" [value]="accountType.code">
                         {{ accountType.value }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field> 
+                </mat-form-field>  -->
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Contact Name" formControlName="contactName" maxlength="60">
                 </mat-form-field>
@@ -49,7 +46,7 @@
                     <input matInput placeholder="Bank Name" [formControl]="bankNameFormControl" readonly>
                 </mat-form-field> -->
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Bank Key" formControlName="bankKey" maxlength="20" readonly required>
+                    <input matInput placeholder="IFSC Code" formControlName="bankKey" maxlength="20" readonly required>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
@@ -105,5 +102,5 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>

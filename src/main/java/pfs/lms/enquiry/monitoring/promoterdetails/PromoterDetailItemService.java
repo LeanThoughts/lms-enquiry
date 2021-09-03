@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Slf4j
@@ -69,14 +68,14 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
         promoterDetailItem = promoterDetailItemRepository.save(promoterDetailItem);
 
         // Change Documents for Promoter Details
-        changeDocumentService.createChangeDocument(
-                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
-                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
-                oldPromoterDetailItem,
-                promoterDetail,
-                "Updated",
-                username,
-                "Monitoring", "Promoter Details Item");
+//        changeDocumentService.createChangeDocument(
+//                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
+//                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                oldPromoterDetailItem,
+//                promoterDetail,
+//                "Updated",
+//                username,
+//                "Monitoring", "Promoter Details Item");
 
         return promoterDetailItem;
     }

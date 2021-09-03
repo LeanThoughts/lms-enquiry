@@ -7,7 +7,7 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+    <mat-dialog-content style="padding: 16px !important;">
         <form [formGroup]="operatingParameterUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
@@ -61,7 +61,7 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Applicable Tarrif " formControlName="applicableTariff" maxlength="3">          
+                    <input matInput placeholder="Applicable Tarrif " formControlName="applicableTariff" maxlength="5">          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Revenue (Rs. in Lakhs)" formControlName="revenue" maxlength="10">          
@@ -73,15 +73,6 @@
                     <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">          
                 </mat-form-field>
             </div> -->
-
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Design PLF CUF" formControlName="designPlfCuf" maxlength="50">          
-                </mat-form-field>
-                <!-- <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Actual Yearly Average (PLF CUF)" formControlName="actualYearlyAveragePlfCuf" maxlength="50">          
-                </mat-form-field> -->
-            </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
@@ -120,5 +111,5 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>
