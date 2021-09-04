@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { SiteVisitModel } from 'app/main/content/model/siteVisit.model';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
     selector: 'fuse-site-visit-update-dialog',
@@ -16,9 +17,11 @@ export class SiteVisitUpdateDialogComponent {
 
     dialogTitle = 'Add New Site Visit Details';
 
+    documentTypes = LoanMonitoringConstants.siteVisitDocumentTypes;
     selectedSiteVisit: SiteVisitModel ;
     siteVisitUpdateForm: FormGroup;
-  
+    siteVisitTypes = LoanMonitoringConstants.siteVisitTypes;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -42,10 +45,25 @@ export class SiteVisitUpdateDialogComponent {
 
         this.siteVisitUpdateForm = _formBuilder.group({
             serialNumber: [this.selectedSiteVisit.serialNumber],
+            siteVisitType: [this.selectedSiteVisit.siteVisitType],
             actualCOD: [this.selectedSiteVisit.actualCOD || ''],
             dateOfSiteVisit: [this.selectedSiteVisit.dateOfSiteVisit || ''],
-            dateOfLendersMeet: [this.selectedSiteVisit.dateOfLendersMeet || '']
+            dateOfLendersMeet: [this.selectedSiteVisit.dateOfLendersMeet || ''],
+            documentType: [this.selectedSiteVisit.documentType || ''],
+            documentTitle: [this.selectedSiteVisit.documentTitle || ''],
+            file: ['']
         });
+    }
+
+    /**
+     * onFileSelect()
+     * @param event 
+     */
+    onFileSelect(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.siteVisitUpdateForm.get('file').setValue(file);
+        }
     }
 
     /**
@@ -53,29 +71,69 @@ export class SiteVisitUpdateDialogComponent {
      */
     submit(): void {
         if (this.siteVisitUpdateForm.valid) {
-            var siteVisit: SiteVisitModel = new SiteVisitModel(this.siteVisitUpdateForm.value);
-            var dt = new Date(siteVisit.actualCOD);
-            siteVisit.actualCOD = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(siteVisit.dateOfSiteVisit);
-            siteVisit.dateOfSiteVisit = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(siteVisit.dateOfLendersMeet);
-            siteVisit.dateOfLendersMeet = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            if (this._dialogData.operation === 'addSiteVisit') {
-                this._loanMonitoringService.saveSiteVisit(siteVisit, this._dialogData.loanApplicationId).subscribe(() => {
-                    this._matSnackBar.open('Site Visit details added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+            if (this.siteVisitUpdateForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.siteVisitUpdateForm.get('file').value);      
+                this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.saveSiteVisitDetails(response.fileReference);
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                            'OK', { duration: 7000 });
+                    }
+                );
             }
             else {
-                this.selectedSiteVisit.serialNumber = siteVisit.serialNumber;
-                this.selectedSiteVisit.actualCOD = siteVisit.actualCOD;
-                this.selectedSiteVisit.dateOfLendersMeet  = siteVisit.dateOfLendersMeet;
-                this.selectedSiteVisit.dateOfSiteVisit  = siteVisit.dateOfSiteVisit;
-                this._loanMonitoringService.updateSiteVisit(this.selectedSiteVisit).subscribe(() => {
-                    this._matSnackBar.open('Site Visit details updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });            
+                this.saveSiteVisitDetails('');
             }
         }
     }
+
+    /**
+     * saveSiteVisitDetails()
+     * @param fileReference 
+     */
+    saveSiteVisitDetails(fileReference: string): void {
+        var siteVisit: SiteVisitModel = new SiteVisitModel(this.siteVisitUpdateForm.value);
+        var dt = new Date(siteVisit.actualCOD);
+        siteVisit.actualCOD = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(siteVisit.dateOfSiteVisit);
+        siteVisit.dateOfSiteVisit = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(siteVisit.dateOfLendersMeet);
+        siteVisit.dateOfLendersMeet = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
+        siteVisit.fileReference = fileReference;
+
+        if (this._dialogData.operation === 'addSiteVisit') {
+            this._loanMonitoringService.saveSiteVisit(siteVisit, this._dialogData.loanApplicationId).subscribe(() => {
+                this._matSnackBar.open('Site Visit details added successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
+        }
+        else {
+            this.selectedSiteVisit.serialNumber = siteVisit.serialNumber;
+            this.selectedSiteVisit.siteVisitType = siteVisit.siteVisitType;
+            this.selectedSiteVisit.actualCOD = siteVisit.actualCOD;
+            this.selectedSiteVisit.dateOfLendersMeet  = siteVisit.dateOfLendersMeet;
+            this.selectedSiteVisit.dateOfSiteVisit  = siteVisit.dateOfSiteVisit;
+            this.selectedSiteVisit.documentType = siteVisit.documentType;
+            this.selectedSiteVisit.documentTitle = siteVisit.documentTitle;
+            if (siteVisit.fileReference !== '') {
+                this.selectedSiteVisit.fileReference = siteVisit.fileReference;
+            }
+            this._loanMonitoringService.updateSiteVisit(this.selectedSiteVisit).subscribe(() => {
+                this._matSnackBar.open('Site Visit details updated successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });            
+        }
+    }
+       
+    /**
+     * getFileURL()
+     * @param fileReference
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
+    }    
 }

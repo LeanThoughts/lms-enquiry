@@ -15,6 +15,11 @@ export class RateOfInterestModel {
     paymentForm: string;
     interestCalculationMethod: string;
 
+    interestPeriodStartDate: Date;
+    interestPeriodUnit: number;
+    interestPeriodFrequency: number;
+    nextInterestResetDate: Date;
+
     /**
      * constructor()
      * @param _rateOfInterest 
@@ -35,5 +40,10 @@ export class RateOfInterestModel {
         this.interestPaymentFrequency = _rateOfInterest.interestPaymentFrequency;
         this.paymentForm = _rateOfInterest.paymentForm || 'MN';
         this.interestCalculationMethod = _rateOfInterest.interestCalculationMethod || '3';
+
+        this.interestPeriodStartDate = _rateOfInterest.interestPeriodStartDate || undefined;
+        this.interestPeriodUnit = _rateOfInterest.interestPeriodUnit || 0;
+        this.interestPeriodFrequency = _rateOfInterest.interestPeriodFrequency || 0;
+        this.nextInterestResetDate = _rateOfInterest.nextInterestResetDate || undefined;
     }
 }

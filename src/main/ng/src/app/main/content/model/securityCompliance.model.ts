@@ -15,6 +15,7 @@ export class SecurityComplianceModel {
     numberOfDays: number;
     eventType: string;
     eventDate: Date;
+    timelineDate: Date;
     validityPeriod: string;
     remarks: string;
     location: string;
@@ -48,6 +49,7 @@ export class SecurityComplianceModel {
         this.numberOfDays = _securityAndCompliance.numberOfDays || 0;
         this.eventType = _securityAndCompliance.eventType || '';
         this.eventDate = _securityAndCompliance.eventDate || undefined;
+        this.timelineDate = _securityAndCompliance.timelineDate || undefined;
         this.validityPeriod = _securityAndCompliance.validityPeriod || '';
         this.remarks = _securityAndCompliance.remarks || '';
         this.location = _securityAndCompliance.location || '';

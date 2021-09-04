@@ -10,7 +10,8 @@ import {
   MatAutocompleteModule,
   MatCardModule,
   MatRadioModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatDialogModule
 } from '@angular/material';
 import { LoanMonitoringComponent } from './loanMonitoring.component';
 import { EnquiryApplicationRouteGuard } from 'app/enquiryApplication.guard';
@@ -72,6 +73,7 @@ const routes = [
       MatExpansionModule,
       MatInputModule,
       MatButtonModule,
+      MatDialogModule,
       MatFormFieldModule,
       MatPaginatorModule,
       MatTableModule,

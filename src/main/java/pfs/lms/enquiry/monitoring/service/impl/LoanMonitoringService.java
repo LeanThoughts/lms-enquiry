@@ -797,6 +797,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         securityCompliance.setRemarks(resource.getSecurityCompliance().getRemarks());
         // securityCompliance.setActionPeriod(resource.getSecurityCompliance().getActionPeriod());
         securityCompliance.setEventType(resource.getSecurityCompliance().getEventType());
+        securityCompliance.setEventDate(resource.getSecurityCompliance().getEventDate());
+        securityCompliance.setTimelineDate(resource.getSecurityCompliance().getTimelineDate());
         securityCompliance.setLocation(resource.getSecurityCompliance().getLocation());
         securityCompliance.setAdditionalText(resource.getSecurityCompliance().getAdditionalText());
         securityCompliance.setRealEstateLandArea(resource.getSecurityCompliance().getRealEstateLandArea());
@@ -843,6 +845,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingSecurityCompliance.setRemarks(resource.getSecurityCompliance().getRemarks());
         // existingSecurityCompliance.setActionPeriod(resource.getSecurityCompliance().getActionPeriod());
         existingSecurityCompliance.setEventType(resource.getSecurityCompliance().getEventType());
+        existingSecurityCompliance.setEventDate(resource.getSecurityCompliance().getEventDate());
+        existingSecurityCompliance.setTimelineDate(resource.getSecurityCompliance().getTimelineDate());
         existingSecurityCompliance.setLocation(resource.getSecurityCompliance().getLocation());
         existingSecurityCompliance.setAdditionalText(resource.getSecurityCompliance().getAdditionalText());
         existingSecurityCompliance.setRealEstateLandArea(resource.getSecurityCompliance().getRealEstateLandArea());
@@ -918,9 +922,13 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         siteVisit.setLoanMonitor(loanMonitor);
 
         siteVisit.setSerialNumber(siteVisitRepository.findByLoanMonitor(loanMonitor).size() + 1);
+        siteVisit.setSiteVisitType(resource.getSiteVisit().getSiteVisitType());
         siteVisit.setActualCOD(resource.getSiteVisit().getActualCOD());
         siteVisit.setDateOfLendersMeet(resource.getSiteVisit().getDateOfLendersMeet());
         siteVisit.setDateOfSiteVisit(resource.getSiteVisit().getDateOfSiteVisit());
+        siteVisit.setDocumentType(resource.getSiteVisit().getDocumentType());
+        siteVisit.setDocumentTitle(resource.getSiteVisit().getDocumentTitle());
+        siteVisit.setFileReference(resource.getSiteVisit().getFileReference());
         siteVisit = siteVisitRepository.save(siteVisit);
 
         // Change Documents for Site Visit
@@ -945,9 +953,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         Object oldSiteVisit = existingSiteVisit.clone();
 
         existingSiteVisit.setSerialNumber(resource.getSiteVisit().getSerialNumber());
+        existingSiteVisit.setSiteVisitType(resource.getSiteVisit().getSiteVisitType());
         existingSiteVisit.setActualCOD(resource.getSiteVisit().getActualCOD());
         existingSiteVisit.setDateOfSiteVisit(resource.getSiteVisit().getDateOfSiteVisit());
         existingSiteVisit.setDateOfLendersMeet(resource.getSiteVisit().getDateOfLendersMeet());
+        existingSiteVisit.setDocumentType(resource.getSiteVisit().getDocumentType());
+        existingSiteVisit.setDocumentTitle(resource.getSiteVisit().getDocumentTitle());
+        existingSiteVisit.setFileReference(resource.getSiteVisit().getFileReference());
+
         existingSiteVisit = siteVisitRepository.save(existingSiteVisit);
 
         // Change Documents for T&C Mod.
@@ -1040,7 +1053,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         existingOperatingParameter.setSerialNumber(resource.getOperatingParameter().getSerialNumber());
         existingOperatingParameter.setMonth(resource.getOperatingParameter().getMonth());
-//        existingOperatingParameter.setYear(resource.getOperatingParameter().getYear());
+        existingOperatingParameter.setYear(resource.getOperatingParameter().getYear());
         existingOperatingParameter.setExportNetGeneration(resource.getOperatingParameter().getExportNetGeneration());
         existingOperatingParameter.setPlfCufActual(resource.getOperatingParameter().getPlfCufActual());
         existingOperatingParameter.setApplicableTariff(resource.getOperatingParameter().getApplicableTariff());
@@ -1049,9 +1062,6 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingOperatingParameter.setDateOfPaymentReceipt(resource.getOperatingParameter().getDateOfPaymentReceipt());
         existingOperatingParameter.setCarbonDiOxideEmission(resource.getOperatingParameter().getCarbonDiOxideEmission());
         existingOperatingParameter.setWaterSaved(resource.getOperatingParameter().getWaterSaved());
-//        existingOperatingParameter.setRemarks(resource.getOperatingParameter().getRemarks());
-        existingOperatingParameter.setDesignPlfCuf(resource.getOperatingParameter().getDesignPlfCuf());
-//        existingOperatingParameter.setActualYearlyAveragePlfCuf(resource.getOperatingParameter().getActualYearlyAveragePlfCuf());
         existingOperatingParameter.setDocumentType(resource.getOperatingParameter().getDocumentType());
         existingOperatingParameter.setDocumentTitle(resource.getOperatingParameter().getDocumentTitle());
         existingOperatingParameter.setFileReference(resource.getOperatingParameter().getFileReference());

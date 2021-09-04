@@ -5,6 +5,7 @@ import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.domain.LoanApplication;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanApplication", "businessPartnerId", "roleType"}, callSuper = false)
+@EntityListeners(LoanPartnerEventListener.class)
 public class LoanPartner extends AggregateRoot<LoanPartner> implements Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER)

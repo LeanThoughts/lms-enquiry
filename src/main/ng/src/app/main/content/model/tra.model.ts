@@ -31,7 +31,7 @@ export class TRAModel
         this.accountNumber = _tra.accountNumber || '';
         this.contactName = _tra.contactName || '';
         this.contactNumber = _tra.contactNumber || '';
-        this.typeOfAccount = _tra.typeOfAccount || '';
+        this.typeOfAccount = _tra.typeOfAccount || 'TRA Account';
         this.email = _tra.email || '';
         this.pfsAuthorisedPersonBPCode = _tra.pfsAuthorisedPersonBPCode || '';
         this.pfsAuthorisedPerson = _tra.pfsAuthorisedPerson || '';

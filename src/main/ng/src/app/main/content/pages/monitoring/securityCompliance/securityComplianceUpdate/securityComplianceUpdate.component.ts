@@ -72,6 +72,7 @@ export class SecurityComplianceUpdateDialogComponent {
             numberOfDays: [this.selectedSecurityCompliance.numberOfDays],
             eventType: [this.selectedSecurityCompliance.eventType],
             eventDate: [this.selectedSecurityCompliance.eventDate || ''],
+            timelineDate: [this.selectedSecurityCompliance.timelineDate || ''],
             validityPeriod: [this.selectedSecurityCompliance.validityPeriod],
             remarks: [this.selectedSecurityCompliance.remarks],
             location: [this.selectedSecurityCompliance.location],
@@ -99,6 +100,9 @@ export class SecurityComplianceUpdateDialogComponent {
             securityCompliance.securityPerfectionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             dt = new Date(securityCompliance.eventDate);
             securityCompliance.eventDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(securityCompliance.timelineDate);
+            securityCompliance.timelineDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
             if (this._dialogData.operation === 'addSecurityCompliance') {
                 this._loanMonitoringService.saveSecurityCompliance(securityCompliance, this._dialogData.loanApplicationId).subscribe(() => {
                     this._matSnackBar.open('Security Compliance added successfully.', 'OK', { duration: 7000 });
@@ -120,6 +124,7 @@ export class SecurityComplianceUpdateDialogComponent {
                 this.selectedSecurityCompliance.numberOfDays  = securityCompliance.numberOfDays;
                 this.selectedSecurityCompliance.eventType  = securityCompliance.eventType;
                 this.selectedSecurityCompliance.eventDate  = securityCompliance.eventDate;
+                this.selectedSecurityCompliance.timelineDate = securityCompliance.timelineDate;
                 this.selectedSecurityCompliance.validityPeriod  = securityCompliance.validityPeriod;
                 this.selectedSecurityCompliance.remarks  = securityCompliance.remarks;
                 this.selectedSecurityCompliance.location  = securityCompliance.location;

@@ -22,11 +22,17 @@ public class SiteVisit extends AbstractEntity implements  Cloneable{
 
     private Integer serialNumber;
 
+    private String siteVisitType;
+
     private LocalDate  actualCOD;
 
     private LocalDate dateOfSiteVisit;
 
     private LocalDate dateOfLendersMeet;
+
+    private String documentType;
+    private String documentTitle;
+    private String fileReference;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

@@ -1,5 +1,19 @@
 export class LoanMonitoringConstants {
 
+    // siteVisitDocumentTypes
+    public static siteVisitDocumentTypes = [
+        {code: "Site Visit Report" , value:"Site Visit Report"},
+        {code: "Site Images" , value:"Site Images"},
+        {code: "MOM" , value:"MOM"},
+        {code: "Mail" , value:"Mail"},
+    ]
+
+    // siteVisitTypes
+    public static siteVisitTypes = [
+        {code: "Site Visit" , value:"Site Visit"},
+        {code: "Lenders Meet" , value:"Lenders Meet"}
+    ];
+
     // reportTypes
     public static reportTypes = [
         {code: "1" , value:"Due Diligence"},
@@ -153,10 +167,17 @@ export class LoanMonitoringConstants {
 
     // actionPeriods
     static actionPeriods = [
-        {code: "1" , value:"Days"},
-        {code: "2" , value:"Weeks"},
-        {code: "3" , value:"Months"},
-        {code: "4" , value:"Years"}
+        {code: "1" , value:"Within"},
+        {code: "2" , value:"Before"},
+        {code: "3" , value:"Till"},
+        {code: "4" , value:"After"},
+        {code: "5" , value:"At the time of"},
+        {code: "6" , value:"Less Than"},
+        {code: "7" , value:"Less Than or Equal To"},
+        {code: "8" , value:"Greater Than"},
+        {code: "9" , value:"Greater Than or Equal To"},
+        {code: "0" , value:"Equal"},
+        {code: "11" , value:"Others"}
     ];
 
     // actionPeriodSuffixes

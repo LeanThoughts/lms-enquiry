@@ -26,7 +26,8 @@
             </div>
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker1" placeholder="Date of Appointment" formControlName="dateOfAppointment" readonly>
+                    <input matInput [matDatepicker]="picker1" placeholder="Date of Appointment" formControlName="dateOfAppointment" 
+                            [matDatepickerFilter]="dateOfAppointmentFilter" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker> 
                 </mat-form-field>
@@ -50,12 +51,15 @@
                 </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="100">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Contact Number" formControlName="contactNumber" maxlength="15" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
                     <input matInput type="email" placeholder="Email" maxlength="200" formControlName="email">      
                     <mat-error>
                        Provide valid input for Email
                     </mat-error>      
-                  </mat-form-field>
+                </mat-form-field>
             </div>
 
             <div mat-dialog-actions fxLayout="row">

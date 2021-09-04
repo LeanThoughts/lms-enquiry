@@ -13,7 +13,6 @@ export class OperatingParameterModel {
     carbonDiOxideEmission: number;
     waterSaved: number;
     remarks: string;
-    designPlfCuf: string;
     actualYearlyAveragePlfCuf: string;
     documentType: string;
     documentTitle: string;
@@ -38,7 +37,6 @@ export class OperatingParameterModel {
         this.carbonDiOxideEmission = _operatingParameter.carbonDiOxideEmission || 0;
         this.waterSaved = _operatingParameter.waterSaved || 0;
         this.remarks = _operatingParameter.remarks || '';
-        this.designPlfCuf = _operatingParameter.designPlfCuf || '';
         this.actualYearlyAveragePlfCuf = _operatingParameter.actualYearlyAveragePlfCuf || '';
         this.documentType = _operatingParameter.documentType || '';
         this.documentTitle = _operatingParameter.documentTitle || '';

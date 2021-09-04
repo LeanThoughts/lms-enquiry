@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { SyndicateConsortiumUpdateComponent } from '../syndicate-consortium-update/syndicate-consortium-update.component';
 
@@ -21,10 +22,6 @@ export class SyndicateConsortiumListComponent implements OnInit {
     selectedSyndicateConsortium: any;
 
     _loanApplicationId: string;
-    @Input() set loanApplicationId(value: string) {
-        this._loanApplicationId = value;
-        this.getSyndicateConsortiums();
-    }
 
     /**
      * constructor()
@@ -32,8 +29,10 @@ export class SyndicateConsortiumListComponent implements OnInit {
      * @param _loanAppraisalService 
      */
     constructor(private _dialogRef: MatDialog, 
+                _loanEnquiryService: LoanEnquiryService,
                 private _loanAppraisalService: LoanAppraisalService) { 
 
+        this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.dataSource = new MatTableDataSource([]);
     }
 

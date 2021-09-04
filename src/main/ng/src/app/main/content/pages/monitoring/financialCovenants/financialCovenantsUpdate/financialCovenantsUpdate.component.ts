@@ -39,11 +39,11 @@ export class FinancialCovenantsUpdateDialogComponent {
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedFinancialCovenants !== undefined) {
             this.selectedFinancialCovenants = Object.assign({}, _dialogData.selectedFinancialCovenants);
-            this.dialogTitle = 'Add New Financial Covenants';
+            this.dialogTitle = 'Modify Financial Covenants';
         }
         else {
             this.selectedFinancialCovenants = new FinancialCovenantsModel({});
-            this.dialogTitle = 'Modify Financial Covenants';
+            this.dialogTitle = 'Add New Financial Covenants';
         }
 
         this.financialCovenantsUpdateForm = _formBuilder.group({

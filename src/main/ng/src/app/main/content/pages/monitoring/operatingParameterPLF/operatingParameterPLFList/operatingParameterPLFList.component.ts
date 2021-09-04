@@ -18,7 +18,7 @@ export class OperatingParameterPLFListComponent {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'serialNumber', 'year', 'actualYearlyAveragePlfCuf', 'remarks'
+        'serialNumber', 'year', 'designPlfCuf', 'actualYearlyAveragePlfCuf', 'miUnGenerated', 'remarks'
     ];
 
     loanApplicationId: string;

@@ -29,11 +29,27 @@
                 </mat-cell>
             </ng-container>
 
+            <!-- designPlfCuf Column -->
+            <ng-container matColumnDef="designPlfCuf">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Design PLF CUF</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.operatingParameterPLF.designPlfCuf }}</p>
+                </mat-cell>
+            </ng-container>
+
             <!-- plfCufActual Column -->
             <ng-container matColumnDef="actualYearlyAveragePlfCuf">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Average PLF/CUF</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.operatingParameterPLF.actualYearlyAveragePlfCuf | number: '1.2-2' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- miUnGenerated Column -->
+            <ng-container matColumnDef="miUnGenerated">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >MU Generated</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.operatingParameterPLF.miUnGenerated | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 

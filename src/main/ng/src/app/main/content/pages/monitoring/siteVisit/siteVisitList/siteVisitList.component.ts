@@ -19,7 +19,7 @@ export class SiteVisitListComponent implements OnInit {
     loanApplicationId: any;
 
     displayedColumns = [
-        'serialNumber', 'actualCOD', 'dateOfSiteVisit','dateOfLendersMeet'
+        'serialNumber', 'siteVisitType', 'actualCOD', 'dateOfSiteVisit','dateOfLendersMeet', 'documentType', 'download'
     ];
 
     selectedSiteVisit: any;
@@ -77,5 +77,13 @@ export class SiteVisitListComponent implements OnInit {
                 })
             }
         });    
+    }
+
+    /**
+     * getFileURL()
+     * @param fileReference 
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
     }
 }

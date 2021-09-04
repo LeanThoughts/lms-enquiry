@@ -70,6 +70,10 @@ export class RateOfInterestUpdateDialogComponent {
         }
 
         this.rateOfInterestDisplayForm = _formBuilder.group({
+            interestPeriodStartDate: [''],
+            interestPeriodUnit: [''],
+            interestPeriodFrequency: [''],
+            nextInterestResetDate: [''],
             sanctionPreCod: [''],
             sanctionPostCod: [''],
             presentRoi: [''],
