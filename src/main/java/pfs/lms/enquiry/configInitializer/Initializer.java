@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.sample;
+package pfs.lms.enquiry.configInitializer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.repository.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Component

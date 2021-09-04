@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.sample;
+package pfs.lms.enquiry.configInitializer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,13 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.*;
-import pfs.lms.enquiry.menustructure.domain.Menu;
-import pfs.lms.enquiry.menustructure.domain.MenuHeader;
-import pfs.lms.enquiry.menustructure.domain.MenuItem;
-import pfs.lms.enquiry.menustructure.service.IMenuService;
 import pfs.lms.enquiry.repository.*;
-
-import java.util.List;
 
 /**
  * Created by sajeev on 14-May-21.

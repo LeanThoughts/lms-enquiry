@@ -290,7 +290,17 @@ public class LoanMonitoringScheduledTask {
                      response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      if (response != null) {
-                         response = postDocument(termsAndConditionsModification.getFileReference(), termsAndConditionsModification.getId(), "","TermsAndConditionsModification", termsAndConditionsModification.getDocumentTitle());
+                         response = postDocument(termsAndConditionsModification.getFileReference(),
+                                 termsAndConditionsModification.getId(), "" + "","TermsAndConditionsModification",
+                                 termsAndConditionsModification.getDocumentTitle());
+
+                         if (response != null) {
+                             response = postDocument(termsAndConditionsModification.getAmendedDocumentfileReference(),
+                                     termsAndConditionsModification.getId(),
+                                     "2",
+                                     "T&C Amended Document File",
+                                     "T&C_Amended_Document_" + termsAndConditionsModification.getAmendedDocumentTitle());
+                         }
                      }
 
                      updateSAPIntegrationPointer(response,sapIntegrationPointer);
@@ -661,7 +671,10 @@ public class LoanMonitoringScheduledTask {
                                 String entityId, String docSubId,
                                 String entityName,
                                 String fileName) throws IOException {
-
+        if (fileReference.length() == 0) {
+            log.error("File Reference is Empty; Posting to SAP Aborted for Process Name :" +entityName + " entityId : " +entityId);
+            return null;
+        }
         UUID fileUUID = UUID.fromString(fileReference);
         byte[] file = fileStorage.download(fileUUID);
         FileResource fileResource = fileStorage.getFile(fileUUID);

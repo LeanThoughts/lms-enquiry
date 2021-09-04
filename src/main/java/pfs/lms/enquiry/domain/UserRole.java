@@ -9,11 +9,15 @@ import javax.persistence.Entity;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+//@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class UserRole extends AggregateRoot<UserRole> {
 
     private String code;
 
     private String value;
+
+    public UserRole() {
+
+    }
 }

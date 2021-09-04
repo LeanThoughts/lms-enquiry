@@ -42,4 +42,14 @@ public class SAPTermsAndConditionsModificationDetails {
     @JsonProperty(value = "Remarks")
     private String remarks;
 
+    @JsonProperty(value = "AmendDocumentTitle")
+    private String amendDocumentTitle;
+    @JsonProperty(value = "AmendDocumentType")
+    private String amendDocumentType;
+    @JsonProperty(value = "AmendDocumentDate")
+    private String amendDocumentDate;
+    @JsonProperty(value = "AmendedDocumentRemarks")
+    private String amendedDocumentRemarks;
+
+
 }

@@ -55,8 +55,15 @@ import java.text.ParseException;
         detailedResource.setDocumentTitle(termsAndConditionsModification.getDocumentTitle());
         detailedResource.setCommunication(termsAndConditionsModification.getCommunication());
         detailedResource.setRemarks(termsAndConditionsModification.getRemarks());
- 
-        
+
+        detailedResource.setAmendDocumentType(termsAndConditionsModification.getAmendedDocumentType().toString());
+        detailedResource.setAmendDocumentTitle(termsAndConditionsModification.getAmendedDocumentTitle());
+        detailedResource.setAmendedDocumentRemarks(termsAndConditionsModification.getAmendedDocumentRemarks());
+        if(termsAndConditionsModification.getDateofIssueofAmendedDocument() != null) {
+            detailedResource.setAmendDocumentDate(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateofIssueofAmendedDocument()));
+        } else
+            detailedResource.setAmendDocumentDate(null);
+
 
         return detailedResource;
 

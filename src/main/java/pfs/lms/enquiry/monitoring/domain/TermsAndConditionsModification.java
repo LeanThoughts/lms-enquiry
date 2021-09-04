@@ -29,6 +29,13 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String remarks;
     private String fileReference;
 
+    //Amended Document Details
+    private LocalDate amendedDocumentType;
+    private LocalDate dateofIssueofAmendedDocument;
+    private String    amendedDocumentRemarks;
+    private String    amendedDocumentTitle;
+    private String    amendedDocumentfileReference;
+
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

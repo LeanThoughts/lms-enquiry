@@ -4,6 +4,8 @@ package pfs.lms.enquiry.domain;
  * Created by sajeev on 15-Dec-18.
  */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
+import lombok.Value;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -29,7 +31,7 @@ public abstract class AuditModel implements Serializable {
     @LastModifiedDate
     private Date updatedAt;
 
-    public Date getCreatedAt() {
+     public Date getCreatedAt() {
         return createdAt;
     }
 
