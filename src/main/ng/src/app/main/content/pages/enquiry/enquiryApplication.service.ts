@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StateModel } from '../../model/state.model';
 import {ApplicantEmail} from "./enquiryApplication/enquiryApplication.component";
+import { AppService } from 'app/app.service';
 
 @Injectable()
 export class LoanEnquiryService implements Resolve<any> {
@@ -19,7 +20,7 @@ export class LoanEnquiryService implements Resolve<any> {
      *
      * @param _http
      */
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private _appService: AppService) {
     }
 
     /**
@@ -36,7 +37,8 @@ export class LoanEnquiryService implements Resolve<any> {
                 this.getProjectTypes(), // get project types.
                 this.getStates(), // get states.
                 this.getAssistanceTypes(), // get assistance types.
-                this.getTechnicalStatus()   // Get Technical Status
+                this.getTechnicalStatus(),   // get technical status.
+                this.getUserRoleAuthorizations()
             ]);
         } else {
             return forkJoin([
@@ -52,6 +54,14 @@ export class LoanEnquiryService implements Resolve<any> {
                 this.getTechnicalStatus()   // Get Technical Status
             ]);
         }
+    }
+
+    
+    /**
+     * getUserRoleAuthorizations()
+     */
+    public getUserRoleAuthorizations(): Observable<any> {
+        return this._http.get<any>('enquiry/api/authorization?userRole=' + this._appService.currentUser.role);
     }
 
     /**

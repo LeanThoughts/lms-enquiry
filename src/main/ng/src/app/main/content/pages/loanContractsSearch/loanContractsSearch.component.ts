@@ -34,6 +34,9 @@ export class LoanContractsSearchComponent {
     states: Array<string>;
     technicalStatuses: Array<any>;
     
+    monitoring: boolean = false;
+    appraisal: boolean = false;
+
     /**
      *
      * @param _formBuilder
@@ -70,6 +73,13 @@ export class LoanContractsSearchComponent {
         this.states = _route.snapshot.data.routeResolvedData[3];
         this.assistanceTypes = _route.snapshot.data.routeResolvedData[4]._embedded.assistanceTypes;
         this.technicalStatuses = _route.snapshot.data.routeResolvedData[5];
+        
+        _route.snapshot.data.routeResolvedData[6].forEach(element => {
+            if (element.authorizationObject === 'Display Appraisal')
+                this.appraisal = false;
+            else if (element.authorizationObject === 'Display Monitoring')
+                this.monitoring = true;
+        });
 
         console.log('_appService.currentUser', _appService.currentUser);
     }

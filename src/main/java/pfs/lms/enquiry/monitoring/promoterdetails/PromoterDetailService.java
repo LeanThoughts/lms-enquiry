@@ -93,14 +93,14 @@ public class PromoterDetailService implements IPromoterDetailService {
         }
 
         // Change Documents for Promoter Details
-//        changeDocumentService.createChangeDocument(
-//                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
-//                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                oldPromoterDetails,
-//                "Updated",
-//                username,
-//                "Monitoring", "Promoter Details");
+        changeDocumentService.createChangeDocument(
+                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
+                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                oldPromoterDetails,
+                "Updated",
+                username,
+                "Monitoring", "Promoter Details");
 
 
         return promoterDetail;

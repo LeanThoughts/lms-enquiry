@@ -1144,7 +1144,10 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         rateOfInterest.setInterestPaymentFrequency(resource.getRateOfInterest().getInterestPaymentFrequency());
         rateOfInterest.setPaymentForm(resource.getRateOfInterest().getPaymentForm());
         rateOfInterest.setInterestCalculationMethod(resource.getRateOfInterest().getInterestCalculationMethod());
-
+        rateOfInterest.setInterestPeriodStartDate(resource.getRateOfInterest().getInterestPeriodStartDate());
+        rateOfInterest.setInterestPeriodUnit(resource.getRateOfInterest().getInterestPeriodUnit());
+        rateOfInterest.setInterestPeriodFrequency(resource.getRateOfInterest().getInterestPeriodFrequency());
+        rateOfInterest.setNextInterestResetDate(resource.getRateOfInterest().getNextInterestResetDate());
         rateOfInterest = rateOfInterestRepository.save(rateOfInterest);
 
         // Change Documents for Rate of Interest
@@ -1180,6 +1183,10 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingRateOfInterest.setInterestPaymentFrequency(resource.getRateOfInterest().getInterestPaymentFrequency());
         existingRateOfInterest.setPaymentForm(resource.getRateOfInterest().getPaymentForm());
         existingRateOfInterest.setInterestCalculationMethod(resource.getRateOfInterest().getInterestCalculationMethod());
+        existingRateOfInterest.setInterestPeriodStartDate(resource.getRateOfInterest().getInterestPeriodStartDate());
+        existingRateOfInterest.setInterestPeriodUnit(resource.getRateOfInterest().getInterestPeriodUnit());
+        existingRateOfInterest.setInterestPeriodFrequency(resource.getRateOfInterest().getInterestPeriodFrequency());
+        existingRateOfInterest.setNextInterestResetDate(resource.getRateOfInterest().getNextInterestResetDate());
 
         existingRateOfInterest = rateOfInterestRepository.save(existingRateOfInterest);
 

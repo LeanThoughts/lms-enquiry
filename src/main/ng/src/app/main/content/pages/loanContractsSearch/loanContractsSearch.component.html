@@ -12,7 +12,7 @@
 
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToLoanAppraisal()" 
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToLoanAppraisal()" *ngIf="appraisal"
                     [disabled]="_service.selectedLoanApplicationId === undefined &&
                     (
                         _appService.currentUser.role.localeCompare('ZLM024') !== 0 || 
@@ -20,7 +20,7 @@
                     )">
                 Loan Appraisal
             </button>
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToMonitorLoan()" 
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToMonitorLoan()" *ngIf="monitoring"
                     [disabled]="_service.selectedLoanApplicationId == undefined && 
                     (_appService.currentUser.role.localeCompare('ZLM024') != 0 || 
                     _appService.currentUser.role.localeCompare('ZLM040') != 0 || 

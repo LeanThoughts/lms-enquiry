@@ -8,7 +8,7 @@
         </mat-toolbar-row>
     </mat-toolbar>
     <mat-dialog-content style="padding: 16px !important;">
-        <form [formGroup]="rateOfInterestDisplayForm">
+        <form [formGroup]="rateOfInterestUpdateForm" class="mt-8">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker4" placeholder="Interest Period Start Date" formControlName="interestPeriodStartDate" readonly required>
@@ -16,12 +16,16 @@
                     <mat-datepicker #picker4></mat-datepicker> 
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Interest Period Number" formControlName="interestPeriodUnit" maxlength="6" required>          
+                    <input matInput placeholder="Interest Period Unit (Number)" formControlName="interestPeriodUnit" maxlength="3" required>          
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Frequency (Days, Months, Year)" formControlName="interestPeriodFrequency" maxlength="6" required>          
+                    <mat-select placeholder="Interest Period Frequency" formControlName="interestPeriodFrequency" required>
+                        <mat-option [value]="0">Days</mat-option>
+                        <mat-option [value]="1">Months</mat-option>
+                        <mat-option [value]="2">Years</mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker5" placeholder="Next Int. Reset Date" formControlName="nextInterestResetDate" readonly required>
@@ -32,19 +36,17 @@
             <mat-card style="padding: 8px; background: antiquewhite;">Sanction Details</mat-card>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Sanction (Pre COD)" formControlName="sanctionPreCod" readonly>          
+                    <input matInput placeholder="Interest Rate Pre Sanction" [formControl]="interestRatePreSanction" readonly>          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Sanction (Post COD)" formControlName="sanctionPostCod" readonly>          
+                    <input matInput placeholder="Interest Rate Post Sanction" [formControl]="interestRatePostSanction" readonly>          
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Present ROI" formControlName="presentRoi" readonly>          
+                    <input matInput placeholder="Present ROI" [formControl]="presentRoi" readonly>          
                 </mat-form-field>
             </div>
-        </form>
-        <form [formGroup]="rateOfInterestUpdateForm" class="mt-8">
             <mat-card style="padding: 8px; background: antiquewhite;">New Rate of Interest</mat-card>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">

@@ -7,6 +7,7 @@ import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { map, startWith } from 'rxjs/operators';
+import { PartnerModel } from 'app/main/content/model/partner.model';
 
 @Component({
     selector: 'fuse-tra-update-dialog',
@@ -29,6 +30,8 @@ export class TRAUpdateDialogComponent implements OnInit {
     bankFilteredOptions: any;
     bankKeyFormControl = new FormControl();
 
+    partners: PartnerModel[] = new Array();
+    
     /**
      * constructor()
      * @param _formBuilder 
@@ -67,6 +70,12 @@ export class TRAUpdateDialogComponent implements OnInit {
         });
 
         this.banks = _loanMonitoringService.banks;
+
+        _loanMonitoringService.getTRAAuthorizedPersons().subscribe(response => {
+            response.forEach(element => {
+                this.partners.push(new PartnerModel(element));
+            });
+        })
     }
 
     /**
@@ -143,5 +152,21 @@ export class TRAUpdateDialogComponent implements OnInit {
             this.traUpdateForm.controls.address.setValue('');
             this.traUpdateForm.controls.ifscCode.setValue('');
         }
+    }
+
+    /**
+     * onPartnerSelect()
+     * @param event 
+     */
+    onPartnerSelect(partner: PartnerModel): void {
+        this.traUpdateForm.controls.pfsAuthorisedPerson.setValue(partner.partyName1 + ' ' + partner.partyName2);
+    }
+
+    /**
+     * getPartyNumberAndName()
+     * @param party 
+     */
+    getPartyNumberAndName(party: any): string {
+        return party.partyNumber + " - " + party.partyName1 + ' ' + party.partyName2;
     }
 }

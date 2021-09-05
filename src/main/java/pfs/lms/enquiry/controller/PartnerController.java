@@ -143,6 +143,18 @@ public class PartnerController {
         }
     }
 
+    @GetMapping("partner/traAuthorizedPersons")
+    public ResponseEntity getTRAAuthorizedPersons(HttpServletRequest httpServletRequest) {
+
+        List<Partner> partners = partnerService.getLendersFinancialAdvisors();
+        if (partners != null) {
+            return ResponseEntity.ok(partners);
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
     @GetMapping("partners/role/{roleType}")
     public ResponseEntity<List<Partner>> getPartnersByRole(@PathVariable String roleType,
                                                            HttpServletRequest httpServletRequest) {

@@ -318,6 +318,14 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
+    public List<Partner> getTRAAuthorizedPersons() {
+        List<Partner> partners = new ArrayList<>();
+        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM029");
+        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
+        return partners;
+    }
+
+    @Override
     public List<Partner> getPartnersByRoleType(String roleType) {
         List<Partner> partners = new ArrayList<>();
         partners = partnerRepository.findByPartyRole(roleType);

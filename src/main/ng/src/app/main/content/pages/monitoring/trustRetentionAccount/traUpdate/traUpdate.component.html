@@ -70,7 +70,11 @@
                     <input matInput placeholder="Address" formControlName="address" maxlength="100" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="PFS Authorised Person-BP Code" formControlName="pfsAuthorisedPersonBPCode">
+                    <mat-select placeholder="PFS Authorised Person-BP Code" formControlName="pfsAuthorisedPersonBPCode">
+                        <mat-option *ngFor="let partner of partners" [value]="partner.partyNumber" (click)="onPartnerSelect(partner)">
+                          {{ getPartyNumberAndName(partner) }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div fxLayout="row">

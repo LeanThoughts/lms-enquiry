@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatCheckboxChange } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { RateOfInterestModel } from 'app/main/content/model/rateOfInterest.model';
@@ -19,7 +19,6 @@ export class RateOfInterestUpdateDialogComponent {
 
     selectedRateOfInterest: RateOfInterestModel ;
 
-    rateOfInterestDisplayForm: FormGroup;
     rateOfInterestUpdateForm: FormGroup;
   
     conditionTypes: any;
@@ -27,6 +26,10 @@ export class RateOfInterestUpdateDialogComponent {
     referenceInterestRateSigns: any;
     paymentForms: any;
     interestCalculationMethods: any;
+
+    interestRatePreSanction: FormControl;
+    interestRatePostSanction: FormControl;
+    presentRoi: FormControl;
 
     /**
      * constructor()
@@ -69,17 +72,11 @@ export class RateOfInterestUpdateDialogComponent {
             this.selectedRateOfInterest = new RateOfInterestModel({});
         }
 
-        this.rateOfInterestDisplayForm = _formBuilder.group({
-            interestPeriodStartDate: [''],
-            interestPeriodUnit: [''],
-            interestPeriodFrequency: [''],
-            nextInterestResetDate: [''],
-            sanctionPreCod: [''],
-            sanctionPostCod: [''],
-            presentRoi: [''],
-        });
-
         this.rateOfInterestUpdateForm = _formBuilder.group({
+            interestPeriodStartDate: [this.selectedRateOfInterest.interestPeriodStartDate],
+            interestPeriodUnit: [this.selectedRateOfInterest.interestPeriodUnit, [Validators.pattern(MonitoringRegEx.digitsOnly)]],
+            interestPeriodFrequency: [this.selectedRateOfInterest.interestPeriodFrequency],
+            nextInterestResetDate: [this.selectedRateOfInterest.nextInterestResetDate],
             conditionType: [this.selectedRateOfInterest.conditionType],
             validFromDate: [this.selectedRateOfInterest.validFromDate],
             interestTypeIndicator: [this.selectedRateOfInterest.interestTypeIndicator],
@@ -96,6 +93,10 @@ export class RateOfInterestUpdateDialogComponent {
         });
 
         this.rateOfInterestUpdateForm.controls.interestRate.value
+
+        this.interestRatePreSanction = new FormControl('1');
+        this.interestRatePostSanction = new FormControl('2');
+        this.presentRoi = new FormControl('3');        
     }
 
     /**
@@ -114,6 +115,12 @@ export class RateOfInterestUpdateDialogComponent {
             const dt3 = new Date(rateOfInterest.dueDate);
             rateOfInterest.dueDate = new Date(Date.UTC(dt3.getFullYear(), dt3.getMonth(), dt3.getDate()));
 
+            const dt4 = new Date(rateOfInterest.interestPeriodStartDate);
+            rateOfInterest.interestPeriodStartDate = new Date(Date.UTC(dt4.getFullYear(), dt4.getMonth(), dt4.getDate()));
+
+            const dt5 = new Date(rateOfInterest.nextInterestResetDate);
+            rateOfInterest.nextInterestResetDate = new Date(Date.UTC(dt5.getFullYear(), dt5.getMonth(), dt5.getDate()));
+
             if (this._dialogData.operation === 'addRateOfInterest') {
                 this._loanMonitoringService.saveRateOfInterest(rateOfInterest, this._dialogData.loanApplicationId).subscribe(() => {
                     this._matSnackBar.open('Rate Of Interest details added successfully.', 'OK', { duration: 7000 });
@@ -121,6 +128,10 @@ export class RateOfInterestUpdateDialogComponent {
                 });
             }
             else {
+                this.selectedRateOfInterest.interestPeriodStartDate = rateOfInterest.interestPeriodStartDate;
+                this.selectedRateOfInterest.interestPeriodUnit = rateOfInterest.interestPeriodUnit;
+                this.selectedRateOfInterest.interestPeriodFrequency = rateOfInterest.interestPeriodFrequency;
+                this.selectedRateOfInterest.nextInterestResetDate = rateOfInterest.nextInterestResetDate;
                 this.selectedRateOfInterest.conditionType = rateOfInterest.conditionType;
                 this.selectedRateOfInterest.validFromDate = rateOfInterest.validFromDate;
                 this.selectedRateOfInterest.interestTypeIndicator = rateOfInterest.interestTypeIndicator;

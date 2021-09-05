@@ -20,6 +20,7 @@ public interface IPartnerService {
 
     List<Partner> getLendersIndependentEngineers();
     List<Partner> getLendersFinancialAdvisors();
+    List<Partner> getTRAAuthorizedPersons();
 
     List<Partner> getPartnersByRoleType(String roleType);
 

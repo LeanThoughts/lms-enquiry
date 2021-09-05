@@ -52,6 +52,11 @@ public class RateOfInterest extends AbstractEntity implements Cloneable {
 
     private String interestCalculationMethod;
 
+    private LocalDate interestPeriodStartDate;
+    private LocalDate nextInterestResetDate;
+    private Integer interestPeriodUnit;
+    private Integer interestPeriodFrequency;
+
 //    private String particulars;
 //
 //    private String scheduledIfAny;

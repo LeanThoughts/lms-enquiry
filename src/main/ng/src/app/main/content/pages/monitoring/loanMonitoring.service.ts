@@ -349,6 +349,10 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get<any>('enquiry/api/partner/lfas');
     }
 
+    public getTRAAuthorizedPersons(): Observable<any> {
+        return this._http.get<any>('enquiry/api/partner/traAuthorizedPersons');
+    }
+
     public getReferenceInterestRates(): Observable<any> {
         return this._http.get<any>('enquiry/api/referenceinterestrates/all');
     }
