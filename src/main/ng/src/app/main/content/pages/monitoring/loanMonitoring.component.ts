@@ -47,6 +47,7 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
             console.log('loan monitoring route resolved data', data);
             if (data.routeResolvedData !== null) {
                 this.loanContractExtension = data.routeResolvedData;
+                _loanMonitoringService.loanContractExtension = data.routeResolvedData;
                 console.log('loanContractExtension', this.loanContractExtension);
             }
         });

@@ -17,6 +17,8 @@ export class LoanMonitoringService implements Resolve<any> {
     
     public banks: any;
 
+    loanContractExtension: any;
+
     /**
      *
      * @param _http

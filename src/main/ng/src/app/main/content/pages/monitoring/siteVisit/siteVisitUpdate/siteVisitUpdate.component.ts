@@ -41,6 +41,8 @@ export class SiteVisitUpdateDialogComponent {
         }
         else {
             this.selectedSiteVisit = new SiteVisitModel({});
+            if (_loanMonitoringService.loanContractExtension)
+                this.selectedSiteVisit.actualCOD = _loanMonitoringService.loanContractExtension.actualCOD;
         }
 
         this.siteVisitUpdateForm = _formBuilder.group({

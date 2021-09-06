@@ -94,9 +94,18 @@ export class RateOfInterestUpdateDialogComponent {
 
         this.rateOfInterestUpdateForm.controls.interestRate.value
 
-        this.interestRatePreSanction = new FormControl('1');
-        this.interestRatePostSanction = new FormControl('2');
-        this.presentRoi = new FormControl('3');        
+        this.interestRatePreSanction = new FormControl('');
+        this.interestRatePostSanction = new FormControl('');
+        this.presentRoi = new FormControl('');
+        
+        if (_loanMonitoringService.loanContractExtension) {
+            this.interestRatePreSanction.setValue(_loanMonitoringService.loanContractExtension.interestRatePreSanction);
+            this.interestRatePostSanction.setValue(_loanMonitoringService.loanContractExtension.interestRatePostSanction);
+            this.rateOfInterestUpdateForm.controls.interestPeriodStartDate.setValue(_loanMonitoringService.loanContractExtension.interestPeriodStartDate);
+            this.rateOfInterestUpdateForm.controls.interestPeriodUnit.setValue(_loanMonitoringService.loanContractExtension.interestPeriodUnit);
+            this.rateOfInterestUpdateForm.controls.interestPeriodFrequency.setValue(_loanMonitoringService.loanContractExtension.interestPeriodFrequency);
+            this.rateOfInterestUpdateForm.controls.nextInterestResetDate.setValue(_loanMonitoringService.loanContractExtension.nextInterestResetDate);
+        }
     }
 
     /**
