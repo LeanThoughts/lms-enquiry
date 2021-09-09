@@ -1,18 +1,31 @@
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 
 @Injectable()
-export class LoanAppraisalService {
+export class LoanAppraisalService implements Resolve<any> {
 
     /**
      * constructor()
      * @param _http
      */
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private _loanEnquiryService: LoanEnquiryService) {
     }
 
+    /**
+     * resolve()
+     * @param route
+     * @param state
+     */
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return forkJoin([
+            this.getLoanOfficers(this._loanEnquiryService.selectedLoanApplicationId.value),
+            this.getLaonAppraisalKYCs(this._loanEnquiryService.selectedLoanApplicationId.value)
+        ]);
+    }
+    
     /**
      * getLaonAppraisal()
      * @param loanApplicationId 

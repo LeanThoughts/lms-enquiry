@@ -36,7 +36,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
                 private _matSnackBar: MatSnackBar) { 
 
         // Fetch selected loan officer details from the dialog's data attribute
-        this.selectedLoanOfficer = _dialogData.loanOfficer;
+        this.selectedLoanOfficer = Object.assign({}, _dialogData.loanOfficer);
 
         // Change diglog title and fetch partners based on the role assigned ...
         if (this._dialogData.operation === 'modifyOfficer') {
@@ -72,6 +72,10 @@ export class LoanPartnerUpdateComponent implements OnInit {
     submit(): void {
         if (this.loanOfficerForm.valid) {
             var formData = this.loanOfficerForm.value;
+
+            var dt = new Date(formData.startDate);
+            formData.startDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
             this.selectedLoanOfficer.businessPartnerId = formData.businessPartnerId;
             this.selectedLoanOfficer.businessPartnerName = formData.businessPartnerName;
             this.selectedLoanOfficer.roleType = formData.roleType;

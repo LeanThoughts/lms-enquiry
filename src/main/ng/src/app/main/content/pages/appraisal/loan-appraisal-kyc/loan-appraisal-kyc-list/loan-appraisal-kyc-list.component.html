@@ -27,7 +27,7 @@
 
             <!-- dateOfCompletion Column -->
             <ng-container matColumnDef="dateOfCompletion">
-                <mat-header-cell *matHeaderCellDef>Role Type</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Date of Completion</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.dateOfCompletion | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
@@ -38,6 +38,14 @@
                 <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.remarks }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentName Column -->
+            <ng-container matColumnDef="documentName">
+                <mat-header-cell *matHeaderCellDef>Document Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentName }}</p>
                 </mat-cell>
             </ng-container>
 

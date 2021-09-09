@@ -31,7 +31,10 @@ const routes = [
         component: LoanAppraisalComponent,
         canActivate: [
             EnquiryApplicationRouteGuard
-        ]
+        ],
+        resolve: {
+            routeResolvedData: LoanAppraisalService
+        }
     }
 ];
 

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
@@ -16,7 +17,7 @@ export class LoanAppraisalKYCListComponent implements OnInit {
     dataSource: MatTableDataSource<any>;
     
     displayedColumns = [
-        'serialNumber', 'kycType', 'dateOfCompletion', 'remarks', 'download'
+        'serialNumber', 'kycType', 'dateOfCompletion', 'remarks', 'documentName', 'download'
     ];
 
     selectedKYC: any;
@@ -30,10 +31,15 @@ export class LoanAppraisalKYCListComponent implements OnInit {
      */
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
-                private _loanAppraisalService: LoanAppraisalService) { 
+                private _loanAppraisalService: LoanAppraisalService,
+                _activatedRoute: ActivatedRoute) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        this.dataSource = new MatTableDataSource([]);
+
+        // Subscribe to route resolved data (data.routeResolvedData[0] = loanPartners) ...
+        _activatedRoute.data.subscribe(data => {
+            this.dataSource = new MatTableDataSource(data.routeResolvedData[1]._embedded.loanAppraisalKYCs);
+        })
     }
 
     /**

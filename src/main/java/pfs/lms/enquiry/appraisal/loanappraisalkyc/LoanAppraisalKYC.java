@@ -4,6 +4,7 @@ import lombok.*;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = {"loanAppraisal", "serialNumber", "partnerType", "kycType"}, callSuper = false)
 public class LoanAppraisalKYC extends AggregateRoot<LoanAppraisalKYC> implements Cloneable {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private LoanAppraisal loanAppraisal;
 
     private Integer serialNumber;

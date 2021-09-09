@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
+import { businessPartnerRoleTypes } from '../../loanAppraisal.constants';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { LoanPartnerUpdateComponent } from '../loan-partner-update/loan-partner-update.component';
 
@@ -30,10 +32,15 @@ export class LoanPartnersComponent implements OnInit {
      */
     constructor(private _dialogRef: MatDialog,
                 _loanEnquiryService: LoanEnquiryService,
-                private _loanAppraisalService: LoanAppraisalService) { 
+                private _loanAppraisalService: LoanAppraisalService,
+                _activatedRoute: ActivatedRoute) { 
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        this.dataSource = new MatTableDataSource([]);
+
+        // Subscribe to route resolved data (data.routeResolvedData[0] = loanPartners) ...
+        _activatedRoute.data.subscribe(data => {
+            this.dataSource = new MatTableDataSource(data.routeResolvedData[0]._embedded.loanPartners);
+        })
     }
 
     /**
@@ -84,5 +91,19 @@ export class LoanPartnersComponent implements OnInit {
      */
     onRowSelect(loanOfficer: any): void {
         this.selectedLoanOfficer = loanOfficer;
+    }
+
+    /**
+     * getRoleDescription()
+     * @param role 
+     */
+    getRoleDescription(role: string): string {
+        let rv = '';
+        businessPartnerRoleTypes.forEach(roleType => {
+            if (roleType.code === role) {
+                rv = roleType.value;
+            }
+        });
+        return rv;
     }
 }

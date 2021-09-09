@@ -31,7 +31,7 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
-        this.selectedLoanAppraisalKYC = _dialogData.loanAppraisalKYC;
+        this.selectedLoanAppraisalKYC = Object.assign({}, _dialogData.loanAppraisalKYC);
 
         // Change diglog title and fetch partners based on the role assigned ...
         if (this._dialogData.operation === 'modifyOfficer') {
@@ -61,7 +61,10 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
     submit(): void {
         if (this.loanAppraisalKYCForm.valid) {
             var formValues = this.loanAppraisalKYCForm.value;
-            this.selectedLoanAppraisalKYC.dateOfCompletion = formValues.dateOfCompletion;
+            
+            var dt = new Date(formValues.dateOfCompletion);
+            this.selectedLoanAppraisalKYC.dateOfCompletion = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
             this.selectedLoanAppraisalKYC.remarks = formValues.remarks;
             this.selectedLoanAppraisalKYC.documentName = formValues.documentName;
             if (this._dialogData.operation === 'modifyAppraisalKYC') {

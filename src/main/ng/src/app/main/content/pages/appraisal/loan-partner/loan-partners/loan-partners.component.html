@@ -37,7 +37,7 @@
             <ng-container matColumnDef="roleType">
                 <mat-header-cell *matHeaderCellDef>Role Type</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.roleType }}</p>
+                    <p class="text-truncate">{{ getRoleDescription(obj.roleType) }}</p>
                 </mat-cell>
             </ng-container>
 
