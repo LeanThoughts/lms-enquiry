@@ -75,9 +75,9 @@ export class LoanContractsSearchComponent {
         this.technicalStatuses = _route.snapshot.data.routeResolvedData[5];
         
         _route.snapshot.data.routeResolvedData[6].forEach(element => {
-            if (element.authorizationObject === 'Display Appraisal')
+            if (element.authorizationObject === 'Execute Appraisal')
                 this.appraisal = true;
-            else if (element.authorizationObject === 'Display Monitoring')
+            else if (element.authorizationObject === 'Execute Monitoring')
                 this.monitoring = true;
         });
 

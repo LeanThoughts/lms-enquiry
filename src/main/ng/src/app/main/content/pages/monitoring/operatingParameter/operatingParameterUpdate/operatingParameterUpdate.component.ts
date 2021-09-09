@@ -52,7 +52,7 @@ export class OperatingParameterUpdateDialogComponent {
             year: [this.selectedOperatingParameter.year, [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             exportNetGeneration: [this.selectedOperatingParameter.exportNetGeneration, [Validators.pattern(MonitoringRegEx.genericAmount)]],
             plfCufActual: [this.selectedOperatingParameter.plfCufActual, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
-            applicableTariff: [this.selectedOperatingParameter.applicableTariff, [Validators.pattern(MonitoringRegEx.genericAmount)]],
+            applicableTariff: [this.selectedOperatingParameter.applicableTariff, [Validators.pattern(MonitoringRegEx.applicableTariff)]],
             revenue: [this.selectedOperatingParameter.revenue, [Validators.pattern(MonitoringRegEx.genericAmount)]],
             dateOfInvoice: [this.selectedOperatingParameter.dateOfInvoice || ''],
             dateOfPaymentReceipt: [this.selectedOperatingParameter.dateOfPaymentReceipt || ''],

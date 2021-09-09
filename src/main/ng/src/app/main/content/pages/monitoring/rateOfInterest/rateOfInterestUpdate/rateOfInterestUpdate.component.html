@@ -51,9 +51,10 @@
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Condition Type" formControlName="conditionType" required>
-                      <mat-option *ngFor="let obj of conditionTypes" [value]="obj.code">
-                        {{ obj.description }}
-                      </mat-option>
+                        <mat-option [value]=""></mat-option>
+                        <mat-option *ngFor="let obj of conditionTypes" [value]="obj.code">
+                            {{ obj.description }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
