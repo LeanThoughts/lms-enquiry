@@ -27,7 +27,8 @@ export class RateOfInterestModel {
     constructor(_rateOfInterest: any)
     {
         this.id = _rateOfInterest.id || '';
-        this.conditionType = _rateOfInterest.conditionType || '201';
+        // this.conditionType = _rateOfInterest.conditionType || '201';
+        this.conditionType = _rateOfInterest.conditionType || '';
         this.validFromDate = _rateOfInterest.validFromDate || undefined;
         this.interestTypeIndicator = _rateOfInterest.interestTypeIndicator || '0';
         this.referenceInterestRate = _rateOfInterest.referenceInterestRate || '';
