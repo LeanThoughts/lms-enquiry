@@ -10,6 +10,7 @@
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
         <form [formGroup]="tandcUpdateForm">
             <mat-card style="padding: 8px !important; background: antiquewhite !important;">Borrower Request Letter Date</mat-card>
+
             <div fxLayout="row" class="mt-8">
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Communication" formControlName="communication" required>
@@ -38,8 +39,8 @@
                 </mat-form-field> 
 
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issue of Amended Document" 
-                        formControlName="dateofIssueofAmendedSanctionLetter" readonly>
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issue of Amended Sanction Letter" 
+                        formControlName="dateOfIssueOfAmendedSanctionLetter" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
@@ -63,6 +64,49 @@
             <div fxLayout="row">
                 <div fxLayout="column" fxFlex="50" class="mt-16">
                     <a [href]="getFileURL(selectedTandC.fileReference)" *ngIf="selectedTandC.fileReference !== ''">
+                        <mat-icon>cloud_download</mat-icon>
+                    </a>
+                </div>
+            </div>
+
+            <mat-card style="padding: 8px !important; background: antiquewhite !important;">Amended Document of PFS</mat-card>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Document Type" formControlName="amendedDocumentType" required>
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                        {{ documentType.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker3" placeholder="Date of Issue of Amended Document" 
+                        formControlName="dateOfIssueOfAmendedDocument" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker> 
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Document Title" formControlName="amendedDocumentTitle">          
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Remarks" formControlName="amendedDocumentRemarks" maxlength="200">          
+                </mat-form-field>
+            </div>
+            
+            <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50">
+                    <label for="amendedDocument">Upload Document (PDF)</label>
+                    <input type="file" name="amendedFile" (change)="onAmendedFileSelect($event)" accept="application/pdf" id="amendedDocument"/>
+                </div>
+            </div>
+
+            <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50" class="mt-16">
+                    <a [href]="getFileURL(selectedTandC.amendedDocumentFileReference)" *ngIf="selectedTandC.amendedDocumentFileReference !== ''">
                         <mat-icon>cloud_download</mat-icon>
                     </a>
                 </div>

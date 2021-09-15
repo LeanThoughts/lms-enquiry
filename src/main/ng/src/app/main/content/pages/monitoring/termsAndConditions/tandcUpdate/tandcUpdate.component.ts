@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { TandCModel } from 'app/main/content/model/tandc.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { forkJoin, Observable } from 'rxjs';
 
 @Component({
     selector: 'fuse-tandc-update-dialog',
@@ -38,7 +39,7 @@ export class TandCUpdateDialogComponent {
 
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedTandC !== undefined) {
-            this.selectedTandC = _dialogData.selectedTandC;
+            this.selectedTandC = new TandCModel(_dialogData.selectedTandC);
             this.dialogTitle = 'Modify T&C';
         }
         else {
@@ -51,8 +52,13 @@ export class TandCUpdateDialogComponent {
             communication: [this.selectedTandC.communication || ''],
             remarks: [this.selectedTandC.remarks || ''],
             borrowerRequestLetterDate: [this.selectedTandC.borrowerRequestLetterDate || ''],
-            dateofIssueofAmendedSanctionLetter: [this.selectedTandC.dateofIssueofAmendedSanctionLetter || ''],
-            file: ['']
+            dateOfIssueOfAmendedSanctionLetter: [this.selectedTandC.dateOfIssueOfAmendedSanctionLetter || ''],
+            file: [''],
+            amendedDocumentType: [this.selectedTandC.amendedDocumentType || ''],
+            dateOfIssueOfAmendedDocument: [this.selectedTandC.dateOfIssueOfAmendedDocument || ''],
+            amendedDocumentRemarks: [this.selectedTandC.amendedDocumentRemarks || ''],
+            amendedDocumentTitle: [this.selectedTandC.amendedDocumentTitle || ''],
+            amendedFile: ['']
         });
     }
 
@@ -68,81 +74,98 @@ export class TandCUpdateDialogComponent {
     }
 
     /**
+     * onAmendedFileSelect()
+     * @param event 
+     */
+    onAmendedFileSelect(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.tandcUpdateForm.get('amendedFile').setValue(file);
+        }
+    }
+
+    /**
      * submit()
      */
     submit(): void {
         if (this.tandcUpdateForm.valid) {
-            var tandc: TandCModel = new TandCModel(this.tandcUpdateForm.value);
-            var dt = new Date(tandc.borrowerRequestLetterDate);
-            tandc.borrowerRequestLetterDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(tandc.dateofIssueofAmendedSanctionLetter);
-            tandc.dateofIssueofAmendedSanctionLetter = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            if (this._dialogData.operation === 'addT&C') {
-                if (this.tandcUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.tandcUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            tandc.fileReference = response.fileReference;
-                            this._loanMonitoringService.saveTandC(tandc, this._dialogData.loanApplicationId).subscribe(() => {
-                                this._matSnackBar.open('T&C added successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
+            forkJoin([
+                this.uploadRegularFile(),
+                this.uploadAmendedFile()
+            ]).subscribe(response => {
+                var tandc: TandCModel = new TandCModel(this.tandcUpdateForm.value);
+
+                var dt1 = new Date(tandc.borrowerRequestLetterDate);
+                tandc.borrowerRequestLetterDate = new Date(Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()));
+                var dt2 = new Date(tandc.dateOfIssueOfAmendedSanctionLetter);
+                tandc.dateOfIssueOfAmendedSanctionLetter = new Date(Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()));
+                var dt3 = new Date(tandc.dateOfIssueOfAmendedDocument);
+                tandc.dateOfIssueOfAmendedDocument = new Date(Date.UTC(dt3.getFullYear(), dt3.getMonth(), dt3.getDate()));
+
+                if (response[0] !== {}) {
+                    tandc.fileReference = response[0].fileReference;
                 }
-                else
-                {
+                if (response[1] !== {}) {
+                    tandc.amendedDocumentFileReference = response[1].fileReference;
+                }
+
+                if (this._dialogData.operation === 'addT&C') {
                     this._loanMonitoringService.saveTandC(tandc, this._dialogData.loanApplicationId).subscribe(() => {
                         this._matSnackBar.open('T&C added successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });
                 }
-            }
-            else {
-                var selectedTandC = Object.assign({}, this.selectedTandC);
-                console.log('selectedTandC', selectedTandC);
-                if (this.tandcUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.tandcUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            selectedTandC.documentType  = tandc.documentType;
-                            selectedTandC.documentTitle  = tandc.documentTitle;
-                            selectedTandC.communication  = tandc.communication;
-                            selectedTandC.borrowerRequestLetterDate  = tandc.borrowerRequestLetterDate;
-                            selectedTandC.dateofIssueofAmendedSanctionLetter  = tandc.dateofIssueofAmendedSanctionLetter;
-                            selectedTandC.remarks  = tandc.remarks;
-                            selectedTandC.fileReference = response.fileReference;
-                            this._loanMonitoringService.updateTandC(selectedTandC).subscribe(() => {
-                                this._matSnackBar.open('T&C updated successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });            
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    selectedTandC.documentType  = tandc.documentType;
-                    selectedTandC.documentTitle  = tandc.documentTitle;
-                    selectedTandC.communication  = tandc.communication;
-                    selectedTandC.borrowerRequestLetterDate  = tandc.borrowerRequestLetterDate;
-                    selectedTandC.dateofIssueofAmendedSanctionLetter  = tandc.dateofIssueofAmendedSanctionLetter;
-                    selectedTandC.remarks  = tandc.remarks;
-                    this._loanMonitoringService.updateTandC(selectedTandC).subscribe(() => {
+                else {
+                    this.selectedTandC.documentType  = tandc.documentType;
+                    this.selectedTandC.documentTitle  = tandc.documentTitle;
+                    this.selectedTandC.communication  = tandc.communication;
+                    this.selectedTandC.borrowerRequestLetterDate  = tandc.borrowerRequestLetterDate;
+                    this.selectedTandC.dateOfIssueOfAmendedSanctionLetter  = tandc.dateOfIssueOfAmendedSanctionLetter;
+                    this.selectedTandC.remarks = tandc.remarks;
+                    if (tandc.fileReference !== undefined) {
+                        this.selectedTandC.fileReference = tandc.fileReference;
+                    }
+                    this.selectedTandC.amendedDocumentType = tandc.amendedDocumentType;
+                    this.selectedTandC.dateOfIssueOfAmendedDocument = tandc.dateOfIssueOfAmendedDocument;
+                    this.selectedTandC.amendedDocumentTitle = tandc.amendedDocumentTitle;
+                    this.selectedTandC.amendedDocumentRemarks = tandc.amendedDocumentRemarks;
+                    if (tandc.amendedDocumentFileReference !== undefined) {
+                        this.selectedTandC.amendedDocumentFileReference = tandc.amendedDocumentFileReference;
+                    }
+                    this._loanMonitoringService.updateTandC(this.selectedTandC).subscribe(() => {
                         this._matSnackBar.open('T&C updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
-                    });            
+                    });
                 }
-            }
+            });
+        }
+    }
+
+    /**
+     * uploadRegularFile()
+     */
+    uploadRegularFile(): Observable<any> {
+        if (this.tandcUpdateForm.get('file').value === '') {
+            return Observable.of({});
+        }
+        else {
+            var formData = new FormData();
+            formData.append('file', this.tandcUpdateForm.get('file').value);      
+            return this._loanMonitoringService.uploadVaultDocument(formData);
+        }
+    }
+
+    /**
+     * uploadAmendedFile()
+     */
+    uploadAmendedFile(): Observable<any> {
+        if (this.tandcUpdateForm.get('amendedFile').value === '') {
+            return Observable.of({});
+        }
+        else {
+            var formData = new FormData();
+            formData.append('file', this.tandcUpdateForm.get('amendedFile').value);      
+            return this._loanMonitoringService.uploadVaultDocument(formData);
         }
     }
 

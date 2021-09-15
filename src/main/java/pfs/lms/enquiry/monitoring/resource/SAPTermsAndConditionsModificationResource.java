@@ -46,8 +46,8 @@ import java.text.ParseException;
         else
             detailedResource.setBorrowerrequestletterdate(null);
 
-        if(termsAndConditionsModification.getDateofIssueofAmendedSanctionLetter() != null) {
-            detailedResource.setDateofissueofamendedsanctionle(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateofIssueofAmendedSanctionLetter()));
+        if(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter() != null) {
+            detailedResource.setDateofissueofamendedsanctionle(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
         } else
             detailedResource.setDateofissueofamendedsanctionle(null);
 
@@ -59,8 +59,8 @@ import java.text.ParseException;
         detailedResource.setAmendDocumentType(termsAndConditionsModification.getAmendedDocumentType().toString());
         detailedResource.setAmendDocumentTitle(termsAndConditionsModification.getAmendedDocumentTitle());
         detailedResource.setAmendedDocumentRemarks(termsAndConditionsModification.getAmendedDocumentRemarks());
-        if(termsAndConditionsModification.getDateofIssueofAmendedDocument() != null) {
-            detailedResource.setAmendDocumentDate(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateofIssueofAmendedDocument()));
+        if(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter() != null) {
+            detailedResource.setAmendDocumentDate(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
         } else
             detailedResource.setAmendDocumentDate(null);
 

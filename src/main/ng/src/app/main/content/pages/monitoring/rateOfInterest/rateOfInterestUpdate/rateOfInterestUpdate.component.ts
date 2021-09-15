@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatCheckboxChange } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { RateOfInterestModel } from 'app/main/content/model/rateOfInterest.model';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'fuse-rate-of-interest-update-dialog',
@@ -13,7 +14,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class RateOfInterestUpdateDialogComponent {
+export class RateOfInterestUpdateDialogComponent implements OnInit, OnDestroy {
 
     dialogTitle = 'Add New Rate Of Interest';
 
@@ -30,6 +31,8 @@ export class RateOfInterestUpdateDialogComponent {
     interestRatePreSanction: FormControl;
     interestRatePostSanction: FormControl;
     presentRoi: FormControl;
+
+    subscriptions = new Subscription()
 
     /**
      * constructor()
@@ -106,6 +109,26 @@ export class RateOfInterestUpdateDialogComponent {
             this.rateOfInterestUpdateForm.controls.interestPeriodFrequency.setValue(_loanMonitoringService.loanContractExtension.interestPeriodFrequency);
             this.rateOfInterestUpdateForm.controls.nextInterestResetDate.setValue(_loanMonitoringService.loanContractExtension.nextInterestResetDate);
         }
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.add(this.rateOfInterestUpdateForm.controls.validFromDate.valueChanges.subscribe(value => {
+            const validFromDate = new Date(value);
+            if (validFromDate.getFullYear() !== 1970) {
+                if (this.rateOfInterestUpdateForm.controls.isCalculationDateOnMonthEnd.value) {
+                    const d = new Date(validFromDate.getFullYear(), validFromDate.getMonth() + 1, 0);
+                    this.rateOfInterestUpdateForm.controls.calculationDate.setValue(d);
+                }
+                if (this.rateOfInterestUpdateForm.controls.isDueDateOnMonthEnd.value) {
+                    const d = new Date(validFromDate.getFullYear(), validFromDate.getMonth() + 1, 0);
+                    this.rateOfInterestUpdateForm.controls.dueDate.setValue(d);
+                }
+            }
+        }));
     }
 
     /**

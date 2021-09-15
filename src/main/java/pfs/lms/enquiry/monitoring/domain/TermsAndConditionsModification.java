@@ -25,16 +25,16 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String documentTitle;
     private String communication;
     private LocalDate borrowerRequestLetterDate;
-    private LocalDate dateofIssueofAmendedSanctionLetter;
+    private LocalDate dateOfIssueOfAmendedSanctionLetter;
     private String remarks;
     private String fileReference;
 
     //Amended Document Details
-    private LocalDate amendedDocumentType;
-    private LocalDate dateofIssueofAmendedDocument;
-    private String    amendedDocumentRemarks;
-    private String    amendedDocumentTitle;
-    private String    amendedDocumentfileReference;
+    private String amendedDocumentType;
+    private LocalDate dateOfIssueOfAmendedDocument;
+    private String amendedDocumentRemarks;
+    private String amendedDocumentTitle;
+    private String amendedDocumentFileReference;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

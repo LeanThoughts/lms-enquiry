@@ -683,9 +683,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         termsAndConditions.setDocumentTitle(resource.getTermsAndConditionsModification().getDocumentTitle());
         termsAndConditions.setCommunication(resource.getTermsAndConditionsModification().getCommunication());
         termsAndConditions.setBorrowerRequestLetterDate(resource.getTermsAndConditionsModification().getBorrowerRequestLetterDate());
-        termsAndConditions.setDateofIssueofAmendedSanctionLetter(resource.getTermsAndConditionsModification().getDateofIssueofAmendedSanctionLetter());
+        termsAndConditions.setDateOfIssueOfAmendedDocument(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedDocument());
         termsAndConditions.setRemarks(resource.getTermsAndConditionsModification().getRemarks());
         termsAndConditions.setFileReference(resource.getTermsAndConditionsModification().getFileReference());
+        termsAndConditions.setAmendedDocumentType(resource.getTermsAndConditionsModification().getAmendedDocumentType());
+        termsAndConditions.setDateOfIssueOfAmendedDocument(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedDocument());
+        termsAndConditions.setAmendedDocumentRemarks(resource.getTermsAndConditionsModification().getAmendedDocumentRemarks());
+        termsAndConditions.setAmendedDocumentTitle(resource.getTermsAndConditionsModification().getAmendedDocumentTitle());
+        termsAndConditions.setAmendedDocumentFileReference(resource.getTermsAndConditionsModification().getAmendedDocumentFileReference());
         termsAndConditions = termsAndConditionsRepository.save(termsAndConditions);
 
         // Change Documents for Terms and Conditions
@@ -713,9 +718,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingTermsAndConditionsModification.setDocumentTitle(resource.getTermsAndConditionsModification().getDocumentTitle());
         existingTermsAndConditionsModification.setCommunication(resource.getTermsAndConditionsModification().getCommunication());
         existingTermsAndConditionsModification.setBorrowerRequestLetterDate(resource.getTermsAndConditionsModification().getBorrowerRequestLetterDate());
-        existingTermsAndConditionsModification.setDateofIssueofAmendedSanctionLetter(resource.getTermsAndConditionsModification().getDateofIssueofAmendedSanctionLetter());
+        existingTermsAndConditionsModification.setDateOfIssueOfAmendedSanctionLetter(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedSanctionLetter());
         existingTermsAndConditionsModification.setRemarks(resource.getTermsAndConditionsModification().getRemarks());
         existingTermsAndConditionsModification.setFileReference(resource.getTermsAndConditionsModification().getFileReference());
+        existingTermsAndConditionsModification.setAmendedDocumentType(resource.getTermsAndConditionsModification().getAmendedDocumentType());
+        existingTermsAndConditionsModification.setDateOfIssueOfAmendedDocument(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedDocument());
+        existingTermsAndConditionsModification.setAmendedDocumentRemarks(resource.getTermsAndConditionsModification().getAmendedDocumentRemarks());
+        existingTermsAndConditionsModification.setAmendedDocumentTitle(resource.getTermsAndConditionsModification().getAmendedDocumentTitle());
+        existingTermsAndConditionsModification.setAmendedDocumentFileReference(resource.getTermsAndConditionsModification().getAmendedDocumentFileReference());
         existingTermsAndConditionsModification = termsAndConditionsRepository.save(existingTermsAndConditionsModification);
 
         // Change Documents for T&C Mod.
