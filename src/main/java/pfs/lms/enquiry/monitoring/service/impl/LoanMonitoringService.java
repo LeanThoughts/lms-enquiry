@@ -943,7 +943,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         // Change Documents for Site Visit
         changeDocumentService.createChangeDocument(
-                loanMonitor.getId(), loanMonitor.getId().toString(),null,
+                loanMonitor.getId(), siteVisit.getId().toString(),null,
                 loanApplication.getLoanContractId(),
                 null,
                 siteVisit,
