@@ -20,6 +20,14 @@
                     <p class="text-truncate">{{ obj.serialNumber }}</p>
                 </mat-cell>
             </ng-container>
+
+            <!-- bankName Column -->
+            <ng-container matColumnDef="bankName">
+                <mat-header-cell *matHeaderCellDef>Bank</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.bankName }}</p>
+                </mat-cell>
+            </ng-container>
             
             <!-- sanctionedAmount Column -->
             <ng-container matColumnDef="sanctionedAmount">

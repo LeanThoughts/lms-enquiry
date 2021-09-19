@@ -9,7 +9,8 @@ import {
   MAT_DATE_LOCALE,
   DateAdapter,
   MatDialogModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatAutocompleteModule
 } from '@angular/material';
 import { EnquiryApplicationRouteGuard } from 'app/enquiryApplication.guard';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
@@ -24,6 +25,8 @@ import { LoanAppraisalKYCListComponent } from './loan-appraisal-kyc/loan-apprais
 import { LoanAppraisalKYCUpdateComponent } from './loan-appraisal-kyc/loan-appraisal-kyc-update/loan-appraisal-kyc-update.component';
 import { SyndicateConsortiumListComponent } from './syndicate-consortium/syndicate-consortium-list/syndicate-consortium-list.component';
 import { SyndicateConsortiumUpdateComponent } from './syndicate-consortium/syndicate-consortium-update/syndicate-consortium-update.component';
+import { ProposalDetailsComponent } from './proposal-details/proposal-details/proposal-details.component';
+import { ProposalDetailsUpdateComponent } from './proposal-details/proposal-details-update/proposal-details-update.component';
 
 const routes = [
     {
@@ -52,25 +55,26 @@ const MY_FORMATS = {
 
 @NgModule({
     imports: [
-      RouterModule.forChild(routes),
-      CommonModule,
-      FuseSharedModule,
-      MatExpansionModule,
-      MatInputModule,
-      MatButtonModule,
-      MatFormFieldModule,
-      MatPaginatorModule,
-      MatTableModule,
-      MatToolbarModule,
-      MatIconModule,
-      MatSelectModule,
-      MatSortModule,
-      MatDatepickerModule,
-      MatProgressSpinnerModule,
-      MatTabsModule,
-      MatDialogModule,
-      FormsModule,
-      MatCheckboxModule
+        RouterModule.forChild(routes),
+        CommonModule,
+        FuseSharedModule,
+        MatExpansionModule,
+        MatInputModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatSelectModule,
+        MatSortModule,
+        MatDatepickerModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        MatDialogModule,
+        FormsModule,
+        MatCheckboxModule,
+        MatAutocompleteModule
     ],
     declarations: [
         LoanAppraisalComponent,
@@ -79,7 +83,9 @@ const MY_FORMATS = {
         LoanAppraisalKYCListComponent,
         LoanAppraisalKYCUpdateComponent,
         SyndicateConsortiumListComponent,
-        SyndicateConsortiumUpdateComponent
+        SyndicateConsortiumUpdateComponent,
+        ProposalDetailsComponent,
+        ProposalDetailsUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -100,7 +106,8 @@ const MY_FORMATS = {
         LoanAppraisalKYCListComponent,
         LoanAppraisalKYCUpdateComponent,
         SyndicateConsortiumListComponent,
-        SyndicateConsortiumUpdateComponent
+        SyndicateConsortiumUpdateComponent,
+        ProposalDetailsUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

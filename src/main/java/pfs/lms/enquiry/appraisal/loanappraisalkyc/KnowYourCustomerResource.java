@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class LoanAppraisalKYCResource {
+public class KnowYourCustomerResource {
 
     private UUID id;
     private UUID loanApplicationId;

@@ -7,6 +7,8 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 @Injectable()
 export class LoanAppraisalService implements Resolve<any> {
 
+    _loanAppraisal: any;
+
     /**
      * constructor()
      * @param _http
@@ -20,15 +22,25 @@ export class LoanAppraisalService implements Resolve<any> {
      * @param state
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        console.log('in resolve :: loanAppraisalId is ', this._loanAppraisal.id);
         return forkJoin([
             this.getLoanOfficers(this._loanEnquiryService.selectedLoanApplicationId.value),
-            this.getLaonAppraisalKYCs(this._loanEnquiryService.selectedLoanApplicationId.value)
+            this.getLaonAppraisalKYCs(this._loanAppraisal.id),
+            this.getBanks(),
+            this.getSyndicateConsortiums(this._loanAppraisal.id),
+            this.getProposalDetail(this._loanAppraisal.id)
         ]);
     }
     
     /**
+     * getBanks()
+     */
+    public getBanks(): Observable<any> {
+        return this._http.get('enquiry/api/bankmasters/all');
+    }
+
+    /**
      * getLaonAppraisal()
-     * @param loanApplicationId 
      */
     public getLaonAppraisal(loanApplicationId: string): Observable<any> {
         return this._http.get("enquiry/api/loanAppraisals/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
@@ -36,7 +48,6 @@ export class LoanAppraisalService implements Resolve<any> {
 
     /**
      * getPartnersByRoleType()
-     * @param roleType 
      */
     public getPartnersByRole(role: string): Observable<any> {
         return this._http.get("enquiry/api/partners/role/" + role);
@@ -44,7 +55,6 @@ export class LoanAppraisalService implements Resolve<any> {
     
     /**
      * getAppraisalOfficers()
-     * @param loanApplicationId 
      */
     public getLoanOfficers(loanApplicationId: string): Observable<any> {
         return this._http.get("enquiry/api/loanPartners/search/findByLoanApplicationIdOrderBySerialNumberDesc?loanApplicationId=" 
@@ -53,7 +63,6 @@ export class LoanAppraisalService implements Resolve<any> {
 
     /**
      * createAppraisalOfficer()
-     * @param appraisalOfficer 
      */
     public createLoanOfficer(loanOfficer: any): Observable<any> {
         return this._http.post("enquiry/api/loanPartners/create", loanOfficer);
@@ -61,7 +70,6 @@ export class LoanAppraisalService implements Resolve<any> {
 
     /**
      * updateLoanOfficer()
-     * @param loanOfficer 
      */
     public updateLoanOfficer(loanOfficer: any): Observable<any> {
         return this._http.put("enquiry/api/loanPartners/update", loanOfficer);
@@ -69,41 +77,37 @@ export class LoanAppraisalService implements Resolve<any> {
 
     /**
      * createLoanAppraisalKYC()
-     * @param loanAppraisalKYC 
      */
     public createLoanAppraisalKYC(loanAppraisalKYC: any): Observable<any> {
-        return this._http.post("enquiry/api/loanAppraisalKYCs/create", loanAppraisalKYC);
+        return this._http.post("enquiry/api/knowYourCustomers/create", loanAppraisalKYC);
     }
 
     /**
      * updateLoanAppraisalKYC()
-     * @param loanAppraisalKYC 
      */
     public updateLoanAppraisalKYC(loanAppraisalKYC: any): Observable<any> {
-        return this._http.put("enquiry/api/loanAppraisalKYCs/update", loanAppraisalKYC);
+        return this._http.put("enquiry/api/knowYourCustomers/update", loanAppraisalKYC);
     }
 
     /**
      * getLaonAppraisalKYCs()
-     * @param loanApplicationId 
      */
-    public getLaonAppraisalKYCs(loanApplicationId: string): Observable<any> {
-        return this._http.get("enquiry/api/loanAppraisalKYCs/search/findByLoanAppraisalLoanApplicationIdOrderBySerialNumberDesc?loanApplicationId=" 
-                + loanApplicationId);
+    public getLaonAppraisalKYCs(loanAppraisalId: string): Observable<any> {
+        return this._http.get("enquiry/api/knowYourCustomers/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
+                + loanAppraisalId);
+        // return this._http.get('enquiry/api/knowYourCustomers');
     }
 
     /**
      * getSyndicateConsortiums()
-     * @param loanApplicationId 
      */
-    public getSyndicateConsortiums(loanApplicationId: string): Observable<any> {
-        return this._http.get("enquiry/api/syndicateConsortiums/search/findByLoanAppraisalLoanApplicationIdOrderBySerialNumberDesc?loanApplicationId=" 
-                + loanApplicationId);
+    public getSyndicateConsortiums(loanAppraisalId: string): Observable<any> {
+        return this._http.get("enquiry/api/syndicateConsortiums/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
+                + loanAppraisalId);
     }
 
     /**
      * createSyndicateConsortium()
-     * @param syndicateConsortium 
      */
     public createSyndicateConsortium(syndicateConsortium: any): Observable<any> {
         return this._http.post("enquiry/api/syndicateConsortiums/create", syndicateConsortium);
@@ -111,15 +115,45 @@ export class LoanAppraisalService implements Resolve<any> {
 
     /**
      * updateSyndicateConsortium()
-     * @param syndicateConsortium 
      */
     public updateSyndicateConsortium(syndicateConsortium: any): Observable<any> {
         return this._http.put("enquiry/api/syndicateConsortiums/update", syndicateConsortium);
     }
 
     /**
+     * getProposalDetail()
+     */
+    public getProposalDetail(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/proposalDetails/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createProposalDetail()
+     */
+    public createProposalDetail(proposalDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/proposalDetails/create", proposalDetail);
+    }
+
+    /**
+     * updateProposalDetail()
+     */
+    public updateProposalDetail(proposalDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/proposalDetails/update", proposalDetail);
+    }
+
+    /**
      * uploadVaultDocument()
-     * @param file 
      */
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);

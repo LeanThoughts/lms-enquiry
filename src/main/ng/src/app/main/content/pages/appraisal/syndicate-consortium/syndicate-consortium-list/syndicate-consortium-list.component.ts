@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
+import { Subscription } from 'rxjs';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { SyndicateConsortiumUpdateComponent } from '../syndicate-consortium-update/syndicate-consortium-update.component';
@@ -13,27 +15,32 @@ import { SyndicateConsortiumUpdateComponent } from '../syndicate-consortium-upda
 })
 export class SyndicateConsortiumListComponent implements OnInit {
 
+    banks: any;
+
     dataSource: MatTableDataSource<any>;
     
     displayedColumns = [
-        'serialNumber', 'sanctionedAmount', 'currency', 'lead', 'approvalStatus', 'documentStage', 'disbursementStatus', 'disbursedAmount'
+        'serialNumber', 'bankName', 'sanctionedAmount', 'currency', 'lead', 'approvalStatus', 'documentStage', 'disbursementStatus', 'disbursedAmount'
     ];
 
     selectedSyndicateConsortium: any;
+    subscriptions = new Subscription();
 
     _loanApplicationId: string;
 
     /**
      * constructor()
-     * @param _dialogRef 
-     * @param _loanAppraisalService 
      */
     constructor(private _dialogRef: MatDialog, 
-                _loanEnquiryService: LoanEnquiryService,
-                private _loanAppraisalService: LoanAppraisalService) { 
+                private _loanEnquiryService: LoanEnquiryService,
+                private _loanAppraisalService: LoanAppraisalService,
+                _activatedRoute: ActivatedRoute) { 
 
-        this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        this.dataSource = new MatTableDataSource([]);
+        // Fetch list of banks and syndicate consortiums ...
+        this.subscriptions.add(_activatedRoute.data.subscribe(data => {
+            this.banks = data.routeResolvedData[2];
+            this.dataSource = new MatTableDataSource(data.routeResolvedData[3]._embedded.syndicateConsortiums);
+        }));
     }
 
     /**
@@ -44,14 +51,14 @@ export class SyndicateConsortiumListComponent implements OnInit {
 
     /**
      * openUpdateDialog()
-     * @param operation 
      */
     openUpdateDialog(operation: string): void {
         // Open the dialog.
         var data = {
             'operation': operation,
-            'loanApplicationId': this._loanApplicationId,
+            'loanApplicationId': this._loanEnquiryService.selectedLoanApplicationId.value,
             'syndicateConsortium': {},
+            'banks': this.banks
         };
         if (operation === 'modifySyndicateConsortium') {
             data.syndicateConsortium = this.selectedSyndicateConsortium;
@@ -64,6 +71,7 @@ export class SyndicateConsortiumListComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this.getSyndicateConsortiums();
+                this.selectedSyndicateConsortium = undefined;
             }
         });
     }
@@ -72,14 +80,13 @@ export class SyndicateConsortiumListComponent implements OnInit {
      * getSyndicateConsortiums()
      */
      getSyndicateConsortiums(): void {
-        this._loanAppraisalService.getSyndicateConsortiums(this._loanApplicationId).subscribe(data => {
+        this._loanAppraisalService.getSyndicateConsortiums(this._loanAppraisalService._loanAppraisal.id).subscribe(data => {
             this.dataSource = new MatTableDataSource(data._embedded.syndicateConsortiums);
         });
     }
 
     /**
      * onRowSelect()
-     * @param syndicateConsortium 
      */
     onRowSelect(syndicateConsortium: any): void {
         this.selectedSyndicateConsortium = syndicateConsortium;
@@ -87,7 +94,6 @@ export class SyndicateConsortiumListComponent implements OnInit {
 
     /**
      * getApprovalStatus()
-     * @param value 
      */
     getApprovalStatus(value: string): string {
         if (value === '01') {
@@ -106,7 +112,6 @@ export class SyndicateConsortiumListComponent implements OnInit {
 
     /**
      * getDisbursementStatus()
-     * @param value 
      */
     getDisbursementStatus(value: string): string {
         if (value === '1') {
