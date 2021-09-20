@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.loanappraisalkyc;
+package pfs.lms.enquiry.appraisal.knowyourcustomer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanApplication", "businessPartnerId", "roleType"}, callSuper = false)
-@EntityListeners(LoanPartnerEventListener.class)
+@EntityListeners(LoanPartnerEntityListener.class)
 public class LoanPartner extends AggregateRoot<LoanPartner> implements Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER)

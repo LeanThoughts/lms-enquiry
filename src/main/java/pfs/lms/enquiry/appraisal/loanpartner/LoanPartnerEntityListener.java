@@ -7,7 +7,7 @@ import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
 
 @Slf4j
-public class LoanPartnerEventListener {
+public class LoanPartnerEntityListener {
 
     @PostPersist
     public void handleLoanPartnerAfterCreate(LoanPartner loanPartner) {

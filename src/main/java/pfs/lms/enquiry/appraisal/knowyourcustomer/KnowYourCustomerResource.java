@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.loanappraisalkyc;
+package pfs.lms.enquiry.appraisal.knowyourcustomer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

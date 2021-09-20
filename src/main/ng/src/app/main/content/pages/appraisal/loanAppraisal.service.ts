@@ -93,17 +93,26 @@ export class LoanAppraisalService implements Resolve<any> {
      * getLaonAppraisalKYCs()
      */
     public getLaonAppraisalKYCs(loanAppraisalId: string): Observable<any> {
-        return this._http.get("enquiry/api/knowYourCustomers/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
-                + loanAppraisalId);
-        // return this._http.get('enquiry/api/knowYourCustomers');
+        if (loanAppraisalId === '') {
+            return Observable.of({});
+        }
+        else {
+            return this._http.get("enquiry/api/knowYourCustomers/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
+                    + loanAppraisalId);
+        }
     }
 
     /**
      * getSyndicateConsortiums()
      */
     public getSyndicateConsortiums(loanAppraisalId: string): Observable<any> {
-        return this._http.get("enquiry/api/syndicateConsortiums/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
-                + loanAppraisalId);
+        if (loanAppraisalId === '') {
+            return Observable.of({});
+        }
+        else {
+            return this._http.get("enquiry/api/syndicateConsortiums/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
+                    + loanAppraisalId);
+        }
     }
 
     /**

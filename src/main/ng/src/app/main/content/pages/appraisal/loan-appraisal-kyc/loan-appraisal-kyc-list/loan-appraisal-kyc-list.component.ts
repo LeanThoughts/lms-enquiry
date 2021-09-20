@@ -40,7 +40,9 @@ export class LoanAppraisalKYCListComponent implements OnInit {
 
         // Subscribe to route resolved data (data.routeResolvedData[0] = loanPartners) ...
         _activatedRoute.data.subscribe(data => {
-            this.dataSource = new MatTableDataSource(data.routeResolvedData[1]._embedded.knowYourCustomers);
+            console.log('knowYourCustomers', data.routeResolvedData[1]);
+            if (JSON.stringify(data.routeResolvedData[1]) !== JSON.stringify({}))
+                this.dataSource = new MatTableDataSource(data.routeResolvedData[1]._embedded.knowYourCustomers);
         })
     }
 

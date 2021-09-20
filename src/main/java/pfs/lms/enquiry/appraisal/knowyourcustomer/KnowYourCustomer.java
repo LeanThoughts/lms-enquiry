@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.loanappraisalkyc;
+package pfs.lms.enquiry.appraisal.knowyourcustomer;
 
 import lombok.*;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanAppraisal", "serialNumber", "partnerType", "kycType"}, callSuper = false)
-@EntityListeners(KnowYourCustomerEventListener.class)
+@EntityListeners(KnowYourCustomerEntityListener.class)
 public class KnowYourCustomer extends AggregateRoot<KnowYourCustomer> implements Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER)

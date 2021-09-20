@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.loanappraisalkyc;
+package pfs.lms.enquiry.appraisal.knowyourcustomer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

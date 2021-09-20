@@ -7,7 +7,7 @@ import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
 
 @Slf4j
-public class ProposalDetailEventListener {
+public class ProposalDetailEntityListener {
 
     @PostPersist
     public void handleProposalDetailAfterCreate(ProposalDetail proposalDetail) {

@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanAppraisal", "serialNumber"}, callSuper = false)
-@EntityListeners(SyndicateConsortiumEventListener.class)
+@EntityListeners(SyndicateConsortiumEntityListener.class)
 public class SyndicateConsortium extends AggregateRoot<SyndicateConsortium> implements Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER)

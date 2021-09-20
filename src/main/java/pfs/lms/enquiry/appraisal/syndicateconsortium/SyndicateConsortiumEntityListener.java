@@ -8,7 +8,7 @@ import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
 
 @Slf4j
-public class SyndicateConsortiumEventListener {
+public class SyndicateConsortiumEntityListener {
 
     @PostPersist
     public void handleSyndicateConsortiumAfterCreate(LoanPartner loanPartner) {

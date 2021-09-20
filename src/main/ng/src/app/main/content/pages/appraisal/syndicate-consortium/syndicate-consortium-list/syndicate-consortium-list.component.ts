@@ -39,7 +39,8 @@ export class SyndicateConsortiumListComponent implements OnInit {
         // Fetch list of banks and syndicate consortiums ...
         this.subscriptions.add(_activatedRoute.data.subscribe(data => {
             this.banks = data.routeResolvedData[2];
-            this.dataSource = new MatTableDataSource(data.routeResolvedData[3]._embedded.syndicateConsortiums);
+            if (JSON.stringify(data.routeResolvedData[3]) !== JSON.stringify({}))
+                this.dataSource = new MatTableDataSource(data.routeResolvedData[3]._embedded.syndicateConsortiums);
         }));
     }
 

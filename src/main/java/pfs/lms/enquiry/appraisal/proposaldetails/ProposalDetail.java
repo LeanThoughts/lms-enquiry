@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(ProposalDetailEventListener.class)
+@EntityListeners(ProposalDetailEntityListener.class)
 public class ProposalDetail extends AggregateRoot<ProposalDetail> implements Cloneable {
 
     @OneToOne(fetch = FetchType.EAGER)
