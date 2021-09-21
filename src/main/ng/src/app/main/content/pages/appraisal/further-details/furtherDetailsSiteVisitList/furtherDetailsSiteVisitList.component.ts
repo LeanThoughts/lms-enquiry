@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
-import { FurtherDetailsSiteVisitUpdateDialogComponent } from '../furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
+import { FurtherDetailsSiteVisitUpdateComponent } from '../furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
 
 @Component({
     selector: 'fuse-further-details',
@@ -109,7 +109,7 @@ export class FurtherDetailsSiteVisitListComponent {
         if (operation === 'updateSiteVisit') {
             data.selectedSiteVisit = this.selectedSiteVisit;
         }
-        const dialogRef = this._matDialog.open(FurtherDetailsSiteVisitUpdateDialogComponent, {
+        const dialogRef = this._matDialog.open(FurtherDetailsSiteVisitUpdateComponent, {
             panelClass: 'fuse-further-details-site-visit-update-dialog',
             width: '750px',
             data: data

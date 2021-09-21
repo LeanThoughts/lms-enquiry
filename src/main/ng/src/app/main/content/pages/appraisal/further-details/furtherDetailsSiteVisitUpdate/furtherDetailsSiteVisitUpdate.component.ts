@@ -13,7 +13,7 @@ import { LoanMonitoringService } from '../../../monitoring/loanMonitoring.servic
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class FurtherDetailsSiteVisitUpdateDialogComponent {
+export class FurtherDetailsSiteVisitUpdateComponent {
 
     dialogTitle = 'Add New Site Visit Details';
 
@@ -31,7 +31,7 @@ export class FurtherDetailsSiteVisitUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, 
                 private _loanMonitoringService: LoanMonitoringService,
-                public _dialogRef: MatDialogRef<FurtherDetailsSiteVisitUpdateDialogComponent>, 
+                public _dialogRef: MatDialogRef<FurtherDetailsSiteVisitUpdateComponent>, 
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
                 private _matSnackBar: MatSnackBar) {
 

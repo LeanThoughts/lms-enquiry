@@ -30,7 +30,8 @@ export class LoanAppraisalService implements Resolve<any> {
             this.getSyndicateConsortiums(this._loanAppraisal.id),
             this.getProposalDetail(this._loanAppraisal.id),
             this.getFurtherDetail(this._loanAppraisal.id),
-            this.getSiteVisits(this._loanEnquiryService.selectedLoanApplicationId.value)
+            this.getSiteVisits(this._loanEnquiryService.selectedLoanApplicationId.value),
+            this.getProjectAppraisalCompletion(this._loanAppraisal.id)
         ]);
     }
     
@@ -194,6 +195,38 @@ export class LoanAppraisalService implements Resolve<any> {
     getSiteVisits(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/siteVisits/search/findByLoanMonitorLoanApplicationIdAndSiteVisitType?loanApplicationId=' 
                 + loanApplicationId + '&siteVisitType=Site Visit');
+    }
+
+    /**
+     * getProjectAppraisalCompletion()
+     */
+    public getProjectAppraisalCompletion(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/projectAppraisalCompletions/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+    
+    /**
+     * createProjectAppraisalCompletion()
+     */
+    public createProjectAppraisalCompletion(proposalDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/projectAppraisalCompletions/create", proposalDetail);
+    }
+
+    /**
+     * updateProjectAppraisalCompletion()
+     */
+    public updateProjectAppraisalCompletion(proposalDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/projectAppraisalCompletions/update", proposalDetail);
     }
 
     /**
