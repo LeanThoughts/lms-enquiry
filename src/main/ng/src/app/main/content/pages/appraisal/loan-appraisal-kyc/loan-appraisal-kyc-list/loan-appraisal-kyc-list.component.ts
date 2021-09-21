@@ -38,12 +38,8 @@ export class LoanAppraisalKYCListComponent implements OnInit {
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
 
-        // Subscribe to route resolved data (data.routeResolvedData[0] = loanPartners) ...
-        _activatedRoute.data.subscribe(data => {
-            console.log('knowYourCustomers', data.routeResolvedData[1]);
-            if (JSON.stringify(data.routeResolvedData[1]) !== JSON.stringify({}))
-                this.dataSource = new MatTableDataSource(data.routeResolvedData[1]._embedded.knowYourCustomers);
-        })
+        if (JSON.stringify(_activatedRoute.snapshot.data.routeResolvedData[1]) !== JSON.stringify({}))
+            this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.knowYourCustomers);
     }
 
     /**

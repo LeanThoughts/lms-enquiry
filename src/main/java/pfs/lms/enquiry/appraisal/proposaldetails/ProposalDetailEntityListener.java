@@ -3,7 +3,6 @@ package pfs.lms.enquiry.appraisal.proposaldetails;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
 
 @Slf4j
@@ -16,9 +15,5 @@ public class ProposalDetailEntityListener {
 
     @PostUpdate
     public void handleProposalDetailAfterUpdate(ProposalDetail proposalDetail) {
-    }
-
-    @PostRemove
-    public void handleProposalDetailAfterDelete(ProposalDetail proposalDetail) {
     }
 }

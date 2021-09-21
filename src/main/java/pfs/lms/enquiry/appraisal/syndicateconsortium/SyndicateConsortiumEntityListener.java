@@ -1,7 +1,6 @@
 package pfs.lms.enquiry.appraisal.syndicateconsortium;
 
 import lombok.extern.slf4j.Slf4j;
-import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
@@ -11,15 +10,15 @@ import javax.persistence.PostUpdate;
 public class SyndicateConsortiumEntityListener {
 
     @PostPersist
-    public void handleSyndicateConsortiumAfterCreate(LoanPartner loanPartner) {
+    public void handleSyndicateConsortiumAfterCreate(SyndicateConsortium syndicateConsortium) {
         log.info("Inside loan partner after create");
     }
 
     @PostUpdate
-    public void handleSyndicateConsortiumAfterUpdate(LoanPartner loanPartner) {
+    public void handleSyndicateConsortiumAfterUpdate(SyndicateConsortium syndicateConsortium) {
     }
 
     @PostRemove
-    public void handleSyndicateConsortiumAfterDelete(LoanPartner loanPartner) {
+    public void handleSyndicateConsortiumAfterDelete(SyndicateConsortium syndicateConsortium) {
     }
 }

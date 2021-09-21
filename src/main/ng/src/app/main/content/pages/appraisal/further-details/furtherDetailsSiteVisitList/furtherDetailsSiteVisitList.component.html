@@ -1,0 +1,79 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSiteVisit('addSiteVisit')"> 
+            Add New Site Visit
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSiteVisit('updateSiteVisit')" 
+                [disabled]="!selectedSiteVisit"> 
+            Modify Site Visit
+        </button>
+    </div>
+</div>
+<div class="content-card mat-white-bg mat-elevation-z4 p-16" style="width: 100%">
+    <form [formGroup]="_furtherDetailForm">
+        <div fxLayout="row">
+            <mat-form-field fxFlex="45">
+                <input matInput placeholder="Further details required during appraisal (if any)" formControlName="furtherDetails" maxlength="200"
+                        required>          
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput [matDatepicker]="picker1" placeholder="Date" formControlName="date" readonly required>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker> 
+            </mat-form-field>
+        </div>
+    </form>
+    <button class="mr-8 btn" mat-raised-button color="accent" (click)="saveFurtherDetails()"> 
+        Save
+    </button>
+</div>
+<div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+    <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+        
+        <!-- serialNumber Column -->
+        <ng-container matColumnDef="serialNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.serialNumber }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- siteVisitType Column -->
+        <ng-container matColumnDef="siteVisitType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Type</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.siteVisitType }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- dateOfSiteVisit Column -->
+        <ng-container matColumnDef="dateOfSiteVisit">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Date of Site Visit</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.dateOfSiteVisit | date: 'dd/MM/yyyy' }}</p>
+            </mat-cell>
+        </ng-container>
+
+       <!-- documentTitle Column -->
+        <ng-container matColumnDef="documentTitle">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.documentTitle }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- download Column -->
+        <ng-container matColumnDef="download">
+            <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <a [href]="getFileURL(obj.fileReference)" *ngIf="obj.fileReference !== ''">Download</a>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        
+        <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+            [ngClass]="{'highlight':obj === selectedSiteVisit}" [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+</div>

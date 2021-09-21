@@ -1,7 +1,6 @@
 package pfs.lms.enquiry.appraisal.knowyourcustomer;
 
 import lombok.extern.slf4j.Slf4j;
-import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
@@ -11,15 +10,15 @@ import javax.persistence.PostUpdate;
 public class KnowYourCustomerEntityListener {
 
     @PostPersist
-    public void handleKnowYourCustomerAfterCreate(SyndicateConsortium syndicateConsortium) {
+    public void handleKnowYourCustomerAfterCreate(KnowYourCustomer knowYourCustomer) {
         log.info("Inside loan partner after create");
     }
 
     @PostUpdate
-    public void handleKnowYourCustomerAfterUpdate(SyndicateConsortium syndicateConsortium) {
+    public void handleKnowYourCustomerAfterUpdate(KnowYourCustomer knowYourCustomer) {
     }
 
     @PostRemove
-    public void handleKnowYourCustomerAfterDelete(SyndicateConsortium syndicateConsortium) {
+    public void handleKnowYourCustomerAfterDelete(KnowYourCustomer knowYourCustomer) {
     }
 }

@@ -27,6 +27,8 @@ import { SyndicateConsortiumListComponent } from './syndicate-consortium/syndica
 import { SyndicateConsortiumUpdateComponent } from './syndicate-consortium/syndicate-consortium-update/syndicate-consortium-update.component';
 import { ProposalDetailsComponent } from './proposal-details/proposal-details/proposal-details.component';
 import { ProposalDetailsUpdateComponent } from './proposal-details/proposal-details-update/proposal-details-update.component';
+import { FurtherDetailsSiteVisitListComponent } from './further-details/furtherDetailsSiteVisitList/furtherDetailsSiteVisitList.component';
+import { FurtherDetailsSiteVisitUpdateDialogComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
 
 const routes = [
     {
@@ -85,7 +87,9 @@ const MY_FORMATS = {
         SyndicateConsortiumListComponent,
         SyndicateConsortiumUpdateComponent,
         ProposalDetailsComponent,
-        ProposalDetailsUpdateComponent
+        ProposalDetailsUpdateComponent,
+        FurtherDetailsSiteVisitListComponent,
+        FurtherDetailsSiteVisitUpdateDialogComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -101,13 +105,11 @@ const MY_FORMATS = {
         LoanAppraisalComponent,
     ],  
     entryComponents: [
-        LoanPartnersComponent,
         LoanPartnerUpdateComponent,
-        LoanAppraisalKYCListComponent,
         LoanAppraisalKYCUpdateComponent,
-        SyndicateConsortiumListComponent,
         SyndicateConsortiumUpdateComponent,
-        ProposalDetailsUpdateComponent
+        ProposalDetailsUpdateComponent,
+        FurtherDetailsSiteVisitUpdateDialogComponent
     ]
 })
 export class LoanAppraisalModule {

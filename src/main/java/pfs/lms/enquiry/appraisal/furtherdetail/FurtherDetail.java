@@ -5,6 +5,7 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanAppraisal", "furtherDetails", "date"}, callSuper = false)
+@EntityListeners(FurtherDetailEntityListener.class)
 public class FurtherDetail extends AggregateRoot<FurtherDetail> implements Cloneable {
 
     @NotNull

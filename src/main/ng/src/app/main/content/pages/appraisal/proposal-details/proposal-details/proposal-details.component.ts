@@ -12,7 +12,7 @@ import { ProposalDetailsUpdateComponent } from '../proposal-details-update/propo
     styleUrls: ['./proposal-details.component.scss'],
     animations: fuseAnimations
 })
-export class ProposalDetailsComponent implements OnInit {
+export class ProposalDetailsComponent {
 
     _loanApplicationId: string;
     _loanAppraisalId: string;
@@ -32,12 +32,6 @@ export class ProposalDetailsComponent implements OnInit {
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
         this._proposalDetail = _activatedRoute.snapshot.data.routeResolvedData[4];
-    }
-
-    /**
-     * ngOnInit()
-     */
-    ngOnInit() {
     }
 
     /**

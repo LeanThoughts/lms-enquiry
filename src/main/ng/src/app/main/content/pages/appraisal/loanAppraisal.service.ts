@@ -28,7 +28,9 @@ export class LoanAppraisalService implements Resolve<any> {
             this.getLaonAppraisalKYCs(this._loanAppraisal.id),
             this.getBanks(),
             this.getSyndicateConsortiums(this._loanAppraisal.id),
-            this.getProposalDetail(this._loanAppraisal.id)
+            this.getProposalDetail(this._loanAppraisal.id),
+            this.getFurtherDetail(this._loanAppraisal.id),
+            this.getSiteVisits(this._loanEnquiryService.selectedLoanApplicationId.value)
         ]);
     }
     
@@ -159,6 +161,39 @@ export class LoanAppraisalService implements Resolve<any> {
      */
     public updateProposalDetail(proposalDetail: any): Observable<any> {
         return this._http.put("enquiry/api/proposalDetails/update", proposalDetail);
+    }
+
+    /**
+     * getFurtherDetails()
+     */
+    public getFurtherDetail(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/furtherDetails/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * updateFurtherDetail()
+     */
+    public updateFurtherDetail(furtherDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/furtherDetails/update", furtherDetail);
+    }
+
+    /**
+     * getSiteVisits()
+     */
+    getSiteVisits(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/siteVisits/search/findByLoanMonitorLoanApplicationIdAndSiteVisitType?loanApplicationId=' 
+                + loanApplicationId + '&siteVisitType=Site Visit');
     }
 
     /**
