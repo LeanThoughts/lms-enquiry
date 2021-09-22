@@ -295,7 +295,7 @@ public class LoanMonitoringScheduledTask {
                                  termsAndConditionsModification.getDocumentTitle());
 
                          if (response != null) {
-                             response = postDocument(termsAndConditionsModification.getAmendedDocumentfileReference(),
+                             response = postDocument(termsAndConditionsModification.getAmendedDocumentFileReference(),
                                      termsAndConditionsModification.getId(),
                                      "2",
                                      "T&C Amended Document File",

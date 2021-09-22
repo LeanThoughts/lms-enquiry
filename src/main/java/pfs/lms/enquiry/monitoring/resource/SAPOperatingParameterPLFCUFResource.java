@@ -39,12 +39,19 @@ public class SAPOperatingParameterPLFCUFResource {
         detailedResource.setMonitorId(operatingParameterPLF.getLoanMonitor().getId().toString());
         detailedResource.setSerialNo(operatingParameterPLF.getSerialNumber().toString() );
 
-
+        detailedResource.setMusGenDuringYear(operatingParameterPLF.getMiUnGenerated().toString());
 
         detailedResource.setPeriod(operatingParameterPLF.getYear().toString());
-        detailedResource.setActualPlfCuf(operatingParameterPLF.getActualYearlyAveragePlfCuf());
-        detailedResource.setDesignPlfCuf(String.format("%.2f", Double.parseDouble("0")));
+        //detailedResource.setActualPlfCuf(operatingParameterPLF.getActualYearlyAveragePlfCuf().toString());
 
+
+        detailedResource.setDesignPlfCuf(operatingParameterPLF.getDesignPlfCuf().toString());
+
+       // detailedResource.setDesignPlfCuf(String.format("%.2f", Double.parseDouble(operatingParameterPLF.getDesignPlfCuf().toString())));
+       // detailedResource.setActualPlfCuf(String.format("%.2f", Double.parseDouble(operatingParameterPLF.getActualYearlyAveragePlfCuf().toString())));
+
+        detailedResource.setDesignPlfCuf(operatingParameterPLF.getDesignPlfCuf());
+        detailedResource.setActualPlfCuf(operatingParameterPLF.getActualYearlyAveragePlfCuf().toString());
         return detailedResource;
 
 
