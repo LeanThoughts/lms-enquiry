@@ -30,6 +30,7 @@ import { ProposalDetailsUpdateComponent } from './proposal-details/proposal-deta
 import { FurtherDetailsSiteVisitListComponent } from './further-details/furtherDetailsSiteVisitList/furtherDetailsSiteVisitList.component';
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
 import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
+import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
 
 const routes = [
     {
@@ -91,7 +92,8 @@ const MY_FORMATS = {
         ProposalDetailsUpdateComponent,
         FurtherDetailsSiteVisitListComponent,
         FurtherDetailsSiteVisitUpdateComponent,
-        ProjectAppraisalCompletionUpdateComponent
+        ProjectAppraisalCompletionUpdateComponent,
+        ReasonForDelayUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -112,7 +114,8 @@ const MY_FORMATS = {
         SyndicateConsortiumUpdateComponent,
         ProposalDetailsUpdateComponent,
         FurtherDetailsSiteVisitUpdateComponent,
-        ProjectAppraisalCompletionUpdateComponent
+        ProjectAppraisalCompletionUpdateComponent,
+        ReasonForDelayUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

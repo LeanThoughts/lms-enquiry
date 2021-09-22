@@ -31,7 +31,8 @@ export class LoanAppraisalService implements Resolve<any> {
             this.getProposalDetail(this._loanAppraisal.id),
             this.getFurtherDetail(this._loanAppraisal.id),
             this.getSiteVisits(this._loanEnquiryService.selectedLoanApplicationId.value),
-            this.getProjectAppraisalCompletion(this._loanAppraisal.id)
+            this.getProjectAppraisalCompletion(this._loanAppraisal.id),
+            this.getReasonForDelay(this._loanAppraisal.id)
         ]);
     }
     
@@ -227,6 +228,38 @@ export class LoanAppraisalService implements Resolve<any> {
      */
     public updateProjectAppraisalCompletion(proposalDetail: any): Observable<any> {
         return this._http.put("enquiry/api/projectAppraisalCompletions/update", proposalDetail);
+    }
+
+    /**
+     * getReasonForDelay()
+     */
+    public getReasonForDelay(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/reasonForDelays/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+    
+    /**
+     * createReasonForDelay()
+     */
+    public createReasonForDelay(reasonForDelay: any): Observable<any> {
+        return this._http.post("enquiry/api/reasonForDelays/create", reasonForDelay);
+    }
+
+    /**
+     * updateReasonForDelay()
+     */
+    public updateReasonForDelay(reasonForDelay: any): Observable<any> {
+        return this._http.put("enquiry/api/reasonForDelays/update", reasonForDelay);
     }
 
     /**

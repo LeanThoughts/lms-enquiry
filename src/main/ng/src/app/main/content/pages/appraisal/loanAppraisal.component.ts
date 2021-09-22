@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
+import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
 
 @Component({
     selector: 'fuse-loanappraisal',
@@ -30,6 +31,7 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     expandPanel2 = false;
 
     _projectAppraisalCompletion: any;
+    _reasonForDelay: any;    
 
     /**
      * constructor()
@@ -55,6 +57,7 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
         );
 
         this._projectAppraisalCompletion = _activatedRoute.snapshot.data.routeResolvedData[7];
+        this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];
     }
 
     /**
@@ -103,5 +106,27 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 this._projectAppraisalCompletion = result.projectAppraisalCompletion;
             }
         });
+    }
+
+    /**
+     * openReasonForDelayUpdateDialog()
+     */
+    openReasonForDelayUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'reasonForDelay': this._reasonForDelay
+        };
+        const dialogRef = this._dialogRef.open(ReasonForDelayUpdateComponent, {
+            width: '750px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._reasonForDelay = result.reasonForDelay;
+            }
+        });        
     }
 }
