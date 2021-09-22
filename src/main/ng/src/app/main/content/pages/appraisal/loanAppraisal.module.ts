@@ -31,6 +31,7 @@ import { FurtherDetailsSiteVisitListComponent } from './further-details/furtherD
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
 import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
 import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
+import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
 
 const routes = [
     {
@@ -93,7 +94,8 @@ const MY_FORMATS = {
         FurtherDetailsSiteVisitListComponent,
         FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
-        ReasonForDelayUpdateComponent
+        ReasonForDelayUpdateComponent,
+        CustomerRejectionUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -115,7 +117,8 @@ const MY_FORMATS = {
         ProposalDetailsUpdateComponent,
         FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
-        ReasonForDelayUpdateComponent
+        ReasonForDelayUpdateComponent,
+        CustomerRejectionUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

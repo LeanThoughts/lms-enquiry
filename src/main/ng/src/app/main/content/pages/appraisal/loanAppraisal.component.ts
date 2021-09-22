@@ -8,6 +8,7 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
 import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
+import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
 
 @Component({
     selector: 'fuse-loanappraisal',
@@ -31,7 +32,8 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     expandPanel2 = false;
 
     _projectAppraisalCompletion: any;
-    _reasonForDelay: any;    
+    _reasonForDelay: any;
+    _customerRejection: any;
 
     /**
      * constructor()
@@ -58,6 +60,7 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
 
         this._projectAppraisalCompletion = _activatedRoute.snapshot.data.routeResolvedData[7];
         this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];
+        this._customerRejection = _activatedRoute.snapshot.data.routeResolvedData[9];
     }
 
     /**
@@ -128,5 +131,27 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 this._reasonForDelay = result.reasonForDelay;
             }
         });        
+    }
+
+    /**
+     * openCustomerRejectionUpdateDialog()
+     */
+    openCustomerRejectionUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'customerRejection': this._customerRejection
+        };
+        const dialogRef = this._dialogRef.open(CustomerRejectionUpdateComponent, {
+            width: '750px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._customerRejection = result.customerRejection;
+            }
+        });   
     }
 }

@@ -32,7 +32,8 @@ export class LoanAppraisalService implements Resolve<any> {
             this.getFurtherDetail(this._loanAppraisal.id),
             this.getSiteVisits(this._loanEnquiryService.selectedLoanApplicationId.value),
             this.getProjectAppraisalCompletion(this._loanAppraisal.id),
-            this.getReasonForDelay(this._loanAppraisal.id)
+            this.getReasonForDelay(this._loanAppraisal.id),
+            this.getCustomerRejection(this._loanAppraisal.id)
         ]);
     }
     
@@ -260,6 +261,38 @@ export class LoanAppraisalService implements Resolve<any> {
      */
     public updateReasonForDelay(reasonForDelay: any): Observable<any> {
         return this._http.put("enquiry/api/reasonForDelays/update", reasonForDelay);
+    }
+
+    /**
+     * getCustomerRejection()
+     */
+    public getCustomerRejection(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/customerRejections/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+    
+    /**
+     * createCustomerRejection()
+     */
+    public createCustomerRejection(customerRejection: any): Observable<any> {
+        return this._http.post("enquiry/api/customerRejections/create", customerRejection);
+    }
+
+    /**
+     * updateCustomerRejection()
+     */
+    public updateCustomerRejection(customerRejection: any): Observable<any> {
+        return this._http.put("enquiry/api/customerRejections/update", customerRejection);
     }
 
     /**
