@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
-import { LoanAppraisalKYCUpdateComponent } from '../../loan-appraisal-kyc/loan-appraisal-kyc-update/loan-appraisal-kyc-update.component';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 
 @Component({
@@ -26,7 +25,7 @@ export class ProposalDetailsUpdateComponent {
      */
     constructor(_formBuilder: FormBuilder, 
                 private _loanAppraisalService: LoanAppraisalService,
-                public _dialogRef: MatDialogRef<LoanAppraisalKYCUpdateComponent>,
+                public _dialogRef: MatDialogRef<ProposalDetailsUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
 

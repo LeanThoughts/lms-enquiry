@@ -10,7 +10,8 @@ import {
   DateAdapter,
   MatDialogModule,
   MatCheckboxModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatStepperModule
 } from '@angular/material';
 import { EnquiryApplicationRouteGuard } from 'app/enquiryApplication.guard';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
@@ -32,6 +33,7 @@ import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCom
 import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
 import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
 import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
+import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 
 const routes = [
     {
@@ -79,7 +81,8 @@ const MY_FORMATS = {
         MatDialogModule,
         FormsModule,
         MatCheckboxModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatStepperModule
     ],
     declarations: [
         LoanAppraisalComponent,
@@ -95,7 +98,8 @@ const MY_FORMATS = {
         FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayUpdateComponent,
-        CustomerRejectionUpdateComponent
+        CustomerRejectionUpdateComponent,
+        ProjectDataUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -118,7 +122,8 @@ const MY_FORMATS = {
         FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayUpdateComponent,
-        CustomerRejectionUpdateComponent
+        CustomerRejectionUpdateComponent,
+        ProjectDataUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

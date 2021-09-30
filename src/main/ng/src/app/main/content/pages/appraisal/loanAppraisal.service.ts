@@ -33,7 +33,12 @@ export class LoanAppraisalService implements Resolve<any> {
             this.getSiteVisits(this._loanEnquiryService.selectedLoanApplicationId.value),
             this.getProjectAppraisalCompletion(this._loanAppraisal.id),
             this.getReasonForDelay(this._loanAppraisal.id),
-            this.getCustomerRejection(this._loanAppraisal.id)
+            this.getCustomerRejection(this._loanAppraisal.id),
+            this.getProjectData(this._loanAppraisal.id),
+            this._loanEnquiryService.getUnitOfMeasures(),
+            this._loanEnquiryService.getProjectTypes(),
+            this.getBusinessPartners('ZLM015'),
+            this.getBusinessPartners('ZLM028')
         ]);
     }
     
@@ -296,9 +301,48 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getProjectData()
+     */
+    public getProjectData(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/projectDatas/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+    
+    /**
+     * createProjectData()
+     */
+    public createProjectData(projectData: any): Observable<any> {
+        return this._http.post("enquiry/api/projectDatas/create", projectData);
+    }
+
+    /**
+     * updateProjectData()
+     */
+    public updateProjectData(projectData: any): Observable<any> {
+        return this._http.put("enquiry/api/projectDatas/update", projectData);
+    }
+
+    /**
+     * getBusinessPartners()
+     */
+    public getBusinessPartners(role: string): Observable<any> {
+        return this._http.get("enquiry/api/partners/role/" + role);
+    }
+
+    /**
      * uploadVaultDocument()
      */
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);
-    }
+    }    
 }

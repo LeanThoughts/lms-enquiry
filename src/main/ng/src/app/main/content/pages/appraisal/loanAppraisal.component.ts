@@ -9,6 +9,7 @@ import { AppService } from 'app/app.service';
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
 import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
 import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
+import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 
 @Component({
     selector: 'fuse-loanappraisal',
@@ -34,6 +35,7 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     _projectAppraisalCompletion: any;
     _reasonForDelay: any;
     _customerRejection: any;
+    _projectData: any;
 
     /**
      * constructor()
@@ -44,12 +46,13 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
      */
     constructor(private _formBuilder: FormBuilder, 
                 public _loanEnquiryService: LoanEnquiryService, 
-                _activatedRoute: ActivatedRoute, 
+                public _activatedRoute: ActivatedRoute, 
                 private _dialogRef: MatDialog,
                 public _appService: AppService) {
         
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
+            console.log('this.selectedEnquiry', this.selectedEnquiry);
         }));          
         
         this.subscriptions.add(
@@ -61,6 +64,7 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
         this._projectAppraisalCompletion = _activatedRoute.snapshot.data.routeResolvedData[7];
         this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];
         this._customerRejection = _activatedRoute.snapshot.data.routeResolvedData[9];
+        this._projectData = _activatedRoute.snapshot.data.routeResolvedData[10];
     }
 
     /**
@@ -153,5 +157,32 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 this._customerRejection = result.customerRejection;
             }
         });   
+    }
+
+    /**
+     * openProjectDataUpdateDialog()
+     */
+    openProjectDataUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'projectData': this._projectData,
+            'loanEnquiry': this.selectedEnquiry,
+            'unitOfMeasures': this._activatedRoute.snapshot.data.routeResolvedData[11]._embedded.unitOfMeasures,
+            'projectTypes': this._activatedRoute.snapshot.data.routeResolvedData[12]._embedded.projectTypes,
+            'technologySuppliers': this._activatedRoute.snapshot.data.routeResolvedData[13],
+            'epcContractors': this._activatedRoute.snapshot.data.routeResolvedData[14]
+        };
+        const dialogRef = this._dialogRef.open(ProjectDataUpdateComponent, {
+            width: '850px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._projectData = result.projectData;
+            }
+        });        
     }
 }
