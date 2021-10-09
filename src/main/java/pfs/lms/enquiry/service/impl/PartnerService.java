@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.PartnerContact;
 import pfs.lms.enquiry.domain.PartnerRoleType;
+import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.PartnerRoleTypeRepository;
+import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.PartnerResourceByAlphabet;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
@@ -29,6 +31,7 @@ public class PartnerService implements IPartnerService {
 
     private final PartnerRepository partnerRepository;
     private final PartnerRoleTypeRepository partnerRoleTypeRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Partner getOne(String username) {
@@ -430,7 +433,51 @@ public class PartnerService implements IPartnerService {
 
         log.info("Finished Migration of EXISTING Business Partner Number :" + partner.getPartyNumber() + partner.getPartyName1());
 
+        // Create/Update User for LOAN Applicants ONLY
+        this.userMaintenance(partner);
 
         return updatedPartner;
+    }
+
+
+    private void userMaintenance (Partner partner) {
+
+        // Create User for Loan Applicants ONLY (TR0100)
+        boolean loanPartnerRoleExisting =
+                partner.getPartnerRoleTypes().stream()
+                .anyMatch(partnerRoleType -> partnerRoleType.getRoleCode().equals("TR0100"));
+        if (loanPartnerRoleExisting == false) {
+            return;
+        }
+
+        log.info("Business Partner" + partner.getPartyNumber() +  " is a Loan Applicant. Therefore creating an entry in the User Table");
+        // Find User By Email Id
+        User exsistingUser  = userRepository.findByEmail(partner.getEmail());
+        if  (exsistingUser != null) {
+            exsistingUser.setEmail(partner.getEmail());
+            exsistingUser.setUserName(exsistingUser.getUserName());
+            exsistingUser.setDepartmentHead(false);
+            exsistingUser.setFirstName(partner.getPartyName1());
+            exsistingUser.setLastName(partner.getPartyName2());
+            exsistingUser.setRiskDepartment("");
+            exsistingUser.setRole("TR0100");
+            exsistingUser.setRoleDescription("Loan Applicant");
+            exsistingUser.setSapBPNumber(partner.getPartyNumber().toString());
+            userRepository.save(exsistingUser);
+        } else {
+            User newUser = new User();
+            newUser.setEmail(partner.getEmail());
+            newUser.setUserName(exsistingUser.getUserName());
+            newUser.setDepartmentHead(false);
+            newUser.setFirstName(partner.getPartyName1());
+            newUser.setLastName(partner.getPartyName2());
+            newUser.setRiskDepartment("");
+            newUser.setRole("TR0100");
+            newUser.setRoleDescription("Loan Applicant");
+            newUser.setSapBPNumber(partner.getPartyNumber().toString());
+            userRepository.save(newUser);
+        }
+
+
     }
 }
