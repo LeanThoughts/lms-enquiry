@@ -73,10 +73,16 @@ public class LoanNotificationServiceImpl implements LoanNotificationService {
            case "dev":
                enquiryPortalCommonConfig  = enquiryPortalCommonConfigRepository.findBySystemId("DEV");
                break;
-           case "pdsdev" :
+           case "pfsdev" :
                enquiryPortalCommonConfig  = enquiryPortalCommonConfigRepository.findBySystemId("QA");
                break;
            case "pfsprd" :
+               enquiryPortalCommonConfig  = enquiryPortalCommonConfigRepository.findBySystemId("PRD");
+               break;
+           case "pfsprddrip" :
+               enquiryPortalCommonConfig  = enquiryPortalCommonConfigRepository.findBySystemId("PRD");
+               break;
+           case "pfsprdip" :
                enquiryPortalCommonConfig  = enquiryPortalCommonConfigRepository.findBySystemId("PRD");
                break;
            default:
@@ -94,7 +100,7 @@ public class LoanNotificationServiceImpl implements LoanNotificationService {
         mailObject.setSendingApp("PFS Loan Enquiry Portal");
         mailObject.setAppObjectId(loanApplication.getEnquiryNo().toString());
 
-        
+
         System.out.println("Enquiry Portal Common Config : " + enquiryPortalCommonConfig.toString());
 
         mailObject.setToAddress(enquiryPortalCommonConfig.getBdTeamEmail());
