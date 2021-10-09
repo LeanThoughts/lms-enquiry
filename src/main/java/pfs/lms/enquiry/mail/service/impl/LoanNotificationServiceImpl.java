@@ -83,10 +83,6 @@ public class LoanNotificationServiceImpl implements LoanNotificationService {
                enquiryPortalCommonConfig  = enquiryPortalCommonConfigRepository.findBySystemId("");
        }
 
-
-
-
-
         String line1 = "Dear PFS BD Team" + System.lineSeparator();
         String line2 = "    A loan enquiry was submitted for review by PTC India Financial Services Ltd.." + System.lineSeparator();
         String line3 = "    Loan Application Id  : " +loanApplication.getEnquiryNo() + System.lineSeparator() ;
@@ -97,7 +93,12 @@ public class LoanNotificationServiceImpl implements LoanNotificationService {
         MailObject mailObject = new MailObject();
         mailObject.setSendingApp("PFS Loan Enquiry Portal");
         mailObject.setAppObjectId(loanApplication.getEnquiryNo().toString());
+
+        
+        System.out.println("Enquiry Portal Common Config : " + enquiryPortalCommonConfig.toString());
+
         mailObject.setToAddress(enquiryPortalCommonConfig.getBdTeamEmail());
+
         mailObject.setSubject("Loan enquiry for project: " +loanApplication.getProjectName() + " is submitted for review");
         mailObject.setMailContent(content);
 
