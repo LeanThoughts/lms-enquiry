@@ -8,6 +8,4 @@ import java.util.UUID;
 public interface FurtherDetailRepository extends JpaRepository<FurtherDetail, UUID> {
 
     Optional<FurtherDetail> findByLoanAppraisalId(UUID loanAppraisalId);
-
-    FurtherDetail findByLoanAppraisalLoanApplicationId(UUID loanApplicationId);
 }

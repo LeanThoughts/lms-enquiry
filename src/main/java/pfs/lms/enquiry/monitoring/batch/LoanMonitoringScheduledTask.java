@@ -124,7 +124,7 @@ public class LoanMonitoringScheduledTask {
 
 
 
-     @Scheduled(fixedRate = 5000)
+     @Scheduled(fixedRate = 999999999)
     public void syncLoanApplicationsToBackend() throws ParseException, IOException {
 
 

@@ -13,7 +13,7 @@ import { LoanPartnerUpdateComponent } from '../loan-partner-update/loan-partner-
     styleUrls: ['./loan-partners.component.scss'],
     animations: fuseAnimations
 })
-export class LoanPartnersComponent implements OnInit {
+export class LoanPartnersComponent {
 
     dataSource: MatTableDataSource<any>;
     
@@ -37,16 +37,7 @@ export class LoanPartnersComponent implements OnInit {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
 
-        // Subscribe to route resolved data (data.routeResolvedData[0] = loanPartners) ...
-        _activatedRoute.data.subscribe(data => {
-            this.dataSource = new MatTableDataSource(data.routeResolvedData[0]._embedded.loanPartners);
-        })
-    }
-
-    /**
-     * ngOnInit()
-     */
-    ngOnInit() {
+        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[0]._embedded.loanPartners);
     }
 
     /**

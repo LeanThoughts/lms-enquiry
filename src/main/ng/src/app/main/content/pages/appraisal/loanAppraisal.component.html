@@ -92,7 +92,6 @@
                     <fuse-loan-partners></fuse-loan-partners>
                 </div>        
             </mat-tab>
-            <!-- Assigning officers tab ends here -->
         
             <!-- KYC details tab starts here -->
             <mat-tab label="KYC Details">
@@ -100,7 +99,6 @@
                     <fuse-loan-appraisal-kyc-list></fuse-loan-appraisal-kyc-list>
                 </div>
             </mat-tab>
-            <!-- KYC details tab ends here -->
 
             <!-- LEAD FI/ Syndicate Consortium details tab starts here -->
             <mat-tab label="Lead FI Details">
@@ -108,72 +106,64 @@
                     <fuse-syndicate-consortium-list></fuse-syndicate-consortium-list>         
                 </div>
             </mat-tab>
-            <!-- Lead FI details tab ends here -->
 
             <!-- Internal risk rating tab starts here -->
-            <mat-tab label="Internal Risk Rating">
-                <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                </div>            
+            <mat-tab label="Internal Risk Rating">          
             </mat-tab>
-            <!-- Internal risk rating tab ends here -->
 
             <!-- Risk report tab starts here -->
-            <mat-tab label="Risk Report">
-                <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                    <button class="mr-8 btn" mat-raised-button color="accent"> 
-                        Edit
-                    </button>
-                </div>            
+            <mat-tab label="Risk Report">       
             </mat-tab>
-            <!-- Risk report tab ends here -->
 
             <!-- Project data tab starts here -->
             <mat-tab label="Project Data">
                 <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                    <button class="mr-8 btn" mat-raised-button color="accent"> 
-                        Edit
+                    <button class="mr-8 btn" mat-raised-button color="accent" (click)="openProjectDataUpdateDialog()"> 
+                        Update Project Data
                     </button>
-                </div>            
+                </div>
             </mat-tab>
-            <!-- Project data tab ends here -->
 
             <!-- Proposal details tab starts here -->
             <mat-tab label="Proposal Details">
-                <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                    <button class="mr-8 btn" mat-raised-button color="accent"> 
-                        Edit
-                    </button>
-                </div>            
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-proposal-details></fuse-proposal-details>
+                </div>
             </mat-tab>
-            <!-- Proposal details tab ends here -->
 
             <!-- Further details tab starts here -->
             <mat-tab label="Further Details">
-                <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                </div>            
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-further-details></fuse-further-details>
+                </div>
             </mat-tab>
-            <!-- Further details tab ends here -->
 
             <!-- Proj appraisal compln tab starts here -->
             <mat-tab label="Proj Appraisal Compln">
                 <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                </div>            
+                    <button class="mr-8 btn" mat-raised-button color="accent" (click)="openProjectAppraisalCompletionUpdateDialog()"> 
+                        Update Project Appraisal Completion Details
+                    </button>
+                </div> 
             </mat-tab>
-            <!-- Proj appraisal compln tab ends here -->
 
             <!-- Reason for delay tab starts here -->
             <mat-tab label="Reason For Delay">
                 <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                </div>            
+                    <button class="mr-8 btn" mat-raised-button color="accent" (click)="openReasonForDelayUpdateDialog()"> 
+                        Update Reason for Delay
+                    </button>
+                </div>
             </mat-tab>
-            <!-- Reason for delay tab ends here -->
 
             <!-- Rejected by customer tab starts here -->
             <mat-tab label="Rejected By Customer">
                 <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                </div>            
+                    <button class="mr-8 btn" mat-raised-button color="accent" (click)="openCustomerRejectionUpdateDialog()"> 
+                        Update Customer Rejection Details
+                    </button>
+                </div>
             </mat-tab>
-            <!-- Rejected By Customer tab ends here -->
             
         </mat-tab-group>
         <!-- / CONTENT -->

@@ -1,0 +1,64 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 340px">
+        <form [formGroup]="_projectAppraisalCompletionForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker1" placeholder="Date of Project Appraisal Completion" 
+                        formControlName="dateOfProjectAppraisalCompletion" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Agenda Note Approval by DIR-A" 
+                        formControlName="agendaNoteApprovalByDirA" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker3" placeholder="Agenda Note Approval by DIR-B" 
+                        formControlName="agendaNoteApprovalByDirB" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker4" placeholder="Agenda Note Approval by MD & CEO" 
+                        formControlName="agendaNoteApprovalByMDAndCEO" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker5" placeholder="Agenda Note Submission to Co Secy" 
+                        formControlName="agendaNoteSubmissionToCoSecy" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -9,6 +9,8 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { EnquiryAlertsService } from '../enquiry/enquiryAlerts/enquiryAlerts.service';
 import { LoanMonitoringConstants } from '../../model/loanMonitoringConstants';
 import { AppService } from 'app/app.service';
+import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -45,8 +47,9 @@ export class LoanContractsSearchComponent {
      * @param _enquiryAlertsService
      */
     constructor(_route: ActivatedRoute, _formBuilder: FormBuilder, public _appService: AppService,
-                public _service: LoanEnquiryService, private _router: Router,
-                private _enquiryAlertsService: EnquiryAlertsService,private _matSnackBar: MatSnackBar) {
+                public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
+                private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService, 
+                private _matSnackBar: MatSnackBar) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -131,7 +134,17 @@ export class LoanContractsSearchComponent {
      * redirectToLoanAppraisal()
      */
     redirectToLoanAppraisal(): void {
-        this.redirect('/loanAppraisal');
+        this._loanAppraisalService.getLaonAppraisal(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+            this._loanAppraisalService._loanAppraisal = response;
+            this.redirect('/loanAppraisal');
+        }, (error: HttpErrorResponse) => {
+            console.log('handling error now');
+            if (error.status === 404) {
+                this._loanAppraisalService._loanAppraisal = { id: '' };
+                console.log('404 error and redirecting: ', this._loanAppraisalService._loanAppraisal);
+                this.redirect('/loanAppraisal');
+            }
+        })
     }
 
     /**

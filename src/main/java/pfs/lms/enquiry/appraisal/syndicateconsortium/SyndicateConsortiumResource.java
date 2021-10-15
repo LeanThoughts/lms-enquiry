@@ -15,13 +15,13 @@ public class SyndicateConsortiumResource {
 
     private UUID id;
     private UUID loanApplicationId;
-    private UUID bank;
 
     private Integer serialNumber;
 
     private Double sanctionedAmount;
     private Double disbursedAmount;
 
+    private String bankKey;
     private String bankName;
     private String currency;
     private String approvalStatus;

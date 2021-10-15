@@ -11,5 +11,5 @@ public interface SyndicateConsortiumRepository extends JpaRepository<SyndicateCo
     @RestResource(exported = false)
     List<SyndicateConsortium> findByLoanAppraisalId(UUID loanAppraisalId);
 
-    List<SyndicateConsortium> findByLoanAppraisalLoanApplicationIdOrderBySerialNumberDesc(UUID loanApplicationId);
+    List<SyndicateConsortium> findByLoanAppraisalIdOrderBySerialNumberDesc(UUID loanAppraisalId);
 }

@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
-import { Router} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
-import { LoanAppraisalService } from './loanAppraisal.service';
+import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
+import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
+import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
+import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 
 @Component({
     selector: 'fuse-loanappraisal',
@@ -20,14 +23,19 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
 
     loanApplicationId: string;
     loanAppraisalId: string;
-    selectedEnquiry: any;
 
+    selectedEnquiry: any;
     selectedEnquiryForm: FormGroup;
 
     subscriptions = new Subscription()
 
     expandPanel1 = true;
     expandPanel2 = false;
+
+    _projectAppraisalCompletion: any;
+    _reasonForDelay: any;
+    _customerRejection: any;
+    _projectData: any;
 
     /**
      * constructor()
@@ -38,12 +46,13 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
      */
     constructor(private _formBuilder: FormBuilder, 
                 public _loanEnquiryService: LoanEnquiryService, 
-                private _router: Router, private _dialogRef: MatDialog,
-                public _appService: AppService, 
-                private _loanAppraisalService: LoanAppraisalService) {
+                public _activatedRoute: ActivatedRoute, 
+                private _dialogRef: MatDialog,
+                public _appService: AppService) {
         
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
+            console.log('this.selectedEnquiry', this.selectedEnquiry);
         }));          
         
         this.subscriptions.add(
@@ -51,6 +60,11 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 this.loanApplicationId = data;
             })
         );
+
+        this._projectAppraisalCompletion = _activatedRoute.snapshot.data.routeResolvedData[7];
+        this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];
+        this._customerRejection = _activatedRoute.snapshot.data.routeResolvedData[9];
+        this._projectData = _activatedRoute.snapshot.data.routeResolvedData[10];
     }
 
     /**
@@ -80,9 +94,95 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * redirectToMonitorLoan()
+     * openProjectAppraisalCompletionUpdateDialog()
      */
-    redirectToMonitorLoan(): void {
-        this._router.navigate(['/enquiryReview']);
+    openProjectAppraisalCompletionUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'projectAppraisalCompletion': this._projectAppraisalCompletion
+        };
+        const dialogRef = this._dialogRef.open(ProjectAppraisalCompletionUpdateComponent, {
+            width: '750px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._projectAppraisalCompletion = result.projectAppraisalCompletion;
+            }
+        });
+    }
+
+    /**
+     * openReasonForDelayUpdateDialog()
+     */
+    openReasonForDelayUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'reasonForDelay': this._reasonForDelay
+        };
+        const dialogRef = this._dialogRef.open(ReasonForDelayUpdateComponent, {
+            width: '750px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._reasonForDelay = result.reasonForDelay;
+            }
+        });        
+    }
+
+    /**
+     * openCustomerRejectionUpdateDialog()
+     */
+    openCustomerRejectionUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'customerRejection': this._customerRejection
+        };
+        const dialogRef = this._dialogRef.open(CustomerRejectionUpdateComponent, {
+            width: '750px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._customerRejection = result.customerRejection;
+            }
+        });   
+    }
+
+    /**
+     * openProjectDataUpdateDialog()
+     */
+    openProjectDataUpdateDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this.loanApplicationId,
+            'loanAppraisalId': this.loanAppraisalId,
+            'projectData': this._projectData,
+            'loanEnquiry': this.selectedEnquiry,
+            'unitOfMeasures': this._activatedRoute.snapshot.data.routeResolvedData[11]._embedded.unitOfMeasures,
+            'projectTypes': this._activatedRoute.snapshot.data.routeResolvedData[12]._embedded.projectTypes,
+            'technologySuppliers': this._activatedRoute.snapshot.data.routeResolvedData[13],
+            'epcContractors': this._activatedRoute.snapshot.data.routeResolvedData[14]
+        };
+        const dialogRef = this._dialogRef.open(ProjectDataUpdateComponent, {
+            width: '850px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._projectData = result.projectData;
+            }
+        });        
     }
 }
