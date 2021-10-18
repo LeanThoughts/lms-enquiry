@@ -330,8 +330,8 @@ public class PartnerService implements IPartnerService {
 
     @Override
     public List<Partner> getPartnersByRoleType(String roleType) {
-        List<Partner> partners = new ArrayList<>();
-        partners = partnerRepository.findByPartyRole(roleType);
+        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode(roleType);
+        List<Partner> partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
         return partners;
     }
 

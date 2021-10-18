@@ -9,7 +9,9 @@ import {
   MAT_DATE_LOCALE,
   DateAdapter,
   MatDialogModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatAutocompleteModule,
+  MatStepperModule
 } from '@angular/material';
 import { EnquiryApplicationRouteGuard } from 'app/enquiryApplication.guard';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
@@ -24,6 +26,14 @@ import { LoanAppraisalKYCListComponent } from './loan-appraisal-kyc/loan-apprais
 import { LoanAppraisalKYCUpdateComponent } from './loan-appraisal-kyc/loan-appraisal-kyc-update/loan-appraisal-kyc-update.component';
 import { SyndicateConsortiumListComponent } from './syndicate-consortium/syndicate-consortium-list/syndicate-consortium-list.component';
 import { SyndicateConsortiumUpdateComponent } from './syndicate-consortium/syndicate-consortium-update/syndicate-consortium-update.component';
+import { ProposalDetailsComponent } from './proposal-details/proposal-details/proposal-details.component';
+import { ProposalDetailsUpdateComponent } from './proposal-details/proposal-details-update/proposal-details-update.component';
+import { FurtherDetailsSiteVisitListComponent } from './further-details/furtherDetailsSiteVisitList/furtherDetailsSiteVisitList.component';
+import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
+import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
+import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
+import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
+import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 
 const routes = [
     {
@@ -52,25 +62,27 @@ const MY_FORMATS = {
 
 @NgModule({
     imports: [
-      RouterModule.forChild(routes),
-      CommonModule,
-      FuseSharedModule,
-      MatExpansionModule,
-      MatInputModule,
-      MatButtonModule,
-      MatFormFieldModule,
-      MatPaginatorModule,
-      MatTableModule,
-      MatToolbarModule,
-      MatIconModule,
-      MatSelectModule,
-      MatSortModule,
-      MatDatepickerModule,
-      MatProgressSpinnerModule,
-      MatTabsModule,
-      MatDialogModule,
-      FormsModule,
-      MatCheckboxModule
+        RouterModule.forChild(routes),
+        CommonModule,
+        FuseSharedModule,
+        MatExpansionModule,
+        MatInputModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatSelectModule,
+        MatSortModule,
+        MatDatepickerModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        MatDialogModule,
+        FormsModule,
+        MatCheckboxModule,
+        MatAutocompleteModule,
+        MatStepperModule
     ],
     declarations: [
         LoanAppraisalComponent,
@@ -79,7 +91,15 @@ const MY_FORMATS = {
         LoanAppraisalKYCListComponent,
         LoanAppraisalKYCUpdateComponent,
         SyndicateConsortiumListComponent,
-        SyndicateConsortiumUpdateComponent
+        SyndicateConsortiumUpdateComponent,
+        ProposalDetailsComponent,
+        ProposalDetailsUpdateComponent,
+        FurtherDetailsSiteVisitListComponent,
+        FurtherDetailsSiteVisitUpdateComponent,
+        ProjectAppraisalCompletionUpdateComponent,
+        ReasonForDelayUpdateComponent,
+        CustomerRejectionUpdateComponent,
+        ProjectDataUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -95,12 +115,15 @@ const MY_FORMATS = {
         LoanAppraisalComponent,
     ],  
     entryComponents: [
-        LoanPartnersComponent,
         LoanPartnerUpdateComponent,
-        LoanAppraisalKYCListComponent,
         LoanAppraisalKYCUpdateComponent,
-        SyndicateConsortiumListComponent,
-        SyndicateConsortiumUpdateComponent
+        SyndicateConsortiumUpdateComponent,
+        ProposalDetailsUpdateComponent,
+        FurtherDetailsSiteVisitUpdateComponent,
+        ProjectAppraisalCompletionUpdateComponent,
+        ReasonForDelayUpdateComponent,
+        CustomerRejectionUpdateComponent,
+        ProjectDataUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

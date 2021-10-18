@@ -11,4 +11,6 @@ public interface LoanAppraisalRepository extends JpaRepository<LoanAppraisal, UU
 
     @RestResource(exported = false)
     Optional<LoanAppraisal> findByLoanApplication(LoanApplication loanApplication);
+
+    LoanAppraisal findByLoanApplicationId(UUID loanApplicationId);
 }

@@ -23,6 +23,7 @@ export class LoanAppraisalKYCListComponent implements OnInit {
     selectedKYC: any;
 
     _loanApplicationId: string;
+    _loanAppraisalId: string;
 
     /**
      * constructor()
@@ -35,11 +36,10 @@ export class LoanAppraisalKYCListComponent implements OnInit {
                 _activatedRoute: ActivatedRoute) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
+        this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
 
-        // Subscribe to route resolved data (data.routeResolvedData[0] = loanPartners) ...
-        _activatedRoute.data.subscribe(data => {
-            this.dataSource = new MatTableDataSource(data.routeResolvedData[1]._embedded.loanAppraisalKYCs);
-        })
+        if (JSON.stringify(_activatedRoute.snapshot.data.routeResolvedData[1]) !== JSON.stringify({}))
+            this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.knowYourCustomers);
     }
 
     /**
@@ -78,8 +78,8 @@ export class LoanAppraisalKYCListComponent implements OnInit {
      * getLoanAppraisalKYCs()
      */
      getLoanAppraisalKYCs(): void {
-        this._loanAppraisalService.getLaonAppraisalKYCs(this._loanApplicationId).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.loanAppraisalKYCs);
+        this._loanAppraisalService.getLaonAppraisalKYCs(this._loanAppraisalId).subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.knowYourCustomers);
         });
     }
 

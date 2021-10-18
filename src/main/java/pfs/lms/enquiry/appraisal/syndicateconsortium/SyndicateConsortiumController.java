@@ -39,8 +39,8 @@ public class SyndicateConsortiumController {
         SyndicateConsortium syndicateConsortium = new SyndicateConsortium();
         syndicateConsortium.setLoanAppraisal(loanAppraisal);
         syndicateConsortium.setSerialNumber(syndicateConsortiumRepository.findByLoanAppraisalId(loanAppraisal.getId()).size() + 1);
-        // syndicateConsortium.setBank(syndicateConsortiumResource.getBank());
-        // syndicateConsortium.setBankName(syndicateConsortiumResource.getBankName());
+        syndicateConsortium.setBankKey(syndicateConsortiumResource.getBankKey());
+        syndicateConsortium.setBankName(syndicateConsortiumResource.getBankName());
         syndicateConsortium.setSanctionedAmount(syndicateConsortiumResource.getSanctionedAmount());
         syndicateConsortium.setCurrency(syndicateConsortiumResource.getCurrency());
         syndicateConsortium.setLead(syndicateConsortiumResource.isLead());
@@ -58,6 +58,8 @@ public class SyndicateConsortiumController {
 
         SyndicateConsortium syndicateConsortium = syndicateConsortiumRepository.findById(syndicateConsortiumResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(syndicateConsortiumResource.getId().toString()));
+        syndicateConsortium.setBankKey(syndicateConsortiumResource.getBankKey());
+        syndicateConsortium.setBankName(syndicateConsortiumResource.getBankName());
         syndicateConsortium.setSanctionedAmount(syndicateConsortiumResource.getSanctionedAmount());
         syndicateConsortium.setCurrency(syndicateConsortiumResource.getCurrency());
         syndicateConsortium.setLead(syndicateConsortiumResource.isLead());

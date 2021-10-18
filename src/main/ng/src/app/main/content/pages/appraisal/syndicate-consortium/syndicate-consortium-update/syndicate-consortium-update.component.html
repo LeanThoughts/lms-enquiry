@@ -2,16 +2,39 @@
     <mat-toolbar matDialogTitle class="mat-accent m-0">
         <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
             <span class="title dialog-title">{{ dialogTitle }}</span>
-            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close({ 'refresh': false })" aria-label="Close Dialog">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 410px">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 400px">
         <form [formGroup]="syndicateConsortiumForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Serial Number" formControlName="serialNumber" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="100">
+                    <input matInput
+                           (blur)="validateBank($event)"
+                           (keyup.enter)="validateBank($event)"
+                           (keyup.tab)="validateBank($event)"
+                           placeholder="Select Bank"
+                           aria-label="Select Bank"
+                           [matAutocomplete]="auto"
+                           [formControl]="bankKeyFormControl" required>
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let bank of filteredBanks | async" [value]="bank.bankKey">
+                            <span>{{bank.bankName}}</span> | <small> Key : {{bank.bankKey}} </small> | <small>Branch : {{bank.bankBranch}} </small>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Bank Id" formControlName="bankKey" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Bank Name" formControlName="bankName" readonly>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
@@ -59,7 +82,7 @@
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>
-                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({ 'refresh': false })">
                     Cancel
                 </button>
             </div>

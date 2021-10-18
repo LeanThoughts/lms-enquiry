@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.loanappraisalkyc;
+package pfs.lms.enquiry.appraisal.knowyourcustomer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class LoanAppraisalKYCResource {
+public class KnowYourCustomerResource {
 
     private UUID id;
     private UUID loanApplicationId;

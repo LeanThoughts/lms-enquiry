@@ -6,11 +6,8 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pfs.lms.enquiry.appraisal.syndicateconsortium.Bank;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.BankMaster;
-import pfs.lms.enquiry.mail.domain.MailObject;
-import pfs.lms.enquiry.mail.service.EmailService;
 import pfs.lms.enquiry.repository.BankMasterRepository;
 import pfs.lms.enquiry.service.IBankMasterService;
 

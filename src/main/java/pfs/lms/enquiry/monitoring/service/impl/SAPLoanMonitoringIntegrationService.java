@@ -1,5 +1,6 @@
 package pfs.lms.enquiry.monitoring.service.impl;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -28,6 +29,7 @@ import java.nio.charset.Charset;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class SAPLoanMonitoringIntegrationService implements ISAPLoanMonitoringIntegrationService {
 
 
