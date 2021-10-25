@@ -454,6 +454,7 @@ public class PartnerService implements IPartnerService {
                 partner.getPartnerRoleTypes().stream()
                 .anyMatch(partnerRoleType -> partnerRoleType.getRoleCode().equals("TR0100"));
         if (loanPartnerRoleExisting == false) {
+            log.info("Business Partner" + partner.getPartyNumber() +  " is NOT A Loan Applicant.   ");
             return;
         }
 
