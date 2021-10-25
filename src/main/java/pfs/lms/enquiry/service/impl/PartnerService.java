@@ -225,6 +225,13 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
+    public List<Partner> getAllPartners() {
+        List<Partner> partners = partnerRepository.findAll();
+        partners.sort(Comparator.comparing(Partner::getPartyName1));
+        return partners;
+    }
+
+    @Override
     public  Partner  getPartnerByEmail(String email) {
         return partnerRepository.findByEmail(email);
     }

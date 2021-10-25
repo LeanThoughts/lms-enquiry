@@ -43,11 +43,16 @@ export class EnquiryReviewComponent implements OnInit {
   loanPurposeLength = 0;
 
   // Applicants Email and NameAddress
-  applicantEmailFilteredOptions: Observable<ApplicantEmail[]>;
-
-  applicantEmails : Array<ApplicantEmail>;
   applicantEmailFormControl = new FormControl();
+  applicantEmailFilteredOptions: Observable<ApplicantEmail[]>;
+  applicantEmails : Array<ApplicantEmail>;
 
+  partnerNameFormControl = new FormControl();
+  partnerIdFormControl = new FormControl();
+
+  partnerNameFilteredOptions: Observable<PartnerModel[]>;
+  partnerIdFilteredOptions: Observable<PartnerModel[]>;
+  partners: Array<PartnerModel>;
 
   loanEnquiryFormStep1: FormGroup;
   loanEnquiryFormStep2: FormGroup;
@@ -74,6 +79,7 @@ export class EnquiryReviewComponent implements OnInit {
   email: string;
 
   readonlyFields: boolean;
+    selectionMethod: string;
 
    /**
    * constructor()
@@ -141,8 +147,14 @@ export class EnquiryReviewComponent implements OnInit {
     this.unitOfMeasures = _route.snapshot.data.routeResolvedData[7]._embedded.unitOfMeasures;
    // this.applicantGroups = _route.snapshot.data.routeResolvedData[8].partnersOrderedByAlphabet;
     this.applicantEmails = _route.snapshot.data.routeResolvedData[8];
-
-
+    this.partners = _route.snapshot.data.routeResolvedData[10];
+    // Check for nulls and convert partynumber to string
+    this.partners.map(x => {
+        if (!x.partyNumber)
+            x.partyNumber = '';
+        else
+            x.partyNumber = x.partyNumber.toString();
+    })
   }
 
   /**
@@ -156,10 +168,22 @@ export class EnquiryReviewComponent implements OnInit {
     this.loanPurposeLength = this.loanEnquiryFormStep1.value.loanPurpose.length;
 
     this.applicantEmailFilteredOptions = this.applicantEmailFormControl.valueChanges
-      .pipe(
+        .pipe(
         startWith(''),
         map(email => email ? this._filterStates(email) : this.applicantEmails.slice())
-      );
+    );
+
+    this.partnerNameFilteredOptions = this.partnerNameFormControl.valueChanges
+        .pipe(
+        startWith(''),
+        map(name => name ? this._filterPartnersByName(name) : this.partners.slice())
+    );
+
+    this.partnerIdFilteredOptions = this.partnerIdFormControl.valueChanges
+        .pipe(
+        startWith(''),
+        map(name => name ? this._filterPartnersById(name) : this.partners.slice())
+    );
   }
 
 
@@ -177,8 +201,24 @@ export class EnquiryReviewComponent implements OnInit {
     return this.applicantEmails.filter(applicantEmail => applicantEmail.email.toLowerCase().indexOf(filterValue) === 0);
   }
 
+    private _filterPartnersByName(value: string): PartnerModel[] {
+        const filterValue = value.toLowerCase();
+        return this.partners.filter(partner => partner.partyName1.toLowerCase().indexOf(filterValue) === 0);
+    }
 
-  // Initialize the forms loanEnquiryFormStep1, loanEnquiryFormStep3.
+    private _filterPartnersById(value: string): PartnerModel[] {
+        const filterValue = value.toLowerCase();
+        return this.partners.filter(partner => {
+            console.log('party number is', partner.partyNumber);
+            if (partner.partyNumber.trim() !== '') {
+                return partner.partyNumber.toLowerCase().indexOf(filterValue) === 0
+            }
+            else
+                return false;
+        });
+    }
+
+    // Initialize the forms loanEnquiryFormStep1, loanEnquiryFormStep3.
   initializeLoanApplicationForms(): void {
 
     this.loanEnquiryFormStep1 = this._formBuilder.group({
@@ -270,7 +310,7 @@ export class EnquiryReviewComponent implements OnInit {
       city: [''],
       state: [''],
       postalCode: [''],
-      email: [this.email, [Validators.pattern(EnquiryApplicationRegEx.email), validateUser(true)]],
+      email: [this.partner.email, [Validators.pattern(EnquiryApplicationRegEx.email), validateUser(true)]],
       contactNumber: [''],
       pan: [' ', [Validators.pattern(EnquiryApplicationRegEx.pan)]],
       groupCompany: [''],
@@ -307,57 +347,86 @@ export class EnquiryReviewComponent implements OnInit {
 
   getProjectName(): string{
     return this.loanApplication.projectName;
-
   }
 
-  validateUserId($event) {
+    validatePartnerById($event) {
+        if ($event.target.value.trim() !== '') {
+            this.applicantEmailFormControl.setValue('');
+            this.partnerNameFormControl.setValue('');
+            const filteredPartners = this.partners.filter(partner => partner.partyNumber.localeCompare($event.target.value) === 0);
+            if (filteredPartners.length > 0) {
+                this.partner = filteredPartners[0];
+                this.loadPartnerForm();
+            }
+            else {
+                this.partner = new PartnerModel({});
+                this.partner.email = this.user.email;
+                this.partner.partyName1 = this.user.firstName;
+                this.partner.partyName2 = this.user.lastName;
+            }
+        }
+    }
 
+    validatePartnerByName($event) {
+        if ($event.target.value.trim() !== '') {
+            this.applicantEmailFormControl.setValue('');
+            this.partnerIdFormControl.setValue('');
+            const filteredPartners = this.partners.filter(partner => partner.partyName1.toLowerCase().localeCompare(
+                $event.target.value.toLowerCase()) === 0);
+            if (filteredPartners.length > 0) {
+                this.partner = filteredPartners[0];
+                this.loadPartnerForm();
+            }
+            else {
+                this.partner = new PartnerModel({});
+                this.partner.email = this.user.email;
+                this.partner.partyName1 = this.user.firstName;
+                this.partner.partyName2 = this.user.lastName;
+            }
+        }
+    }
 
-    let emailId = $event.target.value;
-    this.email = emailId;
+    validateUserId($event) {
+        if (this.applicantEmailFormControl.value !== '' && this.partnerNameFormControl.value === '' && this.partnerIdFormControl.value === '') {
+            let emailId = $event.target.value;
+            this.email = emailId;
+            this.partnerNameFormControl.setValue('');
+            this.partnerIdFormControl.setValue('');
+            // Get User By Email partner.
+            this._userService.getUserByEmail(emailId).subscribe((result) => {
+                this.user = result;
+                console.log(this.user);
+                if (this.user !== undefined || this.user != null) {
+                    this.validUserId = true;
+                    // Initialize partner.
+                    this.partner = new PartnerModel({});
+                    this.partner.email = this.user.email;
+                    this.partner.partyName1 = this.user.firstName;
+                    this.partner.partyName2 = this.user.lastName;
+                    this.validUserId = true;
+                    this.loadPartnerFormWithUser();
 
-    // Get User By Email partner.
+                    this._partnerService.getPartnerByEmail(emailId).subscribe((result) => {
+                        this.partner = result;
 
-    this._userService.getUserByEmail(emailId).subscribe((result) => {
-      this.user = result;
-
-      if (this.user !== undefined || this.user != null) {
-        this.validUserId = true;
-
-
-        // Initialize partner.
-        this.partner = new PartnerModel({});
-        this.partner.email = this.user.email;
-        this.partner.partyName1 = this.user.firstName;
-        this.partner.partyName2 = this.user.lastName;
-        this.validUserId = true;
-        this.loadPartnerFormWithUser();
-
-        this._partnerService.getPartnerByEmail(emailId).subscribe((result) => {
-          this.partner = result;
-
-          if (this.partner != undefined || this.partner != null) {
-            this.loadPartnerForm();
-          } else {
-            this.partner = new PartnerModel({});
-            this.partner.email = this.user.email;
-            this.partner.partyName1 = this.user.firstName;
-            this.partner.partyName2 = this.user.lastName;
-          }
-        });
-
-      } else {
-
-        this.validUserId = false;
-        this.clearPartnerForm(); // Clear partner form
-
-      }
-
-
-    });
-
-  }
-
+                        if (this.partner != undefined || this.partner != null) {
+                            this.loadPartnerForm();
+                        } 
+                        else {
+                            this.partner = new PartnerModel({});
+                            this.partner.email = this.user.email;
+                            this.partner.partyName1 = this.user.firstName;
+                            this.partner.partyName2 = this.user.lastName;
+                        }
+                    });
+                } 
+                else {
+                    this.validUserId = false;
+                    this.clearPartnerForm(); // Clear partner form
+                }
+            }); 
+        }  
+    }
 
   // Initialize the form loanEnquiryFormStep2.
   loadPartnerForm(): void {

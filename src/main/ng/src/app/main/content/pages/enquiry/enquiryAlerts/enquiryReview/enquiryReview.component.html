@@ -292,7 +292,7 @@
 
           <form [formGroup]="applicantEmailFormGroup">
             <div fxLayout="row" fxFlex="100">
-              <mat-form-field fxFlex="100" *ngIf="isCurrentUserAdmin()">
+              <mat-form-field fxFlex="33" *ngIf="isCurrentUserAdmin()">
                 <input matInput
                        (blur)="validateUserId($event)"
                        (keyup.enter)="validateUserId($event)"
@@ -300,13 +300,40 @@
                        (change)="validateUserId($event)"
                        placeholder="Select Applicant"
                        aria-label="Select Applicant"
-                       [matAutocomplete]="auto"
+                       [matAutocomplete]="auto1"
                        [formControl]="applicantEmailFormControl" [readonly]="readonlyFields">
-                <mat-autocomplete #auto="matAutocomplete">
-
+                <mat-autocomplete #auto1="matAutocomplete">
                   <mat-option *ngFor="let state of applicantEmailFilteredOptions | async" [value]="state.email">
                     <span>{{state.email}}</span> |
                     <small>Name & Address : {{state.nameAndAddress}}</small>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="34" *ngIf="isCurrentUserAdmin()">
+                <input matInput
+                       (blur)="validatePartnerByName($event)"
+                       placeholder="Select Partner"
+                       aria-label="Select Partner"
+                       [matAutocomplete]="auto2"
+                       [formControl]="partnerNameFormControl" [readonly]="readonlyFields">
+                <mat-autocomplete #auto2="matAutocomplete">
+                  <mat-option *ngFor="let partner of partnerNameFilteredOptions | async" [value]="partner.partyName1">
+                    <span>{{partner.partyName1}}</span>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="34" *ngIf="isCurrentUserAdmin()">
+                <input matInput
+                       (blur)="validatePartnerById($event)"
+                       placeholder="Select Partner"
+                       aria-label="Select Partner"
+                       [matAutocomplete]="auto3"
+                       [formControl]="partnerIdFormControl" [readonly]="readonlyFields">
+                <mat-autocomplete #auto3="matAutocomplete">
+                  <mat-option *ngFor="let partner of partnerIdFilteredOptions | async" [value]="partner.partyNumber">
+                    <span>{{partner.partyNumber}}</span>
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -326,8 +353,6 @@
 
                 <input matInput
                        (blur)="validateUserId($event)"
-                       (keyup.enter)="validateUserId($event)"
-                       (keyup.tab)="validateUserId($event)"
                        type="email" readonly
                        placeholder="Applicant's Registered Email"
                        formControlName="email"

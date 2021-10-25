@@ -46,10 +46,8 @@ export class EnquiryAlertsService implements Resolve<any> {
                     this._loanEnquiryService.getUnitOfMeasures(), // Get Unit of Measures Sectors
                     //this.getLoanApplicants(),
                     this.getLoanApplicantsByEmail(),
-                    this.getRejectionCategories()
-
-
-
+                    this.getRejectionCategories(),
+                    this.getAllPartners()
                 ]);
             }
         }
@@ -90,6 +88,10 @@ export class EnquiryAlertsService implements Resolve<any> {
      */
     public getLoanApplicantsByEmail(): Observable<any> {
         return this._http.get<ApplicantEmail>('enquiry/api/partners/byEmail'  );
+    }
+
+    public getAllPartners(): Observable<any> {
+        return this._http.get('enquiry/api/partners/all');
     }
 
     /**

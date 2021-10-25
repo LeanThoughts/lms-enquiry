@@ -89,6 +89,17 @@ public class PartnerController {
 
     }
 
+    @GetMapping("partners/all")
+    public ResponseEntity<List<Partner>> getAllPartners(HttpServletRequest httpServletRequest) {
+
+        List<Partner> partners = partnerService.getAllPartners();
+        if (partners != null){
+            return ResponseEntity.ok(partners);
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 
 
     @GetMapping("partner/email")
