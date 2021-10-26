@@ -51,12 +51,16 @@ export class LoanEnquiryService implements Resolve<any> {
                 this.getIndustrySectors(), // Get Industry Sectors
                 this.getUnitOfMeasures(),   // Get Units
                 this.getLoanApplicantsByEmail(), // Get Loan Applicants by Email
-                this.getTechnicalStatus()   // Get Technical Status
+                this.getTechnicalStatus(),   // Get Technical Status
+                this.getAllPartners()
             ]);
         }
     }
 
-    
+    public getAllPartners(): Observable<any> {
+        return this._http.get('enquiry/api/partners/all');
+    }
+
     /**
      * getUserRoleAuthorizations()
      */

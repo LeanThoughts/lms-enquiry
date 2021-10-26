@@ -298,8 +298,8 @@
                        (keyup.enter)="validateUserId($event)"
                        (keyup.tab)="validateUserId($event)"
                        (change)="validateUserId($event)"
-                       placeholder="Select Applicant"
-                       aria-label="Select Applicant"
+                       placeholder="Select Applicant by Email of User"
+                       aria-label="Select Applicant by Email of User"
                        [matAutocomplete]="auto1"
                        [formControl]="applicantEmailFormControl" [readonly]="readonlyFields">
                 <mat-autocomplete #auto1="matAutocomplete">
@@ -313,13 +313,14 @@
               <mat-form-field fxFlex="34" *ngIf="isCurrentUserAdmin()">
                 <input matInput
                        (blur)="validatePartnerByName($event)"
-                       placeholder="Select Partner"
-                       aria-label="Select Partner"
+                       placeholder="Select Partner by Name"
+                       aria-label="Select Partner by Name"
                        [matAutocomplete]="auto2"
                        [formControl]="partnerNameFormControl" [readonly]="readonlyFields">
                 <mat-autocomplete #auto2="matAutocomplete">
                   <mat-option *ngFor="let partner of partnerNameFilteredOptions | async" [value]="partner.partyName1">
                     <span>{{partner.partyName1}}</span>
+                    <small> : {{partner.partyNumber}} : {{getPartyAddress(partner)}}</small>
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -327,13 +328,14 @@
               <mat-form-field fxFlex="34" *ngIf="isCurrentUserAdmin()">
                 <input matInput
                        (blur)="validatePartnerById($event)"
-                       placeholder="Select Partner"
-                       aria-label="Select Partner"
+                       placeholder="Select Partner by Id"
+                       aria-label="Select Partner by Id"
                        [matAutocomplete]="auto3"
                        [formControl]="partnerIdFormControl" [readonly]="readonlyFields">
                 <mat-autocomplete #auto3="matAutocomplete">
                   <mat-option *ngFor="let partner of partnerIdFilteredOptions | async" [value]="partner.partyNumber">
                     <span>{{partner.partyNumber}}</span>
+                    <small> : {{partner.partyName}} : {{getPartyAddress(partner)}}</small>
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -358,10 +360,10 @@
                        formControlName="email"
                        required [readonly]="readonlyFields">
 
-                <mat-error>
+                <!-- <mat-error>
                   Email id is not registered as user of the portal. Enter a valid user of a customer or create a portal
                   user for the new customer with the required email id.
-                </mat-error>
+                </mat-error> -->
 
               </mat-form-field>
 

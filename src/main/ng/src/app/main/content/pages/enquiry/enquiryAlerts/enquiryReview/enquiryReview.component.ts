@@ -52,6 +52,7 @@ export class EnquiryReviewComponent implements OnInit {
 
   partnerNameFilteredOptions: Observable<PartnerModel[]>;
   partnerIdFilteredOptions: Observable<PartnerModel[]>;
+
   partners: Array<PartnerModel>;
 
   loanEnquiryFormStep1: FormGroup;
@@ -154,6 +155,10 @@ export class EnquiryReviewComponent implements OnInit {
             x.partyNumber = '';
         else
             x.partyNumber = x.partyNumber.toString();
+        if (!x.addressLine1) x.addressLine1 = '';
+        if (!x.addressLine2) x.addressLine2 = '';
+        if (!x.street) x.street = '';
+        if (!x.city) x.city = '';
     })
   }
 
@@ -209,7 +214,6 @@ export class EnquiryReviewComponent implements OnInit {
     private _filterPartnersById(value: string): PartnerModel[] {
         const filterValue = value.toLowerCase();
         return this.partners.filter(partner => {
-            console.log('party number is', partner.partyNumber);
             if (partner.partyNumber.trim() !== '') {
                 return partner.partyNumber.toLowerCase().indexOf(filterValue) === 0
             }
@@ -651,7 +655,13 @@ export class EnquiryReviewComponent implements OnInit {
     }
   }
 
-
+    getPartyAddress(partner: PartnerModel): string {
+        let str = partner.addressLine1.trim();
+        str = str + ' ' + partner.addressLine2;
+        str = str.trim() + ' ' + partner.street;
+        str = str.trim() + ' ' + partner.city;
+        return str.trim();;
+    }
 }
 
 //TODO
@@ -670,7 +680,4 @@ function validateUser(isValid: any) {
 
     }
   };
-
-
 }
-

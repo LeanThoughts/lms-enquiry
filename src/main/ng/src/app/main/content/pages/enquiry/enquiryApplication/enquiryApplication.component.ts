@@ -53,9 +53,16 @@ export class EnquiryApplicationComponent implements OnInit {
 
   // Applicants Email and NameAddress
   applicantEmailFilteredOptions: Observable<ApplicantEmail[]>;
-
   applicantEmails : Array<ApplicantEmail>;
   applicantEmailFormControl = new FormControl();
+
+  partnerNameFormControl = new FormControl();
+  partnerIdFormControl = new FormControl();
+
+  partnerNameFilteredOptions: Observable<PartnerModel[]>;
+  partnerIdFilteredOptions: Observable<PartnerModel[]>;
+  
+  partners: Array<PartnerModel>;
 
   loanEnquiryFormStep1: FormGroup;
   loanEnquiryFormStep2: FormGroup;
@@ -220,6 +227,18 @@ export class EnquiryApplicationComponent implements OnInit {
     //   console.log("UNIT" + entry.value);
     // }
 
+    this.partners = _route.snapshot.data.routeResolvedData[10];
+    // Check for nulls and convert partynumber to string
+    this.partners.map(x => {
+        if (!x.partyNumber)
+            x.partyNumber = '';
+        else
+            x.partyNumber = x.partyNumber.toString();
+        if (!x.addressLine1) x.addressLine1 = '';
+        if (!x.addressLine2) x.addressLine2 = '';
+        if (!x.street) x.street = '';
+        if (!x.city) x.city = '';
+    })
   }
 
 
@@ -247,6 +266,18 @@ export class EnquiryApplicationComponent implements OnInit {
         startWith(''),
         map(email => email ? this._filterStates(email) : this.applicantEmails.slice())
       );
+
+    this.partnerNameFilteredOptions = this.partnerNameFormControl.valueChanges
+        .pipe(
+        startWith(''),
+        map(name => name ? this._filterPartnersByName(name) : this.partners.slice())
+    );
+
+    this.partnerIdFilteredOptions = this.partnerIdFormControl.valueChanges
+        .pipe(
+        startWith(''),
+        map(name => name ? this._filterPartnersById(name) : this.partners.slice())
+    );
   }
 
   onProjectNameChange() {
@@ -263,6 +294,21 @@ export class EnquiryApplicationComponent implements OnInit {
     return this.applicantEmails.filter(applicantEmail => applicantEmail.email.toLowerCase().indexOf(filterValue) === 0);
   }
 
+    private _filterPartnersByName(value: string): PartnerModel[] {
+        const filterValue = value.toLowerCase();
+        return this.partners.filter(partner => partner.partyName1.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    private _filterPartnersById(value: string): PartnerModel[] {
+        const filterValue = value.toLowerCase();
+        return this.partners.filter(partner => {
+            if (partner.partyNumber.trim() !== '') {
+                return partner.partyNumber.toLowerCase().indexOf(filterValue) === 0
+            }
+            else
+                return false;
+        });
+    }
 
   backButtonClick(): void {
     this._location.back();
@@ -319,52 +365,86 @@ export class EnquiryApplicationComponent implements OnInit {
 
   validateUserId($event) {
 
+    if (this.applicantEmailFormControl.value !== '' && this.partnerNameFormControl.value === '' && this.partnerIdFormControl.value === '') {
 
-    let emailId = $event.target.value;
-    this.email = emailId;
+        let emailId = $event.target.value;
+        this.email = emailId;
 
-    // Get User By Email partner.
+        // Get User By Email partner.
 
-    this._userService.getUserByEmail(emailId).subscribe((result) => {
-      this.user = result;
+        this._userService.getUserByEmail(emailId).subscribe((result) => {
+        this.user = result;
 
-      if (this.user != undefined || this.user != null) {
-        this.validUserId = true;
+        if (this.user != undefined || this.user != null) {
+            this.validUserId = true;
 
-        // Initialize partner.
-        this.partner = new PartnerModel({});
-        this.partner.email = this.user.email;
-        this.partner.partyName1 = this.user.firstName;
-        this.partner.partyName2 = this.user.lastName;
-        this.validUserId = true;
-
-        this.initializePartnerForm(true); // Load partner form with user details only
-
-
-        this._partnerService.getPartnerByEmail(emailId).subscribe((result) => {
-          this.partner = result;
-
-          if (this.partner != undefined || this.partner != null) {
-            this.loadPartnerForm();
-          } else {
+            // Initialize partner.
             this.partner = new PartnerModel({});
             this.partner.email = this.user.email;
             this.partner.partyName1 = this.user.firstName;
             this.partner.partyName2 = this.user.lastName;
-          }
+            this.validUserId = true;
+
+            this.initializePartnerForm(true); // Load partner form with user details only
+
+
+            this._partnerService.getPartnerByEmail(emailId).subscribe((result) => {
+            this.partner = result;
+
+            if (this.partner != undefined || this.partner != null) {
+                this.loadPartnerForm();
+            } else {
+                this.partner = new PartnerModel({});
+                this.partner.email = this.user.email;
+                this.partner.partyName1 = this.user.firstName;
+                this.partner.partyName2 = this.user.lastName;
+            }
+            });
+        } else {
+            this.validUserId = false;
+            this.initializePartnerForm(false); // Clear partner form
+        }
         });
-
-      } else {
-
-        this.validUserId = false;
-        this.initializePartnerForm(false); // Clear partner form
-
-      }
-
-
-    });
-
+    }
   }
+
+    validatePartnerById($event) {
+        if ($event.target.value.trim() !== '') {
+            this.applicantEmailFormControl.setValue('');
+            this.partnerNameFormControl.setValue('');
+            const filteredPartners = this.partners.filter(partner => partner.partyNumber.localeCompare($event.target.value) === 0);
+            if (filteredPartners.length > 0) {
+                this.partner = filteredPartners[0];
+                this.loadPartnerForm();
+            }
+            else {
+                this.partner = new PartnerModel({});
+                this.partner.email = this.user.email;
+                this.partner.partyName1 = this.user.firstName;
+                this.partner.partyName2 = this.user.lastName;
+            }
+        }
+    }
+
+    validatePartnerByName($event) {
+        if ($event.target.value.trim() !== '') {
+            this.applicantEmailFormControl.setValue('');
+            this.partnerIdFormControl.setValue('');
+            const filteredPartners = this.partners.filter(partner => partner.partyName1.toLowerCase().localeCompare(
+                $event.target.value.toLowerCase()) === 0);
+            if (filteredPartners.length > 0) {
+                this.partner = filteredPartners[0];
+                this.loadPartnerForm();
+            }
+            else {
+                this.partner = new PartnerModel({});
+                this.partner.email = this.user.email;
+                this.partner.partyName1 = this.user.firstName;
+                this.partner.partyName2 = this.user.lastName;
+            }
+        }
+    }
+
 
   // Initialize the form loanEnquiryFormStep2.
   loadPartnerForm(): void {
@@ -409,7 +489,13 @@ export class EnquiryApplicationComponent implements OnInit {
     });
   }
 
-
+    getPartyAddress(partner: PartnerModel): string {
+        let str = partner.addressLine1.trim();
+        str = str + ' ' + partner.addressLine2;
+        str = str.trim() + ' ' + partner.street;
+        str = str.trim() + ' ' + partner.city;
+        return str.trim();;
+    }
 
   /**
    * isCurrentUserAdmin()
