@@ -113,10 +113,17 @@ public class LoanApplicationContoller {
 
                     System.out.println("Filtering Loan Application by Status");
                     System.out.println("Loan Number : " + loanApplication.getLoanContractId() + "   Project Name :" + loanApplication.getProjectName());
-                    System.out.println("Loan Applicant is not NULL:" + partnerRepository.findById(loanApplication.getLoanApplicant()));
+                    if (partnerRepository.findById(loanApplication.getLoanApplicant()) == null) {
+                        System.out.println("Loan Applicant is   NULL for Loan : " + loanApplication.getLoanContractId());
+                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
+                        resources.add(new LoanApplicationResource(loanApplication, partner));
+                    } else {
+                        System.out.println("Loan Applicant is not NULL:" + partnerRepository.findById(loanApplication.getLoanApplicant()));
+                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                    Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
-                    resources.add(new LoanApplicationResource(loanApplication, partner));
+                        resources.add(new LoanApplicationResource(loanApplication, new Partner()));
+                    }
+
                 }
 
                 if (loanApplication.getTechnicalStatus() != null) {
