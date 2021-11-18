@@ -57,7 +57,7 @@ public class SAPLFAResource implements Serializable   {
             detailsResource.setContractPeriodFrom(null);
 
 
-        if (lendersFinancialAdvisor.getContractPeriodFrom() != null)
+        if (lendersFinancialAdvisor.getContractPeriodTo() != null)
         detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(lendersFinancialAdvisor.getContractPeriodTo()));
         else
             detailsResource.setContractPeriodTo(null);

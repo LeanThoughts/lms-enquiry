@@ -33,7 +33,7 @@ spring:
     host: us2.smtp.mailhostbox.com
     port: 587
     username: portal.admin@pfs-ess.com
-    password: Pfs@HyyXIAn2#HyyXIAn2
+    password: Ess@hYYXIaN2#hYYXIaN2
     protocol: smtp
     tls: true
     properties.mail.smtp:
@@ -45,7 +45,7 @@ spring:
     mail-server-host: us2.smtp.mailhostbox.com
     mail-server-port: 587
     mail-server-user-name: portal.admin@pfs-ess.com
-    mail-server-password: Pfs@HyyXIAn2#HyyXIAn2
+    mail-server-password: Ess@hYYXIaN2#hYYXIaN2
     mail-server-default-from: portal.admin@pfs-ess.com
     mail-server-use-tls: true
     database-schema-update: true
