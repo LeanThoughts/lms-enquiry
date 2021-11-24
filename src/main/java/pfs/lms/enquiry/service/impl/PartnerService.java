@@ -449,18 +449,29 @@ public class PartnerService implements IPartnerService {
 
     private void userMaintenance (Partner partner) {
 
-        // Create User for Loan Applicants ONLY (TR0100)
-        boolean loanPartnerRoleExisting =
+        // Create User for Loan Applicants Prospect (TR0110)
+        boolean loanProspectRoleExisting =
                 partner.getPartnerRoleTypes().stream()
-                .anyMatch(partnerRoleType -> partnerRoleType.getRoleCode().equals("TR0100"));
-        if (loanPartnerRoleExisting == false) {
-            log.info("Business Partner" + partner.getPartyNumber() +  " is NOT A Loan Applicant.   ");
-            return;
+                        .anyMatch(partnerRoleType -> partnerRoleType.getRoleCode().equals("TR0110"));
+        if (loanProspectRoleExisting == false) {
+
+            // Create User for Loan Applicants - Main Loan Partner  (TR0100)
+           Boolean loanPartnerRoleExisting =
+                    partner.getPartnerRoleTypes().stream()
+                            .anyMatch(partnerRoleType -> partnerRoleType.getRoleCode().equals("TR0100"));
+            if (loanPartnerRoleExisting == false) {
+                log.info("Business Partner" + partner.getPartyNumber() + " is NOT A Loan Applicant.   ");
+                return;
+            }
+        } else {
+
+            log.info("Business Partner" + partner.getPartyNumber() +  " is a Prospect");
         }
 
         log.info("Business Partner" + partner.getPartyNumber() +  " is a Loan Applicant. Therefore creating an entry in the User Table");
         // Find User By Email Id
         User exsistingUser  = userRepository.findByEmail(partner.getEmail());
+
         if  (exsistingUser != null) {
             exsistingUser.setEmail(partner.getEmail());
             exsistingUser.setUserName(exsistingUser.getUserName());
