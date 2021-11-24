@@ -470,23 +470,23 @@ public class PartnerService implements IPartnerService {
 
         log.info("Business Partner" + partner.getPartyNumber() +  " is a Loan Applicant. Therefore creating an entry in the User Table");
         // Find User By Email Id
-        User exsistingUser  = userRepository.findByEmail(partner.getEmail());
+        User existingUser  = userRepository.findByEmail(partner.getEmail());
 
-        if  (exsistingUser != null) {
-            exsistingUser.setEmail(partner.getEmail());
-            exsistingUser.setUserName(exsistingUser.getUserName());
-            exsistingUser.setDepartmentHead(false);
-            exsistingUser.setFirstName(partner.getPartyName1());
-            exsistingUser.setLastName(partner.getPartyName2());
-            exsistingUser.setRiskDepartment("");
-            exsistingUser.setRole("TR0100");
-            exsistingUser.setRoleDescription("Loan Applicant");
-            exsistingUser.setSapBPNumber(partner.getPartyNumber().toString());
-            userRepository.save(exsistingUser);
+        if  (existingUser != null) {
+            existingUser.setEmail(partner.getEmail());
+            existingUser.setUserName(existingUser.getUserName());
+            existingUser.setDepartmentHead(false);
+            existingUser.setFirstName(partner.getPartyName1());
+            existingUser.setLastName(partner.getPartyName2());
+            existingUser.setRiskDepartment("");
+            existingUser.setRole("TR0100");
+            existingUser.setRoleDescription("Loan Applicant");
+            existingUser.setSapBPNumber(partner.getPartyNumber().toString());
+            userRepository.save(existingUser);
         } else {
             User newUser = new User();
             newUser.setEmail(partner.getEmail());
-            newUser.setUserName(exsistingUser.getUserName());
+            newUser.setUserName(partner.getEmail());
             newUser.setDepartmentHead(false);
             newUser.setFirstName(partner.getPartyName1());
             newUser.setLastName(partner.getPartyName2());
