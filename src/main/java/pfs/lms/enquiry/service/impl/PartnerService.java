@@ -474,7 +474,7 @@ public class PartnerService implements IPartnerService {
 
         if  (existingUser != null) {
             existingUser.setEmail(partner.getEmail());
-            existingUser.setUserName(existingUser.getUserName());
+            existingUser.setUserName(partner.getEmail());
             existingUser.setDepartmentHead(false);
             existingUser.setFirstName(partner.getPartyName1());
             existingUser.setLastName(partner.getPartyName2());
