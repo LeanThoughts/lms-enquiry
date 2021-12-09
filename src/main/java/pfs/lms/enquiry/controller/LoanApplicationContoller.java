@@ -78,7 +78,8 @@ public class LoanApplicationContoller {
             else
                 loanApplications = loanApplicationRepository.findByFunctionalStatus(status, pageable).getContent();
         } else {
-            Partner partner = partnerRepository.findByEmail(user.getEmail());
+            List<Partner> partners = partnerRepository.findByEmail(user.getEmail());
+            Partner partner = partners.get(0);
             if (partner != null)
                 loanApplications = loanApplicationRepository.findByLoanApplicant(partner.getId(), pageable).getContent();
         }
@@ -515,10 +516,14 @@ public class LoanApplicationContoller {
         }
 
         if (user.getRole().equals("TR0100")) {
-            Partner partner = partnerRepository.findByEmail(user.getEmail());
-            if (partner != null) {
-                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanApplicant()
-                        .equals(partner.getId())).collect(Collectors.toList());
+            List<LoanApplication> loanApplicationsForPartner = new ArrayList<>();
+            List<Partner> partners = partnerRepository.findByEmail(user.getEmail());
+            for (Partner partner : partners) {
+                if (partner != null) {
+                    loanApplicationsForPartner = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanApplicant()
+                            .equals(partner.getId())).collect(Collectors.toList());
+                    loanApplications.addAll(loanApplicationsForPartner);
+                }
             }
         }
 
@@ -675,10 +680,14 @@ public class LoanApplicationContoller {
         }
 
         if (user.getRole().equals("TR0100")) {
-            Partner partner = partnerRepository.findByEmail(user.getEmail());
-            if (partner != null) {
-                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanApplicant()
-                        .equals(partner.getId())).collect(Collectors.toList());
+            List<LoanApplication> loanApplicationsForPartner = new ArrayList<>();
+            List<Partner> partners = partnerRepository.findByEmail(user.getEmail());
+            for (Partner partner : partners) {
+                if (partner != null) {
+                    loanApplicationsForPartner = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanApplicant()
+                            .equals(partner.getId())).collect(Collectors.toList());
+                    loanApplications.addAll(loanApplicationsForPartner);
+                }
             }
         }
 

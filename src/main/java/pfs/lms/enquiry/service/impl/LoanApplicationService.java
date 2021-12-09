@@ -47,7 +47,14 @@ public class LoanApplicationService implements ILoanApplicationService {
 
         // Check if the Email id in the Loan Application, is already a user
         // If yes, Update the Partner with the details
-        Partner existingPartner = partnerService.getOne(resource.getPartner().getEmail());
+        Partner existingPartner = null;
+        if (resource.getPartner().getPartyNumber() == null) {
+            existingPartner = partnerService.getOne(resource.getPartner().getEmail());
+        } else  {
+            existingPartner = partnerRepository.findByPartyNumber(resource.getPartner().getPartyNumber());
+        }
+
+
         if (existingPartner != null) {
             existingPartner.setAddressLine1(resource.getPartner().getAddressLine1());
             existingPartner.setAddressLine2(resource.getPartner().getAddressLine2());
@@ -543,9 +550,12 @@ public class LoanApplicationService implements ILoanApplicationService {
         List<LoanApplication> loanApplications = new ArrayList<>();
 
         if (user.getRole().equals("TR0100")) {
-            Partner partner = partnerRepository.findByEmail(user.getEmail());
-            loanApplications = loanApplicationRepository.findByLoanApplicant(partner.getId(),pageable).getContent();
-
+            List<LoanApplication> loanApplicationsForPartner = new ArrayList<>();
+            List<Partner> partners = partnerRepository.findByEmail(user.getEmail());
+                for (Partner partner : partners) {
+                    loanApplicationsForPartner = loanApplicationRepository.findByLoanApplicant(partner.getId(), pageable).getContent();
+                    loanApplications.addAll(loanApplicationsForPartner);
+                }
             }
          else {
             loanApplications =loanApplicationRepository.findAll(pageable).getContent();

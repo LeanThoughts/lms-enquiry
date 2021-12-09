@@ -42,7 +42,18 @@ public class PartnerService implements IPartnerService {
     public Partner save(Partner partner) {
 
         //Check if rhe partner already exist
-        Partner existing = partnerRepository.findByEmail(partner.getEmail());
+        Partner existing = null;
+        List<Partner> partnerList = partnerRepository.findByEmail(partner.getEmail());
+        for (Partner partnerItem : partnerList ) {
+            if (partnerItem.getPartyNumber().intValue() == partner.getPartyNumber().intValue()) {
+                existing = partnerItem;
+            }
+        }
+        if (existing == null) {
+            if (partnerList.size() > 0) {
+                existing = partnerList.get(0);
+            }
+        }
 
         //If exists return the existing partner
         if (existing != null) {
@@ -232,7 +243,8 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
-    public  Partner  getPartnerByEmail(String email) {
+    public  List<Partner>  getPartnerByEmail(String email) {
+
         return partnerRepository.findByEmail(email);
     }
 

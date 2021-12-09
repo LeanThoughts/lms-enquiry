@@ -19,7 +19,7 @@ public interface IPartnerService {
 
     List<Partner> getAllPartners();
 
-    Partner   getPartnerByEmail(String email);
+    List<Partner>   getPartnerByEmail(String email);
 
     List<Partner> getLendersIndependentEngineers();
     List<Partner> getLendersFinancialAdvisors();

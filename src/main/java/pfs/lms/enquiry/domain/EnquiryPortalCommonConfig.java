@@ -9,9 +9,11 @@ import javax.persistence.Entity;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 public class EnquiryPortalCommonConfig extends AggregateRoot<EnquiryPortalCommonConfig> {
+
+
 
      //DEV - Development
      //QA -  QA Test

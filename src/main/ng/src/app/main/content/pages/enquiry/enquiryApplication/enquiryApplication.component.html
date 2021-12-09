@@ -285,7 +285,7 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-          </div>          
+          </div>
         </form>
 
 
@@ -386,7 +386,8 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="33">
-              <input matInput placeholder="PAN Number" formControlName="pan" maxlength="10" required maxlength="10">
+<!--              <input matInput placeholder="PAN Number" formControlName="pan" maxlength="10" required maxlength="10">-->
+              <input matInput placeholder="PAN Number" formControlName="pan" maxlength="10" maxlength="10">
               <mat-error>
                 Provide valid input (Uppercase text and numeric only)
               </mat-error>

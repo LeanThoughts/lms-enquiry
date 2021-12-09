@@ -122,20 +122,23 @@ public class SAPIntegrationService implements ISAPIntegrationService {
             System.out.println("HTTP EXCEPTION ----------------------- Post Loan to SAP");
             System.out.println("HTTP Code    :" + ex.getStatusCode());
             System.out.println("HTTP Message :" +ex.getMessage());
+            System.out.println("Payload " + sapLoanApplicationResource.getSapLoanApplicationDetailsResource().toString());
             return  null;
 
         }
         catch (HttpServerErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post Loan to SAP");
+            System.out.println("HttpServerErrorException ----------------------- Post Loan to SAP");
             System.out.println("HTTP Code    :" + ex.getStatusCode());
             System.out.println("HTTP Message :" + ex.getMessage());
+            System.out.println("Payload " + sapLoanApplicationResource.getSapLoanApplicationDetailsResource().toString());
             return  null;
         }
         catch (UnknownHttpStatusCodeException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post Loan to SAP");
+            System.out.println("UnknownHttpStatusCodeException ----------------------- Post Loan to SAP");
             System.out.println("HTTP Message :" + ex.getMessage());
+            System.out.println("Payload " + sapLoanApplicationResource.getSapLoanApplicationDetailsResource().toString());
             return  null;
         }
 
@@ -144,12 +147,14 @@ public class SAPIntegrationService implements ISAPIntegrationService {
             System.out.println("HTTP EXCEPTION ----------------------- Post Loan to SAP");
             System.out.println("HTTP Code    :" + ex.getStatusCode());
             System.out.println("HTTP Message :" +ex.getMessage());
+            System.out.println("Payload " + sapLoanApplicationResource.getSapLoanApplicationDetailsResource().toString());
             return  null;
         }
         catch (Exception ex) {
 
             System.out.println("General EXCEPTION ----------------------- Post Loan to SAP");
             System.out.println("Exception Message :" +ex.getMessage());
+            System.out.println("Payload " + sapLoanApplicationResource.getSapLoanApplicationDetailsResource().toString());
             return null;
 
         }
