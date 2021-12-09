@@ -360,6 +360,7 @@ export class EnquiryReviewComponent implements OnInit {
             const filteredPartners = this.partners.filter(partner => partner.partyNumber.localeCompare($event.target.value) === 0);
             if (filteredPartners.length > 0) {
                 this.partner = filteredPartners[0];
+                this.partnerNameFormControl.setValue(this.partner.partyName1);
                 this.loadPartnerForm();
             }
             else {
@@ -379,6 +380,7 @@ export class EnquiryReviewComponent implements OnInit {
                 $event.target.value.toLowerCase()) === 0);
             if (filteredPartners.length > 0) {
                 this.partner = filteredPartners[0];
+                this.partnerIdFormControl.setValue(this.partner.partyNumber);
                 this.loadPartnerForm();
             }
             else {

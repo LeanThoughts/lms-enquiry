@@ -2,7 +2,6 @@ package pfs.lms.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -18,11 +17,8 @@ import pfs.lms.enquiry.service.ILoanApplicationService;
 import pfs.lms.enquiry.service.ILoanContractExtensionService;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -175,6 +171,8 @@ public class LoanApplicationContoller {
 //        System.out.println("PARTNER : " + resource.getPartner());
 
 
+        if (resource.getPartner().getPartyNumber() != null)
+            resource.getLoanApplication().setBusPartnerNumber(resource.getPartner().getPartyNumber().toString());
         LoanApplication loanApplication = loanApplicationService.save(resource, request.getUserPrincipal().getName());
 
         loanNotificationService.sendSubmissionNotification(
@@ -202,7 +200,6 @@ public class LoanApplicationContoller {
         LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
         loanApplicationResource.setLoanApplication(resource.getLoanApplication());
         loanApplicationResource.setPartner(resource.getPartner());
-
         LoanApplication loanApplication = loanApplicationService.migrate(loanApplicationResource, request.getUserPrincipal().getName());
 
 
@@ -258,6 +255,8 @@ public class LoanApplicationContoller {
 //        resource.setLoanApplication(loanApplication);
 //        resource.setPartner(partner);
 
+        if (resource.getPartner().getPartyNumber() != null)
+            resource.getLoanApplication().setBusPartnerNumber(resource.getPartner().getPartyNumber().toString());
         LoanApplication loanApplication = loanApplicationService.save(resource, request.getUserPrincipal().getName());
 
         resource.setLoanApplication(loanApplication);
