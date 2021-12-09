@@ -320,7 +320,8 @@ export class EnquiryApplicationComponent implements OnInit {
   saveLoanApplication(stepper: MatStepper): void {
 
     // Re-construct the partner object.
-    const partner = this.loanEnquiryFormStep2.value;
+    var partner = this.loanEnquiryFormStep2.value;
+    partner.partyNumber = this.partner.partyNumber;
 
     // Re-construct the loan application object.
     const loanApplication = this.loanEnquiryFormStep1.value;
@@ -415,6 +416,7 @@ export class EnquiryApplicationComponent implements OnInit {
             const filteredPartners = this.partners.filter(partner => partner.partyNumber.localeCompare($event.target.value) === 0);
             if (filteredPartners.length > 0) {
                 this.partner = filteredPartners[0];
+                this.partnerNameFormControl.setValue(this.partner.partyName1);
                 this.loadPartnerForm();
             }
             else {
@@ -424,6 +426,7 @@ export class EnquiryApplicationComponent implements OnInit {
                 this.partner.partyName2 = this.user.lastName;
             }
         }
+        console.log(this.partner);
     }
 
     validatePartnerByName($event) {
@@ -434,6 +437,7 @@ export class EnquiryApplicationComponent implements OnInit {
                 $event.target.value.toLowerCase()) === 0);
             if (filteredPartners.length > 0) {
                 this.partner = filteredPartners[0];
+                this.partnerIdFormControl.setValue(this.partner.partyNumber);
                 this.loadPartnerForm();
             }
             else {
@@ -443,6 +447,7 @@ export class EnquiryApplicationComponent implements OnInit {
                 this.partner.partyName2 = this.user.lastName;
             }
         }
+        console.log(this.partner);
     }
 
 
