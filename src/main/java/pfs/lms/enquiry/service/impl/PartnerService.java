@@ -45,8 +45,10 @@ public class PartnerService implements IPartnerService {
         Partner existing = null;
         List<Partner> partnerList = partnerRepository.findByEmail(partner.getEmail());
         for (Partner partnerItem : partnerList ) {
-            if (partnerItem.getPartyNumber().intValue() == partner.getPartyNumber().intValue()) {
-                existing = partnerItem;
+            if (partnerItem.getPartyNumber() != null && partner.getPartyNumber() != null) {
+                if (partnerItem.getPartyNumber().intValue() == partner.getPartyNumber().intValue()) {
+                    existing = partnerItem;
+                }
             }
         }
         if (existing == null) {

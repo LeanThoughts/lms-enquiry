@@ -130,7 +130,7 @@ public class LoanApplicationsScheduledTask {
                 loanApplication = loanApplicationRepository.saveAndFlush(loanApplication);
 
                 System.out.println("-----------------------------------------------------------------------------------------------" );
-                System.out.println("Failed to Post Loan Application in SAP: Loan Application :" +loanApplication.getLoanEnquiryId());
+                System.out.println("Failed to Post Loan Application in SAP: Loan Application :" +loanApplication.getId());
                 System.out.println("SAP Business Partner Number :" + partner.getPartyNumber());
             }
         }
