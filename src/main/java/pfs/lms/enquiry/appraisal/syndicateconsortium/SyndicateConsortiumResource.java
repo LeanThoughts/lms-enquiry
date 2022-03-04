@@ -28,5 +28,5 @@ public class SyndicateConsortiumResource {
     private String documentStage;
     private String disbursementStatus;
 
-    private boolean lead;
+    private boolean leadBank;
 }

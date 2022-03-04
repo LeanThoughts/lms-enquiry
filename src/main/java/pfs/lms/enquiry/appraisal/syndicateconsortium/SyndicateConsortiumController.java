@@ -43,7 +43,7 @@ public class SyndicateConsortiumController {
         syndicateConsortium.setBankName(syndicateConsortiumResource.getBankName());
         syndicateConsortium.setSanctionedAmount(syndicateConsortiumResource.getSanctionedAmount());
         syndicateConsortium.setCurrency(syndicateConsortiumResource.getCurrency());
-        syndicateConsortium.setLead(syndicateConsortiumResource.isLead());
+        syndicateConsortium.setLeadBank(syndicateConsortiumResource.isLeadBank());
         syndicateConsortium.setApprovalStatus(syndicateConsortiumResource.getApprovalStatus());
         syndicateConsortium.setDocumentStage(syndicateConsortiumResource.getDocumentStage());
         syndicateConsortium.setDisbursedAmount(syndicateConsortiumResource.getDisbursedAmount());
@@ -62,7 +62,7 @@ public class SyndicateConsortiumController {
         syndicateConsortium.setBankName(syndicateConsortiumResource.getBankName());
         syndicateConsortium.setSanctionedAmount(syndicateConsortiumResource.getSanctionedAmount());
         syndicateConsortium.setCurrency(syndicateConsortiumResource.getCurrency());
-        syndicateConsortium.setLead(syndicateConsortiumResource.isLead());
+        syndicateConsortium.setLeadBank(syndicateConsortiumResource.isLeadBank());
         syndicateConsortium.setApprovalStatus(syndicateConsortiumResource.getApprovalStatus());
         syndicateConsortium.setDocumentStage(syndicateConsortiumResource.getDocumentStage());
         syndicateConsortium.setDisbursedAmount(syndicateConsortiumResource.getDisbursedAmount());

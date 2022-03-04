@@ -35,7 +35,7 @@ public class SyndicateConsortium extends AggregateRoot<SyndicateConsortium> impl
     private String documentStage;
     private String disbursementStatus;
 
-    private boolean lead;
+    private boolean leadBank;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
