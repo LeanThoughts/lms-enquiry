@@ -14,7 +14,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
     bupaRoleTypes: any;
     businessPartnerId: string;
 
-    dialogTitle = "Add Appraisal Officer";
+    dialogTitle = "Add Loan Partners";
 
     loanOfficerForm: FormGroup;
 
@@ -40,7 +40,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
 
         // Change diglog title and fetch partners based on the role assigned ...
         if (this._dialogData.operation === 'modifyOfficer') {
-            this.dialogTitle = 'Modify Appraisal Officer';
+            this.dialogTitle = 'Modify Loan Partners';
             this._loanAppraisalService.getPartnersByRole(this.selectedLoanOfficer.roleType).subscribe(response => {
                 this.partners = response;
             });

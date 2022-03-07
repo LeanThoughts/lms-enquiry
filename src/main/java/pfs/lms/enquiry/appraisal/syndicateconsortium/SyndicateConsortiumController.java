@@ -14,6 +14,7 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @RepositoryRestController
@@ -49,6 +50,18 @@ public class SyndicateConsortiumController {
         syndicateConsortium.setDisbursedAmount(syndicateConsortiumResource.getDisbursedAmount());
         syndicateConsortium.setDisbursementStatus(syndicateConsortiumResource.getDisbursementStatus());
         syndicateConsortium = syndicateConsortiumRepository.save(syndicateConsortium);
+
+        if (syndicateConsortium.isLeadBank()) {
+            List<SyndicateConsortium> syndicateConsortiums = syndicateConsortiumRepository.
+                    findByLoanAppraisalId(loanAppraisal.getId());
+            for(SyndicateConsortium sc : syndicateConsortiums) {
+                if (sc.isLeadBank() && sc.getId() != syndicateConsortium.getId()) {
+                    sc.setLeadBank(false);
+                    syndicateConsortiumRepository.save(sc);
+                }
+            }
+        }
+
         return ResponseEntity.ok(syndicateConsortium);
     }
 
@@ -68,6 +81,18 @@ public class SyndicateConsortiumController {
         syndicateConsortium.setDisbursedAmount(syndicateConsortiumResource.getDisbursedAmount());
         syndicateConsortium.setDisbursementStatus(syndicateConsortiumResource.getDisbursementStatus());
         syndicateConsortium = syndicateConsortiumRepository.save(syndicateConsortium);
+
+        if (syndicateConsortium.isLeadBank()) {
+            List<SyndicateConsortium> syndicateConsortiums = syndicateConsortiumRepository.
+                    findByLoanAppraisalId(syndicateConsortium.getLoanAppraisal().getId());
+            for(SyndicateConsortium sc : syndicateConsortiums) {
+                if (sc.isLeadBank() && sc.getId() != syndicateConsortium.getId()) {
+                    sc.setLeadBank(false);
+                    syndicateConsortiumRepository.save(sc);
+                }
+            }
+        }
+
         return ResponseEntity.ok(syndicateConsortium);
     }
 }

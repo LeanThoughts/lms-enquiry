@@ -7,7 +7,7 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 400px">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 470px">
         <form [formGroup]="syndicateConsortiumForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
@@ -47,12 +47,6 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Lead" formControlName="lead" required>
-                        <mat-option [value]="'true'">Yes</mat-option>
-                        <mat-option [value]="'false'">No</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
                     <mat-select placeholder="Approval Status" formControlName="approvalStatus" required>
                         <mat-option [value]="'01'">Application Submited</mat-option>
                         <mat-option [value]="'02'">In-principle Approved</mat-option>
@@ -74,6 +68,12 @@
                     <mat-select placeholder="Disbursement Status" formControlName="disbursementStatus" required>
                         <mat-option [value]="'1'">Disbursed</mat-option>
                         <mat-option [value]="'2'">Not Disbursed</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Lead FI" formControlName="leadBank" required>
+                        <mat-option [value]="'true'">Yes</mat-option>
+                        <mat-option [value]="'false'">No</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

@@ -11,7 +11,7 @@ public class SyndicateConsortiumEntityListener {
 
     @PostPersist
     public void handleSyndicateConsortiumAfterCreate(SyndicateConsortium syndicateConsortium) {
-        log.info("Inside loan partner after create");
+        log.info("Inside syndicate consortium after create");
     }
 
     @PostUpdate

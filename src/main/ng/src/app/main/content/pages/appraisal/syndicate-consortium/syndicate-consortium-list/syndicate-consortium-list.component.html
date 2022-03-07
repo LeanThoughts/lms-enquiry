@@ -1,11 +1,11 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="ml-8 mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addSyndicateConsortium')"> 
-            Add Syndicate Consortium 
+            Add Syndicate Member 
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifySyndicateConsortium')" 
                 [disabled]="!selectedSyndicateConsortium"> 
-            Modify Syndicate Consortium 
+            Modify Syndicate Member 
         </button>
     </div> 
                
@@ -47,9 +47,9 @@
 
             <!-- lead Column -->
             <ng-container matColumnDef="lead">
-                <mat-header-cell *matHeaderCellDef>Lead</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Lead FI</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lead == 'true' ? 'Yes' : 'No' }}</p>
+                    <p class="text-truncate">{{ obj.leadBank == true ? 'Yes' : 'No' }}</p>
                 </mat-cell>
             </ng-container>
 

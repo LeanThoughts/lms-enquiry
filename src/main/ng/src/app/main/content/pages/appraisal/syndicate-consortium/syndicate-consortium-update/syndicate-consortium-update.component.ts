@@ -18,7 +18,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
 
     bankKeyFormControl = new FormControl();
 
-    dialogTitle = "Add Syndicate Consortium";
+    dialogTitle = "Add Syndicate Bank";
 
     syndicateConsortiumForm: FormGroup;
 
@@ -46,7 +46,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
 
         // Change diglog title and fetch partners based on the role assigned ...
         if (this._dialogData.operation === 'modifySyndicateConsortium') {
-            this.dialogTitle = 'Modify Syndicate Consortium';
+            this.dialogTitle = 'Modify Syndicate Bank';
         }
     }
 
@@ -65,7 +65,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
             bankName: [ this.selectedSyndicateConsortium.bankName || '' ],
             sanctionedAmount: [ this.selectedSyndicateConsortium.sanctionedAmount || '0', [Validators.pattern(LoanAppraisalRegEx.genericAmount)] ],
             currency: [ this.selectedSyndicateConsortium.currency || 'INR' ],
-            lead: [ (this.selectedSyndicateConsortium.lead === true ? 'true' : 'false') || '' ],
+            leadBank: [ (this.selectedSyndicateConsortium.leadBank === true ? 'true' : 'false') || '' ],
             approvalStatus: [ this.selectedSyndicateConsortium.approvalStatus || '' ],
             documentStage: [ this.selectedSyndicateConsortium.documentStage || '' ],
             disbursedAmount: [ this.selectedSyndicateConsortium.disbursedAmount || '0', [Validators.pattern(LoanAppraisalRegEx.genericAmount)] ],
@@ -85,7 +85,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
             var formValues = this.syndicateConsortiumForm.value;
             this.selectedSyndicateConsortium.sanctionedAmount = formValues.sanctionedAmount;            
             this.selectedSyndicateConsortium.currency = formValues.currency;
-            this.selectedSyndicateConsortium.lead = formValues.lead;
+            this.selectedSyndicateConsortium.leadBank = formValues.leadBank;
             this.selectedSyndicateConsortium.approvalStatus = formValues.approvalStatus;
             this.selectedSyndicateConsortium.documentStage = formValues.documentStage;
             this.selectedSyndicateConsortium.disbursedAmount = formValues.disbursedAmount;
