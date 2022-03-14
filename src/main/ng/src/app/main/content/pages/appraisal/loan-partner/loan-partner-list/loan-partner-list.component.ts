@@ -3,17 +3,18 @@ import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
+import { ConfirmationDialogComponent } from '../../confirmationDialog/confirmationDialog.component';
 import { businessPartnerRoleTypes } from '../../loanAppraisal.constants';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { LoanPartnerUpdateComponent } from '../loan-partner-update/loan-partner-update.component';
 
 @Component({
     selector: 'fuse-loan-partners',
-    templateUrl: './loan-partners.component.html',
-    styleUrls: ['./loan-partners.component.scss'],
+    templateUrl: './loan-partner-list.component.html',
+    styleUrls: ['./loan-partner-list.component.scss'],
     animations: fuseAnimations
 })
-export class LoanPartnersComponent {
+export class LoanPartnerListComponent {
 
     dataSource: MatTableDataSource<any>;
     
@@ -65,6 +66,21 @@ export class LoanPartnersComponent {
                 this.getLoanOfficers();
             }
         });       
+    }
+
+    /**
+     * openDeleteDialog()
+     */
+    openDeleteDialog(): void {
+        const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => { 
+            if (result.response) {
+                this._loanAppraisalService.deleteLoanOfficer(this.selectedLoanOfficer.id).subscribe(() => {
+                    this.getLoanOfficers();
+                });
+            }
+        });
     }
 
     /**

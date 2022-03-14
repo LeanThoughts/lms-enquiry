@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
@@ -15,6 +13,7 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -93,6 +92,14 @@ public class SyndicateConsortiumController {
             }
         }
 
+        return ResponseEntity.ok(syndicateConsortium);
+    }
+
+    @DeleteMapping("/syndicateConsortiums/delete/{id}")
+    public ResponseEntity<SyndicateConsortium> deleteSyndicateConsortium(@PathVariable("id") UUID bankId) {
+        SyndicateConsortium syndicateConsortium = syndicateConsortiumRepository.findById(bankId)
+                .orElseThrow(() -> new EntityNotFoundException(bankId.toString()));
+        syndicateConsortiumRepository.deleteById(bankId);
         return ResponseEntity.ok(syndicateConsortium);
     }
 }

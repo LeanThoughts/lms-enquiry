@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { Subscription } from 'rxjs';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
+import { ConfirmationDialogComponent } from '../../confirmationDialog/confirmationDialog.component';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { SyndicateConsortiumUpdateComponent } from '../syndicate-consortium-update/syndicate-consortium-update.component';
 
@@ -73,6 +74,21 @@ export class SyndicateConsortiumListComponent implements OnInit {
             if (result.refresh) {
                 this.getSyndicateConsortiums();
                 this.selectedSyndicateConsortium = undefined;
+            }
+        });
+    }
+
+    /**
+     * openDeleteDialog()
+     */
+    openDeleteDialog(): void {
+        const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => { 
+            if (result.response) {
+                this._loanAppraisalService.deleteSyndicateConsortium(this.selectedSyndicateConsortium.id).subscribe(() => {
+                    this.getSyndicateConsortiums();
+                });
             }
         });
     }

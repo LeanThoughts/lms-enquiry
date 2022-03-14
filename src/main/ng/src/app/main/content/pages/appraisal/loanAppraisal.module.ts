@@ -21,7 +21,7 @@ import { LoanAppraisalService } from './loanAppraisal.service';
 import { LoanAppraisalComponent } from './loanAppraisal.component';
 import { LoanPartnerUpdateComponent } from './loan-partner/loan-partner-update/loan-partner-update.component';
 import { FormsModule } from '@angular/forms';
-import { LoanPartnersComponent } from './loan-partner/loan-partners/loan-partners.component';
+import { LoanPartnerListComponent } from './loan-partner/loan-partner-list/loan-partner-list.component';
 import { LoanAppraisalKYCListComponent } from './loan-appraisal-kyc/loan-appraisal-kyc-list/loan-appraisal-kyc-list.component';
 import { LoanAppraisalKYCUpdateComponent } from './loan-appraisal-kyc/loan-appraisal-kyc-update/loan-appraisal-kyc-update.component';
 import { SyndicateConsortiumListComponent } from './syndicate-consortium/syndicate-consortium-list/syndicate-consortium-list.component';
@@ -34,6 +34,7 @@ import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furthe
 import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
 import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
 import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
+import { ConfirmationDialogComponent } from './confirmationDialog/confirmationDialog.component';
 
 const routes = [
     {
@@ -85,9 +86,10 @@ const MY_FORMATS = {
         MatStepperModule
     ],
     declarations: [
+        ConfirmationDialogComponent,
         LoanAppraisalComponent,
         LoanPartnerUpdateComponent,
-        LoanPartnersComponent,
+        LoanPartnerListComponent,
         LoanAppraisalKYCListComponent,
         LoanAppraisalKYCUpdateComponent,
         SyndicateConsortiumListComponent,
@@ -115,6 +117,7 @@ const MY_FORMATS = {
         LoanAppraisalComponent,
     ],  
     entryComponents: [
+        ConfirmationDialogComponent,
         LoanPartnerUpdateComponent,
         LoanAppraisalKYCUpdateComponent,
         SyndicateConsortiumUpdateComponent,

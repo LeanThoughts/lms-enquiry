@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -50,6 +49,14 @@ public class LoanPartnerController {
         loanPartner.setRoleType(loanPartnerResource.getRoleType());
         loanPartner.setStartDate(loanPartnerResource.getStartDate());
         loanPartner = loanPartnerRepository.save(loanPartner);
+        return ResponseEntity.ok(loanPartner);
+    }
+
+    @DeleteMapping("/loanPartners/delete/{id}")
+    public ResponseEntity<LoanPartner> deleteLoanPartner(@PathVariable("id") UUID loanPartnerId) {
+        LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerId)
+                .orElseThrow(() -> new EntityNotFoundException(loanPartnerId.toString()));
+        loanPartnerRepository.deleteById(loanPartnerId);
         return ResponseEntity.ok(loanPartner);
     }
 }

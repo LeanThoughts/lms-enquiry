@@ -20,5 +20,6 @@ public class LoanPartnerEntityListener {
 
     @PostRemove
     public void handleLoanPartnerAfterDelete(LoanPartner loanPartner) {
+        log.info("Inside loan partner after delete");
     }
 }

@@ -72,6 +72,13 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * deleteLoanOfficer()
+     */
+    public deleteLoanOfficer(partnerId: string): Observable<any> {
+        return this._http.delete("enquiry/api/loanPartners/delete/" + partnerId);
+    }
+
+    /**
      * createAppraisalOfficer()
      */
     public createLoanOfficer(loanOfficer: any): Observable<any> {
@@ -139,6 +146,13 @@ export class LoanAppraisalService implements Resolve<any> {
         return this._http.put("enquiry/api/syndicateConsortiums/update", syndicateConsortium);
     }
 
+    /**
+     * deleteLoanOfficer()
+     */
+    public deleteSyndicateConsortium(bankId: string): Observable<any> {
+        return this._http.delete("enquiry/api/syndicateConsortiums/delete/" + bankId);
+    }
+        
     /**
      * getProposalDetail()
      */

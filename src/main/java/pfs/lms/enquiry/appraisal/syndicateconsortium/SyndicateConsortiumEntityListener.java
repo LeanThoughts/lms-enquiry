@@ -20,5 +20,6 @@ public class SyndicateConsortiumEntityListener {
 
     @PostRemove
     public void handleSyndicateConsortiumAfterDelete(SyndicateConsortium syndicateConsortium) {
+        log.info("Inside syndicate consortium after delete");
     }
 }

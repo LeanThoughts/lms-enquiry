@@ -7,21 +7,19 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 400px">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 415px">
         <form [formGroup]="_proposalDetailsForm">
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Rate of Interest (Pre COD)" formControlName="rateOfInterestPreCod" maxlength="6">
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Rate of Interest (Post COD)" formControlName="rateOfInterestPostCod" maxlength="6">
                 </mat-form-field>
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Spread Reset (From COD)" formControlName="spreadReset" maxlength="3">
                 </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <mat-select placeholder="Spread Reset Unit" formControlName="spreadResetUnit" required>
                         <mat-option [value]="'1'">Days</mat-option>
                         <mat-option [value]="'2'">Weeks</mat-option>
@@ -29,15 +27,15 @@
                         <mat-option [value]="'4'">Years</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Effective Rate of Interest" formControlName="effectiveRateOfInterest" maxlength="6">
-                </mat-form-field>
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="3">
-                </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Effective Rate of Interest" formControlName="effectiveRateOfInterest" maxlength="6">
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="3">
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
                     <mat-select placeholder="Construction Period Unit" formControlName="constructionPeriodUnit">
                         <mat-option [value]="'1'">Days</mat-option>
                         <mat-option [value]="'2'">Weeks</mat-option>
@@ -45,10 +43,12 @@
                         <mat-option [value]="'4'">Years</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Moratorium Period" formControlName="moratoriumPeriod" maxlength="3">
                 </mat-form-field>
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <mat-select placeholder="Moratorium Period Unit" formControlName="moratoriumPeriodUnit">
                         <mat-option [value]="'1'">Days</mat-option>
                         <mat-option [value]="'2'">Weeks</mat-option>
@@ -56,12 +56,10 @@
                         <mat-option [value]="'4'">Years</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Repayment Period" formControlName="repaymentPeriod" maxlength="3">
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="25">
                     <mat-select placeholder="Repayment Period Unit" formControlName="repaymentPeriodUnit">
                         <mat-option [value]="'1'">Days</mat-option>
                         <mat-option [value]="'2'">Weeks</mat-option>
@@ -69,12 +67,12 @@
                         <mat-option [value]="'4'">Years</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Tenor" formControlName="tenor" maxlength="6">
-                </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Tenor" formControlName="tenor" maxlength="6">
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
                     <mat-select placeholder="Tenor Unit" formControlName="tenorUnit">
                         <mat-option [value]="'1'">Days</mat-option>
                         <mat-option [value]="'2'">Weeks</mat-option>
@@ -82,10 +80,10 @@
                         <mat-option [value]="'4'">Years</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Availability Period" formControlName="availabilityPeriod" maxlength="3">
                 </mat-form-field>
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <mat-select placeholder="Availability Period Unit" formControlName="availabilityPeriodUnit">
                         <mat-option [value]="'1'">Days</mat-option>
                         <mat-option [value]="'2'">Weeks</mat-option>
@@ -95,10 +93,10 @@
                 </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Pre Payment Charges" formControlName="prePaymentCharges" maxlength="6">
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Fee Details Schedule" formControlName="feeDetailsSchedule" maxlength="6">
                 </mat-form-field>
             </div>
