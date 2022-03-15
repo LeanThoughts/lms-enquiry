@@ -4,6 +4,7 @@ import { MatDialog, MatSnackBar, MatSort, MatTableDataSource, } from '@angular/m
 import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
+import { ConfirmationDialogComponent } from '../../confirmationDialog/confirmationDialog.component';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { FurtherDetailsSiteVisitUpdateComponent } from '../furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
 
@@ -122,5 +123,22 @@ export class FurtherDetailsSiteVisitListComponent {
                 });
             }
         });    
+    }
+
+    /**
+     * openDeleteDialog()
+     */
+    openDeleteDialog(): void {
+        const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => { 
+            if (result.response) {
+                this._loanAppraisalService.deleteSiteVisit(this.selectedSiteVisit.id).subscribe(() => {
+                    this._loanAppraisalService.getSiteVisits(this._loanApplicationId).subscribe(response => {
+                        this.dataSource = new MatTableDataSource(response._embedded.siteVisits);
+                    });
+                });
+            }
+        });
     }
 }

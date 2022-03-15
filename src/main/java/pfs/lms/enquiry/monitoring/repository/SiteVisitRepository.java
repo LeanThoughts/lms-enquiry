@@ -11,5 +11,5 @@ public interface SiteVisitRepository extends JpaRepository<SiteVisit, String> {
 
     List<SiteVisit> findByLoanMonitor(LoanMonitor loanMonitor);
 
-    List<SiteVisit> findByLoanMonitorLoanApplicationIdAndSiteVisitType(UUID loanApplicationId, String siteVisitType);
+    List<SiteVisit> findByLoanMonitorLoanApplicationIdAndSiteVisitTypeOrderBySerialNumberDesc(UUID loanApplicationId, String siteVisitType);
 }

@@ -214,8 +214,15 @@ export class LoanAppraisalService implements Resolve<any> {
      * getSiteVisits()
      */
     getSiteVisits(loanApplicationId: string): Observable<any> {
-        return this._http.get('enquiry/api/siteVisits/search/findByLoanMonitorLoanApplicationIdAndSiteVisitType?loanApplicationId=' 
+        return this._http.get('enquiry/api/siteVisits/search/findByLoanMonitorLoanApplicationIdAndSiteVisitTypeOrderBySerialNumberDesc?loanApplicationId=' 
                 + loanApplicationId + '&siteVisitType=Site Visit');
+    }
+
+    /**
+     * deleteSiteVisit()
+     */
+    public deleteSiteVisit(id: string): Observable<any> {
+        return this._http.delete("enquiry/api/siteVisits/delete/" + id);
     }
 
     /**

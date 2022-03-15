@@ -23,6 +23,7 @@ import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterResource;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancialsResource;
+import pfs.lms.enquiry.monitoring.repository.SiteVisitRepository;
 import pfs.lms.enquiry.monitoring.resource.*;
 import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.monitoring.tra.TRAResource;
@@ -43,6 +44,8 @@ public class LoanMonitoringController {
    // private final ILIEReportAndFeeService lieReportAndFeeService;
 
     private final ILoanMonitoringService loanMonitoringService;
+
+    private final SiteVisitRepository siteVisitRepository;
 
     // Create update and list (LIE)
 
@@ -304,7 +307,6 @@ public class LoanMonitoringController {
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(siteVisits);
     }
-
 
     // Create update and list (Operating Parameters)
 
