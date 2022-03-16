@@ -50,20 +50,30 @@ export class ProjectAppraisalCompletionUpdateComponent {
         if (this._projectAppraisalCompletionForm.valid) {
             var formValues = this._projectAppraisalCompletionForm.value;
 
-            var dt = new Date(formValues.dateOfProjectAppraisalCompletion);
-            formValues.dateOfProjectAppraisalCompletion = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            if (formValues.dateOfProjectAppraisalCompletion) {
+                var dt = new Date(formValues.dateOfProjectAppraisalCompletion);
+                formValues.dateOfProjectAppraisalCompletion = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
 
-            dt = new Date(formValues.agendaNoteApprovalByDirA);
-            formValues.agendaNoteApprovalByDirA = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            if (formValues.agendaNoteApprovalByDirA) {
+                dt = new Date(formValues.agendaNoteApprovalByDirA);
+                formValues.agendaNoteApprovalByDirA = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
 
-            dt = new Date(formValues.agendaNoteApprovalByDirB);
-            formValues.agendaNoteApprovalByDirB = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            if (formValues.agendaNoteApprovalByDirB) {
+                dt = new Date(formValues.agendaNoteApprovalByDirB);
+                formValues.agendaNoteApprovalByDirB = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
 
-            dt = new Date(formValues.agendaNoteApprovalByMDAndCEO);
-            formValues.agendaNoteApprovalByMDAndCEO = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            if (formValues.agendaNoteApprovalByMDAndCEO) {
+                dt = new Date(formValues.agendaNoteApprovalByMDAndCEO);
+                formValues.agendaNoteApprovalByMDAndCEO = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
 
-            dt = new Date(formValues.agendaNoteSubmissionToCoSecy);
-            formValues.agendaNoteSubmissionToCoSecy = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            if (formValues.agendaNoteSubmissionToCoSecy) {
+                dt = new Date(formValues.agendaNoteSubmissionToCoSecy);
+                formValues.agendaNoteSubmissionToCoSecy = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
             
             if (JSON.stringify(this._projectAppraisalCompletion) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');

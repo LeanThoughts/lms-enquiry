@@ -140,11 +140,9 @@
 
             <!-- Proj appraisal compln tab starts here -->
             <mat-tab label="Proj Appraisal Compln">
-                <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-                    <button class="mr-8 btn" mat-raised-button color="accent" (click)="openProjectAppraisalCompletionUpdateDialog()"> 
-                        Update Project Appraisal Completion Details
-                    </button>
-                </div> 
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-project-appraisal-completion-details></fuse-project-appraisal-completion-details>
+                </div>
             </mat-tab>
 
             <!-- Reason for delay tab starts here -->

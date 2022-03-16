@@ -35,6 +35,7 @@ import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.c
 import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
 import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 import { ConfirmationDialogComponent } from './confirmationDialog/confirmationDialog.component';
+import { ProjectAppraisalCompletionDetails } from './projectAppraisalCompletionDetails/projectAppraisalCompletionDetails.component';
 
 const routes = [
     {
@@ -101,7 +102,8 @@ const MY_FORMATS = {
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayUpdateComponent,
         CustomerRejectionUpdateComponent,
-        ProjectDataUpdateComponent
+        ProjectDataUpdateComponent,
+        ProjectAppraisalCompletionDetails
     ],
     providers: [
         LoanEnquiryService,

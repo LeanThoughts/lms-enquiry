@@ -32,7 +32,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     expandPanel1 = true;
     expandPanel2 = false;
 
-    _projectAppraisalCompletion: any;
     _reasonForDelay: any;
     _customerRejection: any;
     _projectData: any;
@@ -61,7 +60,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
             })
         );
 
-        this._projectAppraisalCompletion = _activatedRoute.snapshot.data.routeResolvedData[7];
         this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];
         this._customerRejection = _activatedRoute.snapshot.data.routeResolvedData[9];
         this._projectData = _activatedRoute.snapshot.data.routeResolvedData[10];
@@ -90,28 +88,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
             stage: [this.selectedEnquiry.stage || '']
-        });
-    }
-
-    /**
-     * openProjectAppraisalCompletionUpdateDialog()
-     */
-    openProjectAppraisalCompletionUpdateDialog(): void {
-        // Open the dialog.
-        var data = {
-            'loanApplicationId': this.loanApplicationId,
-            'loanAppraisalId': this.loanAppraisalId,
-            'projectAppraisalCompletion': this._projectAppraisalCompletion
-        };
-        const dialogRef = this._dialogRef.open(ProjectAppraisalCompletionUpdateComponent, {
-            width: '750px',
-            data: data
-        });
-        // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result.refresh === true) {
-                this._projectAppraisalCompletion = result.projectAppraisalCompletion;
-            }
         });
     }
 
