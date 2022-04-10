@@ -34,7 +34,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
 
     _reasonForDelay: any;
     _customerRejection: any;
-    _projectData: any;
 
     /**
      * constructor()
@@ -62,7 +61,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
 
         this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];
         this._customerRejection = _activatedRoute.snapshot.data.routeResolvedData[9];
-        this._projectData = _activatedRoute.snapshot.data.routeResolvedData[10];
     }
 
     /**
@@ -133,32 +131,5 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 this._customerRejection = result.customerRejection;
             }
         });   
-    }
-
-    /**
-     * openProjectDataUpdateDialog()
-     */
-    openProjectDataUpdateDialog(): void {
-        // Open the dialog.
-        var data = {
-            'loanApplicationId': this.loanApplicationId,
-            'loanAppraisalId': this.loanAppraisalId,
-            'projectData': this._projectData,
-            'loanEnquiry': this.selectedEnquiry,
-            'unitOfMeasures': this._activatedRoute.snapshot.data.routeResolvedData[11]._embedded.unitOfMeasures,
-            'projectTypes': this._activatedRoute.snapshot.data.routeResolvedData[12]._embedded.projectTypes,
-            'technologySuppliers': this._activatedRoute.snapshot.data.routeResolvedData[13],
-            'epcContractors': this._activatedRoute.snapshot.data.routeResolvedData[14]
-        };
-        const dialogRef = this._dialogRef.open(ProjectDataUpdateComponent, {
-            width: '850px',
-            data: data
-        });
-        // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result.refresh === true) {
-                this._projectData = result.projectData;
-            }
-        });        
     }
 }

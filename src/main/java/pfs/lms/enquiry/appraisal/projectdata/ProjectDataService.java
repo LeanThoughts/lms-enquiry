@@ -22,18 +22,13 @@ public class ProjectDataService implements IProjectDataService {
     private final LoanAppraisalRepository loanAppraisalRepository;
 
     @Override
-    public ProjectDataResource getProjectData(UUID loanAppraisalId) {
+    public ProjectData getProjectData(UUID loanAppraisalId) {
         ProjectData projectData = projectDataRepository.findByLoanAppraisalId((loanAppraisalId));
-        ProjectDataResource projectDataResource = null;
-        if (projectData != null) {
-            projectDataResource = new ProjectDataResource();
-            BeanUtils.copyProperties(projectData, projectDataResource);
-        }
-        return projectDataResource;
+        return projectData;
     }
 
     @Override
-    public ProjectDataResource createProjectData(ProjectDataResource projectDataResource) {
+    public ProjectData createProjectData(ProjectDataResource projectDataResource) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(projectDataResource.getLoanApplicationId());
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
@@ -43,38 +38,18 @@ public class ProjectDataService implements IProjectDataService {
                     return obj;
                 });
         ProjectData projectData = new ProjectData();
+        BeanUtils.copyProperties(projectDataResource, projectData);
         projectData.setLoanAppraisal(loanAppraisal);
-        projectData.setEpcContractor(projectDataResource.getEpcContractor());
-        projectData.setMainContractor(projectDataResource.getMainContractor());
-        projectData.setNumberOfUnits(projectDataResource.getNumberOfUnits());
-        projectData.setPolicyApplicable(projectDataResource.getPolicyApplicable());
-        projectData.setProjectCapacity(projectDataResource.getProjectCapacity());
-        projectData.setProjectCapacityUnit(projectDataResource.getProjectCapacityUnit());
-        projectData.setProjectName(projectDataResource.getProjectName());
-        projectData.setProjectType(projectDataResource.getProjectType());
-        projectData.setResourceAssemblyAgency(projectDataResource.getResourceAssemblyAgency());
-        projectData.setTypeOfFunding(projectDataResource.getTypeOfFunding());
         projectData = projectDataRepository.save(projectData);
-        BeanUtils.copyProperties(projectData, projectDataResource);
-        return projectDataResource;
+        return projectData;
     }
 
     @Override
-    public ProjectDataResource updateProjectData(ProjectDataResource projectDataResource) {
+    public ProjectData updateProjectData(ProjectDataResource projectDataResource) {
         ProjectData projectData = projectDataRepository.findById(projectDataResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(projectDataResource.getId().toString()));
-        projectData.setEpcContractor(projectDataResource.getEpcContractor());
-        projectData.setMainContractor(projectDataResource.getMainContractor());
-        projectData.setNumberOfUnits(projectDataResource.getNumberOfUnits());
-        projectData.setPolicyApplicable(projectDataResource.getPolicyApplicable());
-        projectData.setProjectCapacity(projectDataResource.getProjectCapacity());
-        projectData.setProjectCapacityUnit(projectDataResource.getProjectCapacityUnit());
-        projectData.setProjectName(projectDataResource.getProjectName());
-        projectData.setProjectType(projectDataResource.getProjectType());
-        projectData.setResourceAssemblyAgency(projectDataResource.getResourceAssemblyAgency());
-        projectData.setTypeOfFunding(projectDataResource.getTypeOfFunding());
+        BeanUtils.copyProperties(projectDataResource, projectData);
         projectData = projectDataRepository.save(projectData);
-        BeanUtils.copyProperties(projectData, projectDataResource);
-        return projectDataResource;
+        return projectData;
     }
 }

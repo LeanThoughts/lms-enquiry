@@ -17,25 +17,25 @@ public class ProjectDataController {
     private final IProjectDataService projectDataService;
 
     @GetMapping("/projectDatas/{loanAppraisalId}")
-    public ResponseEntity<ProjectDataResource> getProjectData(@PathVariable UUID loanAppraisalId, HttpServletRequest request) {
-        ProjectDataResource projectDataResource = projectDataService.getProjectData(loanAppraisalId);
-        if (projectDataResource != null)
-            return ResponseEntity.ok(projectDataResource);
+    public ResponseEntity<ProjectData> getProjectData(@PathVariable UUID loanAppraisalId, HttpServletRequest request) {
+        ProjectData projectData = projectDataService.getProjectData(loanAppraisalId);
+        if (projectData != null)
+            return ResponseEntity.ok(projectData);
         else
             return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/projectDatas/create")
-    public ResponseEntity<ProjectDataResource> createProjectData(@RequestBody ProjectDataResource projectDataResource,
+    public ResponseEntity<ProjectData> createProjectData(@RequestBody ProjectDataResource projectDataResource,
                                                             HttpServletRequest request) {
-        projectDataResource = projectDataService.createProjectData(projectDataResource);
-        return ResponseEntity.ok(projectDataResource);
+        ProjectData projectData = projectDataService.createProjectData(projectDataResource);
+        return ResponseEntity.ok(projectData);
     }
 
     @PutMapping("/projectDatas/update")
-    public ResponseEntity<ProjectDataResource> updateProjectData(@RequestBody ProjectDataResource projectDataResource,
+    public ResponseEntity<ProjectData> updateProjectData(@RequestBody ProjectDataResource projectDataResource,
                                                             HttpServletRequest request) {
-        projectDataResource = projectDataService.updateProjectData(projectDataResource);
-        return ResponseEntity.ok(projectDataResource);
+        ProjectData projectData = projectDataService.updateProjectData(projectDataResource);
+        return ResponseEntity.ok(projectData);
     }
 }

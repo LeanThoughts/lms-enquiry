@@ -59,6 +59,7 @@ export class ProposalDetailsComponent {
         this.dataSource1.push({particulars: 'Construction Period Unit', description: this.getUnitDescription(this._proposalDetail.constructionPeriodUnit)});
         this.dataSource1.push({particulars: 'Moratorium Period', description: this._proposalDetail.moratoriumPeriod});
         this.dataSource1.push({particulars: 'Moratorium Period Unit', description: this.getUnitDescription(this._proposalDetail.moratoriumPeriodUnit)});
+        
         this.dataSource2.push({particulars: 'Repayment Period', description: this._proposalDetail.repaymentPeriod});
         this.dataSource2.push({particulars: 'Repayment Period Unit', description: this.getUnitDescription(this._proposalDetail.repaymentPeriodUnit)});
         this.dataSource2.push({particulars: 'Tenor', description: this._proposalDetail.tenor});

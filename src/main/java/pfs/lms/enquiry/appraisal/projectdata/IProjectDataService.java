@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface IProjectDataService {
 
-    ProjectDataResource getProjectData(UUID loanAppraisalId);
+    ProjectData getProjectData(UUID loanAppraisalId);
 
-    ProjectDataResource createProjectData(ProjectDataResource projectDataResource);
+    ProjectData createProjectData(ProjectDataResource projectDataResource);
 
-    ProjectDataResource updateProjectData(ProjectDataResource projectDataResource);
+    ProjectData updateProjectData(ProjectDataResource projectDataResource);
 }

@@ -7,53 +7,50 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 500px">
-        <mat-horizontal-stepper class="mat-elevation-z2" [linear]="true" #stepper>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 550px">
+        <mat-horizontal-stepper class="mat-elevation-z2" [linear]="true" #stepper style="height: -webkit-fill-available;">
             <!-- TAb - 1 (Project Overview) -->
             <mat-step [stepControl]="_projectDataStep1Form">
                 <form [formGroup]="_projectDataStep1Form">
+                    <ng-template matStepLabel>Basic Details</ng-template>
                     <div fxLayout="row">
-                        <mat-form-field fxFlex="50">
+                        <mat-form-field fxFlex="25">
                             <input matInput placeholder="Project Name" formControlName="projectName" maxlength="100" required>
                         </mat-form-field>
-                        <mat-form-field fxFlex="50">
+                        <mat-form-field fxFlex="25">
                             <input matInput placeholder="Type of Funding" formControlName="typeOfFunding" maxlength="100" required>
                         </mat-form-field>
-                    </div>
-                    <div fxLayout="row">
-                        <mat-form-field fxFlex="50">
+                        <mat-form-field fxFlex="25">
                             <mat-select placeholder="Policy Applicable" formControlName="policyApplicable">
                                 <mat-option [value]="'0'">Yes</mat-option>
                                 <mat-option [value]="'1'">No</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field fxFlex="50">
-                            <input matInput placeholder="Project Capacity (Unit Size)" formControlName="projectCapacity" maxlength="8">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Technology" formControlName="technology" maxlength="100" required>
                         </mat-form-field>
                     </div>
                     <div fxLayout="row">
-                        <mat-form-field fxFlex="50">
-                            <mat-select placeholder="Project Capacity Unit" formControlName="projectCapacityUnit">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Unit Size" formControlName="projectCapacityUnitSize" maxlength="8">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <mat-select placeholder="Unit of Measure" formControlName="projectCapacityUnitMeasure">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let unitOfMeasure of _dialogData.unitOfMeasures" [value]="unitOfMeasure.code">
                                     {{ unitOfMeasure.value }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field fxFlex="50">
+                        <mat-form-field fxFlex="25">
                             <input matInput placeholder="Number of Units" formControlName="numberOfUnits" maxlength="5" required>
                         </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Design PLF CUF" formControlName="designPlfCuf" maxlength="50">          
+                        </mat-form-field>        
                     </div>
                     <div fxLayout="row">
-                        <mat-form-field fxFlex="50">
-                            <mat-select placeholder="Project Type" formControlName="projectType">
-                                <mat-option></mat-option>
-                                <mat-option *ngFor="let projectType of _dialogData.projectTypes" [value]="projectType.code">
-                                    {{ projectType.value }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field fxFlex="50">
+                        <mat-form-field fxFlex="25">
                             <mat-select placeholder="Technology Supplier" formControlName="mainContractor">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let partner of _dialogData.technologySuppliers" [value]="partner.id">
@@ -61,9 +58,7 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
-                    <div fxLayout="row">
-                        <mat-form-field fxFlex="50">
+                        <mat-form-field fxFlex="25">
                             <mat-select placeholder="EPC Contractor" formControlName="epcContractor">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let partner of _dialogData.epcContractors" [value]="partner.id">
@@ -71,8 +66,11 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field fxFlex="50">
-                            <input matInput placeholder="Resource Assessment Agency" formControlName="resourceAssemblyAgency" maxlength="100">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Resource Assessment Agency" formControlName="resourceAssessmentAgency" maxlength="100">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="O&M Contractor" formControlName="oandmContractor" maxlength="100">
                         </mat-form-field>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="center center">
@@ -82,9 +80,189 @@
                     </div>
                 </form>
             </mat-step>
+
+            <mat-step [stepControl]="_projectDataStep2Form">
+                <form [formGroup]="_projectDataStep2Form">
+                    <ng-template matStepLabel>Technical Parameters</ng-template>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Offtake Volume" formControlName="offtakeVolume" maxlength="10">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Sale Rate" formControlName="saleRate" maxlength="60">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="50">
+                            <input matInput placeholder="Fuel Mix" formControlName="fuelMix" maxlength="100">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Fuel Cost" formControlName="fuelCost" maxlength="13">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Station Heat Rate" formControlName="stationHeatRate" maxlength="13">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="O&M Expenses" formControlName="oandmExpenses" maxlength="18">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Total Land (Acres)" formControlName="totalLand" maxlength="18">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput [matDatepicker]="picker2" placeholder="Project COD" formControlName="projectCOD" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker> 
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="PPA Rate" formControlName="ppaRate" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="50">
+                            <input matInput placeholder="Off Taker Company" formControlName="offTakerCompany" maxlength="60">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <p fxFlex="100"><b>Off Taker Distribution</b></p>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="IPP %" formControlName="ippPercentage" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Group Captive %" formControlName="groupCaptivePercentage" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Third Party %" formControlName="thirdPartyPercentage" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Market %" formControlName="marketPercentage" maxlength="6">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                        <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="accent">
+                            Previous
+                        </button>
+                        <button mat-raised-button matStepperNext type="button" color="accent">
+                            Next
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <mat-step [stepControl]="_projectDataStep3Form">
+                <form [formGroup]="_projectDataStep3Form">
+                    <ng-template matStepLabel>Financial Parameters</ng-template>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Plant & Machinery Cost/ EPC Cost" formControlName="epcCost" maxlength="18">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Overall Project Cost" formControlName="overallProjectCost" maxlength="18">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Debt Equity Ratio" formControlName="debtEquityRatio" maxlength="60">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Total Debt" formControlName="totalDebt" maxlength="60">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Rate of Interest - Pre COD" formControlName="roiPreCod" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Rate of Interest - Post COD" formControlName="roiPostCod" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="4">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <mat-select placeholder="Unit" formControlName="constructionPeriodUnit">
+                                <mat-option [value]="'1'">Days</mat-option>
+                                <mat-option [value]="'2'">Weeks</mat-option>
+                                <mat-option [value]="'3'">Months</mat-option>
+                                <mat-option [value]="'4'">Years</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Moratorium Period" formControlName="moratoriumPeriod" maxlength="4">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <mat-select placeholder="Unit" formControlName="moratoriumPeriodUnit">
+                                <mat-option [value]="'1'">Days</mat-option>
+                                <mat-option [value]="'2'">Weeks</mat-option>
+                                <mat-option [value]="'3'">Months</mat-option>
+                                <mat-option [value]="'4'">Years</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Door to Door - Tenor" formControlName="tenorPeriod" maxlength="4">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <mat-select placeholder="Unit" formControlName="tenorUnit">
+                                <mat-option [value]="'1'">Days</mat-option>
+                                <mat-option [value]="'2'">Weeks</mat-option>
+                                <mat-option [value]="'3'">Months</mat-option>
+                                <mat-option [value]="'4'">Years</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="50">
+                            <input matInput placeholder="Repayment Schedule" formControlName="repaymentSchedule" maxlength="100">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="DSCR - Minimum" formControlName="dscrMinimum" maxlength="6">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="DSCR - Average" formControlName="dscrAverage" maxlength="6">
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Total)" formControlName="levCostTotal" maxlength="18">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Fixed)" formControlName="levCostFixed" maxlength="18">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Variable)" formControlName="levCostVariable" maxlength="18">
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Working Capital Cycle" formControlName="workingCapitalCycle" maxlength="4">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <mat-select placeholder="Unit" formControlName="workingCapitalUnit">
+                                <mat-option [value]="'1'">Days</mat-option>
+                                <mat-option [value]="'2'">Weeks</mat-option>
+                                <mat-option [value]="'3'">Months</mat-option>
+                                <mat-option [value]="'4'">Years</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                        <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="accent">
+                            Previous
+                        </button>
+                        <button mat-raised-button matStepperNext type="button" color="accent">
+                            Next
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
             <mat-step>
+                <ng-template matStepLabel>Submit Data</ng-template>
                 <div class="h2 m-16" fxLayout="row" fxLayoutAlign="center center">
-                    <!-- Thank your for filling out the details. Please click on Finish to submit. -->
+                    Please click on Finish to submit.
                 </div>
 
                 <div fxLayout="row" fxLayoutAlign="center center">

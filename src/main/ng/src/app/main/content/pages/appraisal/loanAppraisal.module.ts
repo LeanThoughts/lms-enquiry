@@ -36,6 +36,7 @@ import { CustomerRejectionUpdateComponent } from './customerRejection/customerRe
 import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 import { ConfirmationDialogComponent } from './confirmationDialog/confirmationDialog.component';
 import { ProjectAppraisalCompletionDetails } from './projectAppraisalCompletionDetails/projectAppraisalCompletionDetails.component';
+import { ProjectDataComponent } from './projectData/projectData.component';
 
 const routes = [
     {
@@ -102,6 +103,7 @@ const MY_FORMATS = {
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayUpdateComponent,
         CustomerRejectionUpdateComponent,
+        ProjectDataComponent,
         ProjectDataUpdateComponent,
         ProjectAppraisalCompletionDetails
     ],
