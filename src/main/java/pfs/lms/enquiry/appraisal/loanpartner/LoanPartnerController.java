@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pfs.lms.enquiry.domain.LoanApplication;
-import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,24 +15,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LoanPartnerController {
 
-    private final LoanApplicationRepository loanApplicationRepository;
+    private final ILoanPartnerService loanPartnerService;
+
     private final LoanPartnerRepository loanPartnerRepository;
 
     @PostMapping("/loanPartners/create")
     public ResponseEntity<LoanPartner> createLoanPartner(@RequestBody LoanPartnerResource loanPartnerResource,
                                                          HttpServletRequest request) {
 
-        LoanApplication loanApplication = loanApplicationRepository.findById(loanPartnerResource.getLoanApplicationId())
-                .orElseThrow(() -> new EntityNotFoundException(loanPartnerResource.getLoanApplicationId().toString()));
-        LoanPartner loanPartner = new LoanPartner();
-        loanPartner.setSerialNumber(loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanPartnerResource
-                .getLoanApplicationId()).size() + 1);
-        loanPartner.setLoanApplication(loanApplication);
-        loanPartner.setBusinessPartnerId(loanPartnerResource.getBusinessPartnerId());
-        loanPartner.setBusinessPartnerName(loanPartnerResource.getBusinessPartnerName());
-        loanPartner.setRoleType(loanPartnerResource.getRoleType());
-        loanPartner.setStartDate(loanPartnerResource.getStartDate());
-        loanPartner = loanPartnerRepository.save(loanPartner);
+        LoanPartner loanPartner = loanPartnerService.createLoanPartner(loanPartnerResource);
         return ResponseEntity.ok(loanPartner);
     }
 

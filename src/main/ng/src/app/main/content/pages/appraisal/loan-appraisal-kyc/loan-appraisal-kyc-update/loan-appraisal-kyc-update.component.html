@@ -10,42 +10,27 @@
     <div mat-dialog-content fusePerfectScrollbar style="height: 340px">
         <form [formGroup]="loanAppraisalKYCForm">
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Serial Number" formControlName="serialNumber" readonly>
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Partner Type" formControlName="partnerType" readonly>
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Document" formControlName="documentName" readonly>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="KYC Type" formControlName="kycType" readonly>
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Status" formControlName="status" readonly>
-                </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker1" placeholder="Date of Completion" formControlName="dateOfCompletion" readonly required>
+                <mat-form-field fxFlex="100">
+                    <input matInput [matDatepicker]="picker1" placeholder="Date" formControlName="dateOfCompletion" readonly required>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker> 
                 </mat-form-field>
-                <mat-form-field fxFlex="50">
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
                     <input matInput placeholder="Remarks" formControlName="remarks" required>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Document Name" formControlName="documentName">
-                </mat-form-field>
-                <div fxFlex="50">
+                <div fxFlex="100">
                     <div fxLayout="column">
                         <label for="document">Upload Document (PDF)</label>
-                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
-                        <!-- <a [href]="getFileURL(selectedLFAReportAndFee.fileReference)" *ngIf="selectedLFAReportAndFee.fileReference !== ''">
-                            <mat-icon>cloud_download</mat-icon>
-                        </a> -->
+                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" required/>
                     </div>
                 </div>
             </div>

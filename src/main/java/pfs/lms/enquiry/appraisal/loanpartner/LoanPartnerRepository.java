@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface LoanPartnerRepository extends JpaRepository<LoanPartner, UUID> {
 
     List<LoanPartner> findByLoanApplicationIdOrderBySerialNumberDesc(UUID loanApplicationId);
+
+    List<LoanPartner> findByLoanApplicationIdAndKycRequired(UUID loanApplicationId, boolean kycRequired);
 }

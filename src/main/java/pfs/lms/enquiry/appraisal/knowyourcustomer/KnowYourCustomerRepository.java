@@ -7,7 +7,5 @@ import java.util.UUID;
 
 public interface KnowYourCustomerRepository extends JpaRepository<KnowYourCustomer, UUID> {
 
-    List<KnowYourCustomer> findByLoanAppraisalId(UUID loanAppraisalId);
-
-    List<KnowYourCustomer> findByLoanAppraisalIdOrderBySerialNumberDesc(UUID loanAppraisalId);
+    List<KnowYourCustomer> findByLoanPartnerId(String loanPartnerId);
 }

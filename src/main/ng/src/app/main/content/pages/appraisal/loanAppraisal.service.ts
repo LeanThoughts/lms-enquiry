@@ -25,7 +25,7 @@ export class LoanAppraisalService implements Resolve<any> {
         console.log('in resolve :: loanAppraisalId is ', this._loanAppraisal.id);
         return forkJoin([
             this.getLoanOfficers(this._loanEnquiryService.selectedLoanApplicationId.value),
-            this.getLaonAppraisalKYCs(this._loanAppraisal.id),
+            this.getLoanOfficersForKyc(this._loanEnquiryService.selectedLoanApplicationId.value),
             this.getBanks(),
             this.getSyndicateConsortiums(this._loanAppraisal.id),
             this.getProposalDetail(this._loanAppraisal.id),
@@ -72,6 +72,14 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getLoanOfficersForKyc()
+     */
+    public getLoanOfficersForKyc(loanApplicationId: string): Observable<any> {
+        return this._http.get("enquiry/api/loanPartners/search/findByLoanApplicationIdAndKycRequired?loanApplicationId=" 
+                + loanApplicationId + '&kycRequired=true');
+    }
+
+    /**
      * deleteLoanOfficer()
      */
     public deleteLoanOfficer(partnerId: string): Observable<any> {
@@ -93,30 +101,17 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
-     * createLoanAppraisalKYC()
+     * getKYCDocuments()
      */
-    public createLoanAppraisalKYC(loanAppraisalKYC: any): Observable<any> {
-        return this._http.post("enquiry/api/knowYourCustomers/create", loanAppraisalKYC);
+    public getKYCDocuments(loanPartnerId: string): Observable<any> {
+        return this._http.get("enquiry/api/knowYourCustomers/search/findByLoanPartnerId?loanPartnerId=" + loanPartnerId);
     }
 
     /**
-     * updateLoanAppraisalKYC()
+     * updateKYC()
      */
-    public updateLoanAppraisalKYC(loanAppraisalKYC: any): Observable<any> {
-        return this._http.put("enquiry/api/knowYourCustomers/update", loanAppraisalKYC);
-    }
-
-    /**
-     * getLaonAppraisalKYCs()
-     */
-    public getLaonAppraisalKYCs(loanAppraisalId: string): Observable<any> {
-        if (loanAppraisalId === '') {
-            return Observable.of({});
-        }
-        else {
-            return this._http.get("enquiry/api/knowYourCustomers/search/findByLoanAppraisalIdOrderBySerialNumberDesc?loanAppraisalId=" 
-                    + loanAppraisalId);
-        }
+    public updateKYC(kyc: string): Observable<any> {
+        return this._http.put("enquiry/api/knowYourCustomers/update", kyc);
     }
 
     /**

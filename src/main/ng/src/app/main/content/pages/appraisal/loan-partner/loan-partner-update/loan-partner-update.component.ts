@@ -20,6 +20,8 @@ export class LoanPartnerUpdateComponent implements OnInit {
 
     selectedLoanOfficer: any;
 
+    selectedRoleTypeDescription: string;
+
     partners: any;
 
     /**
@@ -80,6 +82,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
             this.selectedLoanOfficer.businessPartnerName = formData.businessPartnerName;
             this.selectedLoanOfficer.roleType = formData.roleType;
             this.selectedLoanOfficer.startDate = formData.startDate;
+            this.selectedLoanOfficer.roleDescription = this.selectedRoleTypeDescription;
             if (this._dialogData.operation === 'modifyOfficer') {
                 this._loanAppraisalService.updateLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
                     this._matSnackBar.open('Loan partner updated successfully.', 'OK', { duration: 7000 });
@@ -88,6 +91,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
             }
             else {
                 this.selectedLoanOfficer.loanApplicationId = this._dialogData.loanApplicationId;
+                this.selectedLoanOfficer.kycStatus = "Not Started";
                 this._loanAppraisalService.createLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
                     this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
@@ -109,6 +113,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
      */
     onBupaRoleSelect(roleType: any): void {
         console.log('onBupaRoleSelect', roleType);
+        this.selectedRoleTypeDescription = roleType.value;
         this._loanAppraisalService.getPartnersByRole(roleType.code).subscribe(response => {
             this.partners = response;
         })

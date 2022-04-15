@@ -14,13 +14,18 @@ import { LoanAppraisalKYCUpdateComponent } from '../loan-appraisal-kyc-update/lo
 })
 export class LoanAppraisalKYCListComponent implements OnInit {
 
-    dataSource: MatTableDataSource<any>;
+    dataSource1: MatTableDataSource<any>;
+    dataSource2: MatTableDataSource<any>;
     
-    displayedColumns = [
-        'serialNumber', 'kycType', 'dateOfCompletion', 'remarks', 'documentName', 'download'
+    displayedColumns1 = [
+        'roleType', 'roleDescription', 'businessPartnerName', 'kycStatus'
+    ];
+    displayedColumns2 = [
+        'documentType', 'documentName', 'dateOfCompletion', 'remarks', 'download'
     ];
 
-    selectedKYC: any;
+    selectedPartner: any;
+    selectedKYCDocument: any;
 
     _loanApplicationId: string;
     _loanAppraisalId: string;
@@ -39,7 +44,7 @@ export class LoanAppraisalKYCListComponent implements OnInit {
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
 
         if (JSON.stringify(_activatedRoute.snapshot.data.routeResolvedData[1]) !== JSON.stringify({}))
-            this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.knowYourCustomers);
+            this.dataSource1 = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.loanPartners);
     }
 
     /**
@@ -49,19 +54,15 @@ export class LoanAppraisalKYCListComponent implements OnInit {
     }
 
     /**
-     * openUpdateDialog()
-     * @param operation 
+     * openUploadDialog()
      */
-    openUpdateDialog(operation: string): void {
+     openUploadDialog(operation: string): void {
         // Open the dialog.
         var data = {
             'operation': operation,
             'loanApplicationId': this._loanApplicationId,
-            'loanAppraisalKYC': {},
+            'kycDocument': this.selectedKYCDocument,
         };
-        if (operation === 'modifyAppraisalKYC') {
-            data.loanAppraisalKYC = this.selectedKYC;
-        }
         const dialogRef = this._dialogRef.open(LoanAppraisalKYCUpdateComponent, {
             width: '750px',
             data: data
@@ -69,31 +70,40 @@ export class LoanAppraisalKYCListComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this.getLoanAppraisalKYCs();
+                this.getKYCDocuments();
+                this._loanAppraisalService.getLoanOfficersForKyc(this._loanApplicationId).subscribe(data => {
+                    this.dataSource1 = new MatTableDataSource(data._embedded.loanPartners);
+                });
             }
         });
     }
 
     /**
-     * getLoanAppraisalKYCs()
+     * getKYCDocuments()
      */
-     getLoanAppraisalKYCs(): void {
-        this._loanAppraisalService.getLaonAppraisalKYCs(this._loanAppraisalId).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.knowYourCustomers);
+    getKYCDocuments(): void {
+        this._loanAppraisalService.getKYCDocuments(this.selectedPartner.id).subscribe(data => {
+            this.dataSource2 = new MatTableDataSource(data._embedded.knowYourCustomers);
         });
     }
 
     /**
-     * onRowSelect()
-     * @param loanAppraisalKYC 
+     * onPartnerSelect()
      */
-    onRowSelect(loanAppraisalKYC: any): void {
-        this.selectedKYC = loanAppraisalKYC;
+    onPartnerSelect(loanPartner: any): void {
+        this.selectedPartner = loanPartner;
+        this.getKYCDocuments();
+    }
+
+    /**
+     * onKYCDocumentSelect()
+     */
+    onKYCDocumentSelect(kycDocument: any): void {
+        this.selectedKYCDocument = kycDocument;
     }
 
     /**
      * getFileURL()
-     * @param fileReference 
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;

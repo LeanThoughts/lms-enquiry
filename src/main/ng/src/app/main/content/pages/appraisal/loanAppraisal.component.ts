@@ -6,10 +6,8 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
-import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
 import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
 import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
-import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 
 @Component({
     selector: 'fuse-loanappraisal',

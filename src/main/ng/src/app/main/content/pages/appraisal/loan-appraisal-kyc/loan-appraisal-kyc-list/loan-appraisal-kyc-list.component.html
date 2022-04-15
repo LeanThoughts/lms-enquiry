@@ -1,33 +1,79 @@
 <div class="content">
-    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="ml-8 mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addAppraisalKYC')"> Add Appraisal KYC </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyAppraisalKYC')" 
-                [disabled]="!selectedKYC"> Modify Appraisal KYC </button>
-    </div> 
-               
-    <div class="mat-table-container mat-white-bg" style="width: 100%">
 
-        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+    <div class="mat-table-container mat-white-bg mt-16" style="width: 100%">
 
-            <!-- serialNumber Column -->
-            <ng-container matColumnDef="serialNumber">
-                <mat-header-cell *matHeaderCellDef>Sl No.</mat-header-cell>
+        <mat-table class="enquiries-table" [dataSource]="dataSource1" matSort fusePerfectScrollbar>
+
+            <!-- roleType Column -->
+            <ng-container matColumnDef="roleType">
+                <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                    <p class="text-truncate">{{ obj.roleType }}</p>
                 </mat-cell>
             </ng-container>
             
-            <!-- kycType Column -->
-            <ng-container matColumnDef="kycType">
-                <mat-header-cell *matHeaderCellDef>KYC Type</mat-header-cell>
+            <!-- roleDescription Column -->
+            <ng-container matColumnDef="roleDescription">
+                <mat-header-cell *matHeaderCellDef>Role Description</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.kycType }}</p>
+                    <p class="text-truncate">{{ obj.roleDescription }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- businessPartnerName Column -->
+            <ng-container matColumnDef="businessPartnerName">
+                <mat-header-cell *matHeaderCellDef>Business Partner</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.businessPartnerName }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- kycStatus Column -->
+            <ng-container matColumnDef="kycStatus">
+                <mat-header-cell *matHeaderCellDef>KYC Status</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.kycStatus }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns1;" class="obj" matRipple (click)="onPartnerSelect(obj)"
+                [ngClass]="{'highlight':obj.id === selectedPartner?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button mat-raised-button color="accent" (click)="openUploadDialog()"> 
+            Upload Document 
+        </button>
+    </div> 
+
+    <div class="mat-table-container mat-white-bg mt-16" style="width: 100%">
+
+        <mat-table class="enquiries-table" [dataSource]="dataSource2" matSort fusePerfectScrollbar>
+           
+            <!-- documentType Column -->
+            <ng-container matColumnDef="documentType">
+                <mat-header-cell *matHeaderCellDef>Document Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentType }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentName Column -->
+            <ng-container matColumnDef="documentName">
+                <mat-header-cell *matHeaderCellDef>Document Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentName }}</p>
                 </mat-cell>
             </ng-container>
 
             <!-- dateOfCompletion Column -->
             <ng-container matColumnDef="dateOfCompletion">
-                <mat-header-cell *matHeaderCellDef>Date of Completion</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.dateOfCompletion | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
@@ -41,14 +87,6 @@
                 </mat-cell>
             </ng-container>
 
-            <!-- documentName Column -->
-            <ng-container matColumnDef="documentName">
-                <mat-header-cell *matHeaderCellDef>Document Name</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.documentName }}</p>
-                </mat-cell>
-            </ng-container>
-
             <!-- download Column -->
             <ng-container matColumnDef="download">
                 <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
@@ -57,10 +95,10 @@
                 </mat-cell>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
 
-            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
-                [ngClass]="{'highlight':obj.id === selectedKYC?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+            <mat-row *matRowDef="let obj; columns: displayedColumns2;" class="obj" matRipple (click)="onKYCDocumentSelect(obj)"
+                [ngClass]="{'highlight':obj.id === selectedKYCDocument?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>

@@ -20,6 +20,10 @@ public class LoanPartnerResource {
     private String businessPartnerId;
     private String businessPartnerName;
     private String roleType;
+    private String roleDescription;
+    private String kycStatus;
+
+    private boolean kycRequired;
 
     private LocalDate startDate;
 }

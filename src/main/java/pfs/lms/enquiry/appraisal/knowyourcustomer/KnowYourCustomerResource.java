@@ -15,19 +15,12 @@ import java.util.UUID;
 public class KnowYourCustomerResource {
 
     private UUID id;
-    private UUID loanApplicationId;
+    private String loanPartnerId;
 
-    private Integer serialNumber;
-
-    private String partnerType;
-    private String kycType;
-    private String status;
-
-    private LocalDate dateOfCompletion;
-
-    private String remarks;
+    private String documentType;
     private String documentName;
+    private String remarks;
     private String fileReference;
 
-    private LocalDate uploadDate;
+    private LocalDate dateOfCompletion;
 }

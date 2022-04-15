@@ -31,7 +31,7 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
-        this.selectedLoanAppraisalKYC = Object.assign({}, _dialogData.loanAppraisalKYC);
+        this.selectedLoanAppraisalKYC = Object.assign({}, _dialogData.kycDocument);
 
         // Change diglog title and fetch partners based on the role assigned ...
         if (this._dialogData.operation === 'modifyOfficer') {
@@ -44,14 +44,10 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
      */
     ngOnInit() {
         this.loanAppraisalKYCForm = this._formBuilder.group({
-            serialNumber: [ this.selectedLoanAppraisalKYC.serialNumber || '' ],
-            partnerType: [ this.selectedLoanAppraisalKYC.partnerType || '' ],
-            kycType: [ this.selectedLoanAppraisalKYC.kycType || '' ],
-            status: [ this.selectedLoanAppraisalKYC.status || '' ],
+            documentName: [ this.selectedLoanAppraisalKYC.documentName || '' ],
             dateOfCompletion: [ this.selectedLoanAppraisalKYC.dateOfCompletion || '' ],
             remarks: [ this.selectedLoanAppraisalKYC.remarks || '' ],
             file: [''],
-            documentName: [ this.selectedLoanAppraisalKYC.documentName || '' ]
         });
     }
 
@@ -60,65 +56,34 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this.loanAppraisalKYCForm.valid) {
+
             var formValues = this.loanAppraisalKYCForm.value;
             
             var dt = new Date(formValues.dateOfCompletion);
             this.selectedLoanAppraisalKYC.dateOfCompletion = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             this.selectedLoanAppraisalKYC.remarks = formValues.remarks;
-            this.selectedLoanAppraisalKYC.documentName = formValues.documentName;
-            if (this._dialogData.operation === 'modifyAppraisalKYC') {
-                if (this.loanAppraisalKYCForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.loanAppraisalKYCForm.get('file').value);      
-                    this._loanAppraisalService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            this.selectedLoanAppraisalKYC.fileReference = response.fileReference;
-                            this._loanAppraisalService.updateLoanAppraisalKYC(this.selectedLoanAppraisalKYC).subscribe(() => {
-                                this._matSnackBar.open('Loan Appraisal KYC updated successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    this._loanAppraisalService.updateLoanAppraisalKYC(this.selectedLoanAppraisalKYC).subscribe(() => {
-                        this._matSnackBar.open('Loan Appraisal KYC updated successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
+
+            if (this.loanAppraisalKYCForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.loanAppraisalKYCForm.get('file').value);      
+                this._loanAppraisalService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.selectedLoanAppraisalKYC.fileReference = response.fileReference;
+                        this._loanAppraisalService.updateKYC(this.selectedLoanAppraisalKYC).subscribe(() => {
+                            this._matSnackBar.open('KYC updated successfully.', 'OK', { duration: 7000 });
+                            this._dialogRef.close({ 'refresh': true });
+                        });
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                            'OK', { duration: 7000 });
+                    }
+                );
             }
-            else {
-                this.selectedLoanAppraisalKYC.loanApplicationId = this._dialogData.loanApplicationId;
-                if (this.loanAppraisalKYCForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.loanAppraisalKYCForm.get('file').value);      
-                    this._loanAppraisalService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            this.selectedLoanAppraisalKYC.fileReference = response.fileReference;
-                            this._loanAppraisalService.createLoanAppraisalKYC(this.selectedLoanAppraisalKYC).subscribe(() => {
-                                this._matSnackBar.open('Loan Appraisal KYC added successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    this._loanAppraisalService.createLoanAppraisalKYC(this.selectedLoanAppraisalKYC).subscribe(() => {
-                        this._matSnackBar.open('Loan Appraisal KYC added successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
+            else
+            {
+                // Please select a valid file
             }
         }
     }
