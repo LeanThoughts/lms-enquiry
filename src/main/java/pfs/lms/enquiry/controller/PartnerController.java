@@ -177,6 +177,17 @@ public class PartnerController {
             return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("partners/partyRole/{roleType}")
+    public ResponseEntity<List<Partner>> findByPartyRole(@PathVariable String roleType,
+                                                           HttpServletRequest httpServletRequest) {
+
+        List<Partner> partners = partnerService.findByPartyRole(roleType);
+        if (partners != null)
+            return ResponseEntity.ok(partners);
+        else
+            return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("partner/migrate")
     public ResponseEntity migratePartner(@RequestBody Partner partner, HttpServletRequest httpServletRequest){
 

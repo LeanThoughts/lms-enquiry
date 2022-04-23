@@ -27,5 +27,7 @@ public interface IPartnerService {
 
     List<Partner> getPartnersByRoleType(String roleType);
 
+    List<Partner> findByPartyRole(String roleType);
+
     Partner migratePartner(Partner partner, HttpServletRequest httpServletRequest);
 }

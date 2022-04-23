@@ -60,7 +60,7 @@ export class LoanAppraisalService implements Resolve<any> {
      * getPartnersByRoleType()
      */
     public getPartnersByRole(role: string): Observable<any> {
-        return this._http.get("enquiry/api/partners/role/" + role);
+        return this._http.get("enquiry/api/partners/partyRole/" + role);
     }
     
     /**

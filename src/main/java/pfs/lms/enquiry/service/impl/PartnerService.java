@@ -357,6 +357,11 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
+    public List<Partner> findByPartyRole(String roleType) {
+        return partnerRepository.findByPartyRole(roleType);
+    }
+
+    @Override
     public Partner migratePartner(Partner partner, HttpServletRequest httpServletRequest) {
 
         log.info("Starting Migration of Business Partner Number :" + partner.getPartyNumber() + partner.getPartyName1());
