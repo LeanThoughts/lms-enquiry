@@ -6,7 +6,6 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
@@ -17,12 +16,9 @@ public class LoanPartnerController {
 
     private final ILoanPartnerService loanPartnerService;
 
-    private final LoanPartnerRepository loanPartnerRepository;
-
     @PostMapping("/loanPartners/create")
     public ResponseEntity<LoanPartner> createLoanPartner(@RequestBody LoanPartnerResource loanPartnerResource,
                                                          HttpServletRequest request) {
-
         LoanPartner loanPartner = loanPartnerService.createLoanPartner(loanPartnerResource);
         return ResponseEntity.ok(loanPartner);
     }
@@ -30,22 +26,13 @@ public class LoanPartnerController {
     @PutMapping("/loanPartners/update")
     public ResponseEntity<LoanPartner> updateLoanPartner(@RequestBody LoanPartnerResource loanPartnerResource,
                                                          HttpServletRequest request) {
-
-        LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerResource.getId())
-                .orElseThrow(() -> new EntityNotFoundException(loanPartnerResource.getId().toString()));
-        loanPartner.setBusinessPartnerId(loanPartnerResource.getBusinessPartnerId());
-        loanPartner.setBusinessPartnerName(loanPartnerResource.getBusinessPartnerName());
-        loanPartner.setRoleType(loanPartnerResource.getRoleType());
-        loanPartner.setStartDate(loanPartnerResource.getStartDate());
-        loanPartner = loanPartnerRepository.save(loanPartner);
+        LoanPartner loanPartner = loanPartnerService.updateLoanPartner((loanPartnerResource));
         return ResponseEntity.ok(loanPartner);
     }
 
     @DeleteMapping("/loanPartners/delete/{id}")
     public ResponseEntity<LoanPartner> deleteLoanPartner(@PathVariable("id") UUID loanPartnerId) {
-        LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerId)
-                .orElseThrow(() -> new EntityNotFoundException(loanPartnerId.toString()));
-        loanPartnerRepository.deleteById(loanPartnerId);
+        LoanPartner loanPartner = loanPartnerService.deleteLoanPartner(loanPartnerId);
         return ResponseEntity.ok(loanPartner);
     }
 }
