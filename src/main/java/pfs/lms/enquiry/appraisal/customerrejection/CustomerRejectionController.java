@@ -7,12 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import pfs.lms.enquiry.appraisal.LoanAppraisal;
-import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
-import pfs.lms.enquiry.domain.LoanApplication;
-import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
@@ -20,44 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class CustomerRejectionController {
 
-    private final LoanApplicationRepository loanApplicationRepository;
-    private final LoanAppraisalRepository loanAppraisalRepository;
-    private final CustomerRejectionRepository customerRejectionRepository;
+    private final CustomerRejectionService customerRejectionService;
 
     @PostMapping("/customerRejections/create")
-    public ResponseEntity<CustomerRejection> createProjectAppraisalCompletion(
-                @RequestBody CustomerRejectionResource customerRejectionResource,
+    public ResponseEntity<CustomerRejection> createCustomerRejection(@RequestBody CustomerRejectionResource customerRejectionResource,
                 HttpServletRequest request) {
-
-        LoanApplication loanApplication = loanApplicationRepository.getOne(customerRejectionResource.getLoanApplicationId());
-        LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
-                .orElseGet(() -> {
-                    LoanAppraisal obj = new LoanAppraisal();
-                    obj.setLoanApplication(loanApplication);
-                    obj = loanAppraisalRepository.save(obj);
-                    return obj;
-                });
-        CustomerRejection customerRejection = new CustomerRejection();
-        customerRejection.setLoanAppraisal(loanAppraisal);
-        customerRejection.setDate(customerRejectionResource.getDate());
-        customerRejection.setCategory(customerRejectionResource.getCategory());
-        customerRejection.setReasonForRejection(customerRejectionResource.getReasonForRejection());
-        customerRejection = customerRejectionRepository.save(customerRejection);
-        return ResponseEntity.ok(customerRejection);
+        return ResponseEntity.ok(customerRejectionService.createCustomerRejection(customerRejectionResource));
     }
 
     @PutMapping("/customerRejections/update")
-    public ResponseEntity<CustomerRejection> updateProjectAppraisalCompletion(
-                @RequestBody CustomerRejectionResource customerRejectionResource,
+    public ResponseEntity<CustomerRejection> updateCustomerRejection(@RequestBody CustomerRejectionResource customerRejectionResource,
                 HttpServletRequest request) {
-
-        CustomerRejection customerRejection =
-                customerRejectionRepository.findById(customerRejectionResource.getId())
-                .orElseThrow(() -> new EntityNotFoundException(customerRejectionResource.getId().toString()));
-        customerRejection.setDate(customerRejectionResource.getDate());
-        customerRejection.setCategory(customerRejectionResource.getCategory());
-        customerRejection.setReasonForRejection(customerRejectionResource.getReasonForRejection());
-        customerRejection = customerRejectionRepository.save(customerRejection);
-        return ResponseEntity.ok(customerRejection);
+        return ResponseEntity.ok(customerRejectionService.updateCustomerRejection(customerRejectionResource));
     }
 }

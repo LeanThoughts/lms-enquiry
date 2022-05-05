@@ -5,7 +5,6 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
@@ -16,7 +15,6 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanAppraisal", "serialNumber"}, callSuper = false)
-@EntityListeners(SyndicateConsortiumEntityListener.class)
 public class SyndicateConsortium extends AggregateRoot<SyndicateConsortium> implements Cloneable {
 
     @ManyToOne(fetch = FetchType.EAGER)

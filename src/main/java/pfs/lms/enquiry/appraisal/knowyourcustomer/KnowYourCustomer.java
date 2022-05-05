@@ -4,7 +4,6 @@ import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import java.time.LocalDate;
 
 @Entity
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"loanPartnerId", "documentType"}, callSuper = false)
-@EntityListeners(KnowYourCustomerEntityListener.class)
 public class KnowYourCustomer extends AggregateRoot<KnowYourCustomer> implements Cloneable {
 
     private String loanPartnerId;
