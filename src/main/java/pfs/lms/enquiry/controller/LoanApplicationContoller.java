@@ -211,6 +211,7 @@ public class LoanApplicationContoller {
         LoanContractExtensionResource loanContractExtensionResource = new LoanContractExtensionResource();
         loanContractExtensionResource.setLoanApplicationId(loanApplication.getId());
         loanContractExtensionResource.setLoanContractExtension(loanContractExtension);
+        loanContractExtensionResource.setLoanPartners(resource.getLoanPartners());
 
         if (loanContractExtensionResource.getLoanContractExtension() != null) {
             System.out.println("-----------------------------------------------------");

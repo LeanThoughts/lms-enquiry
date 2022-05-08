@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.domain.User;
@@ -54,6 +56,9 @@ public class WorkflowService implements IWorkflowService {
     @Autowired
     private WorkflowApproverRepository workflowApproverRepository;
 
+    @Autowired
+    private LoanAppraisalRepository loanAppraisalRepository;
+
 
     @Autowired
     private UserRepository userRepository;
@@ -74,6 +79,7 @@ public class WorkflowService implements IWorkflowService {
         Map<String, Object> variables = new HashMap<>();
         String processInstanceId =  new String();
         LoanMonitor loanMonitor = new LoanMonitor();
+        LoanAppraisal loanAppraisal = new LoanAppraisal();
         String loanContractId = null;
 
         switch (processName) {
@@ -85,6 +91,11 @@ public class WorkflowService implements IWorkflowService {
                 loanContractId =  loanMonitor.getLoanApplication().getLoanContractId();
                 break;
             case "Appraisal" :
+                //Fetch the Entity
+                loanAppraisal = loanAppraisalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                loanAppraisal.setWorkFlowStatusCode(02); loanAppraisal.setWorkFlowStatusDescription("Sent for Approval");
+                loanContractId =  loanAppraisal.getLoanApplication().getLoanContractId();
                 break;
         }
 
@@ -148,7 +159,8 @@ public class WorkflowService implements IWorkflowService {
 
 
         Map<String, Object> variables = new HashMap<>();
-         LoanMonitor loanMonitor = new LoanMonitor();
+        LoanMonitor loanMonitor = new LoanMonitor();
+        LoanAppraisal loanAppraisal = new LoanAppraisal();
         String loanContractId = null;
 
 
@@ -162,6 +174,12 @@ public class WorkflowService implements IWorkflowService {
                 processInstanceId = loanMonitor.getProcessInstanceId();
                 break;
             case "Appraisal" :
+                //Fetch the Entity
+                loanAppraisal = loanAppraisalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                loanAppraisal.setWorkFlowStatusCode(03); loanAppraisal.setWorkFlowStatusDescription("Approved");
+                loanContractId =  loanAppraisal.getLoanApplication().getLoanContractId();
+                processInstanceId = loanAppraisal.getProcessInstanceId();
                 break;
         }
 
@@ -217,6 +235,7 @@ public class WorkflowService implements IWorkflowService {
 
         Map<String, Object> variables = new HashMap<>();
         LoanMonitor loanMonitor = new LoanMonitor();
+        LoanAppraisal loanAppraisal = new LoanAppraisal();
         String loanContractId = null;
 
         switch (processName) {
@@ -229,6 +248,12 @@ public class WorkflowService implements IWorkflowService {
                 processInstanceId = loanMonitor.getProcessInstanceId();
                 break;
             case "Appraisal" :
+                //Fetch the Entity
+                loanAppraisal = loanAppraisalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                loanAppraisal.setWorkFlowStatusCode(04); loanAppraisal.setWorkFlowStatusDescription("Rejected");
+                loanContractId =  loanAppraisal.getLoanApplication().getLoanContractId();
+                processInstanceId = loanAppraisal.getProcessInstanceId();
                 break;
         }
 

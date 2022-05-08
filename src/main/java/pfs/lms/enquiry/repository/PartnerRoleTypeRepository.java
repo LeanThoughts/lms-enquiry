@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface PartnerRoleTypeRepository extends JpaRepository<PartnerRoleType, UUID> {
 
     PartnerRoleType findByRoleCode(String roleCode);
+
 }

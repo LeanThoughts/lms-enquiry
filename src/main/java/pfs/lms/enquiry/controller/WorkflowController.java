@@ -56,7 +56,7 @@ public class WorkflowController {
 
     }
 
-
+    // Start Workflow Process
     @PutMapping("/startprocess")
     public ResponseEntity<Object> startProcess(@RequestBody WorkflowRequestResource workflowRequestResource,
                                                HttpServletRequest httpServletRequest) {
@@ -72,7 +72,8 @@ public class WorkflowController {
             case "Monitoring":
                 return ResponseEntity.ok(processObject);
             case "Appraisal" :
-                break;
+                return ResponseEntity.ok(processObject);
+
         }
 
 
@@ -80,7 +81,7 @@ public class WorkflowController {
 
     }
 
-
+    // Approve Workflow
     @PutMapping("/approvetask")
     public ResponseEntity<Object> approveTask(@RequestBody WorkflowProcessRequestResource workflowProcessRequestResource,
                                               HttpServletRequest httpServletRequest) {
@@ -96,7 +97,7 @@ public class WorkflowController {
         return ResponseEntity.ok(processObject);
 
     }
-
+    //Reject Workflow
     @PutMapping("/rejecttask")
     public ResponseEntity<Object> rejectTask(@RequestBody WorkflowProcessRequestResource workflowProcessRequestResource,
                                              HttpServletRequest httpServletRequest) {

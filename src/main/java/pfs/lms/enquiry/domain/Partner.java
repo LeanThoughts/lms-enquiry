@@ -31,7 +31,7 @@ public class Partner extends AggregateRoot<Partner>{
      * ZLM023 - PFS IT Team
      * ZLM001 - Promoter
      * TR0100 - Main Loan Partner
-     * TR010 - Co-Borrower
+     * TR0110 - Co-Borrower
      */
     private String partyRole;
 

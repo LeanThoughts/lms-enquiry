@@ -29,7 +29,7 @@ public class EmailTest extends AbstractTest {
     @Autowired
     EmailService emailService;
 
-    @Test
+   // @Test
     public void sendEmailServiceTest() throws Exception {
 
 

@@ -81,6 +81,18 @@ public class WorkflowProcess implements CommandLineRunner{
         }
 
 
+        // Monitoring
+        WorkflowApprover workflowApproveAppraisal = workflowApproverRepository.findByProcessName("Appraisal");
+
+        if (workflowApproverMonitoring == null) {
+            // Add Approver Name for Processes
+            WorkflowApprover workflowApprover = new WorkflowApprover();
+            workflowApprover.setProcessName("Appraisal");
+            workflowApprover.setApproverName("Sajeev Khan");
+            workflowApprover.setApproverEmail("sajeev@leanthoughts.com");
+            workflowApproverRepository.save(workflowApprover);
+        }
+
 
 
     }
