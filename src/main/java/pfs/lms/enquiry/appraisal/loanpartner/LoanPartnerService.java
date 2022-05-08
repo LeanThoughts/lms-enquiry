@@ -11,6 +11,7 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -48,21 +49,52 @@ public class LoanPartnerService implements ILoanPartnerService {
         return loanPartner;
     }
 
-    private void prePopulateKYCDocumentList(LoanPartner loanPartner) {
-            List<KnowYourCustomer> kycs = new ArrayList<>();
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0002", "PAN Card", "", "", null));
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0003", "Passport", "", "", null));
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0005",
-                    "MoA and Articles of Association (AoA)", "", "", null));
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0006", "Certification of Incorporation", "", "", null));
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0004", "Address Proof", "", "", null));
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0007", "PAN Card of Company", "", "", null));
-            kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0008", "Board Resolution", "", "", null));
-            knowYourCustomerRepository.saveAll(kycs);
+    @Override
+    public LoanPartner updateLoanPartner(LoanPartnerResource loanPartnerResource) {
+        LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerResource.getId())
+                .orElseThrow(() -> new EntityNotFoundException(loanPartnerResource.getId().toString()));
+        loanPartner.setBusinessPartnerId(loanPartnerResource.getBusinessPartnerId());
+        loanPartner.setBusinessPartnerName(loanPartnerResource.getBusinessPartnerName());
+        loanPartner.setRoleType(loanPartnerResource.getRoleType());
+        loanPartner.setStartDate(loanPartnerResource.getStartDate());
+        if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("ZLM038")) {
+            if (!loanPartner.isKycRequired()) {
+                loanPartner.setKycRequired(true);
+                loanPartner.setKycStatus("Not Started");
+            }
+        }
+        loanPartner = loanPartnerRepository.save(loanPartner);
+
+        // check if loan partner kyc document list needs to be auto generated
+        if (loanPartner.isKycRequired()) {
+            if (knowYourCustomerRepository.findByLoanPartnerId(loanPartner.getId().toString()).size() == 0)
+                prePopulateKYCDocumentList(loanPartner);
+        }
+
+        return loanPartner;
     }
 
     @Override
-    public LoanPartner updateLoanPartner(LoanPartnerResource loanPartnerResource) {
-        return null;
+    public LoanPartner deleteLoanPartner(UUID loanPartnerId) {
+        knowYourCustomerRepository.findByLoanPartnerId(loanPartnerId.toString()).forEach(knowYourCustomer -> {
+            knowYourCustomerRepository.delete(knowYourCustomer);
+        });
+        LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerId)
+                .orElseThrow(() -> new EntityNotFoundException(loanPartnerId.toString()));
+        loanPartnerRepository.deleteById(loanPartnerId);
+        return loanPartner;
+    }
+
+    private void prePopulateKYCDocumentList(LoanPartner loanPartner) {
+        List<KnowYourCustomer> kycs = new ArrayList<>();
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0002", "PAN Card", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0003", "Passport", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0005",
+                "MoA and Articles of Association (AoA)", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0006", "Certification of Incorporation", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0004", "Address Proof", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0007", "PAN Card of Company", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0008", "Board Resolution", "", "", null));
+        knowYourCustomerRepository.saveAll(kycs);
     }
 }

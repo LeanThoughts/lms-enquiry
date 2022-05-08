@@ -5,7 +5,6 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(ProjectDataEntityListener.class)
 public class ProjectData extends AggregateRoot<ProjectData> implements Cloneable {
 
     @OneToOne(fetch = FetchType.EAGER)
