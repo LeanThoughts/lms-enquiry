@@ -11,7 +11,7 @@
                     <p class="text-truncate">{{ obj.roleType }}</p>
                 </mat-cell>
             </ng-container>
-            
+
             <!-- roleDescription Column -->
             <ng-container matColumnDef="roleDescription">
                 <mat-header-cell *matHeaderCellDef>Role Description</mat-header-cell>
@@ -46,15 +46,15 @@
     </div>
 
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button mat-raised-button color="accent" (click)="openUploadDialog()"> 
-            Upload Document 
+        <button mat-raised-button color="accent" (click)=openUploadDialog("")>
+            Upload Document
         </button>
-    </div> 
+    </div>
 
     <div class="mat-table-container mat-white-bg mt-16" style="width: 100%">
 
         <mat-table class="enquiries-table" [dataSource]="dataSource2" matSort fusePerfectScrollbar>
-           
+
             <!-- documentType Column -->
             <ng-container matColumnDef="documentType">
                 <mat-header-cell *matHeaderCellDef>Document Type</mat-header-cell>
