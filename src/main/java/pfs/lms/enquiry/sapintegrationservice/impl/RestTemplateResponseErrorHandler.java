@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.monitoring.service.impl;
+package pfs.lms.enquiry.sapintegrationservice.impl;
 
 
  import org.springframework.http.HttpStatus;

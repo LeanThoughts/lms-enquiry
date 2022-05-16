@@ -7,6 +7,7 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -18,15 +19,26 @@ public class ProposalDetailService implements IProposalDetailService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final ProposalDetailRepository proposalDetailRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public ProposalDetail createProposalDetail(ProposalDetailResource proposalDetailResource) {
+    public ProposalDetail createProposalDetail(ProposalDetailResource proposalDetailResource, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(proposalDetailResource.getLoanApplicationId());
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
                     obj = loanAppraisalRepository.save(obj);
+                    // Change Documents for Appraisal Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),null,
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Appraisal", "Header");
+
                     return obj;
                 });
         ProposalDetail proposalDetail = new ProposalDetail();
@@ -49,13 +61,29 @@ public class ProposalDetailService implements IProposalDetailService {
         proposalDetail.setPrePaymentCharges(proposalDetailResource.getPrePaymentCharges());
         proposalDetail.setFeeDetailsSchedule(proposalDetailResource.getFeeDetailsSchedule());
         proposalDetail = proposalDetailRepository.save(proposalDetail);
+
+        // Change Documents for Proposal Detail
+        changeDocumentService.createChangeDocument(
+                proposalDetail.getLoanAppraisal().getId(),
+                proposalDetail.getId().toString(),
+                null,
+                proposalDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                proposalDetail,
+                "Created",
+                username,
+                "Appraisal", "Proposal Detail" );
+
         return proposalDetail;
     }
 
     @Override
-    public ProposalDetail updateProposalDetail(ProposalDetailResource proposalDetailResource) {
+    public ProposalDetail updateProposalDetail(ProposalDetailResource proposalDetailResource, String username) throws CloneNotSupportedException {
         ProposalDetail proposalDetail = proposalDetailRepository.findById(proposalDetailResource.getId())
             .orElseThrow(() -> new EntityNotFoundException(proposalDetailResource.getId().toString()));
+
+        Object oldProposalDetail = proposalDetail.clone();
+
         proposalDetail.setRateOfInterestPreCod(proposalDetailResource.getRateOfInterestPreCod());
         proposalDetail.setRateOfInterestPostCod(proposalDetailResource.getRateOfInterestPostCod());
         proposalDetail.setSpreadReset(proposalDetailResource.getSpreadReset());
@@ -74,6 +102,20 @@ public class ProposalDetailService implements IProposalDetailService {
         proposalDetail.setPrePaymentCharges(proposalDetailResource.getPrePaymentCharges());
         proposalDetail.setFeeDetailsSchedule(proposalDetailResource.getFeeDetailsSchedule());
         proposalDetail = proposalDetailRepository.save(proposalDetail);
+
+        // Change Documents for Proposal Detail
+
+        changeDocumentService.createChangeDocument(
+                proposalDetail.getLoanAppraisal().getId(),
+                proposalDetail.getId().toString(),
+                null,
+                proposalDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                oldProposalDetail,
+                proposalDetail,
+                "Updated",
+                username,
+                "Appraisal", "Project Appraisal Completion" );
+
         return proposalDetail;
     }
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -17,11 +18,15 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
 
     private final LoanPartnerRepository loanPartnerRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public KnowYourCustomer updateKYC(KnowYourCustomerResource knowYourCustomerResource) {
+    public KnowYourCustomer updateKYC(KnowYourCustomerResource knowYourCustomerResource, String username) throws CloneNotSupportedException {
         KnowYourCustomer knowYourCustomer = knowYourCustomerRepository.findById(knowYourCustomerResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(knowYourCustomerResource.getId().toString()));
+
+        Object oldKnowYourCustomer = knowYourCustomer.clone();
+
         knowYourCustomer.setDateOfCompletion(knowYourCustomerResource.getDateOfCompletion());
         knowYourCustomer.setDocumentName(knowYourCustomerResource.getDocumentName());
         knowYourCustomer.setFileReference(knowYourCustomerResource.getFileReference());
@@ -29,6 +34,19 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
         knowYourCustomer = knowYourCustomerRepository.save(knowYourCustomer);
 
         updateLoanPartnerKYCStatus(knowYourCustomer.getLoanPartnerId());
+
+        // Change Documents for KYC
+//        changeDocumentService.createChangeDocument(
+//                knowYourCustomer.getLoanAppraisal().getId(),
+//                knowYourCustomer.getId().toString(),
+//                null,
+//                knowYourCustomer.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+//                oldKnowYourCustomer,
+//                knowYourCustomer,
+//                "Updated",
+//                username,
+//                "Appraisal", "Know Your Customer" );
+
 
         return knowYourCustomer;
     }

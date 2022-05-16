@@ -7,6 +7,7 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -20,15 +21,27 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final SyndicateConsortiumRepository syndicateConsortiumRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public SyndicateConsortium createSyndicateConsortium(SyndicateConsortiumResource syndicateConsortiumResource) {
+    public SyndicateConsortium createSyndicateConsortium(SyndicateConsortiumResource syndicateConsortiumResource, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(syndicateConsortiumResource.getLoanApplicationId());
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
                     obj = loanAppraisalRepository.save(obj);
+
+                    // Change Documents for Appraisal Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),null,
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Appraisal", "Header");
+
                     return obj;
                 });
         SyndicateConsortium syndicateConsortium = new SyndicateConsortium();
@@ -56,13 +69,27 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
             }
         }
 
+        // Change Documents for Syndicate Consortium
+        changeDocumentService.createChangeDocument(
+                syndicateConsortium.getLoanAppraisal().getId(),
+                syndicateConsortium.getId().toString(),
+                null,
+                syndicateConsortium.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                syndicateConsortium,
+                "Created",
+                username,
+                "Appraisal", "Syndicate Consortium" );
+
         return syndicateConsortium;
     }
 
     @Override
-    public SyndicateConsortium updateSyndicateConsortium(SyndicateConsortiumResource syndicateConsortiumResource) {
+    public SyndicateConsortium updateSyndicateConsortium(SyndicateConsortiumResource syndicateConsortiumResource, String username) throws CloneNotSupportedException {
         SyndicateConsortium syndicateConsortium = syndicateConsortiumRepository.findById(syndicateConsortiumResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(syndicateConsortiumResource.getId().toString()));
+        Object oldSyndicateConsortium = syndicateConsortium.clone();
+
         syndicateConsortium.setBankKey(syndicateConsortiumResource.getBankKey());
         syndicateConsortium.setBankName(syndicateConsortiumResource.getBankName());
         syndicateConsortium.setSanctionedAmount(syndicateConsortiumResource.getSanctionedAmount());
@@ -85,14 +112,39 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
             }
         }
 
+        // Change Documents for Syndicate Consortium
+        changeDocumentService.createChangeDocument(
+                syndicateConsortium.getLoanAppraisal().getId(),
+                syndicateConsortium.getId().toString(),
+                null,
+                syndicateConsortium.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                oldSyndicateConsortium,
+                syndicateConsortium,
+                "Updated",
+                username,
+                "Appraisal", "Syndicate Consortium" );
+
         return syndicateConsortium;
     }
 
     @Override
-    public SyndicateConsortium deleteSyndicateConsortium(UUID bankId) {
+    public SyndicateConsortium deleteSyndicateConsortium(UUID bankId, String username) {
         SyndicateConsortium syndicateConsortium = syndicateConsortiumRepository.findById(bankId)
                 .orElseThrow(() -> new EntityNotFoundException(bankId.toString()));
         syndicateConsortiumRepository.deleteById(bankId);
+
+        // Change Documents for Syndicate Consortium
+        changeDocumentService.createChangeDocument(
+                syndicateConsortium.getLoanAppraisal().getId(),
+                syndicateConsortium.getId().toString(),
+                null,
+                syndicateConsortium.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                syndicateConsortium,
+                "Deleted",
+                username,
+                "Appraisal", "Syndicate Consortium" );
+
         return syndicateConsortium;
     }
 }

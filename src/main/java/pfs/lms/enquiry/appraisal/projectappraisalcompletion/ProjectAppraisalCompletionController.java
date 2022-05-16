@@ -22,14 +22,14 @@ public class ProjectAppraisalCompletionController {
                 @RequestBody ProjectAppraisalCompletionResource projectAppraisalCompletionResource,
                 HttpServletRequest request) {
         return ResponseEntity.ok(projectAppraisalCompletionService.
-                createProjectAppraisalCompletion(projectAppraisalCompletionResource));
+                createProjectAppraisalCompletion(projectAppraisalCompletionResource,request.getUserPrincipal().getName()));
     }
 
     @PutMapping("/projectAppraisalCompletions/update")
     public ResponseEntity<ProjectAppraisalCompletion> updateProjectAppraisalCompletion(
                 @RequestBody ProjectAppraisalCompletionResource projectAppraisalCompletionResource,
-                HttpServletRequest request) {
+                HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(projectAppraisalCompletionService.
-                updateProjectAppraisalCompletion(projectAppraisalCompletionResource));
+                updateProjectAppraisalCompletion(projectAppraisalCompletionResource,request.getUserPrincipal().getName()));
     }
 }

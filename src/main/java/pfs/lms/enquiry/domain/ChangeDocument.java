@@ -59,6 +59,9 @@ public class ChangeDocument extends AuditModel  {
     @NotNull
     private String action;
 
+    @Nullable
+    private String tableKey;
+
 
 
     @Nullable

@@ -18,7 +18,7 @@ public class FurtherDetailController {
 
     @PutMapping("/furtherDetails/update")
     public ResponseEntity<FurtherDetail> updateFurtherDetails(@RequestBody FurtherDetailResource furtherDetailResource,
-                                                                 HttpServletRequest request) {
-        return ResponseEntity.ok(furtherDetailService.updateFurtherDetails(furtherDetailResource));
+                                                                 HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(furtherDetailService.updateFurtherDetails(furtherDetailResource,request.getUserPrincipal().getName()));
     }
 }

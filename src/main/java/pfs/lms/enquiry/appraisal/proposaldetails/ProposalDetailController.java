@@ -20,14 +20,14 @@ public class ProposalDetailController {
     @PostMapping("/proposalDetails/create")
     public ResponseEntity<ProposalDetail> createProposalDetail(@RequestBody ProposalDetailResource proposalDetailResource,
                                                       HttpServletRequest request) {
-        ProposalDetail proposalDetail = proposalDetailService.createProposalDetail(proposalDetailResource);
+        ProposalDetail proposalDetail = proposalDetailService.createProposalDetail(proposalDetailResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(proposalDetail);
     }
 
     @PutMapping("/proposalDetails/update")
     public ResponseEntity<ProposalDetail> updateProposalDetail(@RequestBody ProposalDetailResource proposalDetailResource,
-                                                                   HttpServletRequest request) {
-        ProposalDetail proposalDetail = proposalDetailService.updateProposalDetail(proposalDetailResource);
+                                                                   HttpServletRequest request) throws CloneNotSupportedException {
+        ProposalDetail proposalDetail = proposalDetailService.updateProposalDetail(proposalDetailResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(proposalDetail);
     }
 }

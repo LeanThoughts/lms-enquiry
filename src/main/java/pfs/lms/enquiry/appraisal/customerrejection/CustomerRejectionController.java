@@ -20,12 +20,12 @@ public class CustomerRejectionController {
     @PostMapping("/customerRejections/create")
     public ResponseEntity<CustomerRejection> createCustomerRejection(@RequestBody CustomerRejectionResource customerRejectionResource,
                 HttpServletRequest request) {
-        return ResponseEntity.ok(customerRejectionService.createCustomerRejection(customerRejectionResource));
+        return ResponseEntity.ok(customerRejectionService.createCustomerRejection(customerRejectionResource,request.getUserPrincipal().getName()));
     }
 
     @PutMapping("/customerRejections/update")
     public ResponseEntity<CustomerRejection> updateCustomerRejection(@RequestBody CustomerRejectionResource customerRejectionResource,
-                HttpServletRequest request) {
-        return ResponseEntity.ok(customerRejectionService.updateCustomerRejection(customerRejectionResource));
+                HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(customerRejectionService.updateCustomerRejection(customerRejectionResource,request.getUserPrincipal().getName()));
     }
 }

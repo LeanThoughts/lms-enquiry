@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.monitoring.service.impl;
+package pfs.lms.enquiry.sapintegrationservice.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.UnknownHttpStatusCodeException;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResourceDetails;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResource;
-import pfs.lms.enquiry.monitoring.service.ISAPLoanMonitoringIntegrationService;
+import pfs.lms.enquiry.sapintegrationservice.ISAPLoanProcessesIntegrationService;
 
 import javax.xml.ws.http.HTTPException;
 import java.net.URI;
@@ -30,7 +30,7 @@ import java.nio.charset.Charset;
 @Service
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class SAPLoanMonitoringIntegrationService implements ISAPLoanMonitoringIntegrationService {
+public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesIntegrationService {
 
 
     @Value("http://192.168.1.205:8000//sap/opu/odata/sap/ZPFS_LMS_MONITOR_SRV/")
@@ -54,7 +54,7 @@ public class SAPLoanMonitoringIntegrationService implements ISAPLoanMonitoringIn
     private RestTemplate restTemplate;
 
     @Autowired
-    public SAPLoanMonitoringIntegrationService(RestTemplateBuilder restTemplateBuilder) {
+    public SAPLoanProcessesIntegrationService(RestTemplateBuilder restTemplateBuilder) {
          RestTemplate restTemplate = restTemplateBuilder
                 .errorHandler(new RestTemplateResponseErrorHandler())
                 .build();

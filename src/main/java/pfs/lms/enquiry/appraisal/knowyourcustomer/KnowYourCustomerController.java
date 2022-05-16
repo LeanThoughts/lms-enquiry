@@ -18,9 +18,9 @@ public class KnowYourCustomerController {
 
     @PutMapping("/knowYourCustomers/update")
     public ResponseEntity<KnowYourCustomer> updateKYC(@RequestBody KnowYourCustomerResource knowYourCustomerResource,
-                                                      HttpServletRequest request) {
+                                                      HttpServletRequest request) throws CloneNotSupportedException {
 
-        KnowYourCustomer knowYourCustomer = knowYourCustomerService.updateKYC(knowYourCustomerResource);
+        KnowYourCustomer knowYourCustomer = knowYourCustomerService.updateKYC(knowYourCustomerResource, request.getUserPrincipal().getName());
         return ResponseEntity.ok(knowYourCustomer);
     }
 }

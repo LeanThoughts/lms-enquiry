@@ -1,11 +1,11 @@
-package pfs.lms.enquiry.monitoring.service;
+package pfs.lms.enquiry.sapintegrationservice;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEReportAndFeeResource;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResource;
 
-public interface ISAPLoanMonitoringIntegrationService {
+public interface ISAPLoanProcessesIntegrationService {
 
     String fetchCSRFToken();
 

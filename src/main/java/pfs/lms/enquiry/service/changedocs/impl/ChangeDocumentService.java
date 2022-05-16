@@ -11,6 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
+import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
+import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
+import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
+import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
+import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetail;
+import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
+import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.domain.*;
@@ -92,6 +100,16 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         userName,
                         businessProcessName,subProcessName );
                 break;
+
+            case "Deleted":
+                changeDocument.setAction("Deleted");
+                changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                        loanContractId,
+                        changedObject,
+                        action,
+                        userName,
+                        businessProcessName,subProcessName );
+                break;
             case "Sent for Approval":
                 changeDocument.setAction("Rejected");
                 changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
@@ -114,6 +132,15 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 break;
 
             case "Rejected":
+                changeDocument.setAction("Rejected");
+                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                        loanContractId,
+                        oldObject,
+                        changedObject,
+                        action,
+                        userName,
+                        businessProcessName,subProcessName );
+                break;
         }
 
         changeDocument = this.saveChangeDocument(changeDocument);
@@ -202,7 +229,25 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
 
     }
+    private ChangeDocument prepareDeletedChangeDocument(UUID loanBusinessProcessObjectId, String entityId, String mainEntityId,
+                                                       String loanContractId,
+                                                       Object changedObject,
+                                                       String action,
+                                                       String userName,
+                                                       String businessProcessName,
+                                                       String subProcessName ) {
 
+        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId,mainEntityId,
+                loanContractId,
+                changedObject,
+                action,
+                userName,
+                businessProcessName,  subProcessName );
+
+        return changeDocument;
+
+
+    }
 
     private ChangeDocument prepareUpdateChangeDocument(UUID loanBusinessProcessObjectId, String entityId, String mainEntityId,
                                                        String loanContractId,
@@ -388,10 +433,46 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("description", promoterDetails.getDateOfChange().toString());
                     return result;
 
-
-
-
-
+                case "CustomerRejection":
+                    CustomerRejection customerRejection = (CustomerRejection) object;
+                    result.put("id", customerRejection.getDate().toString());
+                    result.put("description", customerRejection.getDate().toString());
+                    return result;
+                case "FurtherDetail":
+                    FurtherDetail furtherDetail = (FurtherDetail) object;
+                    result.put("id", furtherDetail.getDate().toString());
+                    result.put("description", furtherDetail.getDate().toString());
+                    return result;
+                case "KnowYourCustomer":
+                    KnowYourCustomer knowYourCustomer = (KnowYourCustomer) object;
+                    result.put("id", knowYourCustomer.getLoanPartnerId().toString());
+                    result.put("description", knowYourCustomer.getLoanPartnerId().toString());
+                    return result;
+                case "ProjectAppraisalCompletion":
+                    ProjectAppraisalCompletion projectAppraisalCompletion = (ProjectAppraisalCompletion) object;
+                    result.put("id", projectAppraisalCompletion.getDateOfProjectAppraisalCompletion().toString());
+                    result.put("description", projectAppraisalCompletion.getDateOfProjectAppraisalCompletion().toString());
+                    return result;
+                case "ProjectData":
+                    ProjectData projectData = (ProjectData) object;
+                    result.put("id", projectData.getProjectName().toString());
+                    result.put("description", projectData.getProjectName().toString());
+                    return result;
+                case "ProposalDetail":
+                    ProposalDetail proposalDetail = (ProposalDetail) object;
+                    result.put("id", proposalDetail.getId().toString());
+                    result.put("description", proposalDetail.getId().toString());
+                    return result;
+                case "ReasonForDelay":
+                    ReasonForDelay reasonForDelay = (ReasonForDelay) object;
+                    result.put("id", reasonForDelay.getDate().toString());
+                    result.put("description", reasonForDelay.getId().toString());
+                    return result;
+                case "SyndicateConsortium":
+                    SyndicateConsortium syndicateConsortium = (SyndicateConsortium) object;
+                    result.put("id", syndicateConsortium.getBankName().toString());
+                    result.put("description", syndicateConsortium.getId().toString());
+                    return result;
 
             }
 
@@ -424,6 +505,9 @@ public class ChangeDocumentService implements IChangeDocumentService {
         changeDocument.setEnitityId(entityId);
         changeDocument.setMainEntityId(mainEntityId);
         changeDocument.setUserName(userName);
+
+        Map<String, String> result = getObjectDetails(changedObject.getClass().getSimpleName(), changedObject);
+        changeDocument.setTableKey(result.get("description"));
 
         return changeDocument;
     }

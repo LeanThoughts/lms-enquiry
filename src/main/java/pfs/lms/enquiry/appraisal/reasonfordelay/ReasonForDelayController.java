@@ -20,12 +20,12 @@ public class ReasonForDelayController {
     @PostMapping("/reasonForDelays/create")
     public ResponseEntity<ReasonForDelay> createReasonForDelay(@RequestBody ReasonForDelayResource reasonForDelayResource,
                 HttpServletRequest request) {
-        return ResponseEntity.ok(reasonForDelayService.createReasonForDelay(reasonForDelayResource));
+        return ResponseEntity.ok(reasonForDelayService.createReasonForDelay(reasonForDelayResource,request.getUserPrincipal().getName()));
     }
 
     @PutMapping("/reasonForDelays/update")
     public ResponseEntity<ReasonForDelay> updateReasonForDelay(@RequestBody ReasonForDelayResource reasonForDelayResource,
-                HttpServletRequest request) {
-        return ResponseEntity.ok(reasonForDelayService.updateReasonForDelay(reasonForDelayResource));
+                HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(reasonForDelayService.updateReasonForDelay(reasonForDelayResource,request.getUserPrincipal().getName()));
     }
 }

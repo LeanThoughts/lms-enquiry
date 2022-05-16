@@ -20,21 +20,21 @@ public class SyndicateConsortiumController {
     public ResponseEntity<SyndicateConsortium> createSyndicateConsortium(
             @RequestBody SyndicateConsortiumResource syndicateConsortiumResource, HttpServletRequest request) {
         SyndicateConsortium syndicateConsortium =
-                syndicateConsortiumService.createSyndicateConsortium(syndicateConsortiumResource);
+                syndicateConsortiumService.createSyndicateConsortium(syndicateConsortiumResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(syndicateConsortium);
     }
 
     @PutMapping("/syndicateConsortiums/update")
     public ResponseEntity<SyndicateConsortium> updateSyndicateConsortium(
-            @RequestBody SyndicateConsortiumResource syndicateConsortiumResource, HttpServletRequest request) {
+            @RequestBody SyndicateConsortiumResource syndicateConsortiumResource, HttpServletRequest request) throws CloneNotSupportedException {
         SyndicateConsortium syndicateConsortium =
-                syndicateConsortiumService.updateSyndicateConsortium(syndicateConsortiumResource);
+                syndicateConsortiumService.updateSyndicateConsortium(syndicateConsortiumResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(syndicateConsortium);
     }
 
     @DeleteMapping("/syndicateConsortiums/delete/{id}")
-    public ResponseEntity<SyndicateConsortium> deleteSyndicateConsortium(@PathVariable("id") UUID bankId) {
-        SyndicateConsortium syndicateConsortium = syndicateConsortiumService.deleteSyndicateConsortium(bankId);
+    public ResponseEntity<SyndicateConsortium> deleteSyndicateConsortium(@PathVariable("id") UUID bankId,HttpServletRequest request) {
+        SyndicateConsortium syndicateConsortium = syndicateConsortiumService.deleteSyndicateConsortium(bankId,request.getUserPrincipal().getName());
         return ResponseEntity.ok(syndicateConsortium);
     }
 }

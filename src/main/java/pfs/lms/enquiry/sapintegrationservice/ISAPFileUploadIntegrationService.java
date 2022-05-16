@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.monitoring.service;
+package pfs.lms.enquiry.sapintegrationservice;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;

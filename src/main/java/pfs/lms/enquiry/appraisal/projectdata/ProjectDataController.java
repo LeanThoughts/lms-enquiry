@@ -28,14 +28,14 @@ public class ProjectDataController {
     @PostMapping("/projectDatas/create")
     public ResponseEntity<ProjectData> createProjectData(@RequestBody ProjectDataResource projectDataResource,
                                                             HttpServletRequest request) {
-        ProjectData projectData = projectDataService.createProjectData(projectDataResource);
+        ProjectData projectData = projectDataService.createProjectData(projectDataResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(projectData);
     }
 
     @PutMapping("/projectDatas/update")
     public ResponseEntity<ProjectData> updateProjectData(@RequestBody ProjectDataResource projectDataResource,
-                                                            HttpServletRequest request) {
-        ProjectData projectData = projectDataService.updateProjectData(projectDataResource);
+                                                            HttpServletRequest request) throws CloneNotSupportedException {
+        ProjectData projectData = projectDataService.updateProjectData(projectDataResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(projectData);
     }
 }
