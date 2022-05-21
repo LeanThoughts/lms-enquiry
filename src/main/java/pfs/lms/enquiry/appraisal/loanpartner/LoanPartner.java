@@ -21,6 +21,8 @@ public class LoanPartner extends AggregateRoot<LoanPartner> implements Cloneable
     @ManyToOne(fetch = FetchType.EAGER)
     private LoanApplication loanApplication;
 
+    private String loanAppraisalId;
+
     private Integer serialNumber;
 
     private String businessPartnerId;

@@ -3,6 +3,8 @@ package pfs.lms.enquiry.appraisal.loanpartner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomerRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
@@ -21,13 +23,22 @@ public class LoanPartnerService implements ILoanPartnerService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanPartnerRepository loanPartnerRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
+    private final LoanAppraisalRepository loanAppraisalRepository;
 
     @Override
     public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource) {
         // Save loan partner details
-        LoanApplication loanApplication = loanApplicationRepository.findById(loanPartnerResource.getLoanApplicationId())
-                .orElseThrow(() -> new EntityNotFoundException(loanPartnerResource.getLoanApplicationId().toString()));
+        LoanApplication loanApplication = loanApplicationRepository.getOne(loanPartnerResource.getLoanApplicationId());
+        LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
+                .orElseGet(() -> {
+                    LoanAppraisal obj = new LoanAppraisal();
+                    obj.setLoanApplication(loanApplication);
+                    obj = loanAppraisalRepository.save(obj);
+                    return obj;
+                });
+
         LoanPartner loanPartner = new LoanPartner();
+        loanPartner.setLoanAppraisalId(loanAppraisal.getId().toString());
         loanPartner.setSerialNumber(loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanPartnerResource
                 .getLoanApplicationId()).size() + 1);
         loanPartner.setLoanApplication(loanApplication);
