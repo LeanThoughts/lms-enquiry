@@ -209,7 +209,7 @@ export class LoanAppraisalService implements Resolve<any> {
      * getSiteVisits()
      */
     getSiteVisits(loanApplicationId: string): Observable<any> {
-        return this._http.get('enquiry/api/siteVisits/search/findByLoanMonitorLoanApplicationIdAndSiteVisitTypeOrderBySerialNumberDesc?loanApplicationId=' 
+        return this._http.get('enquiry/api/siteVisits/search/findByLoanApplicationIdAndSiteVisitTypeOrderBySerialNumberDesc?loanApplicationId=' 
                 + loanApplicationId + '&siteVisitType=Site Visit');
     }
 

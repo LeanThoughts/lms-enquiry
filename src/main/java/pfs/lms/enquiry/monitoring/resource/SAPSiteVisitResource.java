@@ -35,7 +35,7 @@ public class SAPSiteVisitResource {
         SAPSiteVisitResourceDetails detailedResource = new SAPSiteVisitResourceDetails();
 
         detailedResource.setId(siteVisit.getId());
-        detailedResource.setMonitorId(siteVisit.getLoanMonitor().getId().toString());
+        detailedResource.setMonitorId(siteVisit.getLoanMonitoringId());
         detailedResource.setSerialNo(siteVisit.getSerialNumber());
 
         if (siteVisit.getActualCOD() != null)

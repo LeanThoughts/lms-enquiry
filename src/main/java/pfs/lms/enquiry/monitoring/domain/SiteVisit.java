@@ -2,6 +2,7 @@ package pfs.lms.enquiry.monitoring.domain;
 
 import lombok.*;
 import pfs.lms.enquiry.domain.AbstractEntity;
+import pfs.lms.enquiry.domain.LoanApplication;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,7 +18,10 @@ import java.time.LocalDate;
 public class SiteVisit extends AbstractEntity implements  Cloneable{
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private LoanMonitor loanMonitor;
+    private LoanApplication loanApplication;
+
+    private String loanMonitoringId;
+    private String loanAppraisalId;
 
     private Integer serialNumber;
 

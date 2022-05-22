@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancialsRepository;
@@ -64,6 +66,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     private final FinancialCovenantsRepository financialCovenantsRepository;
 
     private final PromoterDetailRepository promoterDetailRepository;
+
+    private final LoanAppraisalRepository loanAppraisalRepository;
 
     @Autowired
     private  IChangeDocumentService changeDocumentService;
@@ -908,30 +912,44 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
-    public SiteVisit saveSiteVisit(SiteVisitResource resource, String username) {
+    public SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
-
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
-
-            // Change Documents for Monitoring Header
-            changeDocumentService.createChangeDocument(
-                    loanMonitor.getId(),loanMonitor.getId().toString(),null,
-                    loanApplication.getLoanContractId(),
-                    null,
-                    loanMonitor,
-                    "Created",
-                    username,
-                    "Monitoring", "Header");
-        }
         SiteVisit siteVisit = resource.getSiteVisit();
-        siteVisit.setLoanMonitor(loanMonitor);
+        siteVisit.setLoanApplication(loanApplication);
 
-        siteVisit.setSerialNumber(siteVisitRepository.findByLoanMonitor(loanMonitor).size() + 1);
+        if (app.equals("monitoring")) {
+            LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+            if (loanMonitor == null) {
+                loanMonitor = new LoanMonitor();
+                loanMonitor.setLoanApplication(loanApplication);
+                loanMonitor = loanMonitorRepository.save(loanMonitor);
+                siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
+                // Change Documents for Monitoring Header
+                changeDocumentService.createChangeDocument(
+                        loanMonitor.getId(), loanMonitor.getId().toString(), null,
+                        loanApplication.getLoanContractId(),
+                        null,
+                        loanMonitor,
+                        "Created",
+                        username,
+                        "Monitoring", "Header");
+            }
+            else
+                siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
+        }
+        else if (app.equals("appraisal"))
+        {
+            LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
+                    .orElseGet(() -> {
+                        LoanAppraisal obj = new LoanAppraisal();
+                        obj.setLoanApplication(loanApplication);
+                        obj = loanAppraisalRepository.save(obj);
+                        return obj;
+                    });
+            siteVisit.setLoanAppraisalId(loanAppraisal.getId().toString());
+        }
+
+        // siteVisit.setSerialNumber(siteVisitRepository.findByLoanMonitor(loanMonitor).size() + 1);
         siteVisit.setSiteVisitType(resource.getSiteVisit().getSiteVisitType());
         siteVisit.setActualCOD(resource.getSiteVisit().getActualCOD());
         siteVisit.setDateOfLendersMeet(resource.getSiteVisit().getDateOfLendersMeet());
@@ -942,14 +960,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         siteVisit = siteVisitRepository.save(siteVisit);
 
         // Change Documents for Site Visit
-        changeDocumentService.createChangeDocument(
-                loanMonitor.getId(), siteVisit.getId().toString(),null,
-                loanApplication.getLoanContractId(),
-                null,
-                siteVisit,
-                "Created",
-                username,
-                "Monitoring", "Site Visit" );
+//        changeDocumentService.createChangeDocument(
+//                loanMonitor.getId(), siteVisit.getId().toString(),null,
+//                loanApplication.getLoanContractId(),
+//                null,
+//                siteVisit,
+//                "Created",
+//                username,
+//                "Monitoring", "Site Visit" );
 
         return siteVisit;
 
@@ -974,15 +992,15 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingSiteVisit = siteVisitRepository.save(existingSiteVisit);
 
         // Change Documents for T&C Mod.
-        changeDocumentService.createChangeDocument(
-                existingSiteVisit.getLoanMonitor().getId(),
-                existingSiteVisit.getId(),null,
-                existingSiteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
-                oldSiteVisit,
-                existingSiteVisit,
-                "Updated",
-                username,
-                "Monitoring", "Site Visit" );
+//        changeDocumentService.createChangeDocument(
+//                existingSiteVisit.getLoanMonitor().getId(),
+//                existingSiteVisit.getId(),null,
+//                existingSiteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                oldSiteVisit,
+//                existingSiteVisit,
+//                "Updated",
+//                username,
+//                "Monitoring", "Site Visit" );
 
 
 
@@ -997,7 +1015,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
         if(loanMonitor != null) {
             List<SiteVisit> siteVisits
-                    = siteVisitRepository.findByLoanMonitor(loanMonitor);
+                    = siteVisitRepository.findByLoanApplication(loanApplication);
             siteVisits.forEach(
                     siteVisit -> {
                         SiteVisitResource siteVisitResource = new SiteVisitResource();

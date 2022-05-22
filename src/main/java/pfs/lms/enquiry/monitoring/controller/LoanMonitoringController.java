@@ -284,9 +284,9 @@ public class LoanMonitoringController {
     // Create update and list (Site Visit)
 
     @PostMapping("/loanApplications/sitevisit/create")
-    public ResponseEntity createSiteVisit(@RequestBody SiteVisitResource resource, HttpServletRequest request) {
-        SiteVisit siteVisit =
-                loanMonitoringService.saveSiteVisit(resource, request.getUserPrincipal().getName());
+    public ResponseEntity createSiteVisit(@RequestBody SiteVisitResource resource, @RequestParam("app") String app,
+                                          HttpServletRequest request) {
+        SiteVisit siteVisit = loanMonitoringService.saveSiteVisit(resource, app, request.getUserPrincipal().getName());
         return ResponseEntity.ok(siteVisit);
     }
 

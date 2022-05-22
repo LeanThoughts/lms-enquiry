@@ -71,7 +71,7 @@ public interface ILoanMonitoringService {
     List<SecurityComplianceResource> getSecurityCompliance(String loanApplicationId, String name);
 
     // Site Visit
-    SiteVisit saveSiteVisit(SiteVisitResource resource, String username);
+    SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username);
     SiteVisit updateSiteVisit(SiteVisitResource resource, String username) throws CloneNotSupportedException;
     List<SiteVisitResource> getSiteVisit(String loanApplicationId, String name);
 
