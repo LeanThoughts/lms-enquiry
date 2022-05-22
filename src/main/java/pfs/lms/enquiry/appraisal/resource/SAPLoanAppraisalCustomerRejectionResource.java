@@ -37,17 +37,24 @@ public class SAPLoanAppraisalCustomerRejectionResource implements Serializable {
                                 mapCustomerRejectionToSAP(CustomerRejection customerRejection) throws ParseException {
 
         SAPLoanAppraisalCustomerRejectionResourceDetails detailsResource = new SAPLoanAppraisalCustomerRejectionResourceDetails();
+
         detailsResource.setId(customerRejection.getId().toString());
         detailsResource.setAppraisalId(customerRejection.getLoanAppraisal().getId().toString());
-        detailsResource.setCategory(customerRejection.getCategory());
-        detailsResource.setDate(customerRejection.getDate().toString());
+        if ( customerRejection.getReasonForRejection()  != null) {
+            detailsResource.setCategory(customerRejection.getCategory() );
+        } else {
+            detailsResource.setCategory("");
+        }
+
+        if (customerRejection.getDate() != null){
+            detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(customerRejection.getDate()));
+        } else
+            detailsResource.setDate(null);
+
+
         detailsResource.setReasonForRejection(customerRejection.getReasonForRejection());
 
 
-        if (detailsResource.getDate() != null)
-            detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(customerRejection.getDate()));
-        else
-            detailsResource.setDate(null);
         return detailsResource;
     }
 

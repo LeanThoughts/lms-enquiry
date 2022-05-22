@@ -911,6 +911,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
     }
 
+
     @Override
     public SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());

@@ -13,4 +13,6 @@ public interface ISAPLoanProcessesIntegrationService {
 
     Object postResourceToSAP(Object resource, String serviceUri, HttpMethod httpMethod, MediaType mediaType);
 
- }
+    Object deleteResourceFromSAP(String serviceUri, String objectId,   MediaType mediaType);
+
+}

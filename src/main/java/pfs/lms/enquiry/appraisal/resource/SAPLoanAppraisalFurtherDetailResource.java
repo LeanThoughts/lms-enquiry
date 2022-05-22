@@ -34,13 +34,14 @@ public class SAPLoanAppraisalFurtherDetailResource implements Serializable {
     public SAPLoanAppraisalFurtherDetailResourceDetails
                                 mapFurtherDetailToSAP(FurtherDetail furtherDetail) throws ParseException {
 
+        dataConversionUtility = new DataConversionUtility();
         SAPLoanAppraisalFurtherDetailResourceDetails detailsResource = new SAPLoanAppraisalFurtherDetailResourceDetails();
 
-        detailsResource.setAppraisalId(furtherDetail.getLoanAppraisal().getId().toString());
         detailsResource.setId(furtherDetail.getId().toString());
+        detailsResource.setAppraisalId(furtherDetail.getLoanAppraisal().getId().toString());
         detailsResource.setFurtherDetails(furtherDetail.getFurtherDetails());
 
-        if (detailsResource.getDate() != null)
+        if (furtherDetail.getDate() != null)
             detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(furtherDetail.getDate()));
         else
             detailsResource.setDate(null);

@@ -31,7 +31,7 @@ public class ReasonForDelayService implements IReasonForDelayService {
                     obj = loanAppraisalRepository.save(obj);
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),null,
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
@@ -52,7 +52,7 @@ public class ReasonForDelayService implements IReasonForDelayService {
         changeDocumentService.createChangeDocument(
                 reasonForDelay.getLoanAppraisal().getId(),
                 reasonForDelay.getId().toString(),
-                null,
+                reasonForDelay.getLoanAppraisal().getId().toString(),
                 reasonForDelay.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 null,
                 reasonForDelay,
@@ -82,7 +82,7 @@ public class ReasonForDelayService implements IReasonForDelayService {
         changeDocumentService.createChangeDocument(
                 reasonForDelay.getLoanAppraisal().getId(),
                 reasonForDelay.getId().toString(),
-                null,
+                reasonForDelay.getLoanAppraisal().getId().toString(),
                 reasonForDelay.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 oldReasonForDelay,
                 reasonForDelay,

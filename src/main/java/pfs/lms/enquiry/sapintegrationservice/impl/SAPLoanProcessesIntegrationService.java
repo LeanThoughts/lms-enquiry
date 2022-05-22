@@ -24,6 +24,8 @@ import javax.xml.ws.http.HTTPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -199,14 +201,9 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
     @Override
     public Object postResourceToSAP(Object resource, String serviceUri, HttpMethod httpMethod , MediaType mediaType) {
 
-        // String csrfToken = this.fetchCSRFToken();
-
         String postURL = baseUrl + serviceUri+ "?sap-client=" + client;
 
         System.out.println("THE URI : "+postURL.toString());
-
-
-
 
         HttpHeaders headers = new HttpHeaders() {
             {
@@ -217,9 +214,6 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
                 set( "Authorization", authHeader );
                 setContentType(mediaType);
                 add("X-Requested-With", "X");
-                // add("X-CSRF-Token", csrfToken);
-
-                //add("Cookie", "sap-usercontext=sap-client="+client);
             }
         };
 
@@ -275,6 +269,87 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
 
         return responseEntity;
+
+    }
+
+
+
+    @Override
+    public Object deleteResourceFromSAP(String serviceUri, String objectId,    MediaType mediaType) {
+
+
+        String deleteURL = baseUrl + serviceUri+ "('" +  objectId + "')" + "?sap-client=" + client;
+        System.out.println("THE URI : "+deleteURL.toString());
+
+        HttpHeaders headers = new HttpHeaders() {
+            {
+                String auth = userName + ":" + password;
+                byte[] encodedAuth = Base64.encodeBase64(
+                        auth.getBytes(Charset.forName("US-ASCII")) );
+                String authHeader = "Basic " + new String( encodedAuth );
+                set( "Authorization", authHeader );
+                setContentType(mediaType);
+                add("X-Requested-With", "X");
+                }
+        };
+        headers.add("X-Csrf-Token", "Fetch ");
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<Object> requestToPost = new HttpEntity<Object>(null, headers);
+
+        restTemplate = new RestTemplate();
+
+        System.out.println("OBJECT ID For Deletion : " + objectId);
+
+        try {
+
+            ResponseEntity responseEntity =
+                    restTemplate.exchange(deleteURL, HttpMethod.DELETE, requestToPost, Object.class);
+        } catch (Exception ex) {
+            System.out.println("Exception Deleting from SAP------------------------- " +ex.getMessage());
+        }
+
+        try{
+            restTemplate.delete(deleteURL,headers);
+
+        } catch (HttpClientErrorException ex) {
+
+            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            System.out.println("HTTP Code    :" + ex.getStatusCode());
+            System.out.println("HTTP Message :" +ex.getMessage());
+            return  null;
+
+        }
+        catch (HttpServerErrorException ex) {
+
+            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            System.out.println("HTTP Code    :" + ex.getStatusCode());
+            System.out.println("HTTP Message :" + ex.getMessage());
+            return  null;
+        }
+        catch (UnknownHttpStatusCodeException ex) {
+
+            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            System.out.println("HTTP Message :" + ex.getMessage());
+            return  null;
+        }
+
+        catch (HTTPException ex) {
+
+            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            System.out.println("HTTP Code    :" + ex.getStatusCode());
+            System.out.println("HTTP Message :" +ex.getMessage());
+            return  null;
+        }
+        catch (Exception ex) {
+            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            System.out.println("Exception Message :" +ex.getMessage());
+            return null;
+
+        }
+
+
+        return "Deleted";
 
     }
 

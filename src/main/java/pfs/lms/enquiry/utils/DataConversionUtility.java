@@ -11,7 +11,7 @@ import java.util.Date;
 public class DataConversionUtility {
 
 
-    public  String convertDateToSAPFormat (LocalDate localDate) throws ParseException {
+    public static String convertDateToSAPFormat (LocalDate localDate) throws ParseException {
 
         String dateOut  = new String();
 

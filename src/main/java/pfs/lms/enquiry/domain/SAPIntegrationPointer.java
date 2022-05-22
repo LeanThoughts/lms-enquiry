@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
@@ -47,6 +48,12 @@ public class SAPIntegrationPointer {
 
     @Nullable
     private String mainEntityId;
+
+    // C - Create
+    // U - Update
+    // D - Delete
+    @NotNull
+    private char mode;
 
 
 }

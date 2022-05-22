@@ -30,10 +30,18 @@ public class LoanPartner extends AggregateRoot<LoanPartner> implements Cloneable
     private String roleType;
     private String roleDescription;
     private String kycStatus;
-    private boolean kycRequired;
+    public boolean kycRequired;
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private String a;
 
+    public boolean isKycRequired() {
+        return kycRequired;
+    }
+
+    public Object clone () throws CloneNotSupportedException {
+        return super.clone();
+    }
 
 }

@@ -42,34 +42,37 @@ public class SAPLoanAppraisalProjectApprisalCompletionResource implements Serial
         detailsResource.setId(projectAppraisalCompletion.getId().toString());
 
 
-        if (detailsResource.getDateOfProjectAppraisalCompletion() != null)
+        if (projectAppraisalCompletion.getDateOfProjectAppraisalCompletion() != null)
             detailsResource.setDateOfProjectAppraisalCompletion(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getDateOfProjectAppraisalCompletion()));
         else
             detailsResource.setDateOfProjectAppraisalCompletion(null);
 
-        if (detailsResource.getAgendaNoteApprovalByDirA() != null)
+        if (projectAppraisalCompletion.getAgendaNoteApprovalByDirA() != null)
             detailsResource.setAgendaNoteApprovalByDirA(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteApprovalByDirA()));
         else
             detailsResource.setAgendaNoteApprovalByDirA(null);
 
-        if (detailsResource.getAgendaNoteApprovalByDirB() != null)
+        if (projectAppraisalCompletion.getAgendaNoteApprovalByDirB() != null)
             detailsResource.setAgendaNoteApprovalByDirB(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteApprovalByDirB()));
         else
             detailsResource.setAgendaNoteApprovalByDirB(null);
 
-        if (detailsResource.getAgendaNoteSubmissionToCoSecy() != null)
+        if (projectAppraisalCompletion.getAgendaNoteSubmissionToCoSecy() != null)
             detailsResource.setAgendaNoteSubmissionToCoSecy(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteSubmissionToCoSecy()));
         else
             detailsResource.setAgendaNoteSubmissionToCoSecy(null);
 
-        if (detailsResource.getAgendaNoteApprovalByMDAndCEO() != null)
-            detailsResource.setDateOfProjectAppraisalCompletion(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteApprovalByMDAndCEO()));
+        if (projectAppraisalCompletion.getAgendaNoteApprovalByMDAndCEO() != null)
+            detailsResource.setAgendaNoteApprovalByMDAndCEO(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteApprovalByMDAndCEO()));
         else
             detailsResource.setAgendaNoteApprovalByMDAndCEO(null);
 
 
+        if (projectAppraisalCompletion.getRemarks() != null)
+            detailsResource.setRemarks(projectAppraisalCompletion.getRemarks());
+        else
+            detailsResource.setRemarks("");
 
-        detailsResource.setRemarks(detailsResource.getRemarks());
 
 
         return detailsResource;

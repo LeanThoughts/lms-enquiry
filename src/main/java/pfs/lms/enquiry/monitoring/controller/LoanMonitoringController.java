@@ -451,4 +451,7 @@ public class LoanMonitoringController {
         LoanMonitor loanMonitor = loanMonitoringService.getByLoanContractId(loanContractId);
         return ResponseEntity.ok(loanMonitor);
     }
+
+
+
 }

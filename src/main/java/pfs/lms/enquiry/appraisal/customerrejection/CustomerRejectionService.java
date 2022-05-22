@@ -33,7 +33,9 @@ public class CustomerRejectionService implements ICustomerRejectionService {
 
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),null,
+                            obj.getId(),
+                            obj.getId().toString(),
+                            obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
@@ -52,13 +54,15 @@ public class CustomerRejectionService implements ICustomerRejectionService {
 
         // Change Documents for Customer rejection
         changeDocumentService.createChangeDocument(
-                customerRejection.getId(),customerRejection.getId().toString(),null,
+                customerRejection.getLoanAppraisal().getId(),
+                customerRejection.getId().toString(),
+                loanAppraisal.getId().toString(),
                 loanApplication.getLoanContractId(),
                 null,
                 customerRejection,
                 "Created",
                 username,
-                "Appraisal", "CustomerRejection");
+                "Appraisal", "Customer Rejection");
         return customerRejection;
     }
 
@@ -79,7 +83,7 @@ public class CustomerRejectionService implements ICustomerRejectionService {
         changeDocumentService.createChangeDocument(
                 customerRejection.getLoanAppraisal().getId(),
                 customerRejection.getId().toString(),
-                null,
+                customerRejection.getLoanAppraisal().getId().toString(),
                 customerRejection.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 oldCustomerRejection,
                 customerRejection,

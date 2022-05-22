@@ -35,7 +35,7 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
                     changeDocumentService.createChangeDocument(
                             obj.getId(),obj.getId().toString(),null,
                             loanApplication.getLoanContractId(),
-                            null,
+                            obj.getId().toString(),
                             obj,
                             "Created",
                             username,
@@ -61,7 +61,7 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
         changeDocumentService.createChangeDocument(
                 projectAppraisalCompletion.getLoanAppraisal().getId(),
                 projectAppraisalCompletion.getId().toString(),
-                null,
+                projectAppraisalCompletion.getLoanAppraisal().getId().toString(),
                 projectAppraisalCompletion.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 null,
                 projectAppraisalCompletion,
@@ -98,7 +98,7 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
         changeDocumentService.createChangeDocument(
                 projectAppraisalCompletion.getLoanAppraisal().getId(),
                 projectAppraisalCompletion.getId().toString(),
-                null,
+                projectAppraisalCompletion.getLoanAppraisal().getId().toString(),
                 projectAppraisalCompletion.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 oldprojectAppraisalCompletion,
                 projectAppraisalCompletion,

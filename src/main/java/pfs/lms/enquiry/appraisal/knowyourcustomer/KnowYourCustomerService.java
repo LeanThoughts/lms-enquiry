@@ -3,12 +3,15 @@ package pfs.lms.enquiry.appraisal.knowyourcustomer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -16,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KnowYourCustomerService implements IKnowYourCustomerService {
 
+    private final LoanAppraisalRepository loanAppraisalRepository;
     private final LoanPartnerRepository loanPartnerRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
     private final IChangeDocumentService changeDocumentService;
@@ -35,17 +39,21 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
 
         updateLoanPartnerKYCStatus(knowYourCustomer.getLoanPartnerId());
 
+        LoanPartner loanPartner =  loanPartnerRepository.getOne(UUID.fromString(knowYourCustomer.getLoanPartnerId())) ;
+        LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+
+
         // Change Documents for KYC
-//        changeDocumentService.createChangeDocument(
-//                knowYourCustomer.getLoanAppraisal().getId(),
-//                knowYourCustomer.getId().toString(),
-//                null,
-//                knowYourCustomer.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-//                oldKnowYourCustomer,
-//                knowYourCustomer,
-//                "Updated",
-//                username,
-//                "Appraisal", "Know Your Customer" );
+        changeDocumentService.createChangeDocument(
+                loanAppraisal.getId(),
+                knowYourCustomer.getId().toString(),
+                loanAppraisal.getId().toString(),
+                loanPartner.getLoanApplication().getLoanContractId(),
+                oldKnowYourCustomer,
+                knowYourCustomer,
+                "Updated",
+                username,
+                "Appraisal", "Know Your Customer" );
 
 
         return knowYourCustomer;

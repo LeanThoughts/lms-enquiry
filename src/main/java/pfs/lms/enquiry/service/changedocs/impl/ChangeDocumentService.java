@@ -3,6 +3,7 @@ package pfs.lms.enquiry.service.changedocs.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.maven.model.Site;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
+import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
 import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetail;
@@ -38,6 +40,7 @@ import pfs.lms.enquiry.service.ISAPIntegrationPointerService;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 import static org.javers.core.diff.ListCompareAlgorithm.LEVENSHTEIN_DISTANCE;
@@ -64,6 +67,12 @@ public class ChangeDocumentService implements IChangeDocumentService {
     @Autowired
     ISAPIntegrationPointerService sapIntegrationPointerService;
 
+    // C - Create
+    // U - Update
+    // D - Delete
+    private char mode;
+
+
     @Override
     public ChangeDocument createChangeDocument(UUID loanBusinessProcessObjectId, String entityId, String mainEntityId,
                                                String loanContractId,
@@ -72,8 +81,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                                String action,
                                                String userName,
                                                String businessProcessName,
-                                               String subProcessName ) {
-
+                                               String subProcessName) {
 
 
         changeDocument = new ChangeDocument();
@@ -82,71 +90,77 @@ public class ChangeDocumentService implements IChangeDocumentService {
             case "Created":
 //                if (objectId == null) {
 //                    changeDocument.setAction("Created");
-                    changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
-                            loanContractId,
-                            changedObject,
-                            action,
-                            userName,
-                            businessProcessName,subProcessName );
+                changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                        loanContractId,
+                        changedObject,
+                        action,
+                        userName,
+                        businessProcessName, subProcessName);
+                this.mode = 'C';
 
-                 break;
+                break;
             case "Updated":
 //                changeDocument.setAction("Sent for Approval");
-                changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
                         loanContractId,
                         oldObject,
                         changedObject,
                         action,
                         userName,
-                        businessProcessName,subProcessName );
-                break;
+                        businessProcessName, subProcessName);
 
+                this.mode = 'U';
+                break;
             case "Deleted":
                 changeDocument.setAction("Deleted");
-                changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
                         loanContractId,
                         changedObject,
                         action,
                         userName,
-                        businessProcessName,subProcessName );
+                        businessProcessName, subProcessName);
+                this.mode = 'D';
                 break;
             case "Sent for Approval":
                 changeDocument.setAction("Rejected");
-                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
                         loanContractId,
                         oldObject,
                         changedObject,
                         action,
                         userName,
-                        businessProcessName,subProcessName );
+                        businessProcessName, subProcessName);
+                this.mode = 'U';
                 break;
             case "Approved":
                 changeDocument.setAction("Approved");
-                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
                         loanContractId,
                         oldObject,
                         changedObject,
                         action,
                         userName,
-                        businessProcessName,subProcessName );
+                        businessProcessName, subProcessName);
+                this.mode = 'U';
                 break;
 
             case "Rejected":
                 changeDocument.setAction("Rejected");
-                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId,mainEntityId,
+                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
                         loanContractId,
                         oldObject,
                         changedObject,
                         action,
                         userName,
-                        businessProcessName,subProcessName );
+                        businessProcessName, subProcessName);
+                this.mode = 'U';
                 break;
         }
 
         changeDocument = this.saveChangeDocument(changeDocument);
 
 
-        sapIntegrationPointerService.saveForObject(businessProcessName,subProcessName,entityId,mainEntityId);
+        sapIntegrationPointerService.saveForObject(businessProcessName, subProcessName, entityId, mainEntityId,mode);
 
         return changeDocument;
     }
@@ -160,7 +174,6 @@ public class ChangeDocumentService implements IChangeDocumentService {
         changeDocument = changeDocumentRepository.save(changeDocument);
         return changeDocument;
     }
-
 
 
     @Override
@@ -182,31 +195,31 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                                                                   String loanContractId,
                                                                                   Date date,
                                                                                   Pageable pageable) {
-        return changeDocumentRepository.findByBusinessProcessNameAndLoanContractIdAndDate(processName,loanContractId,date,pageable);
+        return changeDocumentRepository.findByBusinessProcessNameAndLoanContractIdAndDate(processName, loanContractId, date, pageable);
     }
 
     @Override
     public Page<ChangeDocument> findByBusinessProcessNameAndLoanContractId(String processName,
                                                                            String loanContractId,
                                                                            Pageable pageable) {
-        Page<ChangeDocument> changeDocumentPage = changeDocumentRepository.findByBusinessProcessNameAndLoanContractId(processName,loanContractId,pageable);
-        return  changeDocumentPage;
+        Page<ChangeDocument> changeDocumentPage = changeDocumentRepository.findByBusinessProcessNameAndLoanContractId(processName, loanContractId, pageable);
+        return changeDocumentPage;
 
     }
 
     @Override
     public Page<ChangeDocument> findByBusinessProcessName(String businessProcessName, Pageable pageable) {
-        return changeDocumentRepository.findByBusinessProcessName(businessProcessName,pageable);
+        return changeDocumentRepository.findByBusinessProcessName(businessProcessName, pageable);
     }
 
     @Override
     public Page<ChangeDocument> findByBusinessProcessNameAndDateBetween(String businessProcessName, Date dateFrom, Date dateTo, Pageable pageable) {
-         return changeDocumentRepository.findByBusinessProcessNameAndDateBetween(businessProcessName,dateFrom,dateTo,pageable);
+        return changeDocumentRepository.findByBusinessProcessNameAndDateBetween(businessProcessName, dateFrom, dateTo, pageable);
     }
 
     @Override
     public Page<ChangeDocument> findByBusinessProcessNameAndDate(String businessProcessName, Date date, Pageable pageable) {
-          return changeDocumentRepository.findByBusinessProcessNameAndDate(businessProcessName,date,pageable);
+        return changeDocumentRepository.findByBusinessProcessNameAndDate(businessProcessName, date, pageable);
     }
 
 
@@ -216,33 +229,34 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                                        String action,
                                                        String userName,
                                                        String businessProcessName,
-                                                       String subProcessName ) {
+                                                       String subProcessName) {
 
-        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId,mainEntityId,
+        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId, mainEntityId,
                 loanContractId,
                 changedObject,
                 action,
                 userName,
-                businessProcessName,  subProcessName );
+                businessProcessName, subProcessName);
 
         return changeDocument;
 
 
     }
-    private ChangeDocument prepareDeletedChangeDocument(UUID loanBusinessProcessObjectId, String entityId, String mainEntityId,
-                                                       String loanContractId,
-                                                       Object changedObject,
-                                                       String action,
-                                                       String userName,
-                                                       String businessProcessName,
-                                                       String subProcessName ) {
 
-        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId,mainEntityId,
+    private ChangeDocument prepareDeletedChangeDocument(UUID loanBusinessProcessObjectId, String entityId, String mainEntityId,
+                                                        String loanContractId,
+                                                        Object changedObject,
+                                                        String action,
+                                                        String userName,
+                                                        String businessProcessName,
+                                                        String subProcessName) {
+
+        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId, mainEntityId,
                 loanContractId,
                 changedObject,
                 action,
                 userName,
-                businessProcessName,  subProcessName );
+                businessProcessName, subProcessName);
 
         return changeDocument;
 
@@ -256,14 +270,14 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                                        String action,
                                                        String userName,
                                                        String businessProcessName,
-                                                       String subProcessName ) {
+                                                       String subProcessName) {
 
-        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId,mainEntityId,
+        changeDocument = prepareHeader(loanBusinessProcessObjectId, entityId, mainEntityId,
                 loanContractId,
                 changedObject,
                 action,
                 userName,
-                businessProcessName,subProcessName );
+                businessProcessName, subProcessName);
 
 
         // Compare RiskModel Header //given
@@ -277,8 +291,6 @@ public class ChangeDocumentService implements IChangeDocumentService {
         changeDocumentItems = prepareChangeDocumentItems(diff, changeDocumentItems);
 
 
-
-
         changeDocument.setChangeDocumentItems(changeDocumentItems);
 
 
@@ -286,10 +298,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
     }
 
 
-
-
     private List<ChangeDocumentItem> prepareChangeDocumentItems(Diff diff, List<ChangeDocumentItem> changeDocumentItems) {
-
 
 
         int i = changeDocumentItems.size() + 1;
@@ -329,12 +338,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
         }
 
 
-
         return changeDocumentItems;
 
     }
 
-    private Map<String, String>    getObjectDetails(String className, Object object ) {
+    private Map<String, String> getObjectDetails(String className, Object object) {
 
         Object objectParsed = new Object();
 
@@ -428,7 +436,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
 
                 case "PromoterDetails":
-                    PromoterDetail promoterDetails  =   (PromoterDetail) object;
+                    PromoterDetail promoterDetails = (PromoterDetail) object;
                     result.put("id", promoterDetails.getDateOfChange().toString());
                     result.put("description", promoterDetails.getDateOfChange().toString());
                     return result;
@@ -442,6 +450,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     FurtherDetail furtherDetail = (FurtherDetail) object;
                     result.put("id", furtherDetail.getDate().toString());
                     result.put("description", furtherDetail.getDate().toString());
+                    return result;
+                case "LoanPartner":
+                    LoanPartner loanPartner = (LoanPartner) object;
+                    result.put("id",loanPartner.getBusinessPartnerId().toString());
+                    result.put("description",loanPartner.getBusinessPartnerId().toString());
                     return result;
                 case "KnowYourCustomer":
                     KnowYourCustomer knowYourCustomer = (KnowYourCustomer) object;
@@ -476,11 +489,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
             }
 
-        } catch ( Exception ex) {
+        } catch (Exception ex) {
 
             //System.out.println(className);
         }
-             return null;
+        return null;
     }
 
 
@@ -489,7 +502,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                          Object changedObject,
                                          String action,
                                          String userName,
-                                         String businessProcessName,String subProcessName ) {
+                                         String businessProcessName, String subProcessName) {
 
         //ChangeDocument changeDocument = new ChangeDocument();
         changeDocument.setLoanBusinessProcessObjectId(loanBusinessProcessObjectId);

@@ -30,7 +30,9 @@ public class FurtherDetailService implements IFurtherDetailService {
 
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),null,
+                            obj.getId(),
+                            obj.getId().toString(),
+                            obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
@@ -54,7 +56,7 @@ public class FurtherDetailService implements IFurtherDetailService {
         changeDocumentService.createChangeDocument(
                 furtherDetail.getLoanAppraisal().getId(),
                 furtherDetail.getId().toString(),
-                null,
+                furtherDetail.getLoanAppraisal().getId().toString(),
                 furtherDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 oldFurtherDetail,
                 furtherDetail,

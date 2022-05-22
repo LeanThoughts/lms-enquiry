@@ -124,7 +124,7 @@ public class LoanMonitoringScheduledTask {
 
 
 
-     @Scheduled(fixedRate = 999999999)
+     @Scheduled(fixedRate = 5000)
     public void syncLoanApplicationsToBackend() throws ParseException, IOException {
 
 
@@ -138,8 +138,11 @@ public class LoanMonitoringScheduledTask {
 
          //Collect SAPIntegrationPointer with the following  Posting Status = 0
          List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
-         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatus("Monitoring", 0));
-         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatus("Monitoring", 2));
+         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Monitoring", 0, 'C'));
+         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Monitoring", 2,'C'));
+         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Monitoring", 0, 'U'));
+         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Monitoring", 2,'U'));
+
 
          Collections.sort(sapIntegrationPointers, new Comparator<SAPIntegrationPointer>() {
              public int compare(SAPIntegrationPointer o1, SAPIntegrationPointer o2) {

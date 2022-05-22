@@ -17,15 +17,15 @@ import java.time.LocalDate;
 public class SAPLoanAppraisalCustomerRejectionResourceDetails {
 
     @JsonProperty(value = "Id")
-    private String Id;
+    private String id;
 
     @JsonProperty(value = "AppraisalId")
     private String appraisalId;
 
-    @JsonProperty(value = "ReasonForRejection")
+    @JsonProperty(value = "Reasonforrejection")
     private String reasonForRejection;
 
-    @JsonProperty(value = "Date")
+    @JsonProperty(value = "Rejectdate")
     private String date;
 
     @JsonProperty(value = "Category")

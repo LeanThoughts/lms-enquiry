@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface ISAPIntegrationPointerService {
 
     public  SAPIntegrationPointer save(SAPIntegrationPointer sapIntegrationPointer);
-    public  SAPIntegrationPointer saveForObject(String businessProcessName, String subBusinessProcessName, String entityId, String mainEntityId);
+    public  SAPIntegrationPointer saveForObject(String businessProcessName, String subBusinessProcessName, String entityId, String mainEntityId, char mode);
     public  SAPIntegrationPointer updateStatus(Long id, Integer status);
 
 

@@ -29,7 +29,7 @@ public class SAPIntegrationPointerService implements ISAPIntegrationPointerServi
     }
 
     @Override
-    public SAPIntegrationPointer saveForObject(String businessProcessName, String subBusinessProcessName, String entityId, String mainEntityId) {
+    public SAPIntegrationPointer saveForObject(String businessProcessName, String subBusinessProcessName, String entityId, String mainEntityId,char mode) {
 
         // Check if an entry already exists with the status - Not Posted in SAP for the Object
         // If yes, do nothing
@@ -49,7 +49,7 @@ public class SAPIntegrationPointerService implements ISAPIntegrationPointerServi
         sapIntegrationPointer.setBusinessObjectId(entityId);
         sapIntegrationPointer.setStatus(status);
         sapIntegrationPointer.setMainEntityId(mainEntityId);
-
+        sapIntegrationPointer.setMode(mode);
         return this.save(sapIntegrationPointer);
      }
 

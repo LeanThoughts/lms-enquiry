@@ -31,7 +31,8 @@ public class ProposalDetailService implements IProposalDetailService {
                     obj = loanAppraisalRepository.save(obj);
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),null,
+                            obj.getId(),obj.getId().toString(),
+                            obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
@@ -66,7 +67,7 @@ public class ProposalDetailService implements IProposalDetailService {
         changeDocumentService.createChangeDocument(
                 proposalDetail.getLoanAppraisal().getId(),
                 proposalDetail.getId().toString(),
-                null,
+                proposalDetail.getLoanAppraisal().getId().toString(),
                 proposalDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 null,
                 proposalDetail,
@@ -108,7 +109,7 @@ public class ProposalDetailService implements IProposalDetailService {
         changeDocumentService.createChangeDocument(
                 proposalDetail.getLoanAppraisal().getId(),
                 proposalDetail.getId().toString(),
-                null,
+                proposalDetail.getLoanAppraisal().getId().toString(),
                 proposalDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 oldProposalDetail,
                 proposalDetail,

@@ -34,7 +34,7 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
 
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),null,
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
@@ -73,7 +73,7 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
         changeDocumentService.createChangeDocument(
                 syndicateConsortium.getLoanAppraisal().getId(),
                 syndicateConsortium.getId().toString(),
-                null,
+                syndicateConsortium.getLoanAppraisal().getId().toString(),
                 syndicateConsortium.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 null,
                 syndicateConsortium,
@@ -116,7 +116,7 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
         changeDocumentService.createChangeDocument(
                 syndicateConsortium.getLoanAppraisal().getId(),
                 syndicateConsortium.getId().toString(),
-                null,
+                syndicateConsortium.getLoanAppraisal().getId().toString(),
                 syndicateConsortium.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 oldSyndicateConsortium,
                 syndicateConsortium,

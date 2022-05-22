@@ -18,22 +18,22 @@ import java.time.LocalDate;
 public class SAPLoanAppraisalProjectAppraisalCompletionResourceDetails {
 
     @JsonProperty(value = "Id")
-    private String Id;
+    private String id;
 
     @JsonProperty(value = "AppraisalId")
     private String appraisalId;
 
 
-    @JsonProperty(value = "DateOfProjectAppraisalCompletion")
+    @JsonProperty(value = "Dateofprojectappraisalcomplete")
     private String dateOfProjectAppraisalCompletion;
 
-    @JsonProperty(value = "AgendaNoteApprovalByDirA")
+    @JsonProperty(value = "Agendanoteapprovalbydira")
     private String agendaNoteApprovalByDirA;
-    @JsonProperty(value = "AgendaNoteApprovalByDirB")
+    @JsonProperty(value = "Agendanoteapprovalbydirb")
     private String agendaNoteApprovalByDirB;
-    @JsonProperty(value = "AgendaNoteApprovalByMDAndCEO")
+    @JsonProperty(value = "Agendanoteapprovalbymdandceo")
     private String agendaNoteApprovalByMDAndCEO;
-    @JsonProperty(value = "AgendaNoteSubmissionToCoSecy")
+    @JsonProperty(value = "Agendanotesubmissiontocosecy")
     private String agendaNoteSubmissionToCoSecy;
     @JsonProperty(value = "Remarks")
     private String remarks;

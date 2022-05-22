@@ -98,6 +98,7 @@ public class Initializer implements CommandLineRunner {
             log.info("Added project type sample data");
         }
 
+
         if(financingTypeRepository.count() == 0) {
             FinancingType ft1 = new FinancingType("01", "Sole Lending");
             FinancingType ft2 = new FinancingType("02", "Consortium Lending");

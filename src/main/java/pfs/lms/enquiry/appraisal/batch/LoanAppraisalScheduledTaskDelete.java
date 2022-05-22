@@ -3,42 +3,23 @@ package pfs.lms.enquiry.appraisal.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalHeaderResource;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalHeaderResourceDetails;
+import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
+import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejectionRepository;
+import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
+import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetailRepository;
+import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
+import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletionRepository;
+import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
+import pfs.lms.enquiry.appraisal.projectdata.ProjectDataRepository;
+import pfs.lms.enquiry.appraisal.resource.*;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
-import pfs.lms.enquiry.domain.User;
-import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
-import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancialsRepository;
-import pfs.lms.enquiry.monitoring.domain.*;
-import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFee;
-import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFeeRepository;
-import pfs.lms.enquiry.monitoring.lfa.LFARepository;
-import pfs.lms.enquiry.monitoring.lfa.LendersFinancialAdvisor;
-import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
-import pfs.lms.enquiry.monitoring.lie.LIEReportAndFeeRepository;
-import pfs.lms.enquiry.monitoring.lie.LIERepository;
-import pfs.lms.enquiry.monitoring.lie.LendersIndependentEngineer;
-import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
-import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
-import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLFRepository;
-import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterRepository;
-import pfs.lms.enquiry.monitoring.projectmonitoring.*;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetail;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetailRepository;
-import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
-import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancialsRepository;
-import pfs.lms.enquiry.monitoring.repository.*;
-import pfs.lms.enquiry.monitoring.resource.*;
-import pfs.lms.enquiry.monitoring.tra.TRARepository;
-import pfs.lms.enquiry.monitoring.tra.TRAStatementRepository;
-import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccount;
-import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccountStatement;
+import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResource;
+import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResourceDetails;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.FileResource;
@@ -61,61 +42,60 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class LoanAppraisalScheduledTask {
+public class LoanAppraisalScheduledTaskDelete {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Value("${sap.lieUri}")
-    private String lieUri;
 
-    @Value("${sap.lieReportAndFeeUri}")
-    private String lieReportAndFeeUri;
 
     @Value("${sap.monitorDocumentUri}")
     private String monitorDocumentUri;
 
-    @Value("${sap.monitorServiceUri}")
-    private String monitorServiceUri;
+    @Value("${sap.appraisalServiceUri}")
+    private String appraisalServiceUri;
 
     private  final ISAPIntegrationService isapIntegrationService;
-    private final LoanAppraisalRepository loanAppraisalRepository;
+
 
     private final FileStorage fileStorage;
     private final UserRepository userRepository;
     private final SAPIntegrationRepository sapIntegrationRepository;
-    private final ISAPLoanProcessesIntegrationService sapLoanMonitoringIntegrationService;
+    private final ISAPLoanProcessesIntegrationService sapLoanProcessesIntegrationService;
     private final ISAPFileUploadIntegrationService fileUploadIntegrationService;
-    private final TRARepository traRepository;
-    private final TRAStatementRepository traStatementRepository;
-    private final LIERepository lieRepository;
-    private final LIEReportAndFeeRepository lieReportAndFeeRepository;
-    private final LFARepository lfaRepository;
-    private final LFAReportAndFeeRepository lfaReportAndFeeRepository;
+
+    private final LoanAppraisalRepository loanAppraisalRepository;
+    private final CustomerRejectionRepository customerRejectionRepository;
+    private final FurtherDetailRepository furtherDetailRepository;
+    private final ProjectAppraisalCompletionRepository projectAppraisalCompletionRepository;
+    private final ProjectDataRepository projectDataRepository;
 
     private final SAPDocumentAttachmentResource sapDocumentAttachmentResource;
 
     private final SAPLoanAppraisalHeaderResource sapLoanAppraisalHeaderResource;
+    private final SAPLoanAppraisalCustomerRejectionResource customerRejectionResource;
+    private final SAPLoanAppraisalFurtherDetailResource sapLoanAppraisalFurtherDetailResource;
+    private final SAPLoanAppraisalProjectApprisalCompletionResource sapLoanAppraisalProjectApprisalCompletionResource;
+    private final SAPLoanAppraisalProjectDataResource sapLoanAppraisalProjectDataResource;
 
 
 
-
-
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 8000)
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 
-
-         LendersIndependentEngineer lendersIndependentEngineer = new LendersIndependentEngineer();
-
-         User lastChangedByUser = new User();
-         lastChangedByUser = userRepository.findByEmail(lendersIndependentEngineer.getChangedByUserName());
+        LoanAppraisal loanAppraisal = new LoanAppraisal();
+        CustomerRejection customerRejection = new CustomerRejection();
+        FurtherDetail furtherDetail = new FurtherDetail();
+        ProjectAppraisalCompletion projectAppraisalCompletion = new ProjectAppraisalCompletion();
+        ProjectData projectData = new ProjectData();
+        String objectId;
 
          Object response = new Object();
          Object resource;
 
          //Collect SAPIntegrationPointer with the following  Posting Status = 0
          List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
-         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatus("Appraisal", 0));
-         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatus("Appraisal", 2));
+         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,'D'));
+         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,'D'));
 
          Collections.sort(sapIntegrationPointers, new Comparator<SAPIntegrationPointer>() {
              public int compare(SAPIntegrationPointer o1, SAPIntegrationPointer o2) {
@@ -123,56 +103,37 @@ public class LoanAppraisalScheduledTask {
              }
          });
 
-
-
          String serviceUri = new String();
-
 
          for (SAPIntegrationPointer sapIntegrationPointer : sapIntegrationPointers) {
 
              switch (sapIntegrationPointer.getSubBusinessProcessName()) {
-                 case "Header":
-                     log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()));
-                     LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                 case "KYC":
+                     log.info("Attempting to Delete Appraisal KYC from SAP AT :" + dateFormat.format(new Date()));
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
                      sapIntegrationRepository.save(sapIntegrationPointer);
 
-                     SAPLoanAppraisalHeaderResourceDetails sapLoanAppraisalHeaderResourceDetails =
-                             sapLoanAppraisalHeaderResource.mapLoanAppraisalHeaderToSAP(loanAppraisal);
-
-                     SAPLoanAppraisalHeaderResource sapLoanAppraisalHeaderResource = new SAPLoanAppraisalHeaderResource();
-                     sapLoanAppraisalHeaderResource.setsapMonitorHeaderResourceDetails(sapLoanAppraisalHeaderResourceDetails);
-
-                     resource = (Object) sapLoanAppraisalHeaderResource;
-                     serviceUri = monitorServiceUri + "MonitorHeaderSet"; //TODO
-                     response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+                       objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = appraisalServiceUri + "KycSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
+                 case "Loan Partner":
+                     log.info("Attempting to Delete Loan Partner from SAP AT :" + dateFormat.format(new Date()));
 
-                 case "Lenders Independent Engineer":
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
 
-//                     log.info("Attempting to Post LIE to SAP AT :" + dateFormat.format(new Date()));
-//                     lendersIndependentEngineer = lieRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
-//
-//                     //Set Status as in progress
-//                     sapIntegrationPointer.setStatus(1); // In Posting Process
-//                     sapIntegrationRepository.save(sapIntegrationPointer);
-//
-//                     SAPLIEResourceDetails saplieResourceDetails = saplieResource.mapToSAP(lendersIndependentEngineer, lastChangedByUser);
-//                     SAPLIEResource d = new SAPLIEResource();
-//                     d.setSaplieResourceDetails(saplieResourceDetails);
-//
-//                     resource = (Object) d;
-//                     serviceUri = monitorServiceUri + "LendersIndependentEngineerSet";
-//                     response = sapLoanMonitoringIntegrationService.postResourceToSAP(d, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
-//
-//                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                       objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = appraisalServiceUri + "LoanPartnerSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
-
-
              }
          }
      }
@@ -270,11 +231,11 @@ public class LoanAppraisalScheduledTask {
             sapIntegrationPointer.setProcessDate(new Date());
             if (response == null) {
                 //Set Status as Failed
-                sapIntegrationPointer.setStatus(2); // Posting Failed
+                sapIntegrationPointer.setStatus(2); // Deletion Failed
                 sapIntegrationRepository.save(sapIntegrationPointer);
             } else {
-                //Set Status as Posted Successfully
-                sapIntegrationPointer.setStatus(3); // Posting Successful
+                //Set Status as processed Successfully
+                sapIntegrationPointer.setStatus(3); // Deletion Successful
                 sapIntegrationRepository.save(sapIntegrationPointer);
             }
 

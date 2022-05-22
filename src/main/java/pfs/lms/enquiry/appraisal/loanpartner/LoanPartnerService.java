@@ -9,6 +9,7 @@ import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomerRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -24,9 +25,10 @@ public class LoanPartnerService implements ILoanPartnerService {
     private final LoanPartnerRepository loanPartnerRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
     private final LoanAppraisalRepository loanAppraisalRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource) {
+    public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username) {
         // Save loan partner details
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanPartnerResource.getLoanApplicationId());
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
@@ -34,6 +36,17 @@ public class LoanPartnerService implements ILoanPartnerService {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
                     obj = loanAppraisalRepository.save(obj);
+
+                    // Change Documents for Appraisal Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Appraisal", "Header");
+
                     return obj;
                 });
 
@@ -52,6 +65,22 @@ public class LoanPartnerService implements ILoanPartnerService {
             loanPartner.setKycStatus("Not Started");
         }
         loanPartner = loanPartnerRepository.save(loanPartner);
+        // Fetch Loan Appraisal for LoanPartner
+        LoanAppraisal loanAppraisalForPartner = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+
+        // Change Documents for  Loan Partner
+        changeDocumentService.createChangeDocument(
+                loanAppraisalForPartner.getId(),
+                loanPartner.getId().toString(),
+                loanAppraisalForPartner.getId().toString(),
+                loanApplication.getLoanContractId(),
+                null,
+                loanPartner,
+                "Created",
+                username,
+                "Appraisal", "Loan Partner");
+
+
 
         // prepopulate loan partner kyc document list
         if (loanPartner.isKycRequired())
@@ -61,9 +90,12 @@ public class LoanPartnerService implements ILoanPartnerService {
     }
 
     @Override
-    public LoanPartner updateLoanPartner(LoanPartnerResource loanPartnerResource) {
+    public LoanPartner updateLoanPartner(LoanPartnerResource loanPartnerResource, String username) throws CloneNotSupportedException {
         LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(loanPartnerResource.getId().toString()));
+
+        Object oldLoanPartner =   loanPartner.clone();
+
         loanPartner.setBusinessPartnerId(loanPartnerResource.getBusinessPartnerId());
         loanPartner.setBusinessPartnerName(loanPartnerResource.getBusinessPartnerName());
         loanPartner.setRoleType(loanPartnerResource.getRoleType());
@@ -81,18 +113,47 @@ public class LoanPartnerService implements ILoanPartnerService {
             if (knowYourCustomerRepository.findByLoanPartnerId(loanPartner.getId().toString()).size() == 0)
                 prePopulateKYCDocumentList(loanPartner);
         }
+        // Fetch Loan Appraisal for LoanPartner
+        LoanAppraisal loanAppraisalForPartner = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
 
+        // Change Documents for  Loan Partner
+        changeDocumentService.createChangeDocument(
+                loanAppraisalForPartner.getId(),
+                loanPartner.getId().toString(),
+                loanAppraisalForPartner.getId().toString(),
+                loanPartner.getLoanApplication().getLoanContractId(),
+                oldLoanPartner,
+                loanPartner,
+                "Updated",
+                username,
+                "Appraisal", "Loan Partner");
         return loanPartner;
     }
 
     @Override
-    public LoanPartner deleteLoanPartner(UUID loanPartnerId) {
+    public LoanPartner deleteLoanPartner(UUID loanPartnerId, String username) {
         knowYourCustomerRepository.findByLoanPartnerId(loanPartnerId.toString()).forEach(knowYourCustomer -> {
             knowYourCustomerRepository.delete(knowYourCustomer);
         });
         LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerId)
                 .orElseThrow(() -> new EntityNotFoundException(loanPartnerId.toString()));
         loanPartnerRepository.deleteById(loanPartnerId);
+
+        // Fetch Loan Appraisal for LoanPartner
+        LoanAppraisal loanAppraisalForPartner = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+
+        // Change Documents for  Loan Partner
+        changeDocumentService.createChangeDocument(
+                loanAppraisalForPartner.getId(),
+                loanPartner.getId().toString(),
+                loanAppraisalForPartner.getId().toString(),
+                loanPartner.getLoanApplication().getLoanContractId(),
+                null,
+                loanPartner,
+                "Deleted",
+                username,
+                "Appraisal", "Loan Partner");
+
         return loanPartner;
     }
 

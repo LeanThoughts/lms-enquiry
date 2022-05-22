@@ -40,7 +40,8 @@ public class ProjectDataService implements IProjectDataService {
 
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),null,
+                            obj.getId(),obj.getId().toString(),
+                            obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
@@ -59,7 +60,7 @@ public class ProjectDataService implements IProjectDataService {
         changeDocumentService.createChangeDocument(
                 projectData.getLoanAppraisal().getId(),
                 projectData.getId().toString(),
-                null,
+                projectData.getLoanAppraisal().getId().toString(),
                 projectData.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 null,
                 projectData,
@@ -83,7 +84,7 @@ public class ProjectDataService implements IProjectDataService {
         changeDocumentService.createChangeDocument(
                 projectData.getLoanAppraisal().getId(),
                 projectData.getId().toString(),
-                null,
+                projectData.getLoanAppraisal().getId().toString(),
                 projectData.getLoanAppraisal().getLoanApplication().getLoanContractId(),
                 odlProjectData,
                 projectData,

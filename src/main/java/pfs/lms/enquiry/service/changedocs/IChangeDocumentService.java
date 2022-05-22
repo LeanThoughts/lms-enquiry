@@ -14,7 +14,9 @@ import java.util.UUID;
  */
 public interface IChangeDocumentService {
 
-    public ChangeDocument createChangeDocument(UUID loanBusinessProcessObjectId, String entityId, String mainEntityId,
+    public ChangeDocument createChangeDocument(UUID loanBusinessProcessObjectId,
+                                               String entityId,
+                                               String mainEntityId,
                                                String loanContractId,
                                                Object oldObject,
                                                Object changedObject,

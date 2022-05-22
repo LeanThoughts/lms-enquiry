@@ -19,20 +19,25 @@ public class LoanPartnerController {
     @PostMapping("/loanPartners/create")
     public ResponseEntity<LoanPartner> createLoanPartner(@RequestBody LoanPartnerResource loanPartnerResource,
                                                          HttpServletRequest request) {
-        LoanPartner loanPartner = loanPartnerService.createLoanPartner(loanPartnerResource);
+        LoanPartner loanPartner = loanPartnerService.createLoanPartner(loanPartnerResource, request.getUserPrincipal().getName());
         return ResponseEntity.ok(loanPartner);
     }
 
     @PutMapping("/loanPartners/update")
     public ResponseEntity<LoanPartner> updateLoanPartner(@RequestBody LoanPartnerResource loanPartnerResource,
-                                                         HttpServletRequest request) {
-        LoanPartner loanPartner = loanPartnerService.updateLoanPartner((loanPartnerResource));
+                                                         HttpServletRequest request) throws CloneNotSupportedException {
+        LoanPartner loanPartner = null;
+        try {
+            loanPartner = loanPartnerService.updateLoanPartner(loanPartnerResource, request.getUserPrincipal().getName());
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(loanPartner);
     }
 
     @DeleteMapping("/loanPartners/delete/{id}")
-    public ResponseEntity<LoanPartner> deleteLoanPartner(@PathVariable("id") UUID loanPartnerId) {
-        LoanPartner loanPartner = loanPartnerService.deleteLoanPartner(loanPartnerId);
+    public ResponseEntity<LoanPartner> deleteLoanPartner(@PathVariable("id") UUID loanPartnerId,HttpServletRequest request) {
+        LoanPartner loanPartner = loanPartnerService.deleteLoanPartner(loanPartnerId,request.getUserPrincipal().getName());
         return ResponseEntity.ok(loanPartner);
     }
 }
