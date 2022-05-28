@@ -17,9 +17,9 @@ import java.text.ParseException;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties (ignoreUnknown = true)
 
-public class SAPLoanAppraisalProjectApprisalCompletionResource implements Serializable {
+public class SAPLoanAppraisalProjectAppraisalCompletionResource implements Serializable {
 
-    public SAPLoanAppraisalProjectApprisalCompletionResource() {
+    public SAPLoanAppraisalProjectAppraisalCompletionResource() {
         sapLoanAppraisalProjectAppraisalCompletionResourceDetails = new SAPLoanAppraisalProjectAppraisalCompletionResourceDetails();
     }
 

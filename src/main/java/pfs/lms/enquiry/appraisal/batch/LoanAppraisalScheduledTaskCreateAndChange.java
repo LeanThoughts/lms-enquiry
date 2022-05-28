@@ -13,13 +13,21 @@ import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejectionRepository;
 import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
 import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetailRepository;
+import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
+import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomerRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletionRepository;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectDataRepository;
+import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetail;
+import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetailRepository;
+import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
+import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelayRepository;
 import pfs.lms.enquiry.appraisal.resource.*;
+import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
+import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortiumRepository;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.monitoring.resource.*;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
@@ -75,15 +83,25 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final ProjectAppraisalCompletionRepository projectAppraisalCompletionRepository;
     private final ProjectDataRepository projectDataRepository;
     private final LoanPartnerRepository loanPartnerRepository;
+    private final SyndicateConsortiumRepository syndicateConsortiumRepository;
+    private final ReasonForDelayRepository reasonForDelayRepository;
+    private final KnowYourCustomerRepository knowYourCustomerRepository;
+    private final ProposalDetailRepository proposalDetailRepository;
 
     private final SAPDocumentAttachmentResource sapDocumentAttachmentResource;
 
     private final SAPLoanAppraisalHeaderResource sapLoanAppraisalHeaderResource;
     private final SAPLoanAppraisalCustomerRejectionResource customerRejectionResource;
     private final SAPLoanAppraisalFurtherDetailResource sapLoanAppraisalFurtherDetailResource;
-    private final SAPLoanAppraisalProjectApprisalCompletionResource sapLoanAppraisalProjectApprisalCompletionResource;
+    private final SAPLoanAppraisalProjectAppraisalCompletionResource sapLoanAppraisalProjectAppraisalCompletionResource;
     private final SAPLoanAppraisalProjectDataResource sapLoanAppraisalProjectDataResource;
     private final SAPLoanAppraisalLoanPartnerResource sapLoanAppraisalLoanPartnerResource;
+    private final SAPLoanAppraisalSyndicateConsortiumResource sapLoanAppraisalSyndicateConsortiumResource;
+    private final SAPLoanAppraisalProposalDetailsResource sapLoanAppraisalProposalDetailsResource;
+    private final SAPLoanAppraisalReasonForDelayResource sapLoanAppraisalReasonForDelayResource;
+    private final SAPLoanAppraisalKYCResource sapLoanAppraisalKYCResource;
+
+
 
 
     @Scheduled(fixedRate = 8000)
@@ -95,6 +113,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
         ProjectAppraisalCompletion projectAppraisalCompletion = new ProjectAppraisalCompletion();
         ProjectData projectData = new ProjectData();
         LoanPartner loanPartner = new LoanPartner();
+        SyndicateConsortium syndicateConsortium;
+        ReasonForDelay reasonForDelay;
+        KnowYourCustomer knowYourCustomer;
+        ProposalDetail proposalDetail;
 
          Object response = new Object();
          Object resource;
@@ -194,9 +216,9 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      sapIntegrationRepository.save(sapIntegrationPointer);
 
                      SAPLoanAppraisalProjectAppraisalCompletionResourceDetails sapLoanAppraisalProjectAppraisalCompletionResourceDetails =
-                             sapLoanAppraisalProjectApprisalCompletionResource.mapProjectAppraisalCompletionToSAP(projectAppraisalCompletion);
+                             sapLoanAppraisalProjectAppraisalCompletionResource.mapProjectAppraisalCompletionToSAP(projectAppraisalCompletion);
 
-                     SAPLoanAppraisalProjectApprisalCompletionResource sapLoanAppraisalProjectApprisalCompletionResource = new SAPLoanAppraisalProjectApprisalCompletionResource();
+                     SAPLoanAppraisalProjectAppraisalCompletionResource sapLoanAppraisalProjectApprisalCompletionResource = new SAPLoanAppraisalProjectAppraisalCompletionResource();
                      sapLoanAppraisalProjectApprisalCompletionResource.setSAPLoanAppraisalProjectAppraisalCompletionResourceDetails(sapLoanAppraisalProjectAppraisalCompletionResourceDetails );
 
                      resource = (Object)  sapLoanAppraisalProjectApprisalCompletionResource;
@@ -228,6 +250,28 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
+                 case "Proposal Details":
+
+                     log.info("Attempting to Post Appraisal Proposal Details to SAP AT :" + dateFormat.format(new Date()));
+                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     proposalDetail = proposalDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLoanAppraisalProposalDetailsResourceDetails sapLoanAppraisalProposalDetailsResourceDetails =
+                             sapLoanAppraisalProposalDetailsResource.mapProposalToSAP(proposalDetail);
+
+                     SAPLoanAppraisalProposalDetailsResource sapLoanAppraisalProposalDetailsResource = new SAPLoanAppraisalProposalDetailsResource();
+                     sapLoanAppraisalProposalDetailsResource.setsapLoanAppraisalProposalDetailsResourceDetails(sapLoanAppraisalProposalDetailsResourceDetails  );
+
+                     resource = (Object)  sapLoanAppraisalProposalDetailsResourceDetails ;
+                     serviceUri = appraisalServiceUri + "ProposalDetailsSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
                  case "Loan Partner":
 
                      log.info("Attempting to Post Appraisal Loan Partner to SAP AT :" + dateFormat.format(new Date()));
@@ -246,6 +290,79 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      resource = (Object)  sapLoanAppraisalLoanPartnerResourceDetails;
                      serviceUri = appraisalServiceUri + "LoanPartnerSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Syndicate Consortium":
+
+                     log.info("Attempting to Post Appraisal Syndicate Consortium to SAP AT :" + dateFormat.format(new Date()));
+                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     syndicateConsortium = syndicateConsortiumRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLoanAppraisalSyndicateConsortiumResourceDetails sapLoanAppraisalSyndicateConsortiumResourceDetails =
+                             sapLoanAppraisalSyndicateConsortiumResource.mapSyndicateConsortiumToSAP(syndicateConsortium);
+
+                     SAPLoanAppraisalSyndicateConsortiumResource  sapLoanAppraisalSyndicateConsortiumResource = new SAPLoanAppraisalSyndicateConsortiumResource();
+                     sapLoanAppraisalSyndicateConsortiumResource.setSAPLoanAppraisalSyndicateConsortiumResourceDetails(sapLoanAppraisalSyndicateConsortiumResourceDetails  );
+
+                     resource = (Object)  sapLoanAppraisalSyndicateConsortiumResourceDetails;
+                     serviceUri = appraisalServiceUri + "SyndicateConsortiumSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Know Your Customer":
+
+                     log.info("Attempting to Post Appraisal Know Your Customer to SAP AT :" + dateFormat.format(new Date()));
+                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     knowYourCustomer = knowYourCustomerRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+
+                       loanPartner =  loanPartnerRepository.getOne(UUID.fromString(knowYourCustomer.getLoanPartnerId())) ;
+                       loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLoanAppraisalKYCResourceDetails sapLoanAppraisalKYCResourceDetails =
+                             sapLoanAppraisalKYCResource.mapKYCToSAP(knowYourCustomer,loanPartner,loanAppraisal);
+
+                     SAPLoanAppraisalKYCResource  sapLoanAppraisalKYCResource = new SAPLoanAppraisalKYCResource();
+                     sapLoanAppraisalKYCResource.setSapLoanAppraisalKYCResourceDetails(sapLoanAppraisalKYCResourceDetails  );
+
+                     resource = (Object)  sapLoanAppraisalKYCResourceDetails;
+                     serviceUri = appraisalServiceUri + "KYCSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     if (response != null) {
+                         response = postDocument(knowYourCustomer.getFileReference(), knowYourCustomer.getId().toString(), "","LIE Report & Fee", knowYourCustomer.getDocumentName());
+                     }
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Reason For Delay":
+
+                     log.info("Attempting to Post Appraisal Reason For Delay to SAP AT :" + dateFormat.format(new Date()));
+                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     reasonForDelay = reasonForDelayRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLoanAppraisalReasonForDelayResourceDetails sapLoanAppraisalReasonForDelayResourceDetails =
+                             sapLoanAppraisalReasonForDelayResource.mapReasonForDelayToSAP(reasonForDelay);
+
+                     SAPLoanAppraisalReasonForDelayResource  sapLoanAppraisalReasonForDelayResource = new SAPLoanAppraisalReasonForDelayResource();
+                     sapLoanAppraisalReasonForDelayResource.setSAPReasonforDelay(sapLoanAppraisalReasonForDelayResourceDetails  );
+
+                     resource = (Object)  sapLoanAppraisalReasonForDelayResourceDetails;
+                     serviceUri = appraisalServiceUri + "ReasonForDelaySet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);

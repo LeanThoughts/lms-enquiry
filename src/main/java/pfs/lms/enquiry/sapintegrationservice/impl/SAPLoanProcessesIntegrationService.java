@@ -300,18 +300,12 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         restTemplate = new RestTemplate();
 
         System.out.println("OBJECT ID For Deletion : " + objectId);
+        ResponseEntity responseEntity;
 
-        try {
-
-            ResponseEntity responseEntity =
-                    restTemplate.exchange(deleteURL, HttpMethod.DELETE, requestToPost, Object.class);
-        } catch (Exception ex) {
-            System.out.println("Exception Deleting from SAP------------------------- " +ex.getMessage());
-        }
 
         try{
-            restTemplate.delete(deleteURL,headers);
-
+              responseEntity =
+                    restTemplate.exchange(deleteURL, HttpMethod.DELETE, requestToPost, Object.class);
         } catch (HttpClientErrorException ex) {
 
             System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");

@@ -74,7 +74,6 @@ public class LoanAppraisalScheduledTaskDelete {
     private final SAPLoanAppraisalHeaderResource sapLoanAppraisalHeaderResource;
     private final SAPLoanAppraisalCustomerRejectionResource customerRejectionResource;
     private final SAPLoanAppraisalFurtherDetailResource sapLoanAppraisalFurtherDetailResource;
-    private final SAPLoanAppraisalProjectApprisalCompletionResource sapLoanAppraisalProjectApprisalCompletionResource;
     private final SAPLoanAppraisalProjectDataResource sapLoanAppraisalProjectDataResource;
 
 
@@ -130,6 +129,19 @@ public class LoanAppraisalScheduledTaskDelete {
 
                        objectId = sapIntegrationPointer.getBusinessObjectId();
                      serviceUri = appraisalServiceUri + "LoanPartnerSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Syndicate Consortium":
+                     log.info("Attempting to Delete Syndicate Consortium from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = appraisalServiceUri + "SyndicateConsortiumSet";
                      response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
