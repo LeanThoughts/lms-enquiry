@@ -2,6 +2,7 @@ package pfs.lms.enquiry.appraisal;
 
 import lombok.*;
 import org.javers.core.metamodel.annotation.DiffIgnore;
+import org.springframework.lang.Nullable;
 import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.domain.LoanApplication;
 
@@ -23,6 +24,9 @@ public class LoanAppraisal extends AggregateRoot<LoanAppraisal> implements Clone
     @NotNull
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private LoanApplication loanApplication;
+
+    @Nullable
+    private String loanContractId;
 
     private String processInstanceId;
 

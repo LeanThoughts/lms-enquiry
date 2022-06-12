@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.loanpartner.ILoanPartnerService;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
+import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerResource;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
@@ -35,6 +37,7 @@ public class LoanApplicationService implements ILoanApplicationService {
 
     private final UserRepository userRepository;
     private final LoanPartnerRepository loanPartnerRepository;
+    private final ILoanPartnerService loanPartnerService;
 
     @Override
     public LoanApplication save(LoanApplicationResource resource, String username) {
@@ -282,23 +285,32 @@ public class LoanApplicationService implements ILoanApplicationService {
             // Set Technical Status as Created
             loanApplication.setTechnicalStatus(1);
             loanApplication.setLoanApplicant(applicant.getId());
+
+            // Set Temporary ID for Contract
+            //loanApplicationRepository.count();
+//            loanApplication.setLoanContractId("TEMPID-" + loanApplicationRepository.count() + 100);
+
             //Create and return the Loan Application
             loanApplication = loanApplicationRepository.save(loanApplication);
         }
 
         // Check if the LoanPartner entry is present for the main loan partner - If else, create it
+
         LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication,loanApplication.getbusPartnerNumber().toString());
         if (loanPartner == null) {
             loanPartner = new LoanPartner();
-            //loanPartner.setId(loanPartnerExisting.getId());
-            loanPartner.setLoanApplication(loanApplication);
-            loanPartner.setRoleType("TR0100");
-            loanPartner.setBusinessPartnerId(loanApplication.getbusPartnerNumber().toString());
-            loanPartner.setBusinessPartnerName(applicant.getPartyName1() + applicant.getPartyName2());
-            loanPartner.setRoleDescription("Main Loan Partner");
-            loanPartner.setStartDate(loanApplication.getCreatedOn());
-            loanPartner.setSerialNumber(1);
-            loanPartnerRepository.save(loanPartner);
+
+            LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+            loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+            loanPartnerResource.setRoleType("TR0100");
+            loanPartnerResource.setBusinessPartnerId(loanApplication.getbusPartnerNumber().toString());
+            loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
+            loanPartnerResource.setRoleDescription("Main Loan Partner");
+            loanPartnerResource.setBusinessPartnerName(applicant.getPartyName1() + " " + applicant.getPartyName2());
+            loanPartnerResource.setSerialNumber(1);
+            loanPartnerResource.setKycStatus("Not Done");
+            loanPartnerResource.setKycRequired(true);
+            loanPartnerService.createLoanPartner(loanPartnerResource,username);
         }
 
 

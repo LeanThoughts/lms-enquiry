@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
@@ -62,6 +64,8 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
     @Autowired
     LoanApplicationRepository loanApplicationRepository;
+    @Autowired
+    LoanAppraisalRepository loanAppraisalRepository;
 
 
     @Autowired
@@ -440,6 +444,47 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", promoterDetails.getDateOfChange().toString());
                     result.put("description", promoterDetails.getDateOfChange().toString());
                     return result;
+                case "Appraisal":
+                    LoanAppraisal loanAppraisal = (LoanAppraisal) object;
+                    if (loanAppraisal.getLoanApplication() != null) {
+                        if (loanAppraisal.getLoanApplication().getLoanContractId() != null) {
+                            result.put("id", loanAppraisal.getLoanApplication().getLoanContractId().toString());
+                            result.put("description", loanAppraisal.getLoanApplication().getLoanContractId().toString());
+                            changeDocument.setLoanApplication(loanAppraisal.getLoanApplication());
+                        }
+                        else{
+                            result.put("id", loanAppraisal.getLoanApplication().getEnquiryNo().toString());
+                            result.put("description", loanAppraisal.getLoanApplication().getEnquiryNo().toString());
+                            changeDocument.setLoanApplication(loanAppraisal.getLoanApplication());
+                        }
+                    }
+                    else {
+                        result.put("id", loanAppraisal.getId().toString());
+                        result.put("description", loanAppraisal.getId().toString());
+
+                    }
+                    return result;
+                case "LoanAppraisal":
+                    LoanAppraisal loanAppraisal1 = (LoanAppraisal) object;
+                    if (loanAppraisal1.getLoanApplication() != null) {
+                        if (loanAppraisal1.getLoanApplication().getLoanContractId() != null) {
+                            result.put("id", loanAppraisal1.getLoanApplication().getLoanContractId().toString());
+                            result.put("description", loanAppraisal1.getLoanApplication().getLoanContractId().toString());
+                            changeDocument.setLoanApplication(loanAppraisal1.getLoanApplication());
+
+                        }
+                        else{
+                            result.put("id", loanAppraisal1.getLoanApplication().getEnquiryNo().toString());
+                            result.put("description", loanAppraisal1.getLoanApplication().getEnquiryNo().toString());
+                            changeDocument.setLoanApplication(loanAppraisal1.getLoanApplication());
+                        }
+                    }
+                    else {
+                        result.put("id", loanAppraisal1.getId().toString());
+                        result.put("description", loanAppraisal1.getId().toString());
+
+                    }
+                    return result;
 
                 case "CustomerRejection":
                     CustomerRejection customerRejection = (CustomerRejection) object;
@@ -453,8 +498,25 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
                 case "LoanPartner":
                     LoanPartner loanPartner = (LoanPartner) object;
-                    result.put("id",loanPartner.getBusinessPartnerId().toString());
-                    result.put("description",loanPartner.getBusinessPartnerId().toString());
+                    LoanAppraisal loanAppraisal2 =  loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+                    if (loanAppraisal2.getLoanApplication() != null) {
+                        if (loanAppraisal2.getLoanApplication().getLoanContractId() != null) {
+                            result.put("id",loanPartner.getBusinessPartnerId().toString());
+                            result.put("description",loanPartner.getBusinessPartnerId().toString());
+                            changeDocument.setLoanApplication(loanAppraisal2.getLoanApplication());
+
+                        }
+                        else{
+                            result.put("id",loanPartner.getBusinessPartnerId().toString());
+                            result.put("description",loanPartner.getBusinessPartnerId().toString());
+                            changeDocument.setLoanApplication(loanAppraisal2.getLoanApplication());
+                        }
+                    }
+                    else {
+                        result.put("id",loanPartner.getBusinessPartnerId().toString());
+                        result.put("description",loanPartner.getBusinessPartnerId().toString());
+                    }
+
                     return result;
                 case "KnowYourCustomer":
                     KnowYourCustomer knowYourCustomer = (KnowYourCustomer) object;
@@ -507,11 +569,13 @@ public class ChangeDocumentService implements IChangeDocumentService {
         //ChangeDocument changeDocument = new ChangeDocument();
         changeDocument.setLoanBusinessProcessObjectId(loanBusinessProcessObjectId);
         changeDocument.setDate(new Date());
+        LoanApplication loanApplication = new LoanApplication();
+        if (loanContractId != null) {
+            loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
+            changeDocument.setLoanApplication(loanApplication);
+            changeDocument.setLoanContractId(loanContractId);
+        }
 
-        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
-        changeDocument.setLoanApplication(loanApplication);
-
-        changeDocument.setLoanContractId(loanContractId);
         changeDocument.setAction(action);
         changeDocument.setBusinessProcessName(businessProcessName);
         changeDocument.setSubProcessName(subProcessName);

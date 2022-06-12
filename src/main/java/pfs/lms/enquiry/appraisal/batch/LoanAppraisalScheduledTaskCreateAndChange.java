@@ -311,7 +311,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      sapLoanAppraisalSyndicateConsortiumResource.setSAPLoanAppraisalSyndicateConsortiumResourceDetails(sapLoanAppraisalSyndicateConsortiumResourceDetails  );
 
                      resource = (Object)  sapLoanAppraisalSyndicateConsortiumResourceDetails;
-                     serviceUri = appraisalServiceUri + "SyndicateConsortiumSet";
+                     serviceUri = appraisalServiceUri + "SyndicateBankSet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);

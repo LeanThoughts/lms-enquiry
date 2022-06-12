@@ -49,7 +49,7 @@ public class ChangeDocument extends AuditModel  {
     @Nullable
     private Date date;
 
-    @NotNull
+    @Nullable
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private LoanApplication loanApplication;
 
