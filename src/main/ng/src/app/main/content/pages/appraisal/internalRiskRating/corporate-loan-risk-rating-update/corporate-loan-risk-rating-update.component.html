@@ -1,0 +1,68 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 420px;">
+        <form [formGroup]="ratingForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Year" formControlName="year" maxlength="4" required>          
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <mat-select placeholder="Financial Ratios" formControlName="financialRatio">
+                        <mat-option [value]="'0'">Low</mat-option>
+                        <mat-option [value]="'1'">Medium</mat-option>
+                        <mat-option [value]="'3'">High</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Purpose of Loan" formControlName="purposeOfLoan">
+                        <mat-option [value]="'0'">Low</mat-option>
+                        <mat-option [value]="'1'">Medium</mat-option>
+                        <mat-option [value]="'3'">High</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Financing Structure and Security Package" formControlName="financingStructure">
+                        <mat-option [value]="'0'">Low</mat-option>
+                        <mat-option [value]="'1'">Medium</mat-option>
+                        <mat-option [value]="'3'">High</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Repayment Capability of Borrower and Promoter" formControlName="repaymentCapability" maxlength="10">
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Corporate Governance Practice" formControlName="corporateGovernancePractice" maxlength="10">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Conduct of Loan Accounts" formControlName="conductOfLoan" maxlength="10">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Deviation with Operational Policy" formControlName="deviationWithOperationalPolicy" maxlength="10">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Exposure" formControlName="exposure" maxlength="10">
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
