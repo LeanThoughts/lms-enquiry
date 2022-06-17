@@ -141,7 +141,7 @@ public class LoanAppraisalScheduledTaskDelete {
                      sapIntegrationRepository.save(sapIntegrationPointer);
 
                      objectId = sapIntegrationPointer.getBusinessObjectId();
-                     serviceUri = appraisalServiceUri + "SyndicateConsortiumSet";
+                     serviceUri = appraisalServiceUri + "SyndicateBankSet";
                      response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);

@@ -40,6 +40,9 @@ public class SAPLoanAppraisalSyndicateConsortiumResource implements Serializable
         detailsResource.setAppraisalId(syndicateConsortium.getLoanAppraisal().getId().toString());
         if (detailsResource.getSerialnumber() != null)
             detailsResource.setSerialnumber(syndicateConsortium.getSerialNumber().toString());
+        else
+            detailsResource.setSerialnumber("");
+
 
         detailsResource.setBankkey(syndicateConsortium.getBankKey());
         detailsResource.setBankname(syndicateConsortium.getBankName());

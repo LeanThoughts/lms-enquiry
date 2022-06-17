@@ -12,7 +12,8 @@ public interface LoanPartnerRepository extends JpaRepository<LoanPartner, UUID> 
 
     List<LoanPartner> findByLoanApplicationIdAndKycRequired(UUID loanApplicationId, boolean kycRequired);
 
-    LoanPartner        findByLoanApplicationAndBusinessPartnerId(LoanApplication loanApplication , String businessPartnerId);
+    LoanPartner findByLoanApplicationAndBusinessPartnerId(LoanApplication loanApplication , String businessPartnerId);
+
 
 
 
