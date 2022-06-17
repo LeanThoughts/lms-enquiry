@@ -172,8 +172,8 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/sitevisits');
     }
 
-    public saveSiteVisit(siteVisit: any, loanApplicationId: any): Observable<any> {
-        const url = "enquiry/api/loanApplications/sitevisit/create";
+    public saveSiteVisit(siteVisit: any, app: string, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/sitevisit/create?app=" + app;
         return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'siteVisit':siteVisit });
     }
 

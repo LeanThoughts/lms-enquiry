@@ -1,0 +1,128 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateRating('addRating')"> Add Rating </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateRating('modifyRating')" [disabled]="!selectedRating"> 
+            Modify Rating 
+        </button>
+        <button class="btn" mat-raised-button color="accent" (click)="deleteRating()" [disabled]="!selectedRating"> 
+            Remove Rating 
+        </button>
+    </div> 
+               
+    <div class="mat-table-container mat-white-bg" style="width: 100%">
+
+        <mat-table class="ratings-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- year Column -->
+            <ng-container matColumnDef="year">
+                <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.year }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- financialRatio Column -->
+            <ng-container matColumnDef="financialRatio">
+                <mat-header-cell *matHeaderCellDef>Financial Ratio</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ getValue(obj.financialRatio) }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- approvalRisk Column -->
+            <ng-container matColumnDef="approvalRisk">
+                <mat-header-cell *matHeaderCellDef>Approval Risk</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ getValue(obj.financialRatio) }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- offTakeRisk Column -->
+            <ng-container matColumnDef="offTakeRisk">
+                <mat-header-cell *matHeaderCellDef>Offtake Risk</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ getValue(obj.financialRatio) }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- fuelRisk Column -->
+            <ng-container matColumnDef="fuelRisk">
+                <mat-header-cell *matHeaderCellDef>Fuel Risk</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.fuelRisk }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- reputationRisk Column -->
+            <ng-container matColumnDef="reputationRisk">
+                <mat-header-cell *matHeaderCellDef>Reputation Risk</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.reputationRisk }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- financingStructure Column -->
+            <ng-container matColumnDef="financingStructure">
+                <mat-header-cell *matHeaderCellDef>Financing Structure</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.financingStructure }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- sponsorSupport Column -->
+            <ng-container matColumnDef="sponsorSupport">
+                <mat-header-cell *matHeaderCellDef>Sponsor Support</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.sponsorSupport }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- securityPackage Column -->
+            <ng-container matColumnDef="securityPackage">
+                <mat-header-cell *matHeaderCellDef>Security Package</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityPackage }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- constructionRisk Column -->
+            <ng-container matColumnDef="constructionRisk">
+                <mat-header-cell *matHeaderCellDef>Construction Risk</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.constructionRisk }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- exposure Column -->
+            <ng-container matColumnDef="exposure">
+                <mat-header-cell *matHeaderCellDef>Exposure</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.exposure }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- technologyRisk Column -->
+            <ng-container matColumnDef="technologyRisk">
+                <mat-header-cell *matHeaderCellDef>Technology Risk</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.technologyRisk }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- overallRisk Column -->
+            <ng-container matColumnDef="overallRisk">
+                <mat-header-cell *matHeaderCellDef>Overall</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.overallRisk }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
+                [ngClass]="{'highlight':obj.id === selectedRating?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>

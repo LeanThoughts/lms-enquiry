@@ -37,6 +37,11 @@ import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdat
 import { ConfirmationDialogComponent } from './confirmationDialog/confirmationDialog.component';
 import { ProjectAppraisalCompletionDetails } from './projectAppraisalCompletionDetails/projectAppraisalCompletionDetails.component';
 import { ProjectDataComponent } from './projectData/projectData.component';
+import { InternalRiskRatingComponent } from './internalRiskRating/internal-risk-rating.component';
+import { TermLoanRiskRatingListComponent } from './internalRiskRating/term-loan-risk-rating-list/term-loan-risk-rating-list.component';
+import { CorporateLoanRiskRatingListComponent } from './internalRiskRating/corporate-loan-risk-rating-list/corporate-loan-risk-rating-list.component';
+import { TermLoanRiskRatingUpdateComponent } from './internalRiskRating/term-loan-risk-rating-update/term-loan-risk-rating-update.component';
+import { CorporateLoanRiskRatingUpdateComponent } from './internalRiskRating/corporate-loan-risk-rating-update/corporate-loan-risk-rating-update.component';
 
 const routes = [
     {
@@ -105,7 +110,12 @@ const MY_FORMATS = {
         CustomerRejectionUpdateComponent,
         ProjectDataComponent,
         ProjectDataUpdateComponent,
-        ProjectAppraisalCompletionDetails
+        ProjectAppraisalCompletionDetails,
+        InternalRiskRatingComponent,
+        TermLoanRiskRatingListComponent,
+        TermLoanRiskRatingUpdateComponent,
+        CorporateLoanRiskRatingListComponent,
+        CorporateLoanRiskRatingUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -130,7 +140,9 @@ const MY_FORMATS = {
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayUpdateComponent,
         CustomerRejectionUpdateComponent,
-        ProjectDataUpdateComponent
+        ProjectDataUpdateComponent,
+        TermLoanRiskRatingUpdateComponent,
+        CorporateLoanRiskRatingUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

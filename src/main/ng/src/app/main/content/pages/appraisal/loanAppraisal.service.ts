@@ -253,6 +253,84 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getCorporateLoanRiskRatings()
+     */
+    public getCorporateLoanRiskRatings(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/corporateLoanRiskRatings/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createCorporateLoanRiskRating()
+     */
+    public createCorporateLoanRiskRating(termLoanRiskRating: any): Observable<any> {
+        return this._http.post("enquiry/api/corporateLoanRiskRatings/create", termLoanRiskRating);
+    }
+    
+    /**
+     * updateCorporateLoanRiskRating()
+     */
+    public updateCorporateLoanRiskRating(termLoanRiskRating: any): Observable<any> {
+        return this._http.put("enquiry/api/corporateLoanRiskRatings/update", termLoanRiskRating);
+    }
+
+    /**
+     * deleteCorporateLoanRiskRating()
+     */
+    public deleteCorporateLoanRiskRating(id: string): Observable<any> {
+        return this._http.delete("enquiry/api/corporateLoanRiskRatings/delete/" + id);
+    }
+        
+    /**
+     * getTermLoanRiskRatings()
+     */
+     public getTermLoanRiskRatings(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/termLoanRiskRatings/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createTermLoanRiskRating()
+     */
+    public createTermLoanRiskRating(termLoanRiskRating: any): Observable<any> {
+        return this._http.post("enquiry/api/termLoanRiskRatings/create", termLoanRiskRating);
+    }
+
+    /**
+     * deleteTermLoanRiskRating()
+     */
+    public deleteTermLoanRiskRating(id: string): Observable<any> {
+        return this._http.delete("enquiry/api/termLoanRiskRatings/delete/" + id);
+    }
+
+    /**
+     * updateTermLoanRiskRating
+     */
+    public updateTermLoanRiskRating(termLoanRiskRating: any): Observable<any> {
+        return this._http.put("enquiry/api/termLoanRiskRatings/update", termLoanRiskRating);
+    }
+
+    /**
      * getReasonForDelay()
      */
     public getReasonForDelay(loanAppraisalId: string): Observable<any> {

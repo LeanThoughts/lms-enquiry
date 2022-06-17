@@ -108,7 +108,7 @@ export class SiteVisitUpdateDialogComponent {
         siteVisit.fileReference = fileReference;
 
         if (this._dialogData.operation === 'addSiteVisit') {
-            this._loanMonitoringService.saveSiteVisit(siteVisit, this._dialogData.loanApplicationId).subscribe(() => {
+            this._loanMonitoringService.saveSiteVisit(siteVisit, 'monitoring', this._dialogData.loanApplicationId).subscribe(() => {
                 this._matSnackBar.open('Site Visit details added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });
