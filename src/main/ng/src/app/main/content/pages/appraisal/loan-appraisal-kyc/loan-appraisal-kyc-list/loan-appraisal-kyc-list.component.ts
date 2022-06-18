@@ -85,6 +85,7 @@ export class LoanAppraisalKYCListComponent implements OnInit {
         this._loanAppraisalService.getKYCDocuments(this.selectedPartner.id).subscribe(data => {
             this.dataSource2 = new MatTableDataSource(data._embedded.knowYourCustomers);
         });
+        this.selectedKYCDocument = undefined;
     }
 
     /**
