@@ -54,15 +54,15 @@ export class ProjectDataUpdateComponent {
         });
 
         this._projectDataStep2Form = _formBuilder.group({
-            offtakeVolume: [this._projectData.offtakeVolume || ''],
-            saleRate: [this._projectData.saleRate || ''],
+            offtakeVolume: [this._projectData.offtakeVolume || '', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]],
+            saleRate: [this._projectData.saleRate || '', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]],
             fuelMix: [this._projectData.fuelMix || ''],
-            fuelCost: [this._projectData.fuelCost || '', [Validators.pattern(MonitoringRegEx.tenCommaTwo)]],
+            fuelCost: [this._projectData.fuelCost || '', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]],
             stationHeatRate: [this._projectData.stationHeatRate || '', [Validators.pattern(MonitoringRegEx.tenCommaTwo)]],
-            oandmExpenses: [this._projectData.oandmExpenses || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
-            totalLand: [this._projectData.totalLand || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
+            oandmExpenses: [this._projectData.oandmExpenses || '', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]],
+            totalLand: [this._projectData.totalLand || '', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]],
             projectCOD: [this._projectData.projectCOD || ''],
-            ppaRate: [this._projectData.ppaRate || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
+            ppaRate: [this._projectData.ppaRate || '', [Validators.pattern(MonitoringRegEx.twoCommaTwo)]],
             offTakerCompany: [this._projectData.offTakerCompany || ''],
             ippPercentage: [this._projectData.ippPercentage || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
             groupCaptivePercentage: [this._projectData.groupCaptivePercentage || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
@@ -71,10 +71,10 @@ export class ProjectDataUpdateComponent {
         });
 
         this._projectDataStep3Form = _formBuilder.group({
-            epcCost: [this._projectData.epcCost || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
-            overallProjectCost: [this._projectData.overallProjectCost || '',  [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
-            debtEquityRatio: [this._projectData.debtEquityRatio || ''],
-            totalDebt: [this._projectData.totalDebt || ''],
+            epcCost: [this._projectData.epcCost || '', [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)]],
+            overallProjectCost: [this._projectData.overallProjectCost || '',  [Validators.pattern(MonitoringRegEx.sixteenCommaTwo)]],
+            debtEquityRatio: [this._projectData.twoCommaTwo || ''],
+            totalDebt: [this._projectData.totalDebt || '', [Validators.pattern(MonitoringRegEx.sixteenCommaTwo)]],
             roiPreCod: [this._projectData.roiPreCod || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
             roiPostCod: [this._projectData.roiPostCod || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
             constructionPeriod: [this._projectData.constructionPeriod || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
@@ -86,9 +86,9 @@ export class ProjectDataUpdateComponent {
             repaymentSchedule: [this._projectData.repaymentSchedule || ''],
             dscrMinimum: [this._projectData.dscrMinimum || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
             dscrAverage: [this._projectData.dscrAverage || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
-            levCostTotal: [this._projectData.levCostTotal || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
-            levCostFixed: [this._projectData.levCostFixed || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
-            levCostVariable: [this._projectData.levCostVariable || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
+            levCostTotal: [this._projectData.levCostTotal || '', [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)]],
+            levCostFixed: [this._projectData.levCostFixed || '', [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)]],
+            levCostVariable: [this._projectData.levCostVariable || '', [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)]],
             workingCapitalCycle: [this._projectData.workingCapitalCycle || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             workingCapitalUnit: [this._projectData.workingCapitalUnit || '']
         });

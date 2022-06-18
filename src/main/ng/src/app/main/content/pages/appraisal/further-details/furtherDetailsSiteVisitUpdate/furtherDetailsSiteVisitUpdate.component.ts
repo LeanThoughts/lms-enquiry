@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { SiteVisitModel } from 'app/main/content/model/siteVisit.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { LoanMonitoringService } from '../../../monitoring/loanMonitoring.service';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-further-details-site-visit-update-dialog',
@@ -50,7 +51,7 @@ export class FurtherDetailsSiteVisitUpdateComponent {
             siteVisitType: [this.selectedSiteVisit.siteVisitType],
             dateOfSiteVisit: [this.selectedSiteVisit.dateOfSiteVisit || ''],
             documentTitle: [this.selectedSiteVisit.documentTitle || ''],
-            fiscalYear: [''],
+            fiscalYear: ['', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             file: ['']
         });
     }

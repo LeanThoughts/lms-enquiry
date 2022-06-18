@@ -18,7 +18,11 @@
                             <input matInput placeholder="Project Name" formControlName="projectName" maxlength="100" required>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Type of Funding" formControlName="typeOfFunding" maxlength="100" required>
+                            <mat-select placeholder="Type of Funding" formControlName="typeOfFunding">
+                                <mat-option [value]="'1'">Sole Lending</mat-option>
+                                <mat-option [value]="'2'">Multiple Banking</mat-option>
+                                <mat-option [value]="'3'">Consortium Lending</mat-option>
+                            </mat-select>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
                             <mat-select placeholder="Policy Applicable" formControlName="policyApplicable">
@@ -54,7 +58,8 @@
                             <mat-select placeholder="Technology Supplier" formControlName="mainContractor">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let partner of _dialogData.technologySuppliers" [value]="partner.id">
-                                    {{ partner.partyName1 }}
+                                    {{ partner.id }} | {{ partner.partyName1 }}
+                                    <!-- <span>{{bank.bankName}}</span> | <small> Key : {{bank.bankKey}} </small> | <small>Branch : {{bank.bankBranch}} </small> -->
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -62,7 +67,7 @@
                             <mat-select placeholder="EPC Contractor" formControlName="epcContractor">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let partner of _dialogData.epcContractors" [value]="partner.id">
-                                    {{ partner.partyName1 }}
+                                    {{ partner.id }} | {{ partner.partyName1 }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -89,7 +94,7 @@
                             <input matInput placeholder="Offtake Volume" formControlName="offtakeVolume" maxlength="10">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Sale Rate" formControlName="saleRate" maxlength="60">
+                            <input matInput placeholder="Sale Rate" formControlName="saleRate" maxlength="10">
                         </mat-form-field>
                         <mat-form-field fxFlex="50">
                             <input matInput placeholder="Fuel Mix" formControlName="fuelMix" maxlength="100">
@@ -97,16 +102,16 @@
                     </div>
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Fuel Cost" formControlName="fuelCost" maxlength="13">
+                            <input matInput placeholder="Fuel Cost" formControlName="fuelCost" maxlength="10">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
                             <input matInput placeholder="Station Heat Rate" formControlName="stationHeatRate" maxlength="13">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="O&M Expenses" formControlName="oandmExpenses" maxlength="18">
+                            <input matInput placeholder="O&M Expenses" formControlName="oandmExpenses" maxlength="10">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Total Land (Acres)" formControlName="totalLand" maxlength="18">
+                            <input matInput placeholder="Total Land (Acres)" formControlName="totalLand" maxlength="10">
                         </mat-form-field>
                     </div>
                     <div fxLayout="row">
@@ -116,7 +121,7 @@
                             <mat-datepicker #picker2></mat-datepicker> 
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="PPA Rate" formControlName="ppaRate" maxlength="6">
+                            <input matInput placeholder="PPA Rate" formControlName="ppaRate" maxlength="5">
                         </mat-form-field>
                         <mat-form-field fxFlex="50">
                             <input matInput placeholder="Off Taker Company" formControlName="offTakerCompany" maxlength="60">
@@ -155,16 +160,16 @@
                     <ng-template matStepLabel>Financial Parameters</ng-template>
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Plant & Machinery Cost/ EPC Cost" formControlName="epcCost" maxlength="18">
+                            <input matInput placeholder="Plant & Machinery Cost/ EPC Cost" formControlName="epcCost" maxlength="16">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Overall Project Cost" formControlName="overallProjectCost" maxlength="18">
+                            <input matInput placeholder="Overall Project Cost" formControlName="overallProjectCost" maxlength="19">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Debt Equity Ratio" formControlName="debtEquityRatio" maxlength="60">
+                            <input matInput placeholder="Debt Equity Ratio" formControlName="debtEquityRatio" maxlength="5">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Total Debt" formControlName="totalDebt" maxlength="60">
+                            <input matInput placeholder="Total Debt" formControlName="totalDebt" maxlength="19">
                         </mat-form-field>
                     </div>
                     <div fxLayout="row">
@@ -226,13 +231,13 @@
 
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Total)" formControlName="levCostTotal" maxlength="18">
+                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Total)" formControlName="levCostTotal" maxlength="16">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Fixed)" formControlName="levCostFixed" maxlength="18">
+                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Fixed)" formControlName="levCostFixed" maxlength="16">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Variable)" formControlName="levCostVariable" maxlength="18">
+                            <input matInput placeholder="LEV Cost of Supply w/o ROE (Variable)" formControlName="levCostVariable" maxlength="16">
                         </mat-form-field>
                     </div>
 

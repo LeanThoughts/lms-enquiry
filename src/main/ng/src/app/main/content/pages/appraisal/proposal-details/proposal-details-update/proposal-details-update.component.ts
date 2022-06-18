@@ -60,9 +60,8 @@ export class ProposalDetailsUpdateComponent {
                 [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
             availabilityPeriodUnit: [ this._proposalDetail.availabilityPeriodUnit || undefined ],
             prePaymentCharges: [ this._proposalDetail.prePaymentCharges || undefined, 
-                [Validators.pattern(MonitoringRegEx.holdingPercentage)] ],
-            feeDetailsSchedule: [ this._proposalDetail.feeDetailsSchedule || undefined, 
-                [Validators.pattern(MonitoringRegEx.holdingPercentage)] ]
+                [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)] ],
+            feeDetailsSchedule: [ this._proposalDetail.feeDetailsSchedule || undefined ]
         });
     }
 
