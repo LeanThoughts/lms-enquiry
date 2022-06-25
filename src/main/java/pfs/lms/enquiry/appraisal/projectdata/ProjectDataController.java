@@ -35,7 +35,7 @@ public class ProjectDataController {
     @PutMapping("/projectDatas/update")
     public ResponseEntity<ProjectData> updateProjectData(@RequestBody ProjectDataResource projectDataResource,
                                                             HttpServletRequest request) throws CloneNotSupportedException {
-        ProjectData projectData = projectDataService.updateProjectData(projectDataResource,request.getUserPrincipal().getName());
+        ProjectData projectData = projectDataService.updateProjectData(projectDataResource, request.getUserPrincipal().getName(), request);
         return ResponseEntity.ok(projectData);
     }
 }
