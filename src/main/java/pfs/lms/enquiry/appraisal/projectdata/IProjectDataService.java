@@ -1,5 +1,6 @@
 package pfs.lms.enquiry.appraisal.projectdata;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 public interface IProjectDataService {
@@ -8,5 +9,6 @@ public interface IProjectDataService {
 
     ProjectData createProjectData(ProjectDataResource projectDataResource, String username);
 
-    ProjectData updateProjectData(ProjectDataResource projectDataResource, String username) throws CloneNotSupportedException;
+    ProjectData updateProjectData(ProjectDataResource projectDataResource, String username,
+                                  HttpServletRequest request) throws CloneNotSupportedException;
 }

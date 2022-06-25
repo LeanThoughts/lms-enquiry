@@ -80,3 +80,5 @@ security:
         keyValue: PfS$$$98567
 server:
   port: 8080
+riskRating:
+  baseUrl: http://localhost:8090/risk
