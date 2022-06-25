@@ -29,6 +29,8 @@ import pfs.lms.enquiry.appraisal.resource.*;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortiumRepository;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
+import pfs.lms.enquiry.monitoring.domain.SiteVisit;
+import pfs.lms.enquiry.monitoring.repository.SiteVisitRepository;
 import pfs.lms.enquiry.monitoring.resource.*;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -62,8 +64,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     @Value("${sap.lieReportAndFeeUri}")
     private String lieReportAndFeeUri;
 
-    @Value("${sap.monitorDocumentUri}")
-    private String monitorDocumentUri;
+    @Value("${sap.appraisalDocumentUri}")
+    private String appraisalDocumentUri;
 
     @Value("${sap.appraisalServiceUri}")
     private String appraisalServiceUri;
@@ -87,6 +89,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final ReasonForDelayRepository reasonForDelayRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
     private final ProposalDetailRepository proposalDetailRepository;
+    private final SiteVisitRepository siteVisitRepository;
 
     private final SAPDocumentAttachmentResource sapDocumentAttachmentResource;
 
@@ -100,6 +103,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final SAPLoanAppraisalProposalDetailsResource sapLoanAppraisalProposalDetailsResource;
     private final SAPLoanAppraisalReasonForDelayResource sapLoanAppraisalReasonForDelayResource;
     private final SAPLoanAppraisalKYCResource sapLoanAppraisalKYCResource;
+    private final SAPSiteVisitResource sapSiteVisitResource;
 
 
 
@@ -110,6 +114,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         CustomerRejection customerRejection = new CustomerRejection();
         FurtherDetail furtherDetail = new FurtherDetail();
+        SiteVisit siteVisit = new SiteVisit();
         ProjectAppraisalCompletion projectAppraisalCompletion = new ProjectAppraisalCompletion();
         ProjectData projectData = new ProjectData();
         LoanPartner loanPartner = new LoanPartner();
@@ -205,6 +210,30 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
+                 case "Site Visit":
+
+                     log.info("Attempting to Post Appraisal Site Visit to SAP AT :" + dateFormat.format(new Date()));
+                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     siteVisit = siteVisitRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Pos
+                     // ting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPSiteVisitResourceDetails sapSiteVisitResourceDetails = sapSiteVisitResource.mapToSAP(siteVisit);
+
+                     SAPSiteVisitResource sapSiteVisitResource = new SAPSiteVisitResource();
+                     sapSiteVisitResource.setSapSiteVisitResourceDetails(sapSiteVisitResourceDetails);
+
+                     resource = (Object)  sapSiteVisitResource;
+                     serviceUri = appraisalServiceUri + "SiteVisitSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+                     if (response != null) {
+                         response = postDocument(siteVisit.getFileReference(), siteVisit.getId(), "","Site Visit", siteVisit.getDocumentTitle());
+                     }
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
                  case "Project Appraisal Completion":
 
                      log.info("Attempting to Post Appraisal Project Appraisal Completion to SAP AT :" + dateFormat.format(new Date()));
@@ -286,7 +315,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                              sapLoanAppraisalLoanPartnerResource.mapLoanPartnerToSAP(loanPartner);
 
                      SAPLoanAppraisalLoanPartnerResource  sapLoanAppraisalLoanPartnerResource = new SAPLoanAppraisalLoanPartnerResource();
-                     sapLoanAppraisalLoanPartnerResource.setSapLoanAppraisalCustomerRejectionResourceDetails(sapLoanAppraisalLoanPartnerResourceDetails  );
+                     sapLoanAppraisalLoanPartnerResource.setSapLoanAppraisalLoanPartnerResourceDetails(sapLoanAppraisalLoanPartnerResourceDetails  );
 
                      resource = (Object)  sapLoanAppraisalLoanPartnerResourceDetails;
                      serviceUri = appraisalServiceUri + "LoanPartnerSet";
@@ -340,10 +369,11 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      if (response != null) {
-                         response = postDocument(knowYourCustomer.getFileReference(), knowYourCustomer.getId().toString(), "","LIE Report & Fee", knowYourCustomer.getDocumentName());
+                         response = postDocument(knowYourCustomer.getFileReference(), knowYourCustomer.getId().toString(), "","Know Your Customer", knowYourCustomer.getDocumentName());
                      }
-
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
+
+
                      break;
                  case "Reason For Delay":
 
@@ -420,13 +450,15 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 //                + "FileType='" +fileType +  "',"
 //                + ")/$value";
 
-                String documentUploadUri = monitorDocumentUri + "("
+                String documentUploadUri = appraisalDocumentUri + "("
                 + "Id='" + entityId + "'," + "DocSubId='" + docSubId + "',"
                 + "EntityId='" +entityId +  "',"
                 + "EntityName='" +entityName +  "',"
                 + "MimeType='" +mimeType +  "',"
                 + "Filename='" +fileName +  "',"
                 + "FileType='" +fileType +  "',"
+//                + "DocId='" + "',"
+//                 + "UploadTime='" + "datetime'2015-07-30T00:00:00Z'',"
                 + ")/$value";
 
 

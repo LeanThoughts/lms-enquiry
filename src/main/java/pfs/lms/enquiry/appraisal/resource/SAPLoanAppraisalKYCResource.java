@@ -49,7 +49,6 @@ public class SAPLoanAppraisalKYCResource implements Serializable {
         detailsResource.setId(knowYourCustomer.getId().toString());
 
 
-
         detailsResource.setAppraisalId(loanAppraisal.getId().toString());
 
         detailsResource.setLoanpartnerid(loanPartner.getBusinessPartnerId());
@@ -58,9 +57,9 @@ public class SAPLoanAppraisalKYCResource implements Serializable {
         detailsResource.setFilereference(knowYourCustomer.getFileReference());
         detailsResource.setRemarks(knowYourCustomer.getRemarks());
         if (knowYourCustomer.getDateOfCompletion() != null)
-            detailsResource.setDateofcompletion(dataConversionUtility.convertDateToSAPFormat(knowYourCustomer.getDateOfCompletion()));
+            detailsResource.setDateOfCompletion(dataConversionUtility.convertDateToSAPFormat(knowYourCustomer.getDateOfCompletion()));
         else
-            detailsResource.setDateofcompletion(null);
+            detailsResource.setDateOfCompletion(null);
 
 
         return detailsResource;

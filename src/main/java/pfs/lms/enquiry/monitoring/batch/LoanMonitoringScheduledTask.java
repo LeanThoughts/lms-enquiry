@@ -760,6 +760,8 @@ public class LoanMonitoringScheduledTask {
 
     private void updateSAPIntegrationPointer(Object response, SAPIntegrationPointer sapIntegrationPointer) {
 
+        System.out.println("Updating SAP Integration Pointer");
+
             sapIntegrationPointer.setProcessDate(new Date());
             if (response == null) {
                 //Set Status as Failed

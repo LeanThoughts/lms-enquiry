@@ -16,6 +16,8 @@ import pfs.lms.enquiry.domain.WorkflowApprover;
 import pfs.lms.enquiry.repository.WorkflowApproverRepository;
 import pfs.lms.enquiry.vault.FileSystemStorage;
 
+import org.activiti.spring.boot.AbstractProcessEngineAutoConfiguration;
+
 import java.io.InputStream;
 import java.util.List;
 

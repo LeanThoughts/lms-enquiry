@@ -35,6 +35,6 @@ public class SAPLoanAppraisalKYCResourceDetails {
     private String remarks;
 
     @JsonProperty(value = "Dateofcompletion")
-    private String  Dateofcompletion;
+    private String  dateOfCompletion;
 
 }
