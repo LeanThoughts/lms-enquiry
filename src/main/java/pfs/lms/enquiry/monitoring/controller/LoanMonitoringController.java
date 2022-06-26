@@ -285,7 +285,7 @@ public class LoanMonitoringController {
 
     @PostMapping("/loanApplications/sitevisit/create")
     public ResponseEntity createSiteVisit(@RequestBody SiteVisitResource resource, @RequestParam("app") String app,
-                                          HttpServletRequest request) {
+                                          HttpServletRequest request) throws CloneNotSupportedException {
         SiteVisit siteVisit = loanMonitoringService.saveSiteVisit(resource, app, request.getUserPrincipal().getName());
         return ResponseEntity.ok(siteVisit);
     }

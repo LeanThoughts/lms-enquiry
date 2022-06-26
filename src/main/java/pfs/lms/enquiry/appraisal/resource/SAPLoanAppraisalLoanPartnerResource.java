@@ -19,15 +19,16 @@ import java.text.ParseException;
 public class SAPLoanAppraisalLoanPartnerResource implements Serializable {
 
     public SAPLoanAppraisalLoanPartnerResource() {
-        sapLoanAppraisalLoanPartnerResourceDetails = new SAPLoanAppraisalLoanPartnerResourceDetails();
+       this.sapLoanAppraisalLoanPartnerResourceDetails = new SAPLoanAppraisalLoanPartnerResourceDetails();
     }
 
     @JsonProperty(value = "d")
     private SAPLoanAppraisalLoanPartnerResourceDetails sapLoanAppraisalLoanPartnerResourceDetails;
+
     DataConversionUtility dataConversionUtility =  new DataConversionUtility();
 
 
-    public void setSapLoanAppraisalCustomerRejectionResourceDetails(SAPLoanAppraisalLoanPartnerResourceDetails  sapLoanAppraisalLoanPartnerResourceDetails) {
+    public void setSapLoanAppraisalLoanPartnerResourceDetails(SAPLoanAppraisalLoanPartnerResourceDetails  sapLoanAppraisalLoanPartnerResourceDetails) {
         this.sapLoanAppraisalLoanPartnerResourceDetails = sapLoanAppraisalLoanPartnerResourceDetails;
     }
 
@@ -44,7 +45,10 @@ public class SAPLoanAppraisalLoanPartnerResource implements Serializable {
         detailsResource.setBusinessPartnerId(loanPartner.getBusinessPartnerId());
         detailsResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
         detailsResource.setRoleDescription(loanPartner.getRoleDescription());
-        detailsResource.setKycStatus(loanPartner.getKycStatus());
+        if (loanPartner.getKycStatus() !=null)
+            detailsResource.setKycStatus(loanPartner.getKycStatus());
+        else
+            detailsResource.setKycStatus("");
         if (loanPartner.kycRequired == true) {
             detailsResource.setKycRequired(("X"));
         }else{

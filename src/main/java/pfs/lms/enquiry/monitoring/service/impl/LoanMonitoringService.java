@@ -913,13 +913,22 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
 
     @Override
-    public SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username) {
+    public SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username) throws CloneNotSupportedException {
+
+//        boolean createChangeDocument = false;
+//
+//        if (resource.getSiteVisit().getId().length() == 0)
+//            createChangeDocument = true;
+
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         SiteVisit siteVisit = resource.getSiteVisit();
         siteVisit.setLoanApplication(loanApplication);
 
+        LoanMonitor loanMonitor = null;
+        LoanAppraisal loanAppraisal = null; //new LoanAppraisal();
+
         if (app.equals("monitoring")) {
-            LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+            loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
             if (loanMonitor == null) {
                 loanMonitor = new LoanMonitor();
                 loanMonitor.setLoanApplication(loanApplication);
@@ -927,29 +936,45 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
                 // Change Documents for Monitoring Header
                 changeDocumentService.createChangeDocument(
-                        loanMonitor.getId(), loanMonitor.getId().toString(), null,
+                        loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
                         loanApplication.getLoanContractId(),
                         null,
                         loanMonitor,
                         "Created",
                         username,
                         "Monitoring", "Header");
-            }
+             }
             else
                 siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
         }
         else if (app.equals("appraisal"))
         {
-            LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
-                    .orElseGet(() -> {
-                        LoanAppraisal obj = new LoanAppraisal();
-                        obj.setLoanApplication(loanApplication);
-                        obj = loanAppraisalRepository.save(obj);
-                        return obj;
-                    });
+            Optional<LoanAppraisal> loanAppraisalOptional = loanAppraisalRepository.findByLoanApplication(loanApplication);
+            if (loanAppraisalOptional != null) {
+                loanAppraisal = loanAppraisalOptional.get();
+            } else {
+                loanAppraisal = new LoanAppraisal();
+                loanAppraisal.setLoanApplication(loanApplication);
+                loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
+                // Change Documents for Monitoring Header
+                changeDocumentService.createChangeDocument(
+                        loanAppraisal.getId(), loanAppraisal.getId().toString(), loanAppraisal.getId().toString(),
+                        loanApplication.getLoanContractId(),
+                        null,
+                        loanAppraisal,
+                        "Created",
+                        username,
+                        "Appraisal", "Header");
+            }
+
             siteVisit.setLoanAppraisalId(loanAppraisal.getId().toString());
         }
 
+        Object oldSiteVisit = new SiteVisit();
+        if (resource.getSiteVisit().getId().length() > 0) {
+            siteVisit = siteVisitRepository.getOne(resource.getSiteVisit().getId());
+            oldSiteVisit = siteVisit.clone();
+        }
         // siteVisit.setSerialNumber(siteVisitRepository.findByLoanMonitor(loanMonitor).size() + 1);
         siteVisit.setSiteVisitType(resource.getSiteVisit().getSiteVisitType());
         siteVisit.setActualCOD(resource.getSiteVisit().getActualCOD());
@@ -960,15 +985,32 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         siteVisit.setFileReference(resource.getSiteVisit().getFileReference());
         siteVisit = siteVisitRepository.save(siteVisit);
 
+
         // Change Documents for Site Visit
-//        changeDocumentService.createChangeDocument(
-//                loanMonitor.getId(), siteVisit.getId().toString(),null,
-//                loanApplication.getLoanContractId(),
-//                null,
-//                siteVisit,
-//                "Created",
-//                username,
-//                "Monitoring", "Site Visit" );
+
+            if (app == "monitoring") {
+                changeDocumentService.createChangeDocument(
+                        loanMonitor.getId(), siteVisit.getId().toString(), loanAppraisal.getId().toString(),
+                        loanApplication.getLoanContractId(),
+                        null,
+                        siteVisit,
+                        "Created",
+                        username,
+                        "Monitoring", "Site Visit");
+            } else {
+                changeDocumentService.createChangeDocument(
+                        loanAppraisal.getId(), siteVisit.getId().toString(), loanAppraisal.getId().toString(),
+                        loanApplication.getLoanContractId(),
+                        null,
+                        siteVisit,
+                        "Created",
+                        username,
+                        "Appraisal", "Site Visit");
+            }
+
+
+
+
 
         return siteVisit;
 
@@ -992,19 +1034,31 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         existingSiteVisit = siteVisitRepository.save(existingSiteVisit);
 
-        // Change Documents for T&C Mod.
-//        changeDocumentService.createChangeDocument(
-//                existingSiteVisit.getLoanMonitor().getId(),
-//                existingSiteVisit.getId(),null,
-//                existingSiteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldSiteVisit,
-//                existingSiteVisit,
-//                "Updated",
-//                username,
-//                "Monitoring", "Site Visit" );
+        String loanAppraisalId = existingSiteVisit.getLoanAppraisalId();
+        String loanMonitorId = existingSiteVisit.getLoanMonitoringId();
+        LoanApplication loanApplication = existingSiteVisit.getLoanApplication();
 
-
-
+        //if (app == "monitoring") {
+        if (loanMonitorId != null) {
+         changeDocumentService.createChangeDocument(
+                UUID.fromString(loanMonitorId), existingSiteVisit.getId().toString(), loanMonitorId,
+                loanApplication.getLoanContractId(),
+                oldSiteVisit,
+                 existingSiteVisit,
+                "Updated",
+                username,
+                "Monitoring", "Site Visit");
+            }
+         else {
+            changeDocumentService.createChangeDocument(
+                    UUID.fromString(loanAppraisalId), existingSiteVisit.getId().toString(), loanAppraisalId,
+                    loanApplication.getLoanContractId(),
+                    oldSiteVisit,
+                    existingSiteVisit,
+                    "Updated",
+                    username,
+                    "Appraisal", "Site Visit");
+         }
         return existingSiteVisit;
 
     }

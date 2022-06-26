@@ -189,6 +189,7 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
 
             } catch (Exception exception) {
                 System.out.println( "FILE UPLOAD FAILED :" + exception.toString());
+                return  null;
 
             }
 

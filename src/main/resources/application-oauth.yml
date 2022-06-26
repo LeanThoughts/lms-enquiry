@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles: oauth
   rest:
     basePath: /api
@@ -37,7 +39,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: pfsriskmodel@gmail.com
-    password: Sapsap@123
+    password: uorhmrwobfzoqoan
     protocol: smtp
     tls: true
     properties.mail.smtp:
@@ -49,7 +51,7 @@ spring:
     mail-server-host: smtp.gmail.com
     mail-server-port: 587
     mail-server-user-name: pfsriskmodel@gmail.com
-    mail-server-password: Sapsap@123
+    mail-server-password: uorhmrwobfzoqoan
     mail-server-default-from: pfsriskmodel@gmail.com
     mail-server-use-tls: true
     database-schema-update: true
@@ -60,6 +62,7 @@ sap:
   baseUrl: http://192.168.1.205:8000
   serviceUri: /sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet
   monitorServiceUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/
+  appraisalDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/DocumentSet
   appraisalServiceUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/
   lieUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LendersIndependentEngineerSet
   lieReportAndFeeUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LIEReportAndFeeSet
