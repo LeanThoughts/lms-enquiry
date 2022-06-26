@@ -1,13 +1,21 @@
 package pfs.lms.enquiry.appraisal.riskreport;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RiskEvaluationSummary {
-    public RiskEvaluationSummary() {
-        this.RiskEvaluation_OverallScore_Nav = new ArrayList<RiskEvaluationScore>();
-        this.RiskEvaluation_ComponentScore_Nav   = new ArrayList<RiskEvaluationComponentScore>();
-    }
+//    public RiskEvaluationSummary() {
+//        this.RiskEvaluation_OverallScore_Nav = new ArrayList<RiskEvaluationScore>();
+//        this.RiskEvaluation_ComponentScore_Nav   = new ArrayList<RiskEvaluationComponentScore>();
+//    }
 
     public String RiskEvalId;
     public String LoanContractId;
