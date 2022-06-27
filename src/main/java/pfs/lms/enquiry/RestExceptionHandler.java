@@ -5,6 +5,8 @@ package pfs.lms.enquiry;
  */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,16 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler {
     private static final String UNEXPECTED_ERROR = "Exception.unexpected";
     private final MessageSource messageSource;
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource
+                = new ReloadableResourceBundleMessageSource();
+
+        messageSource.setBasename("classpath:messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 
     @Autowired
     public RestExceptionHandler(MessageSource messageSource) {

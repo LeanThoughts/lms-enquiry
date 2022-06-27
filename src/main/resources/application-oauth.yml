@@ -36,23 +36,23 @@ spring:
     serialization:
       fail-on-empty-beans: false
   mail:
-    host: smtp.gmail.com
+    host: us2.smtp.mailhostbox.com
     port: 587
-    username: pfsriskmodel@gmail.com
-    password: uorhmrwobfzoqoan
+    username: portal.admin@pfs-ess.com
+    password: Ess@hYYXIaN2#hYYXIaN2
     protocol: smtp
     tls: true
     properties.mail.smtp:
         auth: true
         starttls.enable: true
-        ssl.trust: smtp.gmail.com
+        ssl.trust: us2.smtp.mailhostbox.com
   activiti:
     activiti5CompatibilityEnabled: true
-    mail-server-host: smtp.gmail.com
+    mail-server-host: us2.smtp.mailhostbox.com
     mail-server-port: 587
-    mail-server-user-name: pfsriskmodel@gmail.com
-    mail-server-password: uorhmrwobfzoqoan
-    mail-server-default-from: pfsriskmodel@gmail.com
+    mail-server-user-name: portal.admin@pfs-ess.com
+    mail-server-password: Ess@hYYXIaN2#hYYXIaN2
+    mail-server-default-from: portal.admin@pfs-ess.com
     mail-server-use-tls: true
     database-schema-update: true
 oauth:

@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.riskreport.IRiskClient;
+import pfs.lms.enquiry.appraisal.riskreport.RiskEvaluationSummary;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
@@ -18,6 +19,7 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -103,13 +105,13 @@ public class ProjectDataService implements IProjectDataService {
                 username,
                 "Appraisal", "Project Data" );
 
-//        List<RiskEvaluationSummary> resources =
-//                riskClient.findRiskModelSummaryForLoanContractId("0000020000543",
-//                        getAuthorizationBearer(request.getUserPrincipal()));
+        List<RiskEvaluationSummary> resources =
+                riskClient.findRiskModelSummaryForLoanContractId("0000020000543",
+                        getAuthorizationBearer(request.getUserPrincipal()));
 
-        RestTemplate restTemplate = new RestTemplate();
-        String resourceUrl = "http://localhost:8090/risk/api/riskEvaluationSummary/loanContractId/0000020000543";
-        ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl, String.class);
+        //RestTemplate restTemplate = new RestTemplate();
+        //String resourceUrl = "http://localhost:8090/risk/api/riskEvaluationSummary/loanContractId/0000020000543";
+        //<String> response = restTemplate.getForEntity(resourceUrl, String.class);
 
         return projectData;
     }

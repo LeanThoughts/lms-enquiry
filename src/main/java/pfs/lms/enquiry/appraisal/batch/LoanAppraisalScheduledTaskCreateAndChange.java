@@ -108,7 +108,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
 
 
-    @Scheduled(fixedRate = 8000)
+    @Scheduled(fixedRate = 80000000)
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 
         LoanAppraisal loanAppraisal = new LoanAppraisal();

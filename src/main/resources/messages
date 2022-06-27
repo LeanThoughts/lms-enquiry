@@ -1,0 +1,3 @@
+# messages.properties
+UNEXPECTED_ERROR= Unexpected Error
+Exception.unexpected = Unexpected Error
