@@ -23,9 +23,9 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Select Business Partner Code" formControlName="businessPartnerId" required>
+                    <mat-select placeholder="Select Business Partner" formControlName="businessPartnerId" required>
                         <mat-option *ngFor="let partner of partners" [value]="partner.partyNumber" (click)="onPartnerSelect(partner)">
-                            {{ partner.partyNumber }}
+                            <small>{{ partner.partyNumber }}</small> | {{ partner.partyName1 + ' ' + partner.partyName2 }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

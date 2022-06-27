@@ -1,41 +1,38 @@
-<div class="dialog-content-wrapper">
-    <mat-toolbar matDialogTitle class="mat-accent m-0">
-        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-            <span class="title dialog-title">{{ dialogTitle }}</span>
-            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
-                <mat-icon>close</mat-icon>
-            </button>
-        </mat-toolbar-row>
-    </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 240px">
-        <form [formGroup]="_customerRejectionForm">
-            <div fxLayout="row">
-                <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Reason for Customer Rejection" formControlName="reasonForRejection" maxlength="200">
-                </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date" formControlName="date" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
-                </mat-form-field>
-                <!-- <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Type" formControlName="heldBy" required>
-                        <mat-option [value]="'1'">With Appraisal</mat-option>
-                        <mat-option [value]="'2'">With Risk</mat-option>
-                    </mat-select>
-                </mat-form-field> -->
-            </div>
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openCustomerRejectionUpdateDialog()"> 
+            Update Project Data
+        </button>
+    </div>
 
-            <div mat-dialog-actions fxLayout="row">
-                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
-                    Submit
-                </button>
-                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
-                    Cancel
-                </button>
-            </div>
-        </form>
+
+    <div  fxLayout="row">
+        <div class="mat-table-container mat-white-bg mr-8" style="width: 50%">
+
+            <mat-table class="enquiries-table" [dataSource]="dataSource1" matSort fusePerfectScrollbar>
+    
+                <!-- particulars Column -->
+                <ng-container matColumnDef="particulars">
+                    <mat-header-cell *matHeaderCellDef>Particulars</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.particulars }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <!-- description Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.description }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj">
+                </mat-row>
+    
+            </mat-table>
+        </div>
     </div>
 </div>

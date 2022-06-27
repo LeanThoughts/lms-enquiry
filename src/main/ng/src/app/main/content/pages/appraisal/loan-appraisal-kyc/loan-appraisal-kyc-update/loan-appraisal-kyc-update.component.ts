@@ -10,7 +10,7 @@ import { LoanAppraisalService } from '../../loanAppraisal.service';
 })
 export class LoanAppraisalKYCUpdateComponent implements OnInit {
 
-    dialogTitle = "Add Loan Appraisal KYC";
+    dialogTitle = "KYC Document Upload";
 
     loanAppraisalKYCForm: FormGroup;
 
@@ -30,13 +30,7 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
                 private _matSnackBar: MatSnackBar) { 
 
         // Fetch selected loan officer details from the dialog's data attribute
-        console.log('_dialogData', _dialogData);
         this.selectedLoanAppraisalKYC = Object.assign({}, _dialogData.kycDocument);
-
-        // Change diglog title and fetch partners based on the role assigned ...
-        if (this._dialogData.operation === 'modifyOfficer') {
-            this.dialogTitle = 'Modify Loan Appraisal KYC';
-        }
     }
 
     /**

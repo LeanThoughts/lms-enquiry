@@ -1,79 +1,101 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { DatePipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../loanAppraisal.service';
+import { ReasonForDelayUpdateComponent } from '../reasonForDelayUpdate/reasonForDelayUpdate.component';
 
 @Component({
-  selector: 'fuse-reason-for-delay-update',
+  selector: 'fuse-reason-for-delay',
   templateUrl: './reasonForDelay.component.html',
   styleUrls: ['./reasonForDelay.component.scss']
 })
-export class ReasonForDelayUpdateComponent {
+export class ReasonForDelayComponent {
 
-    dialogTitle = "Update Reason For Delay";
+    _loanApplicationId: string;
+    _loanAppraisalId: string;
 
-    _reasonForDelay: any;
-    _reasonForDelayForm: FormGroup;
+    dataSource1 = [];
+    
+    displayedColumns = [
+        'particulars', 'description'
+    ];
 
+    private _reasonForDelay: any;
+    
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanAppraisalService 
      * @param _dialogRef 
-     * @param _dialogData 
+     * @param _loanAppraisalService 
      */
-    constructor(_formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
-                public _dialogRef: MatDialogRef<ReasonForDelayUpdateComponent>,
-                @Inject(MAT_DIALOG_DATA) private _dialogData: any,
-                private _matSnackBar: MatSnackBar) { 
+    constructor(private _dialogRef: MatDialog, 
+                _loanEnquiryService: LoanEnquiryService,
+                private _activatedRoute: ActivatedRoute,
+                _loanAppraisalService: LoanAppraisalService, public datepipe: DatePipe) {
 
-        // Fetch selected loan officer details from the dialog's data attribute
-        console.log('_dialogData', _dialogData);
-        this._reasonForDelay = Object.assign({}, _dialogData.reasonForDelay);
+        this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
+        this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
 
-        this._reasonForDelayForm = _formBuilder.group({
-            statusOfProposal: [ this._reasonForDelay.statusOfProposal || '' ],
-            date: [ this._reasonForDelay.date || undefined ],
-            heldBy: [ this._reasonForDelay.heldBy || '' ],
-        });
+        this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];        
+        
+        this.populateDisplayTables();
+    }
+ 
+    /**
+     * populateDisplayTables()
+     */
+    populateDisplayTables(): void {
+        this.dataSource1 = [];
+        this.dataSource1.push({particulars: 'Status of Proposal/ Reason for Delay (if any)', description: this._reasonForDelay.statusOfProposal});
+        this.dataSource1.push({particulars: 'Date', description: this.getFormattedDate(this._reasonForDelay.date)});
+        this.dataSource1.push({particulars: 'Type', description: this.getHeldBy(this._reasonForDelay.heldBy)});
     }
 
     /**
-     * submit()
+     * getFormattedDate()
      */
-    submit(): void {
-        if (this._reasonForDelayForm.valid) {
-            var formValues = this._reasonForDelayForm.value;
-
-            var dt = new Date(formValues.date);
-            formValues.date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-
-            if (JSON.stringify(this._reasonForDelay) === JSON.stringify({})) { // Insert a new record ...
-                console.log('inserting new record');
-                formValues.loanApplicationId = this._dialogData.loanApplicationId;
-                this._loanAppraisalService.createReasonForDelay(formValues).subscribe(response => {
-                    this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true, 'reasonForDelay': response });
-                });
-            }
-            else {
-                console.log('updating');
-                this._reasonForDelay.statusOfProposal = formValues.statusOfProposal;
-                this._reasonForDelay.date = formValues.date;
-                this._reasonForDelay.heldBy = formValues.heldBy;
-                this._loanAppraisalService.updateReasonForDelay(this._reasonForDelay).subscribe(response => {
-                    this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true, 'reasonForDelay': response });
-                });
-            }
+    getFormattedDate(dt: any): string {
+        if (dt) {
+            return this.datepipe.transform(dt, 'dd-MM-yyyy')
+        }
+        else {
+            return '';
         }
     }
 
     /**
-     * closeDialog()
+     * getHeldBy()
      */
-    closeDialog(): void {
-        this._dialogRef.close({ 'refresh': false });
+    getHeldBy(heldBy: any): string {
+        if (heldBy === '1') {
+            return 'With Appraisal';
+        }
+        else {
+            return 'With Risk';
+        }
+    }
+
+    /**
+     * openReasonForDelayDialog()
+     */
+     openReasonForDelayDialog(): void {
+        // Open the dialog.
+        var data = {
+            'loanApplicationId': this._loanApplicationId,
+            'loanAppraisalId': this._loanAppraisalId,
+            'reasonForDelay': this._reasonForDelay
+        };
+        const dialogRef = this._dialogRef.open(ReasonForDelayUpdateComponent, {
+            width: '750px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.refresh === true) {
+                this._reasonForDelay = result.reasonForDelay;
+                this.populateDisplayTables();
+            }
+        });    
     }
 }
