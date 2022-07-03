@@ -6,4 +6,6 @@ import pfs.lms.enquiry.domain.FinancingType;
 import java.util.UUID;
 
 public interface FinancingTypeRepository extends JpaRepository<FinancingType, UUID> {
+
+    FinancingType findByCode(String code);
 }

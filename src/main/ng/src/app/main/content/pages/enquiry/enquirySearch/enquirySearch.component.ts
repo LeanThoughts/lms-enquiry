@@ -75,8 +75,102 @@ export class EnquirySearchComponent {
     searchEnquiries(): void {
 
       this._matSnackBar.dismiss();
+      if (this.validateSearchInput() == false){
+        return;
+      }
 
+      this._service.searchLoanEnquiries(this.enquirySearchForm.value).subscribe((result) => {
+            const enquiryApplications = new Array<EnquiryApplicationModel>();
+            result.map(loanApplicationResourceModel => {
+                enquiryApplications.push(new EnquiryApplicationModel(loanApplicationResourceModel));
+            });
+            this.enquiryList = enquiryApplications;
+            this.expandPanel = false;
+        });
+    }
+
+    /**
+   * searchEnquiries and Generate Excel Document
+   */
+  searchEnquiriesExcel(): void {
+
+    let searchForm = this.enquirySearchForm.value;
+
+    this._matSnackBar.dismiss();
+    if (this.validateSearchInput() == false){
+      return;
+    }
+
+
+    let searchParameters : Array<string> = [
+      searchForm.enquiryNoFrom,
+      searchForm.enquiryNoTo,
+      searchForm.enquiryDateFrom,
+      searchForm.enquiryDateTo,
+      searchForm.partyName,
+      searchForm.projectLocationState,
+      searchForm.loanClass,
+      searchForm.projectType,
+      searchForm.financingType,
+      searchForm.assistanceType,
+      searchForm.technicalStatus,
+      searchForm.rating
+
+      ];
+
+    this._service.searchLoanEnquiriesExcel(searchParameters);
+  }
+
+  /**
+   * searchEnquiries and Generate PDF Document
+   */
+  searchEnquiriesPDF(): void {
+
+    let searchForm = this.enquirySearchForm.value;
+
+    this._matSnackBar.dismiss();
+    if (this.validateSearchInput() == false){
+      return;
+    }
+
+
+    let searchParameters : Array<string> = [
+      searchForm.enquiryNoFrom,
+      searchForm.enquiryNoTo,
+      searchForm.enquiryDateFrom,
+      searchForm.enquiryDateTo,
+      searchForm.partyName,
+      searchForm.projectLocationState,
+      searchForm.loanClass,
+      searchForm.projectType,
+      searchForm.financingType,
+      searchForm.assistanceType,
+      searchForm.technicalStatus,
+      searchForm.rating
+
+    ];
+
+    this._service.searchLoanEnquiriesPDF(searchParameters);
+  }
+
+
+
+
+  downloadFile(response: Response) {
+
+    // var blob = new Blob([response.data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    // var url = window.URL.createObjectURL(blob);
+
+    var blob = new Blob([response.body], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url= window.URL.createObjectURL(blob);
+    window.open(url);
+  }
+    /*
+        Validate Search Input
+     */
+    validateSearchInput(): boolean {
       const enquirySearchParameters = this.enquirySearchForm.value;
+      ;
 
       if (enquirySearchParameters.enquiryDateFrom == undefined &&
         enquirySearchParameters.enquiryDateTo == undefined &&
@@ -93,16 +187,16 @@ export class EnquirySearchComponent {
       ) {
         this._matSnackBar.open('Error: Enter at least one search parameter', 'OK', { duration: 7000 });
 
-        return;
+        return false;
       }
 
       //Check if from date is empty
       if (enquirySearchParameters.enquiryDateFrom == '' ||
-          enquirySearchParameters.enquiryDateFrom == undefined &&
-          enquirySearchParameters.enquiryDateTo != undefined) {
+        enquirySearchParameters.enquiryDateFrom == undefined &&
+        enquirySearchParameters.enquiryDateTo != undefined) {
         this._matSnackBar.open('Error: From Date is not entered. Please enter the from date', 'OK', { duration: 7000 });
 
-        return;
+        return false;
       }
 
       //Check if To Date is greater than From Date
@@ -113,7 +207,7 @@ export class EnquirySearchComponent {
         //alert(enquirySearchParameters.enquiryDateTo);
         if (dateTo < dateFrom) {
           this._matSnackBar.open('Error: To Date is less than From Date', 'OK', {duration: 7000});
-          return;
+          return false;
         }
       }
 
@@ -123,24 +217,17 @@ export class EnquirySearchComponent {
 
       if (dateFrom > today){
         this._matSnackBar.open('Error: Enquiry from date is in the future', 'OK', { duration: 7000 });
-        return;
+        return false;
       }
 
       if (dateTo > today){
         this._matSnackBar.open('Error: Enquiry to date is in the future', 'OK', { duration: 7000 });
-        return;
+        return false;
       }
 
-      //alert(dateFrom);
+      // Validation Successful
+      return true;
 
-      this._service.searchLoanEnquiries(this.enquirySearchForm.value).subscribe((result) => {
-            const enquiryApplications = new Array<EnquiryApplicationModel>();
-            result.map(loanApplicationResourceModel => {
-                enquiryApplications.push(new EnquiryApplicationModel(loanApplicationResourceModel));
-            });
-            this.enquiryList = enquiryApplications;
-            this.expandPanel = false;
-        });
     }
 
     /**
