@@ -50,7 +50,7 @@ export class ProjectDataUpdateComponent {
             mainContractor: [this._projectData.mainContractor || ''],
             epcContractor: [this._projectData.epcContractor || ''],
             resourceAssessmentAgency: [this._projectData.resourceAssessmentAgency || ''],
-            oandmContractor: [this._projectData.epcContractor || '']
+            oandmContractor: [this._projectData.oandmContractor || '']
         });
 
         this._projectDataStep2Form = _formBuilder.group({

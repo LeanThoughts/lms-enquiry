@@ -58,7 +58,7 @@
                             <mat-select placeholder="Technology Supplier" formControlName="mainContractor">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let partner of _dialogData.technologySuppliers" [value]="partner.id">
-                                    {{ partner.id }} | {{ partner.partyName1 }}
+                                    <small>{{ partner.partyNumber }}</small> | {{ partner.partyName1 }}
                                     <!-- <span>{{bank.bankName}}</span> | <small> Key : {{bank.bankKey}} </small> | <small>Branch : {{bank.bankBranch}} </small> -->
                                 </mat-option>
                             </mat-select>
@@ -67,7 +67,7 @@
                             <mat-select placeholder="EPC Contractor" formControlName="epcContractor">
                                 <mat-option></mat-option>
                                 <mat-option *ngFor="let partner of _dialogData.epcContractors" [value]="partner.id">
-                                    {{ partner.id }} | {{ partner.partyName1 }}
+                                    <small>{{ partner.partyNumber }}</small> | {{ partner.partyName1 }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -160,7 +160,7 @@
                     <ng-template matStepLabel>Financial Parameters</ng-template>
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Plant & Machinery Cost/ EPC Cost" formControlName="epcCost" maxlength="16">
+                            <input matInput placeholder="Plant & Machinery Cost/ EPC Cost" formControlName="epcCost" maxlength="15">
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
                             <input matInput placeholder="Overall Project Cost" formControlName="overallProjectCost" maxlength="19">

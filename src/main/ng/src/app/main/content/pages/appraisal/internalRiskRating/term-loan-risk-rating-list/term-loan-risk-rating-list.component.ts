@@ -17,7 +17,7 @@ export class TermLoanRiskRatingListComponent {
     private _loanApplicationId: any;
     private _loanAppraisalId: any;
 
-    private selectedRating: any;
+    public selectedRating: any;
 
     dataSource: MatTableDataSource<any>;
 

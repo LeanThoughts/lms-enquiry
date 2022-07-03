@@ -56,10 +56,9 @@ export class LoanAppraisalKYCListComponent implements OnInit {
     /**
      * openUploadDialog()
      */
-     openUploadDialog(operation: string): void {
+     openUploadDialog(): void {
         // Open the dialog.
         var data = {
-            'operation': operation,
             'loanApplicationId': this._loanApplicationId,
             'kycDocument': this.selectedKYCDocument,
         };

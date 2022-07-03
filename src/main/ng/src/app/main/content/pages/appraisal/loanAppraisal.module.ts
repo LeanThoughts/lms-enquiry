@@ -31,8 +31,8 @@ import { ProposalDetailsUpdateComponent } from './proposal-details/proposal-deta
 import { FurtherDetailsSiteVisitListComponent } from './further-details/furtherDetailsSiteVisitList/furtherDetailsSiteVisitList.component';
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
 import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
-import { ReasonForDelayUpdateComponent } from './reasonForDelay/reasonForDelay.component';
-import { CustomerRejectionUpdateComponent } from './customerRejection/customerRejection.component';
+import { ReasonForDelayComponent } from './reasonForDelay/reasonForDelay.component';
+import { CustomerRejectionUpdateComponent } from './customerRejectionUpdate/customerRejectionUpdate.component';
 import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
 import { ConfirmationDialogComponent } from './confirmationDialog/confirmationDialog.component';
 import { ProjectAppraisalCompletionDetails } from './projectAppraisalCompletionDetails/projectAppraisalCompletionDetails.component';
@@ -42,6 +42,8 @@ import { TermLoanRiskRatingListComponent } from './internalRiskRating/term-loan-
 import { CorporateLoanRiskRatingListComponent } from './internalRiskRating/corporate-loan-risk-rating-list/corporate-loan-risk-rating-list.component';
 import { TermLoanRiskRatingUpdateComponent } from './internalRiskRating/term-loan-risk-rating-update/term-loan-risk-rating-update.component';
 import { CorporateLoanRiskRatingUpdateComponent } from './internalRiskRating/corporate-loan-risk-rating-update/corporate-loan-risk-rating-update.component';
+import { ReasonForDelayUpdateComponent } from './reasonForDelayUpdate/reasonForDelayUpdate.component';
+import { CustomerRejectionComponent } from './customerRejection/customerRejection.component';
 
 const routes = [
     {
@@ -106,7 +108,9 @@ const MY_FORMATS = {
         FurtherDetailsSiteVisitListComponent,
         FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
+        ReasonForDelayComponent,
         ReasonForDelayUpdateComponent,
+        CustomerRejectionComponent,
         CustomerRejectionUpdateComponent,
         ProjectDataComponent,
         ProjectDataUpdateComponent,
