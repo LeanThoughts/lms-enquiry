@@ -15,4 +15,7 @@ public class LoanApplicationResource {
 
     private LoanApplication loanApplication;
     private Partner partner;
+    private String  projectTypeDesc;
+    private String  financingTypeDesc;
+    private String  loanClassDesc;
  }

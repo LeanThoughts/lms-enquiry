@@ -14,7 +14,7 @@ import java.text.ParseException;
 
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties (ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class SAPLoanAppraisalReasonForDelayResource implements Serializable {
 
@@ -25,7 +25,7 @@ public class SAPLoanAppraisalReasonForDelayResource implements Serializable {
     }
 
     @JsonProperty(value = "d")
-    private SAPLoanAppraisalReasonForDelayResourceDetails  sapLoanAppraisalReasonForDelayResourceDetails;
+    private SAPLoanAppraisalReasonForDelayResourceDetails sapLoanAppraisalReasonForDelayResourceDetails;
 
 
     public void setSAPReasonforDelay(SAPLoanAppraisalReasonForDelayResourceDetails sapLoanAppraisalReasonForDelayResourceDetails) {
@@ -33,13 +33,28 @@ public class SAPLoanAppraisalReasonForDelayResource implements Serializable {
     }
 
     public SAPLoanAppraisalReasonForDelayResourceDetails
-                                mapReasonForDelayToSAP(ReasonForDelay reasonForDelay) throws ParseException {
+    mapReasonForDelayToSAP(ReasonForDelay reasonForDelay) throws ParseException {
 
         SAPLoanAppraisalReasonForDelayResourceDetails detailsResource = new SAPLoanAppraisalReasonForDelayResourceDetails();
         detailsResource.setId(reasonForDelay.getId().toString());
         detailsResource.setAppraisalId(reasonForDelay.getLoanAppraisal().getId().toString());
-        detailsResource.setHeldby(reasonForDelay.getHeldBy());
-        detailsResource.setStatusofproposal(reasonForDelay.getStatus());
+
+        if (reasonForDelay != null) {
+            detailsResource.setHeldby(reasonForDelay.getHeldBy());
+        } else {
+            detailsResource.setHeldby("");
+        }
+
+        if (reasonForDelay.getStatus() != null)
+            detailsResource.setStatus(reasonForDelay.getStatus());
+        else
+            detailsResource.setStatus("");
+
+        if (reasonForDelay.getStatusOfProposal() != null)
+            detailsResource.setStatusofproposal(reasonForDelay.getStatusOfProposal());
+        else
+            detailsResource.setStatusofproposal("");
+
         if (reasonForDelay.getDate() != null)
             detailsResource.setRsnForDelayDate(dataConversionUtility.convertDateToSAPFormat(reasonForDelay.getDate()));
         else
@@ -47,7 +62,6 @@ public class SAPLoanAppraisalReasonForDelayResource implements Serializable {
 
         return detailsResource;
     }
-
 
 
 }

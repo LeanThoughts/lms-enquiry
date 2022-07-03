@@ -61,7 +61,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class LoanAppraisalScheduledTaskUpdateLoanContractId {
+public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
 
     private final LoanAppraisalRepository loanAppraisalRepository;
@@ -74,7 +74,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractId {
     private final IChangeDocumentService changeDocumentService;
     private final ILoanPartnerService loanPartnerService;
 
-    @Scheduled(fixedRate = 8000)
+    @Scheduled(fixedRate = 30000)
     public void updateLoanContractId() throws ParseException, IOException {
 
         List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
@@ -101,7 +101,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractId {
         }
     }
 
-    @Scheduled(fixedRate = 8000)
+    @Scheduled(fixedRate = 40000)
     public void updatePartnerList() throws ParseException, IOException {
 
         List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();

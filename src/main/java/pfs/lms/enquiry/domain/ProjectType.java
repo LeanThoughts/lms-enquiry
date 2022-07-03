@@ -9,11 +9,13 @@ import javax.persistence.Entity;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 public class ProjectType extends AggregateRoot<ProjectType> {
 
     private String code;
 
     private String value;
+
+
 }
