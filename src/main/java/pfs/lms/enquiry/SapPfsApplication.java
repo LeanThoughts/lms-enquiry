@@ -14,7 +14,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableFeignClients
 @SpringBootApplication
 @EnableScheduling
-
 public class SapPfsApplication {
 
 	@Primary

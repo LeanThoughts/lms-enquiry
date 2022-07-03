@@ -9,9 +9,8 @@ import java.util.List;
 public interface IRiskClient {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @RequestMapping(value = "/api/riskEvaluationSummary/loanContractId/{loanContractId}",
-            method = RequestMethod.GET,
-            produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/riskEvaluationSummary/loanContractId/{loanContractId}",
+            method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
     List<RiskEvaluationSummary> findRiskModelSummaryForLoanContractId(
             @PathVariable("loanContractId") String loanContractId,
             @RequestHeader("Authorization") String authorization);
