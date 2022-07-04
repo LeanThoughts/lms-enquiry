@@ -260,7 +260,7 @@ public class EnquiryReportExcelV1 {
 
                 //approvalDate
             if (loanApplication.getChangedOn() != null)
-                createSXSSCell(row, columnCount++, loanApplication.getChangedOn(), style);
+                createSXSSCell(row, columnCount++, loanApplication.getChangedOn().toString(), style);
             else
                 createSXSSCell(row, columnCount++, "", style);
             //iccClearanceStatus

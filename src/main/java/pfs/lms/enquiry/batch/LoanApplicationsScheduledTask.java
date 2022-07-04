@@ -52,10 +52,10 @@ public class LoanApplicationsScheduledTask {
         this.partnerRepository = partnerRepository;
     }
 
-    @Scheduled(fixedRate = 10000000)
+    @Scheduled(fixedRate = 5000)
     public void syncLoanApplicationsToBackend() throws ParseException {
        // log.info("The time is now {}", dateFormat.format(new Date()));
-       // System.out.println("The time is now :" + dateFormat.format(new Date()));
+       //  log.info("The time is now :" + dateFormat.format(new Date()));
 
         //Collect Loan Application with the following SAP Posting Statuses
         // 0 - Not Posted in SAP
@@ -71,10 +71,10 @@ public class LoanApplicationsScheduledTask {
 
             Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-
-            System.out.println("-----------------------------------------------------------------------------------------------" );
-            System.out.println("Attempting to Post Loan Application in SAP: Loan Application :" +loanApplication.getLoanEnquiryId());
-            System.out.println("SAP Business Partner Number :" + partner.getPartyNumber());
+            
+             log.info("-----------------------------------------------------------------------------------------------" );
+             log.info("Attempting to Post Loan Application in SAP: Loan Application :" +loanApplication.getEnquiryNo().getId());
+             log.info("SAP Business Partner Number :" + partner.getPartyNumber());
 
             // Set SAP Posting Status to Attempted to Post - "1"
             loanApplication.setPostedInSAP(1);
@@ -106,7 +106,7 @@ public class LoanApplicationsScheduledTask {
                 // Set SAP Posting Status to "Posting Successfully"  - "3"
                 loanApplication.setPostedInSAP(3);
                 loanApplication = loanApplicationRepository.saveAndFlush(loanApplication);
-                System.out.println("Loan Contract Id in SAP: " + loanApplication.getLoanContractId());
+                 log.info("Loan Contract Id in SAP: " + loanApplication.getLoanContractId());
 
                 // Save Partner with SAP Business partner number
                 partner.setPartyNumber(Integer.parseInt(sapLoanApplicationResource.getSapLoanApplicationDetailsResource().getBusPartnerNumber()));
@@ -118,9 +118,9 @@ public class LoanApplicationsScheduledTask {
                     user.setSapBPNumber(sapLoanApplicationResource.getSapLoanApplicationDetailsResource().getBusPartnerNumber());
                     userRepository.saveAndFlush(user);
                 }
-                System.out.println("-----------------------------------------------------------------------------------------------" );
-                System.out.println("Successfully Posted Loan Application in SAP: Loan Contract Id :" +loanApplication.getLoanContractId());
-                System.out.println("SAP Business Partner Number :" + partner.getPartyNumber());
+                 log.info("-----------------------------------------------------------------------------------------------" );
+                 log.info("Successfully Posted Loan Application in SAP: Loan Contract Id :" +loanApplication.getLoanContractId());
+                 log.info("SAP Business Partner Number :" + partner.getPartyNumber());
 
 
             } else {
@@ -129,9 +129,9 @@ public class LoanApplicationsScheduledTask {
                 loanApplication.setPostedInSAP(2);
                 loanApplication = loanApplicationRepository.saveAndFlush(loanApplication);
 
-                System.out.println("-----------------------------------------------------------------------------------------------" );
-                System.out.println("Failed to Post Loan Application in SAP: Loan Application :" +loanApplication.getId());
-                System.out.println("SAP Business Partner Number :" + partner.getPartyNumber());
+                 log.info("-----------------------------------------------------------------------------------------------" );
+                 log.info("Failed to Post Loan Application in SAP: Loan Application :" +loanApplication.getId());
+                 log.info("SAP Business Partner Number :" + partner.getPartyNumber());
             }
         }
 
