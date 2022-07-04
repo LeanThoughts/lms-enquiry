@@ -109,6 +109,10 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
         for (LoanMonitor loanMonitor: loanMonitorList) {
 
+            log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getLoanApplication().getLoanContractId());
+            log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getId());
+
+
             LoanApplication loanApplication = loanApplicationRepository.getOne(loanMonitor.getLoanApplication().getId());
             if (loanApplication.getLoanContractId() == null)
                 continue;

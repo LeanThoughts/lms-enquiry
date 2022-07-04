@@ -75,6 +75,10 @@ public class LoanApplicationsScheduledTask {
              log.info("-----------------------------------------------------------------------------------------------" );
              log.info("Attempting to Post Loan Application in SAP: Loan Application :" +loanApplication.getEnquiryNo().getId());
              log.info("SAP Business Partner Number :" + partner.getPartyNumber());
+             log.info("Product Code : " + loanApplication.getProductCode());
+             if (loanApplication.getProductCode() == null) {
+                 continue;
+             }
 
             // Set SAP Posting Status to Attempted to Post - "1"
             loanApplication.setPostedInSAP(1);
