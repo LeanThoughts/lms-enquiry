@@ -74,7 +74,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
     private final IChangeDocumentService changeDocumentService;
     private final ILoanPartnerService loanPartnerService;
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanContractId() throws ParseException, IOException {
 
         List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
@@ -101,7 +101,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
         }
     }
 
-    @Scheduled(fixedRate = 40000)
+    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updatePartnerList() throws ParseException, IOException {
 
         List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();

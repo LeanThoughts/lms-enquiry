@@ -52,7 +52,7 @@ public class LoanApplicationsScheduledTask {
         this.partnerRepository = partnerRepository;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRateString = "${batch.loanApplicationsScheduledTask}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanApplicationsToBackend() throws ParseException {
        // log.info("The time is now {}", dateFormat.format(new Date()));
        //  log.info("The time is now :" + dateFormat.format(new Date()));

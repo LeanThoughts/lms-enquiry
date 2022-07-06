@@ -36,53 +36,27 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     private UUID loanApplicant;
 
     /**
-     * 001     Power
-     * 002     Railways
-     * 003     Urban Infra
-     * 004     Roads
-     * 005     Ports
-     * 006     Oil & Gas
-     * 007     Corporates
-     * 008     Infrastructure
-     * 009     Others
+     Values maintained in DB
      */
-    private String loanClass;
+    private String loanClass; //VDARL-SDTYP
+    /**
+        Values maintained in DB
+     */
+    private String projectType; //VDARL-ZZPROJECT_TYPE
 
     /**
-     * 01   Thermal - Coal
-     * 02   Thermal - Ignite
-     * 03   Thermal - Gas
-     * 04   Hydro
-     * 05   Renewable - Solar
-     * 06   Renewable - Wind
-     * 07   Renewable - Biomass
-     * 08   Renewable - Small Hydro
-     * 09   EPC Contractors
-     * 10   Coal Mining
-     * 11   Power Transmission
-     * 12   Railway Siding
-     * 13   Ports
-     * 14   Corporate
-     * 15   Renovation & Modernisation
-     * 16   Others
+     1	Sole Lending
+     2	MultipleBanking
+     3	ConsortiumLendg
+        Values maintained in DB
      */
-    private String projectType;
-
-    /**
-     * 01      Sole Lending
-     * 02      Consor. Lending
-     * 03      Lead FI
-     * 04      Underwriting
-     * 05      Lead FI & Synd.
-     * 06      Syndication
-     */
-    private String financingType;
+    private String financingType; //VDARL-SFIWO
 
     /**
      * D - Debt
      * E - Equity
      */
-    private String assistanceType;
+    private String assistanceType; //VDARL-ZZDEBIT_EQUITY
 
     private Double projectCapacity;
 

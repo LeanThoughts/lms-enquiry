@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "riskRating", url = "${riskRating.baseUrl}")
+@FeignClient(name = "riskRating", url = "${riskRating.baseUrl}")  // http://localhost:8090/risk/api
 public interface IRiskClient {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -14,4 +14,12 @@ public interface IRiskClient {
     List<RiskEvaluationSummary> findRiskModelSummaryForLoanContractId(
             @PathVariable("loanContractId") String loanContractId,
             @RequestHeader("Authorization") String authorization);
+
+//    @CrossOrigin(origins = "*", allowedHeaders = "*")
+//    @RequestMapping(value = "/riskEvaluationSummary/loanContractId/{loanContractId}",
+//            method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
+//    String findRiskModelSummaryForLoanContractId(
+//            @PathVariable("loanContractId") String loanContractId,
+//            @RequestHeader("Authorization") String authorization);
+
 }

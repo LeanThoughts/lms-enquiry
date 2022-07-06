@@ -76,4 +76,11 @@ server:
   port: 8080
 riskRating:
   baseUrl: http://localhost:8090/risk/api
-
+batch:
+  loanApplicationsScheduledTask: 20000
+  loanMonitoringScheduledTask: 50000
+  loanAppraisalScheduledTaskCreateAndChange:  50000
+  loanAppraisalScheduledTaskDelete:  50000
+  loanAppraisalScheduledTaskUpdateLoanPartner : 100000
+  loanAppraisalScheduledTaskUpdateLoanContractId: 80000
+  initialDelay: 1000

@@ -78,7 +78,7 @@ public class LoanAppraisalScheduledTaskDelete {
 
 
 
-    @Scheduled(fixedRate = 20000)
+    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskDelete}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 
         LoanAppraisal loanAppraisal = new LoanAppraisal();

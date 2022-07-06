@@ -49,6 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().csrf().disable().headers().frameOptions().disable();
 
+
+
         // @formatter:on
     }
 }

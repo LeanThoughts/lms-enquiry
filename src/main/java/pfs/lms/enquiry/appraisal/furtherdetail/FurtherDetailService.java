@@ -44,6 +44,10 @@ public class FurtherDetailService implements IFurtherDetailService {
         FurtherDetail furtherDetail = furtherDetailRepository.findByLoanAppraisalId(loanAppraisal.getId())
                 .orElseGet(FurtherDetail::new);
 
+        boolean createMode = false;
+        if (furtherDetail.getId() == null)
+            createMode = true;
+
         Object oldFurtherDetail =   furtherDetail.clone();
 
         furtherDetail.setDate(furtherDetailResource.getDate());
@@ -52,18 +56,33 @@ public class FurtherDetailService implements IFurtherDetailService {
             furtherDetail.setLoanAppraisal(loanAppraisal);
         furtherDetail = furtherDetailRepository.save(furtherDetail);
 
-        // Change Documents for Further Details
-        changeDocumentService.createChangeDocument(
-                furtherDetail.getLoanAppraisal().getId(),
-                furtherDetail.getId().toString(),
-                furtherDetail.getLoanAppraisal().getId().toString(),
-                furtherDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-                oldFurtherDetail,
-                furtherDetail,
-                "Updated",
-                username,
-                "Appraisal", "Further Detail" );
+        if (createMode == true) {
+            // Change Documents for Further Details
+            changeDocumentService.createChangeDocument(
+                    furtherDetail.getLoanAppraisal().getId(),
+                    furtherDetail.getId().toString(),
+                    furtherDetail.getLoanAppraisal().getId().toString(),
+                    furtherDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                    null,
+                    furtherDetail,
+                    "Created",
+                    username,
+                    "Appraisal", "Further Detail");
 
+        } else {
+            // Change Documents for Further Details
+            changeDocumentService.createChangeDocument(
+                    furtherDetail.getLoanAppraisal().getId(),
+                    furtherDetail.getId().toString(),
+                    furtherDetail.getLoanAppraisal().getId().toString(),
+                    furtherDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                    oldFurtherDetail,
+                    furtherDetail,
+                    "Updated",
+                    username,
+                    "Appraisal", "Further Detail");
+
+        }
         return furtherDetail;
     }
 }

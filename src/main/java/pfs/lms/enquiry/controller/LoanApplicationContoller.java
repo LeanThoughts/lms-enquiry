@@ -680,6 +680,11 @@ public class LoanApplicationContoller {
 
         // Set the project location state name
         for (LoanApplicationResource loanApplicationResource : resources) {
+
+            if (loanApplicationResource.getLoanApplication().getProjectCapacityUnit() == null) {
+                loanApplicationResource.getLoanApplication().setProjectCapacityUnit("");
+            }
+
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
 //                log.info("Loan Number : " + loanApplicationResource.getLoanApplication().getLoanContractId());
 //                log.info("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());

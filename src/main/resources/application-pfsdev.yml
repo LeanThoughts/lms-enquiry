@@ -11,7 +11,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Pfsltd@12345
+    password: dn47gh3y
     maximum-pool-size: 40
     url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&&nullCatalogMeansCurrent=true
     validation-query: select 1
@@ -82,3 +82,11 @@ server:
   port: 8080
 riskRating:
   baseUrl: http://localhost:8090/risk/api
+batch:
+  loanApplicationsScheduledTask: 20000
+  loanMonitoringScheduledTask: 50000
+  loanAppraisalScheduledTaskCreateAndChange:  50000
+  loanAppraisalScheduledTaskDelete:  50000
+  loanAppraisalScheduledTaskUpdateLoanPartner : 100000
+  loanAppraisalScheduledTaskUpdateLoanContractId: 80000
+  initialDelay: 1000

@@ -106,7 +106,7 @@ public class ProjectDataService implements IProjectDataService {
                 "Appraisal", "Project Data" );
 
         List<RiskEvaluationSummary> resources =
-                riskClient.findRiskModelSummaryForLoanContractId("0000020000543",
+            riskClient.findRiskModelSummaryForLoanContractId("0000020000610",
                         getAuthorizationBearer(request.getUserPrincipal()));
 
         //RestTemplate restTemplate = new RestTemplate();

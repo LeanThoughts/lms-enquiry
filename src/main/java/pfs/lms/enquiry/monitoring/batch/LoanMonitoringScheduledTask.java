@@ -124,8 +124,8 @@ public class LoanMonitoringScheduledTask {
 
 
 
-     @Scheduled(fixedRate = 50000000)
-    public void syncLoanApplicationsToBackend() throws ParseException, IOException {
+     @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}",initialDelayString = "${batch.initialDelay}")
+     public void syncLoanApplicationsToBackend() throws ParseException, IOException {
 
 
          LendersIndependentEngineer lendersIndependentEngineer = new LendersIndependentEngineer();
