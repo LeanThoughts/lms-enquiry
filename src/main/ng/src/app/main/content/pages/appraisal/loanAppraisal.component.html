@@ -6,17 +6,19 @@
         <!-- BREADCRUMB -->
         <div class="breadcrumb text-truncate h4 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
             *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
-            Loan Monitoring : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.borrowerName }}
+            Loan Appraisal : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.borrowerName }}
             <br>
-            <!-- Status: {{ loanMonitor?.workFlowStatusDescription }} -->
+            Status: {{ _loanAppraisalService._loanAppraisal?.workFlowStatusDescription }}
         </div>
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <!-- <button mat-raised-button class="mr-8 mb-8" (click)="sendMonitoringForApproval()" [disabled]="(loanMonitor == undefined || loanMonitor == null || 
-                    loanMonitor.workFlowStatusCode === 2) || disableSendForApproval === true">
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendMonitoringForApproval()" 
+                [disabled]="(_loanAppraisalService._loanAppraisal == undefined || 
+                             _loanAppraisalService._loanAppraisalloanMonitor == null || 
+                             _loanAppraisalService._loanAppraisal.workFlowStatusCode === 2) || disableSendForApproval === true">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
-            </button> -->
+            </button>
         </div>
         <!-- / TOOLBAR -->
     </div>

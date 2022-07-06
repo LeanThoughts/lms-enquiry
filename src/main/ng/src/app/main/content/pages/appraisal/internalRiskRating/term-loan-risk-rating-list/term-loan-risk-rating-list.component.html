@@ -33,7 +33,7 @@
             <ng-container matColumnDef="approvalRisk">
                 <mat-header-cell *matHeaderCellDef>Approval Risk</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ getValue(obj.financialRatio) }}</p>
+                    <p class="text-truncate">{{ getValue(obj.approvalRisk) }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -41,7 +41,7 @@
             <ng-container matColumnDef="offTakeRisk">
                 <mat-header-cell *matHeaderCellDef>Offtake Risk</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ getValue(obj.financialRatio) }}</p>
+                    <p class="text-truncate">{{ getValue(obj.offTakeRisk) }}</p>
                 </mat-cell>
             </ng-container>
 

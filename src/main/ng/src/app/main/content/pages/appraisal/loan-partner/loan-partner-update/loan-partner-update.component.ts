@@ -87,6 +87,13 @@ export class LoanPartnerUpdateComponent implements OnInit {
                 this._loanAppraisalService.updateLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
                     this._matSnackBar.open('Loan partner updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    if (response.kycRequired == true) {
+                        this._loanAppraisalService.refreshKYCPartnerList.next({'refresh': true});
+                    };
+                    this._loanAppraisalService.getLaonAppraisal(this._dialogData.loanApplicationId).subscribe(response => {
+                        this._loanAppraisalService._loanAppraisal = response;
+                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisal);
+                    });
                 });
             }
             else {
@@ -95,6 +102,13 @@ export class LoanPartnerUpdateComponent implements OnInit {
                 this._loanAppraisalService.createLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
                     this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    if (response.kycRequired == true) {
+                        this._loanAppraisalService.refreshKYCPartnerList.next({'refresh': true});
+                    };
+                    this._loanAppraisalService.getLaonAppraisal(this._dialogData.loanApplicationId).subscribe(response => {
+                        this._loanAppraisalService._loanAppraisal = response;
+                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisal);
+                    });
                 });
             }
         }

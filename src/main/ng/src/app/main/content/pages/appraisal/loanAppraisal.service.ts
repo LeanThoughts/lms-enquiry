@@ -1,4 +1,4 @@
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
@@ -9,6 +9,8 @@ export class LoanAppraisalService implements Resolve<any> {
 
     _loanAppraisal: any;
 
+    refreshKYCPartnerList: BehaviorSubject<any> = new BehaviorSubject({'refresh': false});
+    
     /**
      * constructor()
      * @param _http

@@ -90,4 +90,15 @@ export class CorporateLoanRiskRatingUpdateComponent {
     closeDialog(): void {
         this._dialogRef.close({ 'refresh': false });
     }
+
+    /**
+     * validateFiscalYear()
+     */
+    validateFiscalYear(): void {
+        var year = this.ratingForm.get('year').value;
+        if (year.length === 2) {
+            year = '20' + year;
+        }
+        this.ratingForm.controls.year.setValue(year);
+    }
 }

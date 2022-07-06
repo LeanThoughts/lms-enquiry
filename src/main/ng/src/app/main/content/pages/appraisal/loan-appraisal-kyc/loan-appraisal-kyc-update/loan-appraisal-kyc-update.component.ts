@@ -77,8 +77,8 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
             }
             else
             {
-                // Please select a valid file
-            }
+                this._matSnackBar.open('Please select a file to upload.', 'OK', { duration: 7000 });
+            };
         }
     }
 

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
+import { LoanAppraisalService } from './loanAppraisal.service';
 
 @Component({
     selector: 'fuse-loanappraisal',
@@ -18,7 +19,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     disableSendForApproval: boolean = false;
 
     loanApplicationId: string;
-    loanAppraisalId: string;
 
     selectedEnquiry: any;
     selectedEnquiryForm: FormGroup;
@@ -39,7 +39,8 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 public _loanEnquiryService: LoanEnquiryService, 
                 public _activatedRoute: ActivatedRoute, 
                 private _dialogRef: MatDialog,
-                public _appService: AppService) {
+                public _appService: AppService,
+                public _loanAppraisalService: LoanAppraisalService) {
         
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;

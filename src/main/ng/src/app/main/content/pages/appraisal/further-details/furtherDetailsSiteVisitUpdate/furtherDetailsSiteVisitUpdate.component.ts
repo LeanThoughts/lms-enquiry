@@ -113,7 +113,7 @@ export class FurtherDetailsSiteVisitUpdateComponent {
             this.selectedSiteVisit.siteVisitType = siteVisit.siteVisitType;
             this.selectedSiteVisit.dateOfSiteVisit  = siteVisit.dateOfSiteVisit;
             this.selectedSiteVisit.documentTitle = siteVisit.documentTitle;
-            // this.selectedSiteVisit.fiscalYear = siteVisit.fiscalYear;
+            this.selectedSiteVisit.fiscalYear = siteVisit.fiscalYear;
             if (siteVisit.fileReference !== '') {
                 this.selectedSiteVisit.fileReference = siteVisit.fileReference;
             }
@@ -130,5 +130,16 @@ export class FurtherDetailsSiteVisitUpdateComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }    
+    }
+    
+    /**
+     * validateFiscalYear()
+     */
+    validateFiscalYear(): void {
+        var fiscalYear = this.siteVisitUpdateForm.get('fiscalYear').value;
+        if (fiscalYear.length === 2) {
+            fiscalYear = '20' + fiscalYear;
+        }
+        this.siteVisitUpdateForm.controls.fiscalYear.setValue(fiscalYear);
+    }
 }

@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
+import { Subscription } from 'rxjs';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { LoanAppraisalKYCUpdateComponent } from '../loan-appraisal-kyc-update/loan-appraisal-kyc-update.component';
@@ -12,7 +13,7 @@ import { LoanAppraisalKYCUpdateComponent } from '../loan-appraisal-kyc-update/lo
     styleUrls: ['./loan-appraisal-kyc-list.component.scss'],
     animations: fuseAnimations
 })
-export class LoanAppraisalKYCListComponent implements OnInit {
+export class LoanAppraisalKYCListComponent implements OnInit, OnDestroy {
 
     dataSource1: MatTableDataSource<any>;
     dataSource2: MatTableDataSource<any>;
@@ -30,6 +31,8 @@ export class LoanAppraisalKYCListComponent implements OnInit {
     _loanApplicationId: string;
     _loanAppraisalId: string;
 
+    subscriptions = new Subscription();
+
     /**
      * constructor()
      * @param _dialogRef 
@@ -45,6 +48,22 @@ export class LoanAppraisalKYCListComponent implements OnInit {
 
         if (JSON.stringify(_activatedRoute.snapshot.data.routeResolvedData[1]) !== JSON.stringify({}))
             this.dataSource1 = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.loanPartners);
+
+        this.subscriptions.add(_loanAppraisalService.refreshKYCPartnerList.subscribe(data => {
+            console.log(data);
+            if (data.refresh == true) {
+                _loanAppraisalService.getLoanOfficersForKyc(this._loanApplicationId).subscribe(partners => {
+                    this.dataSource1 = new MatTableDataSource(partners._embedded.loanPartners);
+                });
+            };
+        }));
+    }
+
+    /**
+     * ngOnDestroy()
+     */
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     /**

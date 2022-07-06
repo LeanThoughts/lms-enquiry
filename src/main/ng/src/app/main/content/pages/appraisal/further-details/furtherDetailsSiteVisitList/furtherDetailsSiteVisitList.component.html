@@ -57,7 +57,15 @@
             </mat-cell>
         </ng-container>
 
-       <!-- documentTitle Column -->
+        <!-- fiscalYear Column -->
+        <ng-container matColumnDef="fiscalYear">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Fiscal Year</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.fiscalYear }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- documentTitle Column -->
         <ng-container matColumnDef="documentTitle">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
             <mat-cell *matCellDef="let obj" >

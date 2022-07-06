@@ -37,6 +37,8 @@ public class SiteVisit extends AbstractEntity implements  Cloneable{
     private String documentTitle;
     private String fileReference;
 
+    private String fiscalYear;
+
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

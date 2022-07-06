@@ -44,6 +44,7 @@ public class TermLoanRiskRatingService implements ITermLoanRiskRatingService {
         termLoanRiskRating.setSecurityPackage(termLoanRiskRatingResource.getSecurityPackage());
         termLoanRiskRating.setSponsorSupport(termLoanRiskRatingResource.getSponsorSupport());
         termLoanRiskRating.setYear(termLoanRiskRatingResource.getYear());
+        termLoanRiskRating.setTechnologyRisk(termLoanRiskRatingResource.getTechnologyRisk());
         termLoanRiskRating = termLoanRiskRatingRepository.save(termLoanRiskRating);
         return termLoanRiskRating;
     }
@@ -64,6 +65,7 @@ public class TermLoanRiskRatingService implements ITermLoanRiskRatingService {
         termLoanRiskRating.setSecurityPackage(termLoanRiskRatingResource.getSecurityPackage());
         termLoanRiskRating.setSponsorSupport(termLoanRiskRatingResource.getSponsorSupport());
         termLoanRiskRating.setYear(termLoanRiskRatingResource.getYear());
+        termLoanRiskRating.setTechnologyRisk(termLoanRiskRatingResource.getTechnologyRisk());
         termLoanRiskRating = termLoanRiskRatingRepository.save(termLoanRiskRating);
         return termLoanRiskRating;
     }

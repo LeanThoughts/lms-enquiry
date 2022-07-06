@@ -983,6 +983,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         siteVisit.setDocumentType(resource.getSiteVisit().getDocumentType());
         siteVisit.setDocumentTitle(resource.getSiteVisit().getDocumentTitle());
         siteVisit.setFileReference(resource.getSiteVisit().getFileReference());
+        siteVisit.setFiscalYear(resource.getSiteVisit().getFiscalYear());
         siteVisit = siteVisitRepository.save(siteVisit);
 
 
@@ -1031,6 +1032,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingSiteVisit.setDocumentType(resource.getSiteVisit().getDocumentType());
         existingSiteVisit.setDocumentTitle(resource.getSiteVisit().getDocumentTitle());
         existingSiteVisit.setFileReference(resource.getSiteVisit().getFileReference());
+        existingSiteVisit.setFiscalYear(resource.getSiteVisit().getFiscalYear());
 
         existingSiteVisit = siteVisitRepository.save(existingSiteVisit);
 

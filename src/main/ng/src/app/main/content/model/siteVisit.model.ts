@@ -9,6 +9,7 @@ export class SiteVisitModel {
     documentType: string;
     documentTitle: string;
     fileReference: string;
+    fiscalYear: string;
 
     /**
      * constructor()
@@ -25,5 +26,6 @@ export class SiteVisitModel {
         this.documentType = _siteVisit.documentType || '';
         this.documentTitle = _siteVisit.documentTitle || '';
         this.fileReference  = _siteVisit.fileReference || '';
+        this.fiscalYear = _siteVisit.fiscalYear || '';
     }
 }

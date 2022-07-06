@@ -23,7 +23,7 @@ export class FurtherDetailsSiteVisitListComponent {
     _furtherDetailForm: FormGroup;
 
     displayedColumns = [
-        'serialNumber', 'siteVisitType', 'dateOfSiteVisit', 'documentTitle', 'download'
+        'serialNumber', 'siteVisitType', 'dateOfSiteVisit', 'fiscalYear', 'documentTitle', 'download'
     ];
 
     selectedSiteVisit: any;
