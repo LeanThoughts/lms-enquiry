@@ -45,6 +45,7 @@ import { CorporateLoanRiskRatingUpdateComponent } from './internalRiskRating/cor
 import { ReasonForDelayUpdateComponent } from './reasonForDelayUpdate/reasonForDelayUpdate.component';
 import { CustomerRejectionComponent } from './customerRejection/customerRejection.component';
 import { RiskEvaluationsOverviewComponent } from './riskReport/risk-evaluations-overview/risk-evaluations-overview.component';
+import { RiskEvaluationDetails } from './riskReport/risk-evaluation-details/risk-evaluation-details.component';
 
 const routes = [
     {
@@ -121,7 +122,8 @@ const MY_FORMATS = {
         TermLoanRiskRatingUpdateComponent,
         CorporateLoanRiskRatingListComponent,
         CorporateLoanRiskRatingUpdateComponent,
-        RiskEvaluationsOverviewComponent
+        RiskEvaluationsOverviewComponent,
+        RiskEvaluationDetails
     ],
     providers: [
         LoanEnquiryService,
@@ -148,7 +150,8 @@ const MY_FORMATS = {
         CustomerRejectionUpdateComponent,
         ProjectDataUpdateComponent,
         TermLoanRiskRatingUpdateComponent,
-        CorporateLoanRiskRatingUpdateComponent
+        CorporateLoanRiskRatingUpdateComponent,
+        RiskEvaluationDetails
     ]
 })
 export class LoanAppraisalModule {

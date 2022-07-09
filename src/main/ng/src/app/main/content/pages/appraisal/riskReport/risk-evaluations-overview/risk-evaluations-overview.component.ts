@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { FormControl } from '@angular/forms';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
+import { RiskEvaluationDetails } from '../risk-evaluation-details/risk-evaluation-details.component';
 
 @Component({
     selector: 'fuse-risk-evaluations-overview',
@@ -15,8 +17,7 @@ export class RiskEvaluationsOverviewComponent {
     dataSource: MatTableDataSource<any>;
     
     displayedColumns = [
-        'riskEvalId', 'wfStatusDesc', 'riskPrjType', 'riskPrjTypeT', 'projectName', 'FinalGrade', 'RiskPrjPhase', 'ratingDate', 'department', 'initiatedBy',
-            'firstLvlApprover', 'secondLvlApprover', 'thirdLvlApprover', 'latestReviewer', 'LoanContractId'
+        'riskEvalId', 'wfStatusDesc', 'riskPrjType', 'riskPrjTypeT', 'projectName', 'FinalGrade', 'RiskPrjPhase', 'ratingDate', 'department', 'initiatedBy'
     ];
 
     selectedRow: any;
@@ -24,8 +25,10 @@ export class RiskEvaluationsOverviewComponent {
     /**
      * constructor()
      */
-    constructor(private _loanAppraisalService: LoanAppraisalService, private _loanEnquiryService: LoanEnquiryService) {
-        console.log(_loanEnquiryService.selectedEnquiry.value);
+    constructor(private _loanAppraisalService: LoanAppraisalService, 
+                _loanEnquiryService: LoanEnquiryService, 
+                private _dialogRef: MatDialog) {
+
         var selectedEnquiry = _loanEnquiryService.selectedEnquiry.value;
         this._loanAppraisalService.getRiskModelSummaryForLoanContractId(selectedEnquiry.loanContractId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -36,6 +39,14 @@ export class RiskEvaluationsOverviewComponent {
      * displayDetailedView()
      */
     displayDetailedView() {
+        // Open the dialog.
+        var data = {
+            'selectedRisk': this.selectedRow
+        };
+        const dialogRef = this._dialogRef.open(RiskEvaluationDetails, {
+            width: '1200px',
+            data: data
+        }); 
     }
 
     /**
