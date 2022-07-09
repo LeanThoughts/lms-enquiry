@@ -31,6 +31,4 @@ public class RiskEvaluationSummary {
     public List<RiskEvaluationScore> RiskEvaluation_OverallScore_Nav;
 
     public List<RiskEvaluationComponentScore> RiskEvaluation_ComponentScore_Nav;
-
-
 }

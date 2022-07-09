@@ -8,6 +8,7 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 export class LoanAppraisalService implements Resolve<any> {
 
     _loanAppraisal: any;
+    _loanAppraisalBS: BehaviorSubject<any> = new BehaviorSubject({});
 
     refreshKYCPartnerList: BehaviorSubject<any> = new BehaviorSubject({'refresh': false});
     
@@ -441,4 +442,24 @@ export class LoanAppraisalService implements Resolve<any> {
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);
     }    
+
+    /**
+     * getRiskModelSummaryForLoanContractId()
+     */
+    public getRiskModelSummaryForLoanContractId(loanContractId: string): Observable<any> {
+        return this._http.get('enquiry/api/termLoanRiskRatings/riskModelSummary/' + loanContractId);
+    }
+
+    /**
+     * sendAppraisalForApproval()
+     */
+    public sendAppraisalForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'Appraisal'
+        }
+        return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }
 }

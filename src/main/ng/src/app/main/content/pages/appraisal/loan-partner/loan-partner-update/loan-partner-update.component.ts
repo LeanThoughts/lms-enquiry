@@ -91,8 +91,8 @@ export class LoanPartnerUpdateComponent implements OnInit {
                         this._loanAppraisalService.refreshKYCPartnerList.next({'refresh': true});
                     };
                     this._loanAppraisalService.getLaonAppraisal(this._dialogData.loanApplicationId).subscribe(response => {
-                        this._loanAppraisalService._loanAppraisal = response;
-                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisal);
+                        this._loanAppraisalService._loanAppraisalBS.next(response);
+                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisalBS.value);
                     });
                 });
             }
@@ -106,8 +106,8 @@ export class LoanPartnerUpdateComponent implements OnInit {
                         this._loanAppraisalService.refreshKYCPartnerList.next({'refresh': true});
                     };
                     this._loanAppraisalService.getLaonAppraisal(this._dialogData.loanApplicationId).subscribe(response => {
-                        this._loanAppraisalService._loanAppraisal = response;
-                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisal);
+                        this._loanAppraisalService._loanAppraisalBS.next(response);
+                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisalBS.value);
                     });
                 });
             }

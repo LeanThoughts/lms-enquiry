@@ -13,10 +13,9 @@
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button mat-raised-button class="mr-8 mb-8" (click)="sendMonitoringForApproval()" 
-                [disabled]="(_loanAppraisalService._loanAppraisal == undefined || 
-                             _loanAppraisalService._loanAppraisalloanMonitor == null || 
-                             _loanAppraisalService._loanAppraisal.workFlowStatusCode === 2) || disableSendForApproval === true">
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendAppraisalForApproval()" 
+                [disabled]="(loanAppraisal == {} || 
+                             loanAppraisal.workFlowStatusCode === 2) || disableSendForApproval === true">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
             </button>
         </div>
@@ -117,8 +116,11 @@
             </mat-tab>
 
             <!-- Risk report tab starts here -->
-            <!-- <mat-tab label="Risk Report">       
-            </mat-tab> -->
+            <mat-tab label="Risk Report">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-risk-evaluations-overview></fuse-risk-evaluations-overview>
+                </div>
+            </mat-tab>
 
             <!-- Project data tab starts here -->
             <mat-tab label="Project Data">

@@ -136,6 +136,7 @@ export class LoanContractsSearchComponent {
     redirectToLoanAppraisal(): void {
         this._loanAppraisalService.getLaonAppraisal(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
             this._loanAppraisalService._loanAppraisal = response;
+            this._loanAppraisalService._loanAppraisalBS.next(response);
             this.redirect('/loanAppraisal');
         }, (error: HttpErrorResponse) => {
             console.log('handling error now');

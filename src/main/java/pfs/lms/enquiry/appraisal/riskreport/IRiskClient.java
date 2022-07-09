@@ -10,16 +10,7 @@ public interface IRiskClient {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/riskEvaluationSummary/loanContractId/{loanContractId}",
-            method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
+                    method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
     List<RiskEvaluationSummary> findRiskModelSummaryForLoanContractId(
-            @PathVariable("loanContractId") String loanContractId,
-            @RequestHeader("Authorization") String authorization);
-
-//    @CrossOrigin(origins = "*", allowedHeaders = "*")
-//    @RequestMapping(value = "/riskEvaluationSummary/loanContractId/{loanContractId}",
-//            method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
-//    String findRiskModelSummaryForLoanContractId(
-//            @PathVariable("loanContractId") String loanContractId,
-//            @RequestHeader("Authorization") String authorization);
-
+            @PathVariable("loanContractId") String loanContractId);
 }

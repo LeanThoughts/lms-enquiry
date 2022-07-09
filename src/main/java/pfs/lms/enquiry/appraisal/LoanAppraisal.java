@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @ToString
 @EqualsAndHashCode(of = {"loanApplication"}, callSuper = false)
-@NoArgsConstructor
 public class LoanAppraisal extends AggregateRoot<LoanAppraisal> implements Cloneable {
 
     @DiffIgnore
@@ -36,5 +35,10 @@ public class LoanAppraisal extends AggregateRoot<LoanAppraisal> implements Clone
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public LoanAppraisal() {
+        this.workFlowStatusCode = 1;
+        this.workFlowStatusDescription = "Created";
     }
 }

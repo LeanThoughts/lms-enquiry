@@ -44,6 +44,7 @@ import { TermLoanRiskRatingUpdateComponent } from './internalRiskRating/term-loa
 import { CorporateLoanRiskRatingUpdateComponent } from './internalRiskRating/corporate-loan-risk-rating-update/corporate-loan-risk-rating-update.component';
 import { ReasonForDelayUpdateComponent } from './reasonForDelayUpdate/reasonForDelayUpdate.component';
 import { CustomerRejectionComponent } from './customerRejection/customerRejection.component';
+import { RiskEvaluationsOverviewComponent } from './riskReport/risk-evaluations-overview/risk-evaluations-overview.component';
 
 const routes = [
     {
@@ -119,7 +120,8 @@ const MY_FORMATS = {
         TermLoanRiskRatingListComponent,
         TermLoanRiskRatingUpdateComponent,
         CorporateLoanRiskRatingListComponent,
-        CorporateLoanRiskRatingUpdateComponent
+        CorporateLoanRiskRatingUpdateComponent,
+        RiskEvaluationsOverviewComponent
     ],
     providers: [
         LoanEnquiryService,

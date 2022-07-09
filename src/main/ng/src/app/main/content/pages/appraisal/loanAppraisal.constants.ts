@@ -26,6 +26,7 @@ export const businessPartnerRoleTypes = [
     { code: "ZLM025", value: "Key Promoter"},
     { code: "ZLM026", value: "Group Company"},
     { code: "ZLM027", value: "Technology Provider"},
+    { code: "ZLM038", value: "Authorized Signatory"},
     { code: "TR0100", value: "Main Loan Partner"},
     { code: "TR0101", value: "Co-Borrower"},
     { code: "TR0110", value: "Prospect"},
