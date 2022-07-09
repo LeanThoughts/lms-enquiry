@@ -1,0 +1,140 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayDetailedView()" [disabled]="!selectedRow"> 
+            Detailed View 
+        </button>
+    </div> 
+               
+    <div class="mat-table-container mat-white-bg" style="width: 140%">
+
+        <mat-table class="risk-evaluations-table" [dataSource]="dataSource" matSort  fusePerfectScrollbar>
+
+            <!-- riskEvalId Column -->
+            <ng-container matColumnDef="riskEvalId">
+                <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.riskEvalId }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- wfStatusDesc Column -->
+            <ng-container matColumnDef="wfStatusDesc">
+                <mat-header-cell *matHeaderCellDef>Workflow Status</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.wfStatusDesc }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- riskPrjType Column -->
+            <ng-container matColumnDef="riskPrjType">
+                <mat-header-cell *matHeaderCellDef>Risk Project Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.riskPrjType }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- riskPrjTypeT Column -->
+            <ng-container matColumnDef="riskPrjTypeT">
+                <mat-header-cell *matHeaderCellDef>Project Type Description</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.riskPrjTypeT }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- projectName Column -->
+            <ng-container matColumnDef="projectName">
+                <mat-header-cell *matHeaderCellDef>Project Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.projectName }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- FinalGrade Column -->
+            <ng-container matColumnDef="FinalGrade">
+                <mat-header-cell *matHeaderCellDef>Final Project Grade</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.FinalGrade }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- RiskPrjPhase Column -->
+            <ng-container matColumnDef="RiskPrjPhase">
+                <mat-header-cell *matHeaderCellDef>Project Phase</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.RiskPrjPhase }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- ratingDate Column -->
+            <ng-container matColumnDef="ratingDate">
+                <mat-header-cell *matHeaderCellDef>Rating Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.ratingDate }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- department Column -->
+            <ng-container matColumnDef="department">
+                <mat-header-cell *matHeaderCellDef>Init. Department</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.department }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- initiatedBy Column -->
+            <ng-container matColumnDef="initiatedBy">
+                <mat-header-cell *matHeaderCellDef>Initiator</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.initiatedBy }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- firstLvlApprover Column -->
+            <ng-container matColumnDef="firstLvlApprover">
+                <mat-header-cell *matHeaderCellDef>1st Approver</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.firstLvlApprover }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- secondLvlApprover Column -->
+            <ng-container matColumnDef="secondLvlApprover">
+                <mat-header-cell *matHeaderCellDef>2nd Approver</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.secondLvlApprover }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- thirdLvlApprover Column -->
+            <ng-container matColumnDef="thirdLvlApprover">
+                <mat-header-cell *matHeaderCellDef>3rd Approver</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.thirdLvlApprover }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- latestReviewer Column -->
+            <ng-container matColumnDef="latestReviewer">
+                <mat-header-cell *matHeaderCellDef>Latest Rev</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.latestReviewer }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- LoanContractId Column -->
+            <ng-container matColumnDef="LoanContractId">
+                <mat-header-cell *matHeaderCellDef>Contract Number</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.LoanContractId }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
+                [ngClass]="{'highlight':obj.id === selectedRow?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>
