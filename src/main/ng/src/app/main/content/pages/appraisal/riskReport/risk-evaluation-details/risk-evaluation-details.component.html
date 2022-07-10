@@ -1,0 +1,137 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 600px;">
+        <div fxLayout="row">
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Risk Model Eval Id" [formControl]="riskModelId" readonly>          
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Contract Number" [formControl]="loanContractNumber" readonly>          
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Project Type Description" [formControl]="projectTypeDescription" readonly>          
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Rating Date" [formControl]="ratingDate" readonly>          
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Project Phase" [formControl]="projectPhase" readonly>          
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Project Name" [formControl]="projectName" readonly>          
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Workflow Status" [formControl]="workflowStatus" readonly>          
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Init. Department" [formControl]="initDepartment" readonly>          
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Final project Grade" [formControl]="finalProjectGrade" readonly>          
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50">
+                <div class="mb-8">
+                    <span><b>Overall Rating</b></span>
+                </div>
+                <div class="mat-table-container mb-16" style="width: 100%">
+
+                    <mat-table class="enquiries-table" [dataSource]="dataSource1" matSort fusePerfectScrollbar>
+            
+                        <!-- ratingType Column -->
+                        <ng-container matColumnDef="ratingType">
+                            <mat-header-cell *matHeaderCellDef>Risk Rating Type</mat-header-cell>
+                            <mat-cell *matCellDef="let obj" >
+                                <p class="text-truncate">{{ obj.ratingType }}</p>
+                            </mat-cell>
+                        </ng-container>
+            
+                        <!-- score Column -->
+                        <ng-container matColumnDef="score">
+                            <mat-header-cell *matHeaderCellDef>Score</mat-header-cell>
+                            <mat-cell *matCellDef="let obj" >
+                                <p class="text-truncate">{{ obj.score }}</p>
+                            </mat-cell>
+                        </ng-container>
+            
+                        <!-- grade Column -->
+                        <ng-container matColumnDef="grade">
+                            <mat-header-cell *matHeaderCellDef>Grade</mat-header-cell>
+                            <mat-cell *matCellDef="let obj" >
+                                <p class="text-truncate">{{ obj.grade }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+            
+                        <mat-row *matRowDef="let obj; columns: displayedColumns1;" class="obj" matRipple></mat-row>
+                    </mat-table>
+                </div>
+            
+                <div class="mb-8">
+                    <span><b>Component Scores</b></span>
+                </div>
+                <div class="mat-table-container mat-white-bg mr-8" style="width: 100%">
+                    <mat-table class="enquiries-table" [dataSource]="dataSource2" matSort fusePerfectScrollbar>
+        
+                        <!-- projectPhase Column -->
+                        <ng-container matColumnDef="projectPhase">
+                            <mat-header-cell *matHeaderCellDef>Project Phase</mat-header-cell>
+                            <mat-cell *matCellDef="let obj" >
+                                <p class="text-truncate">{{ obj.projectPhase }}</p>
+                            </mat-cell>
+                        </ng-container>
+            
+                        <!-- componentName Column -->
+                        <ng-container matColumnDef="componentName">
+                            <mat-header-cell *matHeaderCellDef>Risk Component Name</mat-header-cell>
+                            <mat-cell *matCellDef="let obj" >
+                                <p class="text-truncate">{{ obj.componentName }}</p>
+                            </mat-cell>
+                        </ng-container>
+            
+                        <!-- score Column -->
+                        <ng-container matColumnDef="score">
+                            <mat-header-cell *matHeaderCellDef>Score</mat-header-cell>
+                            <mat-cell *matCellDef="let obj" >
+                                <p class="text-truncate">{{ obj.score }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+            
+                        <mat-row *matRowDef="let obj; columns: displayedColumns2;" class="obj" matRipple></mat-row>
+                    </mat-table>
+                </div>
+            </div>
+            <div fxLayout="column" fxFlex="50" class="ml-16">
+                <div fxLayout="column">
+                    <mat-form-field fxFlex="100">
+                        <input matInput placeholder="1st Approver" [formControl]="firstApprover" readonly>          
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100">
+                        <input matInput placeholder="2nd Approver" [formControl]="secondApprover" readonly>          
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100">
+                        <input matInput placeholder="3rd Approver" [formControl]="thirdApprover" readonly>          
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100">
+                        <input matInput placeholder="Latest Reviewer" [formControl]="latestReviewer" readonly>          
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
