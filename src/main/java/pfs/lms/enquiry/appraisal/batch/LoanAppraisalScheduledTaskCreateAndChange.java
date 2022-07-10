@@ -133,6 +133,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
          sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,'U'));
          sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,'U'));
 
+
          Collections.sort(sapIntegrationPointers, new Comparator<SAPIntegrationPointer>() {
              public int compare(SAPIntegrationPointer o1, SAPIntegrationPointer o2) {
                  return o1.getCreationDate().compareTo(o2.getCreationDate());
@@ -145,8 +146,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
              switch (sapIntegrationPointer.getSubBusinessProcessName()) {
                  case "Header":
-                     log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()));
                      loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()) + "for Loan :" + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -166,10 +167,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
 
                  case "Customer Rejection":
+                     customerRejection = customerRejectionRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( customerRejection.getLoanAppraisal().getId());
 
-                     log.info("Attempting to Post Appraisal Customer Rejection to SAP AT :" + dateFormat.format(new Date()));
-                       loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
-                       customerRejection = customerRejectionRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     log.info("Attempting to Post Appraisal Customer Rejection to SAP AT :" + dateFormat.format(new Date())+ loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -189,9 +190,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Further Detail":
 
-                     log.info("Attempting to Post Appraisal Further Detail to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      furtherDetail = furtherDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( furtherDetail.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Further Detail to SAP AT :" + dateFormat.format(new Date())+ loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -210,10 +212,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
                  case "Site Visit":
-
-                     log.info("Attempting to Post Appraisal Site Visit to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      siteVisit = siteVisitRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+                     loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(siteVisit.getLoanAppraisalId()));
+
+                     log.info("Attempting to Post Appraisal Site Visit to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Pos
@@ -235,9 +237,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Project Appraisal Completion":
 
-                     log.info("Attempting to Post Appraisal Project Appraisal Completion to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      projectAppraisalCompletion = projectAppraisalCompletionRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( projectAppraisalCompletion.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Project Appraisal Completion to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -258,9 +261,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                  case "Project Data":
 
-                     log.info("Attempting to Post Appraisal Project Data Completion to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      projectData = projectDataRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( projectData.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Project Data Completion to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -280,9 +284,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Proposal Details":
 
-                     log.info("Attempting to Post Appraisal Proposal Details to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      proposalDetail = proposalDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( proposalDetail.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Proposal Details to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -301,10 +306,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
                  case "Loan Partner":
-
-                     log.info("Attempting to Post Appraisal Loan Partner to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      loanPartner = loanPartnerRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(loanPartner.getLoanAppraisalId()));
+
+                     log.info("Attempting to Post Appraisal Loan Partner to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -324,9 +329,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Syndicate Consortium":
 
-                     log.info("Attempting to Post Appraisal Syndicate Consortium to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      syndicateConsortium = syndicateConsortiumRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( syndicateConsortium.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Syndicate Consortium to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -346,12 +352,11 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Know Your Customer":
 
-                     log.info("Attempting to Post Appraisal Know Your Customer to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      knowYourCustomer = knowYourCustomerRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanPartner =  loanPartnerRepository.getOne(UUID.fromString(knowYourCustomer.getLoanPartnerId())) ;
+                     loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
 
-                       loanPartner =  loanPartnerRepository.getOne(UUID.fromString(knowYourCustomer.getLoanPartnerId())) ;
-                       loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+                     log.info("Attempting to Post Appraisal Know Your Customer to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -376,9 +381,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Reason For Delay":
 
-                     log.info("Attempting to Post Appraisal Reason For Delay to SAP AT :" + dateFormat.format(new Date()));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                      reasonForDelay = reasonForDelayRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( reasonForDelay.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Reason For Delay to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process

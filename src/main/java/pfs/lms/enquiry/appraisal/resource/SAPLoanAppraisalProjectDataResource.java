@@ -18,7 +18,10 @@ import pfs.lms.enquiry.utils.DataConversionUtility;
 import javax.transaction.Transactional;
 import javax.xml.crypto.Data;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.UUID;
 
 //@Component
@@ -132,7 +135,7 @@ public class SAPLoanAppraisalProjectDataResource implements Serializable {
             detailsResource.setFuelcost("0.0");
 
         if (projectData.getStationHeatRate() != null)
-            detailsResource.setStationheatrate(projectData.getStationHeatRate().toString());
+            detailsResource.setStationheatrate(dataConversionUtility.convertAmountToString(projectData.getStationHeatRate()));
         else
             detailsResource.setStationheatrate("0.0");
 
@@ -183,14 +186,17 @@ public class SAPLoanAppraisalProjectDataResource implements Serializable {
         else
             detailsResource.setMarketpercentage("0.0");
 
-         if (projectData.getEpcCost() != null)
-            detailsResource.setEpccost(projectData.getEpcCost().toString());
-         else
+
+
+         if (projectData.getEpcCost() != null) {
+
+             detailsResource.setEpccost(dataConversionUtility.convertAmountToString(projectData.getEpcCost()) );
+         }else
              detailsResource.setEpccost("0.0");
 
 
         if (projectData.getOverallProjectCost() != null)
-            detailsResource.setOverallprojectcost(projectData.getOverallProjectCost().toString());
+            detailsResource.setOverallprojectcost(dataConversionUtility.convertAmountToString(projectData.getOverallProjectCost()));
         else
             detailsResource.setOverallprojectcost("0.0");
 
@@ -262,7 +268,7 @@ public class SAPLoanAppraisalProjectDataResource implements Serializable {
             detailsResource.setLevcosttotal("0.0");
 
          if (projectData.getLevCostFixed() != null)
-            detailsResource.setLevcostfixed(projectData.getLevCostFixed().toString());
+            detailsResource.setLevcostfixed(dataConversionUtility.convertAmountToString(projectData.getLevCostFixed()));
          else
              detailsResource.setLevcostfixed("0.0");
 

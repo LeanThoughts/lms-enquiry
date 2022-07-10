@@ -29,6 +29,8 @@ public class LoanPartnerService implements ILoanPartnerService {
 
     @Override
     public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username) {
+
+
         // Save loan partner details
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanPartnerResource.getLoanApplicationId());
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
@@ -173,12 +175,12 @@ public class LoanPartnerService implements ILoanPartnerService {
         List<KnowYourCustomer> kycs = new ArrayList<>();
         kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0002", "PAN Card", "", "", null));
         kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0003", "Passport", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0004", "Address Proof", "", "", null));
         kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0005",
                 "MoA and Articles of Association (AoA)", "", "", null));
         kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0006", "Certification of Incorporation", "", "", null));
-        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0004", "Address Proof", "", "", null));
-        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0007", "PAN Card of Company", "", "", null));
-        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0008", "Board Resolution", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0008", "PAN Card of Company", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0018", "Board Resolution", "", "", null));
         knowYourCustomerRepository.saveAll(kycs);
     }
 }

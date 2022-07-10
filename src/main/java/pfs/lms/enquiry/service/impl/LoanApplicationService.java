@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.ILoanPartnerService;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
@@ -11,11 +13,14 @@ import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerResource;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
+import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
+import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.LoanApplicationResource;
 import pfs.lms.enquiry.service.ILoanApplicationService;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -38,6 +43,10 @@ public class LoanApplicationService implements ILoanApplicationService {
     private final UserRepository userRepository;
     private final LoanPartnerRepository loanPartnerRepository;
     private final ILoanPartnerService loanPartnerService;
+
+    private final IChangeDocumentService changeDocumentService;
+    private final LoanMonitorRepository loanMonitorRepository;
+    private final LoanAppraisalRepository loanAppraisalRepository;
 
     @Override
     public LoanApplication save(LoanApplicationResource resource, String username) {
@@ -381,6 +390,57 @@ public class LoanApplicationService implements ILoanApplicationService {
         System.out.println("-------------Finished Migrating Loan number : " + resource.getLoanApplication().getLoanContractId() + "-----------------------------------------------------------");
 
         // Add entries for partners associated with the loan
+
+
+        //Create entries for Loan Appraisal and Monitoring
+
+        LoanApplication loanApplication1 = loanApplicationRepository.getOne(loanApplication.getId());
+
+        LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication1)
+                .orElseGet(() -> {
+                    LoanAppraisal obj = new LoanAppraisal();
+                    obj.setLoanApplication(loanApplication1);
+                    obj = loanAppraisalRepository.save(obj);
+
+                    // Change Documents for Appraisal Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),
+                            obj.getId().toString(),
+                            obj.getId().toString(),
+                            loanApplication1.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            "admin@gmail.com",
+                            "Appraisal", "Header");
+                    log.info("Loan Appraisal Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+
+                    return obj;
+                });
+
+
+        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+        if(loanMonitor == null)
+        {
+            loanMonitor = new LoanMonitor();
+            loanMonitor.setLoanApplication(loanApplication);
+            loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
+            loanMonitor = loanMonitorRepository.save(loanMonitor);
+
+            // Change Documents for Monitoring Header
+            changeDocumentService.createChangeDocument(
+                    loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
+                    loanApplication.getLoanContractId(),
+                    null,
+                    loanMonitor,
+                    "Created",
+                    "admin@gmail.com",
+                    "Monitoring", "Header");
+
+            log.info("Loan Monitoring Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+
+
+        }
 
         return loanApplication;
     }

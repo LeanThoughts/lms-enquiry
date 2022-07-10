@@ -1,9 +1,12 @@
 package pfs.lms.enquiry.utils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by sajeev on 14-Jun-21.
@@ -40,5 +43,14 @@ public class DataConversionUtility {
         else {
             return null;
         }
+    }
+
+    public static String convertAmountToString(Double amount) {
+        String amountAsString;
+        DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+        df.setMaximumFractionDigits(2);
+        amountAsString = df.format(amount);
+        return amountAsString;
+
     }
 }

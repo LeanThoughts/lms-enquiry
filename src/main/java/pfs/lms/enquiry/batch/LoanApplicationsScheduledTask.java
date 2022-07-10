@@ -5,9 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
+import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
+import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -15,6 +19,7 @@ import pfs.lms.enquiry.resource.LoanApplicationResource;
 import pfs.lms.enquiry.resource.SAPLoanApplicationDetailsResource;
 import pfs.lms.enquiry.resource.SAPLoanApplicationResource;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
@@ -44,6 +49,14 @@ public class LoanApplicationsScheduledTask {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private LoanAppraisalRepository loanAppraisalRepository;
+
+    @Autowired
+    private LoanMonitorRepository loanMonitorRepository;
+
+    @Autowired
+    private IChangeDocumentService changeDocumentService;
 
 
     public LoanApplicationsScheduledTask(LoanApplicationRepository loanApplicationRepository, ISAPIntegrationService isapIntegrationService, PartnerRepository partnerRepository) {
@@ -125,6 +138,57 @@ public class LoanApplicationsScheduledTask {
                  log.info("-----------------------------------------------------------------------------------------------" );
                  log.info("Successfully Posted Loan Application in SAP: Loan Contract Id :" +loanApplication.getLoanContractId());
                  log.info("SAP Business Partner Number :" + partner.getPartyNumber());
+
+
+                 //Create entries for Loan Appraisal and Monitoring
+
+                LoanApplication loanApplication1 = loanApplicationRepository.getOne(loanApplication.getId());
+
+                LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication1)
+                        .orElseGet(() -> {
+                            LoanAppraisal obj = new LoanAppraisal();
+                            obj.setLoanApplication(loanApplication1);
+                            obj = loanAppraisalRepository.save(obj);
+
+                            // Change Documents for Appraisal Header
+                            changeDocumentService.createChangeDocument(
+                                    obj.getId(),
+                                    obj.getId().toString(),
+                                    obj.getId().toString(),
+                                    loanApplication1.getLoanContractId(),
+                                    null,
+                                    obj,
+                                    "Created",
+                                    "admin@gmail.com",
+                                    "Appraisal", "Header");
+                            log.info("Loan Appraisal Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+
+                             return obj;
+                        });
+
+
+                LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+                if(loanMonitor == null)
+                {
+                    loanMonitor = new LoanMonitor();
+                    loanMonitor.setLoanApplication(loanApplication);
+                    loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
+                    loanMonitor = loanMonitorRepository.save(loanMonitor);
+
+                    // Change Documents for Monitoring Header
+                    changeDocumentService.createChangeDocument(
+                            loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            loanMonitor,
+                            "Created",
+                            "admin@gmail.com",
+                            "Monitoring", "Header");
+
+                    log.info("Loan Monitoring Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+
+
+                }
 
 
             } else {

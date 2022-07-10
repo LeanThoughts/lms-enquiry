@@ -50,8 +50,8 @@
                             <input matInput placeholder="Number of Units" formControlName="numberOfUnits" maxlength="5" required>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Design PLF CUF" formControlName="designPlfCuf" maxlength="50">          
-                        </mat-form-field>        
+                            <input matInput placeholder="Design PLF CUF" formControlName="designPlfCuf" maxlength="8">
+                        </mat-form-field>
                     </div>
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
@@ -118,7 +118,7 @@
                         <mat-form-field fxFlex="25">
                             <input matInput [matDatepicker]="picker2" placeholder="Project COD" formControlName="projectCOD" readonly>
                             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                            <mat-datepicker #picker2></mat-datepicker> 
+                            <mat-datepicker #picker2></mat-datepicker>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
                             <input matInput placeholder="PPA Rate" formControlName="ppaRate" maxlength="5">
@@ -278,7 +278,7 @@
                         Finish
                     </button>
                 </div>
-                
+
             </mat-step>
 
         </mat-horizontal-stepper>
