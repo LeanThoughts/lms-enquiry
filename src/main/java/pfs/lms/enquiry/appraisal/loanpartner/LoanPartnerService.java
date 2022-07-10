@@ -137,6 +137,7 @@ public class LoanPartnerService implements ILoanPartnerService {
         });
         LoanPartner loanPartner = loanPartnerRepository.findById(loanPartnerId)
                 .orElseThrow(() -> new EntityNotFoundException(loanPartnerId.toString()));
+        UUID loanApplicationId = loanPartner.getLoanApplication().getId();
         loanPartnerRepository.deleteById(loanPartnerId);
 
         // Fetch Loan Appraisal for LoanPartner
@@ -154,7 +155,18 @@ public class LoanPartnerService implements ILoanPartnerService {
                 username,
                 "Appraisal", "Loan Partner");
 
+        updateSerialNumbers(loanApplicationId);
         return loanPartner;
+    }
+
+    private void updateSerialNumbers(UUID loanApplicationId) {
+        List<LoanPartner> loanPartners = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplicationId);
+        int size = loanPartners.size();
+        for(LoanPartner loanPartner : loanPartners) {
+            loanPartner.setSerialNumber(size);
+            loanPartnerRepository.save(loanPartner);
+            size--;
+        }
     }
 
     private void prePopulateKYCDocumentList(LoanPartner loanPartner) {

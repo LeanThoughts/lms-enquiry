@@ -131,6 +131,9 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
     public SyndicateConsortium deleteSyndicateConsortium(UUID bankId, String username) {
         SyndicateConsortium syndicateConsortium = syndicateConsortiumRepository.findById(bankId)
                 .orElseThrow(() -> new EntityNotFoundException(bankId.toString()));
+
+        UUID loanAppraisalId = syndicateConsortium.getLoanAppraisal().getId();
+
         syndicateConsortiumRepository.deleteById(bankId);
 
         // Change Documents for Syndicate Consortium
@@ -145,6 +148,19 @@ public class SyndicateConsortiumService implements ISyndicateConsortiumService {
                 username,
                 "Appraisal", "Syndicate Consortium" );
 
+        updateSerialNumbers(loanAppraisalId);
+
         return syndicateConsortium;
+    }
+
+    private void updateSerialNumbers(UUID loanAppraisalId) {
+        List<SyndicateConsortium> syndicateConsortiums = syndicateConsortiumRepository.
+                findByLoanAppraisalIdOrderBySerialNumberDesc(loanAppraisalId);
+        int size = syndicateConsortiums.size();
+        for(SyndicateConsortium syndicateConsortium : syndicateConsortiums) {
+            syndicateConsortium.setSerialNumber(size);
+            syndicateConsortiumRepository.save(syndicateConsortium);
+            size--;
+        }
     }
 }

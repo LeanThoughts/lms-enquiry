@@ -9,7 +9,8 @@ import java.util.UUID;
 
 public interface SiteVisitRepository extends JpaRepository<SiteVisit, String> {
 
-    // List<SiteVisit> findByLoanMonitor(LoanMonitor loanMonitor);
+    List<SiteVisit> findByLoanMonitoringId(String loanMonitoringId);
+    List<SiteVisit> findByLoanAppraisalId(String loanAppraisalId);
     List<SiteVisit> findByLoanApplication(LoanApplication loanApplication);
     List<SiteVisit> findByLoanApplicationIdAndSiteVisitTypeOrderBySerialNumberDesc(UUID loanApplicationId, String siteVisitType);
 }
