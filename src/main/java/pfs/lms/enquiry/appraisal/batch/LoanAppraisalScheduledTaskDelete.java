@@ -107,6 +107,32 @@ public class LoanAppraisalScheduledTaskDelete {
          for (SAPIntegrationPointer sapIntegrationPointer : sapIntegrationPointers) {
 
              switch (sapIntegrationPointer.getSubBusinessProcessName()) {
+                 case "External Rating Corporate Loan":
+                     log.info("Attempting to Delete Appraisal External Rating Corporate Loan from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = appraisalServiceUri + "ExternalRatingCorporateLoanSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "External Rating Term Loan":
+                     log.info("Attempting to Delete Appraisal External Rating Term Loan from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = appraisalServiceUri + "ExternalRatingTermLoanSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
                  case "KYC":
                      log.info("Attempting to Delete Appraisal KYC from SAP AT :" + dateFormat.format(new Date()));
 

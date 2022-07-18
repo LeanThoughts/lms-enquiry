@@ -17,27 +17,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TermLoanRiskRatingController {
 
-    private final TermLoanRiskRatingService termLoanRiskRatingService;
+    private final ITermLoanRiskRatingService termLoanRiskRatingService;
 
     private final IRiskClient riskClient;
 
     @PostMapping("/termLoanRiskRatings/create")
     public ResponseEntity<TermLoanRiskRating> createTermLoanRiskRating(
             @RequestBody TermLoanRiskRatingResource termLoanRiskRatingResource, HttpServletRequest request) {
-        TermLoanRiskRating termLoanRiskRating = termLoanRiskRatingService.createTermLoanRiskRating(termLoanRiskRatingResource);
+        TermLoanRiskRating termLoanRiskRating = termLoanRiskRatingService.createTermLoanRiskRating(termLoanRiskRatingResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(termLoanRiskRating);
     }
 
     @PutMapping("/termLoanRiskRatings/update")
     public ResponseEntity<TermLoanRiskRating> updateTermLoanRiskRating(
             @RequestBody TermLoanRiskRatingResource termLoanRiskRatingResource, HttpServletRequest request) throws CloneNotSupportedException {
-        TermLoanRiskRating termLoanRiskRating = termLoanRiskRatingService.updateTermLoanRiskRating(termLoanRiskRatingResource);
+        TermLoanRiskRating termLoanRiskRating = termLoanRiskRatingService.updateTermLoanRiskRating(termLoanRiskRatingResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(termLoanRiskRating);
     }
 
     @DeleteMapping("/termLoanRiskRatings/delete/{id}")
     public ResponseEntity<TermLoanRiskRating> deleteTermLoanRiskRating(@PathVariable("id") UUID ratingId, HttpServletRequest request) {
-        TermLoanRiskRating termLoanRiskRating = termLoanRiskRatingService.deleteTermLoanRiskRating(ratingId);
+        TermLoanRiskRating termLoanRiskRating = termLoanRiskRatingService.deleteTermLoanRiskRating(ratingId,request.getUserPrincipal().getName());
         return ResponseEntity.ok(termLoanRiskRating);
     }
 

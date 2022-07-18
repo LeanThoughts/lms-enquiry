@@ -11,10 +11,9 @@ import java.io.Serializable;
 import java.text.ParseException;
 
 @Component
-@JsonInclude (JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties (ignoreUnknown = true)
-public class SAPLoanAppraisalProposalDetailsResource implements Serializable   {
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SAPLoanAppraisalProposalDetailsResource implements Serializable {
 
 
     public SAPLoanAppraisalProposalDetailsResource() {
@@ -25,14 +24,13 @@ public class SAPLoanAppraisalProposalDetailsResource implements Serializable   {
     private SAPLoanAppraisalProposalDetailsResourceDetails sapLoanAppraisalProposalDetailsResourceDetails;
 
 
-
-    public void setsapLoanAppraisalProposalDetailsResourceDetails (SAPLoanAppraisalProposalDetailsResourceDetails sapLoanAppraisalHeaderResourceDetails) {
+    public void setsapLoanAppraisalProposalDetailsResourceDetails(SAPLoanAppraisalProposalDetailsResourceDetails sapLoanAppraisalHeaderResourceDetails) {
         this.sapLoanAppraisalProposalDetailsResourceDetails = sapLoanAppraisalHeaderResourceDetails;
     }
 
 
     public SAPLoanAppraisalProposalDetailsResourceDetails
-                    mapProposalToSAP(ProposalDetail proposalDetail ) throws ParseException {
+    mapProposalToSAP(ProposalDetail proposalDetail) throws ParseException {
 
         SAPLoanAppraisalProposalDetailsResourceDetails detailsResource = new SAPLoanAppraisalProposalDetailsResourceDetails();
 
@@ -45,7 +43,7 @@ public class SAPLoanAppraisalProposalDetailsResource implements Serializable   {
             detailsResource.setRateofinterestpostcod("0.00");
 
         if (proposalDetail.getRateOfInterestPreCod() != null)
-        detailsResource.setRateofinterestprecod(proposalDetail.getRateOfInterestPreCod().toString());
+            detailsResource.setRateofinterestprecod(proposalDetail.getRateOfInterestPreCod().toString());
 
         if (proposalDetail.getSpreadReset() != null)
             detailsResource.setSpreadreset(proposalDetail.getSpreadReset().toString());
@@ -56,21 +54,65 @@ public class SAPLoanAppraisalProposalDetailsResource implements Serializable   {
         if (proposalDetail.getEffectiveRateOfInterest() != null)
             detailsResource.setEffectiverateofinterest(proposalDetail.getEffectiveRateOfInterest().toString());
 
+        if (proposalDetail.getConstructionPeriod() != null)
+            detailsResource.setConstructionperiod(proposalDetail.getConstructionPeriod().toString());
+        else
+            detailsResource.setConstructionperiod("");
 
-        detailsResource.setConstructionperiod(proposalDetail.getConstructionPeriod().toString());
-        detailsResource.setConstructionperiodunit(proposalDetail.getConstructionPeriodUnit());
-        detailsResource.setMoratoriumperiod(proposalDetail.getMoratoriumPeriod().toString());
-        detailsResource.setMoratoriumperiodunit(proposalDetail.getMoratoriumPeriodUnit());
-        detailsResource.setRepaymentperiod(proposalDetail.getRepaymentPeriod().toString());
-        detailsResource.setRepaymentperiodunit(proposalDetail.getRepaymentPeriodUnit());
-        detailsResource.setTenor(proposalDetail.getTenor().toString());
-        detailsResource.setTenorunit(proposalDetail.getTenorUnit());
-        detailsResource.setAvailabilityperiod(proposalDetail.getAvailabilityPeriod().toString());
-        detailsResource.setAvailabilityperiodunit(proposalDetail.getAvailabilityPeriodUnit());
-        if (proposalDetail.getPrePaymentCharges() !=null)
+        if (proposalDetail.getConstructionPeriodUnit() != null) {
+            detailsResource.setConstructionperiodunit(proposalDetail.getConstructionPeriodUnit());
+        } else
+            detailsResource.setConstructionperiodunit("");
+
+        if (proposalDetail.getMoratoriumPeriod() != null)
+            detailsResource.setMoratoriumperiod(proposalDetail.getMoratoriumPeriod().toString());
+        else
+            detailsResource.setMoratoriumperiod("");
+
+        if (proposalDetail.getMoratoriumPeriodUnit() != null)
+            detailsResource.setMoratoriumperiodunit(proposalDetail.getMoratoriumPeriodUnit());
+        else
+            detailsResource.setMoratoriumperiodunit("");
+        if (detailsResource.getRepaymentperiod() != null)
+            detailsResource.setRepaymentperiod(proposalDetail.getRepaymentPeriod().toString());
+        else
+            detailsResource.setRepaymentperiod("");
+
+        if (detailsResource.getRepaymentperiodunit() != null)
+            detailsResource.setRepaymentperiodunit(proposalDetail.getRepaymentPeriodUnit());
+        else
+            detailsResource.setRepaymentperiodunit("");
+
+        if (detailsResource.getTenor() != null)
+            detailsResource.setTenor(proposalDetail.getTenor().toString());
+        else
+            detailsResource.setTenor("");
+
+        if (detailsResource.getTenorunit() != null)
+            detailsResource.setTenorunit(proposalDetail.getTenorUnit());
+        else
+            detailsResource.setTenorunit("");
+
+        if (detailsResource.getAvailabilityperiod() != null)
+            detailsResource.setAvailabilityperiod(proposalDetail.getAvailabilityPeriod().toString());
+        else
+            detailsResource.setAvailabilityperiod("");
+
+        if (detailsResource.getAvailabilityperiodunit() != null)
+            detailsResource.setAvailabilityperiodunit(proposalDetail.getAvailabilityPeriodUnit());
+        else
+            detailsResource.setAvailabilityperiodunit("");
+
+        if (proposalDetail.getPrePaymentCharges() != null)
             detailsResource.setPrepaymentcharges(proposalDetail.getPrePaymentCharges().toString());
+        else
+            detailsResource.setPrepaymentcharges("");
+
         if (proposalDetail.getFeeDetailsSchedule() != null)
-        detailsResource.setFeedetailsschedule(proposalDetail.getFeeDetailsSchedule().toString());
+            detailsResource.setFeedetailsschedule(proposalDetail.getFeeDetailsSchedule().toString());
+        else
+            detailsResource.setFeedetailsschedule("");
+
 
         return detailsResource;
     }

@@ -14,14 +14,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CorporateLoanRiskRatingController {
 
-    private final CorporateLoanRiskRatingService corporateLoanRiskRatingService;
+    private final ICorporateLoanRiskRatingService corporateLoanRiskRatingService;
 
     @PostMapping("/corporateLoanRiskRatings/create")
     public ResponseEntity<CorporateLoanRiskRating> createCorporateLoanRiskRating(
             @RequestBody CorporateLoanRiskRatingResource corporateLoanRiskRatingResource, HttpServletRequest request) {
 
         CorporateLoanRiskRating corporateLoanRiskRating = corporateLoanRiskRatingService.
-                createCorporateLoanRiskRating(corporateLoanRiskRatingResource);
+                createCorporateLoanRiskRating(corporateLoanRiskRatingResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(corporateLoanRiskRating);
     }
 
@@ -31,13 +31,13 @@ public class CorporateLoanRiskRatingController {
             throws CloneNotSupportedException {
 
         CorporateLoanRiskRating corporateLoanRiskRating = corporateLoanRiskRatingService.
-                updateCorporateLoanRiskRating(corporateLoanRiskRatingResource);
+                updateCorporateLoanRiskRating(corporateLoanRiskRatingResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok(corporateLoanRiskRating);
     }
 
     @DeleteMapping("/corporateLoanRiskRatings/delete/{id}")
     public ResponseEntity<CorporateLoanRiskRating> deleteCorporateLoanRiskRating(@PathVariable("id") UUID ratingId, HttpServletRequest request) {
-        CorporateLoanRiskRating corporateLoanRiskRating = corporateLoanRiskRatingService.deleteCorporateLoanRiskRating(ratingId);
+        CorporateLoanRiskRating corporateLoanRiskRating = corporateLoanRiskRatingService.deleteCorporateLoanRiskRating(ratingId,request.getUserPrincipal().getName());
         return ResponseEntity.ok(corporateLoanRiskRating);
     }
 }

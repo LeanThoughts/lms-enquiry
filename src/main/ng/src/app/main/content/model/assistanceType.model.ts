@@ -22,12 +22,15 @@ export class AssistanceTypeModel {
 
     /**
      * getAssistanceTypeDescription()
-     * @param assistanceType 
+     * @param assistanceType
      */
     public static getAssistanceTypeDescription(assistanceType: string): string {
         switch (assistanceType) {
             case 'E': return 'Equity';
-            case 'D': return 'Debt';
+            case 'D': return 'Debt Options';
+            case 'N': return 'NCD';
+            case 'C': return 'CCD';
+
         }
     }
 }

@@ -163,12 +163,31 @@ public class Initializer implements CommandLineRunner {
             log.info("Added financing type sample data");
         }
 
-        if (assistanceTypeRepository.count() == 0) {
-            AssistanceType at1 = new AssistanceType("D", "Debt");
-            AssistanceType at2 = new AssistanceType("E", "Equity");
-            assistanceTypeRepository.saveAll(Arrays.asList(at1, at2));
-            log.info("Added assistance type sample data");
+
+        AssistanceType at1 = assistanceTypeRepository.getAssistanceTypeByCode("D");
+        if (at1 == null) {
+            at1 = new AssistanceType("D", "Debt");
+            assistanceTypeRepository.save(at1);
         }
+        AssistanceType at2 = assistanceTypeRepository.getAssistanceTypeByCode("E");
+        if (at2 == null) {
+            at2 = new AssistanceType("E", "Equity");
+            assistanceTypeRepository.save(at2);
+        }
+        AssistanceType at3 = assistanceTypeRepository.getAssistanceTypeByCode("N");
+        if (at3 == null) {
+            at3 = new AssistanceType("N", "NCD");
+            assistanceTypeRepository.save(at3);
+        }
+        AssistanceType at4 = assistanceTypeRepository.getAssistanceTypeByCode("C");
+        if (at4 == null) {
+            at4 = new AssistanceType("C", "CCD");
+            assistanceTypeRepository.save(at4);
+        }
+
+
+        log.info("Added assistance type sample data");
+
 
         if (userRepository.count() == 0) {
             User user1 = new User("Admin", "- PFS", "admin@gmail.com", "ZLM023", true, "admin@gmail.com", "50000284", "02", false);

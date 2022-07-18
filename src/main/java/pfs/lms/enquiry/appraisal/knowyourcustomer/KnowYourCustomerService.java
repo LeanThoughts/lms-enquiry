@@ -68,10 +68,48 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
             if (kyc.getFileReference() != null && !kyc.getFileReference().equals(""))
                 kycStatusCount++;
         }
-        if(kycStatusCount > 0 && kycStatusCount < 7)
-            loanPartner.setKycStatus("Pending");
-        else if(kycStatusCount == 7)
-            loanPartner.setKycStatus("Completed");
+
+        for (KnowYourCustomer knowYourCustomer : kycs) {
+
+            if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")) {
+
+                if (knowYourCustomer.getFileReference() != null) {
+                    if (knowYourCustomer.getDocumentType().equals("ZPFSBP0008") ||   //PAN Card of Company
+                            knowYourCustomer.getDocumentType().equals("ZPFSBP0006") ||   //"Certification of Incorporation",
+                            knowYourCustomer.getDocumentType().equals("ZPFSBP0018") ||   //Board Resolution
+                            knowYourCustomer.getDocumentType().equals("ZPFSBP0005")) {   //AOA
+
+                        kycStatusCount++;
+                    }
+                }
+
+                if (loanPartner.getRoleType().equals("ZLM038")) {
+
+                    if (knowYourCustomer.getFileReference() != null) {
+                        if (knowYourCustomer.getDocumentType().equals("ZPFSBP0002") ||   //PAN Card
+                                knowYourCustomer.getDocumentType().equals("ZPFSBP0003") ||   //"Passport
+                                knowYourCustomer.getDocumentType().equals("ZPFSBP0004")) {   //"Address Proof
+
+                            kycStatusCount++;
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")) {
+            if (kycStatusCount > 0 && kycStatusCount < 4)
+                loanPartner.setKycStatus("Pending");
+            else if (kycStatusCount == 4)
+                loanPartner.setKycStatus("Completed");
+        } else {
+            if (kycStatusCount > 0 && kycStatusCount < 2)
+                loanPartner.setKycStatus("Pending");
+            else if (kycStatusCount == 2)
+                loanPartner.setKycStatus("Completed");
+        }
 
         loanPartnerRepository.save(loanPartner);
     }

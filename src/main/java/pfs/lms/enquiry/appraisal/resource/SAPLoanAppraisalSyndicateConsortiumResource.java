@@ -47,12 +47,12 @@ public class SAPLoanAppraisalSyndicateConsortiumResource implements Serializable
         detailsResource.setBankkey(syndicateConsortium.getBankKey());
         detailsResource.setBankname(syndicateConsortium.getBankName());
         if (syndicateConsortium.getSanctionedAmount() != null)
-            detailsResource.setSanctionedamount(syndicateConsortium.getSanctionedAmount().toString());
+            detailsResource.setSanctionedamount(dataConversionUtility.convertAmountToString(syndicateConsortium.getSanctionedAmount()).toString());
         else
             detailsResource.setSanctionedamount("0.00");
 
         if (syndicateConsortium.getDisbursedAmount() != null)
-            detailsResource.setDisbursedamount(syndicateConsortium.getDisbursedAmount().toString());
+            detailsResource.setDisbursedamount(dataConversionUtility.convertAmountToString(syndicateConsortium.getDisbursedAmount()).toString());
         else
             detailsResource.setDisbursedamount("0.00");
 

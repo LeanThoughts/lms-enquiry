@@ -6,4 +6,6 @@ import pfs.lms.enquiry.domain.AssistanceType;
 import java.util.UUID;
 
 public interface AssistanceTypeRepository extends JpaRepository<AssistanceType, UUID> {
+
+    AssistanceType getAssistanceTypeByCode(String code);
 }

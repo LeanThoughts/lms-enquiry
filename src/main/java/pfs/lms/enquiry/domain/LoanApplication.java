@@ -55,6 +55,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     /**
      * D - Debt
      * E - Equity
+     * N - NCD
+     * C - CCD
      */
     private String assistanceType; //VDARL-ZZDEBIT_EQUITY
 
@@ -134,6 +136,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     private String promoterKeyDirector;
 
     private String keyPromoter;
+
+    private String term;
 
 
     /**
@@ -255,6 +259,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("tenorMonth") Integer tenorMonth,
                            @JsonProperty("projectCost") Double projectCost,
                            @JsonProperty("projectDebtAmount") Double projectDebtAmount,
+                           @JsonProperty("term") String term,
 
                            @JsonProperty("loanRevisedSanctionAmount") Double loanRevisedSanctionAmount,
                            @JsonProperty("loanContractAmount") Double loanContractAmount,
@@ -330,6 +335,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
         this.projectDistrict = projectDistrict;
         this.tenorYear = tenorYear;
         this.tenorMonth = tenorMonth;
+        this.term = term;
         this.projectCost = projectCost;
         this.projectDebtAmount = projectDebtAmount;
         this.loanRevisedSanctionAmount = loanRevisedSanctionAmount;
@@ -497,6 +503,14 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
 
     public Integer getTenorYear() {
         return this.tenorYear;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public Integer getTenorMonth() {

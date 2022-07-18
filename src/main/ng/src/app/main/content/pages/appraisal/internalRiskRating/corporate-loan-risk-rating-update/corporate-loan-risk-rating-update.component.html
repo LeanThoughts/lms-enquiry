@@ -11,20 +11,20 @@
         <form [formGroup]="ratingForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Year" formControlName="year" maxlength="4" required (blur)="validateFiscalYear()">          
+                    <input matInput placeholder="Year" formControlName="year" maxlength="4" required (blur)="validateFiscalYear()">
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
                     <mat-select placeholder="Financial Ratios" formControlName="financialRatio">
                         <mat-option [value]="'0'">Low</mat-option>
                         <mat-option [value]="'1'">Medium</mat-option>
-                        <mat-option [value]="'3'">High</mat-option>
+                        <mat-option [value]="'2'">High</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="Purpose of Loan" formControlName="purposeOfLoan">
                         <mat-option [value]="'0'">Low</mat-option>
                         <mat-option [value]="'1'">Medium</mat-option>
-                        <mat-option [value]="'3'">High</mat-option>
+                        <mat-option [value]="'2'">High</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -33,7 +33,7 @@
                     <mat-select placeholder="Financing Structure and Security Package" formControlName="financingStructure">
                         <mat-option [value]="'0'">Low</mat-option>
                         <mat-option [value]="'1'">Medium</mat-option>
-                        <mat-option [value]="'3'">High</mat-option>
+                        <mat-option [value]="'2'">High</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">

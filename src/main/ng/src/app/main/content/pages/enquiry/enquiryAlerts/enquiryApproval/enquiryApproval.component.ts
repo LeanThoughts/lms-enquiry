@@ -30,6 +30,8 @@ export class EnquiryApprovalDialogComponent implements OnInit {
 
     products: ProductModel[];
 
+    term: string;
+
     /**
      * constructor()
      * @param _dialogRef
@@ -60,14 +62,14 @@ export class EnquiryApprovalDialogComponent implements OnInit {
      * approve()
      */
     approve(): void {
-        if (this.productCode !== undefined) {
+        if (this.productCode !== undefined && this.term !== undefined ) {
 
             // Display alert message and then approve the loan application.
             const messageDialog = this._messageDialog.open(MessageDialogComponent, {
                 width: '400px',
                 data: {
-                    message: 'Loan application will be submitted to the SAP loans management system and no further ' +
-                        'updates are possible via the enquiry portal. However you can see the latest status of the loan.'
+                    message: 'Loan application will be submitted to the SAP loans management system. Further ' +
+                        'updates to be done via the loan processing functions.'
                 }
             });
             messageDialog.afterClosed().subscribe((dresponse) => {

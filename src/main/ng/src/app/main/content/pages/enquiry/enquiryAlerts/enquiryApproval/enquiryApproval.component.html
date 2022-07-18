@@ -24,6 +24,18 @@
                     Provide valid input
                 </mat-error>
             </mat-form-field>
+
+          <mat-form-field fxFlex="33">
+            <mat-select placeholder="Term" [(ngModel)]="term" required>
+              <mat-option [value]="'1'">Short Term</mat-option>
+              <mat-option [value]="'2'">Medium Term</mat-option>
+              <mat-option [value]="'3'">Long Term</mat-option>
+            </mat-select>
+            <mat-error>
+              Provide valid input
+            </mat-error>
+          </mat-form-field>
+
         </div>
         <div mat-dialog-actions fxLayout="row">
             <button class="mr-8" mat-raised-button type="button" color="accent" (click)="approve()" [disabled]="disableApproveButton">

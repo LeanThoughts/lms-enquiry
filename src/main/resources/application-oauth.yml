@@ -49,11 +49,11 @@ spring:
         ssl.trust: us2.smtp.mailhostbox.com
   activiti:
     activiti5CompatibilityEnabled: true
-    mail-server-host: us2.smtp.mailhostbox.com
+    mail-server-host: smtp.gmail.com
     mail-server-port: 587
-    mail-server-user-name: portal.admin@pfs-ess.com
-    mail-server-password: Ess@hYYXIaN2#hYYXIaN2
-    mail-server-default-from: portal.admin@pfs-ess.com
+    mail-server-user-name: pfsriskmodel@gmail.com
+    mail-server-password: ameofolzdhbmiorr
+    mail-server-default-from: pfsriskmodel@gmail.com
     mail-server-use-tls: true
     database-schema-update: true
 oauth:

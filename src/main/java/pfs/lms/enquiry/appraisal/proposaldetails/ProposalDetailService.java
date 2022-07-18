@@ -115,7 +115,7 @@ public class ProposalDetailService implements IProposalDetailService {
                 proposalDetail,
                 "Updated",
                 username,
-                "Appraisal", "Project Appraisal Completion" );
+                "Appraisal", "Proposal Detail" );
 
         return proposalDetail;
     }

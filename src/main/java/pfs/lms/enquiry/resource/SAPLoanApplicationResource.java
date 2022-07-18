@@ -72,10 +72,16 @@ public class SAPLoanApplicationResource implements Serializable   {
         detailsResource.setFinancingType(loanApplication.getFinancingType());
         detailsResource.setDebtEquityIndicator(loanApplication.getAssistanceType());
         detailsResource.setProjectType(loanApplication.getProjectType());
+
+        detailsResource.setTerm(loanApplication.getTerm());
+
         detailsResource.setProjectCapaacity(loanApplication.getProjectCapacity() == null? "0.00":
                 String.format("%.2f", loanApplication.getProjectCapacity()));
-        detailsResource.setProjectCapacityUnit("MW");
-
+        if (loanApplication.getProjectCapacityUnit() != null){
+            detailsResource.setProjectCapacityUnit(loanApplication.getProjectCapacityUnit());
+        } else {
+            detailsResource.setProjectCapacityUnit("");
+        }
         //String myDate = "2014/10/29 18:10:45";
         if (loanApplication.getScheduledCOD() != null) {
             String scheduledCOD = loanApplication.getScheduledCOD().toString();

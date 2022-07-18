@@ -159,6 +159,9 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "LoanStatus")
     private String loanStatus;
 
+    @JsonProperty(value = "term")
+    private String term;
+
     @JsonProperty(value = "ProjectName")
     private String projectName;
 
@@ -452,6 +455,14 @@ public class SAPLoanApplicationDetailsResource {
 
     public void setApplicationDate(String applicationDate) {
         this.applicationDate = applicationDate;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public String getLoanClass() {

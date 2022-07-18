@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface ITermLoanRiskRatingService {
 
-    TermLoanRiskRating createTermLoanRiskRating(TermLoanRiskRatingResource termLoanRiskRatingResource);
+    TermLoanRiskRating createTermLoanRiskRating(TermLoanRiskRatingResource termLoanRiskRatingResource, String username);
 
-    TermLoanRiskRating updateTermLoanRiskRating(TermLoanRiskRatingResource termLoanRiskRatingResource);
+    TermLoanRiskRating updateTermLoanRiskRating(TermLoanRiskRatingResource termLoanRiskRatingResource, String username) throws CloneNotSupportedException;
 
-    TermLoanRiskRating deleteTermLoanRiskRating(UUID termLoanRiskRatingId);
+    TermLoanRiskRating deleteTermLoanRiskRating(UUID termLoanRiskRatingId, String username);
 }

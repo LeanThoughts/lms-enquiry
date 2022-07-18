@@ -190,6 +190,8 @@ public class LoanApplicationService implements ILoanApplicationService {
 //            loanApplicationExisting.setEnquiryNo(loanApplication.getEnquiryNo());
             loanApplicationExisting.setEquity(loanApplication.getEquity());
 
+            loanApplicationExisting.setTerm(loanApplication.getTerm());
+
             loanApplicationExisting.setExpectedInterestRate(loanApplication.getExpectedInterestRate());
             loanApplicationExisting.setExpectedSubDebt(loanApplication.getExpectedSubDebt());
             loanApplicationExisting.setFinalDecisionStatus(loanApplication.getFinalDecisionStatus());

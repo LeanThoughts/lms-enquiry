@@ -14,6 +14,7 @@ export class LoanApplicationModel {
     loanApplicant: string;
     loanClass: string;
     loanPurpose: number;
+    term:number;
     leadFIName: string;
     leadFILoanAmount: number;
     pfsDebtAmount: number;

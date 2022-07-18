@@ -26,6 +26,10 @@ import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetailRepository;
 import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
 import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelayRepository;
 import pfs.lms.enquiry.appraisal.resource.*;
+import pfs.lms.enquiry.appraisal.riskrating.CorporateLoanRiskRating;
+import pfs.lms.enquiry.appraisal.riskrating.CorporateLoanRiskRatingRepository;
+import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRating;
+import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRatingRepository;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortiumRepository;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
@@ -90,6 +94,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final KnowYourCustomerRepository knowYourCustomerRepository;
     private final ProposalDetailRepository proposalDetailRepository;
     private final SiteVisitRepository siteVisitRepository;
+    private final CorporateLoanRiskRatingRepository corporateLoanRiskRatingRepository;
+    private final TermLoanRiskRatingRepository termLoanRiskRatingRepository;
 
     private final SAPDocumentAttachmentResource sapDocumentAttachmentResource;
 
@@ -104,6 +110,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final SAPLoanAppraisalReasonForDelayResource sapLoanAppraisalReasonForDelayResource;
     private final SAPLoanAppraisalKYCResource sapLoanAppraisalKYCResource;
     private final SAPSiteVisitResource sapSiteVisitResource;
+    private final SAPLoanAppraisalExternalRatingTermLoanResource sapLoanAppraisalExternalRatingTermLoanResource;
+    private final SAPLoanAppraisalExternalRatingCorpLoanResource sapLoanAppraisalExternalRatingCorpLoanResource;
 
 
 
@@ -121,6 +129,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
         ReasonForDelay reasonForDelay;
         KnowYourCustomer knowYourCustomer;
         ProposalDetail proposalDetail;
+        CorporateLoanRiskRating corporateLoanRiskRating;
+        TermLoanRiskRating termLoanRiskRating;
 
          Object response = new Object();
          Object resource;
@@ -161,6 +171,56 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      resource = (Object) sapLoanAppraisalHeaderResource;
                      serviceUri = appraisalServiceUri + "AppraisalHeaderSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "External Rating Corporate Loan":
+
+                     corporateLoanRiskRating = corporateLoanRiskRatingRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( corporateLoanRiskRating.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal External Rating Corporate Loan to SAP AT :" + dateFormat.format(new Date())+ loanAppraisal.getLoanContractId().toString());
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+
+                     SAPLoanAppraisalExternalRatingCorpLoanResourceDetails sapLoanAppraisalExternalRatingCorpLoanResourceDetails =
+                             sapLoanAppraisalExternalRatingCorpLoanResource.mapToSAP(corporateLoanRiskRating);
+
+
+                     SAPLoanAppraisalExternalRatingCorpLoanResource sapLoanAppraisalExternalRatingCorpLoanResource = new SAPLoanAppraisalExternalRatingCorpLoanResource();
+                     sapLoanAppraisalExternalRatingCorpLoanResource.setSapLoanAppraisalCustomerRejectionResourceDetails(sapLoanAppraisalExternalRatingCorpLoanResourceDetails);
+
+                     resource = (Object)  sapLoanAppraisalExternalRatingCorpLoanResource;
+                     serviceUri = appraisalServiceUri + "ExternalRatingCorporateLoanSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "External Rating Term Loan":
+
+                     termLoanRiskRating = termLoanRiskRatingRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( termLoanRiskRating.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal External Rating Term Loan to SAP AT :" + dateFormat.format(new Date())+ loanAppraisal.getLoanContractId().toString());
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+
+                     SAPLoanAppraisalExternalRatingTermLoanResourceDetails sapLoanAppraisalExternalRatingTermLoanResourceDetails =
+                             sapLoanAppraisalExternalRatingTermLoanResource.mapToSAP(termLoanRiskRating);
+
+
+                     SAPLoanAppraisalExternalRatingTermLoanResource sapLoanAppraisalExternalRatingTermLoanResource = new SAPLoanAppraisalExternalRatingTermLoanResource();
+                     sapLoanAppraisalExternalRatingTermLoanResource.setSapLoanAppraisalCustomerRejectionResourceDetails(sapLoanAppraisalExternalRatingTermLoanResourceDetails);
+
+                     resource = (Object)  sapLoanAppraisalExternalRatingTermLoanResource;
+                     serviceUri = appraisalServiceUri + "ExternalRatingTermLoanSet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
@@ -282,7 +342,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
-                 case "Proposal Details":
+                 case "Proposal Detail":
 
                      proposalDetail = proposalDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
                      loanAppraisal = loanAppraisalRepository.getOne( proposalDetail.getLoanAppraisal().getId());

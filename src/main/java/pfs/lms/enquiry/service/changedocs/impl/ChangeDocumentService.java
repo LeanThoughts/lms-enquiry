@@ -22,6 +22,8 @@ import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalComp
 import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
 import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetail;
 import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
+import pfs.lms.enquiry.appraisal.riskrating.CorporateLoanRiskRating;
+import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRating;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
@@ -548,6 +550,18 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", syndicateConsortium.getBankName().toString());
                     result.put("description", syndicateConsortium.getId().toString());
                     return result;
+                case "CorporateLoanRiskRating":
+                    CorporateLoanRiskRating corporateLoanRiskRating = (CorporateLoanRiskRating) object;
+                    result.put("id", corporateLoanRiskRating.getId().toString());
+                    result.put("description", corporateLoanRiskRating.getYear());
+                    return result;
+                case "TermLoanRiskRating":
+                    TermLoanRiskRating termLoanRiskRating = (TermLoanRiskRating) object;
+                    result.put("id", termLoanRiskRating.getId().toString() );
+                    result.put("description", termLoanRiskRating.getYear());
+                    return result;
+
+
 
             }
 

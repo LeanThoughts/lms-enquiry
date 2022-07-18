@@ -24,7 +24,7 @@ $yellow-theme: mat-light-theme($yellow-theme-primary, $yellow-theme-accent, $yel
 }
 
 .mat-dialog-container {
-    
+
     padding: 0 !important;
 
 }
@@ -32,4 +32,13 @@ $yellow-theme: mat-light-theme($yellow-theme-primary, $yellow-theme-accent, $yel
 .mat-dialog-content {
     margin: 0 !important;
     padding: 16px !important;
+}
+
+.mat-toolbar.mat-accent {
+  background: #e68d40 !important;
+  color: #fff;
+}
+
+.mat-tab-group{
+  font-family: "Helvetica Neue",sans-serif !important;
 }
