@@ -80,7 +80,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         headers.add("X-Csrf-Token", "Fetch ");
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-        System.out.println("THE REQUEST : "+requestEntity.toString());
+        log.info("THE REQUEST : "+requestEntity.toString());
 
         URI uri = null;
         try
@@ -91,14 +91,14 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         {
             e.printStackTrace();
         }
-        System.out.println("THE URI : "+uri.toString());
+        log.info("THE URI : "+uri.toString());
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
-        System.out.println("Headers: " + responseEntity.getHeaders());
-        System.out.println("Result - status ("+ responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
+        log.info("Headers: " + responseEntity.getHeaders());
+        log.info("Result - status ("+ responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
                 HttpStatus statusCode = responseEntity.getStatusCode();
-        System.out.println("THE STATUS CODE: "+statusCode);
+        log.info("THE STATUS CODE: "+statusCode);
 
        // System.out.println(responseEntity.getHeaders().get("x-csrf-token").get(0));
 
@@ -112,7 +112,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         String postURL = baseUrl + "/sap/opu/odata/sap/ZPFS_LMS_MONITOR_SRV/LendersIndependentEngineerSet?sap-client=300";
 
-        System.out.println("THE URI : "+postURL.toString());
+        log.info("THE URI : "+postURL.toString());
 
         HttpHeaders headers = new HttpHeaders() {
             {
@@ -134,8 +134,8 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         HttpEntity<SAPLIEResource> requestToPost = new HttpEntity<SAPLIEResource>(saplieResource, headers);
 
-        System.out.println("THE REQUEST : " + requestToPost.toString());
-        System.out.println("THE PAYLOAD : " + saplieResource.getSaplieResourceDetails().toString());
+        log.info("THE REQUEST : " + requestToPost.toString());
+        log.info("THE PAYLOAD : " + saplieResource.getSaplieResourceDetails().toString());
 
 
         ResponseEntity responseEntity; // = new ResponseEntity();
@@ -154,39 +154,39 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         } catch (HttpClientErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post LIE to SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post LIE to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
             return  null;
 
         }
         catch (HttpServerErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post LIE to SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post LIE to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" + ex.getMessage());
             return  null;
         }
         catch (UnknownHttpStatusCodeException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post LIE to SAP");
-            System.out.println("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post LIE to SAP");
+            log.error("HTTP Message :" + ex.getMessage());
             return  null;
         }
 
         catch (HTTPException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post LIE to SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post LIE to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
             return  null;
         }
         catch (Exception ex) {
 
 
 
-            System.out.println("General EXCEPTION ----------------------- Post LIE to SAP");
-            System.out.println("Exception Message :" +ex.getMessage());
+            log.error("General EXCEPTION ----------------------- Post LIE to SAP");
+            log.error("Exception Message :" +ex.getMessage());
             return null;
 
         }
@@ -203,7 +203,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         String postURL = baseUrl + serviceUri+ "?sap-client=" + client;
 
-        System.out.println("THE URI : "+postURL.toString());
+        log.info("THE URI : "+postURL.toString());
 
         HttpHeaders headers = new HttpHeaders() {
             {
@@ -220,8 +220,8 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Object> requestToPost = new HttpEntity<Object>(resource, headers);
 
-        System.out.println("THE REQUEST : " + requestToPost.toString());
-        System.out.println("THE PAYLOAD : " + resource.toString());
+        log.info("THE REQUEST : " + requestToPost.toString());
+        log.info("THE PAYLOAD : " + resource.toString());
 
         ResponseEntity responseEntity; // = new ResponseEntity();
 
@@ -233,36 +233,36 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         } catch (HttpClientErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
             return  null;
 
         }
         catch (HttpServerErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" + ex.getMessage());
             return  null;
         }
         catch (UnknownHttpStatusCodeException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
-            System.out.println("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
+            log.error("HTTP Message :" + ex.getMessage());
             return  null;
         }
 
         catch (HTTPException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
             return  null;
         }
         catch (Exception ex) {
-            System.out.println("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
-            System.out.println("Exception Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
+            log.error("Exception Message :" +ex.getMessage());
             return null;
 
         }
@@ -279,7 +279,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
 
         String deleteURL = baseUrl + serviceUri+ "('" +  objectId + "')" + "?sap-client=" + client;
-        System.out.println("THE URI : "+deleteURL.toString());
+        log.info("THE URI : "+deleteURL.toString());
 
         HttpHeaders headers = new HttpHeaders() {
             {
@@ -299,7 +299,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         restTemplate = new RestTemplate();
 
-        System.out.println("OBJECT ID For Deletion : " + objectId);
+        log.info("OBJECT ID For Deletion : " + objectId);
         ResponseEntity responseEntity;
 
 
@@ -308,36 +308,36 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
                     restTemplate.exchange(deleteURL, HttpMethod.DELETE, requestToPost, Object.class);
         } catch (HttpClientErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
             return  null;
 
         }
         catch (HttpServerErrorException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" + ex.getMessage());
             return  null;
         }
         catch (UnknownHttpStatusCodeException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
-            System.out.println("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Message :" + ex.getMessage());
             return  null;
         }
 
         catch (HTTPException ex) {
 
-            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
-            System.out.println("HTTP Code    :" + ex.getStatusCode());
-            System.out.println("HTTP Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
             return  null;
         }
         catch (Exception ex) {
-            System.out.println("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
-            System.out.println("Exception Message :" +ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("Exception Message :" +ex.getMessage());
             return null;
 
         }
@@ -361,7 +361,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         };
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-        System.out.println("THE REQUEST : "+requestEntity.toString());
+        log.info("THE REQUEST : "+requestEntity.toString());
 
         URI uri = null;
 

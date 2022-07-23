@@ -157,8 +157,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
              switch (sapIntegrationPointer.getSubBusinessProcessName()) {
                  case "Header":
                      loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                     if (loanAppraisal.getLoanApplication().getLoanContractId() == null){
+                         return;
+                     }
                      log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()) + "for Loan :" + loanAppraisal.getLoanContractId().toString());
-
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
                      sapIntegrationRepository.save(sapIntegrationPointer);

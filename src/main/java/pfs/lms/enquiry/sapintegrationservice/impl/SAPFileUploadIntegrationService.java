@@ -35,8 +35,6 @@ import java.util.List;
 public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegrationService {
 
 
-//    @Value("http://192.168.1.205:8000//sap/opu/odata/sap/ZPFS_LMS_MONITOR_SRV/")
-//    private String postURL;
 
     @Value("${sap.userName}")
     private String userName;
@@ -154,9 +152,9 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
 
         } catch (HttpClientErrorException ex) {
 
-            log.info("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
-            log.info("HTTP Code    :" + ex.getStatusCode());
-            log.info("HTTP Message :" + ex.getMessage());
+            log.error("HTTP EXCEPTION ----------------------- Post " + serviceUri + "  to SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" + ex.getMessage());
             return null;
         }
 
@@ -185,10 +183,10 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
             try {
                  response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, String.class);
 
-                System.out.println( "FILE UPLOAD RESPONSE SUCESSS:" + response.toString());
+                log.info( "FILE UPLOAD RESPONSE SUCESSS:" + response.toString());
 
             } catch (Exception exception) {
-                System.out.println( "FILE UPLOAD FAILED :" + exception.toString());
+                log.error( "FILE UPLOAD FAILED :" + exception.toString());
                 return  null;
 
             }

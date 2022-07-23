@@ -148,7 +148,11 @@ public class WorkflowService implements IWorkflowService {
                 loanMonitor = loanMonitorRepository.save(loanMonitor);
                 return loanMonitor;
             case "Appraisal" :
-                break;
+                //Save entity with the Process Instance and workflow status code
+                loanAppraisal.setProcessInstanceId(processInstanceId);
+                loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
+                return loanAppraisal;
+
         }
 
         return null;

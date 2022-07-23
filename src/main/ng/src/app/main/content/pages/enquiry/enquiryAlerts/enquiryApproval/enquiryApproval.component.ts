@@ -30,7 +30,7 @@ export class EnquiryApprovalDialogComponent implements OnInit {
 
     products: ProductModel[];
 
-    term: string;
+    term = '';
 
     /**
      * constructor()
@@ -76,6 +76,7 @@ export class EnquiryApprovalDialogComponent implements OnInit {
                 this.disableApproveButton = true;
                 this.loanApplication.userBPNumber = this._appService.currentUser.sapBPNumber;
                 this.loanApplication.productCode = this.productCode;
+                this.loanApplication.term = this.term;
                 this._service.approveLoanApplication(this.loanApplication, this.partner).subscribe(
                     (response: LoanApplicationResourceModel) => {
                         this.matSnackBar.open('The Loan application is submitted and saved in the SAP loans management system. ' + ''
