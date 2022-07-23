@@ -127,25 +127,37 @@ export class LoanContractsSearchComponent {
      * redirectToMonitorLoan()
      */
     redirectToMonitorLoan(): void {
-        this.redirect('/loanMonitoring');
+        if (this._service.selectedEnquiry.value.loanContractId !== undefined) {
+            this.redirect('/loanMonitoring');
+        }
+        else {
+            this._matSnackBar.open('Loan is still in the enquiry phase. Process cannot only be executed after the enquiry is approved by BD Team',
+                'OK', { duration: 7000 });
+        }
     }
 
     /**
      * redirectToLoanAppraisal()
      */
     redirectToLoanAppraisal(): void {
-        this._loanAppraisalService.getLaonAppraisal(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-            this._loanAppraisalService._loanAppraisal = response;
-            this._loanAppraisalService._loanAppraisalBS.next(response);
-            this.redirect('/loanAppraisal');
-        }, (error: HttpErrorResponse) => {
-            console.log('handling error now');
-            if (error.status === 404) {
-                this._loanAppraisalService._loanAppraisal = { id: '' };
-                console.log('404 error and redirecting: ', this._loanAppraisalService._loanAppraisal);
+        if (this._service.selectedEnquiry.value.loanContractId !== undefined) {
+            this._loanAppraisalService.getLaonAppraisal(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._loanAppraisalService._loanAppraisal = response;
+                this._loanAppraisalService._loanAppraisalBS.next(response);
                 this.redirect('/loanAppraisal');
-            }
-        })
+            }, (error: HttpErrorResponse) => {
+                console.log('handling error now');
+                if (error.status === 404) {
+                    this._loanAppraisalService._loanAppraisal = { id: '' };
+                    console.log('404 error and redirecting: ', this._loanAppraisalService._loanAppraisal);
+                    this.redirect('/loanAppraisal');
+                }
+            })
+        }
+        else {
+            this._matSnackBar.open('Loan is still in the enquiry phase. Process cannot only be executed after the enquiry is approved by BD Team',
+                'OK', { duration: 7000 });
+        }
     }
 
     /**
