@@ -180,7 +180,7 @@ public class LoanPartnerService implements ILoanPartnerService {
                 "MoA and Articles of Association (AoA)", "", "", null));
         kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0006", "Certification of Incorporation", "", "", null));
         kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0008", "PAN Card of Company", "", "", null));
-        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0018", "Board Resolution", "", "", null));
+        kycs.add(new KnowYourCustomer(loanPartner.getId().toString(), "ZPFSBP0019", "Board Resolution", "", "", null));
         knowYourCustomerRepository.saveAll(kycs);
     }
 }

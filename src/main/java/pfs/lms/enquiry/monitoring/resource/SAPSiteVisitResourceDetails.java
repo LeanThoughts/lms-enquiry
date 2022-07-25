@@ -21,8 +21,14 @@ public class SAPSiteVisitResourceDetails {
     @JsonProperty(value = "MonitorId")
     private String monitorId;
 
+    @JsonProperty(value ="AppraisalId")
+    private String appraisalId;
+
     @JsonProperty(value = "SerialNo")
     private Integer serialNo;
+
+    @JsonProperty(value = "FiscalYear")
+    private String fiscalYear;
 
     @JsonProperty(value = "Actualcod")
     private String actualcod;

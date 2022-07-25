@@ -76,7 +76,7 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
                 if (knowYourCustomer.getFileReference() != null) {
                     if (knowYourCustomer.getDocumentType().equals("ZPFSBP0008") ||   //PAN Card of Company
                             knowYourCustomer.getDocumentType().equals("ZPFSBP0006") ||   //"Certification of Incorporation",
-                            knowYourCustomer.getDocumentType().equals("ZPFSBP0018") ||   //Board Resolution
+                            knowYourCustomer.getDocumentType().equals("ZPFSBP0019") ||   //Board Resolution
                             knowYourCustomer.getDocumentType().equals("ZPFSBP0005")) {   //AOA
 
                         kycStatusCount++;

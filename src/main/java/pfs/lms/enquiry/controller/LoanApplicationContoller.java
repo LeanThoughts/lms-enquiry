@@ -43,9 +43,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -111,6 +109,14 @@ public class LoanApplicationContoller {
         }
 
         if (loanApplications.size() > 0) {
+//            Collections.sort(loanApplications, new Comparator<LoanApplication>() {
+//                public int compare(LoanApplication l1, LoanApplication l2) {
+//
+//                         return l1.getLoanEnquiryDate().compareTo(l2.getLoanEnquiryDate());
+//
+//                }
+//            });
+
 
         }
 
