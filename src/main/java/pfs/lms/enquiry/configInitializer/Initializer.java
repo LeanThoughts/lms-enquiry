@@ -59,9 +59,9 @@ public class Initializer implements CommandLineRunner {
 //                loanApplicationRepository.saveAndFlush(loanApplication);
 //            //}
 //        }
+        loanClassRepository.deleteAll();
 
-
-        if (loanClassRepository.count() < 10) {
+        if (loanClassRepository.count() == 0) {
             LoanClass lc1 = new LoanClass("1", "PowerGen-Convl");
             LoanClass lc2 = new LoanClass("2", "PowerGen-Renew");
             LoanClass lc3 = new LoanClass("3", "Railways");
@@ -101,7 +101,9 @@ public class Initializer implements CommandLineRunner {
             log.info("Added loan class sample data");
         }
 
-        if (projectTypeRepository.count() < 18) {
+        projectTypeRepository.deleteAll();
+
+        if (projectTypeRepository.count() == 0) {
             ProjectType pt1 = new ProjectType("1", "TL-PG-Thermal-Coal");
             ProjectType pt2 = new ProjectType("2", "TL-PG-Thermal-Lignite");
             ProjectType pt3 = new ProjectType("3", "TL-PG-Thermal-Gas");
@@ -154,6 +156,7 @@ public class Initializer implements CommandLineRunner {
             log.info("Added project type sample data");
         }
 
+        financingTypeRepository.deleteAll();
 
         if (financingTypeRepository.count() == 0) {
             FinancingType ft1 = new FinancingType("1", "Sole Lending");
@@ -200,6 +203,7 @@ public class Initializer implements CommandLineRunner {
 //            userRepository.save(user3);
         }
 
+        productRepository.deleteAll();
         if (productRepository.count() == 0) {
             Product p1 = new Product("301", "Bridge Loan");
             Product p2 = new Product("301", "Short Term Loan");
@@ -213,6 +217,8 @@ public class Initializer implements CommandLineRunner {
             productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9));
             log.info("Added products sample data");
         }
+
+        industrySectorRepository.deleteAll();
 
         if (industrySectorRepository.count() == 0) {
             IndustrySector i2 = new IndustrySector("1", "Power");

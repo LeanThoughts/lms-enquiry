@@ -655,8 +655,8 @@ public class LoanApplicationContoller {
                         //System.out.println("-------------- Partner is null for loan :" + loanApplication.getLoanContractId());
                     }
                 } catch (Exception x) {
-                    log.info("Exception in Loan Appliction Controller 658: Partner find by Id: " + loanApplication.getbusPartnerNumber());
-                    log.info("Exception in Loan Appliction Controller 658: Loan Number : " + loanApplication.getLoanContractId());
+                    log.info("Exception in Loan Application Controller 658: Partner find by Id: " + loanApplication.getbusPartnerNumber());
+                    log.info("Exception in Loan Application Controller 658: Loan Number : " + loanApplication.getLoanContractId());
                     return;
                 }
 
