@@ -877,13 +877,22 @@ public class LoanApplicationContoller {
         SearchResource resource = new SearchResource();
         LocalDate enquiryFromDate;
         LocalDate enquiryToDate;
-        String dateStringFrom = enquiryDateFrom.substring(8, 10) + "-" + enquiryDateFrom.substring(4, 7) + "-" + enquiryDateFrom.substring(11, 15);
-        enquiryFromDate = LocalDate.parse(dateStringFrom, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
-        String dateStringTo = enquiryDateTo.substring(8, 10) + "-" + enquiryDateTo.substring(4, 7) + "-" + enquiryDateTo.substring(11, 15);
-        enquiryToDate = LocalDate.parse(dateStringTo, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+        String dateStringFrom = "";
+        String dateStringTo = "";
 
-        resource.setEnquiryDateFrom(enquiryFromDate);
-        resource.setEnquiryDateTo(enquiryToDate);
+        if (enquiryDateFrom != null) {
+             dateStringFrom = enquiryDateFrom.substring(8, 10) + "-" + enquiryDateFrom.substring(4, 7) + "-" + enquiryDateFrom.substring(11, 15);
+            enquiryFromDate = LocalDate.parse(dateStringFrom, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+            resource.setEnquiryDateFrom(enquiryFromDate);
+
+        }
+        if (enquiryDateTo != null) {
+             dateStringTo = enquiryDateTo.substring(8, 10) + "-" + enquiryDateTo.substring(4, 7) + "-" + enquiryDateTo.substring(11, 15);
+            enquiryToDate = LocalDate.parse(dateStringTo, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+            resource.setEnquiryDateTo(enquiryToDate);
+
+        }
+
         resource.setEnquiryNoFrom(enquiryNoFrom);
         resource.setEnquiryNoTo(enquiryNoTo);
         resource.setPartyName(partyName);
