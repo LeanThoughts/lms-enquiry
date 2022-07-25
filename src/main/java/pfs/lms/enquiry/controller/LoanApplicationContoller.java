@@ -647,11 +647,17 @@ public class LoanApplicationContoller {
 
 
         loanApplications.forEach(loanApplication -> {
-
+            Partner partner = new Partner();
             if (loanApplication.getLoanApplicant() != null) {
-                Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).get();
-                if (partner == null) {
-                    //System.out.println("-------------- Partner is null for loan :" + loanApplication.getLoanContractId());
+                try {
+                      partner = partnerRepository.findById(loanApplication.getLoanApplicant()).get();
+                    if (partner == null) {
+                        //System.out.println("-------------- Partner is null for loan :" + loanApplication.getLoanContractId());
+                    }
+                } catch (Exception x) {
+                    log.info("Exception in Loan Appliction Controller 658: Partner find by Id: " + loanApplication.getbusPartnerNumber());
+                    log.info("Exception in Loan Appliction Controller 658: Loan Number : " + loanApplication.getLoanContractId());
+                    return;
                 }
 
                 if (loanApplication.getTechnicalStatus() != null) {
