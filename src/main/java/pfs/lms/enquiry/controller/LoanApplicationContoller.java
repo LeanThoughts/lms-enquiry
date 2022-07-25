@@ -698,12 +698,13 @@ public class LoanApplicationContoller {
             }
 
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
-//                log.info("Loan Number : " + loanApplicationResource.getLoanApplication().getLoanContractId());
-//                log.info("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());
-
+                 log.info("Loan Number : " + loanApplicationResource.getLoanApplication().getLoanContractId());
+                 log.info("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
-                    loanApplicationResource.getLoanApplication().setProjectLocationState(
-                            stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
+                    State state = stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState());
+                    if (state != null) {
+                        loanApplicationResource.getLoanApplication().setProjectLocationState(state.getName());
+                    }
                 }
 
         }
