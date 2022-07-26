@@ -1,5 +1,6 @@
 package pfs.lms.enquiry.mail.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.LoanApplication;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
  * Created by sajeev on 17-Feb-19.
  */
 @Component
+@Slf4j
 public class RiskNotificationServiceImpl implements RiskNotificationService {
 
     @Autowired
@@ -52,6 +54,9 @@ public class RiskNotificationServiceImpl implements RiskNotificationService {
 
     @Override
     public String sendRiskOfficerAssignmentNotification(User user, LoanApplication loanApplication ) {
+
+        log.info ("Sending Notification to Risk Officer " );
+        log.info("User Object : " + user.toString());
 
         String line1 = "Dear" + " " + user.getFirstName() + " " + user.getLastName() + System.lineSeparator();
         String line2 = "    You are requested to assign an officer in the risk department to process the risk model evaluation for the following project" + System.lineSeparator();

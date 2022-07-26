@@ -40,6 +40,7 @@ public class Controller {
         log.info("Risk Officer" + processorResource.getRiskDepartmentInitiator());
 
 
+
         User riskDeptHeadUser = userRepository.findByEmail(processorResource.getRiskDepartmentHead());
         User projectOfficer  = userRepository.findByEmail(processorResource.getProjectDepartmentInitiator());
         User monitoringOfficer = userRepository.findByEmail(processorResource.getMonitoringDepartmentInitiator());
