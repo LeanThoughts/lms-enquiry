@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import pfs.lms.enquiry.resource.ProcessorResource;
 
 @ApiController
 @RequiredArgsConstructor
+@Slf4j
 public class Controller {
 
     private final LoanApplicationRepository loanApplicationRepository;
@@ -31,6 +33,13 @@ public class Controller {
     public ResponseEntity updateProcessors(@RequestBody ProcessorResource processorResource) {
 
         LoanApplication loanApplication = loanApplicationRepository.findByEnquiryNo(processorResource.getEnquiryNo());
+
+        log.info("Risk Dept. Head" + processorResource.getRiskDepartmentHead());
+        log.info("Project Officer :" + processorResource.getProjectDepartmentInitiator());
+        log.info("Monitoring Officer" + processorResource.getMonitoringDepartmentInitiator());
+        log.info("Risk Officer" + processorResource.getRiskDepartmentInitiator());
+
+
 
         User riskDeptHeadUser = userRepository.findByEmail(processorResource.getRiskDepartmentHead());
         User projectOfficer  = userRepository.findByEmail(processorResource.getProjectDepartmentInitiator());

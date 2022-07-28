@@ -160,7 +160,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      if (loanAppraisal.getLoanApplication().getLoanContractId() == null){
                          return;
                      }
-                     log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()) + "for Loan :" + loanAppraisal.getLoanContractId().toString());
+                     log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()));
+                     log.info("Loan Contract :" + loanAppraisal.getLoanContractId().toString());
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
                      sapIntegrationRepository.save(sapIntegrationPointer);

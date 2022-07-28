@@ -43,9 +43,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -111,6 +109,14 @@ public class LoanApplicationContoller {
         }
 
         if (loanApplications.size() > 0) {
+//            Collections.sort(loanApplications, new Comparator<LoanApplication>() {
+//                public int compare(LoanApplication l1, LoanApplication l2) {
+//
+//                         return l1.getLoanEnquiryDate().compareTo(l2.getLoanEnquiryDate());
+//
+//                }
+//            });
+
 
         }
 
@@ -641,11 +647,17 @@ public class LoanApplicationContoller {
 
 
         loanApplications.forEach(loanApplication -> {
-
+            Partner partner = new Partner();
             if (loanApplication.getLoanApplicant() != null) {
-                Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).get();
-                if (partner == null) {
-                    //System.out.println("-------------- Partner is null for loan :" + loanApplication.getLoanContractId());
+                try {
+                      partner = partnerRepository.findById(loanApplication.getLoanApplicant()).get();
+                    if (partner == null) {
+                        //System.out.println("-------------- Partner is null for loan :" + loanApplication.getLoanContractId());
+                    }
+                } catch (Exception x) {
+                    log.info("Exception in Loan Application Controller 658: Partner find by Id: " + loanApplication.getbusPartnerNumber());
+                    log.info("Exception in Loan Application Controller 658: Loan Number : " + loanApplication.getLoanContractId());
+                    return;
                 }
 
                 if (loanApplication.getTechnicalStatus() != null) {
@@ -686,12 +698,13 @@ public class LoanApplicationContoller {
             }
 
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
-//                log.info("Loan Number : " + loanApplicationResource.getLoanApplication().getLoanContractId());
-//                log.info("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());
-
+                 log.info("Loan Number : " + loanApplicationResource.getLoanApplication().getLoanContractId());
+                 log.info("State       : " + loanApplicationResource.getLoanApplication().getProjectLocationState());
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
-                    loanApplicationResource.getLoanApplication().setProjectLocationState(
-                            stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
+                    State state = stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState());
+                    if (state != null) {
+                        loanApplicationResource.getLoanApplication().setProjectLocationState(state.getName());
+                    }
                 }
 
         }
@@ -871,13 +884,22 @@ public class LoanApplicationContoller {
         SearchResource resource = new SearchResource();
         LocalDate enquiryFromDate;
         LocalDate enquiryToDate;
-        String dateStringFrom = enquiryDateFrom.substring(8, 10) + "-" + enquiryDateFrom.substring(4, 7) + "-" + enquiryDateFrom.substring(11, 15);
-        enquiryFromDate = LocalDate.parse(dateStringFrom, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
-        String dateStringTo = enquiryDateTo.substring(8, 10) + "-" + enquiryDateTo.substring(4, 7) + "-" + enquiryDateTo.substring(11, 15);
-        enquiryToDate = LocalDate.parse(dateStringTo, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+        String dateStringFrom = "";
+        String dateStringTo = "";
 
-        resource.setEnquiryDateFrom(enquiryFromDate);
-        resource.setEnquiryDateTo(enquiryToDate);
+        if (enquiryDateFrom != null) {
+             dateStringFrom = enquiryDateFrom.substring(8, 10) + "-" + enquiryDateFrom.substring(4, 7) + "-" + enquiryDateFrom.substring(11, 15);
+            enquiryFromDate = LocalDate.parse(dateStringFrom, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+            resource.setEnquiryDateFrom(enquiryFromDate);
+
+        }
+        if (enquiryDateTo != null) {
+             dateStringTo = enquiryDateTo.substring(8, 10) + "-" + enquiryDateTo.substring(4, 7) + "-" + enquiryDateTo.substring(11, 15);
+            enquiryToDate = LocalDate.parse(dateStringTo, DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+            resource.setEnquiryDateTo(enquiryToDate);
+
+        }
+
         resource.setEnquiryNoFrom(enquiryNoFrom);
         resource.setEnquiryNoTo(enquiryNoTo);
         resource.setPartyName(partyName);

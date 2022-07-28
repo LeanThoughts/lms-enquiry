@@ -159,7 +159,7 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "LoanStatus")
     private String loanStatus;
 
-    @JsonProperty(value = "term")
+    @JsonProperty(value = "Term")
     private String term;
 
     @JsonProperty(value = "ProjectName")

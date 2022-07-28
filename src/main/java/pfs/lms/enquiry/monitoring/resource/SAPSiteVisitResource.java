@@ -36,7 +36,9 @@ public class SAPSiteVisitResource {
 
         detailedResource.setId(siteVisit.getId());
         detailedResource.setMonitorId(siteVisit.getLoanMonitoringId());
+        detailedResource.setAppraisalId(siteVisit.getLoanAppraisalId());
         detailedResource.setSerialNo(siteVisit.getSerialNumber());
+        detailedResource.setFiscalYear(siteVisit.getFiscalYear());
 
         if (siteVisit.getActualCOD() != null)
              detailedResource.setActualcod(dataConversionUtility.convertDateToSAPFormat(siteVisit.getActualCOD()));
