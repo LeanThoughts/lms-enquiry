@@ -73,11 +73,11 @@
                 </mat-cell>
             </ng-container>
 
-            <!-- department Column -->
-            <ng-container matColumnDef="department">
+            <!-- CurrDepartment Column -->
+            <ng-container matColumnDef="CurrDepartment">
                 <mat-header-cell *matHeaderCellDef>Init. Department</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.department }}</p>
+                    <p class="text-truncate">{{ obj.CurrDepartment }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -92,7 +92,7 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
-                [ngClass]="{'highlight':obj.id === selectedRow?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+                [ngClass]="{'highlight':obj.riskEvalId === selectedRow?.riskEvalId}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>

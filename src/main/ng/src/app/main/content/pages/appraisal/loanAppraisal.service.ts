@@ -83,6 +83,14 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getLoanOfficersByRoleType()
+     */
+     public getLoanOfficersByRoleType(loanApplicationId: string, roleType: string): Observable<any> {
+        return this._http.get("enquiry/api/loanPartners/search/findByLoanApplicationIdAndRoleType?loanApplicationId=" 
+                + loanApplicationId + '&roleType=' + roleType);
+    }
+
+    /**
      * deleteLoanOfficer()
      */
     public deleteLoanOfficer(partnerId: string): Observable<any> {

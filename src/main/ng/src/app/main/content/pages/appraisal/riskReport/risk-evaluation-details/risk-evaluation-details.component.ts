@@ -58,7 +58,7 @@ export class RiskEvaluationDetails {
         this.projectPhase = new FormControl(this.selectedRisk.RiskPrjPhase);
         this.projectName = new FormControl(this.selectedRisk.projectName);
         this.workflowStatus = new FormControl(this.selectedRisk.wfStatusDesc);
-        this.initDepartment = new FormControl(this.selectedRisk.department);
+        this.initDepartment = new FormControl(this.selectedRisk.CurrDepartment);
         this.finalProjectGrade = new FormControl(this.selectedRisk.FinalGrade);
         this.firstApprover = new FormControl(this.selectedRisk.firstLvlApprover);
         this.secondApprover = new FormControl(this.selectedRisk.secondLvlApprover);
