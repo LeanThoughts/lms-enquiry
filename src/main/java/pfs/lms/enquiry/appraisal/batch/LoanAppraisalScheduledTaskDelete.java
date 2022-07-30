@@ -75,8 +75,6 @@ public class LoanAppraisalScheduledTaskDelete {
     private final SAPLoanAppraisalFurtherDetailResource sapLoanAppraisalFurtherDetailResource;
     private final SAPLoanAppraisalProjectDataResource sapLoanAppraisalProjectDataResource;
 
-
-
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskDelete}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 

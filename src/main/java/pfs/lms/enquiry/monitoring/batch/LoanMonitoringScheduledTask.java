@@ -126,7 +126,6 @@ public class LoanMonitoringScheduledTask {
      @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}",initialDelayString = "${batch.initialDelay}")
      public void syncLoanApplicationsToBackend() throws ParseException, IOException {
 
-
          LendersIndependentEngineer lendersIndependentEngineer = new LendersIndependentEngineer();
 
          User lastChangedByUser = new User();

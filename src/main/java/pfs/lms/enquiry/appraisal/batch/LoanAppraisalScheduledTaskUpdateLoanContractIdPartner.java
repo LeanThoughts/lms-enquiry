@@ -73,6 +73,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
     private final IChangeDocumentService changeDocumentService;
     private final ILoanPartnerService loanPartnerService;
 
+
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanContractId() throws ParseException, IOException {
 

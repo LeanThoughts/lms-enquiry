@@ -63,7 +63,6 @@ public class LoanApplicationsScheduledTask {
         this.isapIntegrationService = isapIntegrationService;
         this.partnerRepository = partnerRepository;
     }
-
     @Scheduled(fixedRateString = "${batch.loanApplicationsScheduledTask}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanApplicationsToBackend() throws ParseException {
        // log.info("The time is now {}", dateFormat.format(new Date()));
