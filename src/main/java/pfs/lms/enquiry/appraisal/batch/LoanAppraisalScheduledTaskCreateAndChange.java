@@ -141,6 +141,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
          sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,'U'));
          sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,'U'));
 
+         log.info("---------------Sync. Loan Appraisal to SAP ");
 
          Collections.sort(sapIntegrationPointers, new Comparator<SAPIntegrationPointer>() {
              public int compare(SAPIntegrationPointer o1, SAPIntegrationPointer o2) {
