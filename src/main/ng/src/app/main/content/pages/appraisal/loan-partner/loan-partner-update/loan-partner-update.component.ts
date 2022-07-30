@@ -97,21 +97,40 @@ export class LoanPartnerUpdateComponent implements OnInit {
                 });
             }
             else {
-                this.selectedLoanOfficer.loanApplicationId = this._dialogData.loanApplicationId;
-                this.selectedLoanOfficer.kycStatus = "Not Started";
-                this._loanAppraisalService.createLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
-                    this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                    if (response.kycRequired == true) {
-                        this._loanAppraisalService.refreshKYCPartnerList.next({'refresh': true});
-                    };
-                    this._loanAppraisalService.getLaonAppraisal(this._dialogData.loanApplicationId).subscribe(response => {
-                        this._loanAppraisalService._loanAppraisalBS.next(response);
-                        console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisalBS.value);
+                if (this.selectedLoanOfficer.roleType !== 'TR0100') {
+                    this.createLoanPartner();
+                }
+                else {
+                    this._loanAppraisalService.getLoanOfficersByRoleType(this._dialogData.loanApplicationId, 'TR0100').subscribe(data => {
+                        if (data._embedded.loanPartners.length === 0) {
+                            this.createLoanPartner();
+                        }
+                        else {
+                            this._matSnackBar.open('Only one main loan partner possible for a loan account.', 'OK', { duration: 7000 });
+                        }
                     });
-                });
+                }
             }
         }
+    }
+
+    /**
+     * createLoanPartner()
+     */
+    createLoanPartner(): void {
+        this.selectedLoanOfficer.loanApplicationId = this._dialogData.loanApplicationId;
+        this.selectedLoanOfficer.kycStatus = "Not Started";
+        this._loanAppraisalService.createLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
+            this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
+            this._dialogRef.close({ 'refresh': true });
+            if (response.kycRequired == true) {
+                this._loanAppraisalService.refreshKYCPartnerList.next({'refresh': true});
+            };
+            this._loanAppraisalService.getLaonAppraisal(this._dialogData.loanApplicationId).subscribe(response => {
+                this._loanAppraisalService._loanAppraisalBS.next(response);
+                console.log('updated loan appraisal is', this._loanAppraisalService._loanAppraisalBS.value);
+            });
+        });
     }
 
     /**

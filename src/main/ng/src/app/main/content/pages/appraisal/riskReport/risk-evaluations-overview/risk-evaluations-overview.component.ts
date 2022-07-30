@@ -17,7 +17,7 @@ export class RiskEvaluationsOverviewComponent {
     dataSource: MatTableDataSource<any>;
     
     displayedColumns = [
-        'riskEvalId', 'wfStatusDesc', 'riskPrjType', 'riskPrjTypeT', 'projectName', 'FinalGrade', 'RiskPrjPhase', 'ratingDate', 'department', 'initiatedBy'
+        'riskEvalId', 'wfStatusDesc', 'riskPrjType', 'riskPrjTypeT', 'projectName', 'FinalGrade', 'RiskPrjPhase', 'ratingDate', 'CurrDepartment', 'initiatedBy'
     ];
 
     selectedRow: any;
