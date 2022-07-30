@@ -58,7 +58,6 @@ public class LoanApplicationsScheduledTask {
     @Autowired
     private IChangeDocumentService changeDocumentService;
 
-
     public LoanApplicationsScheduledTask(LoanApplicationRepository loanApplicationRepository, ISAPIntegrationService isapIntegrationService, PartnerRepository partnerRepository) {
         this.loanApplicationRepository = loanApplicationRepository;
         this.isapIntegrationService = isapIntegrationService;
@@ -77,7 +76,6 @@ public class LoanApplicationsScheduledTask {
         List<LoanApplication> loanApplicationList = loanApplicationRepository.findByTechnicalStatusAndPostedInSAP(4,0);
         loanApplicationList.addAll(loanApplicationRepository.findByTechnicalStatusAndPostedInSAP(4,2));
         loanApplicationList.addAll(loanApplicationRepository.findByTechnicalStatusAndPostedInSAP(4,4));
-
 
 
         for (LoanApplication loanApplication: loanApplicationList) {

@@ -114,7 +114,6 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final SAPLoanAppraisalExternalRatingCorpLoanResource sapLoanAppraisalExternalRatingCorpLoanResource;
 
 
-
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskCreateAndChange}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 

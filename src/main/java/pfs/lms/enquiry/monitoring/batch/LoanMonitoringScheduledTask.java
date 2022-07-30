@@ -123,7 +123,6 @@ public class LoanMonitoringScheduledTask {
     private final SAPProjectMonitoringDataItemResource sapProjectMonitoringDataItemResource;
 
 
-
      @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}",initialDelayString = "${batch.initialDelay}")
      public void syncLoanApplicationsToBackend() throws ParseException, IOException {
 

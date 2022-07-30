@@ -63,7 +63,6 @@ import java.util.*;
 @Transactional
 public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
-
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final LoanMonitorRepository loanMonitorRepository;
     private final LoanApplicationRepository loanApplicationRepository;

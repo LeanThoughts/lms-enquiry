@@ -47,7 +47,6 @@ public class LoanAppraisalScheduledTaskDelete {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 
-
     @Value("${sap.monitorDocumentUri}")
     private String monitorDocumentUri;
 

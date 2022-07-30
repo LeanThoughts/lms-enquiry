@@ -34,10 +34,10 @@ public class Controller {
 
         LoanApplication loanApplication = loanApplicationRepository.findByEnquiryNo(processorResource.getEnquiryNo());
 
-        log.info("Risk Dept. Head" + processorResource.getRiskDepartmentHead());
-        log.info("Project Officer :" + processorResource.getProjectDepartmentInitiator());
-        log.info("Monitoring Officer" + processorResource.getMonitoringDepartmentInitiator());
-        log.info("Risk Officer" + processorResource.getRiskDepartmentInitiator());
+        log.info("Risk Dept. Head   : " + processorResource.getRiskDepartmentHead());
+        log.info("Project Officer   :" + processorResource.getProjectDepartmentInitiator());
+        log.info("Monitoring Officer: " + processorResource.getMonitoringDepartmentInitiator());
+        log.info("Risk Officer      : " + processorResource.getRiskDepartmentInitiator());
 
 
 
