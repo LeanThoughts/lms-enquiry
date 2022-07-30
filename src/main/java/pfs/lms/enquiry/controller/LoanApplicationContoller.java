@@ -241,12 +241,22 @@ public class LoanApplicationContoller {
             log.info("Migrating Extension : " + loanContractExtensionResource.getLoanContractExtension().toString());
             log.info("-----------------------------------------------------");
 
+            LoanContractExtension existingLoanContractExtension = new LoanContractExtension();
 
-            LoanContractExtension existingLoanContractExtension =
-                    loanContractExtensionRepository.getLoanContractExtensionByLoanNumber(loanApplication.getLoanContractId());
+            try {
+                  existingLoanContractExtension =
+                        loanContractExtensionRepository.getLoanContractExtensionByLoanNumber(loanApplication.getLoanContractId());
+            } catch ( Exception ex) {
+                log.error ("Error getting loan contract extension by contract id");
+            }
+
             if (existingLoanContractExtension == null) {
+                log.info("Loan Contract Extension Not Found - Creating New Loan Contract Extension for contract : " + loanApplication.getLoanContractId());
                 loanContractExtensionService.save(loanContractExtensionResource, request.getUserPrincipal().getName());
+
             } else {
+                log.info("Loan Contract Extension  Found - Updating   Loan Contract Extension : " + loanApplication.getLoanContractId());
+
                 loanContractExtensionResource.getLoanContractExtension().setId(existingLoanContractExtension.getId());
                 loanContractExtensionResource.getLoanContractExtension().setLoanApplication(existingLoanContractExtension.getLoanApplication());
                 loanContractExtensionService.update(loanContractExtensionResource, request.getUserPrincipal().getName());

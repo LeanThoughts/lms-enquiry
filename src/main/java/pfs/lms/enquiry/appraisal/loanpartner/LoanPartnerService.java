@@ -66,7 +66,13 @@ public class LoanPartnerService implements ILoanPartnerService {
             loanPartner.setKycRequired(true);
             loanPartner.setKycStatus("Not Started");
         }
-        loanPartner = loanPartnerRepository.save(loanPartner);
+
+        try {
+            //loanPartner = loanPartnerRepository.save(loanPartner);
+            loanPartnerRepository.saveAndFlush(loanPartner);
+        } catch (Exception ex) {
+            log.error("Error Saving Loan Partner : " + loanPartner.getBusinessPartnerId() + "for contract :" + loanPartner.getLoanApplication().getLoanContractId());
+        }
         // Fetch Loan Appraisal for LoanPartner
         LoanAppraisal loanAppraisalForPartner = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
 

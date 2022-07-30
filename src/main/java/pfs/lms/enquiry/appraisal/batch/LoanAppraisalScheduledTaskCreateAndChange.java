@@ -368,8 +368,11 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Loan Partner":
                      loanPartner = loanPartnerRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
-                     loanAppraisal = loanAppraisalRepository.getOne( UUID.fromString(loanPartner.getLoanAppraisalId()));
-
+                     try {
+                         loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
+                     } catch (Exception ex) {
+                         log.error("Error Replicating Loan Partner to SAP : " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanAppraisal.getLoanContractId());
+                     }
                      log.info("Attempting to Post Appraisal Loan Partner to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString());
 
                      //Set Status as in progress

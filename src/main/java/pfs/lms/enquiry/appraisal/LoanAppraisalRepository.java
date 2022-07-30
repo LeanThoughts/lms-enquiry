@@ -2,6 +2,7 @@ package pfs.lms.enquiry.appraisal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
+import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.domain.LoanApplication;
 
 import java.util.Optional;
@@ -13,4 +14,4 @@ public interface LoanAppraisalRepository extends JpaRepository<LoanAppraisal, UU
     Optional<LoanAppraisal> findByLoanApplication(LoanApplication loanApplication);
 
     LoanAppraisal findByLoanApplicationId(UUID loanApplicationId);
-}
+ }

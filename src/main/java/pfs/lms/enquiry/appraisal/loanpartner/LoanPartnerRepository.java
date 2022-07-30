@@ -15,4 +15,6 @@ public interface LoanPartnerRepository extends JpaRepository<LoanPartner, UUID> 
     LoanPartner findByLoanApplicationAndBusinessPartnerId(LoanApplication loanApplication , String businessPartnerId);
 
     List<LoanPartner> findByLoanApplicationIdAndRoleType(UUID loanApplicationId, String roleType);
+
+    List<LoanPartner> findByLoanAppraisalId(String appraisalId);
 }

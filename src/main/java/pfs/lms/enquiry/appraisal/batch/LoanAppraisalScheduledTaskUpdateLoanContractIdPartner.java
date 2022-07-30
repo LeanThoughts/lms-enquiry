@@ -73,6 +73,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
     private final IChangeDocumentService changeDocumentService;
     private final ILoanPartnerService loanPartnerService;
 
+    private String userName = "admin@pfs-portal";
 
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanContractId() throws ParseException, IOException {
@@ -100,7 +101,81 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
         }
     }
+    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
+    public void updateLoanPartnerFromLoanApplication() throws ParseException, IOException {
 
+        Boolean createLoanPartner = true;
+
+        List<LoanApplication> loanApplications = loanApplicationRepository.findAll();
+        for (LoanApplication loanApplication: loanApplications) {
+
+            createLoanPartner = true;
+
+            if (loanApplication.getLoanContractId() == null) {
+                continue;
+            }
+
+            LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplicationId(loanApplication.getId());
+            if (loanAppraisal == null) {
+                loanAppraisal = new LoanAppraisal();
+                loanAppraisal.setLoanApplication(loanApplication);
+                loanAppraisal.setLoanContractId(loanApplication.getLoanContractId());
+                loanAppraisalRepository.save(loanAppraisal);
+                // Change Documents for Appraisal Header
+                changeDocumentService.createChangeDocument(
+                        loanAppraisal.getId(),
+                        loanAppraisal.getId().toString(),
+                        loanAppraisal.getId().toString(),
+                        loanApplication.getLoanContractId(),
+                        null,
+                        loanAppraisal,
+                        "Created",
+                        userName,
+                        "Appraisal", "Header");
+
+            }
+            List<LoanPartner> loanPartners = loanPartnerRepository.findByLoanAppraisalId(loanAppraisal.getId().toString());
+            for (LoanPartner loanPartner : loanPartners) {
+                if (loanPartner.getBusinessPartnerId().equals(loanApplication.getbusPartnerNumber())) {
+                    createLoanPartner = false;
+                }
+            }
+
+            Partner partner = new Partner();
+
+            if (createLoanPartner == true) {
+                LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                loanPartnerResource.setRoleType("TR0100");
+                loanPartnerResource.setBusinessPartnerId(loanApplication.getbusPartnerNumber());
+                loanPartnerResource.setRoleDescription("Main Loan Partner");
+                try {
+                      partner = partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber()));
+                } catch (Exception ex) {
+                    loanPartnerResource.setBusinessPartnerName(" ");
+
+                }
+                if (partner != null)
+                    loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " +partner.getPartyName2());
+                else
+                    loanPartnerResource.setBusinessPartnerName(" ");
+
+                loanPartnerResource.setStartDate(loanApplication.getLoanEnquiryDate());
+                loanPartnerResource.setKycRequired(true);
+                loanPartnerResource.setSerialNumber(loanPartners.size() + 1);
+                try {
+                    if (loanApplication.getLoanContractId() == null) {
+                        log.info("Null Loan Contract"); continue;
+                    }
+                    log.info("Creating Main Partner: " + loanPartnerResource.getBusinessPartnerId() + " for Loan Contract " + loanApplication.getLoanContractId());
+                    loanPartnerService.createLoanPartner(loanPartnerResource, userName);
+                } catch (Exception exception) {
+                    log.info("Error creating Loan Partner from Batch Process LoanAppraisalScheduledTaskUpdateLoanContractIdPartner ");
+                }
+
+            }
+        }
+    }
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updatePartnerList() throws ParseException, IOException {
 
