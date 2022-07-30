@@ -28,6 +28,7 @@ public class ReasonForDelayService implements IReasonForDelayService {
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
+                    obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = loanAppraisalRepository.save(obj);
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(

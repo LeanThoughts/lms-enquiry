@@ -159,7 +159,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                          return;
                      }
                      log.info("Attempting to Post Appraisal Header to SAP AT :" + dateFormat.format(new Date()));
-                     log.info("Loan Contract :" + loanAppraisal.getLoanContractId().toString());
+                     log.info("Loan Contract :" + loanAppraisal.getLoanApplication().getLoanContractId().toString());
+
                      //Set Status as in progress
                      sapIntegrationPointer.setStatus(1); // In Posting Process
                      sapIntegrationRepository.save(sapIntegrationPointer);

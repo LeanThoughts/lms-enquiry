@@ -30,6 +30,7 @@ public class CorporateLoanRiskRatingService implements ICorporateLoanRiskRatingS
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
+                    obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = loanAppraisalRepository.save(obj);
                     changeDocumentService.createChangeDocument(
                             obj.getId(),obj.getId().toString(),

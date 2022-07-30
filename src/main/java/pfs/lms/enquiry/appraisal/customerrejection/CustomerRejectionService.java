@@ -29,6 +29,7 @@ public class CustomerRejectionService implements ICustomerRejectionService {
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
+                    obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = loanAppraisalRepository.save(obj);
 
                     // Change Documents for Appraisal Header

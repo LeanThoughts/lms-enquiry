@@ -28,6 +28,7 @@ public class ProposalDetailService implements IProposalDetailService {
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication);
+                    obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = loanAppraisalRepository.save(obj);
                     // Change Documents for Appraisal Header
                     changeDocumentService.createChangeDocument(

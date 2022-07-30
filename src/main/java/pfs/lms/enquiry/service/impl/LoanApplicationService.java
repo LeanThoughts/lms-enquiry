@@ -402,6 +402,7 @@ public class LoanApplicationService implements ILoanApplicationService {
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
                     obj.setLoanApplication(loanApplication1);
+                    obj.setLoanContractId(loanApplication1.getLoanContractId());
                     obj = loanAppraisalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
