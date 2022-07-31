@@ -28,8 +28,10 @@ public class LoanPartnerService implements ILoanPartnerService {
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username) {
+    public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username) throws InterruptedException {
 
+        log.info("Sleeping in Create Loan Partner");
+        Thread.sleep(1000);
 
         // Save loan partner details
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanPartnerResource.getLoanApplicationId());
@@ -53,7 +55,15 @@ public class LoanPartnerService implements ILoanPartnerService {
                     return obj;
                 });
 
+
         LoanPartner loanPartner = new LoanPartner();
+        loanPartner = loanPartnerRepository.findByLoanAppraisalIdAndBusinessPartnerIdAndRoleType(loanApplication,
+                loanPartnerResource.getBusinessPartnerId(),loanPartnerResource.getRoleType());
+        if (loanPartner.getId() != null){
+            log.info("Loan Partner : " + loanApplication.getbusPartnerNumber() + "For Contract" +loanApplication.getLoanContractId() + " in Role :" + loanPartnerResource.getRoleType() + "already exists. Create Aborted" );
+
+        }
+
         loanPartner.setLoanAppraisalId(loanAppraisal.getId().toString());
         loanPartner.setSerialNumber(loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanPartnerResource
                 .getLoanApplicationId()).size() + 1);

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface ILoanPartnerService {
 
-    LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username);
+    LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username) throws InterruptedException;
 
     LoanPartner updateLoanPartner(LoanPartnerResource loanPartnerResource, String username) throws CloneNotSupportedException;
 

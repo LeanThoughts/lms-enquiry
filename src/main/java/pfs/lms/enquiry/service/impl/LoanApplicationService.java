@@ -311,6 +311,8 @@ public class LoanApplicationService implements ILoanApplicationService {
         if (loanPartner == null) {
             loanPartner = new LoanPartner();
 
+            System.out.println("Creating Main Loan Partner in Migration for Loan :" + loanApplication.getLoanContractId());
+
             LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
             loanPartnerResource.setLoanApplicationId(loanApplication.getId());
             loanPartnerResource.setRoleType("TR0100");
