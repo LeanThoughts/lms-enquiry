@@ -311,7 +311,7 @@ public class LoanApplicationService implements ILoanApplicationService {
         if (loanPartner == null) {
             loanPartner = new LoanPartner();
 
-            System.out.println("Creating Main Loan Partner in Migration for Loan :" + loanApplication.getLoanContractId());
+            System.out.println("Creating Main Loan Partner  for Loan Save :" + loanApplication.getLoanContractId());
 
             LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
             loanPartnerResource.setLoanApplicationId(loanApplication.getId());
@@ -333,7 +333,7 @@ public class LoanApplicationService implements ILoanApplicationService {
     }
 
     @Override
-    public LoanApplication migrate(LoanApplicationResource resource, String username) {
+    public LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException {
 
 
         System.out.println("-------------- Migrating Loan number : " + resource.getLoanApplication().getLoanContractId() + "-----------------------------------------------------------");
@@ -447,6 +447,9 @@ public class LoanApplicationService implements ILoanApplicationService {
 
 
         }
+
+
+
 
         return loanApplication;
     }

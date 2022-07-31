@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.loanpartner.ILoanPartnerService;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
+import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerResource;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.LoanContractExtension;
 import pfs.lms.enquiry.domain.Partner;
@@ -32,17 +34,18 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanPartnerRepository loanPartnerRepository;
 
-    @Autowired
-    private IPartnerService partnerService;
+    private ILoanPartnerService loanPartnerService;
+//    @Autowired
+//    private IPartnerService partnerService;
 
     @Override
-    public LoanContractExtension save(LoanContractExtensionResource resource, String username) {
+    public LoanContractExtension save(LoanContractExtensionResource resource, String username) throws InterruptedException, CloneNotSupportedException {
 
-        System.out.println(" Saving NEW Loan Contract Extension : Loan Application Id: " + resource.getLoanApplicationId());
+        log.info(" Saving NEW Loan Contract Extension : Loan Application Id: " + resource.getLoanApplicationId());
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
 
-        System.out.println(" Continuing to SAVE NEW Loan Contract Extension :" + resource.getLoanApplicationId());
+        log.info(" Continuing to SAVE NEW Loan Contract Extension :" + resource.getLoanApplicationId());
 
         LoanContractExtension loanContractExtension = resource.getLoanContractExtension();
         loanContractExtension.setLoanApplication(loanApplication);
@@ -58,7 +61,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         loanContractExtension.setScheduledCOD(resource.getLoanContractExtension().getScheduledCOD());
         loanContractExtension = loanContractExtensionRepository.save(loanContractExtension);
 
-        List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners());
+        List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners(),username);
 
         return loanContractExtension;
 
@@ -67,9 +70,9 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
 
 
     @Override
-    public LoanContractExtension update(LoanContractExtensionResource resource, String username) {
+    public LoanContractExtension update(LoanContractExtensionResource resource, String username) throws InterruptedException, CloneNotSupportedException {
 
-        System.out.println(" Updating Loan Contract Extension : " + resource.getLoanContractExtension().getId());
+        log.info(" Updating Loan Contract Extension : " + resource.getLoanContractExtension().getId());
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
 
@@ -89,16 +92,16 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         existingLoanContractExtension.setScheduledCOD(resource.getLoanContractExtension().getScheduledCOD());
         existingLoanContractExtension = loanContractExtensionRepository.save(existingLoanContractExtension);
 
-        System.out.println("Done Updating Loan Contract Extension : " + resource.getLoanContractExtension().getId());
+        log.info("Done Updating Loan Contract Extension : " + resource.getLoanContractExtension().getId());
 
-        List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners());
+        List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners(),username);
 
         return existingLoanContractExtension;
 
     }
 
 
-    private List<LoanPartner> updateLoanPartners(LoanApplication loanApplication, List<LoanPartner> loanPartners) {
+    private List<LoanPartner> updateLoanPartners(LoanApplication loanApplication, List<LoanPartner> loanPartners, String username) throws InterruptedException, CloneNotSupportedException {
 
 
         //Existing Loan Partner List
@@ -107,44 +110,47 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
 
         // Create/Update Loan Partners
         for (LoanPartner loanPartner: loanPartners) {
-            System.out.println(" Saving Loan Contract Extension LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId());
+            log.info(" Saving Loan Contract Extension LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId());
 
             // Check if the entry exists for the party number
             LoanPartner loanPartnerExisting = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, loanPartner.getBusinessPartnerId().toString());
-
             // create a new loan partner link
             if (loanPartnerExisting == null) {
-                LoanPartner newLoanPartner = new LoanPartner();
-                newLoanPartner.setLoanApplication(loanApplication);
-                newLoanPartner.setRoleType(loanPartner.getRoleType());
-                newLoanPartner.setBusinessPartnerId(loanPartner.getBusinessPartnerId().toString());
-                newLoanPartner.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
-                newLoanPartner.setRoleDescription(loanPartner.getRoleDescription());
-                newLoanPartner.setStartDate(loanPartner.getStartDate());
-                newLoanPartner.setSerialNumber(loanPartner.getSerialNumber());
+                 log.info("Creating Main Loan Partner  while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
 
+                LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                loanPartnerResource.setRoleType(loanPartner.getRoleType());
+                loanPartnerResource.setBusinessPartnerId(loanApplication.getbusPartnerNumber().toString());
+                loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
+                loanPartnerResource.setRoleDescription(loanPartner.getRoleDescription());
+                loanPartnerResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
+                loanPartnerResource.setSerialNumber(1);
+                loanPartnerResource.setKycStatus("Not Done");
                 if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")|| loanPartner.getRoleType().equals("ZLM038")) {
-                    newLoanPartner.setKycRequired(true);
-                    newLoanPartner.setKycStatus("Not Started");
+                    loanPartnerResource.setKycRequired(true);
+                    loanPartnerResource.setKycStatus("Not Started");
                 }
-
-                loanPartnerRepository.save(newLoanPartner);
+                loanPartnerService.createLoanPartner(loanPartnerResource,username);
 
             } else {  //update loan partner link
-                loanPartnerExisting.setId(loanPartnerExisting.getId());
-                loanPartnerExisting.setLoanApplication(loanApplication);
-                loanPartnerExisting.setRoleType(loanPartner.getRoleType());
-                loanPartnerExisting.setBusinessPartnerId(loanPartner.getBusinessPartnerId().toString());
-                loanPartnerExisting.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
-                loanPartnerExisting.setRoleDescription(loanPartner.getRoleDescription());
-                loanPartnerExisting.setStartDate(loanPartner.getStartDate());
-                loanPartnerExisting.setSerialNumber(loanPartner.getSerialNumber());
+ 
 
+                LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                loanPartnerResource.setId(loanPartnerExisting.getId());
+                loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                loanPartnerResource.setRoleType(loanPartnerExisting.getRoleType());
+                loanPartnerResource.setBusinessPartnerId(loanApplication.getbusPartnerNumber().toString());
+                loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
+                loanPartnerResource.setRoleDescription("Main Loan Partner");
+                loanPartnerResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
+                loanPartnerResource.setSerialNumber(1);
+                loanPartnerResource.setKycStatus("Not Done");
                 if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")|| loanPartner.getRoleType().equals("ZLM038")) {
-                    loanPartnerExisting.setKycRequired(true);
+                    loanPartnerResource.setKycRequired(true);
+                    loanPartnerResource.setKycStatus("Not Started");
                 }
-                loanPartnerExisting.setKycStatus(loanPartnerExisting.getKycStatus());
-                loanPartnerRepository.save(loanPartnerExisting);
+                loanPartnerService.updateLoanPartner(loanPartnerResource,username);
 
             }
         }
@@ -159,10 +165,10 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
             Boolean partnerFound = existingLoanPartner.isPresent();
 
             if ( partnerFound == false ) {
-                System.out.println("  Loan Contract Extension DELETING REMOVED  LOAN PARTNERS: Bupa ID : " + loanPartner.getBusinessPartnerId());
+                log.info("  Loan Contract Extension DELETING REMOVED  LOAN PARTNERS: Bupa ID : " + loanPartner.getBusinessPartnerId());
                 // Delete Loan Partner
-                loanPartnerRepository.delete(loanPartner);
-            }
+                loanPartnerService.deleteLoanPartner(loanPartner.getId(), username);
+             }
         }
 
 

@@ -5,7 +5,7 @@ import pfs.lms.enquiry.resource.LoanContractExtensionResource;
 
 public interface ILoanContractExtensionService {
 
-    LoanContractExtension save(LoanContractExtensionResource resource, String username);
-    LoanContractExtension update(LoanContractExtensionResource resource, String username);
+    LoanContractExtension save(LoanContractExtensionResource resource, String username) throws InterruptedException, CloneNotSupportedException;
+    LoanContractExtension update(LoanContractExtensionResource resource, String username) throws InterruptedException, CloneNotSupportedException;
 
 }

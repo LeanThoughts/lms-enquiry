@@ -13,7 +13,7 @@ public interface ILoanApplicationService {
     LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException;
 
 
-    LoanApplication migrate(LoanApplicationResource resource, String username);
+    LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException;
     LoanApplication migrateUpdate(LoanApplication loanApplication, Partner partner, String username);
     List<LoanApplication> searchLoans(HttpServletRequest request, Pageable pageable);
 
