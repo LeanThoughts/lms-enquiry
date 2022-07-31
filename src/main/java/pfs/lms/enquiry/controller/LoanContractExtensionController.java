@@ -36,7 +36,7 @@ public class LoanContractExtensionController {
     }
 
     @PostMapping("/loancontractextension/{loanapplicationid}")
-    public ResponseEntity create(@PathVariable("loanapplicationid") String loanapplicationid, @RequestBody LoanContractExtensionResource resource, HttpServletRequest request) {
+    public ResponseEntity create(@PathVariable("loanapplicationid") String loanapplicationid, @RequestBody LoanContractExtensionResource resource, HttpServletRequest request) throws InterruptedException, CloneNotSupportedException {
         resource.setLoanApplicationId(UUID.fromString(loanapplicationid));
         LoanContractExtension loanContractExtension =
                 iLoanContractExtensionService.save(resource, request.getUserPrincipal().getName());
@@ -46,7 +46,7 @@ public class LoanContractExtensionController {
     }
 
     @PutMapping("/loancontractextension/{id}")
-    public ResponseEntity update(@PathVariable("id") String loanContractExtensionId, @RequestBody LoanContractExtensionResource resource, HttpServletRequest request) {
+    public ResponseEntity update(@PathVariable("id") String loanContractExtensionId, @RequestBody LoanContractExtensionResource resource, HttpServletRequest request) throws InterruptedException, CloneNotSupportedException {
         LoanContractExtension loanContractExtension =
                 iLoanContractExtensionService.update(resource, request.getUserPrincipal().getName());
 
