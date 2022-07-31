@@ -113,7 +113,6 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
         List<LoanApplication> loanApplications = loanApplicationRepository.findAll();
         for (LoanApplication loanApplication: loanApplications) {
 
-            createLoanPartner = true;
 
             if (loanApplication.getLoanContractId() == null) {
                 continue;
@@ -138,7 +137,12 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
                         "Appraisal", "Header");
 
             }
+
+            createLoanPartner = true;
+
             List<LoanPartner> loanPartners = loanPartnerRepository.findByLoanAppraisalId(loanAppraisal.getId().toString());
+            log.info("Number of Partners for Loan  : " + loanPartners.size());
+
             for (LoanPartner loanPartner : loanPartners) {
 
                 log.info("Checking Loan Partner  " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanApplication.getLoanContractId() + "role :" + loanPartner.getRoleType());
@@ -154,7 +158,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
                 if (partnerInLoanApplication.equals(partnerInLoanPartner)) {
                     log.info("Partner in loanApplication EQUAL TO  PartnerInLoanPartner" );
                     createLoanPartner = false;
-                    continue;
+                    break;
                 } else {
                     log.info("Partner in loanApplication NOT EQUAL TO  PartnerInLoanPartner" );
 
@@ -164,6 +168,8 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             Partner partner = new Partner();
 
             if (createLoanPartner == true) {
+                log.info("Starting to create Loan Partner  : " + loanApplication.getbusPartnerNumber());
+
                 LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
                 loanPartnerResource.setLoanApplicationId(loanApplication.getId());
                 loanPartnerResource.setRoleType("TR0100");
