@@ -142,8 +142,8 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             for (LoanPartner loanPartner : loanPartners) {
 
                 log.info("Checking Loan Partner  " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanApplication.getLoanContractId() + "role :" + loanPartner.getRoleType());
-                if (loanPartner.getRoleType().equals("TR0100"))
-                    continue;
+//                if (loanPartner.getRoleType().equals("TR0100"))
+//                    continue;
                 String partnerInLoanApplication = loanApplication.getbusPartnerNumber();
                 String partnerInLoanPartner     = loanPartner.getBusinessPartnerId();
                 partnerInLoanApplication.replaceFirst("^0+(?!$)", "");
