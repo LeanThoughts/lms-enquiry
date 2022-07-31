@@ -211,7 +211,7 @@ public class LoanApplicationContoller {
 
 
     @PostMapping("/loanApplications/migrate")
-    public ResponseEntity migrate(@RequestBody LoanMigrationResource resource, HttpServletRequest request) {
+    public ResponseEntity migrate(@RequestBody LoanMigrationResource resource, HttpServletRequest request) throws InterruptedException, CloneNotSupportedException {
 
         log.info("LOAN APPLICATION Extension: " + resource.getLoanContractExtension());
         log.info("LOAN APPLICATION : " + resource.getLoanApplication());
