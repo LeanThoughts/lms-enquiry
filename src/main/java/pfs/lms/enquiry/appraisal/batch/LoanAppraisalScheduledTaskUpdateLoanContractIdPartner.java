@@ -102,7 +102,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
         }
     }
-    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
+    @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanPartnerFromLoanApplication() throws ParseException, IOException {
 
         log.info("---------------updateLoanPartnerFromLoanApplication ");
@@ -144,7 +144,12 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
                 log.info("Loan Partner exists " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanApplication.getLoanContractId() + "role :" + loanPartner.getRoleType());
                 if (loanPartner.getRoleType().equals("TR0100"))
                     continue;
-                if (loanPartner.getBusinessPartnerId().equals(loanApplication.getbusPartnerNumber())) {
+                String partnerInLoanApplication = loanApplication.getbusPartnerNumber();
+                String partnerInLoanPartner     = loanPartner.getBusinessPartnerId();
+                partnerInLoanApplication.replaceFirst("^0+(?!$)", "");
+                partnerInLoanPartner.replaceFirst("^0+(?!$)", "");
+
+                if (partnerInLoanApplication.equals(partnerInLoanPartner)) {
                     createLoanPartner = false;
                 }
             }
