@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.loanpartner.ILoanPartnerService;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Component
 @RequiredArgsConstructor
 public class LoanContractExtensionService implements ILoanContractExtensionService {
 
@@ -34,6 +36,8 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanPartnerRepository loanPartnerRepository;
 
+
+    @Autowired
     private ILoanPartnerService loanPartnerService;
 //    @Autowired
 //    private IPartnerService partnerService;
