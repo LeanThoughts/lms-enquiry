@@ -419,7 +419,7 @@ public class LoanApplicationService implements ILoanApplicationService {
                             "Created",
                             "admin@gmail.com",
                             "Appraisal", "Header");
-                    log.info("Loan Appraisal Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+                    log.info("Loan Appraisal Header Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
 
                     return obj;
                 });
@@ -443,7 +443,7 @@ public class LoanApplicationService implements ILoanApplicationService {
                     "admin@gmail.com",
                     "Monitoring", "Header");
 
-            log.info("Loan Monitoring Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+            log.info("Loan Monitoring Header Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
 
 
         }

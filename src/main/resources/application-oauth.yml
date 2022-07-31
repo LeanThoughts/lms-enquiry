@@ -87,11 +87,11 @@ server:
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:
-  loanApplicationsScheduledTask: 1000
-  loanMonitoringScheduledTask: 5000
-  loanAppraisalScheduledTaskCreateAndChange:  10000
-  loanAppraisalScheduledTaskDelete:  10000
-  loanAppraisalScheduledTaskUpdateLoanPartner : 1000
-  loanAppraisalScheduledTaskUpdateLoanContractId: 80000
+  loanApplicationsScheduledTask: 10000000
+  loanMonitoringScheduledTask: 50000000
+  loanAppraisalScheduledTaskCreateAndChange:  100000000
+  loanAppraisalScheduledTaskDelete:  10000000
+  loanAppraisalScheduledTaskUpdateLoanPartner : 10000000
+  loanAppraisalScheduledTaskUpdateLoanContractId: 800000000
   updateMainLoanPartner: 1000
   initialDelay: 1000
