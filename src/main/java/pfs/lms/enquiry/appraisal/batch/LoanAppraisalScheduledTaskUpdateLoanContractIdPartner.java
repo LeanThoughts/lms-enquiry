@@ -140,6 +140,10 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
             List<LoanPartner> loanPartners = loanPartnerRepository.findByLoanAppraisalId(loanAppraisal.getId().toString());
             for (LoanPartner loanPartner : loanPartners) {
+
+                log.info("Loan Partner exists " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanApplication.getLoanContractId() + "role :" + loanPartner.getRoleType());
+                if (loanPartner.getRoleType().equals("TR0100"))
+                    continue;
                 if (loanPartner.getBusinessPartnerId().equals(loanApplication.getbusPartnerNumber())) {
                     createLoanPartner = false;
                 }

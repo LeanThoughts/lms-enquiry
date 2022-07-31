@@ -426,7 +426,7 @@ public class LoanApplicationService implements ILoanApplicationService {
         if(loanMonitor == null)
         {
             loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
+            loanMonitor.setLoanApplication(loanApplication1);
             loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
             loanMonitor = loanMonitorRepository.save(loanMonitor);
 
