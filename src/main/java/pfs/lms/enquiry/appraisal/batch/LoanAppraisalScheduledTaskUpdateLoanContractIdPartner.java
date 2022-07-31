@@ -196,7 +196,8 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
                     log.info("Creating Main Partner: " + loanPartnerResource.getBusinessPartnerId() + " for Loan Contract " + loanApplication.getLoanContractId());
                     loanPartnerService.createLoanPartner(loanPartnerResource, userName);
                 } catch (Exception exception) {
-                    log.info("Error creating Loan Partner from Batch Process LoanAppraisalScheduledTaskUpdateLoanContractIdPartner ");
+                    log.error("Error creating Loan Partner from Batch Process LoanAppraisalScheduledTaskUpdateLoanContractIdPartner ");
+                    log.error(exception.toString());
                 }
 
             }
