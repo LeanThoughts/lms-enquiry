@@ -18,7 +18,7 @@ public class LoanPartnerController {
 
     @PostMapping("/loanPartners/create")
     public ResponseEntity<LoanPartner> createLoanPartner(@RequestBody LoanPartnerResource loanPartnerResource,
-                                                         HttpServletRequest request) {
+                                                         HttpServletRequest request) throws InterruptedException {
         LoanPartner loanPartner = loanPartnerService.createLoanPartner(loanPartnerResource, request.getUserPrincipal().getName());
         return ResponseEntity.ok(loanPartner);
     }

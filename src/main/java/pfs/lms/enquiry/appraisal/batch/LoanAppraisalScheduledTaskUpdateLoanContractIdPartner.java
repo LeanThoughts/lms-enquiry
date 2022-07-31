@@ -203,7 +203,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
         }
     }
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
-    public void updatePartnerList() throws ParseException, IOException {
+    public void updatePartnerList() throws ParseException, IOException, InterruptedException {
 
         log.info("---------------updatePartnerList ");
 

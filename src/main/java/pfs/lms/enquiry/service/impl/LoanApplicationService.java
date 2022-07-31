@@ -49,7 +49,7 @@ public class LoanApplicationService implements ILoanApplicationService {
     private final LoanAppraisalRepository loanAppraisalRepository;
 
     @Override
-    public LoanApplication save(LoanApplicationResource resource, String username) {
+    public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException {
 
         //Set PostedInSAP to "Not Posted" - "0"
         if (resource.getLoanApplication().getPostedInSAP() == null)
@@ -324,6 +324,7 @@ public class LoanApplicationService implements ILoanApplicationService {
             loanPartnerResource.setKycStatus("Not Done");
             loanPartnerResource.setKycRequired(true);
             loanPartnerService.createLoanPartner(loanPartnerResource,username);
+
         }
 
 

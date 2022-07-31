@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ILoanApplicationService {
 
-    LoanApplication save(LoanApplicationResource resource, String username);
+    LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException;
 
 
     LoanApplication migrate(LoanApplicationResource resource, String username);
