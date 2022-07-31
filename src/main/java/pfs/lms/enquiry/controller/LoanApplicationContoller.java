@@ -264,9 +264,7 @@ public class LoanApplicationContoller {
             log.info("-----------------------------------------------------");
             log.info("Finished Migrating Extension : ");
             log.info("-----------------------------------------------------");
-
         }
-
         return ResponseEntity.ok(loanApplication);
     }
 
