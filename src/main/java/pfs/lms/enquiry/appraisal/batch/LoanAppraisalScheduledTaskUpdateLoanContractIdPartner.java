@@ -119,6 +119,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
 
             LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplicationId(loanApplication.getId());
+
             if (loanAppraisal == null) {
                 loanAppraisal = new LoanAppraisal();
                 loanAppraisal.setLoanApplication(loanApplication);

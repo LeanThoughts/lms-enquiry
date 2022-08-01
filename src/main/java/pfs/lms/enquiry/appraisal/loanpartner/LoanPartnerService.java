@@ -30,8 +30,8 @@ public class LoanPartnerService implements ILoanPartnerService {
     @Override
     public LoanPartner createLoanPartner(LoanPartnerResource loanPartnerResource, String username) throws InterruptedException {
 
-        log.info("Sleeping in Create Loan Partner");
-        Thread.sleep(1000);
+//        log.info("Sleeping in Create Loan Partner");
+//        Thread.sleep(1000);
 
         // Save loan partner details
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanPartnerResource.getLoanApplicationId());
