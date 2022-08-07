@@ -103,8 +103,6 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
             log.info("Partner : " + loanPartner.getBusinessPartnerId() + " : "+ loanPartner.getRoleType() + " : " + loanPartner.getBusinessPartnerName());
         }
         List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners(),username);
-
-
         return existingLoanContractExtension;
 
     }
