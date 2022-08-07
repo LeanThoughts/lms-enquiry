@@ -62,7 +62,7 @@ public class LoanPartnerService implements ILoanPartnerService {
             log.info("Loan Partner : " + loanPartner.getBusinessPartnerId() + " For Contract" +loanApplication.getLoanContractId() + " in Role : " + loanPartnerResource.getRoleType() + " already exists. Create Aborted" );
             return loanPartner;
         } else {
-            log.info("Loan Partner Service : Creating Loan Partner : " + loanPartner.getBusinessPartnerId() + " For Contract" +loanApplication.getLoanContractId() + " in Role : " + loanPartnerResource.getRoleType()   );
+            log.info("Loan Partner Service : Creating Loan Partner : " + loanPartnerResource.getBusinessPartnerId() + " For Contract" +loanApplication.getLoanContractId() + " in Role : " + loanPartnerResource.getRoleType()   );
         }
         loanPartner = new LoanPartner();
         loanPartner.setLoanAppraisalId(loanAppraisal.getId().toString());
