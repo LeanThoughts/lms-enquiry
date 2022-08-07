@@ -156,7 +156,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
 
             } else {  //update loan partner link
 
-                log.info("Updating Main Loan Partner  while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
+                log.info("Updating  Loan Partner : " +loanPartner.getBusinessPartnerId() + " while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
 
                 LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
                 loanPartnerResource.setId(loanPartnerExisting.getId());
