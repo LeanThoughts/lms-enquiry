@@ -124,6 +124,12 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         log.info("Number of Partners to update: " + loanPartners.size());
         int i = 1;
 
+        int serialNumber = 0;
+        if (loanPartnerList.size() > 0)
+            serialNumber = loanPartnerList.size();
+        else
+            serialNumber = 0 ;
+
         // Create/Update Loan Partners
         for (LoanPartner loanPartner: loanPartners) {
             log.info("Processing Partner : " + i); i++;
@@ -146,7 +152,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
                 loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
                 loanPartnerResource.setRoleDescription(loanPartner.getRoleDescription());
                 loanPartnerResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
-                loanPartnerResource.setSerialNumber(1);
+                loanPartnerResource.setSerialNumber(serialNumber++);
                 loanPartnerResource.setKycStatus("Not Done");
                 if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")|| loanPartner.getRoleType().equals("ZLM038")) {
                     loanPartnerResource.setKycRequired(true);
@@ -166,7 +172,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
                 loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
                 loanPartnerResource.setRoleDescription(loanPartner.getRoleDescription());
                 loanPartnerResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
-                loanPartnerResource.setSerialNumber(1);
+                loanPartnerResource.setSerialNumber(loanPartner.getSerialNumber());
                 loanPartnerResource.setKycStatus("Not Done");
                 if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")|| loanPartner.getRoleType().equals("ZLM038")) {
                     loanPartnerResource.setKycRequired(true);
