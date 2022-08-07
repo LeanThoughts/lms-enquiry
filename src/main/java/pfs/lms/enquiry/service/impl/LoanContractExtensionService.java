@@ -98,7 +98,12 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
 
         log.info("Done Updating Loan Contract Extension : " + resource.getLoanContractExtension().getId());
 
+        log.info("Loan Partner List for Update");
+        for ( LoanPartner loanPartner: resource.getLoanPartners()) {
+            log.info(loanPartner.getBusinessPartnerId() + " : "+ loanPartner.getRoleType() + " : " + loanPartner.getBusinessPartnerName());
+        }
         List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners(),username);
+
 
         return existingLoanContractExtension;
 
@@ -119,7 +124,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         // Create/Update Loan Partners
         for (LoanPartner loanPartner: loanPartners) {
             log.info("Processing Partner : " + i); i++;
-            log.info(" Processing LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId());
+            log.info("Processing LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId() + "ROLE : " + loanPartner.getRoleType());
 
             // Check if the entry exists for the party number
             LoanPartner loanPartnerExisting =
