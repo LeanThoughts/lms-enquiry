@@ -117,10 +117,11 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
             log.info(" Saving Loan Contract Extension LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId());
 
             // Check if the entry exists for the party number
-            LoanPartner loanPartnerExisting = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, loanPartner.getBusinessPartnerId().toString());
+            LoanPartner loanPartnerExisting =
+                    loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, loanPartner.getBusinessPartnerId().toString());
             // create a new loan partner link
             if (loanPartnerExisting == null) {
-                 log.info("Creating Main Loan Partner  while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
+                 log.info("Creating  Loan Partner  while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
 
                 LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
                 loanPartnerResource.setLoanApplicationId(loanApplication.getId());
@@ -138,7 +139,8 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
                 loanPartnerService.createLoanPartner(loanPartnerResource,username);
 
             } else {  //update loan partner link
- 
+
+                log.info("Updating Main Loan Partner  while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
 
                 LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
                 loanPartnerResource.setId(loanPartnerExisting.getId());
@@ -146,7 +148,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
                 loanPartnerResource.setRoleType(loanPartnerExisting.getRoleType());
                 loanPartnerResource.setBusinessPartnerId(loanApplication.getbusPartnerNumber().toString());
                 loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
-                loanPartnerResource.setRoleDescription("Main Loan Partner");
+                loanPartnerResource.setRoleDescription(loanPartner.getRoleDescription());
                 loanPartnerResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
                 loanPartnerResource.setSerialNumber(1);
                 loanPartnerResource.setKycStatus("Not Done");

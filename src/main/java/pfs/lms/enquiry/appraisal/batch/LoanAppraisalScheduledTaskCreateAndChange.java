@@ -564,6 +564,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
     private void updateSAPIntegrationPointer(Object response, SAPIntegrationPointer sapIntegrationPointer) {
 
+            sapIntegrationPointer = sapIntegrationRepository.getOne(sapIntegrationPointer.getId());
             sapIntegrationPointer.setProcessDate(new Date());
             if (response == null) {
                 //Set Status as Failed
@@ -573,6 +574,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                 //Set Status as Posted Successfully
                 sapIntegrationPointer.setStatus(3); // Posting Successful
                 sapIntegrationRepository.save(sapIntegrationPointer);
+                sapIntegrationRepository.flush();
             }
 
     }

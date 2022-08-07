@@ -61,6 +61,8 @@ public class LoanPartnerService implements ILoanPartnerService {
         if (loanPartner  != null){
             log.info("Loan Partner : " + loanApplication.getbusPartnerNumber() + "For Contract" +loanApplication.getLoanContractId() + " in Role :" + loanPartnerResource.getRoleType() + "already exists. Create Aborted" );
             return loanPartner;
+        } else {
+            log.info("Loan Partner Service : Creating Loan Partner : " + loanApplication.getbusPartnerNumber() + "For Contract" +loanApplication.getLoanContractId() + " in Role :" + loanPartnerResource.getRoleType() + "already exists. Create Aborted" );
         }
         loanPartner = new LoanPartner();
         loanPartner.setLoanAppraisalId(loanAppraisal.getId().toString());
@@ -79,7 +81,7 @@ public class LoanPartnerService implements ILoanPartnerService {
 
         try {
             //loanPartner = loanPartnerRepository.save(loanPartner);
-            loanPartnerRepository.saveAndFlush(loanPartner);
+            loanPartnerRepository.save(loanPartner);
         } catch (Exception ex) {
             log.error("Error Saving Loan Partner : " + loanPartner.getBusinessPartnerId() + "for contract :" + loanPartner.getLoanApplication().getLoanContractId());
         }
