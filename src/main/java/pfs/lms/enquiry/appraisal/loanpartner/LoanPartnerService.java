@@ -59,10 +59,10 @@ public class LoanPartnerService implements ILoanPartnerService {
         LoanPartner loanPartner = new LoanPartner();
         loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, loanPartnerResource.getBusinessPartnerId() );
         if (loanPartner  != null){
-            log.info("Loan Partner : " + loanApplication.getbusPartnerNumber() + "For Contract" +loanApplication.getLoanContractId() + " in Role :" + loanPartnerResource.getRoleType() + "already exists. Create Aborted" );
+            log.info("Loan Partner : " + loanApplication.getbusPartnerNumber() + "For Contract" +loanApplication.getLoanContractId() + " in Role : " + loanPartnerResource.getRoleType() + "already exists. Create Aborted" );
             return loanPartner;
         } else {
-            log.info("Loan Partner Service : Creating Loan Partner : " + loanApplication.getbusPartnerNumber() + "For Contract" +loanApplication.getLoanContractId() + " in Role :" + loanPartnerResource.getRoleType()   );
+            log.info("Loan Partner Service : Creating Loan Partner : " + loanApplication.getbusPartnerNumber() + " For Contract" +loanApplication.getLoanContractId() + " in Role : " + loanPartnerResource.getRoleType()   );
         }
         loanPartner = new LoanPartner();
         loanPartner.setLoanAppraisalId(loanAppraisal.getId().toString());
