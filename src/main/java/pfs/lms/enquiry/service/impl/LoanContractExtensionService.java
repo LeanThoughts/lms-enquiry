@@ -112,9 +112,14 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         List<LoanPartner> loanPartnerList = new ArrayList<>();
         loanPartnerList = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
 
+        log.info("Updating Loan partners for contract id: " + loanApplication.getLoanContractId());
+        log.info("Number of Partners to update: " + loanPartners.size());
+        int i = 1;
+
         // Create/Update Loan Partners
         for (LoanPartner loanPartner: loanPartners) {
-            log.info(" Saving Loan Contract Extension LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId());
+            log.info("Processing Partner : " + i); i++;
+            log.info(" Processing LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId());
 
             // Check if the entry exists for the party number
             LoanPartner loanPartnerExisting =
