@@ -65,6 +65,11 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         loanContractExtension.setScheduledCOD(resource.getLoanContractExtension().getScheduledCOD());
         loanContractExtension = loanContractExtensionRepository.save(loanContractExtension);
 
+        log.info("Loan Partner List for Update");
+        for ( LoanPartner loanPartner: resource.getLoanPartners()) {
+            log.info("Partner : " + loanPartner.getBusinessPartnerId() + " : "+ loanPartner.getRoleType() + " : " + loanPartner.getBusinessPartnerName());
+        }
+
         List<LoanPartner> loanPartnerList = this.updateLoanPartners(loanApplication, resource.getLoanPartners(),username);
 
         return loanContractExtension;
@@ -125,14 +130,14 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
             log.info("Processing LOAN PARTNERS: Bupa Id: " + loanPartner.getBusinessPartnerId() + " ROLE : " + loanPartner.getRoleType());
 
             // Check if the entry exists for the party number and role
-            LoanPartner loanPartnerExisting =
-//                    loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, loanPartner.getBusinessPartnerId().toString());
-            loanPartnerExisting = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication,
-                    loanPartner.getBusinessPartnerId().toString(),loanPartner.getRoleType());
+            LoanPartner loanPartnerExisting
+                         = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication,
+                                                             loanPartner.getBusinessPartnerId().toString(),loanPartner.getRoleType());
 
             // create a new loan partner link
             if (loanPartnerExisting == null) {
-                 log.info("Creating  Loan Partner  while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
+                 log.info("Creating Loan Partner : " +loanPartner.getBusinessPartnerId() + " while migrating Loan Contract Extension :" + loanApplication.getLoanContractId());
+                 log.info("Role : " + loanPartner.getRoleType() );
 
                 LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
                 loanPartnerResource.setLoanApplicationId(loanApplication.getId());
@@ -157,7 +162,7 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
                 loanPartnerResource.setId(loanPartnerExisting.getId());
                 loanPartnerResource.setLoanApplicationId(loanApplication.getId());
                 loanPartnerResource.setRoleType(loanPartnerExisting.getRoleType());
-                loanPartnerResource.setBusinessPartnerId(loanPartner.getBusinessPartnerId().toString());
+                loanPartnerResource.setBusinessPartnerId(loanPartnerExisting.getBusinessPartnerId().toString());
                 loanPartnerResource.setStartDate(loanApplication.getCreatedOn());
                 loanPartnerResource.setRoleDescription(loanPartner.getRoleDescription());
                 loanPartnerResource.setBusinessPartnerName(loanPartner.getBusinessPartnerName());
