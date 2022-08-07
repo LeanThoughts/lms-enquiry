@@ -443,7 +443,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
                 case "PromoterDetails":
                     PromoterDetail promoterDetails = (PromoterDetail) object;
-                    result.put("id", promoterDetails.getDateOfChange().toString());
+                    result.put("id", promoterDetails.getId().toString());
                     result.put("description", promoterDetails.getDateOfChange().toString());
                     return result;
                 case "Appraisal":
@@ -496,7 +496,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "FurtherDetail":
                     FurtherDetail furtherDetail = (FurtherDetail) object;
                     result.put("id", furtherDetail.getDate().toString());
-                    result.put("description", furtherDetail.getDate().toString());
+                    result.put("description", "Further details");//furtherDetail.getDate().toString());
                     return result;
                 case "LoanPartner":
                     LoanPartner loanPartner = (LoanPartner) object;
@@ -522,33 +522,33 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
                 case "KnowYourCustomer":
                     KnowYourCustomer knowYourCustomer = (KnowYourCustomer) object;
-                    result.put("id", knowYourCustomer.getLoanPartnerId().toString());
-                    result.put("description", knowYourCustomer.getLoanPartnerId().toString());
+                    result.put("id", knowYourCustomer.getDocumentType().toString());
+                    result.put("description", knowYourCustomer.getDocumentName().toString());
                     return result;
                 case "ProjectAppraisalCompletion":
                     ProjectAppraisalCompletion projectAppraisalCompletion = (ProjectAppraisalCompletion) object;
-                    result.put("id", projectAppraisalCompletion.getDateOfProjectAppraisalCompletion().toString());
+                    result.put("id", projectAppraisalCompletion.getId().toString());
                     result.put("description", projectAppraisalCompletion.getDateOfProjectAppraisalCompletion().toString());
                     return result;
                 case "ProjectData":
                     ProjectData projectData = (ProjectData) object;
-                    result.put("id", projectData.getProjectName().toString());
+                    result.put("id", projectData.getId().toString());
                     result.put("description", projectData.getProjectName().toString());
                     return result;
                 case "ProposalDetail":
                     ProposalDetail proposalDetail = (ProposalDetail) object;
                     result.put("id", proposalDetail.getId().toString());
-                    result.put("description", proposalDetail.getId().toString());
+                    result.put("description", "Proposal Details");// proposalDetail.get().toString());
                     return result;
                 case "ReasonForDelay":
                     ReasonForDelay reasonForDelay = (ReasonForDelay) object;
                     result.put("id", reasonForDelay.getDate().toString());
-                    result.put("description", reasonForDelay.getId().toString());
+                    result.put("description", "Reason for delay");//reasonForDelay.getId().toString());
                     return result;
                 case "SyndicateConsortium":
                     SyndicateConsortium syndicateConsortium = (SyndicateConsortium) object;
-                    result.put("id", syndicateConsortium.getBankName().toString());
-                    result.put("description", syndicateConsortium.getId().toString());
+                    result.put("id", syndicateConsortium.getId().toString());
+                    result.put("description", syndicateConsortium.getBankName().toString());
                     return result;
                 case "CorporateLoanRiskRating":
                     CorporateLoanRiskRating corporateLoanRiskRating = (CorporateLoanRiskRating) object;

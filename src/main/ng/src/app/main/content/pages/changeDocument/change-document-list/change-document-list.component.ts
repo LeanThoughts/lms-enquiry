@@ -33,7 +33,7 @@ export class ChangeDocumentListComponent implements OnInit {
     }
 
     changeDocumentColumns: string[] = [
-        'date', 'loanContractId', 'userName', 'action'
+        'date', 'loanContractId', 'userName', 'action','businessProcessName', 'subProcessName',
     ];
 
     pageSizeOptions: number[] = [10, 25, 50, 100];
@@ -45,7 +45,7 @@ export class ChangeDocumentListComponent implements OnInit {
     selectedDocument: any;
     selectedItem: any;
 
-    constructor(private _service: ChangeDocumentService) { 
+    constructor(private _service: ChangeDocumentService) {
     }
 
     /**

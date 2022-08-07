@@ -26,7 +26,7 @@
             </mat-cell>
         </ng-container>
 
-        <!-- userName action -->
+        <!--  action Column -->
         <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
             <mat-cell *matCellDef="let changeDocument">
@@ -34,6 +34,21 @@
             </mat-cell>
         </ng-container>
 
+      <!--  businessProcessName Column -->
+      <ng-container matColumnDef="businessProcessName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Business Process</mat-header-cell>
+        <mat-cell *matCellDef="let changeDocument">
+          <div class="text-truncate">{{ changeDocument.businessProcessName }}</div>
+        </mat-cell>
+      </ng-container>
+
+      <!--  subProcessName Column -->
+      <ng-container matColumnDef="subProcessName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Sub Process</mat-header-cell>
+        <mat-cell *matCellDef="let changeDocument">
+          <div class="text-truncate">{{ changeDocument.subProcessName }}</div>
+        </mat-cell>
+      </ng-container>
         <mat-header-row *matHeaderRowDef="changeDocumentColumns"></mat-header-row>
 
         <mat-row *matRowDef="let changeDocument; columns: changeDocumentColumns;" class="changeDocument" matRipple
@@ -88,14 +103,6 @@
             </mat-cell>
         </ng-container>
 
-        <!-- tableKey column -->
-        <ng-container matColumnDef="tableKey">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Table Key</mat-header-cell>
-            <mat-cell *matCellDef="let documentItem">
-                <div class="text-truncate">{{ documentItem.tableKey }}</div>
-            </mat-cell>
-        </ng-container>
-
         <!-- oldValue column -->
         <ng-container matColumnDef="oldValue">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Old Value</mat-header-cell>
@@ -112,6 +119,13 @@
             </mat-cell>
         </ng-container>
 
+      <!-- tableKey column -->
+      <ng-container matColumnDef="tableKey">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Table Key</mat-header-cell>
+        <mat-cell *matCellDef="let documentItem">
+          <div class="text-truncate">{{ documentItem.tableKey }}</div>
+        </mat-cell>
+      </ng-container>
         <mat-header-row *matHeaderRowDef="itemColumns"></mat-header-row>
 
         <mat-row *matRowDef="let documentItem; columns: itemColumns;" class="documentItem" matRipple (click)="onItemSelect(documentItem)"

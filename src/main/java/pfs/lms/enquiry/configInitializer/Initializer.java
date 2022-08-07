@@ -42,6 +42,8 @@ public class Initializer implements CommandLineRunner {
 
     private final LoanApplicationRepository loanApplicationRepository;
 
+    private final WorkflowApproverRepository workflowApproverRepository;
+
     @Override
     public void run(String... strings) throws Exception {
 
@@ -479,6 +481,24 @@ public class Initializer implements CommandLineRunner {
             ));
             log.info("Added STATES");
 
+        }
+
+
+        WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName("Monitoring");
+        if (workflowApprover == null) {
+            workflowApprover.setId(1);
+            workflowApprover.setApproverName("Project Department Head");
+            workflowApprover.setApproverEmail("naveenkverma@ptcfinancial.com");
+            workflowApprover.setProcessName("Monitoring");
+            workflowApproverRepository.save(workflowApprover);
+        }
+        workflowApprover = workflowApproverRepository.findByProcessName("Appraisal");
+        if (workflowApprover == null) {
+            workflowApprover.setId(1);
+            workflowApprover.setApproverName("Appraisal Department Head");
+            workflowApprover.setApproverEmail("naveenkverma@ptcfinancial.com");
+            workflowApprover.setProcessName("Appraisal");
+            workflowApproverRepository.save(workflowApprover);
         }
 
     }
