@@ -6,7 +6,7 @@
         <!-- BREADCRUMB -->
         <div class="breadcrumb text-truncate h4 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
             *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
-            Loan Appraisal : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.borrowerName }}
+            Loan Appraisal : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.projectName }}
             <br>
             Status: {{ _loanAppraisalService._loanAppraisal?.workFlowStatusDescription }}
         </div>

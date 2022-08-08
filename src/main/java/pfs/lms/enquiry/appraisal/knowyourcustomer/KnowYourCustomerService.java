@@ -64,16 +64,16 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
                 orElseThrow(() -> new EntityNotFoundException(loanPartnerId));
         List<KnowYourCustomer> kycs = knowYourCustomerRepository.findByLoanPartnerId(loanPartnerId);
         int kycStatusCount = 0;
-        for (KnowYourCustomer kyc : kycs) {
-            if (kyc.getFileReference() != null && !kyc.getFileReference().equals(""))
-                kycStatusCount++;
-        }
+//        for (KnowYourCustomer kyc : kycs) {
+//            if (kyc.getFileReference() != null && !kyc.getFileReference().equals(""))
+//                kycStatusCount++;
+//        }
 
         for (KnowYourCustomer knowYourCustomer : kycs) {
 
             if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")) {
 
-                if (knowYourCustomer.getFileReference() != null) {
+                if (knowYourCustomer.getFileReference().length() > 0) {
                     if (knowYourCustomer.getDocumentType().equals("ZPFSBP0008") ||   //PAN Card of Company
                             knowYourCustomer.getDocumentType().equals("ZPFSBP0006") ||   //"Certification of Incorporation",
                             knowYourCustomer.getDocumentType().equals("ZPFSBP0019") ||   //Board Resolution
@@ -102,12 +102,12 @@ public class KnowYourCustomerService implements IKnowYourCustomerService {
         if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")) {
             if (kycStatusCount > 0 && kycStatusCount < 4)
                 loanPartner.setKycStatus("Pending");
-            else if (kycStatusCount == 4)
+            else if (kycStatusCount >= 4)
                 loanPartner.setKycStatus("Completed");
         } else {
-            if (kycStatusCount > 0 && kycStatusCount < 2)
+            if (kycStatusCount > 0 && kycStatusCount < 1)
                 loanPartner.setKycStatus("Pending");
-            else if (kycStatusCount == 2)
+            else if (kycStatusCount >= 2)
                 loanPartner.setKycStatus("Completed");
         }
 
