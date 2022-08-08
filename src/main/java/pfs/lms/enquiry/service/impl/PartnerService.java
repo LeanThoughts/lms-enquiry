@@ -327,38 +327,59 @@ public class PartnerService implements IPartnerService {
 
     @Override
     public List<Partner> getLendersIndependentEngineers() {
-        List<Partner> partners = new ArrayList<>();
-        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM003");
-        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
-        return partners;
+//        List<Partner> partners = new ArrayList<>();
+//        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM003");
+//        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
+//        return partners;
+
+        return this.getPartnersByRole("ZLM003");
+
     }
 
     @Override
     public List<Partner> getLendersFinancialAdvisors() {
-        List<Partner> partners = new ArrayList<>();
-        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM002");
-        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
-        return partners;
+//        List<Partner> partners = new ArrayList<>();
+//        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM002");
+//        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
+//        return partners;
+
+        return this.getPartnersByRole("ZLM002");
+
     }
 
     @Override
     public List<Partner> getTRAAuthorizedPersons() {
-        List<Partner> partners = new ArrayList<>();
-        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM029");
-        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
-        return partners;
+//        List<Partner> partners = new ArrayList<>();
+//        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM029");
+//        partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
+//        return partners;
+
+        return this.getPartnersByRole("ZLM029");
+
     }
 
     @Override
     public List<Partner> getPartnersByRoleType(String roleType) {
-        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode(roleType);
-        List<Partner> partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
-        return partners;
+//        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode(roleType);
+//        List<Partner> partners = partnerRepository.findByPartnerRoleTypes(partnerRoleType);
+        return this.getPartnersByRole(roleType);
+
     }
 
     @Override
     public List<Partner> findByPartyRole(String roleType) {
         return partnerRepository.findByPartyRole(roleType);
+    }
+
+    private List<Partner> getPartnersByRole(String roleType) {
+
+        List<Partner> partners = new ArrayList<>();
+        List<PartnerRoleType> partnerRoleTypes = partnerRoleTypeRepository.findByRoleCode(roleType);
+        for (PartnerRoleType partnerRoleType: partnerRoleTypes) {
+            partners.addAll(partnerRepository.findByPartnerRoleTypes(partnerRoleType));
+        }
+
+        return partners;
     }
 
     @Override
