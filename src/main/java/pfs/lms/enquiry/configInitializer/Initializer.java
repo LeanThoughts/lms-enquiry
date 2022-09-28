@@ -208,7 +208,7 @@ public class Initializer implements CommandLineRunner {
         productRepository.deleteAll();
         if (productRepository.count() == 0) {
             Product p1 = new Product("301", "Bridge Loan");
-            Product p2 = new Product("301", "Short Term Loan");
+            Product p2 = new Product("302", "Short Term Loan");
             Product p3 = new Product("303", "Term Loan");
             Product p4 = new Product("304", "Debentures");
             Product p5 = new Product("305", "Non Fund Based Loan");
@@ -484,22 +484,22 @@ public class Initializer implements CommandLineRunner {
         }
 
 
-        WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName("Monitoring");
-        if (workflowApprover == null) {
-            workflowApprover.setId(1);
-            workflowApprover.setApproverName("Project Department Head");
-            workflowApprover.setApproverEmail("naveenkverma@ptcfinancial.com");
-            workflowApprover.setProcessName("Monitoring");
-            workflowApproverRepository.save(workflowApprover);
-        }
-        workflowApprover = workflowApproverRepository.findByProcessName("Appraisal");
-        if (workflowApprover == null) {
-            workflowApprover.setId(1);
-            workflowApprover.setApproverName("Appraisal Department Head");
-            workflowApprover.setApproverEmail("naveenkverma@ptcfinancial.com");
-            workflowApprover.setProcessName("Appraisal");
-            workflowApproverRepository.save(workflowApprover);
-        }
+//        WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName("Monitoring");
+//        if (workflowApprover == null) {
+//            workflowApprover.setId(1);
+//            workflowApprover.setApproverName("Project Department Head");
+//            workflowApprover.setApproverEmail("naveenkverma@ptcfinancial.com");
+//            workflowApprover.setProcessName("Monitoring");
+//            workflowApproverRepository.save(workflowApprover);
+//        }
+//        workflowApprover = workflowApproverRepository.findByProcessName("Appraisal");
+//        if (workflowApprover == null) {
+//            workflowApprover.setId(2);
+//            workflowApprover.setApproverName("Appraisal Department Head");
+//            workflowApprover.setApproverEmail("naveenkverma@ptcfinancial.com");
+//            workflowApprover.setProcessName("Appraisal");
+//            workflowApproverRepository.save(workflowApprover);
+//        }
 
     }
 
