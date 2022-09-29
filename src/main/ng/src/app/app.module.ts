@@ -38,6 +38,7 @@ import { ChangeDocumentModule } from './main/content/pages/changeDocument/change
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { LoanAppraisalModule } from './main/content/pages/appraisal/loanAppraisal.module';
 import { InboxComponent } from './main/content/pages/inbox/inbox.component';
+import { EnquiryActionModule } from './main/content/pages/enquiryAction/enquiryAction.module';
 
 const appRoutes: Routes = [
     {
@@ -100,6 +101,7 @@ const appRoutes: Routes = [
         LoanContractsSearchModule,
         LoanMonitoringModule,
         LoanAppraisalModule,
+        EnquiryActionModule,
 
         // Workflow
         InboxModule,

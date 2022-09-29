@@ -11,6 +11,7 @@ import { LoanMonitoringConstants } from '../../model/loanMonitoringConstants';
 import { AppService } from 'app/app.service';
 import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -49,7 +50,7 @@ export class LoanContractsSearchComponent {
     constructor(_route: ActivatedRoute, _formBuilder: FormBuilder, public _appService: AppService,
                 public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService, 
-                private _matSnackBar: MatSnackBar) {
+                private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -151,6 +152,29 @@ export class LoanContractsSearchComponent {
                     this._loanAppraisalService._loanAppraisal = { id: '' };
                     console.log('404 error and redirecting: ', this._loanAppraisalService._loanAppraisal);
                     this.redirect('/loanAppraisal');
+                }
+            })
+        }
+        else {
+            this._matSnackBar.open('Loan is still in the enquiry phase. Process cannot only be executed after the enquiry is approved by BD Team',
+                'OK', { duration: 7000 });
+        }
+    }
+
+    /**
+     * redirectToEnquiryAction()
+     */
+    redirectToEnquiryAction(): void {
+        if (this._service.selectedEnquiry.value.loanContractId !== undefined) {
+            this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._enquiryActionService._enquiryAction.next(response);
+                this.redirect('/enquiryAction');
+            }, (error: HttpErrorResponse) => {
+                console.log('handling error now');
+                if (error.status === 404) {
+                    this._enquiryActionService._enquiryAction.next({ id: '' });
+                    console.log('404 error and redirecting: ', this._enquiryActionService._enquiryAction.value);
+                    this.redirect('/enquiryAction');
                 }
             })
         }

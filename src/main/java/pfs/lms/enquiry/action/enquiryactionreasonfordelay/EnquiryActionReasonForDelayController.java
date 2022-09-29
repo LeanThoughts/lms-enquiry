@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.reasonfordelay;
+package pfs.lms.enquiry.action.enquiryactionreasonfordelay;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ public class EnquiryActionReasonForDelayController {
 
     private final EnquiryActionReasonForDelayService reasonForDelayService;
 
-    @PostMapping("/enquiryReasonForDelays/create")
+    @PostMapping("/enquiryActionReasonForDelays/create")
     public ResponseEntity<EnquiryActionReasonForDelay> createReasonForDelay(@RequestBody EnquiryActionReasonForDelayResource resource,
                                                                             HttpServletRequest request) {
         return ResponseEntity.ok(reasonForDelayService.create(resource, request.getUserPrincipal().getName()));
     }
 
-    @PutMapping("/enquiryReasonForDelays/update")
+    @PutMapping("/enquiryActionReasonForDelays/update")
     public ResponseEntity<EnquiryActionReasonForDelay> updateReasonForDelay(@RequestBody EnquiryActionReasonForDelayResource resource,
                                                                             HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(reasonForDelayService.update(resource, request.getUserPrincipal().getName()));

@@ -17,13 +17,13 @@ public class RejectByPfsController {
 
     private final RejectByPfsService reasonForDelayService;
 
-    @PostMapping("/rejectByPfs/create")
+    @PostMapping("/rejectByPfses/create")
     public ResponseEntity<RejectByPfs> createRejectByPfs(@RequestBody RejectByPfsResource resource,
                                                             HttpServletRequest request) {
         return ResponseEntity.ok(reasonForDelayService.create(resource, request.getUserPrincipal().getName()));
     }
 
-    @PutMapping("/rejectByPfs/update")
+    @PutMapping("/rejectByPfses/update")
     public ResponseEntity<RejectByPfs> updateRejectByPfs(@RequestBody RejectByPfsResource resource,
                                                             HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(reasonForDelayService.update(resource, request.getUserPrincipal().getName()));

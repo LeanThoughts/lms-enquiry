@@ -1,0 +1,46 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 290px">
+        <form [formGroup]="_rejectByForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Category" formControlName="rejectionCategory" required>
+                        <mat-option [value]="'1'">Rejected by Borrower</mat-option>
+                        <mat-option [value]="'2'">Rejected by BD</mat-option>
+                        <mat-option [value]="'3'">Rejected by ICC</mat-option>
+                        <mat-option [value]="'4'">Rejected by Appraisal</mat-option>
+                        <mat-option [value]="'5'">Rejected by Board</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Reason for Customer Rejection" formControlName="rejectionReason" maxlength="200" required>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput [matDatepicker]="picker2" placeholder="Rejection Date" formControlName="rejectionDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

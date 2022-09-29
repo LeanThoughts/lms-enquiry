@@ -30,14 +30,14 @@ public class RejectByCustomerService implements IRejectByCustomerService {
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-                    changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-                            loanApplication.getLoanContractId(),
-                            null,
-                            obj,
-                            "Created",
-                            username,
-                            "EnquiryAction", "Header");
+//                    changeDocumentService.createChangeDocument(
+//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+//                            loanApplication.getLoanContractId(),
+//                            null,
+//                            obj,
+//                            "Created",
+//                            username,
+//                            "EnquiryAction", "Header");
                     return obj;
                 });
         RejectByCustomer rejectByCustomer = new RejectByCustomer();
@@ -48,16 +48,16 @@ public class RejectByCustomerService implements IRejectByCustomerService {
         rejectByCustomer = rejectByCustomerRepository.save(rejectByCustomer);
 
         // Change Documents for Reject By Customer
-        changeDocumentService.createChangeDocument(
-                rejectByCustomer.getEnquiryAction().getId(),
-                rejectByCustomer.getId().toString(),
-                rejectByCustomer.getEnquiryAction().getId().toString(),
-                rejectByCustomer.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                null,
-                rejectByCustomer,
-                "Created",
-                username,
-                "EnquiryAction", "Reject By Customer" );
+//        changeDocumentService.createChangeDocument(
+//                rejectByCustomer.getEnquiryAction().getId(),
+//                rejectByCustomer.getId().toString(),
+//                rejectByCustomer.getEnquiryAction().getId().toString(),
+//                rejectByCustomer.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                null,
+//                rejectByCustomer,
+//                "Created",
+//                username,
+//                "EnquiryAction", "Reject By Customer" );
 
         return rejectByCustomer;
     }
@@ -77,16 +77,16 @@ public class RejectByCustomerService implements IRejectByCustomerService {
         rejectByCustomer = rejectByCustomerRepository.save(rejectByCustomer);
 
         // Change Documents for Reject By Customer
-        changeDocumentService.createChangeDocument(
-                rejectByCustomer.getEnquiryAction().getId(),
-                rejectByCustomer.getId().toString(),
-                rejectByCustomer.getEnquiryAction().getId().toString(),
-                rejectByCustomer.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                oldRejectByPFS,
-                rejectByCustomer,
-                "Updated",
-                username,
-                "EnquiryAction", "Reject By Customer");
+//        changeDocumentService.createChangeDocument(
+//                rejectByCustomer.getEnquiryAction().getId(),
+//                rejectByCustomer.getId().toString(),
+//                rejectByCustomer.getEnquiryAction().getId().toString(),
+//                rejectByCustomer.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                oldRejectByPFS,
+//                rejectByCustomer,
+//                "Updated",
+//                username,
+//                "EnquiryAction", "Reject By Customer");
 
         return rejectByCustomer;
     }

@@ -12,6 +12,10 @@
 
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToEnquiryAction()" 
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                Process Enquiry
+            </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToLoanAppraisal()" *ngIf="appraisal"
                     [disabled]="_service.selectedLoanApplicationId === undefined &&
                     (

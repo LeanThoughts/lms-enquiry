@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.reasonfordelay;
+package pfs.lms.enquiry.action.enquiryactionreasonfordelay;
 
 public interface IEnquiryActionReasonForDelayService {
 

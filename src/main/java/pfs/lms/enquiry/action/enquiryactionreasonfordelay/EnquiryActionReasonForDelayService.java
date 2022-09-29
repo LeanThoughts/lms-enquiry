@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.reasonfordelay;
+package pfs.lms.enquiry.action.enquiryactionreasonfordelay;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +30,14 @@ public class EnquiryActionReasonForDelayService implements IEnquiryActionReasonF
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-                    changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-                            loanApplication.getLoanContractId(),
-                            null,
-                            obj,
-                            "Created",
-                            username,
-                            "EnquiryAction", "Header");
+//                    changeDocumentService.createChangeDocument(
+//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+//                            loanApplication.getLoanContractId(),
+//                            null,
+//                            obj,
+//                            "Created",
+//                            username,
+//                            "EnquiryAction", "Header");
                     return obj;
                 });
         EnquiryActionReasonForDelay enquiryActionReasonForDelay = new EnquiryActionReasonForDelay();
@@ -47,16 +47,16 @@ public class EnquiryActionReasonForDelayService implements IEnquiryActionReasonF
         enquiryActionReasonForDelay = enquiryActionReasonForDelayRepository.save(enquiryActionReasonForDelay);
 
         // Change Documents for Reason Delay
-        changeDocumentService.createChangeDocument(
-                enquiryActionReasonForDelay.getEnquiryAction().getId(),
-                enquiryActionReasonForDelay.getId().toString(),
-                enquiryActionReasonForDelay.getEnquiryAction().getId().toString(),
-                enquiryActionReasonForDelay.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                null,
-                enquiryActionReasonForDelay,
-                "Created",
-                username,
-                "EnquiryAction", "Reason For Delay" );
+//        changeDocumentService.createChangeDocument(
+//                enquiryActionReasonForDelay.getEnquiryAction().getId(),
+//                enquiryActionReasonForDelay.getId().toString(),
+//                enquiryActionReasonForDelay.getEnquiryAction().getId().toString(),
+//                enquiryActionReasonForDelay.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                null,
+//                enquiryActionReasonForDelay,
+//                "Created",
+//                username,
+//                "EnquiryAction", "Reason For Delay" );
 
         return enquiryActionReasonForDelay;
     }
@@ -75,16 +75,16 @@ public class EnquiryActionReasonForDelayService implements IEnquiryActionReasonF
         enquiryActionReasonForDelay = enquiryActionReasonForDelayRepository.save(enquiryActionReasonForDelay);
 
         // Change Documents for Reason Delay
-        changeDocumentService.createChangeDocument(
-                enquiryActionReasonForDelay.getEnquiryAction().getId(),
-                enquiryActionReasonForDelay.getId().toString(),
-                enquiryActionReasonForDelay.getEnquiryAction().getId().toString(),
-                enquiryActionReasonForDelay.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                oldReasonForDelay,
-                enquiryActionReasonForDelay,
-                "Updated",
-                username,
-                "EnquiryAction", "Reason For Delay" );
+//        changeDocumentService.createChangeDocument(
+//                enquiryActionReasonForDelay.getEnquiryAction().getId(),
+//                enquiryActionReasonForDelay.getId().toString(),
+//                enquiryActionReasonForDelay.getEnquiryAction().getId().toString(),
+//                enquiryActionReasonForDelay.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                oldReasonForDelay,
+//                enquiryActionReasonForDelay,
+//                "Updated",
+//                username,
+//                "EnquiryAction", "Reason For Delay" );
 
         return enquiryActionReasonForDelay;
     }
