@@ -1,0 +1,55 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 345px">
+        <form [formGroup]="_enquiryCompletionForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Product Type" formControlName="productType" required>
+                        <mat-option [value]="'301'">Bridge Loan</mat-option>
+                        <mat-option [value]="'302'">Short Term Loan</mat-option>
+                        <mat-option [value]="'303'">Term Loan</mat-option>
+                        <mat-option [value]="'304'">Debentures</mat-option>
+                        <mat-option [value]="'305'">Non Fund Based Loan</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <mat-select placeholder="Term" formControlName="term" required>
+                        <mat-option [value]="'1'">Short Term (Less than 1 Year)</mat-option>
+                        <mat-option [value]="'2'">Medium Term (Between 1 and 5 years)</mat-option>
+                        <mat-option [value]="'3'">Long Term(Greater than 5 years)</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Completion" formControlName="date" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200" required>
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

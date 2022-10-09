@@ -26,6 +26,8 @@ import { RejectByPFSComponent } from './rejectByPFS/rejectByPFS.component';
 import { RejectByPFSUpdateComponent } from './rejectByPFSUpdate/rejectByPFSUpdate.component';
 import { RejectByCustomerComponent } from './rejectByCustomer/rejectByCustomer.component';
 import { RejectByCustomerUpdateComponent } from './rejectByCustomerUpdate/rejectByCustomerUpdate.component';
+import { EnquiryCompletionComponent } from './enquiryCompletion/enquiryCompletion.component';
+import { EnquiryCompletionUpdateComponent } from './enquiryCompletionUpdate/enquiryCompletionUpdate.component';
 
 const routes = [
     {
@@ -83,7 +85,9 @@ const MY_FORMATS = {
         RejectByPFSComponent,
         RejectByPFSUpdateComponent,
         RejectByCustomerComponent,
-        RejectByCustomerUpdateComponent
+        RejectByCustomerUpdateComponent,
+        EnquiryCompletionComponent,
+        EnquiryCompletionUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -102,12 +106,15 @@ const MY_FORMATS = {
         RejectByPFSComponent,
         RejectByPFSUpdateComponent,
         RejectByCustomerComponent,
-        RejectByCustomerUpdateComponent
+        RejectByCustomerUpdateComponent,
+        EnquiryCompletionComponent,
+        EnquiryCompletionUpdateComponent
     ],  
     entryComponents: [
         EnquiryActionReasonForDelayUpdateComponent,
         RejectByPFSUpdateComponent,
-        RejectByCustomerUpdateComponent
+        RejectByCustomerUpdateComponent,
+        EnquiryCompletionUpdateComponent
     ]
 })
 export class EnquiryActionModule {

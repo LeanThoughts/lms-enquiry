@@ -26,7 +26,8 @@ export class EnquiryActionService implements Resolve<any> {
         return forkJoin([
             this.getReasonForDelay(this._enquiryAction.value.id),
             this.getRejectByPFS(this._enquiryAction.value.id),
-            this.getRejectByCustomers(this._enquiryAction.value.id)
+            this.getRejectByCustomers(this._enquiryAction.value.id),
+            this.getEnquiryCompletion(this._enquiryAction.value.id)
         ]);
     }
     
@@ -35,6 +36,38 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public getEnquiryAction(loanApplicationId: string): Observable<any> {
         return this._http.get("enquiry/api/enquiryActions/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
+    }
+
+    /**
+     * getEnquiryCompletion()
+     */
+    public getEnquiryCompletion(enquiryActionId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/enquiryCompletions/search/findByEnquiryActionId?enquiryActionId=' + enquiryActionId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createEnquiryCompletion()
+     */
+    public createEnquiryCompletion(enquiryCompletion: any): Observable<any> {
+        return this._http.post("enquiry/api/enquiryCompletions/create", enquiryCompletion);
+    }
+
+    /**
+     * updateEnquiryCompletion()
+     */
+    public updateEnquiryCompletion(enquiryCompletion: any): Observable<any> {
+        return this._http.put("enquiry/api/enquiryCompletions/update", enquiryCompletion);
     }
 
     /**

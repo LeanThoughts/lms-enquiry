@@ -17,13 +17,13 @@ public class EnquiryCompletionController {
 
     private final EnquiryCompletionService enquiryCompletionService;
 
-    @PostMapping("/enquiryCompletion/create")
+    @PostMapping("/enquiryCompletions/create")
     public ResponseEntity<EnquiryCompletion> createOtherDetail(@RequestBody EnquiryCompletionResource resource,
                                                                HttpServletRequest request) {
         return ResponseEntity.ok(enquiryCompletionService.create(resource, request.getUserPrincipal().getName()));
     }
 
-    @PutMapping("/enquiryCompletion/update")
+    @PutMapping("/enquiryCompletions/update")
     public ResponseEntity<EnquiryCompletion> updateOtherDetail(@RequestBody EnquiryCompletionResource resource,
                                                                HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(enquiryCompletionService.update(resource, request.getUserPrincipal().getName()));

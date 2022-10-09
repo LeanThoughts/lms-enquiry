@@ -32,6 +32,7 @@ public class OtherDetail extends AggregateRoot<OtherDetail> implements Cloneable
     private String creditStanding;
     private String creditStandingInstruction;
     private String creditStandingText;
+    private LocalDate ratingDate;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

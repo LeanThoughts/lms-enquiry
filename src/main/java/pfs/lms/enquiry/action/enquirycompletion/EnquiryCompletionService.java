@@ -30,14 +30,14 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-                    changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-                            loanApplication.getLoanContractId(),
-                            null,
-                            obj,
-                            "Created",
-                            username,
-                            "EnquiryAction", "Header");
+//                    changeDocumentService.createChangeDocument(
+//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+//                            loanApplication.getLoanContractId(),
+//                            null,
+//                            obj,
+//                            "Created",
+//                            username,
+//                            "EnquiryAction", "Header");
                     return obj;
                 });
         EnquiryCompletion enquiryCompletion = new EnquiryCompletion();
@@ -49,16 +49,16 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
         enquiryCompletion = enquiryCompletionRepository.save(enquiryCompletion);
 
         // Change Documents for Enquiry Completion
-        changeDocumentService.createChangeDocument(
-                enquiryCompletion.getEnquiryAction().getId(),
-                enquiryCompletion.getId().toString(),
-                enquiryCompletion.getEnquiryAction().getId().toString(),
-                enquiryCompletion.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                null,
-                enquiryCompletion,
-                "Created",
-                username,
-                "EnquiryAction", "Enquiry Completion" );
+//        changeDocumentService.createChangeDocument(
+//                enquiryCompletion.getEnquiryAction().getId(),
+//                enquiryCompletion.getId().toString(),
+//                enquiryCompletion.getEnquiryAction().getId().toString(),
+//                enquiryCompletion.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                null,
+//                enquiryCompletion,
+//                "Created",
+//                username,
+//                "EnquiryAction", "Enquiry Completion" );
 
         return enquiryCompletion;
     }
@@ -79,16 +79,16 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
         enquiryCompletion = enquiryCompletionRepository.save(enquiryCompletion);
 
         // Change Documents for Enquiry Completion
-        changeDocumentService.createChangeDocument(
-                enquiryCompletion.getEnquiryAction().getId(),
-                enquiryCompletion.getId().toString(),
-                enquiryCompletion.getEnquiryAction().getId().toString(),
-                enquiryCompletion.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                oldRejectByPFS,
-                enquiryCompletion,
-                "Updated",
-                username,
-                "EnquiryAction", "Enquiry Completion");
+//        changeDocumentService.createChangeDocument(
+//                enquiryCompletion.getEnquiryAction().getId(),
+//                enquiryCompletion.getId().toString(),
+//                enquiryCompletion.getEnquiryAction().getId().toString(),
+//                enquiryCompletion.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                oldRejectByPFS,
+//                enquiryCompletion,
+//                "Updated",
+//                username,
+//                "EnquiryAction", "Enquiry Completion");
 
         return enquiryCompletion;
     }
