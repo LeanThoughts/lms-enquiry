@@ -28,6 +28,8 @@ import { RejectByCustomerComponent } from './rejectByCustomer/rejectByCustomer.c
 import { RejectByCustomerUpdateComponent } from './rejectByCustomerUpdate/rejectByCustomerUpdate.component';
 import { EnquiryCompletionComponent } from './enquiryCompletion/enquiryCompletion.component';
 import { EnquiryCompletionUpdateComponent } from './enquiryCompletionUpdate/enquiryCompletionUpdate.component';
+import { OtherDetailsComponent } from './otherDetails/otherDetails.component';
+import { OtherDetailsUpdateComponent } from './otherDetailsUpdate/otherDetailsUpdate.component';
 
 const routes = [
     {
@@ -87,7 +89,9 @@ const MY_FORMATS = {
         RejectByCustomerComponent,
         RejectByCustomerUpdateComponent,
         EnquiryCompletionComponent,
-        EnquiryCompletionUpdateComponent
+        EnquiryCompletionUpdateComponent,
+        OtherDetailsComponent,
+        OtherDetailsUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -108,13 +112,16 @@ const MY_FORMATS = {
         RejectByCustomerComponent,
         RejectByCustomerUpdateComponent,
         EnquiryCompletionComponent,
-        EnquiryCompletionUpdateComponent
+        EnquiryCompletionUpdateComponent,
+        OtherDetailsComponent,
+        OtherDetailsUpdateComponent
     ],  
     entryComponents: [
         EnquiryActionReasonForDelayUpdateComponent,
         RejectByPFSUpdateComponent,
         RejectByCustomerUpdateComponent,
-        EnquiryCompletionUpdateComponent
+        EnquiryCompletionUpdateComponent,
+        OtherDetailsUpdateComponent
     ]
 })
 export class EnquiryActionModule {

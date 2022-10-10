@@ -94,21 +94,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
     /**
      * sendAppraisalForApproval()
      */
-    //  sendAppraisalForApproval(): void {
-    //     let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-    //     let email = this._appService.currentUser.email;
-    //     this._matSnackBar.open('Please wait while attempting to send the appraisal for approval.', 'OK', { duration: 25000 });
-    //     this._loanAppraisalService.sendAppraisalForApproval(this.loanAppraisal.id, name, email).subscribe(
-    //         response => {
-    //             this.loanAppraisal = response;
-    //             this._matSnackBar.dismiss();
-    //             this._matSnackBar.open('Appraisal is sent for approval.', 'OK', { duration: 7000 });
-    //         },
-    //         error => {
-    //             this.disableSendForApproval = false;
-    //             this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
-    //                 'OK', { duration: 7000 });
-    //         });
-    //     this.disableSendForApproval = true;
-    // }    
+    sendAppraisalForApproval(): void {
+
+    }
 }

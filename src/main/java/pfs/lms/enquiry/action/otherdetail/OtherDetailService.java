@@ -51,6 +51,7 @@ public class OtherDetailService implements IOtherDetailService {
         otherDetail.setCreditStanding(resource.getCreditStanding());
         otherDetail.setCreditStandingInstruction(resource.getCreditStandingInstruction());
         otherDetail.setCreditStandingText(resource.getCreditStandingText());
+        otherDetail.setRatingDate(resource.getRatingDate());
         otherDetail = otherDetailRepository.save(otherDetail);
 
         // Change Documents for Other Detail
@@ -86,6 +87,7 @@ public class OtherDetailService implements IOtherDetailService {
         otherDetail.setCreditStanding(resource.getCreditStanding());
         otherDetail.setCreditStandingInstruction(resource.getCreditStandingInstruction());
         otherDetail.setCreditStandingText(resource.getCreditStandingText());
+        otherDetail.setRatingDate(resource.getRatingDate());
         otherDetail = otherDetailRepository.save(otherDetail);
 
         // Change Documents for Other Detail

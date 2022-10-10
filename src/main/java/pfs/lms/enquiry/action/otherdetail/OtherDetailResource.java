@@ -26,4 +26,5 @@ public class OtherDetailResource {
     private String creditStanding;
     private String creditStandingInstruction;
     private String creditStandingText;
+    private LocalDate ratingDate;
 }

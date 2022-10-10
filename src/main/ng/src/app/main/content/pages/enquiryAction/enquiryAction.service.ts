@@ -27,7 +27,8 @@ export class EnquiryActionService implements Resolve<any> {
             this.getReasonForDelay(this._enquiryAction.value.id),
             this.getRejectByPFS(this._enquiryAction.value.id),
             this.getRejectByCustomers(this._enquiryAction.value.id),
-            this.getEnquiryCompletion(this._enquiryAction.value.id)
+            this.getEnquiryCompletion(this._enquiryAction.value.id),
+            this.getOtherDetails(this._enquiryAction.value.id)
         ]);
     }
     
@@ -36,6 +37,38 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public getEnquiryAction(loanApplicationId: string): Observable<any> {
         return this._http.get("enquiry/api/enquiryActions/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
+    }
+
+    /**
+     * getOtherDetails()
+     */
+    public getOtherDetails(enquiryActionId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/otherDetails/search/findByEnquiryActionId?enquiryActionId=' + enquiryActionId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createOtherDetails()
+     */
+    public createOtherDetails(otherDetails: any): Observable<any> {
+        return this._http.post("enquiry/api/otherDetails/create", otherDetails);
+    }
+
+    /**
+     * updateOtherDetails()
+     */
+    public updateOtherDetails(otherDetails: any): Observable<any> {
+        return this._http.put("enquiry/api/otherDetails/update", otherDetails);
     }
 
     /**
