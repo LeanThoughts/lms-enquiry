@@ -11,15 +11,12 @@ export class EnquiryActionService implements Resolve<any> {
 
     /**
      * constructor()
-     * @param _http
      */
     constructor(private _http: HttpClient, private _loanEnquiryService: LoanEnquiryService) {
     }
 
     /**
      * resolve()
-     * @param route
-     * @param state
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         console.log('in resolve :: enquiryActionId is ', this._enquiryAction.value.id);
@@ -28,7 +25,8 @@ export class EnquiryActionService implements Resolve<any> {
             this.getRejectByPFS(this._enquiryAction.value.id),
             this.getRejectByCustomers(this._enquiryAction.value.id),
             this.getEnquiryCompletion(this._enquiryAction.value.id),
-            this.getOtherDetails(this._enquiryAction.value.id)
+            this.getOtherDetails(this._enquiryAction.value.id),
+            this.getProjectProposals(this._enquiryAction.value.id)
         ]);
     }
     
@@ -37,6 +35,111 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public getEnquiryAction(loanApplicationId: string): Observable<any> {
         return this._http.get("enquiry/api/enquiryActions/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
+    }
+
+    /**
+     * getShareHolders()
+     */
+    public getShareHolders(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/shareHolders/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createShareHolder()
+     */
+    public createShareHolder(shareHolder: any): Observable<any> {
+        return this._http.post("enquiry/api/shareHolders/create", shareHolder);
+    }
+
+    /**
+     * updateShareHolder()
+     */
+    public updateShareHolder(shareHolder: any): Observable<any> {
+        return this._http.put("enquiry/api/shareHolders/update", shareHolder);
+    }
+
+    /**
+     * getProjectCost()
+     */
+    public getProjectCost(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/projectCosts/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createProjectCost()
+     */
+    public createProjectCost(projectCost: any): Observable<any> {
+        return this._http.post("enquiry/api/projectCosts/create", projectCost);
+    }
+
+    /**
+     * updateProjectCost()
+     */
+    public updateProjectCost(projectCost: any): Observable<any> {
+        return this._http.put("enquiry/api/projectCosts/update", projectCost);
+    }
+
+    /**
+     * getCollateralDetails()
+     */
+    public getCollateralDetails(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/collateralDetails/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createCollateralDetail()
+     */
+    public createCollateralDetail(collateralDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/collateralDetails/create", collateralDetail);
+    }
+
+    /**
+     * updateCollateralDetail()
+     */
+    public updateCollateralDetail(collateralDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/collateralDetails/update", collateralDetail);
+    }
+
+    /**
+     * getDealGuaranteeTimeline()
+     */
+    public getDealGuaranteeTimeline(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/dealGuaranteeTimelines/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createDealGuaranteeTimeline()
+     */
+    public createDealGuaranteeTimeline(dealGuaranteeTimeline: any): Observable<any> {
+        return this._http.post("enquiry/api/dealGuaranteeTimelines/create", dealGuaranteeTimeline);
+    }
+
+    /**
+     * updateDealGuaranteeTimeline()
+     */
+    public updateDealGuaranteeTimeline(dealGuaranteeTimeline: any): Observable<any> {
+        return this._http.put("enquiry/api/dealGuaranteeTimelines/update", dealGuaranteeTimeline);
+    }
+
+    /**
+     * getProjectProposals()
+     */
+    public getProjectProposals(enquiryActionId: string): Observable<any> {
+        return this._http.get("enquiry/api/projectProposals/search/findByEnquiryActionId?enquiryActionId=" + enquiryActionId);
+    }
+
+    /**
+     * createProjectProposal()
+     */
+    public createProjectProposal(projectProposal: any): Observable<any> {
+        return this._http.post("enquiry/api/projectProposals/create", projectProposal);
+    }
+
+    /**
+     * updateProjectProposal()
+     */
+    public updateProjectProposal(projectProposal: any): Observable<any> {
+        return this._http.put("enquiry/api/projectProposals/update", projectProposal);
     }
 
     /**

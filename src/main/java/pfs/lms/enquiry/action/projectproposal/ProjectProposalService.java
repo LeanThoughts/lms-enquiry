@@ -16,10 +16,29 @@ import javax.persistence.EntityNotFoundException;
 @RequiredArgsConstructor
 public class ProjectProposalService implements IProjectProposalService {
 
+    private final IChangeDocumentService changeDocumentService;
+
     private final LoanApplicationRepository loanApplicationRepository;
     private final EnquiryActionRepository enquiryActionRepository;
     private final ProjectProposalRepository projectProposalRepository;
-    private final IChangeDocumentService changeDocumentService;
+    private final DealGuaranteeTimelineRepository dealGuaranteeTimelineRepository;
+
+//    @Override
+//    public ProjectProposalResource getProjectProposal(UUID enquiryActionId) {
+//        ProjectProposal projectProposal = projectProposalRepository.findByEnquiryActionId(enquiryActionId)
+//                .orElseGet(() -> {
+//                    return null;
+//                });
+//        ProjectProposalResource projectProposalResource = null;
+//        if (projectProposal != null) {
+//            projectProposalResource = new ProjectProposalResource();
+//            projectProposalResource.setId(projectProposal.getId());
+//            DealGuaranteeTimeline dealGuaranteeTimeline = dealGuaranteeTimelineRepository.
+//                    findByProjectProposalId(projectProposal.getId());
+//            projectProposalResource.setDealGuaranteeTimeline(dealGuaranteeTimeline);
+//        }
+//        return projectProposalResource;
+//    }
 
     @Override
     public ProjectProposal create(ProjectProposalResource resource, String username) {
@@ -30,21 +49,20 @@ public class ProjectProposalService implements IProjectProposalService {
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-                    changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-                            loanApplication.getLoanContractId(),
-                            null,
-                            obj,
-                            "Created",
-                            username,
-                            "EnquiryAction", "Header");
+//                    changeDocumentService.createChangeDocument(
+//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+//                            loanApplication.getLoanContractId(),
+//                            null,
+//                            obj,
+//                            "Created",
+//                            username,
+//                            "EnquiryAction", "Header");
                     return obj;
                 });
         ProjectProposal projectProposal = new ProjectProposal();
         projectProposal.setEnquiryAction(enquiryAction);
         projectProposal.setAdditionalDetails(resource.getAdditionalDetails());
         projectProposal.setProposalFormSharingDate(resource.getProposalFormSharingDate());
-        projectProposal.setProposalFormShareFlag(resource.getProposalFormShareFlag());
         projectProposal.setDocumentName(resource.getDocumentName());
         projectProposal.setDocumentType(resource.getDocumentType());
         projectProposal.setDocumentVersion(resource.getDocumentVersion());
@@ -52,16 +70,16 @@ public class ProjectProposalService implements IProjectProposalService {
         projectProposal = projectProposalRepository.save(projectProposal);
 
         // Change Documents for Project Proposal
-        changeDocumentService.createChangeDocument(
-                projectProposal.getEnquiryAction().getId(),
-                projectProposal.getId().toString(),
-                projectProposal.getEnquiryAction().getId().toString(),
-                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                null,
-                projectProposal,
-                "Created",
-                username,
-                "EnquiryAction", "Project Proposal" );
+//        changeDocumentService.createChangeDocument(
+//                projectProposal.getEnquiryAction().getId(),
+//                projectProposal.getId().toString(),
+//                projectProposal.getEnquiryAction().getId().toString(),
+//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                null,
+//                projectProposal,
+//                "Created",
+//                username,
+//                "EnquiryAction", "Project Proposal" );
 
         return projectProposal;
     }
@@ -77,7 +95,6 @@ public class ProjectProposalService implements IProjectProposalService {
 
         projectProposal.setAdditionalDetails(resource.getAdditionalDetails());
         projectProposal.setProposalFormSharingDate(resource.getProposalFormSharingDate());
-        projectProposal.setProposalFormShareFlag(resource.getProposalFormShareFlag());
         projectProposal.setDocumentName(resource.getDocumentName());
         projectProposal.setDocumentType(resource.getDocumentType());
         projectProposal.setDocumentVersion(resource.getDocumentVersion());
@@ -85,16 +102,16 @@ public class ProjectProposalService implements IProjectProposalService {
         projectProposal = projectProposalRepository.save(projectProposal);
 
         // Change Documents for Project Proposal
-        changeDocumentService.createChangeDocument(
-                projectProposal.getEnquiryAction().getId(),
-                projectProposal.getId().toString(),
-                projectProposal.getEnquiryAction().getId().toString(),
-                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-                oldRejectByPFS,
-                projectProposal,
-                "Updated",
-                username,
-                "EnquiryAction", "Project Proposal" );
+//        changeDocumentService.createChangeDocument(
+//                projectProposal.getEnquiryAction().getId(),
+//                projectProposal.getId().toString(),
+//                projectProposal.getEnquiryAction().getId().toString(),
+//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+//                oldRejectByPFS,
+//                projectProposal,
+//                "Updated",
+//                username,
+//                "EnquiryAction", "Project Proposal" );
 
         return projectProposal;
     }

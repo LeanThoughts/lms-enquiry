@@ -13,19 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RepositoryRestController
 @RequiredArgsConstructor
-public class ProjectProposalController {
+public class DealGuaranteeTimelineController {
 
-    private final ProjectProposalService projectProposalService;
+    private final IDealGuaranteeTimelineService dealGuaranteeTimelineService;
 
-    @PostMapping("/projectProposals/create")
-    public ResponseEntity<ProjectProposal> createProjectProposal(@RequestBody ProjectProposalResource resource,
+    @PostMapping("/dealGuaranteeTimelines/create")
+    public ResponseEntity<DealGuaranteeTimeline> createDealGuaranteeTimeline(@RequestBody DealGuaranteeTimelineResource resource,
                                                                 HttpServletRequest request) {
-        return ResponseEntity.ok(projectProposalService.create(resource,request.getUserPrincipal().getName()));
+        return ResponseEntity.ok(dealGuaranteeTimelineService.create(resource, request.getUserPrincipal().getName()));
     }
 
-    @PutMapping("/projectProposals/update")
-    public ResponseEntity<ProjectProposal> updateProjectProposal(@RequestBody ProjectProposalResource resource,
+    @PutMapping("/dealGuaranteeTimelines/update")
+    public ResponseEntity<DealGuaranteeTimeline> updateDealGuaranteeTimeline(@RequestBody DealGuaranteeTimelineResource resource,
                                                                 HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(projectProposalService.update(resource,request.getUserPrincipal().getName()));
+        return ResponseEntity.ok(dealGuaranteeTimelineService.update(resource, request.getUserPrincipal().getName()));
     }
 }

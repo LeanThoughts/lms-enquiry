@@ -23,9 +23,9 @@ public class ProjectProposal extends AggregateRoot<ProjectProposal> implements C
     @OneToOne(fetch = FetchType.EAGER)
     private EnquiryAction enquiryAction;
 
+    private String loanEnquiryNumber;
     private String additionalDetails;
     private LocalDate proposalFormSharingDate;
-    private Boolean proposalFormShareFlag;
     private String documentName;
     private String documentType;
     private String documentVersion;

@@ -1,0 +1,33 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addProjectProposal')"> 
+            New Proposal
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyProjectProposal')" 
+                [disabled]="!_selectedProjectProposal"> Modify Proposal 
+        </button>
+    </div>
+
+    <div  fxLayout="row">
+        <div class="mat-table-container mat-white-bg mr-8" style="width: 50%">
+
+            <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+    
+                <!-- proposalFormSharingDate Column -->
+                <ng-container matColumnDef="proposalFormSharingDate">
+                    <mat-header-cell *matHeaderCellDef>Proposal Date</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.proposalFormSharingDate | date: 'dd/MM/yyyy' }}</p>
+                    </mat-cell>
+                </ng-container>
+      
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
+                            [ngClass]="{'highlight':obj.id === _selectedProjectProposal?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+                 </mat-row>
+    
+            </mat-table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div class="content-card p-16" fusePerfectScrollbar style="width: 100%">
+        <mat-expansion-panel [expanded]="expandPanel1" hideToggle="false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Project Proposal
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="projectProposalForm">
+                <div fxLayout="row">
+                    <mat-form-field fxFlex="33">
+                        <input matInput placeholder="Loan Enquiry Id" formControlName="loanEnquiryNumber" readonly>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="34">
+                        <input matInput [matDatepicker]="picker2" placeholder="Date of Proposal" formControlName="proposalFormSharingDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker> 
+                    </mat-form-field>
+                    <mat-form-field fxFlex="33">
+                        <mat-select placeholder="Status" formControlName="proposalStatus" required>
+                            <mat-option [value]="'Final'">Final</mat-option>
+                            <mat-option [value]="'Draft'">Draft</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row">
+                    <mat-form-field fxFlex="33">
+                        <input matInput placeholder="Document Name" formControlName="documentName">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="34">
+                        <mat-select placeholder="Document Type" formControlName="documentType" required>
+                            <mat-option [value]="'0'">PDF</mat-option>
+                            <mat-option [value]="'1'">JPEG</mat-option>
+                            <mat-option [value]="'2'">Others</mat-option>
+                        </mat-select>
+                    </mat-form-field>                
+                    <mat-form-field fxFlex="33">
+                        <input matInput placeholder="Document Version" formControlName="documentVersion">
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex="33">
+                        <div fxLayout="column">
+                            <label for="document">Upload Document (PDF)</label>
+                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                        </div>
+                    </div>
+                    <!-- <div fxFlex="33">
+                        <a [href]="getFileURL(selectedLFAReportAndFee.fileReference)" *ngIf="selectedLFAReportAndFee.fileReference !== ''">
+                            <mat-icon>cloud_download</mat-icon>
+                        </a>
+                    </div> -->
+                    <mat-form-field fxFlex="34">
+                        <input matInput placeholder="Additional Details" formControlName="additionalDetails">
+                    </mat-form-field>
+                    <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()" style="height:fit-content; margin: 10px;">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+    </div>
+
+    <div mat-dialog-content fusePerfectScrollbar *ngIf="displayTabs">
+        <mat-tab-group>
+            <!-- Collateral details tab starts here -->
+            <mat-tab label="Collateral Details">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-collateral-detail-list [projectProposal]="projectProposal"></fuse-collateral-detail-list>
+                </div>
+            </mat-tab>
+
+            <!-- Project cost tab starts here -->
+            <mat-tab label="Project Cost and Share Holding">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-project-cost-update [projectProposal]="projectProposal"></fuse-project-cost-update>
+                </div>
+            </mat-tab>
+
+            <!-- Deal, Guarantee, Timelines tab starts here -->
+            <mat-tab label="Deal, Guarantee, Timelines">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-deal-guarantee-timeline-update [projectProposal]="projectProposal"></fuse-deal-guarantee-timeline-update>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

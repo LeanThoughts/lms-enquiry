@@ -1,0 +1,95 @@
+<div class="content">
+    <div fxLayout="row">
+        <p fxFlex="100"><b>Project Cost Details</b></p>
+    </div>
+
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+            Submit
+        </button>
+    </div>
+
+    <form [formGroup]="_projectCostForm">
+        <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="Project Cost (Crores)" 
+                        formControlName="projectCost" maxlength="18" required>
+            </mat-form-field>
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="Debt (Crores)" 
+                        formControlName="debt" maxlength="18" >
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="Equity (Crores)" 
+                        formControlName="equity" maxlength="18" required>
+            </mat-form-field>
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="PFS Debt Amount (Crores)" 
+                        formControlName="pfsDebtAmount" maxlength="18" >
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="Debt Equity Ratio" 
+                        formControlName="debtEquityRatio" maxlength="18" >
+            </mat-form-field>
+        </div>
+    </form>
+
+    <div fxLayout="row">
+        <p fxFlex="100"><b>Share Holding Structure of the Borrower</b></p>
+    </div>
+
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addShareHolder')"> 
+            Add
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyShareHolder')" 
+                [disabled]="!_selectedShareHolder"> Modify 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyShareHolder')" 
+                [disabled]="!_selectedShareHolder"> Delete 
+        </button>
+    </div>
+
+    <div  fxLayout="row">
+        <div class="mat-table-container mat-white-bg mr-8" style="width: 50%">
+
+            <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+    
+                <!-- companyName Column -->
+                <ng-container matColumnDef="companyName">
+                    <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.companyName }}</p>
+                    </mat-cell>
+                </ng-container>
+      
+                <!-- equityCapital Column -->
+                <ng-container matColumnDef="equityCapital">
+                    <mat-header-cell *matHeaderCellDef>Capital</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.equityCapital }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- percentageHolding Column -->
+                <ng-container matColumnDef="percentageHolding">
+                    <mat-header-cell *matHeaderCellDef>Percentage Holding</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.percentageHolding }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
+                            [ngClass]="{'highlight':obj.id === _selectedShareHolder?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+                 </mat-row>
+    
+            </mat-table>
+        </div>
+    </div>
+</div>

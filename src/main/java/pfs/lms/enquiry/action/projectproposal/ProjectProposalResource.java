@@ -16,12 +16,15 @@ public class ProjectProposalResource {
 
     private UUID id;
     private UUID loanApplicationId;
+    private UUID enquiryActionId;
 
+    private String loanEnquiryNumber;
     private String additionalDetails;
     private LocalDate proposalFormSharingDate;
-    private Boolean proposalFormShareFlag;
     private String documentName;
     private String documentType;
     private String documentVersion;
     private String proposalStatus;
+
+    private DealGuaranteeTimeline dealGuaranteeTimeline;
 }
