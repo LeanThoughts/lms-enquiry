@@ -40,6 +40,27 @@ export class EnquiryActionService implements Resolve<any> {
     /**
      * getShareHolders()
      */
+    public getFinancials(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/promoterBorrowerFinancials/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createFinancial()
+     */
+    public createFinancial(financial: any): Observable<any> {
+        return this._http.post("enquiry/api/promoterBorrowerFinancials/create", financial);
+    }
+
+    /**
+     * updateFinancial()
+     */
+    public updateFinancial(financial: any): Observable<any> {
+        return this._http.put("enquiry/api/promoterBorrowerFinancials/update", financial);
+    }
+    
+    /**
+     * getShareHolders()
+     */
     public getShareHolders(projectProposalId: string): Observable<any> {
         return this._http.get("enquiry/api/shareHolders/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
     }

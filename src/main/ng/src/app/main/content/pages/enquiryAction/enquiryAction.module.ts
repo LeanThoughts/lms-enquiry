@@ -37,6 +37,8 @@ import { CollateralDetailListComponent } from './projectProposal/projectProposal
 import { CollateralDetailUpdateComponent } from './projectProposal/projectProposalUpdate/collateralDetailUpdate/collateralDetailUpdate.component';
 import { ProjectCostUpdateComponent } from './projectProposal/projectProposalUpdate/projectCostUpdate/projectCostUpdate.component';
 import { ShareHolderUpdateComponent } from './projectProposal/projectProposalUpdate/shareHolderUpdate/shareHolderUpdate.component';
+import { PromoterBorrowerFinancialListComponent } from './projectProposal/projectProposalUpdate/promoterBorrowerFinancialList/promoterBorrowerFinancialList.component';
+import { PromoterBorrowerFinancialUpdateComponent } from './projectProposal/projectProposalUpdate/promoterBorrowerFinancialUpdate/promoterBorrowerFinancialUpdate.component';
 
 const routes = [
     {
@@ -105,7 +107,9 @@ const MY_FORMATS = {
         CollateralDetailListComponent,
         CollateralDetailUpdateComponent,
         ProjectCostUpdateComponent,
-        ShareHolderUpdateComponent
+        ShareHolderUpdateComponent,
+        PromoterBorrowerFinancialListComponent,
+        PromoterBorrowerFinancialUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -135,7 +139,9 @@ const MY_FORMATS = {
         CollateralDetailListComponent,
         CollateralDetailUpdateComponent,
         ProjectCostUpdateComponent,
-        ShareHolderUpdateComponent
+        ShareHolderUpdateComponent,
+        PromoterBorrowerFinancialListComponent,
+        PromoterBorrowerFinancialUpdateComponent
     ],  
     entryComponents: [
         EnquiryActionReasonForDelayUpdateComponent,
@@ -145,7 +151,8 @@ const MY_FORMATS = {
         OtherDetailsUpdateComponent,
         ProjectProposalUpdateComponent,
         CollateralDetailUpdateComponent,
-        ShareHolderUpdateComponent
+        ShareHolderUpdateComponent,
+        PromoterBorrowerFinancialUpdateComponent
     ]
 })
 export class EnquiryActionModule {

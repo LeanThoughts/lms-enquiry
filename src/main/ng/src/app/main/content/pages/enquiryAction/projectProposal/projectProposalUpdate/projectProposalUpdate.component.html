@@ -92,6 +92,13 @@
                     <fuse-deal-guarantee-timeline-update [projectProposal]="projectProposal"></fuse-deal-guarantee-timeline-update>
                 </div>
             </mat-tab>
+
+            <!-- Promoter borrower financials tab starts here -->
+            <mat-tab label="Promoter/Borrower Group Profile and Financials">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-promoter-borrower-financial-list [projectProposal]="projectProposal"></fuse-promoter-borrower-financial-list>
+                </div>
+            </mat-tab>
         </mat-tab-group>
     </div>
 </div>

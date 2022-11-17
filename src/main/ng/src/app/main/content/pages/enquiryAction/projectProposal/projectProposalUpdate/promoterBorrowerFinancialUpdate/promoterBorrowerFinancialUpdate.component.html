@@ -1,0 +1,158 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close()" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar>
+        <form [formGroup]="_financialUpdateForm">
+            <!---->
+            <div fxLayout="row">
+                <p fxFlex="100"><b>Financials of Previous Fiscal Periods (All amounts in Crores)</b></p>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Fiscal Period" formControlName="fiscalPeriod" maxlength="10" required>
+                </mat-form-field>
+            </div>
+
+            <!---->
+            <div fxLayout="row">
+                <p fxFlex="100"><b>Profit & Loss</b></p>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Revenue" formControlName="revenue" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Depreciation" formControlName="depreciation" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="PBT (after exceptionals)" formControlName="pbt" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Net Cash Accruals" formControlName="netCashAccruals" maxlength="18" >
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="EBITDA" formControlName="ebitda" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Interest Expense" formControlName="interestExpense" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="PAT" formControlName="pat" maxlength="18" >
+                </mat-form-field>
+            </div>
+
+            <!---->
+            <div fxLayout="row">
+                <p fxFlex="100"><b>Balance Sheet</b></p>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="WC/ST Debt" formControlName="wcDebt" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Total Outstanding Liabilities (TOL)" formControlName="totalOutstandingLiabilities" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Adjusted Tangible Net Worth (ATNW)" formControlName="adjustedTangibleNetWorth" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Inv. in Sub/Asso." formControlName="subAsso" maxlength="18" >
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="CPLTD (Current Portion of Long Term Debt)" formControlName="cpltd" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Share Capital" formControlName="shareCapital" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Cash and Bank Balance" formControlName="cashAndBankBalance" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Net Fixed Assets(inc cwip)" formControlName="netFixedAssets" maxlength="18" >
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="LT Debt (excl CPLTD)" formControlName="ltDebt" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Reserves and Surplus" formControlName="reservesAndSurplus" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Current Assets" formControlName="currentAssets" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="FCCB/Quasi Equity" formControlName="quasiEquity" maxlength="18" >
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Total Debt" formControlName="totalDebt" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Tangible Net Worth(TNW)" formControlName="tangibleNetWorth" maxlength="18" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Current Liabilities (incl. CPLTD)" formControlName="currentLiabilities" maxlength="18" >
+                </mat-form-field>
+            </div>
+
+            <!---->
+            <div fxLayout="row">
+                <p fxFlex="100"><b>Ratios</b></p>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="EBITDA Margin %" formControlName="ebitdaMarginPercentage" maxlength="8" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Total Debt/ EBITDA" formControlName="totalDebtEbitda" maxlength="8" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Total Debt/ TNW" formControlName="totalDebtTnw" maxlength="8" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Current Ratio" formControlName="currentRatio" maxlength="8" >
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="EBITDA/ Interest" formControlName="ebitdaInterest" maxlength="8" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Term Debt/ EBITDA" formControlName="termDebtEbitda" maxlength="8" >
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="TOL/TNW" formControlName="tnw" maxlength="8" >
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="Cash DSCR" formControlName="cashDscr" maxlength="8" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <input matInput placeholder="DSCR" formControlName="dscr" maxlength="8" required>
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeDialog()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
