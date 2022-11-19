@@ -88,4 +88,8 @@ export class ProjectProposalUpdateComponent {
             }
         }
     }
+
+    onFileSelect(event: any): void {
+        
+    }
 }
