@@ -1,0 +1,122 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+            Submit
+        </button>
+    </div>
+
+    <form [formGroup]="_otherDetailForm">
+        <!-- -->
+        <div fxLayout="row">
+            <p fxFlex="100"><b>Cash Flow Details</b></p>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="100">
+                <input matInput placeholder="Source and cash flow of repayment of loan and Interest 
+                        (Pls also share the excel calculations of both DSCR and Cash DSCR separately.)" 
+                        formControlName="sourceAndCashFlow" maxlength="2000" required>
+            </mat-form-field>
+        </div>
+
+        <!---->
+        <div fxLayout="row">
+            <p fxFlex="100"><b>Other Loan Details</b></p>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <input matInput [matDatepicker]="picker2" placeholder="Optimum date by which loan is required?" formControlName="optimumDateOfLoan" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker> 
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Consolidated Group Leverage" formControlName="consolidatedGroupLeverage" maxlength="30" >
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Total Debt/TNW" formControlName="totalDebtTNW" maxlength="30" >
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="TOL/TNW" formControlName="tolTNW" maxlength="30" >
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Total Debt/TNW %age" formControlName="totalDebtTNWPercentage" maxlength="30" >
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="TOL/TNW %age" formControlName="tolTNWPercentage" maxlength="30" >
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="Delays in Debt Servicing/Status of SMA etc. with various lenders" 
+                        formControlName="delayInDebtServicing" maxlength="60" >
+            </mat-form-field>
+        </div>
+    </form>
+
+    <!-- -->
+    <div fxLayout="row">
+        <p fxFlex="100"><b>Documents</b></p>
+    </div>
+    
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addCreditRating')"> 
+            Add
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
+                [disabled]="!_selectedCreditRating"> Modify 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
+                [disabled]="!_selectedCreditRating"> Delete 
+        </button>
+    </div>
+
+    <div  fxLayout="row">
+        <div class="mat-table-container mat-white-bg mr-8" style="width: 100%">
+
+            <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+    
+                <!-- creditRating Column -->
+                <ng-container matColumnDef="creditRating">
+                    <mat-header-cell *matHeaderCellDef>Credit Rating</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditRating }}</p>
+                    </mat-cell>
+                </ng-container>
+      
+                <!-- creditRatingAgency Column -->
+                <ng-container matColumnDef="creditRatingAgency">
+                    <mat-header-cell *matHeaderCellDef>Credit Rating Agency</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditRatingAgency }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- creditStandingInstruction Column -->
+                <ng-container matColumnDef="creditStandingInstruction">
+                    <mat-header-cell *matHeaderCellDef>Credit Standing Instruction</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditStandingInstruction }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- creditStandingText Column -->
+                <ng-container matColumnDef="creditStandingText">
+                    <mat-header-cell *matHeaderCellDef>Credit Standing Text</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditStandingText }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
+                            [ngClass]="{'highlight':obj.id === _selectedCreditRating?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+                 </mat-row>
+    
+            </mat-table>
+        </div>
+    </div>
+</div>
