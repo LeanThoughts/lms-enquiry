@@ -38,6 +38,27 @@ export class EnquiryActionService implements Resolve<any> {
     }
 
     /**
+     * getProjectProposalOtherDetails()
+     */
+    public getProjectProposalOtherDetails(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/projectProposalOtherDetails/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createProjectProposalOtherDetails()
+     */
+    public createProjectProposalOtherDetails(otherDetials: any): Observable<any> {
+        return this._http.post("enquiry/api/projectProposalOtherDetails/create", otherDetials);
+    }
+
+    /**
+     * updateProjectProposalOtherDetails()
+     */
+    public updateProjectProposalOtherDetails(otherDetials: any): Observable<any> {
+        return this._http.put("enquiry/api/projectProposalOtherDetails/update", otherDetials);
+    }
+    
+    /**
      * getCreditRatings()
      */
     public getCreditRatings(projectProposalId: string): Observable<any> {
