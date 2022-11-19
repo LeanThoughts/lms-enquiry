@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.projectproposal;
+package pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

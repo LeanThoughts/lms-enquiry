@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.projectproposal;
+package pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

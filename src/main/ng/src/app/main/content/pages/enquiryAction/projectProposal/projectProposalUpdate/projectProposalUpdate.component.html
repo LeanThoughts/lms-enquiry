@@ -72,6 +72,13 @@
 
     <div mat-dialog-content fusePerfectScrollbar *ngIf="displayTabs">
         <mat-tab-group>
+            <!-- project details tab starts here -->
+            <mat-tab label="Project Details">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-project-detail-update [projectProposal]="projectProposal"></fuse-project-detail-update>
+                </div>
+            </mat-tab>
+
             <!-- Collateral details tab starts here -->
             <mat-tab label="Collateral Details">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">

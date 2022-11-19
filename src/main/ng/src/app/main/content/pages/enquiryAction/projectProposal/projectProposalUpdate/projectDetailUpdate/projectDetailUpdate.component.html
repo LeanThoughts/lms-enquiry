@@ -1,0 +1,207 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+            Submit
+        </button>
+    </div>
+
+    <form [formGroup]="_projectDetailForm">
+        <!-- -->
+        <div fxLayout="row">
+            <p fxFlex="100"><b>Project Details</b></p>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Name of Project" formControlName="projectName" maxlength="100" required>
+            </mat-form-field>
+            <mat-form-field fxFlex="34">
+                <input matInput placeholder="Borrower Name" formControlName="borrowerName" maxlength="150" >
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Name of Sponsor/Group" formControlName="promoterName" maxlength="150">
+            </mat-form-field>
+        </div>
+
+        <!---->
+        <div fxLayout="row">
+            <p fxFlex="100"><b>Brief Project Summary</b></p>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="100">
+                <input matInput placeholder="Purpose of Loan" formControlName="loanPurpose" maxlength="18" >
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="33">
+                <input matInput placeholder="Project Capacity" formControlName="projectCapacity" maxlength="10" >
+            </mat-form-field>
+            <mat-form-field fxFlex="34">
+                <mat-select placeholder="Project Capacity unit" formControlName="projectCapacityUnit">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let unitOfMeasure of unitOfMeasures" [value]="unitOfMeasure.code">
+                        {{ unitOfMeasure.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+                <mat-select placeholder="Project Location - State" formControlName="state">
+                    <mat-option> </mat-option>
+                    <mat-option *ngFor="let state of states" [value]="state.code">
+                        {{ state.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="Project District" formControlName="district" maxlength="100">
+            </mat-form-field>
+        </div>
+
+        <!-- -->
+        <div fxLayout="row">
+            <p fxFlex="100"><b>Loan Type, Amounts and Interest Rate</b></p>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Product Type (Type of Loan)" formControlName="productType">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let productType of productTypes" [value]="productType.code">
+                        {{ productType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Loan Class" formControlName="loanClass" >
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let loanClass of loanClasses" [value]="loanClass.code">
+                        {{ loanClass.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Type of Assistance" formControlName="assistanceType">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let assistanceType of assistanceTypes" [value]="assistanceType.code">
+                        {{ assistanceType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Financing Type" formControlName="financingType" required>
+                    <mat-option> </mat-option>
+                    <mat-option *ngFor="let financingType of financingTypes" [value]="financingType.code">
+                        {{ financingType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+                <input matInput placeholder="End use of the funds to be availed from PFS" formControlName="endUseOfFunds"  maxlength="100">
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Rate of Interest" formControlName="roi" maxlength="100">
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Fees" formControlName="fees" maxlength="100">
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Tenure (Year)" formControlName="tenorYear" maxlength="100">
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Tenure (Months)" formControlName="tenorMonths" maxlength="100">
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Moratorium Period" formControlName="moratoriumPeriod" maxlength="3">
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Moratorium Period Unit" formControlName="moratoriumPeriodUnit">
+                    <mat-option [value]="'1'">Days</mat-option>
+                    <mat-option [value]="'2'">Weeks</mat-option>
+                    <mat-option [value]="'3'">Months</mat-option>
+                    <mat-option [value]="'4'">Years</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="3">
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Construction Period Unit" formControlName="constructionPeriodUnit">
+                    <mat-option [value]="'1'">Days</mat-option>
+                    <mat-option [value]="'2'">Weeks</mat-option>
+                    <mat-option [value]="'3'">Months</mat-option>
+                    <mat-option [value]="'4'">Years</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+
+    <!-- -->
+    <div fxLayout="row">
+        <p fxFlex="100"><b>Rating</b></p>
+    </div>
+    
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addCreditRating')"> 
+            Add
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
+                [disabled]="!_selectedCreditRating"> Modify 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
+                [disabled]="!_selectedCreditRating"> Delete 
+        </button>
+    </div>
+
+    <div  fxLayout="row">
+        <div class="mat-table-container mat-white-bg mr-8" style="width: 100%">
+
+            <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+    
+                <!-- creditRating Column -->
+                <ng-container matColumnDef="creditRating">
+                    <mat-header-cell *matHeaderCellDef>Credit Rating</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditRating }}</p>
+                    </mat-cell>
+                </ng-container>
+      
+                <!-- creditRatingAgency Column -->
+                <ng-container matColumnDef="creditRatingAgency">
+                    <mat-header-cell *matHeaderCellDef>Credit Rating Agency</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditRatingAgency }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- creditStandingInstruction Column -->
+                <ng-container matColumnDef="creditStandingInstruction">
+                    <mat-header-cell *matHeaderCellDef>Credit Standing Instruction</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditStandingInstruction }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- creditStandingText Column -->
+                <ng-container matColumnDef="creditStandingText">
+                    <mat-header-cell *matHeaderCellDef>Credit Standing Text</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.creditStandingText }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
+                            [ngClass]="{'highlight':obj.id === _selectedCreditRating?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+                 </mat-row>
+    
+            </mat-table>
+        </div>
+    </div>
+</div>

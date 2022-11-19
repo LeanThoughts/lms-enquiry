@@ -38,6 +38,48 @@ export class EnquiryActionService implements Resolve<any> {
     }
 
     /**
+     * getCreditRatings()
+     */
+    public getCreditRatings(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/creditRatings/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createCreditRating()
+     */
+    public createCreditRating(creditRating: any): Observable<any> {
+        return this._http.post("enquiry/api/creditRatings/create", creditRating);
+    }
+
+    /**
+     * updateCreditRating()
+     */
+    public updateCreditRating(creditRating: any): Observable<any> {
+        return this._http.put("enquiry/api/creditRatings/update", creditRating);
+    }
+        
+    /**
+     * getProjectDetail()
+     */
+    public getProjectDetail(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/projectDetails/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createProjectDetail()
+     */
+    public createProjectDetail(projectDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/projectDetails/create", projectDetail);
+    }
+
+    /**
+     * updateProjectDetail()
+     */
+    public updateProjectDetail(projectDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/projectDetails/update", projectDetail);
+    }
+        
+    /**
      * getShareHolders()
      */
     public getFinancials(projectProposalId: string): Observable<any> {

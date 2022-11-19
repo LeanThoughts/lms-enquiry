@@ -1,6 +1,7 @@
-package pfs.lms.enquiry.action.projectproposal;
+package pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline;
 
 import lombok.*;
+import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;

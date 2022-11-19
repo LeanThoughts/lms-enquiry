@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.projectproposal;
+package pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
