@@ -3,7 +3,13 @@
     <div class="mat-table-container mat-white-bg mt-16" style="width: 100%">
 
         <mat-table class="enquiries-table" [dataSource]="dataSource1" matSort fusePerfectScrollbar>
-
+          <!-- Business Partner Id Column -->
+          <ng-container matColumnDef="businessPartnerId">
+            <mat-header-cell *matHeaderCellDef>Bus. Partner Id</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.businessPartnerId }}</p>
+            </mat-cell>
+          </ng-container>
             <!-- roleType Column -->
             <ng-container matColumnDef="roleType">
                 <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
@@ -20,15 +26,23 @@
                 </mat-cell>
             </ng-container>
 
-            <!-- businessPartnerName Column -->
-            <ng-container matColumnDef="businessPartnerName">
-                <mat-header-cell *matHeaderCellDef>Business Partner</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.businessPartnerName }}</p>
-                </mat-cell>
-            </ng-container>
 
-            <!-- kycStatus Column -->
+          <!-- Business Partner Id Column -->
+          <ng-container matColumnDef="businessPartnerId">
+            <mat-header-cell *matHeaderCellDef>Bus. Partner Id</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.businessPartnerId }}</p>
+            </mat-cell>
+          </ng-container>
+          <!-- businessPartnerName Column -->
+          <ng-container matColumnDef="businessPartnerName">
+            <mat-header-cell *matHeaderCellDef>Business Partner</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.businessPartnerName }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- kycStatus Column -->
             <ng-container matColumnDef="kycStatus">
                 <mat-header-cell *matHeaderCellDef>KYC Status</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
