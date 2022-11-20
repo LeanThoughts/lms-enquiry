@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content p-8">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
             Submit
@@ -62,14 +62,14 @@
     </div>
     
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addCreditRating')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('addDocument')"> 
             Add
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
-                [disabled]="!_selectedCreditRating"> Modify 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('modifyDocument')" 
+                [disabled]="!_selectedDocument"> Modify 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
-                [disabled]="!_selectedCreditRating"> Delete 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('modifyDocument')" 
+                [disabled]="!_selectedDocument"> Delete 
         </button>
     </div>
 
@@ -78,43 +78,27 @@
 
             <mat-table class="enquiries-table" [dataSource]="dataSource" matSort>
     
-                <!-- creditRating Column -->
-                <ng-container matColumnDef="creditRating">
-                    <mat-header-cell *matHeaderCellDef>Credit Rating</mat-header-cell>
+                <!-- documentType Column -->
+                <ng-container matColumnDef="documentType">
+                    <mat-header-cell *matHeaderCellDef>Document Type</mat-header-cell>
                     <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.creditRating }}</p>
+                        <p class="text-truncate">{{ obj.documentType }}</p>
                     </mat-cell>
                 </ng-container>
       
-                <!-- creditRatingAgency Column -->
-                <ng-container matColumnDef="creditRatingAgency">
-                    <mat-header-cell *matHeaderCellDef>Credit Rating Agency</mat-header-cell>
+                <!-- documentName Column -->
+                <ng-container matColumnDef="documentName">
+                    <mat-header-cell *matHeaderCellDef>Document Name</mat-header-cell>
                     <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.creditRatingAgency }}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- creditStandingInstruction Column -->
-                <ng-container matColumnDef="creditStandingInstruction">
-                    <mat-header-cell *matHeaderCellDef>Credit Standing Instruction</mat-header-cell>
-                    <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.creditStandingInstruction }}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- creditStandingText Column -->
-                <ng-container matColumnDef="creditStandingText">
-                    <mat-header-cell *matHeaderCellDef>Credit Standing Text</mat-header-cell>
-                    <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.creditStandingText }}</p>
+                        <p class="text-truncate">{{ obj.documentName }}</p>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     
                 <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
-                            [ngClass]="{'highlight':obj.id === _selectedCreditRating?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
-                 </mat-row>
+                            [ngClass]="{'highlight':obj.id === _selectedDocument?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
     
             </mat-table>
         </div>

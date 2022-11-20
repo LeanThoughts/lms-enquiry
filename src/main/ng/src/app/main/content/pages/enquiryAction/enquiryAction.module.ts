@@ -42,6 +42,7 @@ import { PromoterBorrowerFinancialUpdateComponent } from './projectProposal/proj
 import { ProjectDetailUpdateComponent } from './projectProposal/projectProposalUpdate/projectDetailUpdate/projectDetailUpdate.component';
 import { CreditRatingUpdateComponent } from './projectProposal/projectProposalUpdate/creditRatingUpdate/creditRatingUpdate.component';
 import { ProjectProposalOtherDetailUpdateComponent } from './projectProposal/projectProposalUpdate/projectProposalOtherDetailUpdate/projectProposalOtherDetailUpdate.component';
+import { OtherDetailsFileUploadComponent } from './projectProposal/projectProposalUpdate/otherDetailFileUpload/otherDetailFileUpload.component';
 
 const routes = [
     {
@@ -115,7 +116,8 @@ const MY_FORMATS = {
         PromoterBorrowerFinancialUpdateComponent,
         ProjectDetailUpdateComponent,
         CreditRatingUpdateComponent,
-        ProjectProposalOtherDetailUpdateComponent
+        ProjectProposalOtherDetailUpdateComponent,
+        OtherDetailsFileUploadComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -150,7 +152,8 @@ const MY_FORMATS = {
         PromoterBorrowerFinancialUpdateComponent,
         ProjectDetailUpdateComponent,
         CreditRatingUpdateComponent,
-        ProjectProposalOtherDetailUpdateComponent
+        ProjectProposalOtherDetailUpdateComponent,
+        OtherDetailsFileUploadComponent
     ],  
     entryComponents: [
         EnquiryActionReasonForDelayUpdateComponent,
@@ -162,7 +165,8 @@ const MY_FORMATS = {
         CollateralDetailUpdateComponent,
         ShareHolderUpdateComponent,
         PromoterBorrowerFinancialUpdateComponent,
-        CreditRatingUpdateComponent
+        CreditRatingUpdateComponent,
+        OtherDetailsFileUploadComponent
     ]
 })
 export class EnquiryActionModule {
