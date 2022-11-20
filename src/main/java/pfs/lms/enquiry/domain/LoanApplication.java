@@ -257,7 +257,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("projectDistrict") String projectDistrict,
                            @JsonProperty("tenorYear") Integer tenorYear,
                            @JsonProperty("tenorMonth") Integer tenorMonth,
-                           @JsonProperty("projectCost") Double projectCost,
+                           @JsonProperty("project<Cost>") Double projectCost,
                            @JsonProperty("projectDebtAmount") Double projectDebtAmount,
                            @JsonProperty("term") String term,
 

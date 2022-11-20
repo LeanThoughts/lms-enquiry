@@ -17,9 +17,9 @@ export class LoanAppraisalKYCListComponent implements OnInit, OnDestroy {
 
     dataSource1: MatTableDataSource<any>;
     dataSource2: MatTableDataSource<any>;
-    
+
     displayedColumns1 = [
-        'roleType', 'roleDescription', 'businessPartnerName', 'kycStatus'
+        'roleType', 'roleDescription', 'businessPartnerId','businessPartnerName', 'kycStatus'
     ];
     displayedColumns2 = [
         'documentType', 'documentName', 'dateOfCompletion', 'remarks', 'download'
@@ -35,10 +35,10 @@ export class LoanAppraisalKYCListComponent implements OnInit, OnDestroy {
 
     /**
      * constructor()
-     * @param _dialogRef 
-     * @param _loanAppraisalService 
+     * @param _dialogRef
+     * @param _loanAppraisalService
      */
-    constructor(private _dialogRef: MatDialog, 
+    constructor(private _dialogRef: MatDialog,
                 _loanEnquiryService: LoanEnquiryService,
                 private _loanAppraisalService: LoanAppraisalService,
                 _activatedRoute: ActivatedRoute) {
@@ -86,7 +86,7 @@ export class LoanAppraisalKYCListComponent implements OnInit, OnDestroy {
             data: data
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 this.getKYCDocuments();
                 this._loanAppraisalService.getLoanOfficersForKyc(this._loanApplicationId).subscribe(data => {

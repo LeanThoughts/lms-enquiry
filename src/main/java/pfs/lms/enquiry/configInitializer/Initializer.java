@@ -67,7 +67,7 @@ public class Initializer implements CommandLineRunner {
             LoanClass lc1 = new LoanClass("1", "PowerGen-Convl");
             LoanClass lc2 = new LoanClass("2", "PowerGen-Renew");
             LoanClass lc3 = new LoanClass("3", "Railways");
-            LoanClass lc4 = new LoanClass("4", "Roads");
+            LoanClass lc4 = new LoanClass("4", "Urban Instrastructure");
             LoanClass lc5 = new LoanClass("5", "Roads");
             LoanClass lc6 = new LoanClass("6", "Ports");
             LoanClass lc7 = new LoanClass("7", "Oil&Gas");
@@ -90,15 +90,15 @@ public class Initializer implements CommandLineRunner {
             LoanClass lc24 = new LoanClass("24", "EducationalInst");
             LoanClass lc25 = new LoanClass("25", "SportsInfra");
             LoanClass lc26 = new LoanClass("26", "EnrgyEfficiency");
+            LoanClass lc32 = new LoanClass("30", "Others");
             LoanClass lc27 = new LoanClass("41", "NFB-LOCforCAP");
             LoanClass lc28 = new LoanClass("42", "NFB-LOCforBG");
             LoanClass lc29 = new LoanClass("43", "NFB-LOCOthers");
             LoanClass lc30 = new LoanClass("51", "CL-Corp.Privat");
             LoanClass lc31 = new LoanClass("52", "CL-Corp.Govt");
-
             loanClassRepository.saveAll(Arrays.asList(lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10,
                     lc11, lc12, lc13, lc14, lc15, lc16, lc17, lc18, lc19, lc20, lc21, lc22,
-                    lc23, lc24, lc25, lc26, lc27, lc28, lc29, lc30, lc31
+                    lc23, lc24, lc25, lc26, lc27, lc28, lc29, lc30, lc31,lc32
             ));
             log.info("Added loan class sample data");
         }
@@ -106,54 +106,78 @@ public class Initializer implements CommandLineRunner {
         projectTypeRepository.deleteAll();
 
         if (projectTypeRepository.count() == 0) {
-            ProjectType pt1 = new ProjectType("1", "TL-PG-Thermal-Coal");
-            ProjectType pt2 = new ProjectType("2", "TL-PG-Thermal-Lignite");
-            ProjectType pt3 = new ProjectType("3", "TL-PG-Thermal-Gas");
-            ProjectType pt4 = new ProjectType("4", "TL-PG-Hydro");
-            ProjectType pt5 = new ProjectType("5", "TL-PG-Renewable-Solar");
-            ProjectType pt6 = new ProjectType("6", "TL-PG-Renewable-Wind");
-            ProjectType pt7 = new ProjectType("7", "TL-PG-Renewable-Biomass");
-            ProjectType pt8 = new ProjectType("8", "Renewable-Co-Gen.");
-            ProjectType pt9 = new ProjectType("9", "TL-RY-RailwaySiding");
-            ProjectType pt10 = new ProjectType("10", "TL-UI-SmartCity");
-            ProjectType pt11 = new ProjectType("11", "TL-RD-Roads-Toll");
-            ProjectType pt12 = new ProjectType("12", "TL-RD-Roads-HAM");
-            ProjectType pt13 = new ProjectType("13", "TL-PT-Ports");
-            ProjectType pt14 = new ProjectType("14", "TL-OG-Oil&Gas");
-            ProjectType pt15 = new ProjectType("15", "TL-OT-Others");
-            ProjectType pt16 = new ProjectType("16", "TL-WI-WaterTreamentPlant");
-            ProjectType pt17 = new ProjectType("17", "TL-WI-SewarageTreamentPlant");
-            ProjectType pt18 = new ProjectType("18", "TL-WI-WaterDistribution");
-            ProjectType pt19 = new ProjectType("19", "TL-AP-Airport");
-            ProjectType pt20 = new ProjectType("20", "TL-EM-ChargingInfra");
-            ProjectType pt21 = new ProjectType("21", "TL-EM-EM&ChargingInfra");
-            ProjectType pt22 = new ProjectType("22", "TL-WM-WasteHandling");
-            ProjectType pt23 = new ProjectType("23", "TL-WM-WastetoEnergy");
-            ProjectType pt24 = new ProjectType("24", "TL-M-CoalMining");
-            ProjectType pt25 = new ProjectType("25", "TL-PT-PowerTransmission");
-            ProjectType pt26 = new ProjectType("26", "TL-PD-EnergyEfficiency");
-            ProjectType pt27 = new ProjectType("27", "TL-PD-PowerDistribution");
-            ProjectType pt28 = new ProjectType("28", "TL-PD-SmartMetering");
-            ProjectType pt29 = new ProjectType("29", "TL-LG-Logistics");
-            ProjectType pt30 = new ProjectType("41", "NFB-LOCforCAPEX");
-            ProjectType pt31 = new ProjectType("42", "NFB-LOCforBG/PBG");
-            ProjectType pt32 = new ProjectType("43", "NFB-LOCOthers");
-            ProjectType pt33 = new ProjectType("51", "CL-CP-BridgeLoan-Capex");
-            ProjectType pt34 = new ProjectType("52", "CL-CP-MezzanineLoan-Capex");
-            ProjectType pt35 = new ProjectType("53", "CL-CP-MediumTermLoan-Capex");
-            ProjectType pt36 = new ProjectType("54", "CL-CP-Debentures_Capex");
-            ProjectType pt37 = new ProjectType("55", "CL-CP-RevolvingFacility-Capex");
-            ProjectType pt38 = new ProjectType("56", "CL-CP-Others");
-            ProjectType pt39 = new ProjectType("57", "CL-CG-MezzanineLoan-CashFlowMismatch");
-            ProjectType pt40 = new ProjectType("58", "CL-CG-MediumTermLoan-CashFlowMismatc");
-            ProjectType pt41 = new ProjectType("59", "CL-CG-Debentures-CashFlowMismatch");
-            ProjectType pt42 = new ProjectType("60", "CL-CG-Others");
+            ProjectType pt1 = new ProjectType("1","Thermal-Coal.");
+            ProjectType pt2 = new ProjectType("2","Thermal-Lignite");
+            ProjectType pt3 = new ProjectType("3","Thermal-Gas");
+            ProjectType pt4 = new ProjectType("4","Renewable-Hydro");
+            ProjectType pt5 = new ProjectType("5","Renewable-Solar");
+            ProjectType pt6 = new ProjectType("6","Renewable-Wind");
+            ProjectType pt7 = new ProjectType("7","Renewable-Biomass");
+            ProjectType pt8 = new ProjectType("8","Renewable-Co-Gen.");
+            ProjectType pt9 = new ProjectType("9","Railway Siding");
+            ProjectType pt10 = new ProjectType("10","Railway Wagons/Coach");
+            ProjectType pt11 = new ProjectType("11","Railway Terminals");
+            ProjectType pt12 = new ProjectType("12","Smart City");
+            ProjectType pt13 = new ProjectType("13","Roads-Toll");
+            ProjectType pt14 = new ProjectType("14","Roads-HAM");
+            ProjectType pt15 = new ProjectType("15","Roads & Bridges");
+            ProjectType pt16 = new ProjectType("16","Ports");
+            ProjectType pt17 = new ProjectType("17","Oil & Gas");
+            ProjectType pt18 = new ProjectType("18","Gas Exploration");
+            ProjectType pt19 = new ProjectType("19","Oil Rigs");
+            ProjectType pt20 = new ProjectType("20","Water Treatment Plant");
+            ProjectType pt21 = new ProjectType("21","Sewerage Treatment Plant");
+            ProjectType pt22 = new ProjectType("22","Water Distribution");
+            ProjectType pt23 = new ProjectType("23","Irrigation-DAM/ Channels");
+            ProjectType pt24 = new ProjectType("24","Storm Water Drainage System");
+            ProjectType pt25 = new ProjectType("25","Airport");
+            ProjectType pt26 = new ProjectType("26","EM - Charging Infra");
+            ProjectType pt27 = new ProjectType("27","Waste Handling");
+            ProjectType pt28 = new ProjectType("28","Waste to Energy");
+            ProjectType pt29 = new ProjectType("29","Coal Mining");
+            ProjectType pt30 = new ProjectType("30","Coal Washery");
+            ProjectType pt31 = new ProjectType("31","Large Country Pipelines");
+            ProjectType pt32 = new ProjectType("32","Power Transmission");
+            ProjectType pt33 = new ProjectType("33","Solar Park/Pooling Substation");
+            ProjectType pt34 = new ProjectType("34","Power Distribution");
+            ProjectType pt35 = new ProjectType("35","Solar Power Pumps/Electric Pumps");
+            ProjectType pt36 = new ProjectType("36","Logistics Park/ Terminal");
+            ProjectType pt37 = new ProjectType("37","Warehouse / Cold Chain Facility");
+            ProjectType pt38 = new ProjectType("38","Shipyard");
+            ProjectType pt39 = new ProjectType("39","City Gas Distribution");
+            ProjectType pt40 = new ProjectType("40","Hotels & Resorts");
+            ProjectType pt41 = new ProjectType("41","Real Estate");
+            ProjectType pt42 = new ProjectType("42","SEZ-Industrial Park");
+            ProjectType pt43 = new ProjectType("43","Telecom Towers");
+            ProjectType pt44 = new ProjectType("44","Telecom Networks");
+            ProjectType pt45 = new ProjectType("45","Telecommunication Services");
+            ProjectType pt46 = new ProjectType("46","Inland Waterways");
+            ProjectType pt47 = new ProjectType("47","Public Transport");
+            ProjectType pt48 = new ProjectType("48","Hospitals");
+            ProjectType pt49 = new ProjectType("49","Educational Institutes");
+            ProjectType pt50 = new ProjectType("50","Sports Infrastructure");
+            ProjectType pt51 = new ProjectType("51","Energy Efficiency");
+            ProjectType pt52 = new ProjectType("52","Smart Metering");
+            ProjectType pt53 = new ProjectType("53","Others");
+
 
             projectTypeRepository.saveAll(Arrays.asList(
                     pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8, pt9, pt10, pt11, pt12,
                     pt13, pt14, pt15, pt16, pt17, pt18, pt19, pt20,
                     pt21, pt22, pt23, pt24, pt25, pt26, pt27, pt28, pt29, pt30, pt31, pt32,
-                    pt33, pt34, pt35, pt36, pt37, pt38, pt39, pt40, pt41, pt42
+                    pt33, pt34, pt35, pt36, pt37, pt38, pt39, pt40, pt41, pt42, pt42,
+                    pt43,
+                    pt44,
+                    pt45,
+                    pt46,
+                    pt47,
+                    pt48,
+                    pt49,
+                    pt50,
+                    pt51,
+                    pt52,
+                    pt53
+
             ));
             log.info("Added project type sample data");
         }
