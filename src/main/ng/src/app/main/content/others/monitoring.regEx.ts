@@ -11,6 +11,7 @@ export class MonitoringRegEx {
     public static tenCommaTwo = /^\d{1,10}(\.\d{1,2})?$/;
     public static twelveCommaTwo = /^\d{1,15}(\.\d{1,2})?$/;
     public static fifteenCommaTwo = /^\d{1,18}(\.\d{1,2})?$/;
+    public static fiveCommaTwo = /^\d{1,8}(\.\d{1,2})?$/;
     public static sixteenCommaTwo = /^\d{1,16}(\.\d{1,2})?$/;
     public static thirteenCommaTwo = /^\d{1,13}(\.\d{1,2})?$/;
     public static sevenCommaTwo = /^\d{1,7}(\.\d{1,2})?$/;
