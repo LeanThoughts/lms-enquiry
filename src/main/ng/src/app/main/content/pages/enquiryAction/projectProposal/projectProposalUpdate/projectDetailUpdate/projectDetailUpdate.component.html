@@ -28,7 +28,7 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="100">
-                <input matInput placeholder="Purpose of Loan" formControlName="loanPurpose" maxlength="18" >
+                <input matInput placeholder="Purpose of Loan" formControlName="loanPurpose" maxlength="250" >
             </mat-form-field>
         </div>
         <div fxLayout="row">
@@ -106,18 +106,18 @@
                 <input matInput placeholder="Rate of Interest" formControlName="roi" maxlength="100">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Fees" formControlName="fees" maxlength="100">
+                <input matInput placeholder="Fees" formControlName="fees" maxlength="18">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Tenure (Year)" formControlName="tenorYear" maxlength="100">
+                <input matInput placeholder="Tenure (Year)" formControlName="tenorYear" maxlength="2">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Tenure (Months)" formControlName="tenorMonths" maxlength="100">
+                <input matInput placeholder="Tenure (Months)" formControlName="tenorMonths" maxlength="2">
             </mat-form-field>
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Moratorium Period" formControlName="moratoriumPeriod" maxlength="3">
+                <input matInput placeholder="Moratorium Period" formControlName="moratoriumPeriod" maxlength="2">
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <mat-select placeholder="Moratorium Period Unit" formControlName="moratoriumPeriodUnit">
@@ -128,7 +128,7 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="3">
+                <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="2">
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <mat-select placeholder="Construction Period Unit" formControlName="constructionPeriodUnit">

@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { EnquiryActionService } from '../../../enquiryAction.service';
 
 @Component({
@@ -31,39 +32,39 @@ export class PromoterBorrowerFinancialUpdateComponent {
         this._financialUpdateForm = _formBuilder.group({
             fiscalPeriod: [ this._financial.fiscalPeriod || '' ],
 
-            revenue: [ this._financial.revenue || '' ],
-            depreciation: [ this._financial.depreciation || '' ],
-            pbt: [ this._financial.pbt || '' ],
-            netCashAccruals: [ this._financial.netCashAccruals || '' ],
-            ebitda: [ this._financial.ebitda || '' ],
-            interestExpense: [ this._financial.interestExpense || '' ],
-            pat: [ this._financial.pat || '' ],
+            revenue: [ this._financial.revenue || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            depreciation: [ this._financial.depreciation || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            pbt: [ this._financial.pbt || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            netCashAccruals: [ this._financial.netCashAccruals || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            ebitda: [ this._financial.ebitda || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            interestExpense: [ this._financial.interestExpense || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            pat: [ this._financial.pat || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
 
-            wcDebt: [ this._financial.wcDebt || '' ],
-            totalOutstandingLiabilities: [ this._financial.totalOutstandingLiabilities || '' ],
-            adjustedTangibleNetWorth: [ this._financial.adjustedTangibleNetWorth || '' ],
-            subAsso: [ this._financial.subAsso || '' ],
-            cpltd: [ this._financial.cpltd || '' ],
-            shareCapital: [ this._financial.shareCapital || '' ],
-            cashAndBankBalance: [ this._financial.cashAndBankBalance || '' ],
-            netFixedAssets: [ this._financial.netFixedAssets || '' ],
-            ltDebt: [ this._financial.ltDebt || '' ],
-            reservesAndSurplus: [ this._financial.reservesAndSurplus || '' ],
-            currentAssets: [ this._financial.currentAssets || '' ],
-            quasiEquity: [ this._financial.quasiEquity || '' ],
-            totalDebt: [ this._financial.totalDebt || '' ],
-            tangibleNetWorth: [ this._financial.tangibleNetWorth || '' ],
-            currentLiabilities: [ this._financial.currentLiabilities || '' ],
+            wcDebt: [ this._financial.wcDebt || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            totalOutstandingLiabilities: [ this._financial.totalOutstandingLiabilities || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            adjustedTangibleNetWorth: [ this._financial.adjustedTangibleNetWorth || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            subAsso: [ this._financial.subAsso || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            cpltd: [ this._financial.cpltd || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            shareCapital: [ this._financial.shareCapital || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            cashAndBankBalance: [ this._financial.cashAndBankBalance || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
+            netFixedAssets: [ this._financial.netFixedAssets || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            ltDebt: [ this._financial.ltDebt || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            reservesAndSurplus: [ this._financial.reservesAndSurplus || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            currentAssets: [ this._financial.currentAssets || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            quasiEquity: [ this._financial.quasiEquity || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            totalDebt: [ this._financial.totalDebt || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            tangibleNetWorth: [ this._financial.tangibleNetWorth || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
+            currentLiabilities: [ this._financial.currentLiabilities || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)] ],
 
-            ebitdaMarginPercentage: [ this._financial.ebitdaMarginPercentage || '' ],
-            totalDebtEbitda: [ this._financial.totalDebtEbitda || '' ],
-            totalDebtTnw: [ this._financial.totalDebtTnw || '' ],
-            currentRatio: [ this._financial.currentRatio || '' ],
-            ebitdaInterest: [ this._financial.ebitdaInterest || '' ],
-            termDebtEbitda: [ this._financial.termDebtEbitda || '' ],
-            tnw: [ this._financial.tnw || '' ],
-            cashDscr: [ this._financial.cashDscr || '' ],
-            dscr: [ this._financial.dscr || '' ]
+            ebitdaMarginPercentage: [ this._financial.ebitdaMarginPercentage || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            totalDebtEbitda: [ this._financial.totalDebtEbitda || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)]],
+            totalDebtTnw: [ this._financial.totalDebtTnw || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            currentRatio: [ this._financial.currentRatio || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            ebitdaInterest: [ this._financial.ebitdaInterest || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            termDebtEbitda: [ this._financial.termDebtEbitda || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            tnw: [ this._financial.tnw || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            cashDscr: [ this._financial.cashDscr || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
+            dscr: [ this._financial.dscr || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ]
         });
     }
 

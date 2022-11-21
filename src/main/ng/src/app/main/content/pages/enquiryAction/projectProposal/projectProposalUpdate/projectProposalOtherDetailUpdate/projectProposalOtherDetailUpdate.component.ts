@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from 'app/main/content/pages/enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../../enquiryAction.service';
 import { OtherDetailsFileUploadComponent } from '../otherDetailFileUpload/otherDetailFileUpload.component';
@@ -53,10 +54,10 @@ export class ProjectProposalOtherDetailUpdateComponent {
             sourceAndCashFlow: new FormControl(''),
             optimumDateOfLoan: new FormControl(''),
             consolidatedGroupLeverage: new FormControl(''),
-            totalDebtTNW: new FormControl(''),
-            tolTNW: new FormControl(''),
-            totalDebtTNWPercentage: new FormControl(''),
-            tolTNWPercentage: new FormControl(''),
+            totalDebtTNW: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            tolTNW: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            totalDebtTNWPercentage: new FormControl('', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]),
+            tolTNWPercentage: new FormControl('', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]),
             delayInDebtServicing: new FormControl('')
         });
         
