@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { StateModel } from 'app/main/content/model/state.model';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from 'app/main/content/pages/enquiry/enquiryApplication.service';
 import { productTypes } from '../../../enquiryAction.constants';
 import { EnquiryActionService } from '../../../enquiryAction.service';
@@ -78,7 +79,7 @@ export class ProjectDetailUpdateComponent {
             borrowerName: new FormControl(''),
             promoterName: new FormControl(''),
             loanPurpose: new FormControl(''),
-            projectCapacity: new FormControl(''),
+            projectCapacity: new FormControl('', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
             projectCapacityUnit: new FormControl(''),
             state: new FormControl(''),
             district: new FormControl(''),
@@ -88,12 +89,12 @@ export class ProjectDetailUpdateComponent {
             financingType: new FormControl(''),
             endUseOfFunds: new FormControl(''),
             roi: new FormControl(''),
-            fees: new FormControl(''),
-            tenorYear: new FormControl(''),
-            tenorMonths: new FormControl(''),
-            moratoriumPeriod: new FormControl(''),
+            fees: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            tenorYear: new FormControl('', [Validators.pattern(MonitoringRegEx.digitsOnly)]),
+            tenorMonths: new FormControl('', [Validators.pattern(MonitoringRegEx.digitsOnly)]),
+            moratoriumPeriod: new FormControl('', [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             moratoriumPeriodUnit: new FormControl(''),
-            constructionPeriod: new FormControl(''),
+            constructionPeriod: new FormControl('', [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             constructionPeriodUnit: new FormControl(''),
         });
         

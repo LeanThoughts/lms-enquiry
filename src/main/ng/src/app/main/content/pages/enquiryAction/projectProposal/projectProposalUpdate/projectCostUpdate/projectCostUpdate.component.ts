@@ -55,7 +55,7 @@ export class ProjectCostUpdateComponent implements OnDestroy {
             debt: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             equity: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             pfsDebtAmount: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
-            debtEquityRatio: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)])
+            debtEquityRatio: new FormControl('', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)])
         });
         
         this.initializeFormValues();

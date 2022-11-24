@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from 'app/main/content/pages/enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../../enquiryAction.service';
-import { CreditRatingUpdateComponent } from '../creditRatingUpdate/creditRatingUpdate.component';
+import { OtherDetailsFileUploadComponent } from '../otherDetailFileUpload/otherDetailFileUpload.component';
 
 @Component({
     selector: 'fuse-project-proposal-other-detail-update',
@@ -28,16 +29,16 @@ export class ProjectProposalOtherDetailUpdateComponent {
                 this._otherDetail = response;
                 this.initializeFormValues();
             });
-            // this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(response => {
-            //     this.dataSource = new MatTableDataSource(response._embedded.creditRatings);
-            // });
+            this._enquiryActionService.getOtherDetailsDocuments(this._projectProposal.id).subscribe(response => {
+                this.dataSource = new MatTableDataSource(response._embedded.otherDetailsDocuments);
+            });
         }
     }
 
-    _selectedCreditRating: any;
+    _selectedDocument: any;
     dataSource: MatTableDataSource<any>;
     displayedColumns = [
-        'creditRating', 'creditRatingAgency', 'creditStandingInstruction', 'creditStandingText'
+        'documentType', 'documentName'
     ];
 
     /**
@@ -53,10 +54,10 @@ export class ProjectProposalOtherDetailUpdateComponent {
             sourceAndCashFlow: new FormControl(''),
             optimumDateOfLoan: new FormControl(''),
             consolidatedGroupLeverage: new FormControl(''),
-            totalDebtTNW: new FormControl(''),
-            tolTNW: new FormControl(''),
-            totalDebtTNWStage: new FormControl(''),
-            tolTNWPercentage: new FormControl(''),
+            totalDebtTNW: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            tolTNW: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            totalDebtTNWPercentage: new FormControl('', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]),
+            tolTNWPercentage: new FormControl('', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]),
             delayInDebtServicing: new FormControl('')
         });
         
@@ -89,7 +90,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
                 this._otherDetail.consolidatedGroupLeverage = formValues.consolidatedGroupLeverage;
                 this._otherDetail.totalDebtTNW = formValues.totalDebtTNW;
                 this._otherDetail.tolTNW = formValues.tolTNW;
-                this._otherDetail.totalDebtTNWStage = formValues.totalDebtTNWStage;
+                this._otherDetail.totalDebtTNWPercentage = formValues.totalDebtTNWPercentage;
                 this._otherDetail.tolTNWPercentage = formValues.tolTNWPercentage;
                 this._otherDetail.delayInDebtServicing = formValues.delayInDebtServicing;
                 this._enquiryActionService.updateProjectProposalOtherDetails(this._otherDetail).subscribe(response => {
@@ -110,7 +111,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
             'consolidatedGroupLeverage': this._otherDetail.consolidatedGroupLeverage || '',
             'totalDebtTNW': this._otherDetail.totalDebtTNW || '',
             'tolTNW': this._otherDetail.tolTNW || '',
-            'totalDebtTNWStage': this._otherDetail.totalDebtTNWStage || '',
+            'totalDebtTNWPercentage': this._otherDetail.totalDebtTNWPercentage || '',
             'tolTNWPercentage': this._otherDetail.tolTNWPercentage || '',
             'delayInDebtServicing': this._otherDetail.delayInDebtServicing || ''
         });
@@ -119,31 +120,32 @@ export class ProjectProposalOtherDetailUpdateComponent {
     /**
      * onRowSelect()
      */
-    onRowSelect(creditRating: any): void {
-        this._selectedCreditRating = creditRating;
+    onRowSelect(document: any): void {
+        this._selectedDocument = document;
     }
 
     /**
-     * openUpdateDialog()
+     * openUploadDialog()
      */
-    openUpdateDialog(operation: string) {
+     openUploadDialog(operation: string) {
         // Open the dialog.
         var data = {
-            'projectProposalId': this._projectProposal.id,
-            'otherDetail': {}
+            'operation': operation,
+            'projectProposal': this._projectProposal,
+            'selectedDocument': {}
         };
-        if (operation === 'modifyCreditRating') {
-            data.otherDetail = this._selectedCreditRating;
+        if (operation === 'modifyDocument') {
+            data.selectedDocument = this._selectedDocument;
         }
-        const dialogRef = this._dialogRef.open(CreditRatingUpdateComponent, {
+        const dialogRef = this._dialogRef.open(OtherDetailsFileUploadComponent, {
             data: data,
             width: '750px'
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((data) => {
             if (data.refresh === true) {
-                this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(response => {
-                    this.dataSource.data = response._embedded.creditRatings;
+                this._enquiryActionService.getOtherDetailsDocuments(this._projectProposal.id).subscribe(response => {
+                    this.dataSource.data = response._embedded.otherDetailsDocuments;
                 });
             }
         });    

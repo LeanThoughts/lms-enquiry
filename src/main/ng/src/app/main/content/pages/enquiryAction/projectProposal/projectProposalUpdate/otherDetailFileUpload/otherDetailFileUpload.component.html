@@ -7,22 +7,33 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 315px">
-        <form [formGroup]="_shareHolderUpdateForm">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 300px">
+        <form [formGroup]="otherDetailsDocumentForm">
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Document Type" formControlName="documentType" required>
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                        {{ documentType.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>     
+            </div>
+
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Company Name" formControlName="companyName" maxlength="200" required>
+                    <input matInput placeholder="Document" formControlName="documentName">
                 </mat-form-field>
             </div>
+
             <div fxLayout="row">
-                <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Equity Capital (Crores)" formControlName="equityCapital" maxlength="18" required>
-                </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Percentage Holding" formControlName="percentageHolding" maxlength="8" required>
-                </mat-form-field>
+                <div fxFlex="100">
+                    <div fxLayout="column">
+                        <label for="document">Upload Document (PDF)</label>
+                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" required/>
+                    </div>
+                </div>
             </div>
 
             <div mat-dialog-actions fxLayout="row">

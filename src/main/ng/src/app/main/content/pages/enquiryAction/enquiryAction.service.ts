@@ -38,6 +38,34 @@ export class EnquiryActionService implements Resolve<any> {
     }
 
     /**
+     * uploadVaultDocument()
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/upload', file);
+    }  
+
+    /**
+     * getOtherDetailsDocument()
+     */
+    public getOtherDetailsDocuments(projectProposalId: string): Observable<any> {
+        return this._http.get("enquiry/api/otherDetailsDocuments/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+    }
+
+    /**
+     * createOtherDetailsDocument()
+     */
+    public createOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
+        return this._http.post("enquiry/api/otherDetailsDocuments/create", otherDetialsDocument);
+    }
+
+    /**
+     * updateOtherDetailsDocument()
+     */
+    public updateOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
+        return this._http.put("enquiry/api/otherDetailsDocuments/update", otherDetialsDocument);
+    }
+    
+    /**
      * getProjectProposalOtherDetails()
      */
     public getProjectProposalOtherDetails(projectProposalId: string): Observable<any> {
