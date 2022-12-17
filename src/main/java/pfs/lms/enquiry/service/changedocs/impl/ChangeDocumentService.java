@@ -34,6 +34,8 @@ import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
 import pfs.lms.enquiry.monitoring.lie.LendersIndependentEngineer;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
+import pfs.lms.enquiry.monitoring.projectmonitoring.ProjectMonitoringDataItemHistory;
+import pfs.lms.enquiry.monitoring.projectmonitoring.ProjectMonitoringDataItemResource;
 import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetail;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccount;
@@ -441,11 +443,23 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("description", financialCovenants.getFinancialCovenantType().toString());
                     return result;
 
-                case "PromoterDetails":
+                case "PromoterDetail":
                     PromoterDetail promoterDetails = (PromoterDetail) object;
                     result.put("id", promoterDetails.getId().toString());
                     result.put("description", promoterDetails.getDateOfChange().toString());
                     return result;
+                case "ProjectMonitoringDataItemResource":
+                    ProjectMonitoringDataItemResource projectMonitoringDataItemResource = (ProjectMonitoringDataItemResource) object;
+                    result.put("id", projectMonitoringDataItemResource.getId().toString());
+                    result.put("description", projectMonitoringDataItemResource.getParticulars().toString());
+                    return result;
+                case "ProjectMonitoringDataItemHistory":
+
+                    ProjectMonitoringDataItemHistory projectMonitoringDataItemHistory = (ProjectMonitoringDataItemHistory) object;
+                    result.put("id", projectMonitoringDataItemHistory.getId().toString());
+                    result.put("description", projectMonitoringDataItemHistory.getParticulars().toString());
+                    return result;
+
                 case "Appraisal":
                     LoanAppraisal loanAppraisal = (LoanAppraisal) object;
                     if (loanAppraisal.getLoanApplication() != null) {

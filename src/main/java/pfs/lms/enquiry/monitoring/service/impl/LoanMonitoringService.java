@@ -1389,8 +1389,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         changeDocumentService.createChangeDocument(
                 existingBorrowerFinancials.getLoanMonitor().getId(), existingBorrowerFinancials.getId(),null,
                 existingBorrowerFinancials.getLoanMonitor().getLoanApplication().getLoanContractId(),
-                null,
                 oldBorrowerFinancials,
+                existingBorrowerFinancials,
                 "Updated",
                 username,
                 "Monitoring", "Borrower Financials");
