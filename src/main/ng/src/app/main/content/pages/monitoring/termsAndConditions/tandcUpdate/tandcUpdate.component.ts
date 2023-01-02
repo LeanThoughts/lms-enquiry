@@ -60,6 +60,11 @@ export class TandCUpdateDialogComponent {
             amendedDocumentTitle: [this.selectedTandC.amendedDocumentTitle || ''],
             amendedFile: ['']
         });
+        
+        // Sort document types array
+        this.documentTypes = this.documentTypes.sort((doc1, doc2) => {
+            return doc1.value.localeCompare(doc2.value);
+        })
     }
 
     /**

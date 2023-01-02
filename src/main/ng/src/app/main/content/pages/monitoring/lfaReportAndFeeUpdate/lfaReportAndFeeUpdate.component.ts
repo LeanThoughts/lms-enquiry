@@ -67,6 +67,11 @@ export class LFAReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedLFAReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedLFAReportAndFee.feeAmountRaisedOnCustomer]
         });
+
+        // Sort document types array
+        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
+            return obj1.value.localeCompare(obj2.value);
+        });
     }
 
     /**

@@ -157,7 +157,7 @@ public class PartnerController {
     @GetMapping("partner/traAuthorizedPersons")
     public ResponseEntity getTRAAuthorizedPersons(HttpServletRequest httpServletRequest) {
 
-        List<Partner> partners = partnerService.getLendersFinancialAdvisors();
+        List<Partner> partners = partnerService.getTRAAuthorizedPersons();
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }

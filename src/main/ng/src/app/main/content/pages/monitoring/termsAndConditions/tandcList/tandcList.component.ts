@@ -97,7 +97,7 @@ export class TandCListComponent implements OnInit {
         }
         const dialogRef = this._dialog.open(TandCUpdateDialogComponent, {
             panelClass: 'fuse-tandc-update-dialog',
-            width: '750px',
+            width: '900px',
             data: data
         });
         // Subscribe to the dialog close event to intercept the action taken.

@@ -78,7 +78,7 @@ export class TRAListComponent {
         // Open the dialog.
         const dialogRef = this._dialog.open(TRAUpdateDialogComponent, {
             panelClass: 'fuse-tra-update-dialog',
-            width: '750px',
+            width: '900px',
             data: {
                 operation: 'updateTRA',
                 loanApplicationId: this.loanApplicationId,

@@ -24,6 +24,18 @@
                     <input matInput placeholder="Bus. Partner Name" formControlName="name" readonly>
                 </mat-form-field>
             </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Contract Period From" formControlName="contractPeriodFrom" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker3" placeholder="Contract Period To" formControlName="contractPeriodTo" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker> 
+                </mat-form-field>
+            </div>
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker1" placeholder="Date of Appointment" formControlName="dateOfAppointment" 
@@ -36,18 +48,6 @@
                     <mat-error>
                         Provide valid input for Contact Person
                     </mat-error>
-                </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Contract Period From" formControlName="contractPeriodFrom" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker3" placeholder="Contract Period To" formControlName="contractPeriodTo" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker> 
                 </mat-form-field>
             </div>
             <div fxLayout="row">

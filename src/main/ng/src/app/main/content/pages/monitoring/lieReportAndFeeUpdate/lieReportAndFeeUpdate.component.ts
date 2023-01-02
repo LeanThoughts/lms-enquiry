@@ -67,6 +67,11 @@ export class LIEReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedLIEReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedLIEReportAndFee.feeAmountRaisedOnCustomer]
         });
+
+        // Sort document types array
+        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
+                return obj1.value.localeCompare(obj2.value);
+        });
     }
 
     /**

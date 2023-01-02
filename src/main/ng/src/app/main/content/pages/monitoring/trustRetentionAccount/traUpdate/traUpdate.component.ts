@@ -73,6 +73,7 @@ export class TRAUpdateDialogComponent implements OnInit {
 
         _loanMonitoringService.getTRAAuthorizedPersons().subscribe(response => {
             response.forEach(element => {
+                if (element.partyRole)
                 this.partners.push(new PartnerModel(element));
             });
         })
