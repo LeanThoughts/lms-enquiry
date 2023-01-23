@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
@@ -13,6 +13,13 @@ import { LoanMonitoringService } from '../loanMonitoring.service';
 })
 export class LFAListComponent {
 
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
+    
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
 
@@ -100,5 +107,18 @@ export class LFAListComponent {
                 });
             }
         });    
-    }    
+    }
+
+    displayLIE(): void {
+        // Open the dialog.
+        this._matDialog.open(LFAUpdateDialogComponent, {
+            panelClass: 'fuse-lfa-update-dialog',
+            width: '750px',
+            data: {
+                operation: 'displayLFA',
+                loanApplicationId: this.loanApplicationId,
+                selectedLFA: this.selectedLFA
+            }
+        });
+    }
 }

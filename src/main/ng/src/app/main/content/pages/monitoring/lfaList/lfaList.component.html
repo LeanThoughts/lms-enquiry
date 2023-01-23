@@ -1,8 +1,15 @@
 <div class="content">
-    <!-- <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLFA()"> Add LFA </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLFA()" [disabled]="!selectedLFA"> Modify LFA </button>
-    </div> -->
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLFA()" [disabled]="!selectedLFA" 
+                *ngIf="_module === 'MONITORING'"> 
+            Display LFA Details 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLFA()" *ngIf="_module !== 'MONITORING'"> Add LFA </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLFA()" [disabled]="!selectedLFA" 
+                *ngIf="_module !== 'MONITORING'"> 
+            Modify LFA 
+        </button>
+    </div>
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
 

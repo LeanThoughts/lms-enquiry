@@ -11,7 +11,7 @@
         <form [formGroup]="lfaUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Bus. Partner Id" formControlName="bpCode" required>
+                    <mat-select placeholder="Bus. Partner Id" formControlName="bpCode" required [disabled]="!allowUpdates">
                         <mat-option *ngFor="let partner of partners" [value]="partner.partyNumber" (click)="onPartnerSelect(partner)">
                           {{ getPartyNumberAndName(partner) }}
                         </mat-option>
@@ -28,12 +28,12 @@
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker2" placeholder="Contract Period From" formControlName="contractPeriodFrom" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
+                    <mat-datepicker #picker2 [disabled]="!allowUpdates"></mat-datepicker> 
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker3" placeholder="Contract Period To" formControlName="contractPeriodTo" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker> 
+                    <mat-datepicker #picker3 [disabled]="!allowUpdates"></mat-datepicker> 
                 </mat-form-field>
             </div>
             <div fxLayout="row" class="mt-16">
@@ -41,10 +41,10 @@
                     <input matInput [matDatepicker]="picker1" placeholder="Date of Appointment" formControlName="dateOfAppointment" 
                             [matDatepickerFilter]="dateOfAppointmentFilter" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker> 
+                    <mat-datepicker #picker1 [disabled]="!allowUpdates"></mat-datepicker> 
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Contact Person" formControlName="contactPerson" maxlength="60" required>
+                    <input matInput placeholder="Contact Person" formControlName="contactPerson" maxlength="60" required [readonly]="!allowUpdates">
                     <mat-error>
                         Provide valid input for Contact Person
                     </mat-error>
@@ -52,17 +52,17 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Contact Number" formControlName="contactNumber" maxlength="15" required>
+                    <input matInput placeholder="Contact Number" formControlName="contactNumber" maxlength="15" required [readonly]="!allowUpdates">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput type="email" placeholder="Email" maxlength="200" formControlName="email">      
+                    <input matInput type="email" placeholder="Email" maxlength="200" formControlName="email" [readonly]="!allowUpdates">      
                     <mat-error>
                        Provide valid input for Email
                     </mat-error>      
                 </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row">
+            <div mat-dialog-actions fxLayout="row" *ngIf="allowUpdates">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

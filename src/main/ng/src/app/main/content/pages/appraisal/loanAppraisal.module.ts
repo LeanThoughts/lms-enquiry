@@ -46,6 +46,7 @@ import { ReasonForDelayUpdateComponent } from './reasonForDelayUpdate/reasonForD
 import { CustomerRejectionComponent } from './customerRejection/customerRejection.component';
 import { RiskEvaluationsOverviewComponent } from './riskReport/risk-evaluations-overview/risk-evaluations-overview.component';
 import { RiskEvaluationDetails } from './riskReport/risk-evaluation-details/risk-evaluation-details.component';
+import { LoanMonitoringModule } from '../monitoring/loanMonitoring.module';
 
 const routes = [
     {
@@ -94,7 +95,8 @@ const MY_FORMATS = {
         FormsModule,
         MatCheckboxModule,
         MatAutocompleteModule,
-        MatStepperModule
+        MatStepperModule,
+        LoanMonitoringModule
     ],
     declarations: [
         ConfirmationDialogComponent,

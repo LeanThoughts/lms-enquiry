@@ -26,6 +26,8 @@ export class LIEUpdateDialogComponent implements OnInit {
     // businessPartnerRoles = LoanMonitoringConstants.businessPartnerRoles;
     partners: PartnerModel[] = new Array();
 
+    allowUpdates: boolean = true;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -41,7 +43,13 @@ export class LIEUpdateDialogComponent implements OnInit {
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedLIE !== undefined) {
             this.selectedLIE = Object.assign({}, _dialogData.selectedLIE);
-            this.dialogTitle = 'Modify LIE';
+            if (_dialogData.operation === 'displayLIE') {
+                this.dialogTitle = 'View LIE Details';
+                this.allowUpdates = false;
+            }
+            else {
+                this.dialogTitle = 'Modify LIE';
+            }
         }
         else {
             this.selectedLIE = new LIEModel({});

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
@@ -24,6 +24,15 @@ export class LIEListComponent {
 
     selectedLIE: any;
 
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+        console.log('this._module', this._module);
+        console.log('m', m);
+    }
+
     /**
      * constructor()
      */
@@ -34,6 +43,12 @@ export class LIEListComponent {
             this.dataSource.sort = this.sort;
         });
     }
+
+    // ngOnChanges(changes: SimpleChanges): void {
+    //     console.log(changes['module'].currentValue);
+    //     this._module = changes['module'].currentValue;
+    //     console.log('after ngonchanges module', this._module);
+    // }
 
     /**
      * onSelect()
@@ -98,5 +113,18 @@ export class LIEListComponent {
                 });
             }
         });    
+    }
+
+    displayLIE(): void {
+        // Open the dialog.
+        const dialogRef = this._dialog.open(LIEUpdateDialogComponent, {
+            panelClass: 'fuse-lie-update-dialog',
+            width: '750px',
+            data: {
+                operation: 'displayLIE',
+                loanApplicationId: this.loanApplicationId,
+                selectedLIE: this.selectedLIE
+            }
+        });
     }
 }

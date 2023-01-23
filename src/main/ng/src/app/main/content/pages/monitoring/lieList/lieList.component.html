@@ -1,8 +1,15 @@
 <div class="content">
-    <!-- <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIE()"> Add LIE </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIE()" [disabled]="!selectedLIE"> Modify LIE </button>
-    </div>   -->
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLIE()" [disabled]="!selectedLIE" 
+                *ngIf="_module === 'MONITORING'"> 
+            Display LIE Details 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIE()" *ngIf="_module !== 'MONITORING'"> Add LIE </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIE()" [disabled]="!selectedLIE" 
+                *ngIf="_module !== 'MONITORING'"> 
+            Modify LIE 
+        </button>
+    </div>  
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
 
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>

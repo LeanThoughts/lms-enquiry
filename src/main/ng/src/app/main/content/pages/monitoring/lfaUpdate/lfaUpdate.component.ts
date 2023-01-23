@@ -25,6 +25,8 @@ export class LFAUpdateDialogComponent implements OnInit {
     //businessPartnerRoles = LoanMonitoringConstants.businessPartnerRoles;
     partners: PartnerModel[] = new Array();
     
+    allowUpdates: boolean = true;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -40,7 +42,13 @@ export class LFAUpdateDialogComponent implements OnInit {
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedLFA !== undefined) {
             this.selectedLFA = Object.assign({}, _dialogData.selectedLFA);
-            this.dialogTitle = 'Modify LFA';
+            if (_dialogData.operation === 'displayLFA') {
+                this.dialogTitle = 'View LFA Details';
+                this.allowUpdates = false;
+            }
+            else {
+                this.dialogTitle = 'Modify LFA';
+            }
         }
         else {
             this.selectedLFA = new LFAModel({});
