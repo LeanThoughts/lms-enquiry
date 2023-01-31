@@ -1,0 +1,109 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLIA()" [disabled]="!selectedLIA" 
+                *ngIf="_module === 'MONITORING'"> 
+            Display LIA Details 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIA()" *ngIf="_module !== 'MONITORING'"> Add LIA </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIA()" [disabled]="!selectedLIA" 
+                *ngIf="_module !== 'MONITORING'"> 
+            Modify LIA 
+        </button>
+    </div>  
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- advisor Column -->
+            <ng-container matColumnDef="advisor">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Advisor</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ getAdvisor(obj.lendersInsuranceAdvisor) }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- bpCode Column -->
+            <ng-container matColumnDef="bpCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Bus. Partner Id</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.bpCode }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- name Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.name }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- dateOfAppointment Column -->
+            <ng-container matColumnDef="dateOfAppointment">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Date Of Appointment</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.dateOfAppointment | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contractPeriodFrom Column -->
+            <ng-container matColumnDef="contractPeriodFrom">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contract Period - From</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contractPeriodFrom | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contractPeriodTo Column -->
+            <ng-container matColumnDef="contractPeriodTo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contract Period - To</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contractPeriodTo | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contactPerson Column -->
+            <ng-container matColumnDef="contactPerson">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contact Person</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contactPerson }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contactNumber Column -->
+            <ng-container matColumnDef="contactNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contact No</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contactNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- email Column -->
+            <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Email</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.email }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.lendersInsuranceAdvisor)"
+                [ngClass]="{'highlight':obj.lendersInsuranceAdvisor === selectedLIA}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <div class="content-card" fusePerfectScrollbar style="width: 100%" *ngIf="selectedLIA">
+        <fuse-lia-report-fee-list></fuse-lia-report-fee-list>
+    </div>
+</div>

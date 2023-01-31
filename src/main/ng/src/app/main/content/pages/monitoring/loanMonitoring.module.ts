@@ -51,6 +51,10 @@ import { OperatingParameterPLFUpdateDialogComponent } from './operatingParameter
 import { OperatingParameterPLFListComponent } from './operatingParameterPLF/operatingParameterPLFList/operatingParameterPLFList.component';
 import { ProjectMonitoringDataItemListComponent } from './projectMonitoringData/projectMonitoringDataItemList/projectMonitoringDataItemList.component';
 import { ProjectMonitoringDataItemUpdateComponent } from './projectMonitoringData/projectMonitoringDataItemUpdate/projectMonitoringDataItemUpdate.component';
+import { LIAListComponent } from './liaList/liaList.component';
+import { LIAUpdateDialogComponent } from './liaUpdate/liaUpdate.component';
+import { LIAReportAndFeeListComponent } from './liaReportAndFeeList/liaReportAndFeeList.component';
+import { LIAReportAndFeeUpdateDialogComponent } from './liaReportAndFeeUpdate/liaReportAndFeeUpdate.component';
 
 const routes = [
     {
@@ -91,6 +95,10 @@ const routes = [
     ],
     declarations: [
         LoanMonitoringComponent,
+        LIAListComponent,
+        LIAUpdateDialogComponent,
+        LIAReportAndFeeListComponent,
+        LIAReportAndFeeUpdateDialogComponent,
         LIEListComponent,
         LIEUpdateDialogComponent,
         LIEReportAndFeeListComponent,
@@ -136,6 +144,10 @@ const routes = [
     ],
     exports: [
         LoanMonitoringComponent,
+        LIAListComponent,
+        LIAUpdateDialogComponent,
+        LIAReportAndFeeListComponent,
+        LIAReportAndFeeUpdateDialogComponent,
         LIEListComponent,
         LIEUpdateDialogComponent,
         LIEReportAndFeeListComponent,
@@ -172,6 +184,8 @@ const routes = [
         ProjectMonitoringDataItemUpdateComponent
     ],  
     entryComponents: [
+        LIAReportAndFeeUpdateDialogComponent,
+        LIAUpdateDialogComponent,
         LIEListComponent,
         LIEUpdateDialogComponent,
         LIEReportAndFeeListComponent,

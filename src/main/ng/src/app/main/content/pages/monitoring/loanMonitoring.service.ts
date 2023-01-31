@@ -12,6 +12,7 @@ export class LoanMonitoringService implements Resolve<any> {
     loanMonitor: BehaviorSubject<any> = new BehaviorSubject({});
 
     selectedLIE: BehaviorSubject<any> = new BehaviorSubject({});
+    selectedLIA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLFA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedTRA: BehaviorSubject<any> = new BehaviorSubject({});
     
@@ -34,6 +35,39 @@ export class LoanMonitoringService implements Resolve<any> {
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this.getLoanContractExtension(this._loanEnquiryService.selectedEnquiry.value.id);
+    }
+
+    // All about LIA
+
+    public getLendersInsuranceAdvisors(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersInsuranceAdvisors');
+    }
+
+    public saveLIA(lia: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/lendersInsuranceAdvisors/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':lia });
+    }
+
+    public updateLIA(lia: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/lendersInsuranceAdvisors/" + lia.id;
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':lia });
+    }
+
+    // All about LIA Reports And Fees
+    
+    public getLIAReportsAndFees(liaId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/liaReportAndFeeSubmission/' + liaId + '/liaReceiptsAndFees');
+    }
+    
+    public saveLIAReportAndFee(liaReportAndFee: any, liaId: string): Observable<any> {
+        const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/create";
+        return this._http.post(url, { 'lendersInsuranceAdvisorId': liaId, 'liaReportAndFee': liaReportAndFee });
+    }
+
+    public updateLIAReportAndFee(liaReportAndFee: any): Observable<any> {
+        console.log('in service', liaReportAndFee);
+        const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/" + liaReportAndFee.id;
+        return this._http.put(url, { 'lendersInsuranceAdvisorId': '', 'liaReportAndFee': liaReportAndFee });
     }
 
     // All about LIE
@@ -341,6 +375,11 @@ export class LoanMonitoringService implements Resolve<any> {
                 observer.complete();
             })
         }
+    }
+
+    public getLIAs(): Observable<any> {
+        // return this._http.get<any>('enquiry/api/partner/lias');
+        return this._http.get<any>('enquiry/api/partner/lies');
     }
 
     public getLIEs(): Observable<any> {
