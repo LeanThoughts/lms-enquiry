@@ -101,6 +101,7 @@ export class LoanMonitoringConstants {
         {code: "ZPFSLM7", value:"Financial Model"},
         {code: "ZPFSLM8", value:"Queries/Emails/Imp Communication"},
         {code: "ZPFSLM9", value:"Miscellaneous Documents"},
+        {code: "ZPFSLM9", value:"TRA Statement"}
     ]
 
     // communications

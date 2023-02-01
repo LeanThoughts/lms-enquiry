@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
@@ -24,6 +24,13 @@ export class TRAListComponent {
     loanApplicationId: string;
 
     selectedTRA: any;
+
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
 
     /**
      * constructor()
