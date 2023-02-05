@@ -9,6 +9,10 @@
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
         <form [formGroup]="tandcUpdateForm">
+
+            <!--
+
+            -->
             <mat-card style="padding: 8px !important; background: antiquewhite !important;">Borrower Request Letter Date</mat-card>
 
             <div fxLayout="row" class="mt-8">
@@ -39,7 +43,7 @@
                 </mat-form-field> 
 
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issue of Amended Sanction Letter" 
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issue of Amended Document" 
                         formControlName="dateOfIssueOfAmendedSanctionLetter" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
@@ -56,20 +60,55 @@
             
             <div fxLayout="row">
                 <div fxLayout="column" fxFlex="50">
-                    <label for="document">Upload Document (PDF)</label>
-                    <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="document">Upload Document (PDF)</label>
+                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedTandC.fileReference)" *ngIf="selectedTandC.fileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" class="mt-16">
-                    <a [href]="getFileURL(selectedTandC.fileReference)" *ngIf="selectedTandC.fileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Lead Banker Document Type" formControlName="leadBankerDocumentType" required>
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                        {{ documentType.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Lead Banker Document Title" formControlName="leadBankerDocumentTitle">          
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="leadBankerDocument">Upload Lead Banker Document (PDF)</label>
+                            <input type="file" name="leadBankerFile" (change)="onLeadBankerFileSelect($event)" accept="application/pdf" id="leadBankerDocument"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedTandC.leadBankerDocumentFileReference)" *ngIf="selectedTandC.leadBankerDocumentFileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <mat-card style="padding: 8px !important; background: antiquewhite !important;">Amended Document of PFS</mat-card>
+
+            <!--
+
+            -->
+            <mat-card class="mt-16" style="padding: 8px !important; background: antiquewhite !important;">Amended Document of PFS</mat-card>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
@@ -90,7 +129,7 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Document Title" formControlName="amendedDocumentTitle">          
+                    <input matInput placeholder="Reasons of Amendment" formControlName="reasonsForAmendment" maxlength="200">          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Remarks" formControlName="amendedDocumentRemarks" maxlength="200">          
@@ -98,21 +137,77 @@
             </div>
             
             <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Document Title" formControlName="amendedDocumentTitle">          
+                </mat-form-field>
+                
                 <div fxLayout="column" fxFlex="50">
-                    <label for="amendedDocument">Upload Document (PDF)</label>
-                    <input type="file" name="amendedFile" (change)="onAmendedFileSelect($event)" accept="application/pdf" id="amendedDocument"/>
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="amendedDocument">Upload Document (PDF)</label>
+                            <input type="file" name="amendedFile" (change)="onAmendedFileSelect($event)" accept="application/pdf" id="amendedDocument"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedTandC.amendedDocumentFileReference)" *ngIf="selectedTandC.amendedDocumentFileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>        
+                    </div>
                 </div>
             </div>
+
+
+            <!--
+
+            -->
+            <mat-card class="mt-16" style="padding: 8px !important; background: antiquewhite !important;">Internal Document related to Amendment</mat-card>
 
             <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" class="mt-16">
-                    <a [href]="getFileURL(selectedTandC.amendedDocumentFileReference)" *ngIf="selectedTandC.amendedDocumentFileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Document Type" formControlName="internalDocumentType" required>
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                        {{ documentType.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker4" placeholder="Date of Internal Document" 
+                        formControlName="dateOfInternalDocument" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Document Title" formControlName="internalDocumentTitle">          
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Remarks" formControlName="internalDocumentRemarks" maxlength="200">          
+                </mat-form-field>
+            </div>
+            
+            <div fxLayout="row">
+                <div fxLayout="column" fxFlex="50">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="internalDocument">Upload Document (PDF)</label>
+                            <input type="file" name="internalFile" (change)="onFileSelect($event)" accept="application/pdf" id="internalDocument"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedTandC.internalDocumentFileReference)" *ngIf="selectedTandC.internalDocumentFileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-32" mat-dialog-actions fxLayout="row">
+
+            <!--
+
+            -->
+            <div class="mt-16" mat-dialog-actions fxLayout="row">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

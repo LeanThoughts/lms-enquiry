@@ -689,12 +689,24 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         termsAndConditions.setBorrowerRequestLetterDate(resource.getTermsAndConditionsModification().getBorrowerRequestLetterDate());
         termsAndConditions.setDateOfIssueOfAmendedDocument(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedDocument());
         termsAndConditions.setRemarks(resource.getTermsAndConditionsModification().getRemarks());
+        termsAndConditions.setReasonsForAmendment(resource.getTermsAndConditionsModification().getReasonsForAmendment());
         termsAndConditions.setFileReference(resource.getTermsAndConditionsModification().getFileReference());
         termsAndConditions.setAmendedDocumentType(resource.getTermsAndConditionsModification().getAmendedDocumentType());
         termsAndConditions.setDateOfIssueOfAmendedDocument(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedDocument());
         termsAndConditions.setAmendedDocumentRemarks(resource.getTermsAndConditionsModification().getAmendedDocumentRemarks());
         termsAndConditions.setAmendedDocumentTitle(resource.getTermsAndConditionsModification().getAmendedDocumentTitle());
         termsAndConditions.setAmendedDocumentFileReference(resource.getTermsAndConditionsModification().getAmendedDocumentFileReference());
+
+        termsAndConditions.setLeadBankerDocumentFileReference(resource.getTermsAndConditionsModification().getLeadBankerDocumentFileReference());
+        termsAndConditions.setLeadBankerDocumentTitle(resource.getTermsAndConditionsModification().getLeadBankerDocumentTitle());
+        termsAndConditions.setLeadBankerDocumentType(resource.getTermsAndConditionsModification().getLeadBankerDocumentType());
+
+        termsAndConditions.setInternalDocumentFileReference(resource.getTermsAndConditionsModification().getInternalDocumentFileReference());
+        termsAndConditions.setInternalDocumentRemarks(resource.getTermsAndConditionsModification().getInternalDocumentRemarks());
+        termsAndConditions.setInternalDocumentTitle(resource.getTermsAndConditionsModification().getInternalDocumentTitle());
+        termsAndConditions.setInternalDocumentType(resource.getTermsAndConditionsModification().getInternalDocumentType());
+        termsAndConditions.setDateOfInternalDocument(resource.getTermsAndConditionsModification().getDateOfInternalDocument());
+
         termsAndConditions = termsAndConditionsRepository.save(termsAndConditions);
 
         // Change Documents for Terms and Conditions
@@ -724,12 +736,24 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingTermsAndConditionsModification.setBorrowerRequestLetterDate(resource.getTermsAndConditionsModification().getBorrowerRequestLetterDate());
         existingTermsAndConditionsModification.setDateOfIssueOfAmendedSanctionLetter(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedSanctionLetter());
         existingTermsAndConditionsModification.setRemarks(resource.getTermsAndConditionsModification().getRemarks());
+        existingTermsAndConditionsModification.setReasonsForAmendment(resource.getTermsAndConditionsModification().getReasonsForAmendment());
         existingTermsAndConditionsModification.setFileReference(resource.getTermsAndConditionsModification().getFileReference());
         existingTermsAndConditionsModification.setAmendedDocumentType(resource.getTermsAndConditionsModification().getAmendedDocumentType());
         existingTermsAndConditionsModification.setDateOfIssueOfAmendedDocument(resource.getTermsAndConditionsModification().getDateOfIssueOfAmendedDocument());
         existingTermsAndConditionsModification.setAmendedDocumentRemarks(resource.getTermsAndConditionsModification().getAmendedDocumentRemarks());
         existingTermsAndConditionsModification.setAmendedDocumentTitle(resource.getTermsAndConditionsModification().getAmendedDocumentTitle());
         existingTermsAndConditionsModification.setAmendedDocumentFileReference(resource.getTermsAndConditionsModification().getAmendedDocumentFileReference());
+
+        existingTermsAndConditionsModification.setLeadBankerDocumentFileReference(resource.getTermsAndConditionsModification().getLeadBankerDocumentFileReference());
+        existingTermsAndConditionsModification.setLeadBankerDocumentTitle(resource.getTermsAndConditionsModification().getLeadBankerDocumentTitle());
+        existingTermsAndConditionsModification.setLeadBankerDocumentType(resource.getTermsAndConditionsModification().getLeadBankerDocumentType());
+
+        existingTermsAndConditionsModification.setInternalDocumentFileReference(resource.getTermsAndConditionsModification().getInternalDocumentFileReference());
+        existingTermsAndConditionsModification.setInternalDocumentRemarks(resource.getTermsAndConditionsModification().getInternalDocumentRemarks());
+        existingTermsAndConditionsModification.setInternalDocumentTitle(resource.getTermsAndConditionsModification().getInternalDocumentTitle());
+        existingTermsAndConditionsModification.setInternalDocumentType(resource.getTermsAndConditionsModification().getInternalDocumentType());
+        existingTermsAndConditionsModification.setDateOfInternalDocument(resource.getTermsAndConditionsModification().getDateOfInternalDocument());
+
         existingTermsAndConditionsModification = termsAndConditionsRepository.save(existingTermsAndConditionsModification);
 
         // Change Documents for T&C Mod.

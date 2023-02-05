@@ -27,6 +27,7 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private LocalDate borrowerRequestLetterDate;
     private LocalDate dateOfIssueOfAmendedSanctionLetter;
     private String remarks;
+    private String reasonsForAmendment;
     private String fileReference;
 
     //Amended Document Details
@@ -35,6 +36,16 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String amendedDocumentRemarks;
     private String amendedDocumentTitle;
     private String amendedDocumentFileReference;
+
+    private String leadBankerDocumentType;
+    private String leadBankerDocumentTitle;
+    private String leadBankerDocumentFileReference;
+
+    private String internalDocumentType;
+    private LocalDate dateOfInternalDocument;
+    private String internalDocumentTitle;
+    private String internalDocumentRemarks;
+    private String internalDocumentFileReference;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

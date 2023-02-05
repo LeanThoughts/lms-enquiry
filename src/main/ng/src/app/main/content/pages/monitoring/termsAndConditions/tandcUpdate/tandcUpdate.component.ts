@@ -48,17 +48,26 @@ export class TandCUpdateDialogComponent {
 
         this.tandcUpdateForm = _formBuilder.group({
             documentType: [this.selectedTandC.documentType || ''],
+            leadBankerDocumentType: [this.selectedTandC.leadBankerDocumentType || ''],
             documentTitle: [this.selectedTandC.documentTitle || ''],
+            leadBankerDocumentTitle: [this.selectedTandC.leadBankerDocumentTitle || ''],
             communication: [this.selectedTandC.communication || ''],
             remarks: [this.selectedTandC.remarks || ''],
+            reasonsForAmendment: [this.selectedTandC.reasonsForAmendment || ''],
             borrowerRequestLetterDate: [this.selectedTandC.borrowerRequestLetterDate || ''],
             dateOfIssueOfAmendedSanctionLetter: [this.selectedTandC.dateOfIssueOfAmendedSanctionLetter || ''],
             file: [''],
+            leadBankerFile: [''],
             amendedDocumentType: [this.selectedTandC.amendedDocumentType || ''],
             dateOfIssueOfAmendedDocument: [this.selectedTandC.dateOfIssueOfAmendedDocument || ''],
             amendedDocumentRemarks: [this.selectedTandC.amendedDocumentRemarks || ''],
             amendedDocumentTitle: [this.selectedTandC.amendedDocumentTitle || ''],
-            amendedFile: ['']
+            amendedFile: [''],
+            internalFile: [''],
+            internalDocumentType: [this.selectedTandC.internalDocumentType || ''],
+            dateOfInternalDocument: [this.selectedTandC.dateOfInternalDocument || ''],
+            internalDocumentRemarks: [this.selectedTandC.internalDocumentRemarks || ''],
+            internalDocumentTitle: [this.selectedTandC.internalDocumentTitle || ''],
         });
         
         // Sort document types array
@@ -75,6 +84,13 @@ export class TandCUpdateDialogComponent {
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
             this.tandcUpdateForm.get('file').setValue(file);
+        }
+    }
+
+    onLeadBankerFileSelect(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.tandcUpdateForm.get('leadBankerFile').setValue(file);
         }
     }
 
@@ -96,7 +112,9 @@ export class TandCUpdateDialogComponent {
         if (this.tandcUpdateForm.valid) {
             forkJoin([
                 this.uploadRegularFile(),
-                this.uploadAmendedFile()
+                this.uploadAmendedFile(),
+                this.uploadLeadBankerFile(),
+                this.uploadInternalFile()
             ]).subscribe(response => {
                 var tandc: TandCModel = new TandCModel(this.tandcUpdateForm.value);
 
@@ -113,6 +131,12 @@ export class TandCUpdateDialogComponent {
                 if (response[1] !== {}) {
                     tandc.amendedDocumentFileReference = response[1].fileReference;
                 }
+                if (response[2] !== {}) {
+                    tandc.leadBankerDocumentFileReference = response[2].fileReference;
+                }
+                if (response[3] !== {}) {
+                    tandc.internalDocumentFileReference = response[2].fileReference;
+                }
 
                 if (this._dialogData.operation === 'addT&C') {
                     this._loanMonitoringService.saveTandC(tandc, this._dialogData.loanApplicationId).subscribe(() => {
@@ -121,21 +145,36 @@ export class TandCUpdateDialogComponent {
                     });
                 }
                 else {
+                    this.selectedTandC.leadBankerDocumentTitle = tandc.leadBankerDocumentTitle;
+                    this.selectedTandC.leadBankerDocumentType = tandc.leadBankerDocumentType;
                     this.selectedTandC.documentType  = tandc.documentType;
                     this.selectedTandC.documentTitle  = tandc.documentTitle;
                     this.selectedTandC.communication  = tandc.communication;
                     this.selectedTandC.borrowerRequestLetterDate  = tandc.borrowerRequestLetterDate;
                     this.selectedTandC.dateOfIssueOfAmendedSanctionLetter  = tandc.dateOfIssueOfAmendedSanctionLetter;
                     this.selectedTandC.remarks = tandc.remarks;
-                    if (tandc.fileReference !== undefined) {
-                        this.selectedTandC.fileReference = tandc.fileReference;
-                    }
+                    this.selectedTandC.reasonsForAmendment = tandc.reasonsForAmendment;
                     this.selectedTandC.amendedDocumentType = tandc.amendedDocumentType;
                     this.selectedTandC.dateOfIssueOfAmendedDocument = tandc.dateOfIssueOfAmendedDocument;
                     this.selectedTandC.amendedDocumentTitle = tandc.amendedDocumentTitle;
                     this.selectedTandC.amendedDocumentRemarks = tandc.amendedDocumentRemarks;
+
+                    this.selectedTandC.internalDocumentType = tandc.internalDocumentType;
+                    this.selectedTandC.dateOfInternalDocument = tandc.dateOfInternalDocument;
+                    this.selectedTandC.internalDocumentTitle = tandc.internalDocumentTitle;
+                    this.selectedTandC.internalDocumentRemarks = tandc.internalDocumentRemarks;
+
+                    if (tandc.internalDocumentFileReference !== undefined) {
+                        this.selectedTandC.internalDocumentFileReference = tandc.internalDocumentFileReference;
+                    }
+                    if (tandc.leadBankerDocumentFileReference !== undefined) {
+                        this.selectedTandC.leadBankerDocumentFileReference = tandc.leadBankerDocumentFileReference;
+                    }
                     if (tandc.amendedDocumentFileReference !== undefined) {
                         this.selectedTandC.amendedDocumentFileReference = tandc.amendedDocumentFileReference;
+                    }
+                    if (tandc.fileReference !== undefined) {
+                        this.selectedTandC.fileReference = tandc.fileReference;
                     }
                     this._loanMonitoringService.updateTandC(this.selectedTandC).subscribe(() => {
                         this._matSnackBar.open('T&C updated successfully.', 'OK', { duration: 7000 });
@@ -170,6 +209,28 @@ export class TandCUpdateDialogComponent {
         else {
             var formData = new FormData();
             formData.append('file', this.tandcUpdateForm.get('amendedFile').value);      
+            return this._loanMonitoringService.uploadVaultDocument(formData);
+        }
+    }
+
+    uploadLeadBankerFile(): Observable<any> {
+        if (this.tandcUpdateForm.get('leadBankerFile').value === '') {
+            return Observable.of({});
+        }
+        else {
+            var formData = new FormData();
+            formData.append('file', this.tandcUpdateForm.get('leadBankerFile').value);      
+            return this._loanMonitoringService.uploadVaultDocument(formData);
+        }
+    }
+
+    uploadInternalFile(): Observable<any> {
+        if (this.tandcUpdateForm.get('internalFile').value === '') {
+            return Observable.of({});
+        }
+        else {
+            var formData = new FormData();
+            formData.append('file', this.tandcUpdateForm.get('internalFile').value);      
             return this._loanMonitoringService.uploadVaultDocument(formData);
         }
     }
