@@ -15,6 +15,7 @@ export class LoanMonitoringService implements Resolve<any> {
     selectedLIA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLFA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedTRA: BehaviorSubject<any> = new BehaviorSubject({});
+    selectedLLC: BehaviorSubject<any> = new BehaviorSubject({});
     
     public banks: any;
 
@@ -36,6 +37,40 @@ export class LoanMonitoringService implements Resolve<any> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this.getLoanContractExtension(this._loanEnquiryService.selectedEnquiry.value.id);
     }
+
+    // All about LLC
+
+    public getLendersLegalCouncils(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersLegalCouncils');
+    }
+
+    public saveLLC(llc: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/lendersLegalCouncils/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':llc });
+    }
+
+    public updateLLC(llc: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/lendersLegalCouncils/" + llc.id;
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':llc });
+    }
+
+    // All about LLC Reports And Fees
+    
+    public getLLCReportsAndFees(llcId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/llcReportAndFeeSubmission/' + llcId + '/llcReceiptsAndFees');
+    }
+    
+    public saveLLCReportAndFee(llcReportAndFee: any, liaId: string): Observable<any> {
+        const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/create";
+        return this._http.post(url, { 'lendersLegalCouncilId': liaId, 'llcReportAndFee': llcReportAndFee });
+    }
+
+    public updateLLCReportAndFee(llcReportAndFee: any): Observable<any> {
+        console.log('in service', llcReportAndFee);
+        const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/" + llcReportAndFee.id;
+        return this._http.put(url, { 'lendersLegalCouncilId': '', 'llcReportAndFee': llcReportAndFee });
+    }
+
 
     // All about LIA
 
@@ -377,9 +412,12 @@ export class LoanMonitoringService implements Resolve<any> {
         }
     }
 
+    public getLLCs(): Observable<any> {
+        return this._http.get<any>('enquiry/api/partner/llcs');
+    }
+
     public getLIAs(): Observable<any> {
-        // return this._http.get<any>('enquiry/api/partner/lias');
-        return this._http.get<any>('enquiry/api/partner/lies');
+        return this._http.get<any>('enquiry/api/partner/lias');
     }
 
     public getLIEs(): Observable<any> {

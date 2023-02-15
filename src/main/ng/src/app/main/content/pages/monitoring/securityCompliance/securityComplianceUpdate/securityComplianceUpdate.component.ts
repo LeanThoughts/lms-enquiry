@@ -51,7 +51,6 @@ export class SecurityComplianceUpdateDialogComponent {
             this.collateralAgreementTypes = LoanMonitoringConstants.collateralAgreementTypes.filter(obj => {
                 return obj.objectType === this.selectedSecurityCompliance.collateralObjectType;
             });
-    
         }
         else {
             this.selectedSecurityCompliance = new SecurityComplianceModel({});
