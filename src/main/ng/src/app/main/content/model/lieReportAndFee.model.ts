@@ -15,6 +15,9 @@ export class LIEReportAndFeeModel
     sapFIInvoiceDate: Date;
     sapFIInvoiceNumber: string;
     feeAmountRaisedOnCustomer: number;
+    reportDate: Date;
+    percentageCompletion: number;
+    remarks: string;
 
     /**
      * constructor();
@@ -37,5 +40,8 @@ export class LIEReportAndFeeModel
         this.sapFIInvoiceDate = _lieReportAndFee.sapFIInvoiceDate || undefined;
         this.sapFIInvoiceNumber = _lieReportAndFee.sapFIInvoiceNumber || '';
         this.feeAmountRaisedOnCustomer = _lieReportAndFee.feeAmountRaisedOnCustomer;
+        this.reportDate = _lieReportAndFee.reportDate || undefined;
+        this.percentageCompletion = _lieReportAndFee.percentageCompletion || '';
+        this.remarks = _lieReportAndFee.remarks || '';
     }
 }

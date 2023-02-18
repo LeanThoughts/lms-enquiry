@@ -224,6 +224,11 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existinglieReportAndFee.setDocumentTitle(resource.getLieReportAndFee().getDocumentTitle());
         existinglieReportAndFee.setNextReportDate(resource.getLieReportAndFee().getNextReportDate());
         existinglieReportAndFee.setFileReference(resource.getLieReportAndFee().getFileReference());
+
+        existinglieReportAndFee.setReportDate(resource.getLieReportAndFee().getReportDate());
+        existinglieReportAndFee.setPercentageCompletion(resource.getLieReportAndFee().getPercentageCompletion());
+        existinglieReportAndFee.setRemarks(resource.getLieReportAndFee().getRemarks());
+
         existinglieReportAndFee = lieReportAndFeeRepository.save(existinglieReportAndFee);
 
         // Create Change Document for LIE Report And Fee
@@ -423,6 +428,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existinglfaReportAndFee.setDocumentType(resource.getLfaReportAndFee().getDocumentType());
         existinglfaReportAndFee.setFileReference(resource.getLfaReportAndFee().getFileReference());
         existinglfaReportAndFee.setNextReportDate(resource.getLfaReportAndFee().getNextReportDate());
+        existinglfaReportAndFee.setReportDate(resource.getLfaReportAndFee().getReportDate());
+        existinglfaReportAndFee.setPercentageCompletion(resource.getLfaReportAndFee().getPercentageCompletion());
+        existinglfaReportAndFee.setRemarks(resource.getLfaReportAndFee().getRemarks());
         existinglfaReportAndFee = lfaReportAndFeeRepository.save(existinglfaReportAndFee);
 
         // Create Change Document for LFA Report and Fee

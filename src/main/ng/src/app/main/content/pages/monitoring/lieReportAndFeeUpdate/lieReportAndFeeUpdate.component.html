@@ -99,6 +99,20 @@
                 </div>
             </div>
 
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput [matDatepicker]="picker4" placeholder="Report Date" formControlName="reportDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker> 
+                </mat-form-field>  
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Percentage Completion" maxlength="5" formControlName="percentageCompletion">          
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Remarks" maxlength="250" formControlName="remarks">          
+                </mat-form-field>
+            </div>
+
             <div class="mt-16 mb-16" mat-dialog-actions fxLayout="row">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit

@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import java.sql.Blob;
 import java.time.LocalDate;
 
 @Entity
@@ -34,6 +33,9 @@ public class LFAReportAndFee extends AbstractEntity implements Cloneable {
     private String documentTitle;
     private String fileReference;
     private LocalDate nextReportDate;
+    private LocalDate reportDate;
+    private Double percentageCompletion;
+    private String remarks;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

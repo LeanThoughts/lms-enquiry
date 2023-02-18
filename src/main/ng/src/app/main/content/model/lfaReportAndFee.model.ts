@@ -15,6 +15,9 @@ export class LFAReportAndFeeModel
     sapFIInvoiceDate: Date;
     sapFIInvoiceNumber: string;
     feeAmountRaisedOnCustomer: number;
+    reportDate: Date;
+    percentageCompletion: number;
+    remarks: string;
 
     /**
      * constructor();
@@ -37,5 +40,8 @@ export class LFAReportAndFeeModel
         this.sapFIInvoiceDate = _lfaReportAndFee.sapFIInvoiceDate || undefined;
         this.sapFIInvoiceNumber = _lfaReportAndFee.sapFIInvoiceNumber || '';
         this.feeAmountRaisedOnCustomer = _lfaReportAndFee.feeAmountRaisedOnCustomer;
+        this.reportDate = _lfaReportAndFee.reportDate || undefined;
+        this.percentageCompletion = _lfaReportAndFee.percentageCompletion || '';
+        this.remarks = _lfaReportAndFee.remarks || '';
     }
 }

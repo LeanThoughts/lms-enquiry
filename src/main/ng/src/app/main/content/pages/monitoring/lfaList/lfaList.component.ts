@@ -109,7 +109,7 @@ export class LFAListComponent {
         });    
     }
 
-    displayLIE(): void {
+    displayLFA(): void {
         // Open the dialog.
         this._matDialog.open(LFAUpdateDialogComponent, {
             panelClass: 'fuse-lfa-update-dialog',

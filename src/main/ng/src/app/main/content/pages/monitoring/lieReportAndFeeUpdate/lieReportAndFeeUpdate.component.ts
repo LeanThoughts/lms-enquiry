@@ -65,7 +65,10 @@ export class LIEReportAndFeeUpdateDialogComponent {
             file: [''],
             sapFIInvoiceDate: [this.selectedLIEReportAndFee.sapFIInvoiceDate || ''],
             sapFIInvoiceNumber: [this.selectedLIEReportAndFee.sapFIInvoiceNumber],
-            feeAmountRaisedOnCustomer: [this.selectedLIEReportAndFee.feeAmountRaisedOnCustomer]
+            feeAmountRaisedOnCustomer: [this.selectedLIEReportAndFee.feeAmountRaisedOnCustomer],
+            reportDate: [this.selectedLIEReportAndFee.reportDate || ''],
+            percentageCompletion: [this.selectedLIEReportAndFee.percentageCompletion || ''],
+            remarks: [this.selectedLIEReportAndFee.remarks || '']
         });
 
         // Sort document types array
@@ -98,6 +101,8 @@ export class LIEReportAndFeeUpdateDialogComponent {
             lieReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             dt = new Date(lieReportAndFee.nextReportDate);
             lieReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(lieReportAndFee.reportDate);
+            lieReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLIEReportAndFee') {
                 if (this.lieUpdateForm.get('file').value !== '') {
@@ -142,6 +147,9 @@ export class LIEReportAndFeeUpdateDialogComponent {
                             this.selectedLIEReportAndFee.documentType = lieReportAndFee.documentType;
                             this.selectedLIEReportAndFee.nextReportDate = lieReportAndFee.nextReportDate;
                             this.selectedLIEReportAndFee.fileReference = response.fileReference;
+                            this.selectedLIEReportAndFee.reportDate = response.reportDate;
+                            this.selectedLIEReportAndFee.percentageCompletion = response.percentageCompletion;
+                            this.selectedLIEReportAndFee.remarks = response.remarks;
                             this._loanMonitoringService.updateLIEReportAndFee(this.selectedLIEReportAndFee).subscribe(() => {
                                 this._matSnackBar.open('LIE report updated successfully.', 'OK', { duration: 7000 });
                                 this._dialogRef.close({ 'refresh': true });
@@ -165,6 +173,9 @@ export class LIEReportAndFeeUpdateDialogComponent {
                     this.selectedLIEReportAndFee.documentTitle = lieReportAndFee.documentTitle;
                     this.selectedLIEReportAndFee.documentType = lieReportAndFee.documentType;
                     this.selectedLIEReportAndFee.nextReportDate = lieReportAndFee.nextReportDate;
+                    this.selectedLIEReportAndFee.reportDate = lieReportAndFee.reportDate;
+                    this.selectedLIEReportAndFee.percentageCompletion = lieReportAndFee.percentageCompletion;
+                    this.selectedLIEReportAndFee.remarks = lieReportAndFee.remarks;
                     this._loanMonitoringService.updateLIEReportAndFee(this.selectedLIEReportAndFee).subscribe(() => {
                         this._matSnackBar.open('LIE report updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });

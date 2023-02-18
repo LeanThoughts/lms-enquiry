@@ -31,6 +31,9 @@ public class LIEReportAndFee extends AbstractEntity implements Cloneable {
     private String documentTitle;
     private LocalDate nextReportDate;
     private String fileReference;
+    private LocalDate reportDate;
+    private Double percentageCompletion;
+    private String remarks;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

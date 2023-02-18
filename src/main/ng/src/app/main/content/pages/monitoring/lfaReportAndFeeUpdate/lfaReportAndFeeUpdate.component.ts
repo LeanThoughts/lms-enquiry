@@ -65,7 +65,10 @@ export class LFAReportAndFeeUpdateDialogComponent {
             file: [''],
             sapFIInvoiceDate: [this.selectedLFAReportAndFee.sapFIInvoiceDate || ''],
             sapFIInvoiceNumber: [this.selectedLFAReportAndFee.sapFIInvoiceNumber],
-            feeAmountRaisedOnCustomer: [this.selectedLFAReportAndFee.feeAmountRaisedOnCustomer]
+            feeAmountRaisedOnCustomer: [this.selectedLFAReportAndFee.feeAmountRaisedOnCustomer],
+            reportDate: [this.selectedLFAReportAndFee.reportDate || ''],
+            percentageCompletion: [this.selectedLFAReportAndFee.percentageCompletion || ''],
+            remarks: [this.selectedLFAReportAndFee.remarks || '']
         });
 
         // Sort document types array
@@ -98,6 +101,8 @@ export class LFAReportAndFeeUpdateDialogComponent {
             lfaReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             dt = new Date(lfaReportAndFee.nextReportDate);
             lfaReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(lfaReportAndFee.reportDate);
+            lfaReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLFAReportAndFee') {
                 if (this.lfaUpdateForm.get('file').value !== '') {
@@ -142,6 +147,9 @@ export class LFAReportAndFeeUpdateDialogComponent {
                             this.selectedLFAReportAndFee.nextReportDate = lfaReportAndFee.nextReportDate;
                             this.selectedLFAReportAndFee.documentType = lfaReportAndFee.documentType;
                             this.selectedLFAReportAndFee.fileReference = response.fileReference;
+                            this.selectedLFAReportAndFee.percentageCompletion = response.percentageCompletion;
+                            this.selectedLFAReportAndFee.remarks = response.remarks;
+                            this.selectedLFAReportAndFee.reportDate = response.reportDate;
                             this._loanMonitoringService.updateLFAReportAndFee(this.selectedLFAReportAndFee).subscribe(() => {
                                 this._matSnackBar.open('LFA report updated successfully.', 'OK', { duration: 7000 });
                                 this._dialogRef.close({ 'refresh': true });
@@ -164,6 +172,9 @@ export class LFAReportAndFeeUpdateDialogComponent {
                     this.selectedLFAReportAndFee.statusOfFeePaid = lfaReportAndFee.statusOfFeePaid;
                     this.selectedLFAReportAndFee.documentTitle = lfaReportAndFee.documentTitle;
                     this.selectedLFAReportAndFee.nextReportDate = lfaReportAndFee.nextReportDate;
+                    this.selectedLFAReportAndFee.percentageCompletion = lfaReportAndFee.percentageCompletion;
+                    this.selectedLFAReportAndFee.remarks = lfaReportAndFee.remarks;
+                    this.selectedLFAReportAndFee.reportDate = lfaReportAndFee.reportDate;
                     this._loanMonitoringService.updateLFAReportAndFee(this.selectedLFAReportAndFee).subscribe(() => {
                         this._matSnackBar.open('LFA report updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
