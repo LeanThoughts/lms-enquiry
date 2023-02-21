@@ -142,6 +142,18 @@ public class PartnerController {
         }
     }
 
+    @GetMapping("partner/clas")
+    public ResponseEntity getCommonLoanAgreements(HttpServletRequest httpServletRequest) {
+
+        List<Partner> partners = partnerService.getLendersIndependentEngineers();
+        if (partners != null) {
+            return ResponseEntity.ok(partners);
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
     @GetMapping("partner/llcs")
     public ResponseEntity getLendersLegalCouncils(HttpServletRequest httpServletRequest) {
 

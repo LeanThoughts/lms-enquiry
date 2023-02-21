@@ -16,6 +16,7 @@ export class LoanMonitoringService implements Resolve<any> {
     selectedLFA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedTRA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLLC: BehaviorSubject<any> = new BehaviorSubject({});
+    selectedCLA: BehaviorSubject<any> = new BehaviorSubject({});
     
     public banks: any;
 
@@ -103,6 +104,39 @@ export class LoanMonitoringService implements Resolve<any> {
         console.log('in service', liaReportAndFee);
         const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/" + liaReportAndFee.id;
         return this._http.put(url, { 'lendersInsuranceAdvisorId': '', 'liaReportAndFee': liaReportAndFee });
+    }
+
+    // All about CLA
+
+    public getCommonLoanAgreements(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/commonLoanAgreements');
+    }
+
+    public saveCLA(cla: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/commonLoanAgreements/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'commonLoanAgreement':cla });
+    }
+
+    public updateCLA(cla: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/commonLoanAgreements/" + cla.id;
+        return this._http.put(url, { 'loanApplicationId':'', 'commonLoanAgreement':cla });
+    }
+
+    // All about CLA Reports And Fees
+    
+    public getCLAReportsAndFees(claId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/claReportAndFeeSubmission/' + claId + '/claReceiptsAndFees');
+    }
+    
+    public saveCLAReportAndFee(claReportAndFee: any, claId: string): Observable<any> {
+        const url = "enquiry/api/loanApplications/claReportAndFeeSubmission/create";
+        return this._http.post(url, { 'commonLoanAgreementId': claId, 'claReportAndFee': claReportAndFee });
+    }
+
+    public updateCLAReportAndFee(claReportAndFee: any): Observable<any> {
+        console.log('in service', claReportAndFee);
+        const url = "enquiry/api/loanApplications/claReportAndFeeSubmission/" + claReportAndFee.id;
+        return this._http.put(url, { 'commonLoanAgreementId': '', 'claReportAndFee': claReportAndFee });
     }
 
     // All about LIE
@@ -418,6 +452,10 @@ export class LoanMonitoringService implements Resolve<any> {
 
     public getLIAs(): Observable<any> {
         return this._http.get<any>('enquiry/api/partner/lias');
+    }
+
+    public getCLAs(): Observable<any> {
+        return this._http.get<any>('enquiry/api/partner/clas');
     }
 
     public getLIEs(): Observable<any> {

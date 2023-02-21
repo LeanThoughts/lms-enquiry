@@ -59,6 +59,10 @@ import { LLCListComponent } from './llcList/llcList.component';
 import { LLCUpdateDialogComponent } from './llcUpdate/llcUpdate.component';
 import { LLCReportAndFeeListComponent } from './llcReportAndFeeList/llcReportAndFeeList.component';
 import { LLCReportAndFeeUpdateDialogComponent } from './llcReportAndFeeUpdate/llcReportAndFeeUpdate.component';
+import { CLAListComponent } from './claList/claList.component';
+import { CLAUpdateDialogComponent } from './claUpdate/claUpdate.component';
+import { CLAReportAndFeeListComponent } from './claReportAndFeeList/claReportAndFeeList.component';
+import { CLAReportAndFeeUpdateDialogComponent } from './claReportAndFeeUpdate/claReportAndFeeUpdate.component';
 
 const routes = [
     {
@@ -99,6 +103,10 @@ const routes = [
     ],
     declarations: [
         LoanMonitoringComponent,
+        CLAListComponent,
+        CLAUpdateDialogComponent,
+        CLAReportAndFeeListComponent,
+        CLAReportAndFeeUpdateDialogComponent,
         LLCListComponent,
         LLCUpdateDialogComponent,
         LLCReportAndFeeListComponent,
@@ -152,6 +160,10 @@ const routes = [
     ],
     exports: [
         LoanMonitoringComponent,
+        CLAListComponent,
+        CLAUpdateDialogComponent,
+        CLAReportAndFeeListComponent,
+        CLAReportAndFeeUpdateDialogComponent,
         LLCListComponent,
         LLCUpdateDialogComponent,
         LLCReportAndFeeListComponent,
@@ -196,6 +208,8 @@ const routes = [
         ProjectMonitoringDataItemUpdateComponent
     ],  
     entryComponents: [
+        CLAUpdateDialogComponent,
+        CLAReportAndFeeUpdateDialogComponent,
         LLCUpdateDialogComponent,
         LLCReportAndFeeUpdateDialogComponent,
         LIAReportAndFeeUpdateDialogComponent,
