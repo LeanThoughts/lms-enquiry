@@ -65,7 +65,10 @@ export class LIAReportAndFeeUpdateDialogComponent {
             file: [''],
             sapFIInvoiceDate: [this.selectedLIAReportAndFee.sapFIInvoiceDate || ''],
             sapFIInvoiceNumber: [this.selectedLIAReportAndFee.sapFIInvoiceNumber],
-            feeAmountRaisedOnCustomer: [this.selectedLIAReportAndFee.feeAmountRaisedOnCustomer]
+            feeAmountRaisedOnCustomer: [this.selectedLIAReportAndFee.feeAmountRaisedOnCustomer],
+            reportDate: [this.selectedLIAReportAndFee.reportDate || ''],
+            percentageCompletion: [this.selectedLIAReportAndFee.percentageCompletion || ''],
+            remarks: [this.selectedLIAReportAndFee.remarks || '']
         });
 
         // Sort document types array
@@ -98,6 +101,8 @@ export class LIAReportAndFeeUpdateDialogComponent {
             liaReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             dt = new Date(liaReportAndFee.nextReportDate);
             liaReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(liaReportAndFee.reportDate);
+            liaReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLIAReportAndFee') {
                 if (this.liaUpdateForm.get('file').value !== '') {
@@ -142,6 +147,9 @@ export class LIAReportAndFeeUpdateDialogComponent {
                             this.selectedLIAReportAndFee.documentType = liaReportAndFee.documentType;
                             this.selectedLIAReportAndFee.nextReportDate = liaReportAndFee.nextReportDate;
                             this.selectedLIAReportAndFee.fileReference = response.fileReference;
+                            this.selectedLIAReportAndFee.reportDate = response.reportDate;
+                            this.selectedLIAReportAndFee.percentageCompletion = response.percentageCompletion;
+                            this.selectedLIAReportAndFee.remarks = response.remarks;
                             this._loanMonitoringService.updateLIAReportAndFee(this.selectedLIAReportAndFee).subscribe(() => {
                                 this._matSnackBar.open('LIA report updated successfully.', 'OK', { duration: 7000 });
                                 this._dialogRef.close({ 'refresh': true });
@@ -165,6 +173,9 @@ export class LIAReportAndFeeUpdateDialogComponent {
                     this.selectedLIAReportAndFee.documentTitle = liaReportAndFee.documentTitle;
                     this.selectedLIAReportAndFee.documentType = liaReportAndFee.documentType;
                     this.selectedLIAReportAndFee.nextReportDate = liaReportAndFee.nextReportDate;
+                    this.selectedLIAReportAndFee.reportDate = liaReportAndFee.reportDate;
+                    this.selectedLIAReportAndFee.percentageCompletion = liaReportAndFee.percentageCompletion;
+                    this.selectedLIAReportAndFee.remarks = liaReportAndFee.remarks;
                     this._loanMonitoringService.updateLIAReportAndFee(this.selectedLIAReportAndFee).subscribe(() => {
                         this._matSnackBar.open('LIA report updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });

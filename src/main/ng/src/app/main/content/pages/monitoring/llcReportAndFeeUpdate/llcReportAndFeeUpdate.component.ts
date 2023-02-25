@@ -65,7 +65,10 @@ export class LLCReportAndFeeUpdateDialogComponent {
             file: [''],
             sapFIInvoiceDate: [this.selectedLLCReportAndFee.sapFIInvoiceDate || ''],
             sapFIInvoiceNumber: [this.selectedLLCReportAndFee.sapFIInvoiceNumber],
-            feeAmountRaisedOnCustomer: [this.selectedLLCReportAndFee.feeAmountRaisedOnCustomer]
+            feeAmountRaisedOnCustomer: [this.selectedLLCReportAndFee.feeAmountRaisedOnCustomer],
+            reportDate: [this.selectedLLCReportAndFee.reportDate || ''],
+            percentageCompletion: [this.selectedLLCReportAndFee.percentageCompletion || ''],
+            remarks: [this.selectedLLCReportAndFee.remarks || '']
         });
 
         // Sort document types array
@@ -98,6 +101,8 @@ export class LLCReportAndFeeUpdateDialogComponent {
             llcReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             dt = new Date(llcReportAndFee.nextReportDate);
             llcReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(llcReportAndFee.reportDate);
+            llcReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLLCReportAndFee') {
                 if (this.llcUpdateForm.get('file').value !== '') {
@@ -142,6 +147,9 @@ export class LLCReportAndFeeUpdateDialogComponent {
                             this.selectedLLCReportAndFee.documentType = llcReportAndFee.documentType;
                             this.selectedLLCReportAndFee.nextReportDate = llcReportAndFee.nextReportDate;
                             this.selectedLLCReportAndFee.fileReference = response.fileReference;
+                            this.selectedLLCReportAndFee.reportDate = response.reportDate;
+                            this.selectedLLCReportAndFee.percentageCompletion = response.percentageCompletion;
+                            this.selectedLLCReportAndFee.remarks = response.remarks;
                             this._loanMonitoringService.updateLLCReportAndFee(this.selectedLLCReportAndFee).subscribe(() => {
                                 this._matSnackBar.open('LLC report updated successfully.', 'OK', { duration: 7000 });
                                 this._dialogRef.close({ 'refresh': true });
@@ -165,6 +173,9 @@ export class LLCReportAndFeeUpdateDialogComponent {
                     this.selectedLLCReportAndFee.documentTitle = llcReportAndFee.documentTitle;
                     this.selectedLLCReportAndFee.documentType = llcReportAndFee.documentType;
                     this.selectedLLCReportAndFee.nextReportDate = llcReportAndFee.nextReportDate;
+                    this.selectedLLCReportAndFee.reportDate = llcReportAndFee.reportDate;
+                    this.selectedLLCReportAndFee.percentageCompletion = llcReportAndFee.percentageCompletion;
+                    this.selectedLLCReportAndFee.remarks = llcReportAndFee.remarks;
                     this._loanMonitoringService.updateLLCReportAndFee(this.selectedLLCReportAndFee).subscribe(() => {
                         this._matSnackBar.open('LLC report updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });

@@ -163,6 +163,9 @@ public class LIAService implements ILIAService {
         existingliaReportAndFee.setDocumentTitle(resource.getLiaReportAndFee().getDocumentTitle());
         existingliaReportAndFee.setNextReportDate(resource.getLiaReportAndFee().getNextReportDate());
         existingliaReportAndFee.setFileReference(resource.getLiaReportAndFee().getFileReference());
+        existingliaReportAndFee.setReportDate(resource.getLiaReportAndFee().getReportDate());
+        existingliaReportAndFee.setPercentageCompletion(resource.getLiaReportAndFee().getPercentageCompletion());
+        existingliaReportAndFee.setRemarks(resource.getLiaReportAndFee().getRemarks());
         existingliaReportAndFee = liaReportAndFeeRepository.save(existingliaReportAndFee);
 
         // Create Change Document for LIE Report And Fee
