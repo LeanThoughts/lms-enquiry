@@ -39,6 +39,13 @@ public class SiteVisit extends AbstractEntity implements  Cloneable{
 
     private String fiscalYear;
 
+    private LocalDate initialSCOD;
+    private LocalDate revisedSCOD1;
+    private LocalDate revisedSCOD2;
+
+    private String businessPartnerId;
+    private String businessPartnerName;
+
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

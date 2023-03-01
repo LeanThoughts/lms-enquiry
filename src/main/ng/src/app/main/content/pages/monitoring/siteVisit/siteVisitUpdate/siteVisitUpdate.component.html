@@ -7,22 +7,20 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important; height: 405px;">
         <form [formGroup]="siteVisitUpdateForm">
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
+                <mat-form-field fxFlex="33">
                     <input matInput placeholder="Serial Number" formControlName="serialNumber" readonly>          
                 </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
+                <mat-form-field fxFlex="34">
                     <mat-select placeholder="Type" formControlName="siteVisitType" required>
                         <mat-option *ngFor="let obj of siteVisitTypes" [value]="obj.code">
                             {{ obj.value }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field> 
-                <mat-form-field fxFlex="50">
+                <mat-form-field fxFlex="33">
                     <input matInput [matDatepicker]="picker1" placeholder="Actual COD" formControlName="actualCOD" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker> 
@@ -30,12 +28,15 @@
             </div>
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
                     <input matInput [matDatepicker]="picker2" placeholder="Date of Site Visit" formControlName="dateOfSiteVisit" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
-                <mat-form-field fxFlex="50">
+                <mat-form-field fxFlex="34">
                     <input matInput [matDatepicker]="picker3" placeholder="Date of Lenders Meet" formControlName="dateOfLendersMeet" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker> 
@@ -43,7 +44,7 @@
             </div>
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
+                <mat-form-field fxFlex="33">
                     <mat-select placeholder="Document Type" formControlName="documentType">
                       <mat-option> </mat-option>
                       <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
@@ -51,24 +52,56 @@
                       </mat-option>
                     </mat-select>
                 </mat-form-field> 
-                <mat-form-field fxFlex="50">
+                <mat-form-field fxFlex="34">
                     <input matInput placeholder="Document Title" formControlName="documentTitle">          
                 </mat-form-field>
+                <div fxLayout="column" fxFlex="33">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="document">Upload Document (PDF)</label>
+                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedSiteVisit.fileReference)" *ngIf="selectedSiteVisit.fileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50">
-                    <label for="document">Upload Document (PDF)</label>
-                    <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
-                </div>
+                <mat-form-field fxFlex="33">
+                    <input matInput [matDatepicker]="picker4" placeholder="Initial SCOD" formControlName="initialSCOD" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput [matDatepicker]="picker5" placeholder="Revised SCOD 1" formControlName="revisedSCOD1" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput [matDatepicker]="picker6" placeholder="Revised SCOD 3" formControlName="revisedSCOD2" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                    <mat-datepicker #picker6></mat-datepicker> 
+                </mat-form-field>
             </div>
 
             <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" class="mt-16">
-                    <a [href]="getFileURL(selectedSiteVisit.fileReference)" *ngIf="selectedSiteVisit.fileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
-                </div>
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Select Business Partner" formControlName="businessPartnerId">
+                        <mat-option *ngFor="let partner of partners" [value]="partner.partyNumber" (click)="onPartnerSelect(partner)">
+                            <small>{{ partner.partyNumber }}</small> | {{ partner.partyName1 + ' ' + partner.partyName2 }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Business Partner Code" formControlName="displayBusinessPartnerId" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Business Partner Name" formControlName="businessPartnerName" readonly>
+                </mat-form-field>
             </div>
 
             <div mat-dialog-actions fxLayout="row">

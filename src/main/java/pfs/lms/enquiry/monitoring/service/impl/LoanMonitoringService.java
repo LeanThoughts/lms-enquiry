@@ -1007,7 +1007,10 @@ public class LoanMonitoringService implements ILoanMonitoringService {
             siteVisit = siteVisitRepository.getOne(resource.getSiteVisit().getId());
             oldSiteVisit = siteVisit.clone();
         }
-        siteVisit.setSerialNumber(siteVisitRepository.findByLoanAppraisalId(loanAppraisal.getId().toString()).size() + 1);
+        if (loanMonitor != null)
+            siteVisit.setSerialNumber(siteVisitRepository.findByLoanMonitoringId(loanMonitor.getId().toString()).size() + 1);
+        else
+            siteVisit.setSerialNumber(siteVisitRepository.findByLoanAppraisalId(loanAppraisal.getId().toString()).size() + 1);
         siteVisit.setSiteVisitType(resource.getSiteVisit().getSiteVisitType());
         siteVisit.setActualCOD(resource.getSiteVisit().getActualCOD());
         siteVisit.setDateOfLendersMeet(resource.getSiteVisit().getDateOfLendersMeet());
@@ -1016,6 +1019,11 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         siteVisit.setDocumentTitle(resource.getSiteVisit().getDocumentTitle());
         siteVisit.setFileReference(resource.getSiteVisit().getFileReference());
         siteVisit.setFiscalYear(resource.getSiteVisit().getFiscalYear());
+        siteVisit.setInitialSCOD(resource.getSiteVisit().getInitialSCOD());
+        siteVisit.setRevisedSCOD1(resource.getSiteVisit().getRevisedSCOD1());
+        siteVisit.setRevisedSCOD2(resource.getSiteVisit().getRevisedSCOD2());
+        siteVisit.setBusinessPartnerId(resource.getSiteVisit().getBusinessPartnerId());
+        siteVisit.setBusinessPartnerName(resource.getSiteVisit().getBusinessPartnerName());
         siteVisit = siteVisitRepository.save(siteVisit);
 
 
@@ -1065,6 +1073,11 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingSiteVisit.setDocumentTitle(resource.getSiteVisit().getDocumentTitle());
         existingSiteVisit.setFileReference(resource.getSiteVisit().getFileReference());
         existingSiteVisit.setFiscalYear(resource.getSiteVisit().getFiscalYear());
+        existingSiteVisit.setInitialSCOD(resource.getSiteVisit().getInitialSCOD());
+        existingSiteVisit.setRevisedSCOD1(resource.getSiteVisit().getRevisedSCOD1());
+        existingSiteVisit.setRevisedSCOD2(resource.getSiteVisit().getRevisedSCOD2());
+        existingSiteVisit.setBusinessPartnerId(resource.getSiteVisit().getBusinessPartnerId());
+        existingSiteVisit.setBusinessPartnerName(resource.getSiteVisit().getBusinessPartnerName());
 
         existingSiteVisit = siteVisitRepository.save(existingSiteVisit);
 

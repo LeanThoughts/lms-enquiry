@@ -63,7 +63,7 @@ export class SiteVisitListComponent implements OnInit {
         }
         const dialogRef = this._dialog.open(SiteVisitUpdateDialogComponent, {
             panelClass: 'fuse-site-visit-update-dialog',
-            width: '750px',
+            width: '900px',
             data: data
         });
         // Subscribe to the dialog close event to intercept the action taken.
