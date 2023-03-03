@@ -44,35 +44,44 @@
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Networth" formControlName="netWorth" maxlength="20">          
                 </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="150">          
+                </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <div fxLayout="column" fxFlex="50">
-                    <label for="annualReturnDocument">Annual Report (PDF)</label>
-                    <input type="file" name="annualReturnDocument" (change)="onAnnualReturnDocument($event)" id="annualReturnDocument"
-                            placeholder="Annual Return Document" accept="application/pdf"/>
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="annualReturnDocument">Annual Report (PDF)</label>
+                            <input type="file" name="annualReturnDocument" (change)="onAnnualReturnDocument($event)" id="annualReturnDocument"
+                                    placeholder="Annual Return Document" accept="application/pdf"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedFinancials.annualReturnFileReference)" *ngIf="selectedFinancials.annualReturnFileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div fxLayout="column" fxFlex="50">
-                    <label for="ratingDocument">Rating (PDF)</label>
-                    <input type="file" name="ratingDocument" (change)="onRatingDocument($event)" placeholder="Rating Document" accept="application/pdf" 
-                            id="ratingDocument"/>
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="ratingDocument">Rating (PDF)</label>
+                            <input type="file" name="ratingDocument" (change)="onRatingDocument($event)" placeholder="Rating Document" accept="application/pdf" 
+                                    id="ratingDocument"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedFinancials.ratingFileReference)" *ngIf="selectedFinancials.ratingFileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" class="mt-16">
-                    <a [href]="getFileURL(selectedFinancials.annualReturnFileReference)" *ngIf="selectedFinancials.annualReturnFileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
-                </div>
-                <div fxLayout="column" fxFlex="50" class="mt-16">
-                    <a [href]="getFileURL(selectedFinancials.ratingFileReference)" *ngIf="selectedFinancials.ratingFileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
-                </div>
-            </div>
-
-            <div class="mt-32" mat-dialog-actions fxLayout="row">
+            <div class="mt-16" mat-dialog-actions fxLayout="row">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

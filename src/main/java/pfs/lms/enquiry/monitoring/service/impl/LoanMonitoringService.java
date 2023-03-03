@@ -1394,6 +1394,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         borrowerFinancials.setOverAllRating(resource.getBorrowerFinancials().getOverAllRating());
         borrowerFinancials.setAnnualReturnFileReference(resource.getBorrowerFinancials().getAnnualReturnFileReference());
         borrowerFinancials.setRatingFileReference(resource.getBorrowerFinancials().getRatingFileReference());
+        borrowerFinancials.setRemarks(resource.getBorrowerFinancials().getRemarks());
         borrowerFinancials = borrowerFinancialsRepository.save(borrowerFinancials);
 
 
@@ -1428,6 +1429,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingBorrowerFinancials.setOverAllRating(resource.getBorrowerFinancials().getOverAllRating());
         existingBorrowerFinancials.setAnnualReturnFileReference(resource.getBorrowerFinancials().getAnnualReturnFileReference());
         existingBorrowerFinancials.setRatingFileReference(resource.getBorrowerFinancials().getRatingFileReference());
+        existingBorrowerFinancials.setRemarks(resource.getBorrowerFinancials().getRemarks());
         existingBorrowerFinancials = borrowerFinancialsRepository.save(existingBorrowerFinancials);
 
         // Change Documents for Borrower Financials
@@ -1504,6 +1506,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         promoterfinancials.setOverAllRating(resource.getPromoterFinancials().getOverAllRating());
         promoterfinancials.setAnnualReturnFileReference(resource.getPromoterFinancials().getAnnualReturnFileReference());
         promoterfinancials.setRatingFileReference(resource.getPromoterFinancials().getRatingFileReference());
+        promoterfinancials.setRemarks(resource.getPromoterFinancials().getRemarks());
         promoterfinancials = promoterfinancialsRepository.save(promoterfinancials);
 
         // Change Documents for Promoter Financials
@@ -1536,6 +1539,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingpromoterfinancials.setOverAllRating(resource.getPromoterFinancials().getOverAllRating());
         existingpromoterfinancials.setAnnualReturnFileReference(resource.getPromoterFinancials().getAnnualReturnFileReference());
         existingpromoterfinancials.setRatingFileReference(resource.getPromoterFinancials().getRatingFileReference());
+        existingpromoterfinancials.setRemarks(resource.getPromoterFinancials().getRemarks());
         existingpromoterfinancials = promoterfinancialsRepository.save(existingpromoterfinancials);
 
         // Change Documents fooldPromoterDetailsr Promoter Financials

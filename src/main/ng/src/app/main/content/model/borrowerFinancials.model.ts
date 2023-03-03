@@ -10,6 +10,7 @@ export class BorrowerFinancialsModel {
     overAllRating: string;
     annualReturnFileReference: string;
     ratingFileReference: string;
+    remarks: string;
 
     /**
      * constructor()
@@ -27,5 +28,6 @@ export class BorrowerFinancialsModel {
         this.overAllRating = _borrowerFinancialsDetails.overAllRating || '';
         this.annualReturnFileReference = _borrowerFinancialsDetails.annualReturnFileReference || '';
         this.ratingFileReference = _borrowerFinancialsDetails.ratingFileReference || '';
+        this.remarks = _borrowerFinancialsDetails.remarks || '';
     }
 }

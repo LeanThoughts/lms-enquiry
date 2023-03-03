@@ -53,7 +53,8 @@ export class BorrowerFinancialsUpdateDialogComponent {
             nextDueDateOfExternalRating: [this.selectedFinancials.nextDueDateOfExternalRating || ''],
             overAllRating: [this.selectedFinancials.overAllRating || ''],
             annualReturnFile: [''],
-            ratingFile: ['']
+            ratingFile: [''],
+            remarks: [this.selectedFinancials.remarks || '']
         });
     }
 
@@ -120,6 +121,7 @@ export class BorrowerFinancialsUpdateDialogComponent {
                     this.selectedFinancials.dateOfExternalRating = financials.dateOfExternalRating;
                     this.selectedFinancials.nextDueDateOfExternalRating = financials.nextDueDateOfExternalRating;
                     this.selectedFinancials.overAllRating = financials.overAllRating;
+                    this.selectedFinancials.remarks = financials.remarks;
                     this._loanMonitoringService.updateBorrowerFinancials(this.selectedFinancials).subscribe(() => {
                         this._matSnackBar.open('Borrower Financial details updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });

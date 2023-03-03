@@ -28,6 +28,7 @@ public class BorrowerFinancials extends AbstractEntity implements Cloneable {
     private String overAllRating;
     private String annualReturnFileReference;
     private String ratingFileReference;
+    private String remarks;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
