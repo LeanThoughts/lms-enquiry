@@ -10,6 +10,11 @@ export class SiteVisitModel {
     documentTitle: string;
     fileReference: string;
     fiscalYear: string;
+    initialSCOD: Date;
+    revisedSCOD1: Date;
+    revisedSCOD2: Date;
+    businessPartnerId: string;
+    businessPartnerName: string;
 
     /**
      * constructor()
@@ -27,5 +32,8 @@ export class SiteVisitModel {
         this.documentTitle = _siteVisit.documentTitle || '';
         this.fileReference  = _siteVisit.fileReference || '';
         this.fiscalYear = _siteVisit.fiscalYear || '';
+        this.initialSCOD = _siteVisit.initialSCOD || undefined;
+        this.revisedSCOD1 = _siteVisit.revisedSCOD1 || undefined;
+        this.revisedSCOD2 = _siteVisit.revisedSCOD2 || undefined;
     }
 }

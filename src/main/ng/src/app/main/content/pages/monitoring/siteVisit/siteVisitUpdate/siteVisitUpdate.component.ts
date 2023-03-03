@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { SiteVisitModel } from 'app/main/content/model/siteVisit.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanAppraisalService } from '../../../appraisal/loanAppraisal.service';
 
 @Component({
     selector: 'fuse-site-visit-update-dialog',
@@ -22,6 +23,8 @@ export class SiteVisitUpdateDialogComponent {
     siteVisitUpdateForm: FormGroup;
     siteVisitTypes = LoanMonitoringConstants.siteVisitTypes;
 
+    partners = new Array<any>();
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -32,7 +35,7 @@ export class SiteVisitUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<SiteVisitUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanAppraisalService: LoanAppraisalService) {
 
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedSiteVisit !== undefined) {
@@ -53,7 +56,22 @@ export class SiteVisitUpdateDialogComponent {
             dateOfLendersMeet: [this.selectedSiteVisit.dateOfLendersMeet || ''],
             documentType: [this.selectedSiteVisit.documentType || ''],
             documentTitle: [this.selectedSiteVisit.documentTitle || ''],
+            initialSCOD: [this.selectedSiteVisit.initialSCOD || ''],
+            revisedSCOD1: [this.selectedSiteVisit.revisedSCOD1 || ''],
+            revisedSCOD2: [this.selectedSiteVisit.revisedSCOD2 || ''],
+            businessPartnerId: [ this.selectedSiteVisit.businessPartnerId || '' ],
+            displayBusinessPartnerId: [ this.selectedSiteVisit.businessPartnerId || '' ],
+            businessPartnerName: [ this.selectedSiteVisit.businessPartnerName || '' ],
             file: ['']
+        });
+
+        this._loanAppraisalService.getPartnersByRole('ZLMS024').subscribe(response => {
+            this.partners = response;
+        });
+        this._loanAppraisalService.getPartnersByRole('ZLM028').subscribe(response => {
+            response.map((partner) => {
+                this.partners.push(partner);
+            });
         });
     }
 
@@ -104,6 +122,12 @@ export class SiteVisitUpdateDialogComponent {
         siteVisit.dateOfSiteVisit = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
         dt = new Date(siteVisit.dateOfLendersMeet);
         siteVisit.dateOfLendersMeet = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(siteVisit.initialSCOD);
+        siteVisit.initialSCOD = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(siteVisit.revisedSCOD1);
+        siteVisit.revisedSCOD1 = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(siteVisit.revisedSCOD2);
+        siteVisit.revisedSCOD2 = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
         siteVisit.fileReference = fileReference;
 
@@ -114,6 +138,8 @@ export class SiteVisitUpdateDialogComponent {
             });
         }
         else {
+            this.selectedSiteVisit.businessPartnerId = siteVisit.businessPartnerId;
+            this.selectedSiteVisit.businessPartnerName = siteVisit.businessPartnerName;
             this.selectedSiteVisit.serialNumber = siteVisit.serialNumber;
             this.selectedSiteVisit.siteVisitType = siteVisit.siteVisitType;
             this.selectedSiteVisit.actualCOD = siteVisit.actualCOD;
@@ -121,6 +147,9 @@ export class SiteVisitUpdateDialogComponent {
             this.selectedSiteVisit.dateOfSiteVisit  = siteVisit.dateOfSiteVisit;
             this.selectedSiteVisit.documentType = siteVisit.documentType;
             this.selectedSiteVisit.documentTitle = siteVisit.documentTitle;
+            this.selectedSiteVisit.initialSCOD = siteVisit.initialSCOD;
+            this.selectedSiteVisit.revisedSCOD1 = siteVisit.revisedSCOD1;
+            this.selectedSiteVisit.revisedSCOD2 = siteVisit.revisedSCOD2;
             if (siteVisit.fileReference !== '') {
                 this.selectedSiteVisit.fileReference = siteVisit.fileReference;
             }
@@ -137,5 +166,14 @@ export class SiteVisitUpdateDialogComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }    
+    }
+
+    /**
+     * onPartnerSelect()
+     */
+    onPartnerSelect(partner: any): void {
+        console.log("onPartnerSelect", partner);
+        this.siteVisitUpdateForm.controls.displayBusinessPartnerId.setValue(partner.partyNumber);
+        this.siteVisitUpdateForm.controls.businessPartnerName.setValue(partner.partyName1 + ' ' + partner.partyName2);
+    }
 }
