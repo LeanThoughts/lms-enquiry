@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
+import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancialsRepository;
@@ -72,30 +73,33 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Autowired
     private  IChangeDocumentService changeDocumentService;
 
+    @Autowired
+    private ILoanAppraisalService loanAppraisalService;
 
-    private LoanAppraisal createLoanAppraisal(LoanApplication loanApplication, String username) {
 
-        LoanAppraisal loanAppraisal  = loanAppraisalRepository.findByLoanApplication(loanApplication).get();
-
-        if (loanAppraisal == null) {
-            loanAppraisal = new LoanAppraisal();
-            loanAppraisal.setLoanApplication(loanApplication);
-            loanAppraisal.setWorkFlowStatusCode(01); loanAppraisal.setWorkFlowStatusDescription("Created");
-            loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
-
-            // Change Documents for Monitoring Header
-            changeDocumentService.createChangeDocument(
-                    loanAppraisal.getId(), loanAppraisal.getId().toString(), null,
-                    loanApplication.getLoanContractId(),
-                    null,
-                    loanAppraisal,
-                    "Created",
-                    username,
-                    "Appraisal", "Header");
-        }
-
-        return loanAppraisal;
-    }
+//    private LoanAppraisal createLoanAppraisal(LoanApplication loanApplication, String username) {
+//
+//        LoanAppraisal loanAppraisal  = loanAppraisalRepository.findByLoanApplication(loanApplication).get();
+//
+//        if (loanAppraisal == null) {
+//            loanAppraisal = new LoanAppraisal();
+//            loanAppraisal.setLoanApplication(loanApplication);
+//            loanAppraisal.setWorkFlowStatusCode(01); loanAppraisal.setWorkFlowStatusDescription("Created");
+//            loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
+//
+//            // Change Documents for Monitoring Header
+//            changeDocumentService.createChangeDocument(
+//                    loanAppraisal.getId(), loanAppraisal.getId().toString(), null,
+//                    loanApplication.getLoanContractId(),
+//                    null,
+//                    loanAppraisal,
+//                    "Created",
+//                    username,
+//                    "Appraisal", "Header");
+//        }
+//
+//        return loanAppraisal;
+//    }
 
 
     private LoanMonitor createLoanMonitor(LoanApplication loanApplication, String username) {
@@ -129,11 +133,12 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         LoanMonitor loanMonitor = this.createLoanMonitor(loanApplication, username);
-        LoanAppraisal loanAppraisal = this.createLoanAppraisal(loanApplication, username);
+        LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication, username);
 
         LendersIndependentEngineer lendersIndependentEngineer = resource.getLendersIndependentEngineer();
         lendersIndependentEngineer.setSerialNumber(lieRepository.findByLoanMonitor(loanMonitor).size() + 1);
         lendersIndependentEngineer.setLoanMonitor(loanMonitor);
+        lendersIndependentEngineer.setLoanAppraisal(loanAppraisal);
         lendersIndependentEngineer.setAdvisor(resource.getLendersIndependentEngineer().getAdvisor());
         lendersIndependentEngineer.setBpCode(resource.getLendersIndependentEngineer().getBpCode());
         lendersIndependentEngineer.setName(resource.getLendersIndependentEngineer().getName());
@@ -153,7 +158,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 loanMonitor,
                 "Created",
                 username,
-                "Monitoring" , "Lenders Independent Engineer" );
+                resource.getModuleName() , "Lenders Independent Engineer" );
 
         return lendersIndependentEngineer;
     }
@@ -186,7 +191,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existingLendersIndependentEngineer,
                 "Updated",
                 username,
-                "Monitoring", "Lenders Independent Engineer" );
+                resource.getModuleName(), "Lenders Independent Engineer" );
 
         return existingLendersIndependentEngineer;
     }
@@ -233,7 +238,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lieReportAndFee,
                 "Created",
                 username,
-                "Monitoring" , "LIE Report And Fee" );
+                resource.getModuleName() , "LIE Report And Fee" );
 
         return lieReportAndFee;
     }
@@ -272,7 +277,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existinglieReportAndFee,
                 "Updated",
                 username,
-                "Monitoring" , "LIE Report And Fee" );
+                resource.getModuleName() , "LIE Report And Fee" );
 
         return existinglieReportAndFee;
     }
@@ -309,30 +314,13 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public LendersFinancialAdvisor saveLFA(LFAResource resource, String username) {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
-
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
-
-            // Change Documents for LFA
-            changeDocumentService.createChangeDocument(
-                    loanMonitor.getId(), loanMonitor.getId().toString(),null,
-                    loanApplication.getLoanContractId(),
-                    null,
-                    loanMonitor,
-                    "Created",
-                    username,
-                    "Monitoring", "Header");
-        }
-
-
+        LoanMonitor loanMonitor = this.createLoanMonitor(loanApplication, username);
+        LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication, username);
 
 
         LendersFinancialAdvisor lendersFinancialAdvisor = resource.getLendersFinancialAdvisor();
         lendersFinancialAdvisor.setLoanMonitor(loanMonitor);
+        lendersFinancialAdvisor.setLoanAppraisal(loanAppraisal);
         lendersFinancialAdvisor.setSerialNumber(lfaRepository.findByLoanMonitor(loanMonitor).size() + 1);
         lendersFinancialAdvisor.setBpCode(resource.getLendersFinancialAdvisor().getBpCode());
         lendersFinancialAdvisor.setName(resource.getLendersFinancialAdvisor().getName());
@@ -352,7 +340,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lendersFinancialAdvisor,
                 "Created",
                 username,
-                "Monitoring" , "Lenders Financial Advisor" );
+                resource.getModuleName() , "Lenders Financial Advisor" );
 
 
         return lendersFinancialAdvisor;
@@ -385,7 +373,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existingLendersFinancialAdvisor,
                 "Updated",
                 username,
-                "Monitoring" , "Lenders Financial Advisor" );
+                resource.getModuleName() , "Lenders Financial Advisor" );
 
         return existingLendersFinancialAdvisor;
     }
@@ -429,9 +417,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfaReportAndFee,
                 "Created",
                 username,
-                "Monitoring" , "LFA Report and Fee" );
-
-
+                resource.getModuleName(), "LFA Report and Fee" );
 
         return lfaReportAndFee;
 
@@ -474,7 +460,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existinglfaReportAndFee,
                 "Updated",
                 username,
-                "Monitoring" , "LFA Report and Fee" );
+                resource.getModuleName(), "LFA Report and Fee" );
 
 
         return existinglfaReportAndFee;
@@ -507,28 +493,15 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
     @Override
     public TrustRetentionAccount saveTRA(TRAResource resource, String username) {
+
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
+        LoanMonitor loanMonitor = this.createLoanMonitor(loanApplication, username);
+        LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication, username);
 
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
-
-            // Change Documents for Monitoring Header
-            changeDocumentService.createChangeDocument(
-                    loanMonitor.getId(), loanMonitor.getId().toString(),null,
-                    loanApplication.getLoanContractId(),
-                    null,
-                    loanMonitor,
-                    "Created",
-                    username,
-                    "Monitoring", "Header");
-
-        }
         TrustRetentionAccount trustRetentionAccount = resource.getTrustRetentionAccount();
         trustRetentionAccount.setLoanMonitor(loanMonitor);
+        trustRetentionAccount.setLoanAppraisal(loanAppraisal);
+
         trustRetentionAccount.setSerialNumber(traRepository.findByLoanMonitor(loanMonitor).size() + 1);
         trustRetentionAccount.setBankKey(resource.getTrustRetentionAccount().getBankKey());
         trustRetentionAccount.setTraBankName(resource.getTrustRetentionAccount().getTraBankName());
@@ -553,7 +526,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 trustRetentionAccount,
                 "Created",
                 username,
-                "Monitoring", "TRA Account");
+                resource.getModuleName(), "TRA Account");
 
 
         return trustRetentionAccount;
@@ -590,7 +563,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existingTrustRetentionAccount,
                 "Updated",
                 username,
-                "Monitoring", "TRA Account");
+                resource.getModuleName(), "TRA Account");
 
         return existingTrustRetentionAccount;
     }
@@ -634,7 +607,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 trustRetentionAccount,
                 "Created",
                 username,
-                "Monitoring", "TRA Account Statement");
+                resource.getModuleName(), "TRA Account Statement");
 
 
         return trustRetentionAccountStatement;
@@ -666,7 +639,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existingTrustRetentionAccountStatement,
                 "Updated",
                 username,
-                "Monitoring", "TRA Account Statement");
+                resource.getModuleName(), "TRA Account Statement");
 
 
         return existingTrustRetentionAccountStatement;

@@ -12,7 +12,7 @@ import lombok.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class TRAStatementResource {
-
+    private String moduleName;
     private String trustRetentionAccountId;
     private TrustRetentionAccountStatement trustRetentionAccountStatement;
 }

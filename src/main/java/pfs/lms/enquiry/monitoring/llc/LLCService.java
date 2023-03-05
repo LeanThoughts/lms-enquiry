@@ -20,6 +20,8 @@ public class LLCService implements ILLCService {
     private final LoanMonitorRepository loanMonitorRepository;
     private final LLCRepository LLCRepository;
     private final LLCReportAndFeeRepository LLCReportAndFeeRepository;
+
+
     
     @Override
     public LendersLegalCouncil saveLLC(LLCResource resource, String username) throws CloneNotSupportedException {

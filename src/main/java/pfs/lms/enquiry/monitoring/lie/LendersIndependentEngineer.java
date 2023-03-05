@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.monitoring.lie;
 
 import lombok.*;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.domain.AbstractEntity;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 
@@ -17,6 +18,9 @@ public class LendersIndependentEngineer extends AbstractEntity implements Clonea
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private LoanAppraisal loanAppraisal;
 
     private Integer serialNumber;
 

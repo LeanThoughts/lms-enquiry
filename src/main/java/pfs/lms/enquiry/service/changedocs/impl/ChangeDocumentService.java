@@ -387,6 +387,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", lfaReportAndFee.getLendersFinancialAdvisor().getSerialNumber().toString());
                     result.put("description", lfaReportAndFee.getReportType() + lfaReportAndFee.getDateOfReceipt());
                     return result;
+                case "TrustRetentionAccount$HibernateProxy$Lup33nzA":
                 case "TrustRetentionAccount":
                     TrustRetentionAccount trustRetentionAccount = (TrustRetentionAccount) object;
                     result.put("id", trustRetentionAccount.getSerialNumber().toString());
