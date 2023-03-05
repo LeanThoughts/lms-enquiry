@@ -128,7 +128,7 @@ public class InterestRateConfigInitializer implements CommandLineRunner {
             conditionTypeRepository.save(conditionType);
         }
 
-        conditionType = conditionTypeRepository.findByCode("•9011");
+        conditionType = conditionTypeRepository.findByCode("9011");
         if(conditionType == null) {
             conditionType = new ConditionType(null,"9011","Additional interest");
             conditionTypeRepository.save(conditionType);

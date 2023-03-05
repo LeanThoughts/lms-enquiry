@@ -13,7 +13,7 @@ import java.util.UUID;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class TRAResource {
-
+    private String moduleName;
     private UUID loanApplicationId;
     private TrustRetentionAccount trustRetentionAccount;
 

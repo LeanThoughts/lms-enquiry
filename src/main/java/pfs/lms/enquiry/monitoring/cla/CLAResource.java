@@ -14,7 +14,7 @@ import java.util.UUID;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class CLAResource {
-
+    private String moduleName;
     private UUID loanApplicationId;
     private CommonLoanAgreement commonLoanAgreement;
 }

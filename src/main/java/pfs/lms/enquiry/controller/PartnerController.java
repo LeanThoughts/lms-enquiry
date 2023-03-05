@@ -133,7 +133,7 @@ public class PartnerController {
     @GetMapping("partner/lias")
     public ResponseEntity getLendersInsuranceAdvisors(HttpServletRequest httpServletRequest) {
 
-        List<Partner> partners = partnerService.getLendersIndependentEngineers();
+        List<Partner> partners = partnerService.getLendersInsuranceAdvisors();
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -157,7 +157,7 @@ public class PartnerController {
     @GetMapping("partner/llcs")
     public ResponseEntity getLendersLegalCouncils(HttpServletRequest httpServletRequest) {
 
-        List<Partner> partners = partnerService.getLendersIndependentEngineers();
+        List<Partner> partners = partnerService.getLendersLegalCounsels();
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }

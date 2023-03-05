@@ -13,7 +13,7 @@ import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFee;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class LFAReportAndFeeResource {
-
+    private String moduleName;
     private String lendersFinancialAdvisorId;
     private LFAReportAndFee lfaReportAndFee;
 }

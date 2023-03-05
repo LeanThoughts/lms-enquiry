@@ -120,7 +120,11 @@ public class LoanPartnerService implements ILoanPartnerService {
         loanPartner.setBusinessPartnerName(loanPartnerResource.getBusinessPartnerName());
         loanPartner.setRoleType(loanPartnerResource.getRoleType());
         loanPartner.setStartDate(loanPartnerResource.getStartDate());
-        if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("ZLM038")) {
+        // KYC is required for the following Roles:
+        //   TR0100	Main Loan Partner
+        //   ZLM038	Authorized Signatory
+        //   ZLM025	Key Promoter
+        if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("ZLM038") || loanPartner.getRoleType().equals("ZLM025")) {
             if (!loanPartner.isKycRequired()) {
                 loanPartner.setKycRequired(true);
                 loanPartner.setKycStatus("Not Started");

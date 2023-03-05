@@ -13,7 +13,7 @@ import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class LIEReportAndFeeResource {
-
+    private String moduleName;
     private String lendersIndependentEngineerId;
     private LIEReportAndFee lieReportAndFee;
 }

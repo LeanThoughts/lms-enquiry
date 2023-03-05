@@ -72,15 +72,37 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Autowired
     private  IChangeDocumentService changeDocumentService;
 
-    @Override
-    @Transactional
-    public LendersIndependentEngineer saveLIE(LIEResource resource, String username) {
 
-        LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
+    private LoanAppraisal createLoanAppraisal(LoanApplication loanApplication, String username) {
 
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
+        LoanAppraisal loanAppraisal  = loanAppraisalRepository.findByLoanApplication(loanApplication).get();
+
+        if (loanAppraisal == null) {
+            loanAppraisal = new LoanAppraisal();
+            loanAppraisal.setLoanApplication(loanApplication);
+            loanAppraisal.setWorkFlowStatusCode(01); loanAppraisal.setWorkFlowStatusDescription("Created");
+            loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
+
+            // Change Documents for Monitoring Header
+            changeDocumentService.createChangeDocument(
+                    loanAppraisal.getId(), loanAppraisal.getId().toString(), null,
+                    loanApplication.getLoanContractId(),
+                    null,
+                    loanAppraisal,
+                    "Created",
+                    username,
+                    "Appraisal", "Header");
+        }
+
+        return loanAppraisal;
+    }
+
+
+    private LoanMonitor createLoanMonitor(LoanApplication loanApplication, String username) {
+
+        LoanMonitor loanMonitor  = loanMonitorRepository.findByLoanApplication(loanApplication);
+
+        if (loanMonitor == null) {
             loanMonitor = new LoanMonitor();
             loanMonitor.setLoanApplication(loanApplication);
             loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
@@ -95,8 +117,20 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                     "Created",
                     username,
                     "Monitoring", "Header");
-
         }
+
+        return loanMonitor;
+    }
+
+
+    @Override
+    @Transactional
+    public LendersIndependentEngineer saveLIE(LIEResource resource, String username) {
+
+        LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
+        LoanMonitor loanMonitor = this.createLoanMonitor(loanApplication, username);
+        LoanAppraisal loanAppraisal = this.createLoanAppraisal(loanApplication, username);
+
         LendersIndependentEngineer lendersIndependentEngineer = resource.getLendersIndependentEngineer();
         lendersIndependentEngineer.setSerialNumber(lieRepository.findByLoanMonitor(loanMonitor).size() + 1);
         lendersIndependentEngineer.setLoanMonitor(loanMonitor);
@@ -120,8 +154,6 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 "Created",
                 username,
                 "Monitoring" , "Lenders Independent Engineer" );
-
-
 
         return lendersIndependentEngineer;
     }
