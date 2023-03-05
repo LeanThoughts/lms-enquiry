@@ -604,7 +604,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 trustRetentionAccount.getLoanMonitor().getId(), trustRetentionAccountStatement.getId(),null,
                 trustRetentionAccount.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
-                trustRetentionAccount,
+                trustRetentionAccountStatement,
                 "Created",
                 username,
                 resource.getModuleName(), "TRA Account Statement");

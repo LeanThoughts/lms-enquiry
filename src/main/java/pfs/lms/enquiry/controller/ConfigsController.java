@@ -2,6 +2,7 @@ package pfs.lms.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -12,9 +13,11 @@ import pfs.lms.enquiry.client.OAuthClient;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
+import pfs.lms.enquiry.domain.TRAAccountType;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.mail.service.PasswordResetService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.repository.TRAAccountTypeRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.*;
 import pfs.lms.enquiry.service.IPartnerService;
@@ -34,6 +37,8 @@ import java.util.List;
 
 public class ConfigsController {
 
+    @Autowired
+    TRAAccountTypeRepository traAccountTypeRepository;
 
     /**
      * 01- Created
@@ -60,6 +65,13 @@ public class ConfigsController {
 
     }
 
+    @GetMapping("/traaccounttypes")
+    public ResponseEntity getTRAAccountTypes() {
+
+        List<TRAAccountType> traAccountTypes = traAccountTypeRepository.findAll();
+        return ResponseEntity.ok(traAccountTypes);
+
+    }
 
 
 }

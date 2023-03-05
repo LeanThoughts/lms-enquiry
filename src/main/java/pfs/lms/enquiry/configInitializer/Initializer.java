@@ -44,6 +44,8 @@ public class Initializer implements CommandLineRunner {
 
     private final WorkflowApproverRepository workflowApproverRepository;
 
+    private final TRAAccountTypeRepository traAccountTypeRepository;
+
     @Override
     public void run(String... strings) throws Exception {
 
@@ -524,6 +526,141 @@ public class Initializer implements CommandLineRunner {
 //            workflowApprover.setProcessName("Appraisal");
 //            workflowApproverRepository.save(workflowApprover);
 //        }
+
+        TRAAccountType traAccountType = new TRAAccountType();
+        traAccountType = traAccountTypeRepository.findByCode("01");
+        if (traAccountType != null) {
+            traAccountType.setValue("Revenue Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("01", "Revenue Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("02");
+        if (traAccountType != null) {
+            traAccountType.setValue("Surplus Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("02", "Surplus Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("03");
+        if (traAccountType != null) {
+            traAccountType.setValue("Distribution Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("03", "Distribution Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+        traAccountType = traAccountTypeRepository.findByCode("04");
+        if (traAccountType != null) {
+            traAccountType.setValue("Loss Proceeds Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("04", "Loss Proceeds Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+        traAccountType = traAccountTypeRepository.findByCode("05");
+        if (traAccountType != null) {
+            traAccountType.setValue("O&M Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("05", "O&M Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+        traAccountType = traAccountTypeRepository.findByCode("06");
+        if (traAccountType != null) {
+            traAccountType.setValue("Statutory Dues Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("06", "Statutory Dues Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+        traAccountType = traAccountTypeRepository.findByCode("07");
+        if (traAccountType != null) {
+            traAccountType.setValue("DSRA Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("07", "DSRA Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("08");
+        if (traAccountType != null) {
+            traAccountType.setValue("Debt Service Payment Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("08", "Debt Service Payment Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("09");
+        if (traAccountType != null) {
+            traAccountType.setValue("Construction Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("09", "Construction Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("10");
+        if (traAccountType != null) {
+            traAccountType.setValue("Disbursement Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("10", "Disbursement Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("11");
+        if (traAccountType != null) {
+            traAccountType.setValue("Disputes Reserve Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("11", "Disputes Reserve Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("12");
+        if (traAccountType != null) {
+            traAccountType.setValue("Revenue Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("12", "Revenue Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("13");
+        if (traAccountType != null) {
+            traAccountType.setValue("Compensation and Liquidated Damagest");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("13", "Compensation and Liquidated Damages");
+            traAccountTypeRepository.save(traAccountType);
+        }
+        traAccountType = traAccountTypeRepository.findByCode("14");
+        if (traAccountType != null) {
+            traAccountType.setValue("Enforcement Proceeds Account ");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("14", "Enforcement Proceeds Account ");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+        traAccountType = traAccountTypeRepository.findByCode("16");
+        if (traAccountType != null) {
+            traAccountType.setValue("O&M Reserve Account");
+            traAccountTypeRepository.save(traAccountType);
+        } else {
+            traAccountType = new TRAAccountType("16", "O&M Reserve Account");
+            traAccountTypeRepository.save(traAccountType);
+        }
+
+
+
+
 
     }
 

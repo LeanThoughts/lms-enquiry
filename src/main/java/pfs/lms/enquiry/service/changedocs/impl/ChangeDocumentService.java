@@ -356,6 +356,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
         Map<String, String> result = new HashMap<>();
 
+//        if (className.contains("\\$")) {
+//            String[] classNameComponents = className.split("$");
+//            className = classNameComponents[0];
+//        }
+
         try {
 
             switch (className) {
@@ -387,7 +392,6 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", lfaReportAndFee.getLendersFinancialAdvisor().getSerialNumber().toString());
                     result.put("description", lfaReportAndFee.getReportType() + lfaReportAndFee.getDateOfReceipt());
                     return result;
-                case "TrustRetentionAccount$HibernateProxy$Lup33nzA":
                 case "TrustRetentionAccount":
                     TrustRetentionAccount trustRetentionAccount = (TrustRetentionAccount) object;
                     result.put("id", trustRetentionAccount.getSerialNumber().toString());
