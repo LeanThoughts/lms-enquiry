@@ -16,7 +16,7 @@ import java.util.UUID;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class LIEResource {
-
+    private String moduleName;
     private UUID loanApplicationId;
     private LendersIndependentEngineer lendersIndependentEngineer;
 }
