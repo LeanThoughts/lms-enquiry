@@ -50,59 +50,436 @@ export class LoanMonitoringConstants {
 
     // documentTypes
     static documentTypes = [
-        {code: "ZPFSLM1", value:"PFS Project Notes"},
-        {code: "ZPFSLM10", value:"Loan Agreement"},
-        {code: "ZPFSLM11", value:"Lenders Agent Agreement"},
-        {code: "ZPFSLM12", value:"Security Trustee Agreement"},
-        {code: "ZPFSLM13", value:"Trust and Retention Agreement"},
-        {code: "ZPFSLM14", value:"Inter Creditor Agreement"},
-        {code: "ZPFSLM15", value:"Confirmation to ICA"},
-        {code: "ZPFSLM16", value:"Deed of Hypothecation"},
-        {code: "ZPFSLM17", value:"Deed of Pledge"},
-        {code: "ZPFSLM18", value:"Power of Attorney"},
-        {code: "ZPFSLM19", value:"Indenture of Mortgage"},
-        {code: "ZPFSLM2", value:"Project Contract Documents"},
-        {code: "ZPFSLM20", value:"Deed of Personal Guarantee"},
-        {code: "ZPFSLM21", value:"Deed of Corporate Guarantee"},
-        {code: "ZPFSLM22", value:"Affidavit"},
-        {code: "ZPFSLM23", value:"Borrowers Undertaking"},
-        {code: "ZPFSLM24", value:"Promoters Undertaking"},
-        {code: "ZPFSLM25", value:"Other Agreements"},
-        {code: "ZPFSLM26", value:"CA / CS/ Auditors Certificates"},
-        {code: "ZPFSLM27", value:"Amendment agreements"},
-        {code: "ZPFSLM28", value:"Novation / Accession Agreements"},
-        {code: "ZPFSLM29", value:"Demand Letters"},
-        {code: "ZPFSLM3", value:"Project Clearances/Approvals"},
-        {code: "ZPFSLM30", value:"Fee Invoices"},
-        {code: "ZPFSLM31", value:"Debit Notes"},
-        {code: "ZPFSLM32", value:"No Objection Certificate"},
-        {code: "ZPFSLM33", value:"Term Sheet"},
-        {code: "ZPFSLM34", value:"Sanction Letter"},
-        {code: "ZPFSLM35", value:"Amendment to Sanction Letters"},
-        {code: "ZPFSLM36", value:"Disbursement Intimations"},
-        {code: "ZPFSLM37", value:"Other Communication (if any)"},
-        // {code: "ZPFSLM38", value:"Loan Request Application"},
-        {code: "ZPFSLM38", value:"Borrower Request Letter"},        
-        {code: "ZPFSLM39", value:"Request for Disbursement"},
-        {code: "ZPFSLM4", value:"Promoter and Borrower Financials"},
-        {code: "ZPFSLM40", value:"Request for Amendment"},
-        {code: "ZPFSLM41", value:"Request for Prepayment"},
-        {code: "ZPFSLM42", value:"Any Other requests"},
-        {code: "ZPFSLM43", value:"Gallery"},
-        {code: "ZPFSLM44", value:"Operating_Parameter"},
-        {code: "ZPFSLM45", value:"NOC_Prepayment"},
-        {code: "ZPFSLM46", value:"NOC_Intt_Reduction"},
-        {code: "ZPFSLM47", value:"NOC_Other_Request"},
-        {code: "ZPFSLM48", value:"Demand Letters (Old)"},
-        {code: "ZPFSLM49", value:"Fee Invoices (Old)"},
-        {code: "ZPFSLM5", value:"DPR"},
-        {code: "ZPFSLM50", value:"Credit Notes"},
-        {code: "ZPFSLM6", value:"Credit Opinion/CIBIL/Analyst Reports"},
-        {code: "ZPFSLM7", value:"Financial Model"},
-        {code: "ZPFSLM8", value:"Queries/Emails/Imp Communication"},
-        {code: "ZPFSLM9", value:"Miscellaneous Documents"},
-        {code: "ZPFSLM9", value:"TRA Statement"}
-    ]
+        {
+         code: "ZPFSBP0001",
+         value: "Identity Proof"
+        },
+        {
+         code: "ZPFSBP0002",
+         value: "PAN Card"
+        },
+        {
+         code: "ZPFSBP0003",
+         value: "Passport"
+        },
+        {
+         code: "ZPFSBP0004",
+         value: "Address Proof"
+        },
+        {
+         code: "ZPFSBP0005",
+         value: "MoA and Articles of Association (AoA)"
+        },
+        {
+         code: "ZPFSBP0006",
+         value: "Certification of Incorporation"
+        },
+        {
+         code: "ZPFSBP0007",
+         value: "Certificate of Commencement of Business"
+        },
+        {
+         code: "ZPFSBP0008",
+         value: "PAN Card of Company"
+        },
+        {
+         code: "ZPFSBP0009",
+         value: "Shareholding Pattern of the Company"
+        },
+        {
+         code: "ZPFSBP0010",
+         value: "Credit Rating Letter"
+        },
+        {
+         code: "ZPFSBP0011",
+         value: "Financial Statements"
+        },
+        {
+         code: "ZPFSBP0012",
+         value: "Authority Letter by CMD\/MD\/CEO\/WTD\/Direc"
+        },
+        {
+         code: "ZPFSBP0013",
+         value: "Copy of Telephone Bill"
+        },
+        {
+         code: "ZPFSBP0014",
+         value: "Copy of Water Bill"
+        },
+        {
+         code: "ZPFSBP0015",
+         value: "Electricity Bill in the name of Company"
+        },
+        {
+         code: "ZPFSBP0016",
+         value: "Institution on Letter head of Company"
+        },
+        {
+         code: "ZPFSBP0017",
+         value: "Statement Declaring List of Defaults"
+        },
+        {
+         code: "ZPFSBP0018",
+         value: "Detail of Dispute\/Demand"
+        },
+        {
+         code: "ZPFSBP0019",
+         value: "Board Resolution"
+        },
+        {
+         code: "ZPFSBP0020",
+         value: "KYC detail"
+        },
+        {
+         code: "ZPFSLM1",
+         value: "PFS Project Notes"
+        },
+        {
+         code: "ZPFSLM10",
+         value: "Loan Agreement"
+        },
+        {
+         code: "ZPFSLM11",
+         value: "Lenders Agent Agreement"
+        },
+        {
+         code: "ZPFSLM12",
+         value: "Security Trustee Agreement"
+        },
+        {
+         code: "ZPFSLM13",
+         value: "Trust and Retention Agreement"
+        },
+        {
+         code: "ZPFSLM14",
+         value: "Inter Creditor Agreement"
+        },
+        {
+         code: "ZPFSLM15",
+         value: "Confirmation to ICA"
+        },
+        {
+         code: "ZPFSLM16",
+         value: "Deed of Hypothecation"
+        },
+        {
+         code: "ZPFSLM17",
+         value: "Deed of Pledge"
+        },
+        {
+         code: "ZPFSLM18",
+         value: "Power of Attorney"
+        },
+        {
+         code: "ZPFSLM19",
+         value: "Indenture of Mortgage"
+        },
+        {
+         code: "ZPFSLM2",
+         value: "Project Contract Documents"
+        },
+        {
+         code: "ZPFSLM20",
+         value: "Deed of Personal Guarantee"
+        },
+        {
+         code: "ZPFSLM21",
+         value: "Deed of Corporate Guarantee"
+        },
+        {
+         code: "ZPFSLM22",
+         value: "Affidavit"
+        },
+        {
+         code: "ZPFSLM23",
+         value: "Borrowers Undertaking"
+        },
+        {
+         code: "ZPFSLM24",
+         value: "Promoters Undertaking"
+        },
+        {
+         code: "ZPFSLM25",
+         value: "Other Agreements"
+        },
+        {
+         code: "ZPFSLM26",
+         value: "CA \/ CS\/ Auditors Certificates"
+        },
+        {
+         code: "ZPFSLM27",
+         value: "Amendment agreements"
+        },
+        {
+         code: "ZPFSLM28",
+         value: "Novation \/ Accession Agreements"
+        },
+        {
+         code: "ZPFSLM29",
+         value: "Demand Letters"
+        },
+        {
+         code: "ZPFSLM3",
+         value: "Project Clearances\/Approvals"
+        },
+        {
+         code: "ZPFSLM30",
+         value: "Fee Invoices"
+        },
+        {
+         code: "ZPFSLM31",
+         value: "Debit Notes"
+        },
+        {
+         code: "ZPFSLM32",
+         value: "No Objection Certificate"
+        },
+        {
+         code: "ZPFSLM33",
+         value: "Term Sheet"
+        },
+        {
+         code: "ZPFSLM34",
+         value: "Sanction Letter"
+        },
+        {
+         code: "ZPFSLM35",
+         value: "Amendment to Sanction Letters"
+        },
+        {
+         code: "ZPFSLM36",
+         value: "Disbursement Intimations"
+        },
+        {
+         code: "ZPFSLM37",
+         value: "Other Communication (if any)"
+        },
+        {
+         code: "ZPFSLM38",
+         value: "Borrower Request Letter"
+        },
+        {
+         code: "ZPFSLM39",
+         value: "Request for Disbursement"
+        },
+        {
+         code: "ZPFSLM4",
+         value: "Promoter and Borrower Financials"
+        },
+        {
+         code: "ZPFSLM40",
+         value: "Request for Amendment"
+        },
+        {
+         code: "ZPFSLM41",
+         value: "Request for Prepayment"
+        },
+        {
+         code: "ZPFSLM42",
+         value: "Any Other requests"
+        },
+        {
+         code: "ZPFSLM43",
+         value: "Gallery"
+        },
+        {
+         code: "ZPFSLM44",
+         value: "Operating_Parameter"
+        },
+        {
+         code: "ZPFSLM45",
+         value: "NOC_Prepayment"
+        },
+        {
+         code: "ZPFSLM46",
+         value: "NOC_Intt_Reduction"
+        },
+        {
+         code: "ZPFSLM47",
+         value: "NOC_Other_Request"
+        },
+        {
+         code: "ZPFSLM48",
+         value: "Demand Letters (Old)"
+        },
+        {
+         code: "ZPFSLM49",
+         value: "Fee Invoices (Old)"
+        },
+        {
+         code: "ZPFSLM5",
+         value: "DPR"
+        },
+        {
+         code: "ZPFSLM50",
+         value: "LIE Report"
+        },
+        {
+         code: "ZPFSLM51",
+         value: "LFA Report"
+        },
+        {
+         code: "ZPFSLM52",
+         value: "TRA Statement"
+        },
+        {
+         code: "ZPFSLM53",
+         value: "Terms and Condition Modification"
+        },
+        {
+         code: "ZPFSLM54",
+         value: "Operating Parameters"
+        },
+        {
+         code: "ZPFSLM55",
+         value: "BorrowerFinancials-Annual Rpt"
+        },
+        {
+         code: "ZPFSLM56",
+         value: "BorrowerFinancialsc-Rating"
+        },
+        {
+         code: "ZPFSLM57",
+         value: "PromoterFinancials-Annual Rpt"
+        },
+        {
+         code: "ZPFSLM58",
+         value: "PromoterFinancials-Rating"
+        },
+        {
+         code: "ZPFSLM59",
+         value: "Site Visit"
+        },
+        {
+         code: "ZPFSLM6",
+         value: "Credit Opinion\/CIBIL\/Analyst Reports"
+        },
+        {
+         code: "ZPFSLM7",
+         value: "Financial Model"
+        },
+        {
+         code: "ZPFSLM8",
+         value: "Queries\/Emails\/Imp Communication"
+        },
+        {
+         code: "ZPFSLM9",
+         value: "Miscellaneous Documents"
+        },
+        {
+         code: "ZPFSLM60",
+         value: "Lead Banker Document"
+        },
+        {
+         code: "ZPFSLM61",
+         value: "Approved note sheet"
+        },
+        {
+         code: "ZPFSLM62",
+         value: "Board approved minutes"
+        },
+        {
+         code: "ZPFSLM63",
+         value: "Appraisal Note-Internal "
+        },
+        {
+         code: "ZPFSLM64",
+         value: "Approval for placing agenda to Board"
+        },
+        {
+         code: "ZPFSLM65",
+         value: "Due Diligence Report"
+        },
+        {
+         code: "ZPFSLM66",
+         value: "Signed Board Agenda note"
+        },
+        {
+         code: "ZPFSLM67",
+         value: "Board Agenda"
+        },
+        {
+         code: "ZPFSLM68",
+         value: "Board Minutes"
+        },
+        {
+         code: "ZPFSLM69",
+         value: "Amendment letters"
+        },
+        {
+         code: "ZPFSLM70",
+         value: "Security Compliance Certificate"
+        },
+        {
+         code: "ZPFSLM71",
+         value: "1st Disbursement approval"
+        },
+        {
+         code: "ZPFSLM72",
+         value: "LIE Work Order"
+        },
+        {
+         code: "ZPFSLM73",
+         value: "LFA Work Order"
+        },
+        {
+         code: "ZPFSLM74",
+         value: "Authority Letters "
+        },
+        {
+         code: "ZPFSLM75",
+         value: "Facility Agreement"
+        },
+        {
+         code: "ZPFSLM76",
+         value: "Subsequent Amendments"
+        },
+        {
+         code: "ZPFSLM77",
+         value: "Subsequent Amendments Addendum"
+        },
+        {
+         code: "ZPFSLM78",
+         value: "Pledge Deeds"
+        },
+        {
+         code: "ZPFSLM79",
+         value: "Guarantee Deeds"
+        },
+        {
+         code: "ZPFSLM80",
+         value: "Deed of Hypothecation-DOH "
+        },
+        {
+         code: "ZPFSLM81",
+         value: "Authority Letters"
+        },
+        {
+         code: "ZPFSLM82",
+         value: "Other Security Documents"
+        },
+        {
+         code: "ZPFSLM83",
+         value: "Valuation Report"
+        },
+        {
+         code: "ZPFSLM84",
+         value: "CA Certificate-Fin Covenants"
+        },
+        {
+         code: "ZPFSLM85",
+         value: "CA Certificate "
+        },
+        {
+         code: "ZPFSLM86",
+         value: "End Use Certificate"
+        },
+        {
+         code: "ZPFSLM87",
+         value: "Insurance Document"
+        }
+       ]
+       
 
     // communications
     static communications = [

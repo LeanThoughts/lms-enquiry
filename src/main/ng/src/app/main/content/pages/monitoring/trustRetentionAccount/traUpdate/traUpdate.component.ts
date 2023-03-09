@@ -24,7 +24,7 @@ export class TRAUpdateDialogComponent implements OnInit {
 
     traUpdateForm: FormGroup;
 
-    accountTypes = LoanMonitoringConstants.accountTypes;
+    accountTypes: any;
 
     banks: any;
     bankFilteredOptions: any;
@@ -71,12 +71,16 @@ export class TRAUpdateDialogComponent implements OnInit {
 
         this.banks = _loanMonitoringService.banks;
 
+        _loanMonitoringService.getTRAAccountTypes().subscribe(response => {
+            this.accountTypes = response;
+        });
+
         _loanMonitoringService.getTRAAuthorizedPersons().subscribe(response => {
             response.forEach(element => {
                 if (element.partyRole)
                 this.partners.push(new PartnerModel(element));
             });
-        })
+        });
     }
 
     /**

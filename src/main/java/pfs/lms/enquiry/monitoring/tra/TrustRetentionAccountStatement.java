@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import java.sql.Blob;
 
 @Entity
 @Setter
@@ -25,6 +24,7 @@ public class    TrustRetentionAccountStatement extends AbstractEntity  implement
     private String remarks;
     private String periodQuarter;
     private String periodYear;
+    private String documentTitle;
     private String documentType;
     private String fileReference;
 

@@ -524,4 +524,11 @@ export class LoanMonitoringService implements Resolve<any> {
         }
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
     }
+
+    /**
+     * getTRAAccountTypes()
+     */
+    public getTRAAccountTypes(): Observable<any> {
+        return this._http.get('enquiry/api/traaccounttypes');
+    }    
 }

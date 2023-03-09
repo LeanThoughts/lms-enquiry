@@ -10,21 +10,21 @@
     <mat-dialog-content style="padding: 16px !important;">
         <form [formGroup]="traUpdateForm">
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Type Of Account" formControlName="typeOfAccount" readonly>
-                </mat-form-field>
                 <!-- <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Type Of Account" formControlName="typeOfAccount" readonly>
+                </mat-form-field> -->
+                <mat-form-field fxFlex="50">
                     <mat-select placeholder="Type Of Account" formControlName="typeOfAccount" required readonly>
                         <mat-option *ngFor="let accountType of accountTypes" [value]="accountType.code">
                         {{ accountType.value }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>  -->
+                </mat-form-field> 
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Contact Name" formControlName="contactName" maxlength="60">
                 </mat-form-field>
             </div>
-            <div fxLayout="row" class="mt-16">
+            <div fxLayout="row">
                 <mat-form-field fxFlex="100">
                     <input matInput
                            (blur)="validateBank($event)"
@@ -97,7 +97,7 @@
                 </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row" class="mb-32">
+            <div mat-dialog-actions fxLayout="row">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

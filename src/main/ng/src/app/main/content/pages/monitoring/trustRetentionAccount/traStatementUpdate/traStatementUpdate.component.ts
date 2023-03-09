@@ -55,6 +55,7 @@ export class TRAStatementUpdateDialogComponent {
             remarks: [this.selectedTRAStatement.remarks],
             periodQuarter: [this.selectedTRAStatement.periodQuarter],
             periodYear: [this.selectedTRAStatement.periodYear, [Validators.pattern(MonitoringRegEx.digitsOnly)]],
+            documentTitle: [this.selectedTRAStatement.documentTitle],
             documentType: [this.selectedTRAStatement.documentType],
             file: ['']
         });
@@ -120,6 +121,7 @@ export class TRAStatementUpdateDialogComponent {
                             this.selectedTRAStatement.periodYear = traStatement.periodYear;
                             this.selectedTRAStatement.documentType = traStatement.documentType;
                             this.selectedTRAStatement.fileReference = response.fileReference;
+                            this.selectedTRAStatement.documentTitle = traStatement.documentTitle;
                             this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement).subscribe(() => {
                                 this._matSnackBar.open('TRA Statement updated successfully.', 'OK', { duration: 5000 });
                                 this._dialogRef.close({ 'refresh': true });
@@ -138,6 +140,7 @@ export class TRAStatementUpdateDialogComponent {
                     this.selectedTRAStatement.periodQuarter = traStatement.periodQuarter;
                     this.selectedTRAStatement.periodYear = traStatement.periodYear;
                     this.selectedTRAStatement.documentType = traStatement.documentType;
+                    this.selectedTRAStatement.documentTitle = traStatement.documentTitle;
                     this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement).subscribe(() => {
                         this._matSnackBar.open('TRA Statement updated successfully.', 'OK', { duration: 5000 });
                         this._dialogRef.close({ 'refresh': true });

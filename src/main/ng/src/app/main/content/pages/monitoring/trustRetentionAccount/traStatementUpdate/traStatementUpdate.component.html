@@ -22,7 +22,7 @@
                     <input matInput placeholder="Remarks" formControlName="remarks" maxlength="100">
                 </mat-form-field>
             </div>
-            <div fxLayout="row" class="mt-16">
+            <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Period (Quarter)" formControlName="periodQuarter" required>
                       <mat-option *ngFor="let periodQuarter of periodQuarters" [value]="periodQuarter.code">
@@ -36,25 +36,30 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Document Title" formControlName="documentTitle" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
                     <mat-select placeholder="Document Type" formControlName="documentType" required>
                       <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
                         {{ documentType.value }}
                       </mat-option>
                     </mat-select>
                 </mat-form-field> 
-                <div fxLayout="column" fxFlex="50">
-                    <label for="document">Upload Document (PDF)</label>
-                    <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
-                </div>
-                <!-- <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf"/> -->
             </div>
 
             <div fxLayout="row">
-                <div fxLayout="column" fxFlex="50" class="mt-16"></div>
                 <div fxLayout="column" fxFlex="50">
-                    <a [href]="getFileURL(selectedTRAStatement.fileReference)" *ngIf="selectedTRAStatement.fileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="document">Upload Document (PDF)</label>
+                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedTRAStatement.fileReference)" *ngIf="selectedTRAStatement.fileReference !== ''">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             

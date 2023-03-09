@@ -625,6 +625,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingTrustRetentionAccountStatement.setRemarks(resource.getTrustRetentionAccountStatement().getRemarks());
         existingTrustRetentionAccountStatement.setPeriodQuarter(resource.getTrustRetentionAccountStatement().getPeriodQuarter());
         existingTrustRetentionAccountStatement.setPeriodYear(resource.getTrustRetentionAccountStatement().getPeriodYear());
+        existingTrustRetentionAccountStatement.setDocumentTitle(resource.getTrustRetentionAccountStatement().getDocumentTitle());
         existingTrustRetentionAccountStatement.setDocumentType(resource.getTrustRetentionAccountStatement().getDocumentType());
         existingTrustRetentionAccountStatement.setFileReference(resource.getTrustRetentionAccountStatement().getFileReference());
         existingTrustRetentionAccountStatement = traStatementRepository.save(existingTrustRetentionAccountStatement);
