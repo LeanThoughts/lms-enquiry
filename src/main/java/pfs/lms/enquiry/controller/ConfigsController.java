@@ -68,6 +68,7 @@ public class ConfigsController {
     @GetMapping("/traaccounttypes")
     public ResponseEntity getTRAAccountTypes() {
 
+
         List<TRAAccountType> traAccountTypes = traAccountTypeRepository.findAll();
         return ResponseEntity.ok(traAccountTypes);
 
