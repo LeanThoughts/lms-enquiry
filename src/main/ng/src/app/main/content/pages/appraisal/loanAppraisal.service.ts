@@ -41,7 +41,9 @@ export class LoanAppraisalService implements Resolve<any> {
             this._loanEnquiryService.getUnitOfMeasures(),
             this._loanEnquiryService.getProjectTypes(),
             this.getBusinessPartners('ZLM015'),
-            this.getBusinessPartners('ZLM028')
+            this.getBusinessPartners('ZLM028'),
+            this.getMainLocationDetail(this._loanAppraisal.id),
+            this.getSubLocations(this._loanAppraisal.id)
         ]);
     }
     
@@ -210,10 +212,56 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getMainLocationDetail()
+     */
+    public getMainLocationDetail(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/mainLocationDetails/search/findByLoanAppraisalId?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
      * updateFurtherDetail()
      */
     public updateFurtherDetail(furtherDetail: any): Observable<any> {
         return this._http.put("enquiry/api/furtherDetails/update", furtherDetail);
+    }
+
+    /**
+     * updateMainLocationDetail()
+     */
+    public updateMainLocationDetail(mainLocationDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/mainLocationDetails/update", mainLocationDetail);
+    }
+
+    /**
+     * getSubLocations()
+     */
+    public getSubLocations(loanAppraisalId: string): Observable<any> {
+        return this._http.get("enquiry/api/subLocationDetails/search/findByLoanAppraisalId?loanAppraisalId=" + loanAppraisalId);
+    }
+
+    /**
+     * createSubLocationDetail()
+     */
+    public createSubLocationDetail(subLocationDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/subLocationDetails/create", subLocationDetail);
+    }
+
+    /**
+     * updateSubLocationDetail()
+     */
+    public updateSubLocationDetail(subLocationDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/subLocationDetails/update", subLocationDetail);
     }
 
     /**

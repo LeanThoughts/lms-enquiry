@@ -47,6 +47,8 @@ import { CustomerRejectionComponent } from './customerRejection/customerRejectio
 import { RiskEvaluationsOverviewComponent } from './riskReport/risk-evaluations-overview/risk-evaluations-overview.component';
 import { RiskEvaluationDetails } from './riskReport/risk-evaluation-details/risk-evaluation-details.component';
 import { LoanMonitoringModule } from '../monitoring/loanMonitoring.module';
+import { MainLocationUpdateComponent } from './location-details/mainLocationUpdate/mainLocationUpdate.component';
+import { SubLocationUpdateComponent } from './location-details/subLocationUpdate/subLocationUpdate.component';
 
 const routes = [
     {
@@ -125,7 +127,9 @@ const MY_FORMATS = {
         CorporateLoanRiskRatingListComponent,
         CorporateLoanRiskRatingUpdateComponent,
         RiskEvaluationsOverviewComponent,
-        RiskEvaluationDetails
+        RiskEvaluationDetails,
+        MainLocationUpdateComponent,
+        SubLocationUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -153,7 +157,9 @@ const MY_FORMATS = {
         ProjectDataUpdateComponent,
         TermLoanRiskRatingUpdateComponent,
         CorporateLoanRiskRatingUpdateComponent,
-        RiskEvaluationDetails
+        RiskEvaluationDetails,
+        MainLocationUpdateComponent,
+        SubLocationUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

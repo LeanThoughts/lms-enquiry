@@ -7,7 +7,7 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 340px">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 380px">
         <form [formGroup]="_projectAppraisalCompletionForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
@@ -49,6 +49,15 @@
                 <mat-form-field fxFlex="100">
                     <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">
                 </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <div fxFlex="100">
+                    <div fxLayout="column">
+                        <label for="document">Upload Agenda Note Document (PDF)</label>
+                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" required/>
+                    </div>
+                </div>
             </div>
 
             <div mat-dialog-actions fxLayout="row">
