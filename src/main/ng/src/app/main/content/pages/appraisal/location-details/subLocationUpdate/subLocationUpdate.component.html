@@ -1,0 +1,77 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close({ 'refresh': false })" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 420px;">
+        <form [formGroup]="subLocationUpdateForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Location" formControlName="location" maxlength="50" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Nearest Villate/ Town" formControlName="nearestVillage" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="20">
+                    <input matInput placeholder="Kms" formControlName="nearestVillageDistance" maxlength="4">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="State" formControlName="state" maxlength="50" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Nearest Railway Station" formControlName="nearestRailwayStation" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="20">
+                    <input matInput placeholder="Kms" formControlName="nearestRailwayStationDistance" maxlength="4">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="District" formControlName="district" maxlength="50" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Nearest Airport" formControlName="nearestAirport" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="20">
+                    <input matInput placeholder="Kms" formControlName="nearestAirportDistance" maxlength="4">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Region" formControlName="region" maxlength="50" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Nearest Seaport" formControlName="nearestSeaport" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="20">
+                    <input matInput placeholder="Kms" formControlName="nearestSeaportDistance" maxlength="4">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <div fxFlex="40">
+                </div>
+                <mat-form-field fxFlex="40">
+                    <input matInput placeholder="Nearest Functional Airport" formControlName="nearestFunctionalAirport" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="20">
+                    <input matInput placeholder="Kms" formControlName="nearestFunctionalAirportDistance" maxlength="4">
+                </mat-form-field>
+            </div>
+    
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({ 'refresh': false })">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
