@@ -26,6 +26,9 @@ public class FinancialCovenants extends AbstractEntity implements Cloneable {
     private Double dscr;
     private Double tolTnw;
     private String remarksForDeviation;
+    private String documentType;
+    private String documentTitle;
+    private String fileReference;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

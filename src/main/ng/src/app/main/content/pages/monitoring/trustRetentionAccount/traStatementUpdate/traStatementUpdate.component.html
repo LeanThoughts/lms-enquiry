@@ -52,7 +52,7 @@
                     <div fxLayout="row">
                         <div fxLayout="column" fxFlex="85">
                             <label for="document">Upload Document (PDF)</label>
-                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" #fileInput/>
                         </div>
                         <div fxLayout="column" fxFlex="15" class="mt-16">
                             <a [href]="getFileURL(selectedTRAStatement.fileReference)" *ngIf="selectedTRAStatement.fileReference !== ''">
@@ -63,8 +63,9 @@
                 </div>
             </div>
             
-            <div class="mt-32 mb-32" mat-dialog-actions fxLayout="row">
-                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+            <div mat-dialog-actions fxLayout="row" class="mb-16">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()" 
+                                            [disabled]="!fileInput.value || selectedTRAStatement.fileReference === ''">
                     Submit
                 </button>
                 <button class="mr-8" mat-raised-button type="button" color="accent" (click)="closeClick()">

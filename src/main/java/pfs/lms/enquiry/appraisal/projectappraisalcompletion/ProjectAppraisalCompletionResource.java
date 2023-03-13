@@ -23,4 +23,7 @@ public class ProjectAppraisalCompletionResource {
     private LocalDate agendaNoteApprovalByMDAndCEO;
     private LocalDate agendaNoteSubmissionToCoSecy;
     private String remarks;
+    private String fileReference;
+    private String documentType;
+    private String documentTitle;
 }

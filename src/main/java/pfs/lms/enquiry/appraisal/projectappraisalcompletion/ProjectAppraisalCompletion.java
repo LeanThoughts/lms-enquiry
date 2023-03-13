@@ -29,6 +29,9 @@ public class ProjectAppraisalCompletion extends AggregateRoot<ProjectAppraisalCo
     private LocalDate agendaNoteApprovalByMDAndCEO;
     private LocalDate agendaNoteSubmissionToCoSecy;
     private String remarks;
+    private String fileReference;
+    private String documentType;
+    private String documentTitle;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

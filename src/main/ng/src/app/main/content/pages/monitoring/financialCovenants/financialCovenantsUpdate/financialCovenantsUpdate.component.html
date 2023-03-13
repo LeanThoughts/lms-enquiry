@@ -44,7 +44,39 @@
                 </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Document Title" maxlength="20" formControlName="documentTitle">          
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Document Type" formControlName="documentType" >
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                        {{ documentType.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+            </div>
+
+            <div fxLayout="row">
+                <div fxFlex="50">
+                    <div fxLayout="column" fxFlex="100">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="85">
+                                <label for="document">Upload Document (PDF)</label>
+                                <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" #fileInput/>
+                            </div>
+                            <div fxLayout="column" fxFlex="15" class="mt-16">
+                                <a [href]="getFileURL(selectedFinancialCovenants.fileReference)" *ngIf="selectedFinancialCovenants.fileReference !== ''">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row" class="mb-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

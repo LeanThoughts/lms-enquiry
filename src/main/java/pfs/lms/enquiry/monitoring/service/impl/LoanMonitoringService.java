@@ -1611,6 +1611,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         FinancialCovenants financialCovenants = resource.getFinancialCovenants();
         financialCovenants.setLoanMonitor(loanMonitor);
         financialCovenants.setSerialNumber(financialCovenantsRepository.findByLoanMonitor(loanMonitor).size() + 1);
+        financialCovenants.setDocumentTitle(resource.getFinancialCovenants().getDocumentTitle());
+        financialCovenants.setDocumentType(resource.getFinancialCovenants().getDocumentType());
+        financialCovenants.setFileReference(resource.getFinancialCovenants().getFileReference());
         financialCovenants.setFinancialCovenantType(resource.getFinancialCovenants().getFinancialCovenantType());
         financialCovenants.setFinancialYear(resource.getFinancialCovenants().getFinancialYear());
         financialCovenants.setDebtEquityRatio(resource.getFinancialCovenants().getDebtEquityRatio());
@@ -1641,6 +1644,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         Object oldFinancialCovenants = existingFinancialCovenants.clone();
 
+        existingFinancialCovenants.setDocumentTitle(resource.getFinancialCovenants().getDocumentTitle());
+        existingFinancialCovenants.setDocumentType(resource.getFinancialCovenants().getDocumentType());
+        existingFinancialCovenants.setFileReference(resource.getFinancialCovenants().getFileReference());
         existingFinancialCovenants.setFinancialCovenantType(resource.getFinancialCovenants().getFinancialCovenantType());
         existingFinancialCovenants.setFinancialYear(resource.getFinancialCovenants().getFinancialYear());
         existingFinancialCovenants.setDebtEquityRatio(resource.getFinancialCovenants().getDebtEquityRatio());

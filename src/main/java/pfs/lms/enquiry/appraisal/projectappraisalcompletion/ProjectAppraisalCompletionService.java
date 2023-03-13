@@ -58,6 +58,9 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
                 getDateOfProjectAppraisalCompletion());
         projectAppraisalCompletion.setRemarks(projectAppraisalCompletionResource.getRemarks());
         projectAppraisalCompletion = projectAppraisalCompletionRepository.save(projectAppraisalCompletion);
+        projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
+        projectAppraisalCompletion.setDocumentTitle(projectAppraisalCompletionResource.getDocumentTitle());
+        projectAppraisalCompletion.setDocumentType(projectAppraisalCompletionResource.getDocumentType());
         // Change Documents for project Appraisal Completion
         changeDocumentService.createChangeDocument(
                 projectAppraisalCompletion.getLoanAppraisal().getId(),
@@ -91,6 +94,9 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
         projectAppraisalCompletion.setDateOfProjectAppraisalCompletion(projectAppraisalCompletionResource.
                 getDateOfProjectAppraisalCompletion());
         projectAppraisalCompletion.setRemarks(projectAppraisalCompletionResource.getRemarks());
+        projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
+        projectAppraisalCompletion.setDocumentTitle(projectAppraisalCompletionResource.getDocumentTitle());
+        projectAppraisalCompletion.setDocumentType(projectAppraisalCompletionResource.getDocumentType());
         projectAppraisalCompletion = projectAppraisalCompletionRepository.save(projectAppraisalCompletion);
 
 

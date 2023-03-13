@@ -7,6 +7,9 @@ export class FinancialCovenantsModel {
     dscr: number;
     tolTnw: number;
     remarksForDeviation: string;
+    documentTitle: string;
+    documentType: string;
+    fileReference: string;
 
     /**
      * constructor()
@@ -21,6 +24,9 @@ export class FinancialCovenantsModel {
         this.dscr = _financialCovenants.dscr || 0;
         this.tolTnw = _financialCovenants.tolTnw || 0;
         this.remarksForDeviation = _financialCovenants.remarksForDeviation || '';
+        this.documentTitle = _financialCovenants.documentTitle || '';
+        this.documentType = _financialCovenants.documentType || '';
+        this.fileReference = _financialCovenants.fileReference || '';
     }
 }
  
