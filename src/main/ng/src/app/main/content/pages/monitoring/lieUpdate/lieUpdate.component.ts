@@ -93,7 +93,7 @@ export class LIEUpdateDialogComponent implements OnInit {
             lie.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLIE') {
-                this._loanMonitoringService.saveLIE(lie, this._dialogData.loanApplicationId).subscribe(() => {
+                this._loanMonitoringService.saveLIE(lie, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LIE added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -108,7 +108,7 @@ export class LIEUpdateDialogComponent implements OnInit {
                 this.selectedLIE.contactNumber = lie.contactNumber;
                 this.selectedLIE.email = lie.email;
 
-                this._loanMonitoringService.updateLIE(this.selectedLIE).subscribe(() => {
+                this._loanMonitoringService.updateLIE(this.selectedLIE, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LIE updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

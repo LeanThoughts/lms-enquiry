@@ -82,71 +82,56 @@ export class TRAStatementUpdateDialogComponent {
      */
     submit(): void {
         if (this.traStatementUpdateForm.valid) {
-            var traStatement: TRAStatementModel = new TRAStatementModel(this.traStatementUpdateForm.value);
-            if (this._dialogData.operation === 'addTRAStatement') {
-                if (this.traStatementUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.traStatementUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            traStatement.fileReference = response.fileReference;
-                            this._loanMonitoringService.saveTRAStatement(traStatement, this.selectedTRA.id).subscribe(() => {
-                                this._matSnackBar.open('TRA Statement added successfully.', 'OK', { duration: 5000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    this._loanMonitoringService.saveTRAStatement(traStatement, this.selectedTRA.id).subscribe(() => {
-                        this._matSnackBar.open('TRA Statement added successfully.', 'OK', { duration: 5000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
+            if (this.traStatementUpdateForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.traStatementUpdateForm.get('file').value);      
+                this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.saveTRAStatement(response.fileReference);
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                            'OK', { duration: 7000 });
+                    }
+                );
             }
             else {
-                if (this.traStatementUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.traStatementUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            this.selectedTRAStatement.viewRights = traStatement.viewRights;
-                            this.selectedTRAStatement.remarks = traStatement.remarks;
-                            this.selectedTRAStatement.periodQuarter = traStatement.periodQuarter;
-                            this.selectedTRAStatement.periodYear = traStatement.periodYear;
-                            this.selectedTRAStatement.documentType = traStatement.documentType;
-                            this.selectedTRAStatement.fileReference = response.fileReference;
-                            this.selectedTRAStatement.documentTitle = traStatement.documentTitle;
-                            this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement).subscribe(() => {
-                                this._matSnackBar.open('TRA Statement updated successfully.', 'OK', { duration: 5000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
+                if (this._dialogData.operation === 'addTRAStatement') {
+                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
                 }
-                else
-                {
-                    this.selectedTRAStatement.viewRights = traStatement.viewRights;
-                    this.selectedTRAStatement.remarks = traStatement.remarks;
-                    this.selectedTRAStatement.periodQuarter = traStatement.periodQuarter;
-                    this.selectedTRAStatement.periodYear = traStatement.periodYear;
-                    this.selectedTRAStatement.documentType = traStatement.documentType;
-                    this.selectedTRAStatement.documentTitle = traStatement.documentTitle;
-                    this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement).subscribe(() => {
-                        this._matSnackBar.open('TRA Statement updated successfully.', 'OK', { duration: 5000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
+                else {
+                    this.saveTRAStatement('');
                 }
             }
+        }
+    }
+
+    /**
+     * saveTRAStatement()
+     */
+    saveTRAStatement(fileReference: string) {
+        var traStatement: TRAStatementModel = new TRAStatementModel(this.traStatementUpdateForm.value);
+        if (this._dialogData.operation === 'addTRAStatement') {
+            traStatement.fileReference = fileReference;
+            this._loanMonitoringService.saveTRAStatement(traStatement, this.selectedTRA.id).subscribe(() => {
+                this._matSnackBar.open('TRA Statement added successfully.', 'OK', { duration: 5000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
+        }
+        else {
+            if (fileReference !== '' ) {
+                this.selectedTRAStatement.fileReference = fileReference;
+            }
+            this.selectedTRAStatement.viewRights = traStatement.viewRights;
+            this.selectedTRAStatement.remarks = traStatement.remarks;
+            this.selectedTRAStatement.periodQuarter = traStatement.periodQuarter;
+            this.selectedTRAStatement.periodYear = traStatement.periodYear;
+            this.selectedTRAStatement.documentType = traStatement.documentType;
+            this.selectedTRAStatement.documentTitle = traStatement.documentTitle;
+            this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement).subscribe(() => {
+                this._matSnackBar.open('TRA Statement updated successfully.', 'OK', { duration: 5000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
         }
     }
 

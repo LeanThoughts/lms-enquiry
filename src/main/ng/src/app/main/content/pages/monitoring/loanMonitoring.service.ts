@@ -145,14 +145,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersIndependentEngineers');
     }
 
-    public saveLIE(lie: any, loanApplicationId: any): Observable<any> {
+    public saveLIE(lie: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersindependentengineers/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersIndependentEngineer':lie });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersIndependentEngineer':lie, 'moduleName': module });
     }
 
-    public updateLIE(lie: any): Observable<any> {
+    public updateLIE(lie: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersindependentengineers/" + lie.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'lendersIndependentEngineer':lie });
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersIndependentEngineer':lie, 'moduleName': module });
     }
 
     // All about LIE Reports And Fees
@@ -161,15 +161,15 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/lendersIndependentEngineer/' + lieId + '/lieReceiptsAndFees');
     }
     
-    public saveLIEReportAndFee(lieReportAndFee: any, lieId: string): Observable<any> {
+    public saveLIEReportAndFee(lieReportAndFee: any, lieId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/liereportandfeesubmission/create";
-        return this._http.post(url, { 'lendersIndependentEngineerId': lieId, 'lieReportAndFee': lieReportAndFee });
+        return this._http.post(url, { 'lendersIndependentEngineerId': lieId, 'lieReportAndFee': lieReportAndFee, 'moduleName': module });
     }
 
-    public updateLIEReportAndFee(lieReportAndFee: any): Observable<any> {
+    public updateLIEReportAndFee(lieReportAndFee: any, module: string): Observable<any> {
         console.log('in service', lieReportAndFee);
         const url = "enquiry/api/loanApplications/liereportandfeesubmission/" + lieReportAndFee.id;
-        return this._http.put(url, { 'lendersIndependentEngineerId': '', 'lieReportAndFee': lieReportAndFee });
+        return this._http.put(url, { 'lendersIndependentEngineerId': '', 'lieReportAndFee': lieReportAndFee, 'moduleName': module });
     }
 
     // All about LFA

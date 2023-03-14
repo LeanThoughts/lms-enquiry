@@ -44,12 +44,6 @@ export class LIEListComponent {
         });
     }
 
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     console.log(changes['module'].currentValue);
-    //     this._module = changes['module'].currentValue;
-    //     console.log('after ngonchanges module', this._module);
-    // }
-
     /**
      * onSelect()
      */
@@ -75,7 +69,8 @@ export class LIEListComponent {
             width: '750px',
             data: {
                 operation: 'addLIE',
-                loanApplicationId: this.loanApplicationId
+                loanApplicationId: this.loanApplicationId,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -102,7 +97,8 @@ export class LIEListComponent {
             data: {
                 operation: 'updateLIE',
                 loanApplicationId: this.loanApplicationId,
-                selectedLIE: this.selectedLIE
+                selectedLIE: this.selectedLIE,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

@@ -259,6 +259,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existinglieReportAndFee.setStatusOfFeeReceipt(resource.getLieReportAndFee().getStatusOfFeeReceipt());
         existinglieReportAndFee.setStatusOfFeePaid(resource.getLieReportAndFee().getStatusOfFeePaid());
         existinglieReportAndFee.setDocumentTitle(resource.getLieReportAndFee().getDocumentTitle());
+        existinglieReportAndFee.setDocumentType(resource.getLieReportAndFee().getDocumentType());
         existinglieReportAndFee.setNextReportDate(resource.getLieReportAndFee().getNextReportDate());
         existinglieReportAndFee.setFileReference(resource.getLieReportAndFee().getFileReference());
 

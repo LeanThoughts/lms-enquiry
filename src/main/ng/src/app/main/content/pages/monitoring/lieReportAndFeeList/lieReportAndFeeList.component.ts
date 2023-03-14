@@ -28,6 +28,13 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
 
     subscriptions = new Subscription()
     
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
+
     /**
      * constructor()
      */
@@ -75,7 +82,8 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
             width: '1126px',
             data: {
                 operation: 'addLIEReportAndFee',
-                selectedLIE: this.selectedLIE
+                selectedLIE: this.selectedLIE,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -99,7 +107,8 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
             data: {
                 operation: 'updateLIEReportAndFee',
                 selectedLIE: this.selectedLIE,
-                selectedLIEReportAndFee: this.selectedLIEReportAndFee
+                selectedLIEReportAndFee: this.selectedLIEReportAndFee,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

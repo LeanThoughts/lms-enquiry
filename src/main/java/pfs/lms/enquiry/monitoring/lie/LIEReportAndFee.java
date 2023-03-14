@@ -29,6 +29,7 @@ public class LIEReportAndFee extends AbstractEntity implements Cloneable {
     private String statusOfFeeReceipt;
     private String statusOfFeePaid;
     private String documentTitle;
+    private String documentType;
     private LocalDate nextReportDate;
     private String fileReference;
     private LocalDate reportDate;
