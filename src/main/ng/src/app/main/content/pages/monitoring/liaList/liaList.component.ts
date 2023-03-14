@@ -29,8 +29,6 @@ export class LIAListComponent {
     @Input()
     set module(m: string) {
         this._module = m;
-        console.log('this._module', this._module);
-        console.log('m', m);
     }
 
     /**
@@ -69,7 +67,8 @@ export class LIAListComponent {
             width: '750px',
             data: {
                 operation: 'addLIA',
-                loanApplicationId: this.loanApplicationId
+                loanApplicationId: this.loanApplicationId,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -96,7 +95,8 @@ export class LIAListComponent {
             data: {
                 operation: 'updateLIA',
                 loanApplicationId: this.loanApplicationId,
-                selectedLIA: this.selectedLIA
+                selectedLIA: this.selectedLIA,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

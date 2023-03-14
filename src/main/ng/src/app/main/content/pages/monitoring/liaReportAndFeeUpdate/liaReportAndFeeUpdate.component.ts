@@ -93,95 +93,72 @@ export class LIAReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.liaUpdateForm.valid) {
-            // To solve the utc time zone issue
-            var liaReportAndFee: LIEReportAndFeeModel = new LIEReportAndFeeModel(this.liaUpdateForm.value);
-            var dt = new Date(liaReportAndFee.dateOfReceipt);
-            liaReportAndFee.dateOfReceipt = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(liaReportAndFee.invoiceDate);
-            liaReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(liaReportAndFee.nextReportDate);
-            liaReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(liaReportAndFee.reportDate);
-            liaReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-
-            if (this._dialogData.operation === 'addLIAReportAndFee') {
-                if (this.liaUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.liaUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            liaReportAndFee.fileReference = response.fileReference;
-                            this._loanMonitoringService.saveLIAReportAndFee(liaReportAndFee, this.selectedLIA.id).subscribe((data) => {
-                                this._matSnackBar.open('LIA report added successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    this._loanMonitoringService.saveLIAReportAndFee(liaReportAndFee, this.selectedLIA.id).subscribe((data) => {
-                        this._matSnackBar.open('LIA report added successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
+            if (this.liaUpdateForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.liaUpdateForm.get('file').value);      
+                this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.saveLIAReportAndFee(response.fileReference);
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                            'OK', { duration: 7000 });
+                    }
+                );
             }
             else {
-                if (this.liaUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.liaUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            this.selectedLIAReportAndFee.reportType = liaReportAndFee.reportType;
-                            this.selectedLIAReportAndFee.dateOfReceipt = liaReportAndFee.dateOfReceipt;
-                            this.selectedLIAReportAndFee.invoiceDate = liaReportAndFee.invoiceDate;
-                            this.selectedLIAReportAndFee.invoiceNo = liaReportAndFee.invoiceNo;
-                            this.selectedLIAReportAndFee.feeAmount = liaReportAndFee.feeAmount;
-                            this.selectedLIAReportAndFee.statusOfFeeReceipt = liaReportAndFee.statusOfFeeReceipt;
-                            this.selectedLIAReportAndFee.statusOfFeePaid = liaReportAndFee.statusOfFeePaid;
-                            this.selectedLIAReportAndFee.documentTitle = liaReportAndFee.documentTitle;
-                            this.selectedLIAReportAndFee.documentType = liaReportAndFee.documentType;
-                            this.selectedLIAReportAndFee.nextReportDate = liaReportAndFee.nextReportDate;
-                            this.selectedLIAReportAndFee.fileReference = response.fileReference;
-                            this.selectedLIAReportAndFee.reportDate = response.reportDate;
-                            this.selectedLIAReportAndFee.percentageCompletion = response.percentageCompletion;
-                            this.selectedLIAReportAndFee.remarks = response.remarks;
-                            this._loanMonitoringService.updateLIAReportAndFee(this.selectedLIAReportAndFee).subscribe(() => {
-                                this._matSnackBar.open('LIA report updated successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
+                if (this._dialogData.operation === 'addLIAReportAndFee') {
+                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
                 }
-                else
-                {
-                    this.selectedLIAReportAndFee.reportType = liaReportAndFee.reportType;
-                    this.selectedLIAReportAndFee.dateOfReceipt = liaReportAndFee.dateOfReceipt;
-                    this.selectedLIAReportAndFee.invoiceDate = liaReportAndFee.invoiceDate;
-                    this.selectedLIAReportAndFee.invoiceNo = liaReportAndFee.invoiceNo;
-                    this.selectedLIAReportAndFee.feeAmount = liaReportAndFee.feeAmount;
-                    this.selectedLIAReportAndFee.statusOfFeeReceipt = liaReportAndFee.statusOfFeeReceipt;
-                    this.selectedLIAReportAndFee.statusOfFeePaid = liaReportAndFee.statusOfFeePaid;
-                    this.selectedLIAReportAndFee.documentTitle = liaReportAndFee.documentTitle;
-                    this.selectedLIAReportAndFee.documentType = liaReportAndFee.documentType;
-                    this.selectedLIAReportAndFee.nextReportDate = liaReportAndFee.nextReportDate;
-                    this.selectedLIAReportAndFee.reportDate = liaReportAndFee.reportDate;
-                    this.selectedLIAReportAndFee.percentageCompletion = liaReportAndFee.percentageCompletion;
-                    this.selectedLIAReportAndFee.remarks = liaReportAndFee.remarks;
-                    this._loanMonitoringService.updateLIAReportAndFee(this.selectedLIAReportAndFee).subscribe(() => {
-                        this._matSnackBar.open('LIA report updated successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
+                else {
+                    this.saveLIAReportAndFee('');
                 }
             }
+        }
+    }
+    
+    /**
+     * saveLIAReportAndFee()
+     */
+    saveLIAReportAndFee(fileReference: string): void {
+        // To solve the utc time zone issue
+        var liaReportAndFee: LIEReportAndFeeModel = new LIEReportAndFeeModel(this.liaUpdateForm.value);
+        var dt = new Date(liaReportAndFee.dateOfReceipt);
+        liaReportAndFee.dateOfReceipt = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(liaReportAndFee.invoiceDate);
+        liaReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(liaReportAndFee.nextReportDate);
+        liaReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(liaReportAndFee.reportDate);
+        liaReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        if (this._dialogData.operation === 'addLIAReportAndFee') {
+            liaReportAndFee.fileReference = fileReference;
+            this._loanMonitoringService.saveLIAReportAndFee(liaReportAndFee, this.selectedLIA.id, this._dialogData.module).subscribe((data) => {
+                this._matSnackBar.open('LIA report added successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
+        }
+        else {
+            if (fileReference !== '' ) {
+                this.selectedLIAReportAndFee.fileReference = fileReference;
+            }
+            this.selectedLIAReportAndFee.reportType = liaReportAndFee.reportType;
+            this.selectedLIAReportAndFee.dateOfReceipt = liaReportAndFee.dateOfReceipt;
+            this.selectedLIAReportAndFee.invoiceDate = liaReportAndFee.invoiceDate;
+            this.selectedLIAReportAndFee.invoiceNo = liaReportAndFee.invoiceNo;
+            this.selectedLIAReportAndFee.feeAmount = liaReportAndFee.feeAmount;
+            this.selectedLIAReportAndFee.statusOfFeeReceipt = liaReportAndFee.statusOfFeeReceipt;
+            this.selectedLIAReportAndFee.statusOfFeePaid = liaReportAndFee.statusOfFeePaid;
+            this.selectedLIAReportAndFee.documentTitle = liaReportAndFee.documentTitle;
+            this.selectedLIAReportAndFee.documentType = liaReportAndFee.documentType;
+            this.selectedLIAReportAndFee.nextReportDate = liaReportAndFee.nextReportDate;
+            this.selectedLIAReportAndFee.reportDate = liaReportAndFee.reportDate;
+            this.selectedLIAReportAndFee.percentageCompletion = liaReportAndFee.percentageCompletion;
+            this.selectedLIAReportAndFee.remarks = liaReportAndFee.remarks;
+            this._loanMonitoringService.updateLIAReportAndFee(this.selectedLIAReportAndFee, this._dialogData.module).subscribe(() => {
+                this._matSnackBar.open('LIA report updated successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
         }
     }
 

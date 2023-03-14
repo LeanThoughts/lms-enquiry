@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LIEModel } from 'app/main/content/model/lie.model';
 import { LoanMonitoringService } from '../loanMonitoring.service';
-import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 import { PartnerModel } from 'app/main/content/model/partner.model';
 
@@ -93,7 +92,7 @@ export class LIAUpdateDialogComponent implements OnInit {
             lia.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLIA') {
-                this._loanMonitoringService.saveLIA(lia, this._dialogData.loanApplicationId).subscribe(() => {
+                this._loanMonitoringService.saveLIA(lia, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LIA added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -108,7 +107,7 @@ export class LIAUpdateDialogComponent implements OnInit {
                 this.selectedLIA.contactNumber = lia.contactNumber;
                 this.selectedLIA.email = lia.email;
 
-                this._loanMonitoringService.updateLIA(this.selectedLIA).subscribe(() => {
+                this._loanMonitoringService.updateLIA(this.selectedLIA, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LIA updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

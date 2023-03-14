@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LIEModel } from 'app/main/content/model/lie.model';
@@ -27,6 +27,13 @@ export class LIAReportAndFeeListComponent implements OnDestroy {
     ];
 
     subscriptions = new Subscription()
+    
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
     
     /**
      * constructor()
@@ -75,7 +82,8 @@ export class LIAReportAndFeeListComponent implements OnDestroy {
             width: '1126px',
             data: {
                 operation: 'addLIAReportAndFee',
-                selectedLIA: this.selectedLIA
+                selectedLIA: this.selectedLIA,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -99,7 +107,8 @@ export class LIAReportAndFeeListComponent implements OnDestroy {
             data: {
                 operation: 'updateLIAReportAndFee',
                 selectedLIA: this.selectedLIA,
-                selectedLIAReportAndFee: this.selectedLIAReportAndFee
+                selectedLIAReportAndFee: this.selectedLIAReportAndFee,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

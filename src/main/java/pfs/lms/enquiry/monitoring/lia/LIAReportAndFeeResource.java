@@ -12,7 +12,7 @@ import lombok.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class LIAReportAndFeeResource {
-
+    private String moduleName;
     private String lendersInsuranceAdvisorId;
     private LIAReportAndFee liaReportAndFee;
 }

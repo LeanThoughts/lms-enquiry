@@ -79,14 +79,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersInsuranceAdvisors');
     }
 
-    public saveLIA(lia: any, loanApplicationId: any): Observable<any> {
+    public saveLIA(lia: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersInsuranceAdvisors/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':lia });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':lia, 'moduleName':module });
     }
 
-    public updateLIA(lia: any): Observable<any> {
+    public updateLIA(lia: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersInsuranceAdvisors/" + lia.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':lia });
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':lia, 'moduleName':module });
     }
 
     // All about LIA Reports And Fees
@@ -95,15 +95,15 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/liaReportAndFeeSubmission/' + liaId + '/liaReceiptsAndFees');
     }
     
-    public saveLIAReportAndFee(liaReportAndFee: any, liaId: string): Observable<any> {
+    public saveLIAReportAndFee(liaReportAndFee: any, liaId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/create";
-        return this._http.post(url, { 'lendersInsuranceAdvisorId': liaId, 'liaReportAndFee': liaReportAndFee });
+        return this._http.post(url, { 'lendersInsuranceAdvisorId': liaId, 'liaReportAndFee': liaReportAndFee, 'moduleName':module });
     }
 
-    public updateLIAReportAndFee(liaReportAndFee: any): Observable<any> {
+    public updateLIAReportAndFee(liaReportAndFee: any, module: string): Observable<any> {
         console.log('in service', liaReportAndFee);
         const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/" + liaReportAndFee.id;
-        return this._http.put(url, { 'lendersInsuranceAdvisorId': '', 'liaReportAndFee': liaReportAndFee });
+        return this._http.put(url, { 'lendersInsuranceAdvisorId': '', 'liaReportAndFee': liaReportAndFee, 'moduleName':module });
     }
 
     // All about CLA
