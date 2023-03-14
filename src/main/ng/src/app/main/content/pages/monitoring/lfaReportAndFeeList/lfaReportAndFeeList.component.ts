@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LFAModel } from 'app/main/content/model/lfa.model';
@@ -28,6 +28,13 @@ export class LFAReportAndFeeListComponent implements OnDestroy {
 
     subscriptions = new Subscription();
 
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
+    
     /**
      * constructor()
      */
@@ -86,7 +93,8 @@ export class LFAReportAndFeeListComponent implements OnDestroy {
             width: '1126px',
             data: {
                 operation: 'addLFAReportAndFee',
-                selectedLFA: this.selectedLFA
+                selectedLFA: this.selectedLFA,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -110,7 +118,8 @@ export class LFAReportAndFeeListComponent implements OnDestroy {
             data: {
                 operation: 'updateLFAReportAndFee',
                 selectedLFA: this.selectedLFA,
-                selectedLFAReportAndFee: this.selectedLFAReportAndFee
+                selectedLFAReportAndFee: this.selectedLFAReportAndFee,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

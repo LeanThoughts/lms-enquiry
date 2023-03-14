@@ -92,7 +92,7 @@ export class LFAUpdateDialogComponent implements OnInit {
             lfa.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLFA') {
-                this._loanMonitoringService.saveLFA(lfa, this._dialogData.loanApplicationId).subscribe(() => {
+                this._loanMonitoringService.saveLFA(lfa, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LFA added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -106,7 +106,7 @@ export class LFAUpdateDialogComponent implements OnInit {
                 this.selectedLFA.contractPeriodTo = lfa.contractPeriodTo;
                 this.selectedLFA.contactNumber = lfa.contactNumber;
                 this.selectedLFA.email = lfa.email;
-                this._loanMonitoringService.updateLFA(this.selectedLFA).subscribe(() => {
+                this._loanMonitoringService.updateLFA(this.selectedLFA, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LFA updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

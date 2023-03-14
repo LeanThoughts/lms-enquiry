@@ -178,14 +178,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersFinancialAdvisors');
     }
     
-    public saveLFA(lfa: any, loanApplicationId: any): Observable<any> {
+    public saveLFA(lfa: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersfinancialAdvisors/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersFinancialAdvisor':lfa });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersFinancialAdvisor':lfa, 'moduleName': module });
     }
 
-    public updateLFA(lfa: any): Observable<any> {
+    public updateLFA(lfa: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersfinancialAdvisors/" + lfa.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'lendersFinancialAdvisor':lfa });
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersFinancialAdvisor':lfa, 'moduleName': module });
     }
 
     // All about LFA Reports And Fees
@@ -194,15 +194,15 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/lendersFinancialAdvisor/' + lfaId + '/lfaReceiptsAndFees');
     }
 
-    public saveLFAReportAndFee(lfaReportAndFee: any, lfaId: string): Observable<any> {
+    public saveLFAReportAndFee(lfaReportAndFee: any, lfaId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lfareportandfeesubmission/create";
-        return this._http.post(url, { 'lendersFinancialAdvisorId': lfaId, 'lfaReportAndFee': lfaReportAndFee });
+        return this._http.post(url, { 'lendersFinancialAdvisorId': lfaId, 'lfaReportAndFee': lfaReportAndFee, 'moduleName': module });
     }
 
-    public updateLFAReportAndFee(lfaReportAndFee: any): Observable<any> {
+    public updateLFAReportAndFee(lfaReportAndFee: any, module: string): Observable<any> {
         console.log('in service', lfaReportAndFee);
         const url = "enquiry/api/loanApplications/lfareportandfeesubmission/" + lfaReportAndFee.id;
-        return this._http.put(url, { 'lendersFinancialAdvisorId': '', 'lfaReportAndFee': lfaReportAndFee });
+        return this._http.put(url, { 'lendersFinancialAdvisorId': '', 'lfaReportAndFee': lfaReportAndFee, 'moduleName': module });
     }
 
     // All about TRA

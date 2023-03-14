@@ -69,7 +69,8 @@ export class LFAListComponent {
             width: '750px',
             data: {
                 operation: 'addLFA',
-                loanApplicationId: this.loanApplicationId
+                loanApplicationId: this.loanApplicationId,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -96,7 +97,8 @@ export class LFAListComponent {
             data: {
                 operation: 'updateLFA',
                 loanApplicationId: this.loanApplicationId,
-                selectedLFA: this.selectedLFA
+                selectedLFA: this.selectedLFA,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
