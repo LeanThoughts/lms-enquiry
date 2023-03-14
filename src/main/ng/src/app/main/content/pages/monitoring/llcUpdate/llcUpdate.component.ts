@@ -92,7 +92,7 @@ export class LLCUpdateDialogComponent implements OnInit {
             llc.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLLC') {
-                this._loanMonitoringService.saveLLC(llc, this._dialogData.loanApplicationId).subscribe(() => {
+                this._loanMonitoringService.saveLLC(llc, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LLC added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -107,7 +107,7 @@ export class LLCUpdateDialogComponent implements OnInit {
                 this.selectedLLC.contactNumber = llc.contactNumber;
                 this.selectedLLC.email = llc.email;
 
-                this._loanMonitoringService.updateLLC(this.selectedLLC).subscribe(() => {
+                this._loanMonitoringService.updateLLC(this.selectedLLC, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('LLC updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

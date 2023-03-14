@@ -45,14 +45,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersLegalCouncils');
     }
 
-    public saveLLC(llc: any, loanApplicationId: any): Observable<any> {
+    public saveLLC(llc: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersLegalCouncils/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':llc });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':llc, 'moduleName':module });
     }
 
-    public updateLLC(llc: any): Observable<any> {
+    public updateLLC(llc: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersLegalCouncils/" + llc.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':llc });
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':llc, 'moduleName':module });
     }
 
     // All about LLC Reports And Fees
@@ -61,15 +61,15 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/llcReportAndFeeSubmission/' + llcId + '/llcReceiptsAndFees');
     }
     
-    public saveLLCReportAndFee(llcReportAndFee: any, liaId: string): Observable<any> {
+    public saveLLCReportAndFee(llcReportAndFee: any, liaId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/create";
-        return this._http.post(url, { 'lendersLegalCouncilId': liaId, 'llcReportAndFee': llcReportAndFee });
+        return this._http.post(url, { 'lendersLegalCouncilId': liaId, 'llcReportAndFee': llcReportAndFee, 'moduleName':module });
     }
 
-    public updateLLCReportAndFee(llcReportAndFee: any): Observable<any> {
+    public updateLLCReportAndFee(llcReportAndFee: any, module: string): Observable<any> {
         console.log('in service', llcReportAndFee);
         const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/" + llcReportAndFee.id;
-        return this._http.put(url, { 'lendersLegalCouncilId': '', 'llcReportAndFee': llcReportAndFee });
+        return this._http.put(url, { 'lendersLegalCouncilId': '', 'llcReportAndFee': llcReportAndFee, 'moduleName':module });
     }
 
 
@@ -112,14 +112,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/commonLoanAgreements');
     }
 
-    public saveCLA(cla: any, loanApplicationId: any): Observable<any> {
+    public saveCLA(cla: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/commonLoanAgreements/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'commonLoanAgreement':cla });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'commonLoanAgreement':cla, 'moduleName':module });
     }
 
-    public updateCLA(cla: any): Observable<any> {
+    public updateCLA(cla: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/commonLoanAgreements/" + cla.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'commonLoanAgreement':cla });
+        return this._http.put(url, { 'loanApplicationId':'', 'commonLoanAgreement':cla, 'moduleName':module });
     }
 
     // All about CLA Reports And Fees
@@ -128,15 +128,15 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/claReportAndFeeSubmission/' + claId + '/claReceiptsAndFees');
     }
     
-    public saveCLAReportAndFee(claReportAndFee: any, claId: string): Observable<any> {
+    public saveCLAReportAndFee(claReportAndFee: any, claId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/claReportAndFeeSubmission/create";
-        return this._http.post(url, { 'commonLoanAgreementId': claId, 'claReportAndFee': claReportAndFee });
+        return this._http.post(url, { 'commonLoanAgreementId': claId, 'claReportAndFee': claReportAndFee, 'moduleName':module });
     }
 
-    public updateCLAReportAndFee(claReportAndFee: any): Observable<any> {
+    public updateCLAReportAndFee(claReportAndFee: any, module: string): Observable<any> {
         console.log('in service', claReportAndFee);
         const url = "enquiry/api/loanApplications/claReportAndFeeSubmission/" + claReportAndFee.id;
-        return this._http.put(url, { 'commonLoanAgreementId': '', 'claReportAndFee': claReportAndFee });
+        return this._http.put(url, { 'commonLoanAgreementId': '', 'claReportAndFee': claReportAndFee, 'moduleName':module });
     }
 
     // All about LIE

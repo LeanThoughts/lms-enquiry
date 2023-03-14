@@ -161,6 +161,7 @@ public class CLAService implements ICLAService {
         existingClaReportAndFee.setStatusOfFeeReceipt(resource.getClaReportAndFee().getStatusOfFeeReceipt());
         existingClaReportAndFee.setStatusOfFeePaid(resource.getClaReportAndFee().getStatusOfFeePaid());
         existingClaReportAndFee.setDocumentTitle(resource.getClaReportAndFee().getDocumentTitle());
+        existingClaReportAndFee.setDocumentType(resource.getClaReportAndFee().getDocumentType());
         existingClaReportAndFee.setNextReportDate(resource.getClaReportAndFee().getNextReportDate());
         existingClaReportAndFee.setFileReference(resource.getClaReportAndFee().getFileReference());
         existingClaReportAndFee = claReportAndFeeRepository.save(existingClaReportAndFee);

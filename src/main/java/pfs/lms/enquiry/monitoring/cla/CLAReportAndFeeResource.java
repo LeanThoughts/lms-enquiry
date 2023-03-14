@@ -13,6 +13,7 @@ import lombok.*;
 
 public class CLAReportAndFeeResource {
 
+    private String moduleName;
     private String commonLoanAgreementId;
     private CLAReportAndFee claReportAndFee;
 }

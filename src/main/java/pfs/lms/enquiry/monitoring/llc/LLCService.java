@@ -163,6 +163,7 @@ public class LLCService implements ILLCService {
         existingliaReportAndFee.setStatusOfFeeReceipt(resource.getLlcReportAndFee().getStatusOfFeeReceipt());
         existingliaReportAndFee.setStatusOfFeePaid(resource.getLlcReportAndFee().getStatusOfFeePaid());
         existingliaReportAndFee.setDocumentTitle(resource.getLlcReportAndFee().getDocumentTitle());
+        existingliaReportAndFee.setDocumentType(resource.getLlcReportAndFee().getDocumentType());
         existingliaReportAndFee.setNextReportDate(resource.getLlcReportAndFee().getNextReportDate());
         existingliaReportAndFee.setFileReference(resource.getLlcReportAndFee().getFileReference());
         existingliaReportAndFee.setReportDate(resource.getLlcReportAndFee().getReportDate());

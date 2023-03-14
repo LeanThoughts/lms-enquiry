@@ -29,8 +29,6 @@ export class CLAListComponent {
     @Input()
     set module(m: string) {
         this._module = m;
-        console.log('this._module', this._module);
-        console.log('m', m);
     }
 
     /**
@@ -43,12 +41,6 @@ export class CLAListComponent {
             this.dataSource.sort = this.sort;
         });
     }
-
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     console.log(changes['module'].currentValue);
-    //     this._module = changes['module'].currentValue;
-    //     console.log('after ngonchanges module', this._module);
-    // }
 
     /**
      * onSelect()
@@ -75,7 +67,8 @@ export class CLAListComponent {
             width: '750px',
             data: {
                 operation: 'addCLA',
-                loanApplicationId: this.loanApplicationId
+                loanApplicationId: this.loanApplicationId,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -102,7 +95,8 @@ export class CLAListComponent {
             data: {
                 operation: 'updateCLA',
                 loanApplicationId: this.loanApplicationId,
-                selectedCLA: this.selectedCLA
+                selectedCLA: this.selectedCLA,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

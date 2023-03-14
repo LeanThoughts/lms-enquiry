@@ -93,95 +93,72 @@ export class CLAReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.claUpdateForm.valid) {
-            // To solve the utc time zone issue
-            var claReportAndFee: LIEReportAndFeeModel = new LIEReportAndFeeModel(this.claUpdateForm.value);
-            var dt = new Date(claReportAndFee.dateOfReceipt);
-            claReportAndFee.dateOfReceipt = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(claReportAndFee.invoiceDate);
-            claReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(claReportAndFee.nextReportDate);
-            claReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(claReportAndFee.reportDate);
-            claReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-
-            if (this._dialogData.operation === 'addCLAReportAndFee') {
-                if (this.claUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.claUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            claReportAndFee.fileReference = response.fileReference;
-                            this._loanMonitoringService.saveCLAReportAndFee(claReportAndFee, this.selectedCLA.id).subscribe((data) => {
-                                this._matSnackBar.open('CLA report added successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    this._loanMonitoringService.saveCLAReportAndFee(claReportAndFee, this.selectedCLA.id).subscribe((data) => {
-                        this._matSnackBar.open('CLA report added successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
+            if (this.claUpdateForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.claUpdateForm.get('file').value);      
+                this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.saveCLAReportAndFee(response.fileReference);
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                            'OK', { duration: 7000 });
+                    }
+                );
             }
             else {
-                if (this.claUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.claUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            this.selectedCLAReportAndFee.reportType = claReportAndFee.reportType;
-                            this.selectedCLAReportAndFee.dateOfReceipt = claReportAndFee.dateOfReceipt;
-                            this.selectedCLAReportAndFee.invoiceDate = claReportAndFee.invoiceDate;
-                            this.selectedCLAReportAndFee.invoiceNo = claReportAndFee.invoiceNo;
-                            this.selectedCLAReportAndFee.feeAmount = claReportAndFee.feeAmount;
-                            this.selectedCLAReportAndFee.statusOfFeeReceipt = claReportAndFee.statusOfFeeReceipt;
-                            this.selectedCLAReportAndFee.statusOfFeePaid = claReportAndFee.statusOfFeePaid;
-                            this.selectedCLAReportAndFee.documentTitle = claReportAndFee.documentTitle;
-                            this.selectedCLAReportAndFee.documentType = claReportAndFee.documentType;
-                            this.selectedCLAReportAndFee.nextReportDate = claReportAndFee.nextReportDate;
-                            this.selectedCLAReportAndFee.fileReference = response.fileReference;
-                            this.selectedCLAReportAndFee.reportDate = response.reportDate;
-                            this.selectedCLAReportAndFee.percentageCompletion = response.percentageCompletion;
-                            this.selectedCLAReportAndFee.remarks = response.remarks;
-                            this._loanMonitoringService.updateCLAReportAndFee(this.selectedCLAReportAndFee).subscribe(() => {
-                                this._matSnackBar.open('CLA report updated successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
+                if (this._dialogData.operation === 'addCLAReportAndFee') {
+                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
                 }
-                else
-                {
-                    this.selectedCLAReportAndFee.reportType = claReportAndFee.reportType;
-                    this.selectedCLAReportAndFee.dateOfReceipt = claReportAndFee.dateOfReceipt;
-                    this.selectedCLAReportAndFee.invoiceDate = claReportAndFee.invoiceDate;
-                    this.selectedCLAReportAndFee.invoiceNo = claReportAndFee.invoiceNo;
-                    this.selectedCLAReportAndFee.feeAmount = claReportAndFee.feeAmount;
-                    this.selectedCLAReportAndFee.statusOfFeeReceipt = claReportAndFee.statusOfFeeReceipt;
-                    this.selectedCLAReportAndFee.statusOfFeePaid = claReportAndFee.statusOfFeePaid;
-                    this.selectedCLAReportAndFee.documentTitle = claReportAndFee.documentTitle;
-                    this.selectedCLAReportAndFee.documentType = claReportAndFee.documentType;
-                    this.selectedCLAReportAndFee.nextReportDate = claReportAndFee.nextReportDate;
-                    this.selectedCLAReportAndFee.reportDate = claReportAndFee.reportDate;
-                    this.selectedCLAReportAndFee.percentageCompletion = claReportAndFee.percentageCompletion;
-                    this.selectedCLAReportAndFee.remarks = claReportAndFee.remarks;
-                    this._loanMonitoringService.updateCLAReportAndFee(this.selectedCLAReportAndFee).subscribe(() => {
-                        this._matSnackBar.open('CLA report updated successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
+                else {
+                    this.saveCLAReportAndFee('');
                 }
             }
+        }
+    }
+    
+    /**
+     * saveCLAReportAndFee()
+     */
+    saveCLAReportAndFee(fileReference: string): void {
+        // To solve the utc time zone issue
+        var claReportAndFee: LIEReportAndFeeModel = new LIEReportAndFeeModel(this.claUpdateForm.value);
+        var dt = new Date(claReportAndFee.dateOfReceipt);
+        claReportAndFee.dateOfReceipt = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(claReportAndFee.invoiceDate);
+        claReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(claReportAndFee.nextReportDate);
+        claReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(claReportAndFee.reportDate);
+        claReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        if (this._dialogData.operation === 'addCLAReportAndFee') {
+            claReportAndFee.fileReference = fileReference;
+            this._loanMonitoringService.saveCLAReportAndFee(claReportAndFee, this.selectedCLA.id, this._dialogData.module).subscribe((data) => {
+                this._matSnackBar.open('CLA report added successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
+        }
+        else {
+            if (fileReference !== '' ) {
+                this.selectedCLAReportAndFee.fileReference = fileReference;
+            }
+            this.selectedCLAReportAndFee.reportType = claReportAndFee.reportType;
+            this.selectedCLAReportAndFee.dateOfReceipt = claReportAndFee.dateOfReceipt;
+            this.selectedCLAReportAndFee.invoiceDate = claReportAndFee.invoiceDate;
+            this.selectedCLAReportAndFee.invoiceNo = claReportAndFee.invoiceNo;
+            this.selectedCLAReportAndFee.feeAmount = claReportAndFee.feeAmount;
+            this.selectedCLAReportAndFee.statusOfFeeReceipt = claReportAndFee.statusOfFeeReceipt;
+            this.selectedCLAReportAndFee.statusOfFeePaid = claReportAndFee.statusOfFeePaid;
+            this.selectedCLAReportAndFee.documentTitle = claReportAndFee.documentTitle;
+            this.selectedCLAReportAndFee.documentType = claReportAndFee.documentType;
+            this.selectedCLAReportAndFee.nextReportDate = claReportAndFee.nextReportDate;
+            this.selectedCLAReportAndFee.reportDate = claReportAndFee.reportDate;
+            this.selectedCLAReportAndFee.percentageCompletion = claReportAndFee.percentageCompletion;
+            this.selectedCLAReportAndFee.remarks = claReportAndFee.remarks;
+            this._loanMonitoringService.updateCLAReportAndFee(this.selectedCLAReportAndFee, this._dialogData.module).subscribe(() => {
+                this._matSnackBar.open('CLA report updated successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
         }
     }
 

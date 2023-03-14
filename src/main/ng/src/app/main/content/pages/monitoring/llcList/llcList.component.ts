@@ -29,8 +29,6 @@ export class LLCListComponent {
     @Input()
     set module(m: string) {
         this._module = m;
-        console.log('this._module', this._module);
-        console.log('m', m);
     }
 
     /**
@@ -69,7 +67,8 @@ export class LLCListComponent {
             width: '750px',
             data: {
                 operation: 'addLLC',
-                loanApplicationId: this.loanApplicationId
+                loanApplicationId: this.loanApplicationId,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -96,7 +95,8 @@ export class LLCListComponent {
             data: {
                 operation: 'updateLLC',
                 loanApplicationId: this.loanApplicationId,
-                selectedLLC: this.selectedLLC
+                selectedLLC: this.selectedLLC,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

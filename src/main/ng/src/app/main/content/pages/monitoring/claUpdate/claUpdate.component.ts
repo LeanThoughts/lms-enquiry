@@ -92,7 +92,7 @@ export class CLAUpdateDialogComponent implements OnInit {
             cla.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addCLA') {
-                this._loanMonitoringService.saveCLA(cla, this._dialogData.loanApplicationId).subscribe(() => {
+                this._loanMonitoringService.saveCLA(cla, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('CLA added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -107,7 +107,7 @@ export class CLAUpdateDialogComponent implements OnInit {
                 this.selectedCLA.contactNumber = cla.contactNumber;
                 this.selectedCLA.email = cla.email;
 
-                this._loanMonitoringService.updateCLA(this.selectedCLA).subscribe(() => {
+                this._loanMonitoringService.updateCLA(this.selectedCLA, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('CLA updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

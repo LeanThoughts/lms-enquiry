@@ -93,95 +93,72 @@ export class LLCReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.llcUpdateForm.valid) {
-            // To solve the utc time zone issue
-            var llcReportAndFee: LIEReportAndFeeModel = new LIEReportAndFeeModel(this.llcUpdateForm.value);
-            var dt = new Date(llcReportAndFee.dateOfReceipt);
-            llcReportAndFee.dateOfReceipt = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(llcReportAndFee.invoiceDate);
-            llcReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(llcReportAndFee.nextReportDate);
-            llcReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(llcReportAndFee.reportDate);
-            llcReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-
-            if (this._dialogData.operation === 'addLLCReportAndFee') {
-                if (this.llcUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.llcUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            llcReportAndFee.fileReference = response.fileReference;
-                            this._loanMonitoringService.saveLLCReportAndFee(llcReportAndFee, this.selectedLLC.id).subscribe((data) => {
-                                this._matSnackBar.open('LLC report added successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
-                }
-                else
-                {
-                    this._loanMonitoringService.saveLLCReportAndFee(llcReportAndFee, this.selectedLLC.id).subscribe((data) => {
-                        this._matSnackBar.open('LLC report added successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
+            if (this.llcUpdateForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.llcUpdateForm.get('file').value);      
+                this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.saveLLCReportAndFee(response.fileReference);
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                            'OK', { duration: 7000 });
+                    }
+                );
             }
             else {
-                if (this.llcUpdateForm.get('file').value !== '') {
-                    var formData = new FormData();
-                    formData.append('file', this.llcUpdateForm.get('file').value);      
-                    this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
-                        (response) => {
-                            this.selectedLLCReportAndFee.reportType = llcReportAndFee.reportType;
-                            this.selectedLLCReportAndFee.dateOfReceipt = llcReportAndFee.dateOfReceipt;
-                            this.selectedLLCReportAndFee.invoiceDate = llcReportAndFee.invoiceDate;
-                            this.selectedLLCReportAndFee.invoiceNo = llcReportAndFee.invoiceNo;
-                            this.selectedLLCReportAndFee.feeAmount = llcReportAndFee.feeAmount;
-                            this.selectedLLCReportAndFee.statusOfFeeReceipt = llcReportAndFee.statusOfFeeReceipt;
-                            this.selectedLLCReportAndFee.statusOfFeePaid = llcReportAndFee.statusOfFeePaid;
-                            this.selectedLLCReportAndFee.documentTitle = llcReportAndFee.documentTitle;
-                            this.selectedLLCReportAndFee.documentType = llcReportAndFee.documentType;
-                            this.selectedLLCReportAndFee.nextReportDate = llcReportAndFee.nextReportDate;
-                            this.selectedLLCReportAndFee.fileReference = response.fileReference;
-                            this.selectedLLCReportAndFee.reportDate = response.reportDate;
-                            this.selectedLLCReportAndFee.percentageCompletion = response.percentageCompletion;
-                            this.selectedLLCReportAndFee.remarks = response.remarks;
-                            this._loanMonitoringService.updateLLCReportAndFee(this.selectedLLCReportAndFee).subscribe(() => {
-                                this._matSnackBar.open('LLC report updated successfully.', 'OK', { duration: 7000 });
-                                this._dialogRef.close({ 'refresh': true });
-                            });
-                        },
-                        (error) => {
-                            this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                                'OK', { duration: 7000 });
-                        }
-                    );
+                if (this._dialogData.operation === 'addLLCReportAndFee') {
+                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
                 }
-                else
-                {
-                    this.selectedLLCReportAndFee.reportType = llcReportAndFee.reportType;
-                    this.selectedLLCReportAndFee.dateOfReceipt = llcReportAndFee.dateOfReceipt;
-                    this.selectedLLCReportAndFee.invoiceDate = llcReportAndFee.invoiceDate;
-                    this.selectedLLCReportAndFee.invoiceNo = llcReportAndFee.invoiceNo;
-                    this.selectedLLCReportAndFee.feeAmount = llcReportAndFee.feeAmount;
-                    this.selectedLLCReportAndFee.statusOfFeeReceipt = llcReportAndFee.statusOfFeeReceipt;
-                    this.selectedLLCReportAndFee.statusOfFeePaid = llcReportAndFee.statusOfFeePaid;
-                    this.selectedLLCReportAndFee.documentTitle = llcReportAndFee.documentTitle;
-                    this.selectedLLCReportAndFee.documentType = llcReportAndFee.documentType;
-                    this.selectedLLCReportAndFee.nextReportDate = llcReportAndFee.nextReportDate;
-                    this.selectedLLCReportAndFee.reportDate = llcReportAndFee.reportDate;
-                    this.selectedLLCReportAndFee.percentageCompletion = llcReportAndFee.percentageCompletion;
-                    this.selectedLLCReportAndFee.remarks = llcReportAndFee.remarks;
-                    this._loanMonitoringService.updateLLCReportAndFee(this.selectedLLCReportAndFee).subscribe(() => {
-                        this._matSnackBar.open('LLC report updated successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
+                else {
+                    this.saveLLCReportAndFee('');
                 }
             }
+        }
+    }
+    
+    /**
+     * saveLLCReportAndFee()
+     */
+    saveLLCReportAndFee(fileReference: string): void {
+        // To solve the utc time zone issue
+        var llcReportAndFee: LIEReportAndFeeModel = new LIEReportAndFeeModel(this.llcUpdateForm.value);
+        var dt = new Date(llcReportAndFee.dateOfReceipt);
+        llcReportAndFee.dateOfReceipt = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(llcReportAndFee.invoiceDate);
+        llcReportAndFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(llcReportAndFee.nextReportDate);
+        llcReportAndFee.nextReportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        dt = new Date(llcReportAndFee.reportDate);
+        llcReportAndFee.reportDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        if (this._dialogData.operation === 'addLLCReportAndFee') {
+            llcReportAndFee.fileReference = fileReference;
+            this._loanMonitoringService.saveLLCReportAndFee(llcReportAndFee, this.selectedLLC.id, this._dialogData.module).subscribe((data) => {
+                this._matSnackBar.open('LLC report added successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
+        }
+        else {
+            if (fileReference !== '' ) {
+                this.selectedLLCReportAndFee.fileReference = fileReference;
+            }
+            this.selectedLLCReportAndFee.reportType = llcReportAndFee.reportType;
+            this.selectedLLCReportAndFee.dateOfReceipt = llcReportAndFee.dateOfReceipt;
+            this.selectedLLCReportAndFee.invoiceDate = llcReportAndFee.invoiceDate;
+            this.selectedLLCReportAndFee.invoiceNo = llcReportAndFee.invoiceNo;
+            this.selectedLLCReportAndFee.feeAmount = llcReportAndFee.feeAmount;
+            this.selectedLLCReportAndFee.statusOfFeeReceipt = llcReportAndFee.statusOfFeeReceipt;
+            this.selectedLLCReportAndFee.statusOfFeePaid = llcReportAndFee.statusOfFeePaid;
+            this.selectedLLCReportAndFee.documentTitle = llcReportAndFee.documentTitle;
+            this.selectedLLCReportAndFee.documentType = llcReportAndFee.documentType;
+            this.selectedLLCReportAndFee.nextReportDate = llcReportAndFee.nextReportDate;
+            this.selectedLLCReportAndFee.reportDate = llcReportAndFee.reportDate;
+            this.selectedLLCReportAndFee.percentageCompletion = llcReportAndFee.percentageCompletion;
+            this.selectedLLCReportAndFee.remarks = llcReportAndFee.remarks;
+            this._loanMonitoringService.updateLLCReportAndFee(this.selectedLLCReportAndFee, this._dialogData.module).subscribe(() => {
+                this._matSnackBar.open('LLC report updated successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
+            });
         }
     }
 

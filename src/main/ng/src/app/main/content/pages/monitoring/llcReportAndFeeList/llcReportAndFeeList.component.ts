@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnDestroy, Input } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LIEModel } from 'app/main/content/model/lie.model';
@@ -27,6 +27,13 @@ export class LLCReportAndFeeListComponent implements OnDestroy {
     ];
 
     subscriptions = new Subscription()
+    
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
     
     /**
      * constructor()
@@ -75,7 +82,8 @@ export class LLCReportAndFeeListComponent implements OnDestroy {
             width: '1126px',
             data: {
                 operation: 'addLLCReportAndFee',
-                selectedLLC: this.selectedLLC
+                selectedLLC: this.selectedLLC,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -99,7 +107,8 @@ export class LLCReportAndFeeListComponent implements OnDestroy {
             data: {
                 operation: 'updateLLCReportAndFee',
                 selectedLLC: this.selectedLLC,
-                selectedLLCReportAndFee: this.selectedLLCReportAndFee
+                selectedLLCReportAndFee: this.selectedLLCReportAndFee,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

@@ -13,6 +13,7 @@ import lombok.*;
 
 public class LLCReportAndFeeResource {
 
+    private String moduleName;
     private String lendersLegalCouncilId;
     private LLCReportAndFee llcReportAndFee;
 }
