@@ -366,6 +366,22 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'promoterDetail':promoterDetail });
     }
 
+    // All about NPA
+
+    public getNPADetails(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/npas/loanApplication/' + loanApplicationId);
+    }
+
+    public saveNPA(npa: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/npas";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'npa':npa });
+    }
+
+    public updateNPA(npa: any): Observable<any> {
+        const url = "enquiry/api/npas/" + npa.id;
+        return this._http.put(url, { 'loanApplicationId':'', 'npa':npa });
+    }
+
     // All about Operating Parameters 
 
     public getOperatingParameters(loanApplicationId: string): Observable<any> {

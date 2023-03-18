@@ -1,12 +1,12 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayCLA()" [disabled]="!selectedCLA" 
-                *ngIf="_module === 'MONITORING'"> 
+                *ngIf="_module === 'Monitoring'"> 
             Display CLA Details 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addCLA()" *ngIf="_module !== 'MONITORING'"> Add CLA </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addCLA()" *ngIf="_module !== 'Monitoring'"> Add CLA </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateCLA()" [disabled]="!selectedCLA" 
-                *ngIf="_module !== 'MONITORING'"> 
+                *ngIf="_module !== 'Monitoring'"> 
             Modify CLA 
         </button>
     </div>  

@@ -1,12 +1,12 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLIA()" [disabled]="!selectedLIA" 
-                *ngIf="_module === 'MONITORING'"> 
+                *ngIf="_module === 'Monitoring'"> 
             Display LIA Details 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIA()" *ngIf="_module !== 'MONITORING'"> Add LIA </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIA()" *ngIf="_module !== 'Monitoring'"> Add LIA </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIA()" [disabled]="!selectedLIA" 
-                *ngIf="_module !== 'MONITORING'"> 
+                *ngIf="_module !== 'Monitoring'"> 
             Modify LIA 
         </button>
     </div>  
