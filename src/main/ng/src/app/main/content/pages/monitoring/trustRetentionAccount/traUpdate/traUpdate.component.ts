@@ -111,7 +111,7 @@ export class TRAUpdateDialogComponent implements OnInit {
         if (this.traUpdateForm.valid) {
             var tra: TRAModel = new TRAModel(this.traUpdateForm.value);
             if (this._dialogData.operation === 'addTRA') {
-                this._loanMonitoringService.saveTRA(tra, this._dialogData.loanApplicationId).subscribe(() => {
+                this._loanMonitoringService.saveTRA(tra, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('TRA added successfully.', 'OK', { duration: 5000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -130,7 +130,7 @@ export class TRAUpdateDialogComponent implements OnInit {
                 this.selectedTRA.pfsAuthorisedPersonBPCode  = tra.pfsAuthorisedPersonBPCode;
                 this.selectedTRA.pfsAuthorisedPerson  = tra.pfsAuthorisedPerson;
                 this.selectedTRA.beneficiaryName  = tra.beneficiaryName;
-                this._loanMonitoringService.updateTRA(this.selectedTRA).subscribe(() => {
+                this._loanMonitoringService.updateTRA(this.selectedTRA, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('TRA updated successfully.', 'OK', { duration: 5000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

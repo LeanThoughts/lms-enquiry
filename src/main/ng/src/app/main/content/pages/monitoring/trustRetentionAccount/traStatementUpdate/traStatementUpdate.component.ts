@@ -113,7 +113,7 @@ export class TRAStatementUpdateDialogComponent {
         var traStatement: TRAStatementModel = new TRAStatementModel(this.traStatementUpdateForm.value);
         if (this._dialogData.operation === 'addTRAStatement') {
             traStatement.fileReference = fileReference;
-            this._loanMonitoringService.saveTRAStatement(traStatement, this.selectedTRA.id).subscribe(() => {
+            this._loanMonitoringService.saveTRAStatement(traStatement, this.selectedTRA.id, this._dialogData.module).subscribe(() => {
                 this._matSnackBar.open('TRA Statement added successfully.', 'OK', { duration: 5000 });
                 this._dialogRef.close({ 'refresh': true });
             });
@@ -128,7 +128,7 @@ export class TRAStatementUpdateDialogComponent {
             this.selectedTRAStatement.periodYear = traStatement.periodYear;
             this.selectedTRAStatement.documentType = traStatement.documentType;
             this.selectedTRAStatement.documentTitle = traStatement.documentTitle;
-            this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement).subscribe(() => {
+            this._loanMonitoringService.updateTRAStatement(this.selectedTRAStatement, this._dialogData.module).subscribe(() => {
                 this._matSnackBar.open('TRA Statement updated successfully.', 'OK', { duration: 5000 });
                 this._dialogRef.close({ 'refresh': true });
             });

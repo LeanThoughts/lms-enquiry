@@ -74,7 +74,7 @@ export class LIAListComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
+                this._loanMonitoringService.getLendersInsuranceAdvisors(this.loanApplicationId).subscribe(data => {
                     this.dataSource.data = data;
                 });
                 this._loanMonitoringService.getLoanMonitor(this.loanApplicationId).subscribe(data => {
@@ -102,7 +102,7 @@ export class LIAListComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
+                this._loanMonitoringService.getLendersInsuranceAdvisors(this.loanApplicationId).subscribe(data => {
                     this.dataSource.data = data;
                 });
             }

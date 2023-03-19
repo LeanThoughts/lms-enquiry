@@ -83,7 +83,7 @@ export class MainLocationUpdateComponent {
             if (JSON.stringify(this._mainLocationDetail) === JSON.stringify({})) {
                 formValues.loanApplicationId = this._loanApplicationId;
                 this._loanAppraisalService.updateMainLocationDetail(formValues).subscribe(() => {
-                    this._matSnackBar.open('Further details added successfully.', 'OK', { duration: 7000 });
+                    this._matSnackBar.open('Main location details added successfully.', 'OK', { duration: 7000 });
                 });
             }
             else {
@@ -103,7 +103,7 @@ export class MainLocationUpdateComponent {
                 this._mainLocationDetail.nearestFunctionalAirport = formValues.nearestFunctionalAirport;
                 this._mainLocationDetail.nearestFunctionalAirportDistance = formValues.nearestFunctionalAirportDistance;
                 this._loanAppraisalService.updateMainLocationDetail(this._mainLocationDetail).subscribe(() => {
-                    this._matSnackBar.open('Proposal details updated successfully.', 'OK', { duration: 7000 });
+                    this._matSnackBar.open('Main location details updated successfully.', 'OK', { duration: 7000 });
                 });
             }
         }

@@ -47,12 +47,12 @@ export class LoanMonitoringService implements Resolve<any> {
 
     public saveLLC(llc: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersLegalCouncils/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersInsuranceAdvisor':llc, 'moduleName':module });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersLegalCouncil':llc, 'moduleName':module });
     }
 
     public updateLLC(llc: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersLegalCouncils/" + llc.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':llc, 'moduleName':module });
+        return this._http.put(url, { 'loanApplicationId':'', 'lendersLegalCouncil':llc, 'moduleName':module });
     }
 
     // All about LLC Reports And Fees
@@ -211,14 +211,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/trustretentionaccounts');
     }
 
-    public saveTRA(tra: any, loanApplicationId: any): Observable<any> {
+    public saveTRA(tra: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/trustretentionaccount/create";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'trustRetentionAccount':tra });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'trustRetentionAccount':tra, 'moduleName': module });
     }
 
-    public updateTRA(tra: any): Observable<any> {
+    public updateTRA(tra: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/trustretentionaccounts/" + tra.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'trustRetentionAccount':tra });
+        return this._http.put(url, { 'loanApplicationId':'', 'trustRetentionAccount':tra, 'moduleName': module });
     }
     
     // All about TRA Statement
@@ -227,14 +227,14 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get('enquiry/api/loanApplications/trustretentionaccount/' + traId + '/traStatements');
     }
 
-    public saveTRAStatement(traStatement: any, traId: string): Observable<any> {
+    public saveTRAStatement(traStatement: any, traId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/trastatement/create";
-        return this._http.post(url, { 'trustRetentionAccountId': traId, 'trustRetentionAccountStatement': traStatement });
+        return this._http.post(url, { 'trustRetentionAccountId': traId, 'trustRetentionAccountStatement': traStatement, 'moduleName': module });
     }
 
-    public updateTRAStatement(traStatement: any): Observable<any> {
+    public updateTRAStatement(traStatement: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/trastatement/" + traStatement.id;
-        return this._http.put(url, { 'trustRetentionAccountId': '', 'trustRetentionAccountStatement': traStatement });
+        return this._http.put(url, { 'trustRetentionAccountId': '', 'trustRetentionAccountStatement': traStatement, 'moduleName': module });
     }
 
     // All about Terms & Conditions
@@ -369,16 +369,16 @@ export class LoanMonitoringService implements Resolve<any> {
     // All about NPA
 
     public getNPADetails(loanApplicationId: string): Observable<any> {
-        return this._http.get('enquiry/api/npas/loanApplication/' + loanApplicationId);
+        return this._http.get('enquiry/api/nPAs/loanApplication/' + loanApplicationId);
     }
 
     public saveNPA(npa: any, loanApplicationId: any): Observable<any> {
-        const url = "enquiry/api/npas";
+        const url = "enquiry/api/nPAs/create";
         return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'npa':npa });
     }
 
     public updateNPA(npa: any): Observable<any> {
-        const url = "enquiry/api/npas/" + npa.id;
+        const url = "enquiry/api/nPAs/" + npa.id;
         return this._http.put(url, { 'loanApplicationId':'', 'npa':npa });
     }
 
