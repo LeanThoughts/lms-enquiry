@@ -62,7 +62,8 @@ export class TRAListComponent {
             width: '750px',
             data: {
                 operation: 'addTRA',
-                loanApplicationId: this.loanApplicationId
+                loanApplicationId: this.loanApplicationId,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -89,7 +90,8 @@ export class TRAListComponent {
             data: {
                 operation: 'updateTRA',
                 loanApplicationId: this.loanApplicationId,
-                selectedTRA: this.selectedTRA
+                selectedTRA: this.selectedTRA,
+                module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

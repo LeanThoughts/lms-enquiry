@@ -30,6 +30,13 @@ export class TRAStatementListComponent implements OnDestroy {
 
     subscriptions = new Subscription();
 
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
+
     /**
      * constructor()
      */
@@ -83,14 +90,16 @@ export class TRAStatementListComponent implements OnDestroy {
             data = {
                 'operation': operation,
                 'loanApplicationId': this.loanApplicationId,
-                'selectedTRA': this.selectedTRA
+                'selectedTRA': this.selectedTRA,
+                'module': this.module
             }
         }
         else {
             data = {
                 'operation': operation,
                 'selectedTRA': this.selectedTRA,
-                'selectedTRAStatement': this.selectedTRAStatement
+                'selectedTRAStatement': this.selectedTRAStatement,
+                'module': this.module
             }
         }
         const dialogRef = this._dialog.open(TRAStatementUpdateDialogComponent, {
