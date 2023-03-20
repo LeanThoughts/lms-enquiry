@@ -45,6 +45,11 @@ public class SAPPromoterDetailsItemsResourceDetails {
     @JsonProperty(value = "BupaId")
     private String bupaId;
 
+    @JsonProperty(value = "Dateofchange")
+    private String dateofchange;
+
+    @JsonProperty(value = "Groupexposure")
+    private Double groupexposure;
 
 
 }

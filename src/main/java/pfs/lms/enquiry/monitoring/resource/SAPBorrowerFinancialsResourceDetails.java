@@ -47,6 +47,10 @@ public class SAPBorrowerFinancialsResourceDetails {
     @JsonProperty(value = "Overallrating")
     private String overallrating;
 
+    @JsonProperty(value = "Remarks")
+    private String remarks;
+
+
 
     @Override
     public String toString() {

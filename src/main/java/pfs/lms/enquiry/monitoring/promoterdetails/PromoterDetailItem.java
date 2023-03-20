@@ -4,6 +4,7 @@ import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -21,7 +22,8 @@ public class PromoterDetailItem extends AggregateRoot<PromoterDetailItem> implem
     private Double  equityLinkInstrumentSanction; // (CCD/ CCPS/ Unsecured loan) - Sanction
     private Double  equityLinkInstrumentCurrent; // (CCD/ CCPS/ Unsecured loan) - Current
 
-
+    private LocalDate dateOfChange;
+    private Double groupExposure;
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

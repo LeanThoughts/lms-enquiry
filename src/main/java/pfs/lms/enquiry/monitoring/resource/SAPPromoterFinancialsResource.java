@@ -54,6 +54,7 @@ public class SAPPromoterFinancialsResource {
         detailedResource.setTurnover(String.format("%.2f",promoterFinancials.getTurnover()));
         detailedResource.setPat(String.format("%.2f",promoterFinancials.getPat()));
         detailedResource.setOverallrating(promoterFinancials.getOverAllRating());
+        detailedResource.setRemarks(promoterFinancials.getRemarks());
         
 
         return detailedResource;

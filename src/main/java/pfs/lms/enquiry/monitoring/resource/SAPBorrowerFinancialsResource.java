@@ -54,6 +54,7 @@ public class SAPBorrowerFinancialsResource {
         detailedResource.setTurnover(String.format("%.2f",borrowerFinancials.getTurnover()));
         detailedResource.setPat(String.format("%.2f",borrowerFinancials.getPat()));
         detailedResource.setOverallrating(borrowerFinancials.getOverAllRating());
+        detailedResource.setRemarks(borrowerFinancials.getRemarks());
 
 
         return detailedResource;

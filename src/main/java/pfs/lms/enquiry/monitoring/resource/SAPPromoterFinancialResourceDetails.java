@@ -45,5 +45,8 @@ public class SAPPromoterFinancialResourceDetails {
     @JsonProperty(value = "Overallrating")
     private String overallrating;
 
+    @JsonProperty(value = "Remarks")
+    private String remarks;
+
 
 }

@@ -49,6 +49,12 @@ public class SAPPromoterDetailsItemResource {
         detailedResource.setCurrentequitylinkinstrument(promoterDetailItem.getPaidupCapitalEquityCurrent());
         detailedResource.setSanctionedequitylinkinstrument(promoterDetailItem.getEquityLinkInstrumentSanction());
         detailedResource.setCurrentequitylinkinstrument(promoterDetailItem.getEquityLinkInstrumentCurrent());
+        detailedResource.setGroupexposure(promoterDetailItem.getGroupExposure());
+        if (promoterDetailItem.getDateOfChange() !=null)
+            detailedResource.setDateofchange(dataConversionUtility.convertDateToSAPFormat(promoterDetailItem.getDateOfChange()));
+        else
+            detailedResource.setDateofchange(null);
+
 
         return detailedResource;
     }
