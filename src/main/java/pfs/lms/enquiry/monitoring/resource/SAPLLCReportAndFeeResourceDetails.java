@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 /**
  * Created by gguptha on 09/11/18.
@@ -14,15 +13,15 @@ import org.joda.time.DateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class SAPLIEReportAndFeeResourceDetails {
+public class SAPLLCReportAndFeeResourceDetails {
 
 
 
-    @JsonProperty (value = "Id")
+    @JsonProperty (value = "LlcRptFeeId")
     private String id;
 
-    @JsonProperty (value = "LieId")
-    private String lieId;
+    @JsonProperty (value = "LlcId")
+    private String llcId;
 
     @JsonProperty (value = "SerialNo")
     private Integer serialNo;
@@ -73,12 +72,11 @@ public class SAPLIEReportAndFeeResourceDetails {
     @JsonProperty (value = "Remarks")
     private String remarks;
 
-
     @Override
     public String toString() {
-        return "SAPLIEReportAndFeeResourceDetails{" +
+        return "SAPLLCReportAndFeeResourceDetails{" +
                 "id='" + id + '\'' +
-                ", lieId='" + lieId + '\'' +
+                ", llcId='" + llcId + '\'' +
                 ", serialNo=" + serialNo +
                 ", reporttype='" + reporttype + '\'' +
                 ", dateofreceipt='" + dateofreceipt + '\'' +
@@ -91,10 +89,10 @@ public class SAPLIEReportAndFeeResourceDetails {
                 ", feeamountraisedoncustomer='" + feeamountraisedoncustomer + '\'' +
                 ", statusoffeereceipt='" + statusoffeereceipt + '\'' +
                 ", documenttitle='" + documenttitle + '\'' +
-//                ", documentcontent='" + documentcontent + '\'' +
                 ", nextreportdate='" + nextreportdate + '\'' +
-//                ", fileName='" + fileName + '\'' +
-//                ", mimeType='" + mimeType + '\'' +
+                ", reportdate='" + reportdate + '\'' +
+                ", percentagecompletion='" + percentagecompletion + '\'' +
+                ", remarks='" + remarks + '\'' +
                 '}';
     }
 }

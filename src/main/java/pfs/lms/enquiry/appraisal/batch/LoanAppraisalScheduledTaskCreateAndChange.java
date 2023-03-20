@@ -294,7 +294,14 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      serviceUri = appraisalServiceUri + "SiteVisitSet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
                      if (response != null) {
-                         response = postDocument(siteVisit.getFileReference(), siteVisit.getId(), "","Site Visit", siteVisit.getDocumentTitle());
+                         response = postDocument(
+                                 siteVisit.getFileReference(),
+                                 siteVisit.getId(),
+                                 "",
+                                 "Site Visit",
+                                 siteVisit.getDocumentTitle(),
+                                 siteVisit.getDocumentType()
+                         );
                      }
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
@@ -439,7 +446,13 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      if (response != null) {
-                         response = postDocument(knowYourCustomer.getFileReference(), knowYourCustomer.getId().toString(), "","Know Your Customer", knowYourCustomer.getDocumentName());
+                         response = postDocument(
+                                 knowYourCustomer.getFileReference(),
+                                 knowYourCustomer.getId().toString(),
+                                 "",
+                                 "Know Your Customer",
+                                 knowYourCustomer.getDocumentName(),
+                                 knowYourCustomer.getDocumentType());
                      }
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
 
@@ -475,7 +488,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private Object postDocument(String fileReference,
                                 String entityId, String docSubId,
                                 String entityName,
-                                String fileName) throws IOException {
+                                String fileName,
+                                String documentType) throws IOException {
         if (fileReference.length() == 0) {
             log.error("File Reference is Empty; Posting to SAP Aborted for Process Name :" +entityName + " entityId : " +entityId);
             return null;
@@ -528,6 +542,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                 + "MimeType='" +mimeType +  "',"
                 + "Filename='" +fileName +  "',"
                 + "FileType='" +fileType +  "',"
+                + "DocumentType='" +documentType +  "',"
 //                + "DocId='" + "',"
 //                 + "UploadTime='" + "datetime'2015-07-30T00:00:00Z'',"
                 + ")/$value";

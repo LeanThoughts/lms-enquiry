@@ -13,10 +13,10 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class SAPLIEResourceDetails {
+public class SAPLIAResourceDetails {
 
 
-    @JsonProperty (value = "LieId")
+    @JsonProperty (value = "LfaId")
     private String id;
 
     @JsonProperty (value = "MonitorId")
@@ -24,7 +24,6 @@ public class SAPLIEResourceDetails {
 
     @JsonProperty (value = "AppraisalId")
     private String appraisalId;
-
     @JsonProperty (value = "SerialNo")
     private Integer serialNumber;
 
@@ -55,19 +54,21 @@ public class SAPLIEResourceDetails {
     @JsonProperty (value = "Email")
     private String email;
 
-    public SAPLIEResourceDetails() {
+    public SAPLIAResourceDetails() {
     }
 
     @Override
     public String toString() {
-        return "SAPLIEResourceDetails{" +
+        return "SAPLIAResourceDetails{" +
                 "id='" + id + '\'' +
+                ", monitorId='" + monitorId + '\'' +
+                ", appraisalId='" + appraisalId + '\'' +
                 ", serialNumber=" + serialNumber +
                 ", bpCode='" + bpCode + '\'' +
                 ", name='" + name + '\'' +
-                ", dateOfAppointment=" + dateOfAppointment +
-                ", contractPeriodFrom=" + contractPeriodFrom +
-                ", contractPeriodTo=" + contractPeriodTo +
+                ", dateOfAppointment='" + dateOfAppointment + '\'' +
+                ", contractPeriodFrom='" + contractPeriodFrom + '\'' +
+                ", contractPeriodTo='" + contractPeriodTo + '\'' +
                 ", contactPerson='" + contactPerson + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", email='" + email + '\'' +

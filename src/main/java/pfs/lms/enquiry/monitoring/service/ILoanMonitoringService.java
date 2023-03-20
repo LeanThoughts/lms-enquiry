@@ -1,5 +1,7 @@
 package pfs.lms.enquiry.monitoring.service;
 
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancialsResource;
 import pfs.lms.enquiry.monitoring.domain.*;
@@ -108,5 +110,8 @@ public interface ILoanMonitoringService {
     //Find By Loan Contract Id
     public LoanMonitor getByLoanContractId (UUID loanContractId);
 
+    public LoanMonitor createLoanMonitor(LoanApplication loanApplication, String username);
+
+    public UUID getLoanBusinessProcessObjectId (LoanMonitor loanMonitor, LoanAppraisal loanAppraisal, String moduleName);
 
 }

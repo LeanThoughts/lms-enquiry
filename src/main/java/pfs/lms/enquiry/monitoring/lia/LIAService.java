@@ -4,10 +4,14 @@ package pfs.lms.enquiry.monitoring.lia;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
+import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import java.util.*;
 
@@ -20,34 +24,24 @@ public class LIAService implements ILIAService {
     private final LoanMonitorRepository loanMonitorRepository;
     private final LIARepository liaRepository;
     private final LIAReportAndFeeRepository liaReportAndFeeRepository;
+    private final ILoanMonitoringService loanMonitoringService;
+    private final ILoanAppraisalService loanAppraisalService;
+
+    private final IChangeDocumentService changeDocumentService;
     
     @Override
     public LendersInsuranceAdvisor saveLIA(LIAResource resource, String username) throws CloneNotSupportedException {
 
+
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
+        LoanMonitor loanMonitor = loanMonitoringService.createLoanMonitor(loanApplication, username);
+        LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication, username);
 
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
-            loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
 
-            // Change Documents for Monitoring Header
-//            changeDocumentService.createChangeDocument(
-//                    loanMonitor.getId(), loanMonitor.getId().toString(), null,
-//                    loanApplication.getLoanContractId(),
-//                    null,
-//                    loanMonitor,
-//                    "Created",
-//                    username,
-//                    "Monitoring", "Header");
-
-        }
         LendersInsuranceAdvisor lendersInsuranceAdvisor = resource.getLendersInsuranceAdvisor();
         lendersInsuranceAdvisor.setSerialNumber(liaRepository.findByLoanMonitor(loanMonitor).size() + 1);
         lendersInsuranceAdvisor.setLoanMonitor(loanMonitor);
+        lendersInsuranceAdvisor.setLoanAppraisal(loanAppraisal);
         lendersInsuranceAdvisor.setAdvisor(resource.getLendersInsuranceAdvisor().getAdvisor());
         lendersInsuranceAdvisor.setBpCode(resource.getLendersInsuranceAdvisor().getBpCode());
         lendersInsuranceAdvisor.setName(resource.getLendersInsuranceAdvisor().getName());
@@ -59,15 +53,21 @@ public class LIAService implements ILIAService {
         lendersInsuranceAdvisor.setEmail(resource.getLendersInsuranceAdvisor().getEmail());
         lendersInsuranceAdvisor = liaRepository.save(lendersInsuranceAdvisor);
 
-        // Create Change Document for LIE
-//        changeDocumentService.createChangeDocument(
-//                loanMonitor.getId(),lendersInsuranceAdvisor.getId(),null,
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanMonitor,
-//                "Created",
-//                username,
-//                "Monitoring" , "Lenders Independent Engineer" );
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(lendersInsuranceAdvisor.getLoanMonitor(),
+                lendersInsuranceAdvisor.getLoanAppraisal(),resource.getModuleName());
+
+
+        // Create Change Document for LIA
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                lendersInsuranceAdvisor.getId(),
+                null,
+                loanApplication.getLoanContractId(),
+                null,
+                lendersInsuranceAdvisor,
+                "Created",
+                username,
+                resource.getModuleName() , "Lenders Insurance Advisor" );
 
         return lendersInsuranceAdvisor;
     }
@@ -78,7 +78,7 @@ public class LIAService implements ILIAService {
                 = liaRepository.getOne(resource.getLendersInsuranceAdvisor().getId());
 
         //Clone the LIE Object for Change Document
-        Object oldLendersIndependentEngineer = lia.clone();
+        Object oldLia = lia.clone();
 
         lia.setAdvisor(resource.getLendersInsuranceAdvisor().getAdvisor());
         lia.setBpCode(resource.getLendersInsuranceAdvisor().getBpCode());
@@ -91,15 +91,21 @@ public class LIAService implements ILIAService {
         lia.setEmail(resource.getLendersInsuranceAdvisor().getEmail());
         lia = liaRepository.save(lia);
 
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(lia.getLoanMonitor(),
+                lia.getLoanAppraisal(),resource.getModuleName());
+
+
         //Create Change Document
-//        changeDocumentService.createChangeDocument(
-//                existingLendersIndependentEngineer.getLoanMonitor().getId(),existingLendersIndependentEngineer.getId(),null,
-//                existingLendersIndependentEngineer.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldLendersIndependentEngineer,
-//                existingLendersIndependentEngineer,
-//                "Updated",
-//                username,
-//                "Monitoring", "Lenders Independent Engineer" );
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                lia.getId(),
+                null,
+                lia.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                oldLia,
+                lia,
+                "Updated",
+                username,
+                "Monitoring", "Lenders Insurance Advisor" );
 
         return lia;
     }
@@ -133,15 +139,20 @@ public class LIAService implements ILIAService {
         liaReportAndFee.setLendersInsuranceAdvisor(lendersInsuranceAdvisor);
         liaReportAndFee = liaReportAndFeeRepository.save(liaReportAndFee);
 
-        // Create Change Document for LIE Report and Fee
-//        changeDocumentService.createChangeDocument(
-//                lendersInsuranceAdvisor.getLoanMonitor().getId(), liaReportAndFee.getId(),lendersInsuranceAdvisor.getId(),
-//                lendersInsuranceAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                liaReportAndFee,
-//                "Created",
-//                username,
-//                "Monitoring" , "LIE Report And Fee" );
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor(),
+                liaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal(),resource.getModuleName());
+
+        // Create Change Document for LIA Report and Fee
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                liaReportAndFee.getId(),
+                lendersInsuranceAdvisor.getId(),
+                lendersInsuranceAdvisor.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                liaReportAndFee,
+                "Created",
+                username,
+                resource.getModuleName(), "LIA Report And Fee" );
 
         return liaReportAndFee;
     }
@@ -169,16 +180,21 @@ public class LIAService implements ILIAService {
         existingliaReportAndFee.setRemarks(resource.getLiaReportAndFee().getRemarks());
         existingliaReportAndFee = liaReportAndFeeRepository.save(existingliaReportAndFee);
 
-        // Create Change Document for LIE Report And Fee
-//        changeDocumentService.createChangeDocument(
-//                existingliaReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getId(),
-//                existingliaReportAndFee.getId(),existingliaReportAndFee.getLendersIndependentEngineer().getId(),
-//                existingliaReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldLieReportAndFee,
-//                existingliaReportAndFee,
-//                "Updated",
-//                username,
-//                "Monitoring" , "LIE Report And Fee" );
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(existingliaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor(),
+                existingliaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal(),resource.getModuleName());
+
+
+        // Create Change Document for LIA Report And Fee
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                existingliaReportAndFee.getId(),
+                existingliaReportAndFee.getLendersInsuranceAdvisor().getId(),
+                existingliaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                oldLiaReportAndFee,
+                existingliaReportAndFee,
+                "Updated",
+                username,
+                resource.getModuleName(), "LIA Report And Fee" );
 
         return existingliaReportAndFee;
     }

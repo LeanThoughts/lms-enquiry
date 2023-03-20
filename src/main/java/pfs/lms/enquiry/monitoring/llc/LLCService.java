@@ -4,10 +4,15 @@ package pfs.lms.enquiry.monitoring.llc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.appraisal.LoanAppraisal;
+import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
+import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
+import pfs.lms.enquiry.monitoring.service.impl.LoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import java.util.*;
 
@@ -20,6 +25,9 @@ public class LLCService implements ILLCService {
     private final LoanMonitorRepository loanMonitorRepository;
     private final LLCRepository LLCRepository;
     private final LLCReportAndFeeRepository LLCReportAndFeeRepository;
+    private final ILoanMonitoringService loanMonitoringService;
+    private final ILoanAppraisalService loanAppraisalService;
+    private final IChangeDocumentService changeDocumentService;
 
 
     
@@ -27,29 +35,13 @@ public class LLCService implements ILLCService {
     public LendersLegalCouncil saveLLC(LLCResource resource, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
+        LoanMonitor loanMonitor = loanMonitoringService.createLoanMonitor(loanApplication, username);
+        LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication, username);
 
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
-            loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
-
-            // Change Documents for Monitoring Header
-//            changeDocumentService.createChangeDocument(
-//                    loanMonitor.getId(), loanMonitor.getId().toString(), null,
-//                    loanApplication.getLoanContractId(),
-//                    null,
-//                    loanMonitor,
-//                    "Created",
-//                    username,
-//                    "Monitoring", "Header");
-
-        }
         LendersLegalCouncil lendersLegalCouncil = resource.getLendersLegalCouncil();
         lendersLegalCouncil.setSerialNumber(LLCRepository.findByLoanMonitor(loanMonitor).size() + 1);
         lendersLegalCouncil.setLoanMonitor(loanMonitor);
+        lendersLegalCouncil.setLoanAppraisal(loanAppraisal);
         lendersLegalCouncil.setAdvisor(resource.getLendersLegalCouncil().getAdvisor());
         lendersLegalCouncil.setBpCode(resource.getLendersLegalCouncil().getBpCode());
         lendersLegalCouncil.setName(resource.getLendersLegalCouncil().getName());
@@ -61,15 +53,20 @@ public class LLCService implements ILLCService {
         lendersLegalCouncil.setEmail(resource.getLendersLegalCouncil().getEmail());
         lendersLegalCouncil = LLCRepository.save(lendersLegalCouncil);
 
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(lendersLegalCouncil.getLoanMonitor(),
+                lendersLegalCouncil.getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LIE
-//        changeDocumentService.createChangeDocument(
-//                loanMonitor.getId(),lendersInsuranceAdvisor.getId(),null,
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanMonitor,
-//                "Created",
-//                username,
-//                "Monitoring" , "Lenders Independent Engineer" );
+            changeDocumentService.createChangeDocument(
+                    loanBusinessProcessObjectId,
+                    lendersLegalCouncil.getId(),
+                    null,
+                    loanApplication.getLoanContractId(),
+                    null,
+                    lendersLegalCouncil,
+                    "Created",
+                    username,
+                    resource.getModuleName() , "Lenders Legal Counsel" );
 
         return lendersLegalCouncil;
     }
@@ -80,7 +77,7 @@ public class LLCService implements ILLCService {
                 = LLCRepository.getOne(resource.getLendersLegalCouncil().getId());
 
         //Clone the LIE Object for Change Document
-        Object oldLendersIndependentEngineer = llc.clone();
+        Object oldLLC = llc.clone();
 
         llc.setAdvisor(resource.getLendersLegalCouncil().getAdvisor());
         llc.setBpCode(resource.getLendersLegalCouncil().getBpCode());
@@ -93,15 +90,20 @@ public class LLCService implements ILLCService {
         llc.setEmail(resource.getLendersLegalCouncil().getEmail());
         llc = LLCRepository.save(llc);
 
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(llc.getLoanMonitor(),
+                llc.getLoanAppraisal(),resource.getModuleName());
+
         //Create Change Document
-//        changeDocumentService.createChangeDocument(
-//                existingLendersIndependentEngineer.getLoanMonitor().getId(),existingLendersIndependentEngineer.getId(),null,
-//                existingLendersIndependentEngineer.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldLendersIndependentEngineer,
-//                existingLendersIndependentEngineer,
-//                "Updated",
-//                username,
-//                "Monitoring", "Lenders Independent Engineer" );
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                llc.getId(),
+                null,
+                llc.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldLLC,
+                llc,
+                "Updated",
+                username,
+                resource.getModuleName(), "Lenders Legal Counsel" );
 
         return llc;
     }
@@ -135,54 +137,63 @@ public class LLCService implements ILLCService {
         llcReportAndFee.setLendersLegalCouncil(lendersLegalCouncil);
         llcReportAndFee = LLCReportAndFeeRepository.save(llcReportAndFee);
 
-        // Create Change Document for LIE Report and Fee
-//        changeDocumentService.createChangeDocument(
-//                lendersInsuranceAdvisor.getLoanMonitor().getId(), liaReportAndFee.getId(),lendersInsuranceAdvisor.getId(),
-//                lendersInsuranceAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                liaReportAndFee,
-//                "Created",
-//                username,
-//                "Monitoring" , "LIE Report And Fee" );
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(llcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
+                llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal() ,resource.getModuleName());
+
+        // Create Change Document for LLC Report and Fee
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                llcReportAndFee.getId(),
+                llcReportAndFee.getId(),
+                llcReportAndFee.getLendersLegalCouncil().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                llcReportAndFee,
+                "Created",
+                username,
+                resource.getModuleName() , "LLC Report And Fee" );
 
         return llcReportAndFee;
     }
 
     @Override
     public LLCReportAndFee updateLLCReportAndFee(LLCReportAndFeeResource resource, String username) throws CloneNotSupportedException {
-        LLCReportAndFee existingliaReportAndFee
+        LLCReportAndFee existingllcReportAndFee
                 = LLCReportAndFeeRepository.getOne(resource.getLlcReportAndFee().getId());
 
-        Object oldLiaReportAndFee = existingliaReportAndFee.clone();
+        Object oldllcReportAndFee = existingllcReportAndFee.clone();
 
-        existingliaReportAndFee.setReportType(resource.getLlcReportAndFee().getReportType());
-        existingliaReportAndFee.setDateOfReceipt(resource.getLlcReportAndFee().getDateOfReceipt());
-        existingliaReportAndFee.setInvoiceDate(resource.getLlcReportAndFee().getInvoiceDate());
-        existingliaReportAndFee.setInvoiceNo(resource.getLlcReportAndFee().getInvoiceNo());
-        existingliaReportAndFee.setFeeAmount(resource.getLlcReportAndFee().getFeeAmount());
-        existingliaReportAndFee.setStatusOfFeeReceipt(resource.getLlcReportAndFee().getStatusOfFeeReceipt());
-        existingliaReportAndFee.setStatusOfFeePaid(resource.getLlcReportAndFee().getStatusOfFeePaid());
-        existingliaReportAndFee.setDocumentTitle(resource.getLlcReportAndFee().getDocumentTitle());
-        existingliaReportAndFee.setDocumentType(resource.getLlcReportAndFee().getDocumentType());
-        existingliaReportAndFee.setNextReportDate(resource.getLlcReportAndFee().getNextReportDate());
-        existingliaReportAndFee.setFileReference(resource.getLlcReportAndFee().getFileReference());
-        existingliaReportAndFee.setReportDate(resource.getLlcReportAndFee().getReportDate());
-        existingliaReportAndFee.setPercentageCompletion(resource.getLlcReportAndFee().getPercentageCompletion());
-        existingliaReportAndFee.setRemarks(resource.getLlcReportAndFee().getRemarks());
-        existingliaReportAndFee = LLCReportAndFeeRepository.save(existingliaReportAndFee);
+        existingllcReportAndFee.setReportType(resource.getLlcReportAndFee().getReportType());
+        existingllcReportAndFee.setDateOfReceipt(resource.getLlcReportAndFee().getDateOfReceipt());
+        existingllcReportAndFee.setInvoiceDate(resource.getLlcReportAndFee().getInvoiceDate());
+        existingllcReportAndFee.setInvoiceNo(resource.getLlcReportAndFee().getInvoiceNo());
+        existingllcReportAndFee.setFeeAmount(resource.getLlcReportAndFee().getFeeAmount());
+        existingllcReportAndFee.setStatusOfFeeReceipt(resource.getLlcReportAndFee().getStatusOfFeeReceipt());
+        existingllcReportAndFee.setStatusOfFeePaid(resource.getLlcReportAndFee().getStatusOfFeePaid());
+        existingllcReportAndFee.setDocumentTitle(resource.getLlcReportAndFee().getDocumentTitle());
+        existingllcReportAndFee.setDocumentType(resource.getLlcReportAndFee().getDocumentType());
+        existingllcReportAndFee.setNextReportDate(resource.getLlcReportAndFee().getNextReportDate());
+        existingllcReportAndFee.setFileReference(resource.getLlcReportAndFee().getFileReference());
+        existingllcReportAndFee.setReportDate(resource.getLlcReportAndFee().getReportDate());
+        existingllcReportAndFee.setPercentageCompletion(resource.getLlcReportAndFee().getPercentageCompletion());
+        existingllcReportAndFee.setRemarks(resource.getLlcReportAndFee().getRemarks());
+        existingllcReportAndFee = LLCReportAndFeeRepository.save(existingllcReportAndFee);
 
-        // Create Change Document for LIE Report And Fee
-//        changeDocumentService.createChangeDocument(
-//                existingliaReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getId(),
-//                existingliaReportAndFee.getId(),existingliaReportAndFee.getLendersIndependentEngineer().getId(),
-//                existingliaReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldLieReportAndFee,
-//                existingliaReportAndFee,
-//                "Updated",
-//                username,
-//                "Monitoring" , "LIE Report And Fee" );
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(existingllcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
+                existingllcReportAndFee.getLendersLegalCouncil().getLoanAppraisal(),  resource.getModuleName());
 
-        return existingliaReportAndFee;
+        // Create Change Document for LLC Report and Fee
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                existingllcReportAndFee.getId(),
+                existingllcReportAndFee.getId(),
+                existingllcReportAndFee.getLendersLegalCouncil().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                existingllcReportAndFee,
+                "Created",
+                username,
+                resource.getModuleName(), "LLC Report And Fee" );
+
+        return existingllcReportAndFee;
     }
 
     @Override
@@ -190,6 +201,7 @@ public class LLCService implements ILLCService {
         List<LLCReportAndFeeResource> llcReportAndFeeResources = new ArrayList<>();
         LendersLegalCouncil lendersLegalCouncil = LLCRepository.getOne(lendersInsuranceAdvisorId);
         //LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+
         if(lendersLegalCouncil != null) {
             List<LLCReportAndFee> llcReportAndFees
                     = LLCReportAndFeeRepository.findByLendersLegalCouncil(lendersLegalCouncil);

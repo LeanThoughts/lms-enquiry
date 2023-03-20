@@ -19,50 +19,66 @@ import java.text.ParseException;
  public class SAPTermsAndConditionsModificationResource implements Serializable {
 
     @JsonProperty(value = "d")
-    private SAPTermsAndConditionsModificationDetails sapTermsAndConditionsModificationDetails;
+    private SAPTermsAndConditionsModificationResourceDetails sapTermsAndConditionsModificationResourceDetails;
 
     public SAPTermsAndConditionsModificationResource() {
-        sapTermsAndConditionsModificationDetails = new SAPTermsAndConditionsModificationDetails();
+        sapTermsAndConditionsModificationResourceDetails = new SAPTermsAndConditionsModificationResourceDetails();
     }
 
-    public void setSAPTermsAndConditionsModificationDetails(SAPTermsAndConditionsModificationDetails sapTermsAndConditionsModificationDetails) {
-        this.sapTermsAndConditionsModificationDetails = sapTermsAndConditionsModificationDetails;
+    public void setSAPTermsAndConditionsModificationDetails(SAPTermsAndConditionsModificationResourceDetails sapTermsAndConditionsModificationResourceDetails) {
+        this.sapTermsAndConditionsModificationResourceDetails = sapTermsAndConditionsModificationResourceDetails;
     }
 
 
 
-    public SAPTermsAndConditionsModificationDetails mapToSAP(TermsAndConditionsModification termsAndConditionsModification) throws ParseException {
+    public SAPTermsAndConditionsModificationResourceDetails mapToSAP(TermsAndConditionsModification termsAndConditionsModification) throws ParseException {
 
         DataConversionUtility dataConversionUtility = new DataConversionUtility();
 
-        SAPTermsAndConditionsModificationDetails detailedResource = new SAPTermsAndConditionsModificationDetails();
+        SAPTermsAndConditionsModificationResourceDetails detailedResource = new SAPTermsAndConditionsModificationResourceDetails();
 
         detailedResource.setId(termsAndConditionsModification.getId());
         detailedResource.setMonitorId(termsAndConditionsModification.getLoanMonitor().getId().toString());
-        detailedResource.setSerialNo(termsAndConditionsModification.getSerialNumber());
+        detailedResource.setSerialNumber(termsAndConditionsModification.getSerialNumber());
 
         if (termsAndConditionsModification.getBorrowerRequestLetterDate() != null)
-             detailedResource.setBorrowerrequestletterdate(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getBorrowerRequestLetterDate()));
+             detailedResource.setBorrowerRequestLetterDate(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getBorrowerRequestLetterDate()));
         else
-            detailedResource.setBorrowerrequestletterdate(null);
+            detailedResource.setBorrowerRequestLetterDate(null);
 
         if(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter() != null) {
-            detailedResource.setDateofissueofamendedsanctionle(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
+            detailedResource.setDateOfIssueOfAmendedSanctionLetter(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
         } else
-            detailedResource.setDateofissueofamendedsanctionle(null);
+            detailedResource.setDateOfIssueOfAmendedSanctionLetter(null);
 
-        detailedResource.setDocumenttype(termsAndConditionsModification.getDocumentType());
+        detailedResource.setDocumentType(termsAndConditionsModification.getDocumentType());
         detailedResource.setDocumentTitle(termsAndConditionsModification.getDocumentTitle());
         detailedResource.setCommunication(termsAndConditionsModification.getCommunication());
         detailedResource.setRemarks(termsAndConditionsModification.getRemarks());
 
-        detailedResource.setAmendDocumentType(termsAndConditionsModification.getAmendedDocumentType().toString());
-        detailedResource.setAmendDocumentTitle(termsAndConditionsModification.getAmendedDocumentTitle());
+        //Amended Doc
+        detailedResource.setAmendedDocumentType(termsAndConditionsModification.getAmendedDocumentType().toString());
+        detailedResource.setAmendedDocumentTitle(termsAndConditionsModification.getAmendedDocumentTitle());
         detailedResource.setAmendedDocumentRemarks(termsAndConditionsModification.getAmendedDocumentRemarks());
         if(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter() != null) {
-            detailedResource.setAmendDocumentDate(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
+            detailedResource.setDateOfIssueOfAmendedDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
         } else
-            detailedResource.setAmendDocumentDate(null);
+            detailedResource.setDateOfIssueOfAmendedDocument(null);
+
+
+        // Internal Document
+        if(termsAndConditionsModification.getDateOfInternalDocument() != null) {
+            detailedResource.setDateOfInternalDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
+        } else
+            detailedResource.setDateOfInternalDocument(null);
+
+        detailedResource.setInternalDocumentRemarks(termsAndConditionsModification.getInternalDocumentRemarks());
+        detailedResource.setInternalDocumentTitle(termsAndConditionsModification.getInternalDocumentTitle());
+        detailedResource.setInternalDocumentType(termsAndConditionsModification.getInternalDocumentType());
+
+        //Lead Banker Document
+        detailedResource.setLeadBankerDocumentTitle(termsAndConditionsModification.getLeadBankerDocumentTitle());
+        detailedResource.setLeadBankerDocumentType(termsAndConditionsModification.getLeadBankerDocumentType());
 
 
         return detailedResource;

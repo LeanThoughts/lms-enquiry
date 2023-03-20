@@ -22,6 +22,8 @@ public class SAPLFAResourceDetails {
     @JsonProperty (value = "MonitorId")
     private String monitorId;
 
+    @JsonProperty (value = "AppraisalId")
+    private String appraisalId;
     @JsonProperty (value = "SerialNo")
     private Integer serialNumber;
 

@@ -8,6 +8,7 @@ import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
 import org.javers.core.diff.changetype.ValueChange;
+import org.jboss.jandex.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,8 @@ import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
+import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
+import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetail;
 import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
 import pfs.lms.enquiry.appraisal.riskrating.CorporateLoanRiskRating;
@@ -30,8 +33,12 @@ import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.domain.*;
 import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFee;
 import pfs.lms.enquiry.monitoring.lfa.LendersFinancialAdvisor;
+import pfs.lms.enquiry.monitoring.lia.LIAReportAndFee;
+import pfs.lms.enquiry.monitoring.lia.LendersInsuranceAdvisor;
 import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
 import pfs.lms.enquiry.monitoring.lie.LendersIndependentEngineer;
+import pfs.lms.enquiry.monitoring.llc.LLCReportAndFee;
+import pfs.lms.enquiry.monitoring.llc.LendersLegalCouncil;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
 import pfs.lms.enquiry.monitoring.projectmonitoring.ProjectMonitoringDataItemHistory;
@@ -380,6 +387,27 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", lieReportAndFee.getLendersIndependentEngineer().getSerialNumber().toString());
                     result.put("description", lieReportAndFee.getReportType() + lieReportAndFee.getDateOfReceipt());
                     return result;
+                case "LendersInsuranceAdvisor":
+                    LendersInsuranceAdvisor lendersInsuranceAdvisor = (LendersInsuranceAdvisor) object;
+                    result.put("id", lendersInsuranceAdvisor.getSerialNumber().toString());
+                    result.put("description", lendersInsuranceAdvisor.getName());
+                    return result;
+                case "LIAReportAndFee":
+                    LIAReportAndFee liaReportAndFee = (LIAReportAndFee) object;
+                    result.put("id", liaReportAndFee.getLendersInsuranceAdvisor().getSerialNumber().toString());
+                    result.put("description", liaReportAndFee.getReportType() + liaReportAndFee.getDateOfReceipt());
+                    return result;
+                case "LendersLegalCouncil":
+                    LendersLegalCouncil lendersLegalCouncil = (LendersLegalCouncil) object;
+                    result.put("id", lendersLegalCouncil.getSerialNumber().toString());
+                    result.put("description", lendersLegalCouncil.getName());
+                    return result;
+                case "LLCReportAndFee":
+                    LLCReportAndFee llcReportAndFee = (LLCReportAndFee) object;
+                    result.put("id", llcReportAndFee.getLendersLegalCouncil().getSerialNumber().toString());
+                    result.put("description", llcReportAndFee.getReportType() + llcReportAndFee.getDateOfReceipt());
+                    return result;
+
 
                 case "LendersFinancialAdvisor":
                     LendersFinancialAdvisor lendersFinancialAdvisor = (LendersFinancialAdvisor) object;
@@ -579,7 +607,16 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", termLoanRiskRating.getId().toString() );
                     result.put("description", termLoanRiskRating.getYear());
                     return result;
-
+                case "MainLocationDetail":
+                    MainLocationDetail mainLocationDetail = (MainLocationDetail) object;
+                    result.put("id", mainLocationDetail.getId().toString() );
+                    result.put("description", mainLocationDetail.getLocation());
+                    return result;
+                case "SubLocationDetail":
+                    SubLocationDetail subLocationDetail = (SubLocationDetail) object;
+                    result.put("id", subLocationDetail.getId().toString() );
+                    result.put("description", subLocationDetail.getLocation());
+                    return result;
 
 
             }

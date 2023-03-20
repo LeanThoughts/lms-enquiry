@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 /**
  * Created by gguptha on 09/11/18.
@@ -14,14 +13,14 @@ import org.joda.time.DateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class SAPLIEReportAndFeeResourceDetails {
+public class SAPLIAReportAndFeeResourceDetails {
 
 
 
     @JsonProperty (value = "Id")
     private String id;
 
-    @JsonProperty (value = "LieId")
+    @JsonProperty (value = "LfaId")
     private String lieId;
 
     @JsonProperty (value = "SerialNo")
@@ -30,7 +29,7 @@ public class SAPLIEReportAndFeeResourceDetails {
     @JsonProperty (value = "Reporttype")
     private String reporttype;
 
-    @JsonProperty (value = "Dateofreceipt")
+    @JsonProperty (value = "DateOfReceipt")
     private String dateofreceipt;
 
     @JsonProperty (value = "Invoicedate")
@@ -73,10 +72,9 @@ public class SAPLIEReportAndFeeResourceDetails {
     @JsonProperty (value = "Remarks")
     private String remarks;
 
-
     @Override
     public String toString() {
-        return "SAPLIEReportAndFeeResourceDetails{" +
+        return "SAPLIAReportAndFeeResourceDetails{" +
                 "id='" + id + '\'' +
                 ", lieId='" + lieId + '\'' +
                 ", serialNo=" + serialNo +
@@ -91,10 +89,10 @@ public class SAPLIEReportAndFeeResourceDetails {
                 ", feeamountraisedoncustomer='" + feeamountraisedoncustomer + '\'' +
                 ", statusoffeereceipt='" + statusoffeereceipt + '\'' +
                 ", documenttitle='" + documenttitle + '\'' +
-//                ", documentcontent='" + documentcontent + '\'' +
                 ", nextreportdate='" + nextreportdate + '\'' +
-//                ", fileName='" + fileName + '\'' +
-//                ", mimeType='" + mimeType + '\'' +
+                ", reportdate='" + reportdate + '\'' +
+                ", percentagecompletion='" + percentagecompletion + '\'' +
+                ", remarks='" + remarks + '\'' +
                 '}';
     }
 }

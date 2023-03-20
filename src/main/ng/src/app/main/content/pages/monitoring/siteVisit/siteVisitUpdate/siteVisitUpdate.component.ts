@@ -27,11 +27,11 @@ export class SiteVisitUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<SiteVisitUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -65,7 +65,7 @@ export class SiteVisitUpdateDialogComponent {
             file: ['']
         });
 
-        this._loanAppraisalService.getPartnersByRole('ZLMS024').subscribe(response => {
+        this._loanAppraisalService.getPartnersByRole('ZLM024').subscribe(response => {
             this.partners = response;
         });
         this._loanAppraisalService.getPartnersByRole('ZLM028').subscribe(response => {
@@ -77,7 +77,7 @@ export class SiteVisitUpdateDialogComponent {
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -93,13 +93,13 @@ export class SiteVisitUpdateDialogComponent {
         if (this.siteVisitUpdateForm.valid) {
             if (this.siteVisitUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.siteVisitUpdateForm.get('file').value);      
+                formData.append('file', this.siteVisitUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveSiteVisitDetails(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -112,7 +112,7 @@ export class SiteVisitUpdateDialogComponent {
 
     /**
      * saveSiteVisitDetails()
-     * @param fileReference 
+     * @param fileReference
      */
     saveSiteVisitDetails(fileReference: string): void {
         var siteVisit: SiteVisitModel = new SiteVisitModel(this.siteVisitUpdateForm.value);
@@ -156,10 +156,10 @@ export class SiteVisitUpdateDialogComponent {
             this._loanMonitoringService.updateSiteVisit(this.selectedSiteVisit).subscribe(() => {
                 this._matSnackBar.open('Site Visit details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
-            });            
+            });
         }
     }
-       
+
     /**
      * getFileURL()
      * @param fileReference

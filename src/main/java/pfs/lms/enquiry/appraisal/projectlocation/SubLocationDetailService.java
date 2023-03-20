@@ -67,16 +67,16 @@ public class SubLocationDetailService implements ISubLocationDetailService {
         subLocationDetail = subLocationDetailRepository.save(subLocationDetail);
 
         // Change Documents for Sub Location Details
-//        changeDocumentService.createChangeDocument(
-//                subLocationDetail.getLoanAppraisal().getId(),
-//                subLocationDetail.getId().toString(),
-//                subLocationDetail.getLoanAppraisal().getId().toString(),
-//                subLocationDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-//                null,
-//                subLocationDetail,
-//                "Created",
-//                username,
-//                "Appraisal", "Further Detail");
+        changeDocumentService.createChangeDocument(
+                subLocationDetail.getLoanAppraisal().getId(),
+                subLocationDetail.getId().toString(),
+                subLocationDetail.getLoanAppraisal().getId().toString(),
+                subLocationDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                subLocationDetail,
+                "Created",
+                username,
+                "Appraisal", "Sub Location Detail");
 
         return subLocationDetail;
     }
@@ -102,6 +102,17 @@ public class SubLocationDetailService implements ISubLocationDetailService {
         subLocationDetail.setRegion(subLocationDetailResource.getRegion());
         subLocationDetail.setState(subLocationDetailResource.getState());
         subLocationDetail = subLocationDetailRepository.save(subLocationDetail);
+
+        changeDocumentService.createChangeDocument(
+                subLocationDetail.getLoanAppraisal().getId(),
+                subLocationDetail.getId().toString(),
+                subLocationDetail.getLoanAppraisal().getId().toString(),
+                subLocationDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                subLocationDetail,
+                "Updated",
+                username,
+                "Appraisal", "Sub Location Detail");
 
         return subLocationDetail;
     }

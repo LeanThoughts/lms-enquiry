@@ -63,6 +63,15 @@ public class SAPLFAReportAndFeeResourceDetails {
     @JsonProperty (value = "Nextreportdate")
     private String nextreportdate;
 
+    @JsonProperty (value = "Reportdate")
+    private String reportdate;
+
+    @JsonProperty (value = "Percentagecompletion")
+    private String percentagecompletion;
+
+    @JsonProperty (value = "Remarks")
+    private String remarks;
+
     @Override
     public String toString() {
         return "SAPLFAReportAndFeeResourceDetails{" +

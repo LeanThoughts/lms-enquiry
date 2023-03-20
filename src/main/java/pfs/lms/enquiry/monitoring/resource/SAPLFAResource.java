@@ -45,6 +45,7 @@ public class SAPLFAResource implements Serializable   {
         detailsResource.setSerialNumber(lendersFinancialAdvisor.getSerialNumber());
         detailsResource.setBpCode(lendersFinancialAdvisor.getBpCode());
         detailsResource.setName(lendersFinancialAdvisor.getName());
+        detailsResource.setAppraisalId(lendersFinancialAdvisor.getLoanAppraisal().getId().toString());
 
         if (lendersFinancialAdvisor.getDateOfAppointment() != null)
             detailsResource.setDateOfAppointment(dataConversionUtility.convertDateToSAPFormat(lendersFinancialAdvisor.getDateOfAppointment()));

@@ -1,15 +1,15 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLLC()" [disabled]="!selectedLLC" 
-                *ngIf="_module === 'Monitoring'"> 
-            Display LLC Details 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLLC()" [disabled]="!selectedLLC"
+                *ngIf="_module === 'Monitoring'">
+            Display LLC Details
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLLC()" *ngIf="_module !== 'Monitoring'"> Add LLC </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLLC()" [disabled]="!selectedLLC" 
-                *ngIf="_module !== 'Monitoring'"> 
-            Modify LLC 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLLC()" [disabled]="!selectedLLC"
+                *ngIf="_module !== 'Monitoring'">
+            Modify LLC
         </button>
-    </div>  
+    </div>
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
 
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
@@ -18,7 +18,7 @@
             <ng-container matColumnDef="serialNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.serialNumber }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.serialNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -26,7 +26,7 @@
             <ng-container matColumnDef="advisor">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Advisor</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ getAdvisor(obj.lendersInsuranceAdvisor) }}</p>
+                    <p class="text-truncate">{{ getAdvisor(obj.lendersLegalCouncil) }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -34,7 +34,7 @@
             <ng-container matColumnDef="bpCode">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Bus. Partner Id</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.bpCode }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.bpCode }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -42,15 +42,15 @@
             <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Name</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.name }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.name }}</p>
                 </mat-cell>
             </ng-container>
-            
+
             <!-- dateOfAppointment Column -->
             <ng-container matColumnDef="dateOfAppointment">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Date Of Appointment</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.dateOfAppointment | date: 'dd/MM/yyyy' }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.dateOfAppointment | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -58,7 +58,7 @@
             <ng-container matColumnDef="contractPeriodFrom">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Contract Period - From</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contractPeriodFrom | date: 'dd/MM/yyyy' }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.contractPeriodFrom | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -66,7 +66,7 @@
             <ng-container matColumnDef="contractPeriodTo">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Contract Period - To</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contractPeriodTo | date: 'dd/MM/yyyy' }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.contractPeriodTo | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -74,7 +74,7 @@
             <ng-container matColumnDef="contactPerson">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Contact Person</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contactPerson }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.contactPerson }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -82,7 +82,7 @@
             <ng-container matColumnDef="contactNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Contact No</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.contactNumber }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.contactNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -90,14 +90,14 @@
             <ng-container matColumnDef="email">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Email</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.lendersInsuranceAdvisor.email }}</p>
+                    <p class="text-truncate">{{ obj.lendersLegalCouncil.email }}</p>
                 </mat-cell>
             </ng-container>
-            
+
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.lendersInsuranceAdvisor)"
-                [ngClass]="{'highlight':obj.lendersInsuranceAdvisor === selectedLLC}" [@animate]="{value:'*',params:{y:'100%'}}">
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.lendersLegalCouncil)"
+                [ngClass]="{'highlight':obj.lendersLegalCouncil === selectedLLC}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>

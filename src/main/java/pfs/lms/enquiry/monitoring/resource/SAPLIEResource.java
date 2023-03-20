@@ -44,6 +44,7 @@ public class SAPLIEResource implements Serializable   {
         detailsResource.setSerialNumber(lendersIndependentEngineer.getSerialNumber());
         detailsResource.setBpCode(lendersIndependentEngineer.getBpCode());
         detailsResource.setName(lendersIndependentEngineer.getName());
+        detailsResource.setAppraisalId(lendersIndependentEngineer.getLoanAppraisal().getId().toString());
 
         if (lendersIndependentEngineer.getDateOfAppointment() != null)
             detailsResource.setDateOfAppointment(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getDateOfAppointment()));

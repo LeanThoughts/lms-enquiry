@@ -3,6 +3,7 @@ package pfs.lms.enquiry.monitoring.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
@@ -102,7 +103,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 //    }
 
 
-    private LoanMonitor createLoanMonitor(LoanApplication loanApplication, String username) {
+    public LoanMonitor createLoanMonitor(LoanApplication loanApplication, String username) {
 
         LoanMonitor loanMonitor  = loanMonitorRepository.findByLoanApplication(loanApplication);
 
@@ -150,12 +151,17 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         lendersIndependentEngineer.setEmail(resource.getLendersIndependentEngineer().getEmail());
         lendersIndependentEngineer = lieRepository.save(lendersIndependentEngineer);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lendersIndependentEngineer.getLoanMonitor(),
+                lendersIndependentEngineer.getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LIE
         changeDocumentService.createChangeDocument(
-                loanMonitor.getId(),lendersIndependentEngineer.getId(),null,
+                loanBusinessProcessObjectId,
+                lendersIndependentEngineer.getId(),
+                null,
                 loanApplication.getLoanContractId(),
                 null,
-                loanMonitor,
+                lendersIndependentEngineer,
                 "Created",
                 username,
                 resource.getModuleName() , "Lenders Independent Engineer" );
@@ -183,9 +189,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingLendersIndependentEngineer.setEmail(resource.getLendersIndependentEngineer().getEmail());
         existingLendersIndependentEngineer = lieRepository.save(existingLendersIndependentEngineer);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existingLendersIndependentEngineer.getLoanMonitor(),
+                existingLendersIndependentEngineer.getLoanAppraisal(),resource.getModuleName());
+
         //Create Change Document
         changeDocumentService.createChangeDocument(
-                existingLendersIndependentEngineer.getLoanMonitor().getId(),existingLendersIndependentEngineer.getId(),null,
+                loanBusinessProcessObjectId,
+                existingLendersIndependentEngineer.getId(),
+                null,
                 existingLendersIndependentEngineer.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldLendersIndependentEngineer,
                 existingLendersIndependentEngineer,
@@ -230,9 +241,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         lieReportAndFee.setLendersIndependentEngineer(lendersIndependentEngineer);
         lieReportAndFee = lieReportAndFeeRepository.save(lieReportAndFee);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor(),
+                lieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LIE Report and Fee
         changeDocumentService.createChangeDocument(
-                lendersIndependentEngineer.getLoanMonitor().getId(), lieReportAndFee.getId(),lendersIndependentEngineer.getId(),
+                loanBusinessProcessObjectId,
+                lieReportAndFee.getId(),
+                lendersIndependentEngineer.getId(),
                 lendersIndependentEngineer.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 lieReportAndFee,
@@ -269,9 +285,12 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         existinglieReportAndFee = lieReportAndFeeRepository.save(existinglieReportAndFee);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existinglieReportAndFee.getLendersIndependentEngineer().getLoanMonitor(),
+                existinglieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LIE Report And Fee
         changeDocumentService.createChangeDocument(
-                existinglieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getId(),
+                loanBusinessProcessObjectId,
                 existinglieReportAndFee.getId(),existinglieReportAndFee.getLendersIndependentEngineer().getId(),
                 existinglieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldLieReportAndFee,
@@ -333,9 +352,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         lendersFinancialAdvisor.setEmail(resource.getLendersFinancialAdvisor().getEmail());
         lendersFinancialAdvisor = lfaRepository.save(lendersFinancialAdvisor);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lendersFinancialAdvisor.getLoanMonitor(),
+                lendersFinancialAdvisor.getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LFA
         changeDocumentService.createChangeDocument(
-                lendersFinancialAdvisor.getLoanMonitor().getId(),lendersFinancialAdvisor.getId(),null,
+                loanBusinessProcessObjectId,
+                lendersFinancialAdvisor.getId(),
+                null,
                 lendersFinancialAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 lendersFinancialAdvisor,
@@ -356,7 +380,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         //Clone Object for Change Document
         Object oldLendersFinancialAdvisor = existingLendersFinancialAdvisor.clone();
 
-                existingLendersFinancialAdvisor.setBpCode(resource.getLendersFinancialAdvisor().getBpCode());
+        existingLendersFinancialAdvisor.setBpCode(resource.getLendersFinancialAdvisor().getBpCode());
         existingLendersFinancialAdvisor.setName(resource.getLendersFinancialAdvisor().getName());
         existingLendersFinancialAdvisor.setDateOfAppointment(resource.getLendersFinancialAdvisor().getDateOfAppointment());
         existingLendersFinancialAdvisor.setContractPeriodFrom(resource.getLendersFinancialAdvisor().getContractPeriodFrom());
@@ -366,9 +390,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingLendersFinancialAdvisor.setEmail(resource.getLendersFinancialAdvisor().getEmail());
         existingLendersFinancialAdvisor = lfaRepository.save(existingLendersFinancialAdvisor);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existingLendersFinancialAdvisor.getLoanMonitor(),
+                existingLendersFinancialAdvisor.getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LFA
         changeDocumentService.createChangeDocument(
-                existingLendersFinancialAdvisor.getLoanMonitor().getId(),existingLendersFinancialAdvisor.getId(),null,
+                loanBusinessProcessObjectId,
+                existingLendersFinancialAdvisor.getId(),
+                null,
                 existingLendersFinancialAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldLendersFinancialAdvisor,
                 existingLendersFinancialAdvisor,
@@ -410,9 +439,15 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         lfaReportAndFee.setLendersFinancialAdvisor(lendersFinancialAdvisor);
         lfaReportAndFee = lfaReportAndFeeRepository.save(lfaReportAndFee);
 
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
+                lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LFA Report and Fee
         changeDocumentService.createChangeDocument(
-                lendersFinancialAdvisor.getLoanMonitor().getId(),lfaReportAndFee.getId(),lendersFinancialAdvisor.getId(),
+                loanBusinessProcessObjectId,
+                lfaReportAndFee.getId(),
+                lendersFinancialAdvisor.getId(),
                 lendersFinancialAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 lfaReportAndFee,
@@ -452,10 +487,15 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existinglfaReportAndFee.setRemarks(resource.getLfaReportAndFee().getRemarks());
         existinglfaReportAndFee = lfaReportAndFeeRepository.save(existinglfaReportAndFee);
 
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existinglfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
+                existinglfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),resource.getModuleName());
+
         // Create Change Document for LFA Report and Fee
         changeDocumentService.createChangeDocument(
-                existinglfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getId(),
-                existinglfaReportAndFee.getId(),existinglfaReportAndFee.getLendersFinancialAdvisor().getId(),
+                loanBusinessProcessObjectId,
+                existinglfaReportAndFee.getId(),
+                existinglfaReportAndFee.getLendersFinancialAdvisor().getId(),
                 existinglfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldLFAReportAndFee,
                 existinglfaReportAndFee,
@@ -519,9 +559,15 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         trustRetentionAccount.setPfsAuthorisedPersonBPCode(resource.getTrustRetentionAccount().getPfsAuthorisedPersonBPCode());
         trustRetentionAccount = traRepository.save(trustRetentionAccount);
 
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(trustRetentionAccount.getLoanMonitor(),
+                trustRetentionAccount.getLoanAppraisal(),resource.getModuleName());
+
         // Change Documents for TRA
         changeDocumentService.createChangeDocument(
-                loanMonitor.getId(),trustRetentionAccount.getId(),null,
+                loanBusinessProcessObjectId,
+                trustRetentionAccount.getId(),
+                null,
                 loanApplication.getLoanContractId(),
                 null,
                 trustRetentionAccount,
@@ -556,9 +602,15 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingTrustRetentionAccount.setPfsAuthorisedPersonBPCode(resource.getTrustRetentionAccount().getPfsAuthorisedPersonBPCode());
         existingTrustRetentionAccount = traRepository.save(existingTrustRetentionAccount);
 
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existingTrustRetentionAccount.getLoanMonitor(),
+                existingTrustRetentionAccount.getLoanAppraisal(),resource.getModuleName());
+
         // Change Documents for TRA A/c
         changeDocumentService.createChangeDocument(
-                existingTrustRetentionAccount.getLoanMonitor().getId(), existingTrustRetentionAccount.getId(),null,
+                loanBusinessProcessObjectId,
+                existingTrustRetentionAccount.getId(),
+                null,
                 existingTrustRetentionAccount.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldTRARetentionAccount,
                 existingTrustRetentionAccount,
@@ -600,9 +652,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         trustRetentionAccountStatement.setTrustRetentionAccount(trustRetentionAccount);
         trustRetentionAccountStatement = traStatementRepository.save(trustRetentionAccountStatement);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(trustRetentionAccountStatement.getTrustRetentionAccount().getLoanMonitor(),
+                trustRetentionAccountStatement.getTrustRetentionAccount().getLoanAppraisal(),resource.getModuleName());
+
         // Change Documents for TRA A/c Stmt
         changeDocumentService.createChangeDocument(
-                trustRetentionAccount.getLoanMonitor().getId(), trustRetentionAccountStatement.getId(),null,
+                loanBusinessProcessObjectId,
+                trustRetentionAccountStatement.getId(),
+                null,
                 trustRetentionAccount.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 trustRetentionAccountStatement,
@@ -631,10 +688,12 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingTrustRetentionAccountStatement.setFileReference(resource.getTrustRetentionAccountStatement().getFileReference());
         existingTrustRetentionAccountStatement = traStatementRepository.save(existingTrustRetentionAccountStatement);
 
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existingTrustRetentionAccountStatement.getTrustRetentionAccount().getLoanMonitor(),
+                existingTrustRetentionAccountStatement.getTrustRetentionAccount().getLoanAppraisal(),resource.getModuleName());
 
         // Change Documents for TRA A/c Stmt
         changeDocumentService.createChangeDocument(
-                existingTrustRetentionAccountStatement.getTrustRetentionAccount().getLoanMonitor().getId(),
+                loanBusinessProcessObjectId,
                 existingTrustRetentionAccountStatement.getId(),existingTrustRetentionAccountStatement.getTrustRetentionAccount().getId(),
                 existingTrustRetentionAccountStatement.getTrustRetentionAccount().getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldTRAAccountStatement,
@@ -954,60 +1013,58 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Override
     public SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username) throws CloneNotSupportedException {
 
-//        boolean createChangeDocument = false;
-//
-//        if (resource.getSiteVisit().getId().length() == 0)
-//            createChangeDocument = true;
-
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         SiteVisit siteVisit = resource.getSiteVisit();
         siteVisit.setLoanApplication(loanApplication);
 
-        LoanMonitor loanMonitor = null;
-        LoanAppraisal loanAppraisal = null; //new LoanAppraisal();
+        LoanMonitor loanMonitor = this.createLoanMonitor(loanApplication,username);
+        LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication,username);
 
-        if (app.equals("monitoring")) {
-            loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-            if (loanMonitor == null) {
-                loanMonitor = new LoanMonitor();
-                loanMonitor.setLoanApplication(loanApplication);
-                loanMonitor = loanMonitorRepository.save(loanMonitor);
-                siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
-                // Change Documents for Monitoring Header
-                changeDocumentService.createChangeDocument(
-                        loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
-                        loanApplication.getLoanContractId(),
-                        null,
-                        loanMonitor,
-                        "Created",
-                        username,
-                        "Monitoring", "Header");
-             }
-            else
-                siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
-        }
-        else if (app.equals("appraisal"))
-        {
-            Optional<LoanAppraisal> loanAppraisalOptional = loanAppraisalRepository.findByLoanApplication(loanApplication);
-            if (loanAppraisalOptional != null) {
-                loanAppraisal = loanAppraisalOptional.get();
-            } else {
-                loanAppraisal = new LoanAppraisal();
-                loanAppraisal.setLoanApplication(loanApplication);
-                loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
-                // Change Documents for Monitoring Header
-                changeDocumentService.createChangeDocument(
-                        loanAppraisal.getId(), loanAppraisal.getId().toString(), loanAppraisal.getId().toString(),
-                        loanApplication.getLoanContractId(),
-                        null,
-                        loanAppraisal,
-                        "Created",
-                        username,
-                        "Appraisal", "Header");
-            }
+//        if (app.equals("monitoring")) {
+//            loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+//            if (loanMonitor == null) {
+//                loanMonitor = new LoanMonitor();
+//                loanMonitor.setLoanApplication(loanApplication);
+//                loanMonitor = loanMonitorRepository.save(loanMonitor);
+//                siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
+//                // Change Documents for Monitoring Header
+//                changeDocumentService.createChangeDocument(
+//                        loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
+//                        loanApplication.getLoanContractId(),
+//                        null,
+//                        loanMonitor,
+//                        "Created",
+//                        username,
+//                        "Monitoring", "Header");
+//             }
+//            else
+//                siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
+//        }
+//        else if (app.equals("appraisal"))
+//        {
+//            Optional<LoanAppraisal> loanAppraisalOptional = loanAppraisalRepository.findByLoanApplication(loanApplication);
+//            if (loanAppraisalOptional != null) {
+//                loanAppraisal = loanAppraisalOptional.get();
+//            } else {
+//                loanAppraisal = new LoanAppraisal();
+//                loanAppraisal.setLoanApplication(loanApplication);
+//                loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
+//                // Change Documents for Monitoring Header
+//                changeDocumentService.createChangeDocument(
+//                        loanAppraisal.getId(), loanAppraisal.getId().toString(), loanAppraisal.getId().toString(),
+//                        loanApplication.getLoanContractId(),
+//                        null,
+//                        loanAppraisal,
+//                        "Created",
+//                        username,
+//                        "Appraisal", "Header");
+//            }
+//
+//            siteVisit.setLoanAppraisalId(loanAppraisal.getId().toString());
+//        }
 
-            siteVisit.setLoanAppraisalId(loanAppraisal.getId().toString());
-        }
+        siteVisit.setLoanMonitoringId(loanMonitor.getId().toString());
+        siteVisit.setLoanAppraisalId(loanAppraisal.getId().toString());
 
         Object oldSiteVisit = new SiteVisit();
         if (resource.getSiteVisit().getId().length() > 0) {
@@ -1036,9 +1093,11 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         // Change Documents for Site Visit
 
-            if (app == "monitoring") {
+            if (app.equals("monitoring")) {
                 changeDocumentService.createChangeDocument(
-                        loanMonitor.getId(), siteVisit.getId().toString(), loanAppraisal.getId().toString(),
+                        loanMonitor.getId(),
+                        siteVisit.getId().toString(),
+                        loanMonitor.getId().toString(),
                         loanApplication.getLoanContractId(),
                         null,
                         siteVisit,
@@ -1047,7 +1106,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                         "Monitoring", "Site Visit");
             } else {
                 changeDocumentService.createChangeDocument(
-                        loanAppraisal.getId(), siteVisit.getId().toString(), loanAppraisal.getId().toString(),
+                        loanAppraisal.getId(),
+                        siteVisit.getId().toString(),
+                        loanAppraisal.getId().toString(),
                         loanApplication.getLoanContractId(),
                         null,
                         siteVisit,
@@ -1700,5 +1761,17 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         LoanApplication  loanApplication =  loanApplicationRepository.getOne(loanContractId);
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
         return loanMonitor;
+    }
+
+    public UUID getLoanBusinessProcessObjectId (LoanMonitor loanMonitor, LoanAppraisal loanAppraisal, String moduleName) {
+
+        switch (moduleName){
+            case  "Appraisal":
+                return loanAppraisal.getId();
+            case "Monitoring":
+                return loanMonitor.getId();
+        }
+        return null;
+
     }
 }

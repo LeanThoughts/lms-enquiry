@@ -20,6 +20,7 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
+    // Borrower Request letter
     private Integer serialNumber;
     private String documentType;
     private String documentTitle;
@@ -30,6 +31,11 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String reasonsForAmendment;
     private String fileReference;
 
+    // LeadBanker Document Type
+    private String leadBankerDocumentType;
+    private String leadBankerDocumentTitle;
+    private String leadBankerDocumentFileReference;
+
     //Amended Document Details
     private String amendedDocumentType;
     private LocalDate dateOfIssueOfAmendedDocument;
@@ -37,10 +43,7 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String amendedDocumentTitle;
     private String amendedDocumentFileReference;
 
-    private String leadBankerDocumentType;
-    private String leadBankerDocumentTitle;
-    private String leadBankerDocumentFileReference;
-
+    // Internal Document Type
     private String internalDocumentType;
     private LocalDate dateOfInternalDocument;
     private String internalDocumentTitle;
