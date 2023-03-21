@@ -58,7 +58,9 @@ public class SAPLFAReportAndFeeResource implements Serializable   {
             detailsResource.setInvoicedate(null);
 
         detailsResource.setInvoiceno(lfaReportAndFee.getInvoiceNo());
+        if (lfaReportAndFee.getFeeAmount() != null)
         detailsResource.setFeeamount(lfaReportAndFee.getFeeAmount().toString());
+
         detailsResource.setStatusoffeepaid(lfaReportAndFee.getStatusOfFeePaid());
 
         if  (lfaReportAndFee.getReportDate() != null)

@@ -58,7 +58,9 @@ public class SAPLLCReportAndFeeResource implements Serializable   {
             detailsResource.setInvoicedate(null);
 
         detailsResource.setInvoiceno(llcReportAndFee.getInvoiceNo());
+        if (llcReportAndFee.getFeeAmount() != null)
         detailsResource.setFeeamount(llcReportAndFee.getFeeAmount().toString());
+
         detailsResource.setStatusoffeepaid(llcReportAndFee.getStatusOfFeePaid());
 
         if  (llcReportAndFee.getReportDate() != null)
@@ -66,6 +68,8 @@ public class SAPLLCReportAndFeeResource implements Serializable   {
         else
             detailsResource.setReportdate(null);
         detailsResource.setRemarks(llcReportAndFee.getRemarks());
+
+        if(llcReportAndFee.getPercentageCompletion() != null)
         detailsResource.setRemarks(llcReportAndFee.getPercentageCompletion().toString());
 
  //                Sapfiinvoicedate

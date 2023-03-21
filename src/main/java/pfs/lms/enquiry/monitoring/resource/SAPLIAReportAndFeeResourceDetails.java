@@ -17,11 +17,11 @@ public class SAPLIAReportAndFeeResourceDetails {
 
 
 
-    @JsonProperty (value = "Id")
-    private String id;
+    @JsonProperty (value = "LiaRptFeeId")
+    private String liaRptFeeId;
 
-    @JsonProperty (value = "LfaId")
-    private String lieId;
+    @JsonProperty (value = "LiaId")
+    private String liaId;
 
     @JsonProperty (value = "SerialNo")
     private Integer serialNo;
@@ -29,7 +29,7 @@ public class SAPLIAReportAndFeeResourceDetails {
     @JsonProperty (value = "Reporttype")
     private String reporttype;
 
-    @JsonProperty (value = "DateOfReceipt")
+    @JsonProperty (value = "Dateofreceipt")
     private String dateofreceipt;
 
     @JsonProperty (value = "Invoicedate")
@@ -75,8 +75,8 @@ public class SAPLIAReportAndFeeResourceDetails {
     @Override
     public String toString() {
         return "SAPLIAReportAndFeeResourceDetails{" +
-                "id='" + id + '\'' +
-                ", lieId='" + lieId + '\'' +
+                "liaRptFeeId='" + liaRptFeeId + '\'' +
+                ", liaId='" + liaId + '\'' +
                 ", serialNo=" + serialNo +
                 ", reporttype='" + reporttype + '\'' +
                 ", dateofreceipt='" + dateofreceipt + '\'' +

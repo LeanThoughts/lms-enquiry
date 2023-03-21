@@ -42,10 +42,10 @@ public class SAPLIAReportAndFeeResource implements Serializable   {
 
        SAPLIAReportAndFeeResourceDetails detailsResource= new SAPLIAReportAndFeeResourceDetails();
 
-        detailsResource.setId(liaReportAndFee.getId());
+        detailsResource.setLiaRptFeeId(liaReportAndFee.getId());
         detailsResource.setSerialNo(liaReportAndFee.getSerialNumber());
         detailsResource.setReporttype(liaReportAndFee.getReportType());
-        detailsResource.setLieId(liaReportAndFee.getLendersInsuranceAdvisor().getId());
+        detailsResource.setLiaId(liaReportAndFee.getLendersInsuranceAdvisor().getId());
 
         if (liaReportAndFee.getDateOfReceipt() != null)
             detailsResource.setDateofreceipt(dataConversionUtility.convertDateToSAPFormat(liaReportAndFee.getDateOfReceipt()));
@@ -66,6 +66,7 @@ public class SAPLIAReportAndFeeResource implements Serializable   {
         else
             detailsResource.setReportdate(null);
         detailsResource.setRemarks(liaReportAndFee.getRemarks());
+        if (liaReportAndFee.getPercentageCompletion() != null)
         detailsResource.setRemarks(liaReportAndFee.getPercentageCompletion().toString());
 
  //                Sapfiinvoicedate

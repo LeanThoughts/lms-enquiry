@@ -16,7 +16,7 @@ import lombok.Setter;
 public class SAPLIAResourceDetails {
 
 
-    @JsonProperty (value = "LfaId")
+    @JsonProperty (value = "LiaId")
     private String id;
 
     @JsonProperty (value = "MonitorId")

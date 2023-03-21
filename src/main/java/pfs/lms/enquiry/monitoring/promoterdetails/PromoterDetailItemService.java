@@ -26,7 +26,9 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
                 resource.getPaidupCapitalEquitySanction(),
                 resource.getPaidupCapitalEquityCurrent(),
                 resource.getEquityLinkInstrumentSanction(),
-                resource.getEquityLinkInstrumentCurrent()
+                resource.getEquityLinkInstrumentCurrent(),
+                resource.getDateOfChange(),
+                resource.getGroupExposure()
         );
         promoterDetailItem = promoterDetailItemRepository.save(promoterDetailItem);
 

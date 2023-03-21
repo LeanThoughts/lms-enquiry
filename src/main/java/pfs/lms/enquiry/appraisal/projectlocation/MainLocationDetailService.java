@@ -80,7 +80,7 @@ public class MainLocationDetailService implements IMainLocationDetailService {
                     mainLocationDetail,
                     "Created",
                     username,
-                    "Appraisal", "Main Location");
+                    "Appraisal", "Main Location Detail");
 
         } else {
             // Change Documents for Main Location Details
@@ -93,7 +93,7 @@ public class MainLocationDetailService implements IMainLocationDetailService {
                     mainLocationDetail,
                     "Updated",
                     username,
-                    "Appraisal", "Main Location");
+                    "Appraisal", "Main Location Detail");
 
         }
         return mainLocationDetail;
