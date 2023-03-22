@@ -8,6 +8,31 @@ export class LoanMonitoringConstants {
         {code: "Mail" , value:"Mail"},
     ]
 
+    // assetClasses
+    public static assetClasses = [
+        {code: "1" , value:"Standard"},
+        {code: "2" , value:"Standard-Restructured"},
+        {code: "3" , value:"Substandard"},
+        {code: "4" , value:"NPA"},
+        {code: "5" , value:"Doubtful 1"},
+        {code: "6" , value:"Doubtful 2"},
+        {code: "7" , value:"Doubtful 3"}
+    ]
+    
+    // smaCategories
+    public static smaCategories = [
+        {code: "1" , value:"SMA 1"},
+        {code: "2" , value:"SMA 2"}
+    ]
+    
+    // restructuringTypes
+    public static restructuringTypes = [
+        {code: "1" , value:""},
+        {code: "2" , value:"CDR"},
+        {code: "3" , value:"Flexible"},
+        {code: "4" , value:"SDR"},
+    ]
+    
     // siteVisitTypes
     public static siteVisitTypes = [
         {code: "Site Visit" , value:"Site Visit"},

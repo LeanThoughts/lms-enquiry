@@ -1,10 +1,10 @@
-<div class="content">
+<div class="content mt-16">
     <div class="content-card mat-white-bg mat-elevation-z4 p-16" fusePerfectScrollbar style="width: 100%">
         <form [formGroup]="npaUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="Asset Class" formControlName="assetClass" required>
-                        <mat-option *ngFor="let obj of documentTypes" [value]="obj.code">
+                        <mat-option *ngFor="let obj of assetClasses" [value]="obj.code">
                             {{ obj.value }}
                         </mat-option>
                     </mat-select>
@@ -28,7 +28,7 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="Restructuing Type" formControlName="restructuringType" required>
-                        <mat-option *ngFor="let obj of documentTypes" [value]="obj.code">
+                        <mat-option *ngFor="let obj of restructuringTypes" [value]="obj.code">
                             {{ obj.value }}
                         </mat-option>
                     </mat-select>
@@ -38,7 +38,7 @@
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="SMA Category" formControlName="smaCategory" required>
-                        <mat-option *ngFor="let obj of documentTypes" [value]="obj.code">
+                        <mat-option *ngFor="let obj of smaCategories" [value]="obj.code">
                             {{ obj.value }}
                         </mat-option>
                     </mat-select>
@@ -66,4 +66,75 @@
             </div>
         </form>
     </div>
+</div>
+
+<div class="toolbar" fxLayout="row" class="mt-16">
+    <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateNPADetails('addNPADetails')" 
+            [disabled]="selectedNPA === null"> 
+        Add New NPA Detail
+    </button>
+    <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateNPADetails('updateNPADetails')" 
+            [disabled]="!selectedNPADetail"> 
+        Modify NPA Detail
+    </button>
+</div>
+
+<div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+    <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+        
+        <!-- loanNumber Column -->
+        <ng-container matColumnDef="loanNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Loan No.</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.loanNumber }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- lineItemNumber Column -->
+        <ng-container matColumnDef="lineItemNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Line Item #</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.lineItemNumber }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- npaAssetClass Column -->
+        <ng-container matColumnDef="npaAssetClass">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Asset Class</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.npaAssetClass }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- assetClassificationChangeDate Column -->
+        <ng-container matColumnDef="assetClassificationChangeDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Change Date</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.assetClassificationChangeDate }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- provisionDate Column -->
+        <ng-container matColumnDef="provisionDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Provision Date</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.provisionDate }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- absoluteValue Column -->
+        <ng-container matColumnDef="absoluteValue">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Equity Link Instrument (Current)</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.absoluteValue | number: '1.2-2' }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        
+        <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+            [ngClass]="{'highlight':obj === selectedNPADetail}" [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+
+    </mat-table>
 </div>

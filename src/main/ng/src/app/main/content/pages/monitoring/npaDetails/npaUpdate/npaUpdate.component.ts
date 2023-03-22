@@ -1,11 +1,12 @@
-import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
+import { NPADetailUpdateDialogComponent } from '../npaDetailsUpdate/npaDetailsUpdate.component';
 
 @Component({
     selector: 'fuse-npa-update-component',
@@ -16,11 +17,23 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
 })
 export class NPAUpdateComponent implements OnInit {
 
-    documentTypes = LoanMonitoringConstants.siteVisitDocumentTypes;
+    assetClasses = LoanMonitoringConstants.assetClasses;
+    restructuringTypes = LoanMonitoringConstants.restructuringTypes;
+    smaCategories = LoanMonitoringConstants.smaCategories;
+
     selectedNPA: any = {};
+    selectedNPADetail: any;
+
     npaUpdateForm: FormGroup;
 
     loanApplicationId = '';
+
+    dataSource: MatTableDataSource<any>;
+    @ViewChild(MatSort) sort: MatSort;
+
+    displayedColumns = [
+        'loanNumber', 'lineItemNumber', 'npaAssetClass', 'assetClassificationChangeDate','provisionDate', 'absoluteValue'
+    ];
 
     /**
      * constructor()
@@ -31,13 +44,15 @@ export class NPAUpdateComponent implements OnInit {
      * @param _matSnackBar 
      */
     constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService, 
-        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar) {
+        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _matDialog: MatDialog) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
         this.selectedNPA.id = '';
-        _loanMonitoringService.getNPADetails(this.loanApplicationId).subscribe(data => {
+        _loanMonitoringService.getNPA(this.loanApplicationId).subscribe(data => {
+
             this.selectedNPA = data;
+
             this.npaUpdateForm = this._formBuilder.group({
                 assetClass: [this.selectedNPA.assetClass || ''],
                 npaDeclarationDate: [this.selectedNPA.npaDeclarationDate || ''],
@@ -49,6 +64,11 @@ export class NPAUpdateComponent implements OnInit {
                 fraudDate: [this.selectedNPA.fraudDate || ''],
                 impairmentReserve: [this.selectedNPA.impairmentReserve || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
                 provisionAmount: [this.selectedNPA.provisionAmount || '', [Validators.pattern(MonitoringRegEx.genericAmount)]]
+            });
+
+            _loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
+                this.dataSource = new MatTableDataSource(data);
+                this.dataSource.sort = this.sort;
             });
         });
     }
@@ -69,6 +89,13 @@ export class NPAUpdateComponent implements OnInit {
             impairmentReserve: [this.selectedNPA.impairmentReserve || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
             provisionAmount: [this.selectedNPA.provisionAmount || '', [Validators.pattern(MonitoringRegEx.genericAmount)]]
         });
+    }
+
+    /**
+     * onSelect()
+     */
+    onSelect(selectedNPADetail: any): void {
+        this.selectedNPADetail = selectedNPADetail;
     }
 
     /**
@@ -103,5 +130,35 @@ export class NPAUpdateComponent implements OnInit {
                 this.selectedNPA = data;
             });
         }
+    }
+
+    /**
+     * updateNPADetails()
+     */
+    updateNPADetails(operation: string): void {
+        // Open the dialog.
+        var data = {
+            'operation': operation,
+            'npaId': this.selectedNPA.id,
+            'selectedNPADetail': undefined
+        };
+        if (operation === 'updateNPADetails') {
+            data.selectedNPADetail = this.selectedNPADetail;
+        }
+        const dialogRef = this._matDialog.open(NPADetailUpdateDialogComponent, {
+            panelClass: 'fuse-npa-detail-update-dialog',
+            width: '850px',
+            data: data
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => { 
+            if (result.refresh) {
+                this._loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
+                    this.dataSource = new MatTableDataSource(data);
+                    this.dataSource.sort = this.sort;
+                });
+    
+            }
+        });   
     }
 }

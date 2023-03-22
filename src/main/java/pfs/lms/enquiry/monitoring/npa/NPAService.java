@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
-import pfs.lms.enquiry.monitoring.promoterdetails.IPromoterDetailItemService;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetailRepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.impl.ChangeDocumentService;
@@ -24,8 +22,6 @@ public class NPAService implements INPAService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanMonitorRepository loanMonitorRepository;
     private final ChangeDocumentService changeDocumentService;
-    private final PromoterDetailRepository promoterDetailRepository;
-    private final IPromoterDetailItemService promoterDetailItemService;
 
     @Override
     public NPA saveNPA(NPAResource resource, String username) {

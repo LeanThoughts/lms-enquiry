@@ -368,7 +368,7 @@ export class LoanMonitoringService implements Resolve<any> {
 
     // All about NPA
 
-    public getNPADetails(loanApplicationId: string): Observable<any> {
+    public getNPA(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/nPAs/loanApplication/' + loanApplicationId);
     }
 
@@ -380,6 +380,22 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateNPA(npa: any): Observable<any> {
         const url = "enquiry/api/nPAs/" + npa.id;
         return this._http.put(url, { 'loanApplicationId':'', 'npa':npa });
+    }
+
+    // All about NPA Details
+
+    public getNPADetails(npaId: string): Observable<any> {
+        return this._http.get('enquiry/api/nPADetails/npaId/' + npaId);
+    }
+
+    public saveNPADetails(npaId: any, npaDetail: any): Observable<any> {
+        const url = "enquiry/api/nPADetails/create";
+        return this._http.post(url, { 'npaId':npaId, 'npaDetail':npaDetail });
+    }
+
+    public updateNPADetails(npaId: string, npaDetail: any): Observable<any> {
+        const url = "enquiry/api/nPADetails/update";
+        return this._http.put(url, { 'npaId':npaId, 'npaDetail':npaDetail });
     }
 
     // All about Operating Parameters 

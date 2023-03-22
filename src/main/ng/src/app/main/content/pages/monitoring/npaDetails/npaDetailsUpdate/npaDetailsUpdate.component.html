@@ -1,0 +1,97 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close({ 'refresh': false })" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 420px;">
+        <form [formGroup]="npaDetailUpdateForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Line Item Number" formControlName="lineItemNumber" maxlength="50" readonly>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="34">
+                    <mat-select placeholder="NPA Asset Class" formControlName="npaAssetClass" required>
+                        <mat-option *ngFor="let obj of assetClasses" [value]="obj.code">
+                            {{ obj.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+
+                <mat-form-field fxFlex="33">
+                    <input matInput [matDatepicker]="picker1" placeholder="Asset Classification Change Date" 
+                            formControlName="assetClassificationChangeDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker> 
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput [matDatepicker]="picker2" placeholder="Provision Date" formControlName="provisionDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Percentage Secured" formControlName="percentageSecured" maxlength="5">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Percentage Unsecured" formControlName="percentageUnsecured" maxlength="5">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Absolute Value" formControlName="absoluteValue" maxlength="12">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Loan Asset Value" formControlName="loanAssetValue" maxlength="12">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Secured Loan Asset" formControlName="securedLoanAsset" maxlength="12">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Unsecured Loan Asset" formControlName="unsecuredLoanAsset" maxlength="12">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="NPA Provision Value" formControlName="npaProvisionValue" maxlength="12">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Net Asset Value" formControlName="netAssetValue" maxlength="12">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Loan Number" formControlName="loanNumber" maxlength="20">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="50">
+                </mat-form-field>
+            </div>
+    
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({ 'refresh': false })">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
