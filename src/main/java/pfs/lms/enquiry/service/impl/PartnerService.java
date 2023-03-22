@@ -347,6 +347,11 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
+    public List<Partner> getValuers() {
+        return this.getPartnersByRole("ZLM039");
+    }
+
+    @Override
     public List<Partner> getLendersFinancialAdvisors() {
 //        List<Partner> partners = new ArrayList<>();
 //        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("ZLM002");

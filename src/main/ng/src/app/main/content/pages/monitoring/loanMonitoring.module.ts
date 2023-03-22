@@ -65,6 +65,8 @@ import { CLAReportAndFeeListComponent } from './claReportAndFeeList/claReportAnd
 import { CLAReportAndFeeUpdateDialogComponent } from './claReportAndFeeUpdate/claReportAndFeeUpdate.component';
 import { NPAUpdateComponent } from './npaDetails/npaUpdate/npaUpdate.component';
 import { NPADetailUpdateDialogComponent } from './npaDetails/npaDetailsUpdate/npaDetailsUpdate.component';
+import { ValuerListComponent } from './valuerList/valuerList.component';
+import { ValuerUpdateDialogComponent } from './valuerUpdate/valuerUpdate.component';
 
 const routes = [
     {
@@ -152,7 +154,9 @@ const routes = [
         ProjectMonitoringDataItemListComponent,
         ProjectMonitoringDataItemUpdateComponent,
         NPAUpdateComponent,
-        NPADetailUpdateDialogComponent
+        NPADetailUpdateDialogComponent,
+        ValuerListComponent,
+        ValuerUpdateDialogComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -209,7 +213,9 @@ const routes = [
         OperatingParameterPLFListComponent,
         OperatingParameterPLFUpdateDialogComponent,
         ProjectMonitoringDataItemListComponent,
-        ProjectMonitoringDataItemUpdateComponent
+        ProjectMonitoringDataItemUpdateComponent,
+        ValuerListComponent,
+        ValuerUpdateDialogComponent
     ],  
     entryComponents: [
         CLAUpdateDialogComponent,
@@ -253,7 +259,8 @@ const routes = [
         ProjectMonitoringDataItemListComponent,
         ProjectMonitoringDataItemUpdateComponent,
         NPAUpdateComponent,
-        NPADetailUpdateDialogComponent
+        NPADetailUpdateDialogComponent,
+        ValuerUpdateDialogComponent
     ]
 })
 export class LoanMonitoringModule {

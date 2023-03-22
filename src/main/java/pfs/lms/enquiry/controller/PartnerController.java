@@ -154,6 +154,18 @@ public class PartnerController {
         }
     }
 
+    @GetMapping("partner/valuers")
+    public ResponseEntity getValuers(HttpServletRequest httpServletRequest) {
+
+        List<Partner> partners = partnerService.getValuers();
+        if (partners != null) {
+            return ResponseEntity.ok(partners);
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
     @GetMapping("partner/llcs")
     public ResponseEntity getLendersLegalCouncils(HttpServletRequest httpServletRequest) {
 

@@ -17,6 +17,7 @@ export class LoanMonitoringService implements Resolve<any> {
     selectedTRA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLLC: BehaviorSubject<any> = new BehaviorSubject({});
     selectedCLA: BehaviorSubject<any> = new BehaviorSubject({});
+    selectedValuer: BehaviorSubject<any> = new BehaviorSubject({});
     
     public banks: any;
 
@@ -37,6 +38,39 @@ export class LoanMonitoringService implements Resolve<any> {
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this.getLoanContractExtension(this._loanEnquiryService.selectedEnquiry.value.id);
+    }
+
+    // All about Valuer
+
+    public getValuers(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/valuers');
+    }
+
+    public saveValuer(valuer: any, loanApplicationId: any, module: string): Observable<any> {
+        const url = "enquiry/api/loanApplications/valuers/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'valuer':valuer, 'moduleName':module });
+    }
+
+    public updateValuer(valuer: any, module: string): Observable<any> {
+        const url = "enquiry/api/loanApplications/valuers/" + valuer.id;
+        return this._http.put(url, { 'loanApplicationId':'', 'valuer':valuer, 'moduleName':module });
+    }
+
+    // All about Valuer Reports And Fees
+    
+    public getValuerReportsAndFees(valuerId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/valuerReportAndFeeSubmission/' + valuerId + '/valuerReceiptsAndFees');
+    }
+    
+    public saveValuerReportAndFee(valuerReportAndFee: any, valuerId: string, module: string): Observable<any> {
+        const url = "enquiry/api/loanApplications/valuerReportAndFeeSubmission/create";
+        return this._http.post(url, { 'valuerId': valuerId, 'valuerReportAndFee': valuerReportAndFee, 'moduleName':module });
+    }
+
+    public updateValuerReportAndFee(valuerReportAndFee: any, module: string): Observable<any> {
+        console.log('in service', valuerReportAndFee);
+        const url = "enquiry/api/loanApplications/valuerReportAndFeeSubmission/" + valuerReportAndFee.id;
+        return this._http.put(url, { 'valuerId': '', 'valuerReportAndFee': valuerReportAndFee, 'moduleName':module });
     }
 
     // All about LLC
@@ -71,7 +105,6 @@ export class LoanMonitoringService implements Resolve<any> {
         const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/" + llcReportAndFee.id;
         return this._http.put(url, { 'lendersLegalCouncilId': '', 'llcReportAndFee': llcReportAndFee, 'moduleName':module });
     }
-
 
     // All about LIA
 
@@ -476,6 +509,10 @@ export class LoanMonitoringService implements Resolve<any> {
                 observer.complete();
             })
         }
+    }
+
+    public getAllValuers(): Observable<any> {
+        return this._http.get<any>('enquiry/api/partner/valuers');
     }
 
     public getLLCs(): Observable<any> {

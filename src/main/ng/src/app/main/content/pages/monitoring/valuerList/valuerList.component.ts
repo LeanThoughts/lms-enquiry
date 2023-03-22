@@ -2,16 +2,16 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
-import { LLCUpdateDialogComponent } from '../llcUpdate/llcUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
+import { ValuerUpdateDialogComponent } from '../valuerUpdate/valuerUpdate.component';
 
 @Component({
-    selector: 'fuse-llc-list',
-    templateUrl: './llcList.component.html',
-    styleUrls: ['./llcList.component.scss'],
+    selector: 'fuse-valuer-list',
+    templateUrl: './valuerList.component.html',
+    styleUrls: ['./valuerList.component.scss'],
     animations: fuseAnimations
 })
-export class LLCListComponent {
+export class ValuerListComponent {
 
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
@@ -22,7 +22,7 @@ export class LLCListComponent {
         'serialNumber', 'advisor', 'bpCode','name', 'dateOfAppointment', 'contractPeriodFrom', 'contractPeriodTo', 'contactNumber', 'email'
     ];
 
-    selectedLLC: any;
+    selectedValuer: any;
 
     _module = '';
 
@@ -36,7 +36,7 @@ export class LLCListComponent {
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        _loanMonitoringService.getLendersLegalCouncils(this.loanApplicationId).subscribe(data => {
+        _loanMonitoringService.getValuers(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
@@ -45,28 +45,28 @@ export class LLCListComponent {
     /**
      * onSelect()
      */
-    onSelect(llc: any): void {
-        this.selectedLLC = llc;
-        this._loanMonitoringService.selectedLLC.next(llc);
+    onSelect(valuer: any): void {
+        this.selectedValuer = valuer;
+        this._loanMonitoringService.selectedValuer.next(valuer);
     }
 
     /**
      * getAdvisor()
      */
-    getAdvisor(llc: any): string {
-        return 'LLC';
+    getAdvisor(valuer: any): string {
+        return 'Valuer';
     }
 
     /**
-     * addLLC()
+     * addValuer()
      */
-    addLLC(): void {
+    addValuer(): void {
         // Open the dialog.
-        const dialogRef = this._dialog.open(LLCUpdateDialogComponent, {
-            panelClass: 'fuse-llc-update-dialog',
+        const dialogRef = this._dialog.open(ValuerUpdateDialogComponent, {
+            panelClass: 'fuse-valuer-update-dialog',
             width: '750px',
             data: {
-                operation: 'addLLC',
+                operation: 'addValuer',
                 loanApplicationId: this.loanApplicationId,
                 module: this._module
             }
@@ -74,7 +74,7 @@ export class LLCListComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._loanMonitoringService.getLendersLegalCouncils(this.loanApplicationId).subscribe(data => {
+                this._loanMonitoringService.getValuers(this.loanApplicationId).subscribe(data => {
                     this.dataSource.data = data;
                 });
                 this._loanMonitoringService.getLoanMonitor(this.loanApplicationId).subscribe(data => {
@@ -85,39 +85,39 @@ export class LLCListComponent {
     }
 
     /**
-     * updateLLC()
+     * updateValuer()
      */
-    updateLLC(): void {
+    updateValuer(): void {
         // Open the dialog.
-        const dialogRef = this._dialog.open(LLCUpdateDialogComponent, {
-            panelClass: 'fuse-llc-update-dialog',
+        const dialogRef = this._dialog.open(ValuerUpdateDialogComponent, {
+            panelClass: 'fuse-valuer-update-dialog',
             width: '750px',
             data: {
-                operation: 'updateLLC',
+                operation: 'updateValuer',
                 loanApplicationId: this.loanApplicationId,
-                selectedLLC: this.selectedLLC,
+                selectedValuer: this.selectedValuer,
                 module: this._module
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._loanMonitoringService.getLendersLegalCouncils(this.loanApplicationId).subscribe(data => {
+                this._loanMonitoringService.getValuers(this.loanApplicationId).subscribe(data => {
                     this.dataSource.data = data;
                 });
             }
         });    
     }
 
-    displayLLC(): void {
+    displayValuer(): void {
         // Open the dialog.
-        const dialogRef = this._dialog.open(LLCUpdateDialogComponent, {
-            panelClass: 'fuse-llc-update-dialog',
+        const dialogRef = this._dialog.open(ValuerUpdateDialogComponent, {
+            panelClass: 'fuse-valuer-update-dialog',
             width: '750px',
             data: {
-                operation: 'displayLLC',
+                operation: 'displayValuer',
                 loanApplicationId: this.loanApplicationId,
-                selectedLLC: this.selectedLLC
+                selectedValuer: this.selectedValuer
             }
         });
     }

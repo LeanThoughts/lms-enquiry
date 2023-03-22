@@ -29,6 +29,8 @@ public interface IPartnerService {
 
     List<Partner> getLendersLegalCounsels();
 
+    List<Partner> getValuers();
+
     List<Partner> getPartnersByRoleType(String roleType);
 
     List<Partner> findByPartyRole(String roleType);
