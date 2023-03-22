@@ -1,0 +1,112 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addValuerReportAndFee()" 
+                [disabled]="selectedValuer.id == ''"> 
+            Add Report For Valuer
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateValuerReportAndFee()" [disabled]="!selectedValuerReportAndFee"> 
+            Modify Report For Valuer
+        </button>
+    </div>
+
+    <div class="mat-table-container" mat-white-bg style="width: 100%">
+
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- reportType Column -->
+            <ng-container matColumnDef="reportType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >ReportType</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ getReportType(obj.valuerReportAndFee.reportType) }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- dateOfReceipt Column -->
+            <ng-container matColumnDef="dateOfReceipt">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Date Of Receipt</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.dateOfReceipt | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- invoiceDate Column -->
+            <ng-container matColumnDef="invoiceDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Invoice Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.invoiceDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- invoiceNo Column -->
+            <ng-container matColumnDef="invoiceNo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Invoice Number</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.invoiceNo }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- feeAmount Column -->
+            <ng-container matColumnDef="feeAmount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Amount</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.feeAmount }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- statusOfFeeReceipt Column -->
+            <ng-container matColumnDef="statusOfFeeReceipt">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Receipt Status</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.statusOfFeeReceipt == 0? 'Yes' : 'No' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- statusOfFeePaid Column -->
+            <ng-container matColumnDef="statusOfFeePaid">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Paid Status</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.statusOfFeePaid == 0? 'Yes' : 'No' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentTitle Column -->
+            <ng-container matColumnDef="documentTitle">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.documentTitle }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- nextReportDate Column -->
+            <ng-container matColumnDef="nextReportDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Next Report Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.valuerReportAndFee.nextReportDate }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- download Column -->
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <a [href]="getFileURL(obj.valuerReportAndFee.fileReference)" *ngIf="obj.valuerReportAndFee.fileReference !== ''">Download</a>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.valuerReportAndFee)"
+                [ngClass]="{'highlight':obj.valuerReportAndFee === selectedValuerReportAndFee}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>

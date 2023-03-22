@@ -24,14 +24,14 @@ public class ValuerController {
     }
 
     @PutMapping("/loanApplications/valuers/{id}")
-    public ResponseEntity updateLLC(@PathVariable("id") String valuerId, @RequestBody ValuerResource resource,
+    public ResponseEntity updateValuer(@PathVariable("id") String valuerId, @RequestBody ValuerResource resource,
                                     HttpServletRequest request) throws CloneNotSupportedException {
         Valuer valuer = valuerService.updateValuer(resource, request.getUserPrincipal().getName());
         return ResponseEntity.ok(valuer);
     }
 
     @GetMapping("/loanApplications/{loanapplicationid}/valuers")
-    public ResponseEntity getLendersLegalCouncils(@PathVariable("loanapplicationid") String loanApplicationId,
+    public ResponseEntity getValuers(@PathVariable("loanapplicationid") String loanApplicationId,
                                      HttpServletRequest request)
     {
         List<ValuerResource> list = valuerService.getValuers(loanApplicationId);
@@ -55,7 +55,7 @@ public class ValuerController {
     }
 
     @GetMapping("/loanApplications/valuerReportAndFeeSubmission/{valuerId}/valuerReceiptsAndFees")
-    public ResponseEntity getLIAReportAndFee(@PathVariable("valuerId") String valuerId, HttpServletRequest request)
+    public ResponseEntity getValuerReportAndFees(@PathVariable("valuerId") String valuerId, HttpServletRequest request)
     {
         List<ValuerReportAndFeeResource> valuerReportAndFeeResources = valuerService.getValuerReportAndFees(valuerId);
         return ResponseEntity.ok(valuerReportAndFeeResources);
