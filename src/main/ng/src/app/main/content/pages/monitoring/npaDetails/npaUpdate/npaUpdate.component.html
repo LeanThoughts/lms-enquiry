@@ -82,17 +82,9 @@
 <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
     <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
         
-        <!-- loanNumber Column -->
-        <ng-container matColumnDef="loanNumber">
-            <mat-header-cell *matHeaderCellDef mat-sort-header >Loan No.</mat-header-cell>
-            <mat-cell *matCellDef="let obj" >
-                <p class="text-truncate">{{ obj.loanNumber }}</p>
-            </mat-cell>
-        </ng-container>
-
         <!-- lineItemNumber Column -->
         <ng-container matColumnDef="lineItemNumber">
-            <mat-header-cell *matHeaderCellDef mat-sort-header >Line Item #</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
             <mat-cell *matCellDef="let obj" >
                 <p class="text-truncate">{{ obj.lineItemNumber }}</p>
             </mat-cell>

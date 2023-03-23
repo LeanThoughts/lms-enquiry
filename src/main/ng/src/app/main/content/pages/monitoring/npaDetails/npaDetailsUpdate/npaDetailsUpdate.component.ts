@@ -5,6 +5,8 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { Subscription } from 'rxjs';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-npa-detail-update-dialog',
@@ -22,13 +24,20 @@ export class NPADetailUpdateDialogComponent {
 
     assetClasses = LoanMonitoringConstants.assetClasses;
 
+    subscriptions = new Subscription();
+    loanContractId = '';
+
     /**
      * constructor()
      */
-    constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService, 
+    constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService, private _loanEnquiryService: LoanEnquiryService,
         public _dialogRef: MatDialogRef<NPADetailUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any, 
         private _matSnackBar: MatSnackBar) {
 
+        this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
+            this.loanContractId = data.loanContractId;
+        }));          
+    
         // Fetch selected user details from the dialog's data attribute.
         this.selectedNPADetail = Object.assign({}, _dialogData.selectedNPADetail);
 
@@ -49,8 +58,7 @@ export class NPADetailUpdateDialogComponent {
             unsecuredLoanAsset: [ this.selectedNPADetail.unsecuredLoanAsset || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
             npaProvisionValue: [ this.selectedNPADetail.npaProvisionValue || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
             netAssetValue: [ this.selectedNPADetail.netAssetValue || '' ],
-            remarks: [ this.selectedNPADetail.remarks || ''],
-            loanNumber: [ this.selectedNPADetail.loanNumber || '' ]
+            remarks: [ this.selectedNPADetail.remarks || '']
         });
     }
 
@@ -82,7 +90,7 @@ export class NPADetailUpdateDialogComponent {
             });
         }
         else {
-            this.selectedNPADetail.loanNumber = npaDetail.loanNumber;
+            this.selectedNPADetail.loanNumber = this.loanContractId;
             this.selectedNPADetail.lineItemNumber = npaDetail.lineItemNumber;
             this.selectedNPADetail.npaAssetClass = npaDetail.npaAssetClass;
             this.selectedNPADetail.assetClassificationChangeDate = npaDetail.assetClassificationChangeDate;

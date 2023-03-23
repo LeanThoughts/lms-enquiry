@@ -32,7 +32,7 @@ export class NPAUpdateComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'loanNumber', 'lineItemNumber', 'npaAssetClass', 'assetClassificationChangeDate','provisionDate', 'absoluteValue'
+        'lineItemNumber', 'npaAssetClass', 'assetClassificationChangeDate','provisionDate', 'absoluteValue'
     ];
 
     /**
