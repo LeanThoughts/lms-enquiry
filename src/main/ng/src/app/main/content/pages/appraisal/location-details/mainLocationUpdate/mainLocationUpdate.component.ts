@@ -23,7 +23,7 @@ export class MainLocationUpdateComponent {
     _mainLocationDetailForm: FormGroup;
 
     displayedColumns = [
-        'serialNumber', 'location'
+        'serialNumber', 'location', 'state', 'district', 'region'
     ];
 
     selectedSubLocation: any;

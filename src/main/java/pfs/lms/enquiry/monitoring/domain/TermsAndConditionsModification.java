@@ -30,6 +30,7 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String remarks;
     private String reasonsForAmendment;
     private String fileReference;
+    private String brlReasonsForAmendment;
 
     // LeadBanker Document Type
     private String leadBankerDocumentType;

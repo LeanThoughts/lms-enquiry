@@ -32,7 +32,15 @@
                     <mat-datepicker #picker1></mat-datepicker> 
                 </mat-form-field>
             </div>
+
             <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issue of Amended Document" 
+                        formControlName="dateOfIssueOfAmendedSanctionLetter" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Document Type" formControlName="documentType" required>
                       <mat-option> </mat-option>
@@ -41,24 +49,12 @@
                       </mat-option>
                     </mat-select>
                 </mat-form-field> 
-
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issue of Amended Document" 
-                        formControlName="dateOfIssueOfAmendedSanctionLetter" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
-                </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Document Title" formControlName="documentTitle">          
                 </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">          
-                </mat-form-field>
-            </div>
-            
-            <div fxLayout="row">
+
                 <div fxLayout="column" fxFlex="50">
                     <div fxLayout="row">
                         <div fxLayout="column" fxFlex="85">
@@ -72,6 +68,21 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">          
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Reasons for Amendment" formControlName="brlReasonsForAmendment" required>
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let reason of brlReasonsForAmendment" [value]="reason.code">
+                        {{ reason.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
             </div>
 
             <div fxLayout="row">

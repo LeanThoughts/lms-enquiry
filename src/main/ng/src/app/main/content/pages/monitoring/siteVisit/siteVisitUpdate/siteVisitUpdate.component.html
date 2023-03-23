@@ -45,7 +45,7 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <mat-select placeholder="Document Type" formControlName="documentType">
+                    <mat-select placeholder="Document Type" formControlName="documentType" required>
                       <mat-option> </mat-option>
                       <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
                         {{ documentType.value }}

@@ -24,7 +24,8 @@ export class TandCUpdateDialogComponent {
 
     communications = LoanMonitoringConstants.communications;
     documentTypes = LoanMonitoringConstants.documentTypes;
-
+    brlReasonsForAmendment = LoanMonitoringConstants.brlReasonsForAmendment;
+    
     /**
      * constructor()
      * @param _formBuilder 
@@ -68,6 +69,7 @@ export class TandCUpdateDialogComponent {
             dateOfInternalDocument: [this.selectedTandC.dateOfInternalDocument || ''],
             internalDocumentRemarks: [this.selectedTandC.internalDocumentRemarks || ''],
             internalDocumentTitle: [this.selectedTandC.internalDocumentTitle || ''],
+            brlReasonsForAmendment: [this.selectedTandC.brlReasonsForAmendment || '']
         });
         
         // Sort document types array
@@ -163,6 +165,8 @@ export class TandCUpdateDialogComponent {
                     this.selectedTandC.dateOfInternalDocument = tandc.dateOfInternalDocument;
                     this.selectedTandC.internalDocumentTitle = tandc.internalDocumentTitle;
                     this.selectedTandC.internalDocumentRemarks = tandc.internalDocumentRemarks;
+
+                    this.selectedTandC.brlReasonsForAmendment = tandc.brlReasonsForAmendment;
 
                     if (tandc.internalDocumentFileReference !== undefined) {
                         this.selectedTandC.internalDocumentFileReference = tandc.internalDocumentFileReference;

@@ -105,7 +105,12 @@ export class SiteVisitUpdateDialogComponent {
                 );
             }
             else {
-                this.saveSiteVisitDetails('');
+                if (this._dialogData.operation === 'addSiteVisit') {
+                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                }
+                else {
+                    this.saveSiteVisitDetails('');
+                }
             }
         }
     }

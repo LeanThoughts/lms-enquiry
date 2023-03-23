@@ -20,7 +20,7 @@ export class TandCListComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'serialNumber', 'communication', 'remarks','borrowerRequestLetterDate', 'dateofIssueofAmendedSanctionLetter', 'documentType', 'download'
+        'serialNumber', 'communication', 'remarks','borrowerRequestLetterDate', 'dateofIssueofAmendedSanctionLetter', 'documentType'
     ];
 
     selectedTandC: any;

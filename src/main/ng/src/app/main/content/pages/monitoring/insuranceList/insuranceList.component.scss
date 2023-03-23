@@ -1,0 +1,17 @@
+mat-header-cell, mat-header-row, .mat-header-cell-def{
+    font-weight:bold;
+  }
+  
+  mat-paginator.mat-paginator.paginator--centered {
+    display: flex;
+    justify-content: left;
+  }
+  
+  .mat-cell, .mat-header-cell {
+    text-align: left;
+  }
+  
+  .highlight{
+    background: #FFA500; /* orange */
+  }
+  

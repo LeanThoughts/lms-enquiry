@@ -94,11 +94,35 @@
             </mat-cell>
         </ng-container>
 
-        <!-- siteVisitType Column -->
+        <!-- location Column -->
         <ng-container matColumnDef="location">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Location</mat-header-cell>
             <mat-cell *matCellDef="let obj" >
                 <p class="text-truncate">{{ obj.location }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- state Column -->
+        <ng-container matColumnDef="state">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >State</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.state }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- district Column -->
+        <ng-container matColumnDef="district">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >District</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.district }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- region Column -->
+        <ng-container matColumnDef="region">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Region</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+                <p class="text-truncate">{{ obj.region }}</p>
             </mat-cell>
         </ng-container>
 

@@ -73,6 +73,22 @@ export class LoanMonitoringConstants {
         {code: "IV" , value:"Fourth Quarter"}
     ];
 
+    // brlReasonsForAmendment
+    static brlReasonsForAmendment = [
+        {code: "1" , value:"Change in Sanction Amount"},
+        {code: "2" , value:"Timeline Extension"},
+        {code: "3" , value:"Waiver of Condition"},
+        {code: "4" , value:"Language Modification"},
+        {code: "5" , value:"Change in Intt Rate"},
+        {code: "6" , value:"Reimbursement"},
+        {code: "7" , value:"Waiver of billed amt"},
+        {code: "8" , value:"DCCO Timeline Extension"},
+        {code: "9" , value:"Availability Period"},
+        {code: "10" , value:"Security Timeline Extension"},
+        {code: "11" , value:"Other Timeline Extension"},
+        {code: "12" , value:"Others"},
+    ];
+
     // documentTypes
     static documentTypes = [
         {

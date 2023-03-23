@@ -3,7 +3,6 @@ package pfs.lms.enquiry.monitoring.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
@@ -770,7 +769,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         termsAndConditions.setAmendedDocumentRemarks(resource.getTermsAndConditionsModification().getAmendedDocumentRemarks());
         termsAndConditions.setAmendedDocumentTitle(resource.getTermsAndConditionsModification().getAmendedDocumentTitle());
         termsAndConditions.setAmendedDocumentFileReference(resource.getTermsAndConditionsModification().getAmendedDocumentFileReference());
-
+        termsAndConditions.setBrlReasonsForAmendment(resource.getTermsAndConditionsModification().getBrlReasonsForAmendment());
         termsAndConditions.setLeadBankerDocumentFileReference(resource.getTermsAndConditionsModification().getLeadBankerDocumentFileReference());
         termsAndConditions.setLeadBankerDocumentTitle(resource.getTermsAndConditionsModification().getLeadBankerDocumentTitle());
         termsAndConditions.setLeadBankerDocumentType(resource.getTermsAndConditionsModification().getLeadBankerDocumentType());
@@ -817,6 +816,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingTermsAndConditionsModification.setAmendedDocumentRemarks(resource.getTermsAndConditionsModification().getAmendedDocumentRemarks());
         existingTermsAndConditionsModification.setAmendedDocumentTitle(resource.getTermsAndConditionsModification().getAmendedDocumentTitle());
         existingTermsAndConditionsModification.setAmendedDocumentFileReference(resource.getTermsAndConditionsModification().getAmendedDocumentFileReference());
+        existingTermsAndConditionsModification.setBrlReasonsForAmendment(resource.getTermsAndConditionsModification().getBrlReasonsForAmendment());
 
         existingTermsAndConditionsModification.setLeadBankerDocumentFileReference(resource.getTermsAndConditionsModification().getLeadBankerDocumentFileReference());
         existingTermsAndConditionsModification.setLeadBankerDocumentTitle(resource.getTermsAndConditionsModification().getLeadBankerDocumentTitle());

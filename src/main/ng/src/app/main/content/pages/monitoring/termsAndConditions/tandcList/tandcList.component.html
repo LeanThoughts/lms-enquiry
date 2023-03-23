@@ -61,15 +61,6 @@
                 </mat-cell>
             </ng-container>
 
-            <!-- download Column -->
-            <ng-container matColumnDef="download">
-                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <a [href]="getFileURL(obj.termsAndConditionsModification.fileReference)" 
-                            *ngIf="obj.termsAndConditionsModification.fileReference !== ''">Download</a>
-                </mat-cell>
-            </ng-container>
-
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.termsAndConditionsModification)"

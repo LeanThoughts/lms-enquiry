@@ -26,6 +26,8 @@ export class TandCModel
     internalDocumentRemarks: string;
     internalDocumentFileReference: string;
 
+    brlReasonsForAmendment: string;
+
     /**
      * constructor();
      * @param _tandc 
@@ -55,5 +57,6 @@ export class TandCModel
         this.internalDocumentTitle = _tandc.internalDocumentTitle || '';
         this.internalDocumentRemarks = _tandc.internalDocumentRemarks || '';
         this.internalDocumentFileReference = _tandc.internalDocumentFileReference || '';
+        this.brlReasonsForAmendment = _tandc.brlReasonsForAmendment || '';
     }
 }
