@@ -1,0 +1,71 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close({ 'refresh': false })" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+        <div class="mat-table-container" mat-white-bg style="width: 100%">
+            <mat-table class="enquiries-table" [dataSource]="projectMonitoringHistoryDataSource" matSort fusePerfectScrollbar>
+    
+                <!-- description Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >Particulars</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.description }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <!-- dateOfEntry Column -->
+                <ng-container matColumnDef="dateOfEntry">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >Date</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.dateOfEntry | date: 'dd/MM/yyyy' }}</p>
+                    </mat-cell>
+                </ng-container>      
+    
+                <!-- originalData Column -->
+                <ng-container matColumnDef="originalData">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >Original Data</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.originalData }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <!-- revisedData1 Column -->
+                <ng-container matColumnDef="revisedData1">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Data - 1</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.revisedData1 }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <!-- revisedData2 Column -->
+                <ng-container matColumnDef="revisedData2">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Data - 2</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.revisedData2 }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <!-- remarks Column -->
+                <ng-container matColumnDef="remarks">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header >Remarks</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.remarks }}</p>
+                    </mat-cell>
+                </ng-container>
+    
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onHistorySelect(obj)"
+                    [ngClass]="{'highlight':obj === selectedProjectMonitoringDataHistoryItem}" [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+    
+            </mat-table>
+        </div>
+    </div>
+</div>
