@@ -19,7 +19,7 @@ export class LIEListComponent {
     loanApplicationId: string;
 
     displayedColumns = [
-        'serialNumber', 'advisor', 'bpCode','name', 'dateOfAppointment', 'contractPeriodFrom', 'contractPeriodTo', 'contactNumber', 'email'
+        'serialNumber', 'advisor', 'bpCode', 'name' , 'dateOfAppointment', 'contractPeriodFrom', 'contractPeriodTo', 'contactNumber', 'email'
     ];
 
     selectedLIE: any;
@@ -74,7 +74,7 @@ export class LIEListComponent {
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 this._loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
                     this.dataSource.data = data;
@@ -83,7 +83,7 @@ export class LIEListComponent {
                     this._loanMonitoringService.loanMonitor.next(data);
                 });
             }
-        });    
+        });
     }
 
     /**
@@ -102,13 +102,13 @@ export class LIEListComponent {
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 this._loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
                     this.dataSource.data = data;
                 });
             }
-        });    
+        });
     }
 
     displayLIE(): void {

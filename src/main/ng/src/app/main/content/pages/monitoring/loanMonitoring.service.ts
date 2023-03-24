@@ -11,6 +11,8 @@ export class LoanMonitoringService implements Resolve<any> {
 
     loanMonitor: BehaviorSubject<any> = new BehaviorSubject({});
 
+
+
     selectedLIE: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLIA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLFA: BehaviorSubject<any> = new BehaviorSubject({});
@@ -18,7 +20,8 @@ export class LoanMonitoringService implements Resolve<any> {
     selectedLLC: BehaviorSubject<any> = new BehaviorSubject({});
     selectedCLA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedValuer: BehaviorSubject<any> = new BehaviorSubject({});
-    
+    selectedLoanDocumentation: BehaviorSubject<any> = new BehaviorSubject({});
+
     public banks: any;
 
     loanContractExtension: any;
@@ -57,11 +60,11 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
     // All about Valuer Reports And Fees
-    
+
     public getValuerReportsAndFees(valuerId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/valuerReportAndFeeSubmission/' + valuerId + '/valuerReceiptsAndFees');
     }
-    
+
     public saveValuerReportAndFee(valuerReportAndFee: any, valuerId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/valuerReportAndFeeSubmission/create";
         return this._http.post(url, { 'valuerId': valuerId, 'valuerReportAndFee': valuerReportAndFee, 'moduleName':module });
@@ -90,11 +93,11 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
     // All about LLC Reports And Fees
-    
+
     public getLLCReportsAndFees(llcId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/llcReportAndFeeSubmission/' + llcId + '/llcReceiptsAndFees');
     }
-    
+
     public saveLLCReportAndFee(llcReportAndFee: any, liaId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/create";
         return this._http.post(url, { 'lendersLegalCouncilId': liaId, 'llcReportAndFee': llcReportAndFee, 'moduleName':module });
@@ -123,11 +126,11 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
     // All about LIA Reports And Fees
-    
+
     public getLIAReportsAndFees(liaId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/liaReportAndFeeSubmission/' + liaId + '/liaReceiptsAndFees');
     }
-    
+
     public saveLIAReportAndFee(liaReportAndFee: any, liaId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/create";
         return this._http.post(url, { 'lendersInsuranceAdvisorId': liaId, 'liaReportAndFee': liaReportAndFee, 'moduleName':module });
@@ -156,11 +159,11 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
     // All about CLA Reports And Fees
-    
+
     public getCLAReportsAndFees(claId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/claReportAndFeeSubmission/' + claId + '/claReceiptsAndFees');
     }
-    
+
     public saveCLAReportAndFee(claReportAndFee: any, claId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/claReportAndFeeSubmission/create";
         return this._http.post(url, { 'commonLoanAgreementId': claId, 'claReportAndFee': claReportAndFee, 'moduleName':module });
@@ -188,12 +191,30 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'lendersIndependentEngineer':lie, 'moduleName': module });
     }
 
+
+    // All  about Loan Documentation
+  public getLoanDocumentations(loanApplicationId: string): Observable<any> {
+    return this._http.get('enquiry/api/nPAs/loanDocumentation/loanApplication/' + loanApplicationId  );
+  }
+
+  public saveLoanDocumentation(loanDocumentation: any, loanApplicationId: any, module: string): Observable<any> {
+    const url = 'enquiry/api/nPAs/loanDocumentation/create';
+    return this._http.post(url, { 'loanApplicationId': loanApplicationId, 'loanDocumentation': loanDocumentation, 'moduleName': module });
+  }
+
+  public updateLoanDocumentation(loanDocumentation: any, module: string): Observable<any> {
+    const url = 'enquiry/api/nPAs/loanDocumentation/' + loanDocumentation.id;
+    return this._http.put(url, {'loanApplicationId': '', 'loanDocumentation': loanDocumentation, 'moduleName': module});
+  }
+
+
+
     // All about LIE Reports And Fees
-    
+
     public getLIEReportsAndFees(lieId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/lendersIndependentEngineer/' + lieId + '/lieReceiptsAndFees');
     }
-    
+
     public saveLIEReportAndFee(lieReportAndFee: any, lieId: string, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/liereportandfeesubmission/create";
         return this._http.post(url, { 'lendersIndependentEngineerId': lieId, 'lieReportAndFee': lieReportAndFee, 'moduleName': module });
@@ -210,7 +231,7 @@ export class LoanMonitoringService implements Resolve<any> {
     public getLendersFinancialAdvisors(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/lendersFinancialAdvisors');
     }
-    
+
     public saveLFA(lfa: any, loanApplicationId: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/lendersfinancialAdvisors/create";
         return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'lendersFinancialAdvisor':lfa, 'moduleName': module });
@@ -253,7 +274,7 @@ export class LoanMonitoringService implements Resolve<any> {
         const url = "enquiry/api/loanApplications/trustretentionaccounts/" + tra.id;
         return this._http.put(url, { 'loanApplicationId':'', 'trustRetentionAccount':tra, 'moduleName': module });
     }
-    
+
     // All about TRA Statement
 
     public getTRAStatements(traId: string): Observable<any> {
@@ -300,8 +321,8 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateSecurityCompliance(securityCompliance: any): Observable<any> {
         const url = "enquiry/api/loanApplications/securitycompliance/" + securityCompliance.id;
         return this._http.put(url, { 'loanApplicationId':'', 'securityCompliance':securityCompliance });
-    }    
-    
+    }
+
     // All about Site Visit
 
     public getSiteVisits(loanApplicationId: string): Observable<any> {
@@ -316,10 +337,10 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateSiteVisit(siteVisit: any): Observable<any> {
         const url = "enquiry/api/loanApplications/sitevisit/" + siteVisit.id;
         return this._http.put(url, { 'loanApplicationId':'', 'siteVisit':siteVisit });
-    }    
+    }
 
     // All about Rate of Interest
-    
+
     public getRateOfInterests(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/rateofinterest');
     }
@@ -332,10 +353,10 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateRateOfInterest(rateOfInterest: any): Observable<any> {
         const url = "enquiry/api/loanApplications/rateofinterest/" + rateOfInterest.id;
         return this._http.put(url, { 'loanApplicationId':'', 'rateOfInterest':rateOfInterest });
-    }  
+    }
 
     // All about Borrower Financials
-    
+
     public getBorrowerFinancials(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/borrowerfinancials');
     }
@@ -352,7 +373,7 @@ export class LoanMonitoringService implements Resolve<any> {
 
 
     // All about Promoter Financials
-    
+
     public getPromoterFinancials(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/promoterfinancials');
     }
@@ -366,9 +387,9 @@ export class LoanMonitoringService implements Resolve<any> {
         const url = "enquiry/api/loanApplications/promoterfinancials/" + promoterfinancials.id;
         return this._http.put(url, { 'loanApplicationId':'', 'promoterFinancials':promoterfinancials });
     }
-    
+
     // All about Financial Covenants
-    
+
     public getFinancialCovenants(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/financialcovenants');
     }
@@ -431,12 +452,12 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'npaId':npaId, 'npaDetail':npaDetail });
     }
 
-    // All about Operating Parameters 
+    // All about Operating Parameters
 
     public getOperatingParameters(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/operatingparameters');
     }
-    
+
     public saveOperatingParameter(operatingParameter: any, loanApplicationId: any): Observable<any> {
         const url = "enquiry/api/loanApplications/operatingparameter/create";
         return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'operatingParameter':operatingParameter });
@@ -452,7 +473,7 @@ export class LoanMonitoringService implements Resolve<any> {
     public getOperatingParameterPLFs(loanApplicationId: string): Observable<any> {
         return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/operatingparameterplfs');
     }
-    
+
     public saveOperatingParameterPLF(operatingParameterPLF: any, loanApplicationId: any): Observable<any> {
         const url = "enquiry/api/loanApplications/operatingparameterplf/create";
         return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'operatingParameterPLF':operatingParameterPLF });
@@ -478,11 +499,11 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
     public getProjectMonitoringDataItemHistory(projectMonitoringDataId: string, particulars: string): Observable<any> {
-        const url = 'enquiry/api/projectMonitoringDataItemHistories/search/findByProjectMonitoringDataIdAndParticularsOrderByDateOfEntryDesc' 
+        const url = 'enquiry/api/projectMonitoringDataItemHistories/search/findByProjectMonitoringDataIdAndParticularsOrderByDateOfEntryDesc'
                 + '?projectMonitoringDataId=' + projectMonitoringDataId + '&particulars=' + particulars;
         return this._http.get(url);
     }
-    
+
     // Others
 
     public getBanks(): Observable<any> {
@@ -539,7 +560,17 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get<any>('enquiry/api/partner/traAuthorizedPersons');
     }
 
-    public getReferenceInterestRates(): Observable<any> {
+
+  public getDocumentationTypes(): Observable<any> {
+    return this._http.get<any>('enquiry/api/documentationTypes');
+  }
+
+  public getDocumentationStatuses(): Observable<any> {
+    return this._http.get<any>('enquiry/api/documentationStatuses');
+  }
+
+
+  public getReferenceInterestRates(): Observable<any> {
         return this._http.get<any>('enquiry/api/referenceinterestrates/all');
     }
 
@@ -565,7 +596,7 @@ export class LoanMonitoringService implements Resolve<any> {
 
     /**
      * getLoanMonitor()
-     * @param loanApplicationId 
+     * @param loanApplicationId
      */
     public getLoanMonitor(loanApplicationId: any): Observable<any>
     {
@@ -574,7 +605,7 @@ export class LoanMonitoringService implements Resolve<any> {
 
     /**
      * getLoanContractExtension()
-     * @param loanApplicationId 
+     * @param loanApplicationId
      */
     public getLoanContractExtension(loanApplicationId: any): Observable<any>
     {
@@ -599,5 +630,5 @@ export class LoanMonitoringService implements Resolve<any> {
      */
     public getTRAAccountTypes(): Observable<any> {
         return this._http.get('enquiry/api/traaccounttypes');
-    }    
+    }
 }

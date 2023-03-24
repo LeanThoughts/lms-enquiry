@@ -21,6 +21,10 @@ import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalComp
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletionRepository;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectDataRepository;
+import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
+import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetailRepository;
+import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
+import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetailRepository;
 import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetail;
 import pfs.lms.enquiry.appraisal.proposaldetails.ProposalDetailRepository;
 import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
@@ -91,6 +95,9 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final LoanPartnerRepository loanPartnerRepository;
     private final SyndicateConsortiumRepository syndicateConsortiumRepository;
     private final ReasonForDelayRepository reasonForDelayRepository;
+
+    private final MainLocationDetailRepository mainLocationDetailRepository;
+    private final SubLocationDetailRepository subLocationDetailRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
     private final ProposalDetailRepository proposalDetailRepository;
     private final SiteVisitRepository siteVisitRepository;
@@ -112,6 +119,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final SAPSiteVisitResource sapSiteVisitResource;
     private final SAPLoanAppraisalExternalRatingTermLoanResource sapLoanAppraisalExternalRatingTermLoanResource;
     private final SAPLoanAppraisalExternalRatingCorpLoanResource sapLoanAppraisalExternalRatingCorpLoanResource;
+    private final SAPLoanAppraisalMainLocationDetailResource sapLoanAppraisalMainLocationDetailResource;
+    private final SAPLoanAppraisalSubLocationDetailResource sapLoanAppraisalSubLocationDetailResource;
 
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskCreateAndChange}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
@@ -129,6 +138,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
         ProposalDetail proposalDetail;
         CorporateLoanRiskRating corporateLoanRiskRating;
         TermLoanRiskRating termLoanRiskRating;
+        MainLocationDetail mainLocationDetail;
+        SubLocationDetail subLocationDetail;
 
          Object response = new Object();
          Object resource;
@@ -141,7 +152,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
          sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,'U'));
          sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,'U'));
 
-         log.info("---------------Sync. Loan Appraisal to SAP ");
+         //log.info("---------------Sync. Loan Appraisal to SAP ");
 
          Collections.sort(sapIntegrationPointers, new Comparator<SAPIntegrationPointer>() {
              public int compare(SAPIntegrationPointer o1, SAPIntegrationPointer o2) {
@@ -477,6 +488,52 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      resource = (Object)  sapLoanAppraisalReasonForDelayResourceDetails;
                      serviceUri = appraisalServiceUri + "ReasonForDelaySet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Main Location Detail":
+
+                     mainLocationDetail = mainLocationDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( mainLocationDetail.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Main Location to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanContractId().toString());
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLoanAppraisalMainLocationDetailResourceDetails sapLoanAppraisalMainLocationDetailResourceDetails =
+                             sapLoanAppraisalMainLocationDetailResource.mapMainLocationDetails(mainLocationDetail);
+
+                     SAPLoanAppraisalMainLocationDetailResource  sapLoanAppraisalMainLocationDetailResource1 = new SAPLoanAppraisalMainLocationDetailResource();
+                     sapLoanAppraisalMainLocationDetailResource1.setSapLoanAppraisalMainLocationDetailResourceDetails(sapLoanAppraisalMainLocationDetailResourceDetails  );
+
+                     resource = (Object)  sapLoanAppraisalMainLocationDetailResourceDetails;
+                     serviceUri = appraisalServiceUri + "LocationMainSet";
+                     response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Sub Location Detail":
+
+                     subLocationDetail = subLocationDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( subLocationDetail.getLoanAppraisal().getId());
+
+                     log.info("Attempting to Post Appraisal Sub Location to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanContractId().toString());
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLoanAppraisalSubLocationDetailResourceDetails sapLoanAppraisalSubLocationDetailResourceDetails =
+                             sapLoanAppraisalSubLocationDetailResource.mapSubLocationDetails(subLocationDetail);
+
+                     SAPLoanAppraisalSubLocationDetailResource  sapLoanAppraisalSubLocationDetailResource1 = new SAPLoanAppraisalSubLocationDetailResource();
+                     sapLoanAppraisalSubLocationDetailResource1.setSapLoanAppraisalSubLocationDetailResourceDetails(sapLoanAppraisalSubLocationDetailResourceDetails);
+
+                     resource = (Object)  sapLoanAppraisalSubLocationDetailResourceDetails;
+                     serviceUri = appraisalServiceUri + "LocationSubSet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);

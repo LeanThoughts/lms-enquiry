@@ -70,10 +70,12 @@ import { ValuerUpdateDialogComponent } from './valuerUpdate/valuerUpdate.compone
 import { ValuerReportAndFeeUpdateDialogComponent } from './valuerReportAndFeeUpdate/valuerReportAndFeeUpdate.component';
 import { ValuerReportAndFeeListComponent } from './valuerReportAndFeeList/valuerReportAndFeeList.component';
 import { ProjectMonitoringDataItemHistoryComponent } from './projectMonitoringData/projectMonitoringDataItemHistory/projectMonitoringDataItemHistory.component';
+import { LoanDocumentationListComponent } from './loanDocumentationList/loanDocumentationList.component';
+import { LoanDocumentationUpdateDialogComponent } from './loanDocumentationUpdate/loanDocumentationUpdate.component';
 
 const routes = [
     {
-        path: 'loanMonitoring', 
+        path: 'loanMonitoring',
         component: LoanMonitoringComponent,
         canActivate: [
             EnquiryApplicationRouteGuard
@@ -162,7 +164,9 @@ const routes = [
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeListComponent,
         ValuerReportAndFeeUpdateDialogComponent,
-        ProjectMonitoringDataItemHistoryComponent
+        ProjectMonitoringDataItemHistoryComponent,
+        LoanDocumentationListComponent,
+        LoanDocumentationUpdateDialogComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -224,8 +228,10 @@ const routes = [
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeListComponent,
         ValuerReportAndFeeUpdateDialogComponent,
-        ProjectMonitoringDataItemHistoryComponent
-    ],  
+        ProjectMonitoringDataItemHistoryComponent,
+        LoanDocumentationListComponent,
+        LoanDocumentationUpdateDialogComponent
+    ],
     entryComponents: [
         CLAUpdateDialogComponent,
         CLAReportAndFeeUpdateDialogComponent,
@@ -271,7 +277,9 @@ const routes = [
         NPADetailUpdateDialogComponent,
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeUpdateDialogComponent,
-        ProjectMonitoringDataItemHistoryComponent
+        ProjectMonitoringDataItemHistoryComponent,
+        LoanDocumentationListComponent,
+        LoanDocumentationUpdateDialogComponent
     ]
 })
 export class LoanMonitoringModule {

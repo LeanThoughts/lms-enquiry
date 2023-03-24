@@ -3,6 +3,7 @@ package pfs.lms.enquiry.monitoring.npa;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -16,6 +17,8 @@ public class NPADetailService implements INPADetailService {
     private final NPARepository npaRepository;
     private final NPADetailRepository npaDetailRepository;
 
+    private final IChangeDocumentService changeDocumentService;
+
     @Override
     public NPADetail saveNPADetail(NPADetailResource resource, String username) {
         NPA npa = npaRepository.getOne(UUID.fromString(resource.getNpaId()));
@@ -23,7 +26,9 @@ public class NPADetailService implements INPADetailService {
         npaDetail.setNpa(npa);
         npaDetail.setLoanNumber(resource.getNpaDetail().getLoanNumber());
 
-        List<NPADetail> npaDetails = npaDetailRepository.findByNpaOrderByLineItemNumberDesc(npa);
+        //List<NPADetail> npaDetails = npaDetailRepository.findByNpaOOrderByLineItemNumberDesc(npa);
+        List<NPADetail> npaDetails = npaDetailRepository.findByNpa(npa);
+
         npaDetail.setLineItemNumber(npaDetails.size() + 1);
 
         npaDetail.setNpaAssetClass(resource.getNpaDetail().getNpaAssetClass());
@@ -39,6 +44,19 @@ public class NPADetailService implements INPADetailService {
         npaDetail.setNetAssetValue(resource.getNpaDetail().getNetAssetValue());
         npaDetail.setRemarks(resource.getNpaDetail().getRemarks());
         npaDetail = npaDetailRepository.save(npaDetail);
+
+        // Change Documents for NPA Detail
+        changeDocumentService.createChangeDocument(
+                npa.getLoanMonitor().getId(),
+                npaDetail.getId().toString(),
+                null,
+                npa.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                npaDetail,
+                "Created",
+                username,
+                "Monitoring", "NPA Detail");
+
         return npaDetail;
     }
 
@@ -47,6 +65,9 @@ public class NPADetailService implements INPADetailService {
         NPADetail npaDetail = npaDetailRepository
                 .findById(resource.getNpaDetail().getId())
                 .orElseThrow(() -> new EntityNotFoundException(resource.getNpaDetail().getId().toString()));
+
+        NPADetail oldNPADetail = (NPADetail) npaDetail.clone();
+
         npaDetail.setLoanNumber(resource.getNpaDetail().getLoanNumber());
         npaDetail.setLineItemNumber(resource.getNpaDetail().getLineItemNumber());
         npaDetail.setNpaAssetClass(resource.getNpaDetail().getNpaAssetClass());
@@ -62,12 +83,27 @@ public class NPADetailService implements INPADetailService {
         npaDetail.setNetAssetValue(resource.getNpaDetail().getNetAssetValue());
         npaDetail.setRemarks(resource.getNpaDetail().getRemarks());
         npaDetail = npaDetailRepository.save(npaDetail);
+
+        // Change Documents for NPA Detail
+        changeDocumentService.createChangeDocument(
+                npaDetail.getNpa().getLoanMonitor().getId(),
+                npaDetail.getId().toString(),
+                null,
+                npaDetail.getNpa().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldNPADetail,
+                npaDetail,
+                "Created",
+                username,
+                "Monitoring", "NPA Detail");
+
         return npaDetail;
     }
 
     @Override
     public List<NPADetail> getNPADetail(String npaId, String username) {
         NPA npa = npaRepository.getOne(UUID.fromString(npaId));
-        return npaDetailRepository.findByNpaOrderByLineItemNumberDesc(npa);
+        //return npaDetailRepository.findByNpaOOrderByLineItemNumberDesc(npa);
+        return npaDetailRepository.findByNpa(npa);
+
     }
 }

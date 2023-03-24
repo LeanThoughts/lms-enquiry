@@ -53,7 +53,7 @@ public class ValuerService implements IValuerService {
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(valuer.getLoanMonitor(),
                 valuer.getLoanAppraisal(),resource.getModuleName());
 
-        // Create Change Document for LIE
+        // Create Change Document for Valuer
             changeDocumentService.createChangeDocument(
                     loanBusinessProcessObjectId,
                     valuer.getId(),
@@ -63,7 +63,7 @@ public class ValuerService implements IValuerService {
                     valuer,
                     "Created",
                     username,
-                    resource.getModuleName() , "Lenders Legal Counsel" );
+                    resource.getModuleName() , "Valuer" );
 
         return valuer;
     }
@@ -100,7 +100,7 @@ public class ValuerService implements IValuerService {
                 valuer,
                 "Updated",
                 username,
-                resource.getModuleName(), "Lenders Legal Counsel" );
+                resource.getModuleName(), "Valuer" );
 
         return valuer;
     }
@@ -147,7 +147,7 @@ public class ValuerService implements IValuerService {
                 valuerReportAndFee,
                 "Created",
                 username,
-                resource.getModuleName() , "LLC Report And Fee" );
+                resource.getModuleName() , "Valuer Report And Fee" );
 
         return valuerReportAndFee;
     }
@@ -188,7 +188,7 @@ public class ValuerService implements IValuerService {
                 valuerReportAndFee,
                 "Created",
                 username,
-                resource.getModuleName(), "LLC Report And Fee" );
+                resource.getModuleName(), "Valuer Report And Fee" );
 
         return valuerReportAndFee;
     }

@@ -39,6 +39,8 @@ import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
 import pfs.lms.enquiry.monitoring.lie.LendersIndependentEngineer;
 import pfs.lms.enquiry.monitoring.llc.LLCReportAndFee;
 import pfs.lms.enquiry.monitoring.llc.LendersLegalCouncil;
+import pfs.lms.enquiry.monitoring.npa.NPA;
+import pfs.lms.enquiry.monitoring.npa.NPADetail;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
 import pfs.lms.enquiry.monitoring.projectmonitoring.ProjectMonitoringDataItemHistory;
@@ -47,6 +49,8 @@ import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetail;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccount;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccountStatement;
+import pfs.lms.enquiry.monitoring.valuer.Valuer;
+import pfs.lms.enquiry.monitoring.valuer.ValuerReportAndFee;
 import pfs.lms.enquiry.repository.ChangeDocumentRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.ISAPIntegrationPointerService;
@@ -407,7 +411,16 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", llcReportAndFee.getLendersLegalCouncil().getSerialNumber().toString());
                     result.put("description", llcReportAndFee.getReportType() + llcReportAndFee.getDateOfReceipt());
                     return result;
-
+                case "Valuer":
+                    Valuer valuer = (Valuer) object;
+                    result.put("id", valuer.getSerialNumber().toString());
+                    result.put("description", valuer.getName());
+                    return result;
+                case "ValuerReportAndFee":
+                    ValuerReportAndFee valuerReportAndFee = (ValuerReportAndFee) object;
+                    result.put("id", valuerReportAndFee.getSerialNumber().toString());
+                    result.put("description", valuerReportAndFee.getReportType() + valuerReportAndFee.getDateOfReceipt());
+                    return result;
 
                 case "LendersFinancialAdvisor":
                     LendersFinancialAdvisor lendersFinancialAdvisor = (LendersFinancialAdvisor) object;
@@ -614,10 +627,19 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
                 case "SubLocationDetail":
                     SubLocationDetail subLocationDetail = (SubLocationDetail) object;
-                    result.put("id", subLocationDetail.getId().toString() );
+                    result.put("id", subLocationDetail.getSerialNumber().toString() );
                     result.put("description", subLocationDetail.getLocation());
                     return result;
-
+                case "NPA":
+                    NPA npa = (NPA) object;
+                    result.put("id", npa.getId().toString() );
+                    result.put("description", npa.getAssetClass());
+                    return result;
+                case "NPADetail":
+                    NPADetail npaDetail = (NPADetail) object;
+                    result.put("id", npaDetail.getLineItemNumber().toString() );
+                    result.put("description", npaDetail.getLoanNumber()); // TODO - Change to Serial Number
+                    return result;
 
             }
 

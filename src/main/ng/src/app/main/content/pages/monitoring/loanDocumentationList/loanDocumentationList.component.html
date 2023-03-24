@@ -1,0 +1,115 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLoanDocumentation()" [disabled]="!selectedLoanDocumentation"
+                *ngIf="_module === 'Monitoring'">
+            Display Loan Documentation Details
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLoanDocumentation()" *ngIf="_module == 'Monitoring'"> Add LIE </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLoanDocumentation()" [disabled]="!selectedLoanDocumentation"
+                *ngIf="_module  == 'Monitoring'">
+            Modify Loan Documentation
+        </button>
+    </div>
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Documentation Type Column -->
+            <ng-container matColumnDef="documentationTypeCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Documentation Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{  getDocumentationType(obj.documentationTypeCode)  }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentationTypeDescription Column -->
+            <ng-container matColumnDef="documentationTypeDescription">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Doc. Type Description</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentationTypeDescription }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- executionDate Column -->
+            <ng-container matColumnDef="executionDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Execution Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.executionDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+          <!-- approvalDate Column -->
+          <ng-container matColumnDef="approvalDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Date Of Appointment</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.approvalDate | date: 'dd/MM/yyyy' }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <!--loanDocumentationStatusCode Column -->
+          <ng-container matColumnDef="loanDocumentationStatusCode">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Documentation Status</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ getDocumentationStatus(obj.loanDocumentationStatusCode) }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- loanDocumentationStatusCodeDescription Column -->
+          <ng-container matColumnDef="loanDocumentationStatusCodeDescription">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Doc. Status Description</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.loanDocumentationStatusCodeDescription }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- documentType Column -->
+          <ng-container matColumnDef="documentType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.documentType }}</p>
+            </mat-cell>
+          </ng-container>
+
+
+          <!-- documentTitle Column -->
+          <ng-container matColumnDef="documentTitle">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.documentTitle }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- fileReference Column -->
+          <ng-container matColumnDef="fileReference">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >File Reference</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.fileReference }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Remarks Column -->
+            <ng-container matColumnDef="remarks">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Remarks</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.remarks }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+                [ngClass]="{'highlight':obj === selectedLoanDocumentation}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+</div>

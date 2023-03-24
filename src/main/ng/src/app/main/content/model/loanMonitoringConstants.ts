@@ -18,13 +18,13 @@ export class LoanMonitoringConstants {
         {code: "6" , value:"Doubtful 2"},
         {code: "7" , value:"Doubtful 3"}
     ]
-    
+
     // smaCategories
     public static smaCategories = [
         {code: "1" , value:"SMA 1"},
         {code: "2" , value:"SMA 2"}
     ]
-    
+
     // restructuringTypes
     public static restructuringTypes = [
         {code: "1" , value:""},
@@ -32,7 +32,7 @@ export class LoanMonitoringConstants {
         {code: "3" , value:"Flexible"},
         {code: "4" , value:"SDR"},
     ]
-    
+
     // siteVisitTypes
     public static siteVisitTypes = [
         {code: "Site Visit" , value:"Site Visit"},
@@ -520,7 +520,7 @@ export class LoanMonitoringConstants {
          value: "Insurance Document"
         }
        ]
-       
+
 
     // communications
     static communications = [
@@ -577,7 +577,7 @@ export class LoanMonitoringConstants {
         {objectType: "ZDE002", code: "Z00010", value:"Hypothecation"},
         {objectType: "ZDE003", code: "Z00010", value:"Hypothecation"},
         {objectType: "ZDE004", code: "Z00010", value:"Hypothecation"}
-    ];    
+    ];
 
     // applicability
     static applicability = [
@@ -1058,5 +1058,21 @@ export class LoanMonitoringConstants {
         {code: "06", value:"Loan Disbursement Stage"},
         {code: "07", value:"Approved"},
         {code: "08", value:"Rejected"}
-    ]
+    ];
+  public static documentationTypes = [
+    {code: "1", value:"Facility Agreement"},
+    {code: "2", value:"TRA Agreement"},
+    {code: "3", value:"Facility Agent Agreement"},
+    {code: "4", value:"Security Trustee Agreement"}
+
+
+  ];
+  public static documentationStatuses = [
+    {code: "1", value:"Not Started"},
+    {code: "2", value:"Pending"},
+    {code: "3", value:"Executed"},
+    {code: "4", value:"Approved"}
+
+  ];
+
 }

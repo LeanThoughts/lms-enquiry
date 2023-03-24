@@ -87,6 +87,10 @@ public class SubLocationDetailService implements ISubLocationDetailService {
 
         SubLocationDetail subLocationDetail = subLocationDetailRepository.findById(subLocationDetailResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(subLocationDetailResource.getId().toString()));
+
+        SubLocationDetail oldSubLocationDetail = (SubLocationDetail) subLocationDetail.clone();
+
+
         subLocationDetail.setDistrict(subLocationDetailResource.getDistrict());
         subLocationDetail.setLocation(subLocationDetailResource.getLocation());
         subLocationDetail.setNearestAirport(subLocationDetailResource.getNearestAirport());
@@ -108,7 +112,7 @@ public class SubLocationDetailService implements ISubLocationDetailService {
                 subLocationDetail.getId().toString(),
                 subLocationDetail.getLoanAppraisal().getId().toString(),
                 subLocationDetail.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-                null,
+                oldSubLocationDetail,
                 subLocationDetail,
                 "Updated",
                 username,

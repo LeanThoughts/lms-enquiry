@@ -13,7 +13,7 @@
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button mat-raised-button class="mr-8 mb-8" (click)="sendMonitoringForApproval()" [disabled]="(loanMonitor == undefined || loanMonitor == null || 
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendMonitoringForApproval()" [disabled]="(loanMonitor == undefined || loanMonitor == null ||
                     loanMonitor.workFlowStatusCode === 2) || disableSendForApproval === true">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
             </button>
@@ -31,45 +31,45 @@
                     <mat-panel-title>
                         Enquiry Details
                     </mat-panel-title>
-                </mat-expansion-panel-header>            
+                </mat-expansion-panel-header>
                 <form [formGroup]="selectedEnquiryForm">
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="BP Code" formControlName="busPartnerNumber" readonly>          
+                            <input matInput placeholder="BP Code" formControlName="busPartnerNumber" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Project Location (State)" formControlName="projectLocationState" readonly>          
+                            <input matInput placeholder="Project Location (State)" formControlName="projectLocationState" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Project Type" formControlName="projectType" readonly>          
+                            <input matInput placeholder="Project Type" formControlName="projectType" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Loan Class" formControlName="loanClassDescription" readonly>          
-                        </mat-form-field>
-                    </div>
-                    <div fxLayout="row">
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Project Capacity" formControlName="projectCapacity" readonly>          
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Type of Assistance" formControlName="assistanceTypeDescription" readonly>          
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Project Cost" formControlName="projectCost" readonly>          
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Loan Amount Requested" formControlName="loanAmount" readonly>          
+                            <input matInput placeholder="Loan Class" formControlName="loanClassDescription" readonly>
                         </mat-form-field>
                     </div>
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Financing Type" formControlName="financingTypeDescription" readonly>          
+                            <input matInput placeholder="Project Capacity" formControlName="projectCapacity" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Lead FI" formControlName="leadFI" readonly>          
+                            <input matInput placeholder="Type of Assistance" formControlName="assistanceTypeDescription" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Stage" formControlName="stage" readonly>          
+                            <input matInput placeholder="Project Cost" formControlName="projectCost" readonly>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Loan Amount Requested" formControlName="loanAmount" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Financing Type" formControlName="financingTypeDescription" readonly>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Lead FI" formControlName="leadFI" readonly>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Stage" formControlName="stage" readonly>
                         </mat-form-field>
                     </div>
                 </form>
@@ -80,39 +80,39 @@
                     <mat-panel-title>
                         Other Details
                     </mat-panel-title>
-                </mat-expansion-panel-header>               
+                </mat-expansion-panel-header>
                 <form [formGroup]="boardApprovalDetailsForm">
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Board Meeting Number" formControlName="boardMeetingNumber" readonly>          
+                            <input matInput placeholder="Board Meeting Number" formControlName="boardMeetingNumber" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Board Approval Date" formControlName="boardApprovalDate" readonly>          
+                            <input matInput placeholder="Board Approval Date" formControlName="boardApprovalDate" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Loan Number" formControlName="loanNumber" readonly>          
+                            <input matInput placeholder="Loan Number" formControlName="loanNumber" readonly>
                         </mat-form-field>
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Sanction Letter Date" formControlName="sanctionLetterDate" readonly>          
-                        </mat-form-field>
-                    </div>
-                    <div fxLayout="row">
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Loan Documentation Date" formControlName="loanDocumentationDate" readonly>          
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="1st Disbn Date" formControlName="firstDistributionDate" readonly>          
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Sanction Amount" formControlName="sanctionAmount" readonly>          
-                        </mat-form-field>
-                        <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Disbursement Status" formControlName="discributionStatus" readonly>          
+                            <input matInput placeholder="Sanction Letter Date" formControlName="sanctionLetterDate" readonly>
                         </mat-form-field>
                     </div>
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
-                            <input matInput placeholder="Scheduled COD" formControlName="scheduledCOD" readonly>          
+                            <input matInput placeholder="Loan Documentation Date" formControlName="loanDocumentationDate" readonly>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="1st Disbn Date" formControlName="firstDistributionDate" readonly>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Sanction Amount" formControlName="sanctionAmount" readonly>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Disbursement Status" formControlName="discributionStatus" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Scheduled COD" formControlName="scheduledCOD" readonly>
                         </mat-form-field>
                     </div>
                 </form>
@@ -157,12 +157,12 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="TRA Statement">         
+            <mat-tab label="TRA Statement">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-tra-list [module]="'Monitoring'"></fuse-tra-list>
                 </div>
             </mat-tab>
-            
+
             <mat-tab label="T&C Modification">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-tandc-list></fuse-tandc-list>
@@ -175,7 +175,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Site Visit / Lenders Meet">          
+            <mat-tab label="Site Visit / Lenders Meet">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-site-visit-list></fuse-site-visit-list>
                 </div>
@@ -187,25 +187,25 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Rate of Interest">            
+            <mat-tab label="Rate of Interest">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-rate-of-interest-list></fuse-rate-of-interest-list>
                 </div>
             </mat-tab>
 
-            <mat-tab label="Borrower Financials">           
+            <mat-tab label="Borrower Financials">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-borrower-financials-list></fuse-borrower-financials-list>
                 </div>
             </mat-tab>
 
-            <mat-tab label="Promoter Financials">           
+            <mat-tab label="Promoter Financials">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-promoter-financials-list></fuse-promoter-financials-list>
                 </div>
             </mat-tab>
 
-            <mat-tab label="Financial Covenants">        
+            <mat-tab label="Financial Covenants">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-financial-covenants-list></fuse-financial-covenants-list>
                 </div>
@@ -216,7 +216,7 @@
                     <fuse-promoter-details-list></fuse-promoter-details-list>
                 </div>
             </mat-tab>
-        
+
             <mat-tab label="Project Monitoring">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-project-monitoring-data-item-list></fuse-project-monitoring-data-item-list>
@@ -228,6 +228,13 @@
                     <fuse-npa-update-component></fuse-npa-update-component>
                 </div>
             </mat-tab>
+
+          <mat-tab label="Loan Documentation">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-loan-documentation-list [module]="'Monitoring'"></fuse-loan-documentation-list>
+            </div>
+          </mat-tab>
+
         </mat-tab-group>
         <!-- / CONTENT -->
     </div>
