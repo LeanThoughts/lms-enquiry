@@ -310,12 +310,12 @@ export class LoanMonitoringService implements Resolve<any> {
 
     public saveSiteVisit(siteVisit: any, app: string, loanApplicationId: any): Observable<any> {
         const url = "enquiry/api/loanApplications/sitevisit/create?app=" + app;
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'siteVisit':siteVisit });
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'siteVisit':siteVisit, 'moduleName': app });
     }
 
-    public updateSiteVisit(siteVisit: any): Observable<any> {
+    public updateSiteVisit(siteVisit: any, moduleName: string): Observable<any> {
         const url = "enquiry/api/loanApplications/sitevisit/" + siteVisit.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'siteVisit':siteVisit });
+        return this._http.put(url, { 'loanApplicationId':'', 'siteVisit':siteVisit, 'moduleName': moduleName });
     }    
 
     // All about Rate of Interest

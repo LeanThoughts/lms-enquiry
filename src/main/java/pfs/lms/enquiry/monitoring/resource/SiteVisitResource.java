@@ -18,4 +18,5 @@ public class SiteVisitResource {
 
     private UUID loanApplicationId;
     private SiteVisit siteVisit;
+    private String moduleName;
 }
