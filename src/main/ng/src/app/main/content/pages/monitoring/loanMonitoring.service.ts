@@ -198,7 +198,7 @@ export class LoanMonitoringService implements Resolve<any> {
 
   public saveLoanDocumentation(loanDocumentation: any, loanApplicationId: any, module: string): Observable<any> {
     const url = 'enquiry/api/nPAs/loanDocumentation/create';
-    return this._http.post(url, { 'loanApplicationId': loanApplicationId, 'lendersIndependentEngineer': loanDocumentation, 'moduleName': module });
+    return this._http.post(url, { 'loanApplicationId': loanApplicationId, 'loanDocumentation': loanDocumentation, 'moduleName': module });
   }
 
   public updateLoanDocumentation(loanDocumentation: any, module: string): Observable<any> {

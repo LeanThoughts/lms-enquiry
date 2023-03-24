@@ -122,10 +122,13 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
             var dt = new Date(loanDocumenation.executionDate);
 
             loanDocumenation.executionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(loanDocumenation.executionDate);
+          dt = new Date(loanDocumenation.approvalDate);
             loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(loanDocumenation.approvalDate);
-            loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
+          // dt = new Date(loanDocumenation.executionDate);
+            // loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            // dt = new Date(loanDocumenation.approvalDate);
+            // loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addLoanDocumentation') {
                 this._loanMonitoringService.saveLoanDocumentation(loanDocumenation, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
