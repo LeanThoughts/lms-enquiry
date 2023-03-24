@@ -25,6 +25,8 @@ export class SiteVisitUpdateDialogComponent {
 
     partners = new Array<any>();
 
+    moduleName: string;
+
     /**
      * constructor()
      * @param _formBuilder
@@ -47,6 +49,8 @@ export class SiteVisitUpdateDialogComponent {
             if (_loanMonitoringService.loanContractExtension)
                 this.selectedSiteVisit.actualCOD = _loanMonitoringService.loanContractExtension.actualCOD;
         }
+
+        this.moduleName = _dialogData.moduleName;
 
         this.siteVisitUpdateForm = _formBuilder.group({
             serialNumber: [this.selectedSiteVisit.serialNumber],
@@ -137,7 +141,7 @@ export class SiteVisitUpdateDialogComponent {
         siteVisit.fileReference = fileReference;
 
         if (this._dialogData.operation === 'addSiteVisit') {
-            this._loanMonitoringService.saveSiteVisit(siteVisit, 'monitoring', this._dialogData.loanApplicationId).subscribe(() => {
+            this._loanMonitoringService.saveSiteVisit(siteVisit, this.moduleName, this._dialogData.loanApplicationId).subscribe(() => {
                 this._matSnackBar.open('Site Visit details added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });
@@ -158,7 +162,7 @@ export class SiteVisitUpdateDialogComponent {
             if (siteVisit.fileReference !== '') {
                 this.selectedSiteVisit.fileReference = siteVisit.fileReference;
             }
-            this._loanMonitoringService.updateSiteVisit(this.selectedSiteVisit).subscribe(() => {
+            this._loanMonitoringService.updateSiteVisit(this.selectedSiteVisit, this.moduleName).subscribe(() => {
                 this._matSnackBar.open('Site Visit details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });

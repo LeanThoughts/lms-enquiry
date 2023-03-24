@@ -24,6 +24,13 @@ export class SiteVisitListComponent implements OnInit {
 
     selectedSiteVisit: any;
 
+    _module = '';
+
+    @Input()
+    set module(m: string) {
+        this._module = m;
+    }
+
     /**
      * constructor()
      */
@@ -56,7 +63,8 @@ export class SiteVisitListComponent implements OnInit {
         var data = {
             'operation': operation,
             'loanApplicationId': this.loanApplicationId,
-            'selectedSiteVisit': undefined
+            'selectedSiteVisit': undefined,
+            'moduleName': this._module
         };
         if (operation === 'updateSiteVisit') {
             data.selectedSiteVisit = this.selectedSiteVisit;

@@ -28,9 +28,7 @@ import { SyndicateConsortiumListComponent } from './syndicate-consortium/syndica
 import { SyndicateConsortiumUpdateComponent } from './syndicate-consortium/syndicate-consortium-update/syndicate-consortium-update.component';
 import { ProposalDetailsComponent } from './proposal-details/proposal-details/proposal-details.component';
 import { ProposalDetailsUpdateComponent } from './proposal-details/proposal-details-update/proposal-details-update.component';
-import { FurtherDetailsSiteVisitListComponent } from './further-details/furtherDetailsSiteVisitList/furtherDetailsSiteVisitList.component';
 import { ProjectAppraisalCompletionUpdateComponent } from './projectAppraisalCompletionUpdate/projectAppraisalCompletionUpdate.component';
-import { FurtherDetailsSiteVisitUpdateComponent } from './further-details/furtherDetailsSiteVisitUpdate/furtherDetailsSiteVisitUpdate.component';
 import { ReasonForDelayComponent } from './reasonForDelay/reasonForDelay.component';
 import { CustomerRejectionUpdateComponent } from './customerRejectionUpdate/customerRejectionUpdate.component';
 import { ProjectDataUpdateComponent } from './projectDataUpdate/projectDataUpdate.component';
@@ -111,8 +109,6 @@ const MY_FORMATS = {
         SyndicateConsortiumUpdateComponent,
         ProposalDetailsComponent,
         ProposalDetailsUpdateComponent,
-        FurtherDetailsSiteVisitListComponent,
-        FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayComponent,
         ReasonForDelayUpdateComponent,
@@ -150,7 +146,6 @@ const MY_FORMATS = {
         LoanAppraisalKYCUpdateComponent,
         SyndicateConsortiumUpdateComponent,
         ProposalDetailsUpdateComponent,
-        FurtherDetailsSiteVisitUpdateComponent,
         ProjectAppraisalCompletionUpdateComponent,
         ReasonForDelayUpdateComponent,
         CustomerRejectionUpdateComponent,

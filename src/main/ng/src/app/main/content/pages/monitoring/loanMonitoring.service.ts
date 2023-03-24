@@ -11,8 +11,6 @@ export class LoanMonitoringService implements Resolve<any> {
 
     loanMonitor: BehaviorSubject<any> = new BehaviorSubject({});
 
-
-
     selectedLIE: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLIA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedLFA: BehaviorSubject<any> = new BehaviorSubject({});
@@ -20,7 +18,6 @@ export class LoanMonitoringService implements Resolve<any> {
     selectedLLC: BehaviorSubject<any> = new BehaviorSubject({});
     selectedCLA: BehaviorSubject<any> = new BehaviorSubject({});
     selectedValuer: BehaviorSubject<any> = new BehaviorSubject({});
-    selectedLoanDocumentation: BehaviorSubject<any> = new BehaviorSubject({});
 
     public banks: any;
 
@@ -190,24 +187,6 @@ export class LoanMonitoringService implements Resolve<any> {
         const url = "enquiry/api/loanApplications/lendersindependentengineers/" + lie.id;
         return this._http.put(url, { 'loanApplicationId':'', 'lendersIndependentEngineer':lie, 'moduleName': module });
     }
-
-
-    // All  about Loan Documentation
-  public getLoanDocumentations(loanApplicationId: string): Observable<any> {
-    return this._http.get('enquiry/api/nPAs/loanDocumentation/loanApplication/' + loanApplicationId  );
-  }
-
-  public saveLoanDocumentation(loanDocumentation: any, loanApplicationId: any, module: string): Observable<any> {
-    const url = 'enquiry/api/nPAs/loanDocumentation/create';
-    return this._http.post(url, { 'loanApplicationId': loanApplicationId, 'loanDocumentation': loanDocumentation, 'moduleName': module });
-  }
-
-  public updateLoanDocumentation(loanDocumentation: any, module: string): Observable<any> {
-    const url = 'enquiry/api/nPAs/loanDocumentation/' + loanDocumentation.id;
-    return this._http.put(url, {'loanApplicationId': '', 'loanDocumentation': loanDocumentation, 'moduleName': module});
-  }
-
-
 
     // All about LIE Reports And Fees
 
@@ -560,17 +539,7 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.get<any>('enquiry/api/partner/traAuthorizedPersons');
     }
 
-
-  public getDocumentationTypes(): Observable<any> {
-    return this._http.get<any>('enquiry/api/documentationTypes');
-  }
-
-  public getDocumentationStatuses(): Observable<any> {
-    return this._http.get<any>('enquiry/api/documentationStatuses');
-  }
-
-
-  public getReferenceInterestRates(): Observable<any> {
+    public getReferenceInterestRates(): Observable<any> {
         return this._http.get<any>('enquiry/api/referenceinterestrates/all');
     }
 
