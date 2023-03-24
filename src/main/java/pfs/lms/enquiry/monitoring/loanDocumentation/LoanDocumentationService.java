@@ -43,6 +43,7 @@ public class LoanDocumentationService implements ILoanDocumentationService {
 
         LoanDocumentation loanDocumentation = resource.getLoanDocumentation();
         loanDocumentation.setLoanMonitor(loanMonitor);
+        loanDocumentation.setSerialNumber(loanDocumentationRepository.findByLoanMonitor(loanMonitor).size() + 1);
         loanDocumentation = loanDocumentationRepository.save(loanDocumentation);
 
         // Change Documents for Monitoring Header
@@ -80,19 +81,21 @@ public class LoanDocumentationService implements ILoanDocumentationService {
         existingLoanDocumentation.setFileReference(resource.getLoanDocumentation().getFileReference() );
         existingLoanDocumentation.setRemarks( resource.getLoanDocumentation().getRemarks());
 
-        LoanDocumentation npa = loanDocumentationRepository.save(existingLoanDocumentation);
+        LoanDocumentation loanDocumentation = loanDocumentationRepository.save(existingLoanDocumentation);
 
         // Change Documents for LoanDocumentation
         changeDocumentService.createChangeDocument(
-                npa.getLoanMonitor().getId(), npa.getId().toString(),null,
-                npa.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                loanDocumentation.getLoanMonitor().getId(),
+                loanDocumentation.getId().toString(),
+                null,
+                loanDocumentation.getLoanMonitor().getLoanApplication().getLoanContractId(),
                 oldLoanDocumentation,
                 existingLoanDocumentation,
                 "Updated",
                 username,
                 "Monitoring", "Loan Documentation");
 
-        return npa;
+        return loanDocumentation;
     }
 
     @Override

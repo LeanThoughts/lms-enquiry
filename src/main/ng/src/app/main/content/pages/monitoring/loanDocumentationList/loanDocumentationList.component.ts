@@ -4,7 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../loanMonitoring.service';
 import { LoanDocumentationUpdateDialogComponent } from '../loanDocumentationUpdate/loanDocumentationUpdate.component';
-import {LoanMonitoringConstants} from "../../../model/loanMonitoringConstants";
+import {LoanMonitoringConstants} from '../../../model/loanMonitoringConstants';
 
 @Component({
     selector: 'fuse-loan-documentation-list',

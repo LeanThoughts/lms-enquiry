@@ -39,6 +39,7 @@ import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
 import pfs.lms.enquiry.monitoring.lie.LendersIndependentEngineer;
 import pfs.lms.enquiry.monitoring.llc.LLCReportAndFee;
 import pfs.lms.enquiry.monitoring.llc.LendersLegalCouncil;
+import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentation;
 import pfs.lms.enquiry.monitoring.npa.NPA;
 import pfs.lms.enquiry.monitoring.npa.NPADetail;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
@@ -638,9 +639,13 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "NPADetail":
                     NPADetail npaDetail = (NPADetail) object;
                     result.put("id", npaDetail.getLineItemNumber().toString() );
-                    result.put("description", npaDetail.getLoanNumber()); // TODO - Change to Serial Number
+                    result.put("description", npaDetail.getLoanNumber());
                     return result;
-
+                case "LoanDocumentation":
+                    LoanDocumentation loanDocumentation = (LoanDocumentation) object;
+                    result.put("id", loanDocumentation.getSerialNumber().toString() );
+                    result.put("description", loanDocumentation.getDocumentationTypeDescription());
+                    return result;
             }
 
         } catch (Exception ex) {
