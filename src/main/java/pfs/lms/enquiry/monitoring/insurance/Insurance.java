@@ -22,6 +22,7 @@ public class Insurance extends AggregateRoot<Insurance> implements Cloneable    
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
+    private Integer serialNumber;
     private LocalDate validFrom;
     private LocalDate validTo;
     private String documentType;
