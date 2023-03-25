@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Setter
@@ -14,12 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class InsuranceResource {
 
-    private UUID id;
     private UUID loanApplicationId;
-
-    private LocalDate validFrom;
-    private LocalDate validTo;
-    private String documentType;
-    private String documentTitle;
-    private String fileReference;
+    private Insurance insurance;
 }

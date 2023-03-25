@@ -40,6 +40,22 @@ export class LoanMonitoringService implements Resolve<any> {
         return this.getLoanContractExtension(this._loanEnquiryService.selectedEnquiry.value.id);
     }
 
+    // All about Insurance
+
+    public getInsurances(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/insurances');
+    }
+
+    public saveInsurance(insurance: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/insurances/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'insurance':insurance });
+    }
+
+    public updateInsurance(insurance: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/insurances/update";
+        return this._http.put(url, { 'loanApplicationId':'', 'insurance':insurance });
+    }
+
     // All about Valuer
 
     public getValuers(loanApplicationId: string): Observable<any> {

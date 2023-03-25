@@ -70,6 +70,8 @@ import { ValuerUpdateDialogComponent } from './valuerUpdate/valuerUpdate.compone
 import { ValuerReportAndFeeUpdateDialogComponent } from './valuerReportAndFeeUpdate/valuerReportAndFeeUpdate.component';
 import { ValuerReportAndFeeListComponent } from './valuerReportAndFeeList/valuerReportAndFeeList.component';
 import { ProjectMonitoringDataItemHistoryComponent } from './projectMonitoringData/projectMonitoringDataItemHistory/projectMonitoringDataItemHistory.component';
+import { InsuranceListComponent } from './insurance/insuranceList/insuranceList.component';
+import { InsuranceUpdateDialogComponent } from './insurance/insuranceUpdate/insuranceUpdate.component';
 
 const routes = [
     {
@@ -162,7 +164,9 @@ const routes = [
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeListComponent,
         ValuerReportAndFeeUpdateDialogComponent,
-        ProjectMonitoringDataItemHistoryComponent
+        ProjectMonitoringDataItemHistoryComponent,
+        InsuranceListComponent,
+        InsuranceUpdateDialogComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -271,7 +275,8 @@ const routes = [
         NPADetailUpdateDialogComponent,
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeUpdateDialogComponent,
-        ProjectMonitoringDataItemHistoryComponent
+        ProjectMonitoringDataItemHistoryComponent,
+        InsuranceUpdateDialogComponent
     ]
 })
 export class LoanMonitoringModule {
