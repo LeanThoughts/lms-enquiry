@@ -23,7 +23,9 @@ export class ProjectMonitoringDataItemListComponent implements OnInit {
     selectedProjectMonitoringDataItem: any;
 
     displayedColumns = [
-        'dateOfEntry', 'description', 'originalData','revisedData1', 'revisedData2', 'remarks'
+        //'dateOfEntry', 'description', 'originalData','revisedData1', 'revisedData2', 'remarks'
+        'dateOfEntry', 'description', 'originalData',  'remarks'
+
     ];
 
     /**
@@ -66,7 +68,7 @@ export class ProjectMonitoringDataItemListComponent implements OnInit {
     onSelect(projectMonitoringDataItem: any): void {
         this.selectedProjectMonitoringDataItem = projectMonitoringDataItem;
     }
-    
+
     /**
      * updateProjectMonitoringData()
      */
@@ -82,14 +84,14 @@ export class ProjectMonitoringDataItemListComponent implements OnInit {
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 this._monitoringService.getProjectMonitoringData(this.loanApplicationId).subscribe(response => {
                     this.projectMonitoringData = response;
                     this.projectMonitoringDataSource = new MatTableDataSource(this.projectMonitoringData.projectMonitoringDataItems);
                 });
             }
-        });  
+        });
     }
 
     displayProjectMonitoringDataHistory(history: any): void {
@@ -118,4 +120,12 @@ export class ProjectMonitoringDataItemListComponent implements OnInit {
                     }
                 });
     }
+
+  downloadHistory(): void {
+    this._monitoringService.getProjectMonitoringDataItemHistoryDownload(this.projectMonitoringData.id )
+      .subscribe(response => {
+        this._matSnackBar.open('Project monitoring history download', 'OK', { duration: 7000 });
+
+      });
+  }
 }

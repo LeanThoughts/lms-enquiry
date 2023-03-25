@@ -229,18 +229,17 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="NPA Details">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-npa-update-component></fuse-npa-update-component>
-                </div>
-            </mat-tab>
-
           <mat-tab label="Loan Documentation">
             <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
               <fuse-loan-documentation-list [module]="'Monitoring'"></fuse-loan-documentation-list>
             </div>
           </mat-tab>
 
+          <mat-tab label="NPA Details">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-npa-update-component></fuse-npa-update-component>
+            </div>
+          </mat-tab>
         </mat-tab-group>
         <!-- / CONTENT -->
     </div>

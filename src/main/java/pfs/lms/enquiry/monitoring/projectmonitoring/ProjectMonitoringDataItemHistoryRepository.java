@@ -8,4 +8,7 @@ import java.util.UUID;
 public interface ProjectMonitoringDataItemHistoryRepository extends JpaRepository<ProjectMonitoringDataItemHistory, String> {
     List<ProjectMonitoringDataItemHistory>
         findByProjectMonitoringDataIdAndParticularsOrderByDateOfEntryDesc(String projectMonitoringDataId, String particulars);
+    List<ProjectMonitoringDataItemHistory>
+    findByProjectMonitoringDataIdOrderByDateOfEntryDesc(String projectMonitoringDataId );
+
 }

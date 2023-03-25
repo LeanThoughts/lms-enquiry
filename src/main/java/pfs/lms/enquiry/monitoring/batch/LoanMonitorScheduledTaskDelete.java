@@ -54,6 +54,9 @@ public class LoanMonitorScheduledTaskDelete {
     @Value("${sap.monitorDocumentUri}")
     private String monitorDocumentUri;
 
+    @Value("${sap.monitorServiceUri}")
+    private String monitorServiceUri;
+
     @Value("${sap.appraisalServiceUri}")
     private String appraisalServiceUri;
 
@@ -100,6 +103,72 @@ public class LoanMonitorScheduledTaskDelete {
          for (SAPIntegrationPointer sapIntegrationPointer : sapIntegrationPointers) {
 
              switch (sapIntegrationPointer.getSubBusinessProcessName()) {
+                 case "Lenders Independent Engineer":
+                     log.info("Attempting to Delete Lenders Independent Engineer from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = monitorServiceUri + "LendersIndependentEngineerSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+
+             case "Lenders Financial Advisor":
+                 log.info("Attempting to Delete Lenders Financial Advisor from SAP AT :" + dateFormat.format(new Date()));
+
+                 //Set Status as in progress
+                 sapIntegrationPointer.setStatus(1); // In Posting Process
+                 sapIntegrationRepository.save(sapIntegrationPointer);
+
+                 objectId = sapIntegrationPointer.getBusinessObjectId();
+                 serviceUri = monitorServiceUri + "LendersFinancialAdvisorSet";
+                 response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                 updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                 break;
+                 case "Lenders Insurance Advisor":
+                     log.info("Attempting to Delete Lenders Insurance Advisor from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = monitorServiceUri + "LendersInsuranceAdvisorSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Lenders Legal Counsel":
+                     log.info("Attempting to Delete Lenders Legal Counsel from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = monitorServiceUri + "LendersInsuranceAdvisorSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+                 case "Valuer":
+                     log.info("Attempting to Delete Valuer from SAP AT :" + dateFormat.format(new Date()));
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     objectId = sapIntegrationPointer.getBusinessObjectId();
+                     serviceUri = monitorServiceUri + "ValuerSet";
+                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
                  case "NPA Detail":
                      log.info("Attempting to Delete NPA Detail from SAP AT :" + dateFormat.format(new Date()));
 
@@ -108,7 +177,7 @@ public class LoanMonitorScheduledTaskDelete {
                      sapIntegrationRepository.save(sapIntegrationPointer);
 
                      objectId = sapIntegrationPointer.getBusinessObjectId();
-                     serviceUri = monitorDocumentUri + "NPADetailSet";
+                     serviceUri = monitorServiceUri + "NPADetailSet";
                      response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri,objectId , MediaType.APPLICATION_JSON);
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
