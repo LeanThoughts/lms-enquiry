@@ -19,9 +19,11 @@ export class ProjectMonitoringDataItemHistoryComponent {
     projectMonitoringHistoryDataSource: MatTableDataSource<any>;
 
     displayedColumns = [
-        'dateOfEntry', 'description', 'originalData','revisedData1', 'revisedData2', 'remarks'
+//     'dateOfEntry', 'description', 'originalData','revisedData1', 'revisedData2', 'remarks'
+      'dateOfEntry', 'description', 'originalData', 'remarks'
+
     ];
-  
+
     /**
      * constructor()
      */
@@ -38,5 +40,5 @@ export class ProjectMonitoringDataItemHistoryComponent {
      */
     onHistorySelect(projectMonitoringDataHistoryItem: any): void {
         this.selectedProjectMonitoringDataHistoryItem = projectMonitoringDataHistoryItem;
-    }  
+    }
 }

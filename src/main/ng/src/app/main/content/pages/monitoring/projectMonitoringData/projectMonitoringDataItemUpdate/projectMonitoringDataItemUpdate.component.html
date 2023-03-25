@@ -16,24 +16,24 @@
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker1" placeholder="Date" formControlName="dateOfEntry" readonly required>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker> 
-                </mat-form-field>            
-            </div>
-            <div fxLayout="row" class="mt-16">
-                <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Original Data" formControlName="originalData" maxlength="100">
+                    <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </div>
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Revised Data - 1" formControlName="revisedData1" maxlength="100">
+                    <input matInput placeholder="Current Data" formControlName="originalData" maxlength="100">
                 </mat-form-field>
             </div>
-            <div fxLayout="row" class="mt-16">
-                <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Revised Data - 2" formControlName="revisedData2" maxlength="100">
-                </mat-form-field>
-            </div>
+<!--            <div fxLayout="row" class="mt-16">-->
+<!--                <mat-form-field fxFlex="100">-->
+<!--                    <input matInput placeholder="Revised Data - 1" formControlName="revisedData1" maxlength="100">-->
+<!--                </mat-form-field>-->
+<!--            </div>-->
+<!--            <div fxLayout="row" class="mt-16">-->
+<!--                <mat-form-field fxFlex="100">-->
+<!--                    <input matInput placeholder="Revised Data - 2" formControlName="revisedData2" maxlength="100">-->
+<!--                </mat-form-field>-->
+<!--            </div>-->
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="100">
                     <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">

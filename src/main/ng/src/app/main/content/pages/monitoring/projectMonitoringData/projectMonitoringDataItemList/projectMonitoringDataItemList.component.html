@@ -1,11 +1,14 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="ml-8 mr-8 btn" mat-raised-button color="accent" (click)="updateProjectMonitoringData()" [disabled]="!selectedProjectMonitoringDataItem"> 
+        <button class="ml-8 mr-8 btn" mat-raised-button color="accent" (click)="updateProjectMonitoringData()" [disabled]="!selectedProjectMonitoringDataItem">
             Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="getHistory()" [disabled]="!selectedProjectMonitoringDataItem"> 
-            View History
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="getHistory()" [disabled]="!selectedProjectMonitoringDataItem">
+            View history
         </button>
+      <button class="mr-8 btn" mat-raised-button color="accent" (click)="downloadHistory()" >
+        Download history of all values
+      </button>
     </div>
     <div class="mat-table-container" mat-white-bg style="width: 100%">
 
@@ -25,31 +28,31 @@
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.dateOfEntry | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
-            </ng-container>      
+            </ng-container>
 
             <!-- originalData Column -->
             <ng-container matColumnDef="originalData">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Original Data</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Current Data</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.originalData }}</p>
                 </mat-cell>
             </ng-container>
 
             <!-- revisedData1 Column -->
-            <ng-container matColumnDef="revisedData1">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Data - 1</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.revisedData1 }}</p>
-                </mat-cell>
-            </ng-container>
+<!--            <ng-container matColumnDef="revisedData1">-->
+<!--                <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Data - 1</mat-header-cell>-->
+<!--                <mat-cell *matCellDef="let obj" >-->
+<!--                    <p class="text-truncate">{{ obj.revisedData1 }}</p>-->
+<!--                </mat-cell>-->
+<!--            </ng-container>-->
 
             <!-- revisedData2 Column -->
-            <ng-container matColumnDef="revisedData2">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Data - 2</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.revisedData2 }}</p>
-                </mat-cell>
-            </ng-container>
+<!--            <ng-container matColumnDef="revisedData2">-->
+<!--                <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Data - 2</mat-header-cell>-->
+<!--                <mat-cell *matCellDef="let obj" >-->
+<!--                    <p class="text-truncate">{{ obj.revisedData2 }}</p>-->
+<!--                </mat-cell>-->
+<!--            </ng-container>-->
 
             <!-- remarks Column -->
             <ng-container matColumnDef="remarks">
@@ -60,11 +63,11 @@
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            
+
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
                 [ngClass]="{'highlight':obj === selectedProjectMonitoringDataItem}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>
-    </div>    
+    </div>
 </div>

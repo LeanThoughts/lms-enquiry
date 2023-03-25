@@ -517,6 +517,15 @@ export class LoanMonitoringService implements Resolve<any> {
                 + '?projectMonitoringDataId=' + projectMonitoringDataId + '&particulars=' + particulars;
         return this._http.get(url);
     }
+  public getProjectMonitoringDataItemHistoryDownload(projectMonitoringDataId: string ): Observable<any> {
+
+      (window as any).open('enquiry/api/projectMonitoringDatas/excel'
+        + '?projectMonitoringDataId=' + projectMonitoringDataId);
+     return  null;
+    // const url = 'enquiry/api/projectMonitoringDatas/excel'
+    //   + '?projectMonitoringDataId=' + projectMonitoringDataId  ;
+    // return this._http.get(url);
+  }
 
     // Others
 

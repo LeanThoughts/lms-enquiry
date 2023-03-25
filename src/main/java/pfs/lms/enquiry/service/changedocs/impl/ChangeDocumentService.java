@@ -31,6 +31,7 @@ import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.domain.*;
+import pfs.lms.enquiry.monitoring.insurance.Insurance;
 import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFee;
 import pfs.lms.enquiry.monitoring.lfa.LendersFinancialAdvisor;
 import pfs.lms.enquiry.monitoring.lia.LIAReportAndFee;
@@ -645,6 +646,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     LoanDocumentation loanDocumentation = (LoanDocumentation) object;
                     result.put("id", loanDocumentation.getSerialNumber().toString() );
                     result.put("description", loanDocumentation.getDocumentationTypeDescription());
+                    return result;
+                case "Insurance":
+                    Insurance insurance = (Insurance) object;
+                    result.put("id", insurance.getSerialNumber().toString() );
+                    result.put("description", insurance.getValidFrom().toString());
                     return result;
             }
 

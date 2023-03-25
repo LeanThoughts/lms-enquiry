@@ -31,6 +31,7 @@ public class InsuranceService implements IInsuranceService {
         LoanMonitor loanMonitor = loanMonitoringService.createLoanMonitor(loanApplication, username);
 
         Insurance insurance = new Insurance();
+        insurance.setSerialNumber(insuranceRepository.findByLoanMonitor(loanMonitor).size() + 1);
         insurance.setDocumentTitle(resource.getInsurance().getDocumentTitle());
         insurance.setDocumentType(resource.getInsurance().getDocumentType());
         insurance.setFileReference(resource.getInsurance().getFileReference());
@@ -39,15 +40,16 @@ public class InsuranceService implements IInsuranceService {
         insurance.setValidTo(resource.getInsurance().getValidTo());
         insurance = insuranceRepository.save(insurance);
 
-        // Change Documents for Promoter Details
-//        changeDocumentService.createChangeDocument(
-//                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
-//                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                promoterDetail,
-//                "Created",
-//                username,
-//                "Monitoring", "Promoter Details Item");
+        // Change Documents for Insurance Details
+        changeDocumentService.createChangeDocument(
+                insurance.getLoanMonitor().getId(),
+                insurance.getId().toString(),null,
+                insurance.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                insurance,
+                "Created",
+                username,
+                "Monitoring", "Insurance");
 
         return insurance;
     }
@@ -60,6 +62,7 @@ public class InsuranceService implements IInsuranceService {
 
         Insurance oldInsurance = (Insurance) insurance.clone();
 
+        insurance.setSerialNumber(resource.getInsurance().getSerialNumber());
         insurance.setDocumentTitle(resource.getInsurance().getDocumentTitle());
         insurance.setDocumentType(resource.getInsurance().getDocumentType());
         insurance.setFileReference(resource.getInsurance().getFileReference());
@@ -68,14 +71,16 @@ public class InsuranceService implements IInsuranceService {
         insurance = insuranceRepository.save(insurance);
 
         // Change Documents for Promoter Details
-//        changeDocumentService.createChangeDocument(
-//                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
-//                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldPromoterDetailItem,
-//                promoterDetail,
-//                "Updated",
-//                username,
-//                "Monitoring", "Promoter Details Item");
+        changeDocumentService.createChangeDocument(
+                insurance.getLoanMonitor().getId(),
+                insurance.getId().toString(),
+                null,
+                insurance.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldInsurance,
+                insurance,
+                "Updated",
+                username,
+                "Monitoring", "Insurance");
 
         return insurance;
     }
