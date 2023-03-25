@@ -53,15 +53,15 @@ public class SAPLoanAppraisalSubLocationDetailResource implements Serializable {
             detailsResource.setNearestRailwayStationDistance(locationDetail.getNearestRailwayStationDistance().toString());
 
         detailsResource.setNearestAirport(locationDetail.getNearestAirport());
-        if (detailsResource.getNearestAirportDistance()  != null)
+        if (locationDetail.getNearestAirportDistance()  != null)
             detailsResource.setNearestAirportDistance(locationDetail.getNearestAirportDistance().toString());
 
         detailsResource.setNearestSeaport(locationDetail.getNearestSeaport());
-        if(detailsResource.getNearestSeaportDistance() !=null)
+        if(locationDetail.getNearestSeaportDistance() !=null)
             detailsResource.setNearestSeaportDistance(locationDetail.getNearestSeaportDistance().toString());
 
         detailsResource.setNearestFunctionalAirport(locationDetail.getNearestFunctionalAirport());
-        if(detailsResource.getNearestFunctionalAirportDistance() != null)
+        if(locationDetail.getNearestFunctionalAirportDistance() != null)
             detailsResource.setNearestFunctionalAirportDistance(locationDetail.getNearestFunctionalAirportDistance().toString());
 
         return detailsResource;

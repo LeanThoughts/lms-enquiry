@@ -72,10 +72,12 @@ import { ValuerReportAndFeeListComponent } from './valuerReportAndFeeList/valuer
 import { ProjectMonitoringDataItemHistoryComponent } from './projectMonitoringData/projectMonitoringDataItemHistory/projectMonitoringDataItemHistory.component';
 import { InsuranceListComponent } from './insurance/insuranceList/insuranceList.component';
 import { InsuranceUpdateDialogComponent } from './insurance/insuranceUpdate/insuranceUpdate.component';
+import { LoanDocumentationListComponent } from './loanDocumentationList/loanDocumentationList.component';
+import { LoanDocumentationUpdateDialogComponent } from './loanDocumentationUpdate/loanDocumentationUpdate.component';
 
 const routes = [
     {
-        path: 'loanMonitoring', 
+        path: 'loanMonitoring',
         component: LoanMonitoringComponent,
         canActivate: [
             EnquiryApplicationRouteGuard
@@ -165,6 +167,8 @@ const routes = [
         ValuerReportAndFeeListComponent,
         ValuerReportAndFeeUpdateDialogComponent,
         ProjectMonitoringDataItemHistoryComponent,
+        LoanDocumentationListComponent,
+        LoanDocumentationUpdateDialogComponent,
         InsuranceListComponent,
         InsuranceUpdateDialogComponent
     ],
@@ -228,8 +232,10 @@ const routes = [
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeListComponent,
         ValuerReportAndFeeUpdateDialogComponent,
-        ProjectMonitoringDataItemHistoryComponent
-    ],  
+        ProjectMonitoringDataItemHistoryComponent,
+        LoanDocumentationListComponent,
+        LoanDocumentationUpdateDialogComponent
+    ],
     entryComponents: [
         CLAUpdateDialogComponent,
         CLAReportAndFeeUpdateDialogComponent,
@@ -276,6 +282,8 @@ const routes = [
         ValuerUpdateDialogComponent,
         ValuerReportAndFeeUpdateDialogComponent,
         ProjectMonitoringDataItemHistoryComponent,
+        LoanDocumentationListComponent,
+        LoanDocumentationUpdateDialogComponent,
         InsuranceUpdateDialogComponent
     ]
 })

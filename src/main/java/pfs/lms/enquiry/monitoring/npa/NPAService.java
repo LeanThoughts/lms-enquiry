@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
+import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.impl.ChangeDocumentService;
 
@@ -22,32 +23,30 @@ public class NPAService implements INPAService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanMonitorRepository loanMonitorRepository;
     private final ChangeDocumentService changeDocumentService;
+    private final ILoanMonitoringService loanMonitoringService;
 
     @Override
     public NPA saveNPA(NPAResource resource, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication);
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
-
-            // Change Documents for Monitoring Header
-            changeDocumentService.createChangeDocument(
-                    loanMonitor.getId(), loanMonitor.getId().toString(),null,
-                    loanApplication.getLoanContractId(),
-                    null,
-                    loanMonitor,
-                    "Created",
-                    username,
-                    "Monitoring", "Header");
-        }
+        if (loanMonitor == null)
+            loanMonitor = loanMonitoringService.createLoanMonitor(loanApplication,username);
 
         NPA npa = resource.getNpa();
         npa.setLoanMonitor(loanMonitor);
         npa = npaRepository.save(npa);
+
+        // Change Documents for Monitoring Header
+        changeDocumentService.createChangeDocument(
+                loanMonitor.getId(),
+                npa.getId().toString(),
+                loanMonitor.getId().toString(),
+                loanApplication.getLoanContractId(),
+                null,
+                loanMonitor,
+                "Created",
+                username,
+                "Monitoring", "NPA");
 
         return npa;
     }
@@ -72,15 +71,17 @@ public class NPAService implements INPAService {
         existingNPA.setProvisionAmount(resource.getNpa().getProvisionAmount());
         NPA npa = npaRepository.save(existingNPA);
 
-        // Change Documents for Promoter Details
-//        changeDocumentService.createChangeDocument(
-//                promoterDetail.getLoanMonitor().getId(), promoterDetail.getId().toString(),null,
-//                promoterDetail.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                oldNPA,
-//                "Updated",
-//                username,
-//                "Monitoring", "Promoter Details");
+        // Change Documents for NPA
+        changeDocumentService.createChangeDocument(
+                npa.getLoanMonitor().getId(),
+                npa.getId().toString(),
+                existingNPA.getLoanMonitor().getId().toString(),
+                npa.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldNPA,
+                npa,
+                "Updated",
+                username,
+                "Monitoring", "NPA");
 
         return npa;
     }

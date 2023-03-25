@@ -22,8 +22,6 @@ public class Initializer implements CommandLineRunner {
 
     private final AssistanceTypeRepository assistanceTypeRepository;
 
-    private final PartnerRepository partnerRepository;
-
     private final UserRepository userRepository;
 
     private final ProductRepository productRepository;
@@ -46,23 +44,13 @@ public class Initializer implements CommandLineRunner {
 
     private final TRAAccountTypeRepository traAccountTypeRepository;
 
+    private final DocumentationTypeRepository documentationTypeRepository;
+    private final DocumentationStatusRepository documentationStatusRepository;
+
     @Override
     public void run(String... strings) throws Exception {
 
-//        List<LoanApplication> loanApplicationList = loanApplicationRepository.findAll();
-//        for (LoanApplication loanApplication: loanApplicationList) {
-//             String loanContractID = loanApplication.getLoanContractId();
-//            char ch = '1';
-//            // Get the index
-//            int index = 5;
-//
-//            //if (loanContractID.substring(0, index).equals("000002")) {
-//
-//                loanContractID = loanContractID.substring(0, index) + ch + loanContractID.substring(index + 1);
-//                loanApplication.setLoanContractId(loanContractID);
-//                loanApplicationRepository.saveAndFlush(loanApplication);
-//            //}
-//        }
+
         loanClassRepository.deleteAll();
 
         if (loanClassRepository.count() == 0) {
@@ -194,6 +182,66 @@ public class Initializer implements CommandLineRunner {
             log.info("Added financing type sample data");
         }
 
+        DocumentationType documentationType = documentationTypeRepository.findByCode("1");
+        if (documentationType == null){
+            documentationType = new DocumentationType();
+            documentationType.setCode("1");
+            documentationType.setValue("Facility Agreement");
+            documentationTypeRepository.save(documentationType);
+        }
+        documentationType = documentationTypeRepository.findByCode("2");
+        if (documentationType == null){
+            documentationType = new DocumentationType();
+            documentationType.setCode("2");
+            documentationType.setValue("TRA Agreement");
+            documentationTypeRepository.save(documentationType);
+        }
+        documentationType = documentationTypeRepository.findByCode("3");
+        if (documentationType == null){
+            documentationType = new DocumentationType();
+            documentationType.setCode("3");
+            documentationType.setValue("Facility Agent Agreement");
+            documentationTypeRepository.save(documentationType);
+        }
+        documentationType = documentationTypeRepository.findByCode("4");
+        if (documentationType == null){
+            documentationType = new DocumentationType();
+            documentationType.setCode("4");
+            documentationType.setValue("Security Trustee Agreement");
+            documentationTypeRepository.save(documentationType);
+        }
+
+        DocumentationStatus documentationStatus  = documentationStatusRepository.findByCode("1");
+        if (documentationStatus == null){
+            documentationStatus = new DocumentationStatus();
+            documentationStatus.setCode("1");
+            documentationStatus.setValue("Not started");
+            documentationStatusRepository.save(documentationStatus);
+        }
+        documentationStatus = new DocumentationStatus();
+        documentationStatus = documentationStatusRepository.findByCode("2");
+        if (documentationStatus == null){
+            documentationStatus = new DocumentationStatus();
+            documentationStatus.setCode("2");
+            documentationStatus.setValue("Pending");
+            documentationStatusRepository.save(documentationStatus);
+        }
+        documentationStatus = new DocumentationStatus();
+        documentationStatus = documentationStatusRepository.findByCode("3");
+        if (documentationStatus == null){
+            documentationStatus = new DocumentationStatus();
+            documentationStatus.setCode("3");
+            documentationStatus.setValue("Executed");
+            documentationStatusRepository.save(documentationStatus);
+        }
+        documentationStatus = new DocumentationStatus();
+        documentationStatus = documentationStatusRepository.findByCode("4");
+        if (documentationStatus == null){
+            documentationStatus = new DocumentationStatus();
+            documentationStatus.setCode("4");
+            documentationStatus.setValue("Approved");
+            documentationStatusRepository.save(documentationStatus);
+        }
 
         AssistanceType at1 = assistanceTypeRepository.getAssistanceTypeByCode("D");
         if (at1 == null) {

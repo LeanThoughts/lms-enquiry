@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentation;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -36,4 +37,6 @@ public class NPADetailController {
         List<NPADetail> npaDetails = npaDetailService.getNPADetail(npaId, request.getUserPrincipal().getName());
         return ResponseEntity.ok(npaDetails);
     }
+
+
 }

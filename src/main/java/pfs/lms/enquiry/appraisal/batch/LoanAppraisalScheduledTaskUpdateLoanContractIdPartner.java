@@ -30,11 +30,17 @@ import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.lfa.LFARepository;
 import pfs.lms.enquiry.monitoring.lfa.LendersFinancialAdvisor;
+import pfs.lms.enquiry.monitoring.lia.LIARepository;
+import pfs.lms.enquiry.monitoring.lia.LendersInsuranceAdvisor;
 import pfs.lms.enquiry.monitoring.lie.LIERepository;
 import pfs.lms.enquiry.monitoring.lie.LendersIndependentEngineer;
+import pfs.lms.enquiry.monitoring.llc.LLCRepository;
+import pfs.lms.enquiry.monitoring.llc.LendersLegalCouncil;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResource;
 import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResourceDetails;
+import pfs.lms.enquiry.monitoring.valuer.Valuer;
+import pfs.lms.enquiry.monitoring.valuer.ValuerRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
@@ -69,15 +75,19 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
     private final LoanPartnerRepository loanPartnerRepository;
     private final LIERepository lieRepository;
     private final LFARepository lfaRepository;
+
+    private final LIARepository liaRepository;
+    private final LLCRepository llcRepository;
+    private final ValuerRepository valuerRepository;
     private final PartnerRepository partnerRepository;
     private final IChangeDocumentService changeDocumentService;
     private final ILoanPartnerService loanPartnerService;
 
     private String userName = "admin@pfs-portal";
 
-    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
+   // @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanContractId() throws ParseException, IOException {
-        log.info("---------------updateLoanContractId ");
+        log.info("---------------Update LoanContract Id on Appraisal");
 
         List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
 
@@ -102,7 +112,10 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
         }
     }
-    @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
+
+
+
+   // @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanPartnerFromLoanApplication() throws ParseException, IOException {
 
         log.info("---------------updateLoanPartnerFromLoanApplication ");
@@ -204,111 +217,213 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
         }
     }
-    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
+  // @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updatePartnerList() throws ParseException, IOException, InterruptedException {
 
-        log.info("---------------updatePartnerList ");
+       log.info("---------------update PartnerList from LIE,LFA,LIA,LLC,Valuer");
 
-        List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
-        List<LoanMonitor> loanMonitorList = loanMonitorRepository.findAll();
+       List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
+       List<LoanMonitor> loanMonitorList = loanMonitorRepository.findAll();
 
-        for (LoanMonitor loanMonitor: loanMonitorList) {
+       for (LoanMonitor loanMonitor : loanMonitorList) {
 
-            log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getLoanApplication().getLoanContractId());
-            log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getId());
-
-
-            LoanApplication loanApplication = loanApplicationRepository.getOne(loanMonitor.getLoanApplication().getId());
-            if (loanApplication.getLoanContractId() == null)
-                continue;
-
-            LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
-                    .orElseGet(() -> {
-                        LoanAppraisal obj = new LoanAppraisal();
-                        obj.setLoanApplication(loanApplication);
-                        obj = loanAppraisalRepository.save(obj);
-
-                        // Change Documents for Appraisal Header
-                        changeDocumentService.createChangeDocument(
-                                obj.getId(),
-                                obj.getId().toString(),
-                                obj.getId().toString(),
-                                loanApplication.getLoanContractId(),
-                                null,
-                                obj,
-                                "Created",
-                                "portal-admin",
-                                "Appraisal", "Header");
-
-                        return obj;
-                    });
-
-            List<LoanPartner> loanPartnerList = new ArrayList<>();
-            loanPartnerList =  loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
-
-            Integer loanPartnersCount = loanPartnerList.size();
-
-            // Fetch list of LIE for Monitoring
-            List<LendersIndependentEngineer> lendersIndependentEngineers = new ArrayList<>();
-            lendersIndependentEngineers = lieRepository.findByLoanMonitor(loanMonitor);
-
-            for (LendersIndependentEngineer lendersIndependentEngineer: lendersIndependentEngineers) {
-                LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication,lendersIndependentEngineer.getBpCode());
-
-                // Add Loan Partner with the ROLE for LIE
-                if (loanPartner == null) {
-
-                    Integer businessPartnerId = Integer.parseInt(lendersIndependentEngineer.getBpCode());
-                    Partner partner = partnerRepository.findByPartyNumber(businessPartnerId);
-
-                    LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
-                    loanPartnerResource.setLoanApplicationId(loanApplication.getId());
-                    loanPartnerResource.setRoleType("ZLM003");
-                    loanPartnerResource.setBusinessPartnerId(businessPartnerId.toString());
-                    loanPartnerResource.setStartDate(lendersIndependentEngineer.getContractPeriodFrom());
-                    loanPartnerResource.setRoleDescription("Lenders Engineer");
-                    loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
-                    loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
-                    loanPartnerResource.setKycStatus("Not Done");
-                    loanPartnerResource.setKycRequired(false);
-                    loanPartnerService.createLoanPartner(loanPartnerResource,"portal-admin");
-
-                }
-            }
-
-            // Fetch list of LIE for Monitoring
-            List<LendersFinancialAdvisor> lendersFinancialAdvisors = new ArrayList<>();
-            lendersFinancialAdvisors = lfaRepository.findByLoanMonitor(loanMonitor);
-
-            loanPartnerList =  loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
-            loanPartnersCount = loanPartnerList.size();
+           log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getLoanApplication().getLoanContractId());
+           log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getId());
 
 
-            for (LendersFinancialAdvisor lendersFinancialAdvisor: lendersFinancialAdvisors) {
-                LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication,lendersFinancialAdvisor.getBpCode());
+           LoanApplication loanApplication = loanApplicationRepository.getOne(loanMonitor.getLoanApplication().getId());
+           if (loanApplication.getLoanContractId() == null)
+               continue;
 
-                // Add Loan Partner with the ROLE for LIE
-                if (loanPartner == null) {
-                    LoanPartner loanPartnerLFA = new LoanPartner();
-                    Integer businessPartnerId = Integer.parseInt(loanPartner.getBusinessPartnerId());
+           LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
+                   .orElseGet(() -> {
+                       LoanAppraisal obj = new LoanAppraisal();
+                       obj.setLoanApplication(loanApplication);
+                       obj = loanAppraisalRepository.save(obj);
 
-                    Partner partner = partnerRepository.findByPartyNumber(businessPartnerId);
+                       // Change Documents for Appraisal Header
+                       changeDocumentService.createChangeDocument(
+                               obj.getId(),
+                               obj.getId().toString(),
+                               obj.getId().toString(),
+                               loanApplication.getLoanContractId(),
+                               null,
+                               obj,
+                               "Created",
+                               "portal-admin",
+                               "Appraisal", "Header");
 
-                    LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
-                    loanPartnerResource.setLoanApplicationId(loanApplication.getId());
-                    loanPartnerResource.setRoleType("ZLM003");
-                    loanPartnerResource.setBusinessPartnerId(businessPartnerId.toString());
-                    loanPartnerResource.setStartDate(lendersFinancialAdvisor.getContractPeriodFrom());
-                    loanPartnerResource.setRoleDescription("Lenders Financial Advisor");
-                    loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
-                    loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
-                    loanPartnerResource.setKycStatus("Not Done");
-                    loanPartnerResource.setKycRequired(false);
-                    loanPartnerService.createLoanPartner(loanPartnerResource,"portal-admin");
-                }
-            }
-         }
-    }
+                       return obj;
+                   });
+
+           List<LoanPartner> loanPartnerList = new ArrayList<>();
+           loanPartnerList = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
+
+           Integer loanPartnersCount = loanPartnerList.size();
+
+           // Fetch list of LIE for Monitoring
+           List<LendersIndependentEngineer> lendersIndependentEngineers = new ArrayList<>();
+           lendersIndependentEngineers = lieRepository.findByLoanMonitor(loanMonitor);
+
+           for (LendersIndependentEngineer lendersIndependentEngineer : lendersIndependentEngineers) {
+               LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, lendersIndependentEngineer.getBpCode());
+
+               // Add Loan Partner with the ROLE for LIE
+               if (loanPartner == null) {
+
+                   Integer businessPartnerId = Integer.parseInt(lendersIndependentEngineer.getBpCode());
+                   Partner partner = partnerRepository.findByPartyNumber(businessPartnerId);
+
+                   LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                   loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                   loanPartnerResource.setRoleType("ZLM003");
+                   loanPartnerResource.setBusinessPartnerId(businessPartnerId.toString());
+                   loanPartnerResource.setStartDate(lendersIndependentEngineer.getContractPeriodFrom());
+                   loanPartnerResource.setRoleDescription("Lenders Engineer");
+                   loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
+                   loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
+                   loanPartnerResource.setKycStatus("Not Done");
+                   loanPartnerResource.setKycRequired(false);
+                   loanPartnerService.createLoanPartner(loanPartnerResource, "portal-admin");
+
+               }
+           }
+
+           // Fetch list of LIE for Monitoring
+           List<LendersFinancialAdvisor> lendersFinancialAdvisors = new ArrayList<>();
+           lendersFinancialAdvisors = lfaRepository.findByLoanMonitor(loanMonitor);
+
+           loanPartnerList = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
+           loanPartnersCount = loanPartnerList.size();
+
+
+           for (LendersFinancialAdvisor lendersFinancialAdvisor : lendersFinancialAdvisors) {
+               LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, lendersFinancialAdvisor.getBpCode());
+
+               // Add Loan Partner with the ROLE for LIE
+               if (loanPartner == null) {
+                   LoanPartner loanPartnerLFA = new LoanPartner();
+                   //Integer businessPartnerId = Integer.parseInt(loanPartner.getBusinessPartnerId());
+                   Integer bupaId = Integer.parseInt(lendersFinancialAdvisor.getBpCode());
+                   Partner partner = partnerRepository.findByPartyNumber(bupaId);
+
+                   LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                   loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                   loanPartnerResource.setRoleType("ZLM002");
+                   loanPartnerResource.setBusinessPartnerId(bupaId.toString());
+                   loanPartnerResource.setStartDate(lendersFinancialAdvisor.getContractPeriodFrom());
+                   loanPartnerResource.setRoleDescription("Lenders Financial Advisor");
+                   loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
+                   loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
+                   loanPartnerResource.setKycStatus("Not Done");
+                   loanPartnerResource.setKycRequired(false);
+                   loanPartnerService.createLoanPartner(loanPartnerResource, "portal-admin");
+               }
+           }
+
+           // Fetch list of LIA for Monitoring
+           List<LendersInsuranceAdvisor> lendersInsuranceAdvisors = new ArrayList<>();
+           lendersInsuranceAdvisors = liaRepository.findByLoanMonitor(loanMonitor);
+
+           loanPartnerList = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
+           loanPartnersCount = loanPartnerList.size();
+
+
+           for (LendersInsuranceAdvisor lendersInsuranceAdvisor : lendersInsuranceAdvisors) {
+               LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, lendersInsuranceAdvisor.getBpCode());
+
+               // Add Loan Partner with the ROLE for LIE
+               if (loanPartner == null) {
+                   LoanPartner loanPartnerLFA = new LoanPartner();
+                   //Integer businessPartnerId = Integer.parseInt(loanPartner.getBusinessPartnerId());
+                   Integer bupaId = 0;
+                   try {
+                         bupaId = Integer.parseInt(lendersInsuranceAdvisor.getBpCode());
+                   } catch (NullPointerException ex ){
+                       bupaId = Integer.parseInt(lendersInsuranceAdvisor.getLoanMonitor().getLoanApplication().getbusPartnerNumber());
+                   }
+                   Partner partner = partnerRepository.findByPartyNumber(bupaId);
+                   LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                   loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                   loanPartnerResource.setRoleType("ZLM004");
+                   loanPartnerResource.setBusinessPartnerId(bupaId.toString());
+                   loanPartnerResource.setStartDate(lendersInsuranceAdvisor.getContractPeriodFrom());
+                   loanPartnerResource.setRoleDescription("Lenders Insurance Advisor");
+                   loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
+                   loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
+                   loanPartnerResource.setKycStatus("Not Done");
+                   loanPartnerResource.setKycRequired(false);
+                   loanPartnerService.createLoanPartner(loanPartnerResource, "portal-admin");
+               }
+           }
+
+           // Fetch list of LLC for Monitoring
+           List<LendersLegalCouncil> lendersLegalCouncils = new ArrayList<>();
+           lendersLegalCouncils = llcRepository.findByLoanMonitor(loanMonitor);
+
+           loanPartnerList = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
+           loanPartnersCount = loanPartnerList.size();
+
+
+           for (LendersLegalCouncil lendersLegalCouncil : lendersLegalCouncils) {
+               LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, lendersLegalCouncil.getBpCode());
+
+               // Add Loan Partner with the ROLE for LIE
+               if (loanPartner == null) {
+                   LoanPartner loanPartnerLFA = new LoanPartner();
+                   //Integer businessPartnerId = Integer.parseInt(loanPartner.getBusinessPartnerId());
+                   Integer bupaId = Integer.parseInt(lendersLegalCouncil.getLoanAppraisal().getLoanApplication().getbusPartnerNumber());
+                   Partner partner = partnerRepository.findByPartyNumber(bupaId);
+
+                   LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                   loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                   loanPartnerResource.setRoleType("ZLM006");
+                   loanPartnerResource.setBusinessPartnerId(bupaId.toString());
+                   loanPartnerResource.setStartDate(lendersLegalCouncil.getContractPeriodFrom());
+                   loanPartnerResource.setRoleDescription("Lenders Legal Counsel");
+                   loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
+                   loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
+                   loanPartnerResource.setKycStatus("Not Done");
+                   loanPartnerResource.setKycRequired(false);
+                   loanPartnerService.createLoanPartner(loanPartnerResource, "portal-admin");
+               }
+           }
+
+
+           // Fetch list of Valuer for Monitoring
+           List<Valuer> valuers = new ArrayList<>();
+           valuers = valuerRepository.findByLoanMonitor(loanMonitor);
+
+           loanPartnerList = loanPartnerRepository.findByLoanApplicationIdOrderBySerialNumberDesc(loanApplication.getId());
+           loanPartnersCount = loanPartnerList.size();
+
+
+           for (Valuer valuer : valuers) {
+               LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerId(loanApplication, valuer.getBpCode());
+
+               // Add Loan Partner with the ROLE for LIE
+               if (loanPartner == null) {
+                   LoanPartner loanPartnerLFA = new LoanPartner();
+                   //Integer businessPartnerId = Integer.parseInt(loanPartner.getBusinessPartnerId());
+                   Integer bupaId = Integer.parseInt(valuer.getLoanAppraisal().getLoanApplication().getbusPartnerNumber());
+                   Partner partner = partnerRepository.findByPartyNumber(bupaId);
+
+                   LoanPartnerResource loanPartnerResource = new LoanPartnerResource();
+                   loanPartnerResource.setLoanApplicationId(loanApplication.getId());
+                   loanPartnerResource.setRoleType("ZLM039");
+                   loanPartnerResource.setBusinessPartnerId(bupaId.toString());
+                   loanPartnerResource.setStartDate(valuer.getContractPeriodFrom());
+                   loanPartnerResource.setRoleDescription("Valuer");
+                   loanPartnerResource.setBusinessPartnerName(partner.getPartyName1() + " " + partner.getPartyName2());
+                   loanPartnerResource.setSerialNumber(loanPartnersCount + 1);
+                   loanPartnerResource.setKycStatus("Not Done");
+                   loanPartnerResource.setKycRequired(false);
+                   loanPartnerService.createLoanPartner(loanPartnerResource, "portal-admin");
+               }
+           }
+
+       }
+   }
 
 }
 

@@ -27,6 +27,10 @@ import pfs.lms.enquiry.monitoring.llc.LLCReportAndFee;
 import pfs.lms.enquiry.monitoring.llc.LLCReportAndFeeRepository;
 import pfs.lms.enquiry.monitoring.llc.LLCRepository;
 import pfs.lms.enquiry.monitoring.llc.LendersLegalCouncil;
+import pfs.lms.enquiry.monitoring.npa.NPA;
+import pfs.lms.enquiry.monitoring.npa.NPADetail;
+import pfs.lms.enquiry.monitoring.npa.NPADetailRepository;
+import pfs.lms.enquiry.monitoring.npa.NPARepository;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLFRepository;
@@ -114,6 +118,8 @@ public class LoanMonitoringScheduledTask {
     private final ProjectMonitoringDataRepository projectMonitoringDataRepository;
     private final ProjectMonitoringDataItemRepository projectMonitoringDataItemRepository;
     private final ProjectMonitoringDataItemHistoryRepository projectMonitoringDataItemHistoryRepository;
+    private final NPARepository npaRepository;
+    private final NPADetailRepository npaDetailRepository;
 
     private final SAPLIEResource saplieResource;
     private final SAPLFAResource saplfaResource;
@@ -145,6 +151,8 @@ public class LoanMonitoringScheduledTask {
     private final SAPProjectMonitoringHistoryResource sapProjectMonitoringHistoryResource;
     private final SAPProjectMonitoringDataItemResource sapProjectMonitoringDataItemResource;
 
+    private final SAPNPADetailResource sapnpaDetailResource;
+    private final SAPNPAResource sapnpaResource;
 
     @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}", initialDelayString = "${batch.initialDelay}")
     public void syncLoanApplicationsToBackend() throws ParseException, IOException {
@@ -537,9 +545,10 @@ public class LoanMonitoringScheduledTask {
 
                 if (response != null) {
                     if (siteVisit.getFileReference() != null && siteVisit.getFileReference().length() > 0) {
-                        response = postDocument(siteVisit.getFileReference(),
+                        response = postDocument(
+                                siteVisit.getFileReference(),
                                 siteVisit.getId(),
-                                "4",
+                                "",
                                 "SiteVisit",
                                 "Document_" + siteVisit.getDocumentTitle(),
                                 siteVisit.getDocumentType()
@@ -890,6 +899,52 @@ public class LoanMonitoringScheduledTask {
 
                 updateSAPIntegrationPointer(response, sapIntegrationPointer);
                 break;
+                case "NPA Detail":
+                    NPADetail npaDetail = new NPADetail();
+
+                    log.info("Attempting to Post NPA Detail to SAP AT :" + dateFormat.format(new Date()));
+                    Optional<NPADetail> npaDetailOptional = npaDetailRepository.findById(UUID.fromString( sapIntegrationPointer.getBusinessObjectId())) ;
+
+                    npaDetail = npaDetailOptional.get();
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPNPADetailResourceDetails sapnpaDetailResourceDetails = sapnpaDetailResource.mapToSAP(npaDetail);
+                    SAPNPADetailResource sapnpaDetailResource1 = new SAPNPADetailResource();
+                    sapnpaDetailResource1.setSAPNPADetailResourceDetails(sapnpaDetailResourceDetails);
+
+
+                    resource = (Object) sapnpaDetailResourceDetails;
+                    serviceUri = monitorServiceUri + "NPADetailSet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+                case "NPA":
+                    NPA npa = new NPA();
+
+                    log.info("Attempting to Post NPA to SAP AT :" + dateFormat.format(new Date()));
+                    Optional<NPA> npaOptional = npaRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    npa = npaOptional.get();
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPNPAResourceDetails sapnpaResourceDetails = sapnpaResource.mapToSAP(npa);
+                    SAPNPAResource sapnpaResource1 = new SAPNPAResource();
+                    sapnpaResource1.setSAPNPAResourceDetails(sapnpaResourceDetails);
+
+
+                    resource = (Object) sapnpaResourceDetails;
+                    serviceUri = monitorServiceUri + "NPASet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
         }
     }
 

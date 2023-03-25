@@ -7,5 +7,7 @@ import java.util.UUID;
 
 public interface NPADetailRepository extends JpaRepository<NPADetail, UUID> {
 
-    List<NPADetail> findByNpaOrderByLineItemNumberDesc(NPA npa);
+    //List<NPADetail> findByNpaOOrderByLineItemNumberDesc(NPA npa);
+
+    List<NPADetail> findByNpa(NPA npa);
 }
