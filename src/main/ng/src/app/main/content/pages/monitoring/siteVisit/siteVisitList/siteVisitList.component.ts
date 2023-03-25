@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { SiteVisitUpdateDialogComponent } from '../siteVisitUpdate/siteVisitUpdate.component';
@@ -25,7 +26,7 @@ export class SiteVisitListComponent implements OnInit {
     selectedSiteVisit: any;
 
     _module = '';
-
+   
     @Input()
     set module(m: string) {
         this._module = m;
@@ -89,9 +90,30 @@ export class SiteVisitListComponent implements OnInit {
 
     /**
      * getFileURL()
-     * @param fileReference 
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
+     * getDocumentTypeDescription()
+     */
+    getDocumentTypeDescription(documentType: string): string {
+        const obj = LoanMonitoringConstants.siteVisitDocumentTypes.filter(f => f.code === documentType)[0];
+        if (obj !== undefined)
+            return obj.value;
+        else
+            return '';
+    }
+
+    /**
+     * getSiteVisitTypeDescription()
+     */
+    getSiteVisitTypeDescription(siteVisitType: string): string {
+        const obj = LoanMonitoringConstants.siteVisitTypes.filter(f => f.code === siteVisitType)[0];
+        if (obj !== undefined)
+            return obj.value;
+        else
+            return '';
     }
 }

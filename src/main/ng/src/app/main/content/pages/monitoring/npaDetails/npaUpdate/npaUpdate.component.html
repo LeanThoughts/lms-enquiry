@@ -94,7 +94,7 @@
         <ng-container matColumnDef="npaAssetClass">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Asset Class</mat-header-cell>
             <mat-cell *matCellDef="let obj" >
-                <p class="text-truncate">{{ obj.npaAssetClass }}</p>
+                <p class="text-truncate">{{ getAssetClassDescription(obj.npaAssetClass) }}</p>
             </mat-cell>
         </ng-container>
 

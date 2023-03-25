@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { InsuranceUpdateDialogComponent } from '../insuranceUpdate/insuranceUpdate.component';
@@ -94,5 +95,16 @@ export class InsuranceListComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
+     * getDocumentTypeDescription()
+     */
+    getDocumentTypeDescription(documentType: string): string {
+        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        if (obj !== undefined)
+            return obj.value;
+        else
+            return '';
     }
 }

@@ -33,7 +33,7 @@
             <ng-container matColumnDef="documentType">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.documentType }}</p>
+                    <p class="text-truncate">{{ getDocumentTypeDescription(obj.documentType) }}</p>
                 </mat-cell>
             </ng-container>
 

@@ -161,4 +161,15 @@ export class NPAUpdateComponent implements OnInit {
             }
         });   
     }
+
+    /**
+     * getAssetClassDescription()
+     */
+    getAssetClassDescription(assetClass: string): string {
+        const obj = this.assetClasses.filter(f => f.code === assetClass)[0];
+        if (obj !== undefined)
+            return obj.value;
+        else
+            return '';
+    }
 }
