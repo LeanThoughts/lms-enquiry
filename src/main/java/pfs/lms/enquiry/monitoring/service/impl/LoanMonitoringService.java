@@ -18,7 +18,6 @@ import pfs.lms.enquiry.monitoring.lie.*;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterRepository;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterResource;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetailRepository;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancialsRepository;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancialsResource;
@@ -65,8 +64,6 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     private final PromoterFinancialsRepository promoterfinancialsRepository;
 
     private final FinancialCovenantsRepository financialCovenantsRepository;
-
-    private final PromoterDetailRepository promoterDetailRepository;
 
     private final LoanAppraisalRepository loanAppraisalRepository;
 

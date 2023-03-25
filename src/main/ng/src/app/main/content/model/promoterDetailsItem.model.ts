@@ -7,18 +7,21 @@ export class PromoterDetailsItemModel {
     equityLinkInstrumentSanction: number;
     paidupCapitalEquityCurrent: number;
     equityLinkInstrumentCurrent: number;
+    dateOfChange: Date;
+    groupExposure: number;
 
     /**
      * constructor()
-     * @param _promoterDetailsItem
      */
-    constructor(_promoterDetailsItem: any) {
-        this.id = _promoterDetailsItem.id;
-        this.serialNumber = _promoterDetailsItem.serialNumber || 0;
-        this.shareHoldingCompany = _promoterDetailsItem.shareHoldingCompany || '';
-        this.paidupCapitalEquitySanction = _promoterDetailsItem.paidupCapitalEquitySanction || 0;
-        this.paidupCapitalEquityCurrent = _promoterDetailsItem.paidupCapitalEquityCurrent || 0;
-        this.equityLinkInstrumentSanction = _promoterDetailsItem.equityLinkInstrumentSanction || 0;
-        this.equityLinkInstrumentCurrent = _promoterDetailsItem.equityLinkInstrumentCurrent || 0;
+    constructor(_promoterDetailItem: any) {
+        this.id = _promoterDetailItem.id;
+        this.serialNumber = _promoterDetailItem.serialNumber || 0;
+        this.shareHoldingCompany = _promoterDetailItem.shareHoldingCompany || '';
+        this.paidupCapitalEquitySanction = _promoterDetailItem.paidupCapitalEquitySanction || 0;
+        this.paidupCapitalEquityCurrent = _promoterDetailItem.paidupCapitalEquityCurrent || 0;
+        this.equityLinkInstrumentSanction = _promoterDetailItem.equityLinkInstrumentSanction || 0;
+        this.equityLinkInstrumentCurrent = _promoterDetailItem.equityLinkInstrumentCurrent || 0;
+        this.dateOfChange = _promoterDetailItem.dateOfChange || '';
+        this.groupExposure = _promoterDetailItem.groupExposure || 0;
     }
 }

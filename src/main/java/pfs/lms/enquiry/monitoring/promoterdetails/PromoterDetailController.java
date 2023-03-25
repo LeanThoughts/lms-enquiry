@@ -8,38 +8,40 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
 @AllArgsConstructor
 public class PromoterDetailController {
 
-    private final IPromoterDetailService promoterDetailService;
+    private final IPromoterDetailItemService promoterDetailItemService;
 
-    @PostMapping("/promoterDetails")
-    public ResponseEntity<PromoterDetail> createPromoterDetails(@RequestBody PromoterDetailResource resource,
-                                                                HttpServletRequest request) {
-        PromoterDetail promoterDetail =
-                promoterDetailService.savePromoterDetails(resource, request.getUserPrincipal().getName());
-        return ResponseEntity.ok(promoterDetail);
-    }
-
-    @PutMapping("/promoterDetails/{id}")
-    public ResponseEntity<PromoterDetail> updatePromoterDetails(@PathVariable("id") String promoterDetailsId,
-                                                                @RequestBody PromoterDetailResource resource, HttpServletRequest request)
+    @PostMapping("/promoterDetailItems/create")
+    public ResponseEntity<PromoterDetailItem> createPromoterDetailItem(@RequestBody PromoterDetailItemResource resource,
+                                                                        HttpServletRequest request)
             throws CloneNotSupportedException {
 
-        PromoterDetail promoterDetail =
-                promoterDetailService.updatePromoterDetails(resource, request.getUserPrincipal().getName());
-        return ResponseEntity.ok(promoterDetail);
+        PromoterDetailItem promoterDetailItem =
+                promoterDetailItemService.savePromoterDetailItem(resource, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(promoterDetailItem);
     }
 
-    @GetMapping("/promoterDetails/loanApplication/{loanapplicationid}")
-    public ResponseEntity<List<PromoterDetailResource>> getPromoterDetails(
-            @PathVariable("loanapplicationid") String loanApplicationId, HttpServletRequest request) {
+    @PutMapping("/promoterDetailItems/update")
+    public ResponseEntity<PromoterDetailItem> updatePromoterDetailItem(@RequestBody PromoterDetailItemResource resource,
+                                                                       HttpServletRequest request)
+            throws CloneNotSupportedException {
 
-        List<PromoterDetailResource> promoterDetails = promoterDetailService.getPromoterDetails(loanApplicationId,
-                request.getUserPrincipal().getName());
-        return ResponseEntity.ok(promoterDetails);
+        PromoterDetailItem promoterDetailItem =
+                promoterDetailItemService.updatePromoterDetailItem(resource, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(promoterDetailItem);
+    }
+
+    @GetMapping("/loanApplications/{loanapplicationid}/promoterDetailItems")
+    public ResponseEntity<List<PromoterDetailItem>> getPromoterDetailItems(
+            @PathVariable("loanapplicationid") UUID loanApplicationId, HttpServletRequest request) {
+
+        List<PromoterDetailItem> promoterDetailItems = promoterDetailItemService.getPromoterDetailItems(loanApplicationId);
+        return ResponseEntity.ok(promoterDetailItems);
     }
 }

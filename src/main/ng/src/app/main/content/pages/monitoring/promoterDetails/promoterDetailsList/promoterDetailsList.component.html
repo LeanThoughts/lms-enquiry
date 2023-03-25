@@ -1,30 +1,14 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updatePromoterDetails('addPromoterDetails')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updatePromoterDetailItem('addPromoterDetailItem')"> 
             Add New Promoter Details
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updatePromoterDetails('updatePromoterDetails')" 
-                [disabled]="!selectedPromoterDetailsItem"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updatePromoterDetailItem('updatePromoterDetailItem')" 
+                [disabled]="!selectedPromoterDetailItem"> 
             Modify Promoter Details
         </button>
     </div>
-    <div class="content-card mat-white-bg mat-elevation-z4 p-16" fusePerfectScrollbar style="width: 100%">
-        <form [formGroup]="promoterHeaderDetailsForm">
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker1" placeholder="Date of Change" formControlName="dateOfChange" readonly required>
-                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker> 
-                </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Group Exposure" formControlName="groupExposure" maxlength="100">          
-                </mat-form-field>
-            </div>
-        </form>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="savePromoterHeaderDetails()"> 
-            Save
-        </button>
-    </div>
+
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
             
@@ -79,7 +63,7 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
-                [ngClass]="{'highlight':obj === selectedPromoterDetailsItem}" [@animate]="{value:'*',params:{y:'100%'}}">
+                [ngClass]="{'highlight':obj === selectedPromoterDetailItem}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>

@@ -36,8 +36,6 @@ import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLFRepository;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterRepository;
 import pfs.lms.enquiry.monitoring.projectmonitoring.*;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetail;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetailRepository;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancialsRepository;
 import pfs.lms.enquiry.monitoring.repository.*;
@@ -113,7 +111,7 @@ public class LoanMonitoringScheduledTask {
     private final SiteVisitRepository siteVisitRepository;
     private final RateOfInterestRepository rateOfInterestRepository;
     private final FinancialCovenantsRepository financialCovenantsRepository;
-    private final PromoterDetailRepository promoterDetailsRepository;
+//    private final PromoterDetailRepository promoterDetailsRepository;
     private final LoanMonitorRepository loanMonitorRepository;
     private final ProjectMonitoringDataRepository projectMonitoringDataRepository;
     private final ProjectMonitoringDataItemRepository projectMonitoringDataItemRepository;
@@ -750,25 +748,25 @@ public class LoanMonitoringScheduledTask {
                 updateSAPIntegrationPointer(response, sapIntegrationPointer);
                 break;
             case "Promoter Details":
-                PromoterDetail promoterDetails = new PromoterDetail();
-                log.info("Attempting to Post Promoter Details  to SAP AT :" + dateFormat.format(new Date()));
-                Optional<PromoterDetail> pd = promoterDetailsRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
-
-                promoterDetails = pd.get();
-
-                //Set Status as in progress
-                sapIntegrationPointer.setStatus(1); // In Posting Process
-                sapIntegrationRepository.save(sapIntegrationPointer);
-
-                SAPPromoterDetailsResourceDetails sapPromoterDetailsResourceDetails = sapPromoterDetailsResource.mapToSAP(promoterDetails);
-                SAPPromoterDetailsResource sapPromoterDetailsResource = new SAPPromoterDetailsResource();
-                sapPromoterDetailsResource.setSapPromoterDetailsResourceDetails(sapPromoterDetailsResourceDetails);
-
-                resource = (Object) sapPromoterDetailsResource;
-                serviceUri = monitorServiceUri + " PromoterDetailsSet";
-                response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
-
-                updateSAPIntegrationPointer(response, sapIntegrationPointer);
+//                PromoterDetail promoterDetails = new PromoterDetail();
+//                log.info("Attempting to Post Promoter Details  to SAP AT :" + dateFormat.format(new Date()));
+//                Optional<PromoterDetail> pd = promoterDetailsRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+//
+//                promoterDetails = pd.get();
+//
+//                //Set Status as in progress
+//                sapIntegrationPointer.setStatus(1); // In Posting Process
+//                sapIntegrationRepository.save(sapIntegrationPointer);
+//
+//                SAPPromoterDetailsResourceDetails sapPromoterDetailsResourceDetails = sapPromoterDetailsResource.mapToSAP(promoterDetails);
+//                SAPPromoterDetailsResource sapPromoterDetailsResource = new SAPPromoterDetailsResource();
+//                sapPromoterDetailsResource.setSapPromoterDetailsResourceDetails(sapPromoterDetailsResourceDetails);
+//
+//                resource = (Object) sapPromoterDetailsResource;
+//                serviceUri = monitorServiceUri + " PromoterDetailsSet";
+//                response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+//
+//                updateSAPIntegrationPointer(response, sapIntegrationPointer);
                 break;
             case "ProjectMonitoring":
                 ProjectMonitoringData projectMonitoringData = new ProjectMonitoringData();

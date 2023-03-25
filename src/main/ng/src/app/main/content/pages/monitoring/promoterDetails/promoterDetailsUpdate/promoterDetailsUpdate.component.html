@@ -8,10 +8,13 @@
         </mat-toolbar-row>
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
-        <form [formGroup]="promoterDetailsUpdateForm">
+        <form [formGroup]="promoterDetailUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Promoter Company Name" formControlName="shareHoldingCompany" maxlength="100">          
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Group Exposure" formControlName="groupExposure" maxlength="20">          
                 </mat-form-field>
             </div>
 
@@ -33,7 +36,15 @@
                 </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Change" formControlName="dateOfChange" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row" class="mb-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

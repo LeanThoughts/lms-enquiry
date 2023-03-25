@@ -418,20 +418,20 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'financialCovenants':financialCovenants });
     }
 
-    // All about Promoter Details
+    // All about Promoter Detail Items
 
-    public getPromoterDetails(loanApplicationId: string): Observable<any> {
-        return this._http.get('enquiry/api/promoterDetails/loanApplication/' + loanApplicationId);
+    public getPromoterDetailItems(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/promoterDetailItems');
     }
 
-    public savePromoterDetails(promoterDetail: any, loanApplicationId: any): Observable<any> {
-        const url = "enquiry/api/promoterDetails";
-        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'promoterDetail':promoterDetail });
+    public savePromoterDetailItem(promoterDetailItem: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/promoterDetailItems/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'promoterDetailItem':promoterDetailItem });
     }
 
-    public updatePromoterDetails(promoterDetail: any): Observable<any> {
-        const url = "enquiry/api/promoterDetails/" + promoterDetail.id;
-        return this._http.put(url, { 'loanApplicationId':'', 'promoterDetail':promoterDetail });
+    public updatePromoterDetailItem(promoterDetailItem: any): Observable<any> {
+        const url = "enquiry/api/promoterDetailItems/update";
+        return this._http.put(url, { 'loanApplicationId':'', 'promoterDetailItem':promoterDetailItem });
     }
 
     // All about NPA

@@ -7,12 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetail;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetailItem;
-import pfs.lms.enquiry.utils.DataConversionUtility;
-
-import java.text.ParseException;
-
 /**
  * Created by sajeev on 28-Jun-21.
  */
@@ -36,35 +30,35 @@ public class SAPPromoterDetailsResource {
         this.sapPromoterDetailsResourceDetails = sapPromoterDetailsResourceDetails;
     }
 
-    public SAPPromoterDetailsResourceDetails mapToSAP(PromoterDetail promoterDetails) throws ParseException {
-
-        DataConversionUtility dataConversionUtility = new DataConversionUtility();
-
-        SAPPromoterDetailsResourceDetails detailedResource = new SAPPromoterDetailsResourceDetails();
-        detailedResource.setId(promoterDetails.getId().toString());
-        detailedResource.setMonitorId(promoterDetails.getLoanMonitor().getId().toString());
-
-        if (promoterDetails.getDateOfChange() != null) {
-            detailedResource.setDateofchange(dataConversionUtility.convertDateToSAPFormat(promoterDetails.getDateOfChange()));
-        } else
-            detailedResource.setDateofchange(null);
-        detailedResource.setGroupexposure(promoterDetails.getGroupExposure());
-
-        for (PromoterDetailItem promoterDetailItem : promoterDetails.getPromoterDetailItemSet()) {
-            SAPPromoterDetailsItemsResourceDetails sapPromoterDetailsItemsResourceDetails = new SAPPromoterDetailsItemsResourceDetails();
-            sapPromoterDetailsItemsResourceDetails.setId(promoterDetailItem.getId().toString());
-            sapPromoterDetailsItemsResourceDetails.setSerialNo(promoterDetailItem.getSerialNumber());
-            sapPromoterDetailsItemsResourceDetails.setPromDtlId(promoterDetails.getId().toString());
-            sapPromoterDetailsItemsResourceDetails.setSanctionedequitylinkinstrument(promoterDetailItem.getEquityLinkInstrumentSanction());
-            sapPromoterDetailsItemsResourceDetails.setCurrentequitylinkinstrument(promoterDetailItem.getEquityLinkInstrumentCurrent());
-            sapPromoterDetailsItemsResourceDetails.setCurrentpaidupce(promoterDetailItem.getPaidupCapitalEquityCurrent());
-            sapPromoterDetailsItemsResourceDetails.setSanctionedpaidupce(promoterDetailItem.getPaidupCapitalEquitySanction());
-            //sapPromoterDetailsItemsResourceDetails.setBupaId(promoterDetailsItem.se);
-            detailedResource.add(sapPromoterDetailsItemsResourceDetails);
-        }
-
-        return detailedResource;
-    }
+//    public SAPPromoterDetailsResourceDetails mapToSAP(PromoterDetail promoterDetails) throws ParseException {
+//
+//        DataConversionUtility dataConversionUtility = new DataConversionUtility();
+//
+//        SAPPromoterDetailsResourceDetails detailedResource = new SAPPromoterDetailsResourceDetails();
+//        detailedResource.setId(promoterDetails.getId().toString());
+//        detailedResource.setMonitorId(promoterDetails.getLoanMonitor().getId().toString());
+//
+//        if (promoterDetails.getDateOfChange() != null) {
+//            detailedResource.setDateofchange(dataConversionUtility.convertDateToSAPFormat(promoterDetails.getDateOfChange()));
+//        } else
+//            detailedResource.setDateofchange(null);
+//        detailedResource.setGroupexposure(promoterDetails.getGroupExposure());
+//
+//        for (PromoterDetailItem promoterDetailItem : promoterDetails.getPromoterDetailItemSet()) {
+//            SAPPromoterDetailsItemsResourceDetails sapPromoterDetailsItemsResourceDetails = new SAPPromoterDetailsItemsResourceDetails();
+//            sapPromoterDetailsItemsResourceDetails.setId(promoterDetailItem.getId().toString());
+//            sapPromoterDetailsItemsResourceDetails.setSerialNo(promoterDetailItem.getSerialNumber());
+//            sapPromoterDetailsItemsResourceDetails.setPromDtlId(promoterDetails.getId().toString());
+//            sapPromoterDetailsItemsResourceDetails.setSanctionedequitylinkinstrument(promoterDetailItem.getEquityLinkInstrumentSanction());
+//            sapPromoterDetailsItemsResourceDetails.setCurrentequitylinkinstrument(promoterDetailItem.getEquityLinkInstrumentCurrent());
+//            sapPromoterDetailsItemsResourceDetails.setCurrentpaidupce(promoterDetailItem.getPaidupCapitalEquityCurrent());
+//            sapPromoterDetailsItemsResourceDetails.setSanctionedpaidupce(promoterDetailItem.getPaidupCapitalEquitySanction());
+//            //sapPromoterDetailsItemsResourceDetails.setBupaId(promoterDetailsItem.se);
+//            detailedResource.add(sapPromoterDetailsItemsResourceDetails);
+//        }
+//
+//        return detailedResource;
+//    }
 
 
 

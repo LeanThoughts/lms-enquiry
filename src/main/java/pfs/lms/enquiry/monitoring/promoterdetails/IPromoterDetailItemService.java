@@ -1,9 +1,15 @@
 package pfs.lms.enquiry.monitoring.promoterdetails;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 public interface IPromoterDetailItemService {
-    PromoterDetailItem savePromoterDetailItem(PromoterDetailItem resource, UUID promoterDetailId, Integer itemsCount, String userName);
-    PromoterDetailItem updatePromoterDetailItem(PromoterDetailItem resource, UUID promoterDetailId, String userName) throws CloneNotSupportedException;
+
+    PromoterDetailItem savePromoterDetailItem(PromoterDetailItemResource resource, String username)
+            throws CloneNotSupportedException;
+
+    PromoterDetailItem updatePromoterDetailItem(PromoterDetailItemResource resource, String username)
+            throws CloneNotSupportedException;
+
+    List<PromoterDetailItem> getPromoterDetailItems(UUID loanApplicationId);
 }

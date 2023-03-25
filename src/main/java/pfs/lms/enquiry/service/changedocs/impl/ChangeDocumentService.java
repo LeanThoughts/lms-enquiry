@@ -3,12 +3,10 @@ package pfs.lms.enquiry.service.changedocs.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.maven.model.Site;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
 import org.javers.core.diff.changetype.ValueChange;
-import org.jboss.jandex.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +44,6 @@ import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameter;
 import pfs.lms.enquiry.monitoring.operatingparameters.OperatingParameterPLF;
 import pfs.lms.enquiry.monitoring.projectmonitoring.ProjectMonitoringDataItemHistory;
 import pfs.lms.enquiry.monitoring.projectmonitoring.ProjectMonitoringDataItemResource;
-import pfs.lms.enquiry.monitoring.promoterdetails.PromoterDetail;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccount;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccountStatement;
@@ -58,7 +55,6 @@ import pfs.lms.enquiry.service.ISAPIntegrationPointerService;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 
 import static org.javers.core.diff.ListCompareAlgorithm.LEVENSHTEIN_DISTANCE;
@@ -491,10 +487,10 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
 
                 case "PromoterDetail":
-                    PromoterDetail promoterDetails = (PromoterDetail) object;
-                    result.put("id", promoterDetails.getId().toString());
-                    result.put("description", promoterDetails.getDateOfChange().toString());
-                    return result;
+//                    PromoterDetail promoterDetails = (PromoterDetail) object;
+//                    result.put("id", promoterDetails.getId().toString());
+//                    result.put("description", promoterDetails.getDateOfChange().toString());
+//                    return result;
                 case "ProjectMonitoringDataItemResource":
                     ProjectMonitoringDataItemResource projectMonitoringDataItemResource = (ProjectMonitoringDataItemResource) object;
                     result.put("id", projectMonitoringDataItemResource.getId().toString());
