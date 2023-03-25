@@ -125,7 +125,7 @@ public class ProjectMonitoringHistoryInExcel {
         font.setFontHeight(fontHeight);
         style.setFont(font);
 
-
+        Integer serialNumber = 1;
         for (ProjectMonitorItemResource item : resource.getProjectMonitorItemResourceList()) {
 
             log.info("Serial No: Excel Output Row for Project Monitor :" + item.getSerialNumber());
@@ -133,7 +133,7 @@ public class ProjectMonitoringHistoryInExcel {
             Row row = sxssfSheet.createRow(rowCount++);
             int columnCount = 0;
 
-            createSXSSCell(row, columnCount++, item.getSerialNumber(), style);
+            createSXSSCell(row, columnCount++, serialNumber, style);
             if ( item.getDateOfEntry() != null)
             createSXSSCell(row, columnCount++, item.getDateOfEntry().toString(), style);
             else
@@ -143,6 +143,7 @@ public class ProjectMonitoringHistoryInExcel {
             createSXSSCell(row, columnCount++, item.getDescription(), style);
             createSXSSCell(row, columnCount++, item.getOriginalData(), style);
             createSXSSCell(row, columnCount++, item.getRemarks(), style);
+            serialNumber++;
 
         }
 

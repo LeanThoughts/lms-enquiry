@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.monitoring.resource.ProjectMonitorItemResource;
@@ -125,7 +126,7 @@ public class ProjectMonitoringDataItemService implements IProjectMonitoringDataI
                 projectMonitorItemResource.setDescription(projectMonitoringDataItem.getDescription());
                 projectMonitorItemResource.setDateOfEntry(projectMonitoringDataItem.getDateOfEntry());
                 projectMonitorItemResource.setOriginalData(projectMonitoringDataItem.getOriginalData());
-                projectMonitorItemResource.setRemarks(projectMonitorItemResource.getRemarks());
+                projectMonitorItemResource.setRemarks(projectMonitoringDataItem.getRemarks());
                 projectMonitorResource.addItem(projectMonitorItemResource);
                 serialNumber++;
             }
@@ -147,6 +148,12 @@ public class ProjectMonitoringDataItemService implements IProjectMonitoringDataI
                 serialNumber++;
             }
         }
+
+        Collections.sort(projectMonitorResource.getProjectMonitorItemResourceList(), new Comparator<ProjectMonitorItemResource>() {
+            public int compare(ProjectMonitorItemResource o1, ProjectMonitorItemResource o2) {
+                return o1.getDateOfEntry().compareTo(o2.getDateOfEntry());
+            }
+        });
 
         projectMonitorResource.setProjectName( loanMonitor.getLoanApplication().getProjectName());
         projectMonitorResource.setLoanNumber( loanMonitor.getLoanApplication().getLoanContractId());
