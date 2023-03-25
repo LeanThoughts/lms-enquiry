@@ -8,6 +8,7 @@ import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplicat
 import {LoanDocumentationModel} from '../../../model/loanDocumentation.model';
 import {DocumentationTypeModel} from '../../../model/documentationType.model';
 import {DocumentationStatusModel} from '../../../model/documentationStatus.model';
+import {MonitoringRegEx} from '../../../others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-loan-documentation-dialog',
@@ -61,6 +62,17 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
             this.selectedLoanDocumentation = new LoanDocumentationModel({});
         }
 
+      this.loanDocumentationUpdateForm = _formBuilder.group({
+        documentationType: [this.selectedLoanDocumentation.documentationTypeCode],
+        documentationStatus: [this.selectedLoanDocumentation.loanDocumentationStatusCode || ''],
+        executionDate: [this.selectedLoanDocumentation.executionDate || ''],
+        approvalDate: [this.selectedLoanDocumentation.approvalDate],
+        documentTitle: [this.selectedLoanDocumentation.documentTitle],
+        documentType: [this.selectedLoanDocumentation.documentType || ''],
+        file: [''],
+        remarks: [this.selectedLoanDocumentation.remarks || '']
+      });
+
         _loanMonitoringService.getDocumentationTypes().subscribe(response => {
             response.forEach(element => {
                 this.documentationTypes.push(new DocumentationTypeModel(element));
@@ -106,54 +118,76 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
           documentType: [this.selectedLoanDocumentation.documentType || ''],
           documentTitle: [this.selectedLoanDocumentation.documentTitle || ''],
           fileReference: [this.selectedLoanDocumentation.fileReference || ''],
-          remarks: [this.selectedLoanDocumentation.remarks || '' ]
+          remarks: [this.selectedLoanDocumentation.remarks || '' ],
+          file: ['']
         });
     }
 
+    saveLoanDocumentation(fileReference: string): void {
+      var loanDocumenation: LoanDocumentationModel = new LoanDocumentationModel(this.loanDocumentationUpdateForm.value);
+      var dt = new Date(loanDocumenation.executionDate);
 
+      loanDocumenation.executionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+      dt = new Date(loanDocumenation.approvalDate);
+      loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+
+
+      if (this._dialogData.operation === 'addLoanDocumentation') {
+        loanDocumenation.fileReference = fileReference;
+        this._loanMonitoringService.saveLoanDocumentation(loanDocumenation, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+          this._matSnackBar.open('Loan documentation added successfully.', 'OK', { duration: 7000 });
+          this._dialogRef.close({ 'refresh': true });
+        });
+      }
+      else {
+        if (fileReference !== '' ) {
+          this.selectedLoanDocumentation.fileReference = fileReference;
+        }
+        this.selectedLoanDocumentation.serialNumber  = loanDocumenation.serialNumber;
+        this.selectedLoanDocumentation.documentationTypeCode = loanDocumenation.documentationTypeCode;
+        this.selectedLoanDocumentation.documentationTypeDescription = loanDocumenation.documentationTypeDescription;
+        this.selectedLoanDocumentation.executionDate = loanDocumenation.executionDate;
+        this.selectedLoanDocumentation.approvalDate = loanDocumenation.approvalDate;
+        this.selectedLoanDocumentation.loanDocumentationStatusCode = loanDocumenation.loanDocumentationStatusCode;
+        this.selectedLoanDocumentation.loanDocumentationStatusCodeDescription = loanDocumenation.loanDocumentationStatusCodeDescription;
+        this.selectedLoanDocumentation.documentType = loanDocumenation.documentTitle;
+        this.selectedLoanDocumentation.fileReference = loanDocumenation.fileReference;
+        this.selectedLoanDocumentation.documentTitle = loanDocumenation.documentTitle;
+        this.selectedLoanDocumentation.remarks = loanDocumenation.remarks;
+
+        this._loanMonitoringService.updateLoanDocumentation(this.selectedLoanDocumentation, this._dialogData.module).subscribe(() => {
+          this._matSnackBar.open('Loan documentation updated successfully.', 'OK', { duration: 7000 });
+          this._dialogRef.close({ 'refresh': true });
+        });
+      }
+    }
 
     /**
      * submit()
      */
     submit(): void {
         if (this.loanDocumentationUpdateForm.valid) {
-            // To solve the utc time zone issue
-            var loanDocumenation: LoanDocumentationModel = new LoanDocumentationModel(this.loanDocumentationUpdateForm.value);
-            var dt = new Date(loanDocumenation.executionDate);
-
-            loanDocumenation.executionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-          dt = new Date(loanDocumenation.approvalDate);
-            loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-
-          // dt = new Date(loanDocumenation.executionDate);
-            // loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            // dt = new Date(loanDocumenation.approvalDate);
-            // loanDocumenation.approvalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-
+          if (this.loanDocumentationUpdateForm.get('file').value !== '') {
+            var formData = new FormData();
+            formData.append('file', this.loanDocumentationUpdateForm.get('file').value);
+            this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
+              (response) => {
+                this.saveLoanDocumentation(response.fileReference);
+              },
+              (error) => {
+                this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
+                  'OK', { duration: 7000 });
+              }
+            );
+          }
+          else {
             if (this._dialogData.operation === 'addLoanDocumentation') {
-                this._loanMonitoringService.saveLoanDocumentation(loanDocumenation, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('Loan documentation added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+              this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
             }
             else {
-                this.selectedLoanDocumentation.serialNumber  = loanDocumenation.serialNumber;
-                this.selectedLoanDocumentation.documentationTypeCode = loanDocumenation.documentationTypeCode;
-                this.selectedLoanDocumentation.documentationTypeDescription = loanDocumenation.documentationTypeDescription;
-                this.selectedLoanDocumentation.executionDate = loanDocumenation.executionDate;
-                this.selectedLoanDocumentation.approvalDate = loanDocumenation.approvalDate;
-                this.selectedLoanDocumentation.loanDocumentationStatusCode = loanDocumenation.loanDocumentationStatusCode;
-                this.selectedLoanDocumentation.loanDocumentationStatusCodeDescription = loanDocumenation.loanDocumentationStatusCodeDescription;
-                this.selectedLoanDocumentation.documentType = loanDocumenation.documentTitle;
-                this.selectedLoanDocumentation.fileReference = loanDocumenation.fileReference;
-                this.selectedLoanDocumentation.documentTitle = loanDocumenation.documentTitle;
-                this.selectedLoanDocumentation.remarks = loanDocumenation.remarks;
-
-                this._loanMonitoringService.updateLoanDocumentation(this.selectedLoanDocumentation, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('Loan documentation updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+              this.saveLoanDocumentation('');
             }
+          }
         }
     }
 

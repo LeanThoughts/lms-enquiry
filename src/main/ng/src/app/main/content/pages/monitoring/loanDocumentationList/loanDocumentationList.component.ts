@@ -71,6 +71,14 @@ export class LoanDocumentationListComponent {
     return filtered[0].value;
   }
 
+  /**
+   * getDocumentType()
+   */
+  getDocumentType(documentType: string): string {
+    const filtered = LoanMonitoringConstants.documentTypes.filter(obj => obj.code === documentType);
+    return filtered[0].value;
+  }
+
     /**
      * addLIE()
      */

@@ -4,7 +4,7 @@
                 *ngIf="_module === 'Monitoring'">
             Display Loan Documentation Details
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLoanDocumentation()" *ngIf="_module == 'Monitoring'"> Add LIE </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLoanDocumentation()" *ngIf="_module == 'Monitoring'"> Add Loan Documentation </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLoanDocumentation()" [disabled]="!selectedLoanDocumentation"
                 *ngIf="_module  == 'Monitoring'">
             Modify Loan Documentation
@@ -74,7 +74,7 @@
           <ng-container matColumnDef="documentType">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
             <mat-cell *matCellDef="let obj" >
-              <p class="text-truncate">{{ obj.documentType }}</p>
+              <p class="text-truncate">{{ getDocumentType(obj.documentType) }}</p>
             </mat-cell>
           </ng-container>
 

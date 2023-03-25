@@ -47,6 +47,12 @@
             </div>
 
           <div fxLayout="row">
+            <mat-form-field fxFlex="100">
+              <input matInput placeholder="Document Title" maxlength="60" formControlName="documentTitle">
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
             <mat-form-field fxFlex="33">
               <mat-select placeholder="Document Type" formControlName="documentType" required>
                 <mat-option> </mat-option>
@@ -58,7 +64,7 @@
             <div fxFlex="34">
               <div fxLayout="column">
                 <label for="document">Upload Document (PDF)</label>
-                <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+                <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"  />
               </div>
             </div>
             <div fxFlex="33">
