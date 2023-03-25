@@ -24,7 +24,7 @@ export class FinancialCovenantsUpdateDialogComponent {
   
     financialCovenantsType = LoanMonitoringConstants.financialCovenantsType;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes = LoanMonitoringConstants.financialCovenantsDocumentTypes;
 
     /**
      * constructor()

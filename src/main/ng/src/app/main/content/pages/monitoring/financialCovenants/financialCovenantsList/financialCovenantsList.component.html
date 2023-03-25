@@ -69,6 +69,22 @@
                 </mat-cell>
             </ng-container>
 
+            <!-- documentTitle Column -->
+            <ng-container matColumnDef="documentTitle">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.financialCovenants.documentTitle }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- download Column -->
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <a [href]="getFileURL(obj.financialCovenants.fileReference)" *ngIf="obj.financialCovenants.fileReference !== ''">Download</a>
+                </mat-cell>
+            </ng-container>
+            
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.financialCovenants)"

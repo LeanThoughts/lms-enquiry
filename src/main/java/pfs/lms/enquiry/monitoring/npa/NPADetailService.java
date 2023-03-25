@@ -28,7 +28,6 @@ public class NPADetailService implements INPADetailService {
 
         //List<NPADetail> npaDetails = npaDetailRepository.findByNpaOOrderByLineItemNumberDesc(npa);
         List<NPADetail> npaDetails = npaDetailRepository.findByNpa(npa);
-
         npaDetail.setLineItemNumber(npaDetails.size() + 1);
 
         npaDetail.setNpaAssetClass(resource.getNpaDetail().getNpaAssetClass());
@@ -102,8 +101,8 @@ public class NPADetailService implements INPADetailService {
     @Override
     public List<NPADetail> getNPADetail(String npaId, String username) {
         NPA npa = npaRepository.getOne(UUID.fromString(npaId));
-        //return npaDetailRepository.findByNpaOOrderByLineItemNumberDesc(npa);
-        return npaDetailRepository.findByNpa(npa);
+        return npaDetailRepository.findByNpaOrderByLineItemNumberDesc(npa);
+        //return npaDetailRepository.findByNpa(npa);
 
     }
 }

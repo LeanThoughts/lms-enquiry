@@ -18,7 +18,7 @@ export class FinancialCovenantsListComponent {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'serialNumber', 'financialCovenantType', 'financialYear', 'debtEquityRatio','dscr', 'tolTnw', 'remarksForDeviation'
+        'serialNumber', 'financialCovenantType', 'financialYear', 'debtEquityRatio','dscr', 'tolTnw', 'remarksForDeviation', 'documentTitle', 'download'
     ];
 
     loanApplicationId: string;
@@ -83,5 +83,12 @@ export class FinancialCovenantsListComponent {
                 });
             }
         });    
+    }
+
+    /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
     }
 }

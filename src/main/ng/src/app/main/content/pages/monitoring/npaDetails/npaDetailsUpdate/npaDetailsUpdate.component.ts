@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
@@ -15,7 +15,7 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class NPADetailUpdateDialogComponent {
+export class NPADetailUpdateDialogComponent implements OnDestroy {
 
     dialogTitle = 'Add New NPA Details';
 
@@ -35,6 +35,7 @@ export class NPADetailUpdateDialogComponent {
         private _matSnackBar: MatSnackBar) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
+            console.log(data, 'loan contract');
             this.loanContractId = data.loanContractId;
         }));          
     
@@ -57,9 +58,13 @@ export class NPADetailUpdateDialogComponent {
             securedLoanAsset: [ this.selectedNPADetail.securedLoanAsset || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)] ],
             unsecuredLoanAsset: [ this.selectedNPADetail.unsecuredLoanAsset || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
             npaProvisionValue: [ this.selectedNPADetail.npaProvisionValue || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
-            netAssetValue: [ this.selectedNPADetail.netAssetValue || '' ],
+            netAssetValue: [ this.selectedNPADetail.netAssetValue || '', [Validators.pattern(MonitoringRegEx.twelveCommaTwo)]],
             remarks: [ this.selectedNPADetail.remarks || '']
         });
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe
     }
 
     /**
@@ -84,13 +89,13 @@ export class NPADetailUpdateDialogComponent {
 
         npaDetail.npaId = this._dialogData.npaId;
         if (this._dialogData.operation === 'addNPADetails') {
+            npaDetail.loanNumber = this.loanContractId;
             this._loanMonitoringService.saveNPADetails(this._dialogData.npaId, npaDetail).subscribe(() => {
                 this._matSnackBar.open('NPA details added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });
         }
         else {
-            this.selectedNPADetail.loanNumber = this.loanContractId;
             this.selectedNPADetail.lineItemNumber = npaDetail.lineItemNumber;
             this.selectedNPADetail.npaAssetClass = npaDetail.npaAssetClass;
             this.selectedNPADetail.assetClassificationChangeDate = npaDetail.assetClassificationChangeDate;

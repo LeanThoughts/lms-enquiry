@@ -2,10 +2,10 @@ export class LoanMonitoringConstants {
 
     // siteVisitDocumentTypes
     public static siteVisitDocumentTypes = [
-        {code: "Site Visit Report" , value:"Site Visit Report"},
-        {code: "Site Images" , value:"Site Images"},
-        {code: "MOM" , value:"MOM"},
-        {code: "Mail" , value:"Mail"},
+        {code: "ZPFSLM59" , value:"Site Visit Report"},
+        {code: "ZPFSLM88" , value:"Site Images"},
+        {code: "ZPFSLM89" , value:"MOM"},
+        {code: "ZPFSLM90" , value:"Mail"},
     ]
 
     // assetClasses
@@ -35,8 +35,8 @@ export class LoanMonitoringConstants {
 
     // siteVisitTypes
     public static siteVisitTypes = [
-        {code: "Site Visit" , value:"Site Visit"},
-        {code: "Lenders Meet" , value:"Lenders Meet"}
+        {code: "1" , value:"Site Visit"},
+        {code: "2" , value:"Lenders Meet"}        
     ];
 
     // reportTypes
@@ -1075,4 +1075,14 @@ export class LoanMonitoringConstants {
 
   ];
 
+    static financialCovenantsDocumentTypes = [
+        {
+            code: "ZPFSLM84",
+            value: "CA Certificate-Fin Covenants"
+        },
+        {
+            code: "ZPFSLM9",
+            value: "Miscellaneous Documents"
+        }
+    ];
 }
