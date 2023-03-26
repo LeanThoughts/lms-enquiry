@@ -91,7 +91,7 @@ export class TRAStatementListComponent implements OnDestroy {
                 'operation': operation,
                 'loanApplicationId': this.loanApplicationId,
                 'selectedTRA': this.selectedTRA,
-                'module': this.module
+                'module': this._module
             }
         }
         else {
@@ -99,7 +99,7 @@ export class TRAStatementListComponent implements OnDestroy {
                 'operation': operation,
                 'selectedTRA': this.selectedTRA,
                 'selectedTRAStatement': this.selectedTRAStatement,
-                'module': this.module
+                'module': this._module
             }
         }
         const dialogRef = this._dialog.open(TRAStatementUpdateDialogComponent, {
