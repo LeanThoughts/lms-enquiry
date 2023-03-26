@@ -428,6 +428,28 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
+    public LendersFinancialAdvisor deleteLFA(UUID lfaId, String username) {
+        LendersFinancialAdvisor lfa = lfaRepository.getOne(lfaId.toString());
+        LoanMonitor loanMonitor = lfa.getLoanMonitor();
+        lfaRepository.delete(lfa);
+        updateLFASerialNumbers(loanMonitor);
+
+        return lfa;
+    }
+
+    private void updateLFASerialNumbers(LoanMonitor loanMonitor) {
+        List<LendersFinancialAdvisor> lendersFinancialAdvisors = lfaRepository.findByLoanMonitor(loanMonitor);
+        int size = lendersFinancialAdvisors.size();
+        for(LendersFinancialAdvisor lendersFinancialAdvisor: lendersFinancialAdvisors) {
+            if (lendersFinancialAdvisor.getSerialNumber() != size) {
+                lendersFinancialAdvisor.setSerialNumber(size);
+                lfaRepository.save(lendersFinancialAdvisor);
+            }
+            size--;
+        }
+    }
+
+    @Override
     public LFAReportAndFee saveLFAReportAndFee(LFAReportAndFeeResource resource, String username) {
         LendersFinancialAdvisor lendersFinancialAdvisor = lfaRepository.getOne(resource.getLendersFinancialAdvisorId());
         LFAReportAndFee lfaReportAndFee = resource.getLfaReportAndFee();
@@ -502,6 +524,27 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         return existinglfaReportAndFee;
 
+    }
+
+    @Override
+    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username) {
+        LFAReportAndFee lfaReportAndFee = lfaReportAndFeeRepository.getOne(lfaReportAndFeeId.toString());
+        lfaReportAndFeeRepository.delete(lfaReportAndFee);
+        updateLFAReportAndFeeSerialNumbers(lfaReportAndFee.getLendersFinancialAdvisor().getId());
+        return lfaReportAndFee;
+    }
+
+    private void updateLFAReportAndFeeSerialNumbers(String lfaId) {
+        LendersFinancialAdvisor lendersFinancialAdvisor = lfaRepository.getOne(lfaId);
+        List<LFAReportAndFee> lfaReportAndFees = lfaReportAndFeeRepository.findByLendersFinancialAdvisor(lendersFinancialAdvisor);
+        int size = lfaReportAndFees.size();
+        for(LFAReportAndFee lfaReportAndFee: lfaReportAndFees) {
+            if (lfaReportAndFee.getSerialNumber() != size) {
+                lfaReportAndFee.setSerialNumber(size);
+                lfaReportAndFeeRepository.save(lfaReportAndFee);
+            }
+            size--;
+        }
     }
 
     @Override
@@ -1535,6 +1578,40 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         return borrowerFinancialsResources;
     }
 
+    @Override
+    public BorrowerFinancials deleteBorrowerFinancials(UUID borrowerFinancialsId, String username) {
+        BorrowerFinancials borrowerFinancials = borrowerFinancialsRepository.getOne(borrowerFinancialsId.toString());
+        LoanMonitor loanMonitor = borrowerFinancials.getLoanMonitor();
+        borrowerFinancialsRepository.delete(borrowerFinancials);
+        updateBorrowerFinancialsSerialNumbers(loanMonitor);
+
+        // Change Documents for  NPA Detail Delete
+//        changeDocumentService.createChangeDocument(
+//                loanMonitor.getId(),
+//                npaDetail.getId().toString(),
+//                loanMonitor.getId().toString(),
+//                loanMonitor.getLoanApplication().getLoanContractId(),
+//                null,
+//                npaDetail,
+//                "Deleted",
+//                username,
+//                "Appraisal", "NPA Detail");
+
+        return borrowerFinancials;
+    }
+
+    private void updateBorrowerFinancialsSerialNumbers(LoanMonitor loanMonitor) {
+        List<BorrowerFinancials> borrowerFinancialsList = borrowerFinancialsRepository.findByLoanMonitor(loanMonitor);
+        int size = borrowerFinancialsList.size();
+        for(BorrowerFinancials borrowerFinancials: borrowerFinancialsList) {
+            if (borrowerFinancials.getSerialNumber() != size) {
+                borrowerFinancials.setSerialNumber(size);
+                borrowerFinancialsRepository.save(borrowerFinancials);
+            }
+            size--;
+        }
+    }
+
     // Promoter Financials
 
     @Override
@@ -1751,6 +1828,42 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         return financialCovenantsResources;
 
     }
+
+    @Override
+    public FinancialCovenants deleteFinancialCovenants(UUID financialCovenantsId, String username) {
+        FinancialCovenants financialCovenants = financialCovenantsRepository.getOne(financialCovenantsId.toString());
+        LoanMonitor loanMonitor = financialCovenants.getLoanMonitor();
+        financialCovenantsRepository.delete(financialCovenants);
+        updateFinancialCovenantsSerialNumbers(loanMonitor);
+
+        // Change Documents for  NPA Detail Delete
+//        changeDocumentService.createChangeDocument(
+//                loanMonitor.getId(),
+//                npaDetail.getId().toString(),
+//                loanMonitor.getId().toString(),
+//                loanMonitor.getLoanApplication().getLoanContractId(),
+//                null,
+//                npaDetail,
+//                "Deleted",
+//                username,
+//                "Appraisal", "NPA Detail");
+
+        return financialCovenants;
+    }
+
+    private void updateFinancialCovenantsSerialNumbers(LoanMonitor loanMonitor) {
+        List<FinancialCovenants> financialCovenantsList = financialCovenantsRepository.findByLoanMonitor(loanMonitor);
+        int size = financialCovenantsList.size();
+        for(FinancialCovenants financialCovenants: financialCovenantsList) {
+            if (financialCovenants.getSerialNumber() != size) {
+                financialCovenants.setSerialNumber(size);
+                financialCovenantsRepository.save(financialCovenants);
+            }
+            size--;
+        }
+    }
+
+    // Others
 
     @Override
     public LoanMonitor getByLoanContractId(UUID loanContractId) {

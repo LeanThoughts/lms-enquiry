@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { FinancialCovenantsUpdateDialogComponent } from '../financialCovenantsUpdate/financialCovenantsUpdate.component';
@@ -90,5 +91,23 @@ export class FinancialCovenantsListComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
+     * deleteFinancialCovenants()
+     */
+    deleteFinancialCovenants(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteFinancialCovenants(this.selectedFinancialCovenants).subscribe(() => {
+                    this.selectedFinancialCovenants = undefined;
+                    this._loanMonitoringService.getFinancialCovenants(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
     }
 }

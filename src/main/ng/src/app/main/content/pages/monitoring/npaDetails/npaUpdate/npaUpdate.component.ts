@@ -179,14 +179,16 @@ export class NPAUpdateComponent implements OnInit {
     deleteNPADetails(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => {
-            this._loanMonitoringService.deleteNPADetails(this.selectedNPADetail.id).subscribe(() => {
-                this.selectedNPADetail = undefined;
-                this._loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
-                    this.dataSource = new MatTableDataSource(data);
-                    this.dataSource.sort = this.sort;
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteNPADetails(this.selectedNPADetail.id).subscribe(() => {
+                    this.selectedNPADetail = undefined;
+                    this._loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
+                        this.dataSource = new MatTableDataSource(data);
+                        this.dataSource.sort = this.sort;
+                    });
                 });
-            });
+            }
         });
     }
 }

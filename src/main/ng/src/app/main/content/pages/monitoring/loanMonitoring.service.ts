@@ -57,6 +57,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'insurance':insurance });
     }
 
+    public deleteInsurance(insurance: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/insurances/delete/" + insurance.id;
+        return this._http.delete(url);
+    }
+    
     // All about Valuer
 
     public getValuers(loanApplicationId: string): Observable<any> {
@@ -256,6 +261,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'lendersFinancialAdvisor':lfa, 'moduleName': module });
     }
 
+    public deleteLFA(lfa: any): Observable<any> {
+        const url = "enquiry/api/lendersFinancialAdvisors/delete/" + lfa.id;
+        return this._http.delete(url);
+    }
+
     // All about LFA Reports And Fees
 
     public getLFAReportsAndFees(lfaId: string): Observable<any> {
@@ -271,6 +281,11 @@ export class LoanMonitoringService implements Resolve<any> {
         console.log('in service', lfaReportAndFee);
         const url = "enquiry/api/loanApplications/lfareportandfeesubmission/" + lfaReportAndFee.id;
         return this._http.put(url, { 'lendersFinancialAdvisorId': '', 'lfaReportAndFee': lfaReportAndFee, 'moduleName': module });
+    }
+
+    public deleteLFAReportAndFee(lfaReportAndFee: any): Observable<any> {
+        const url = "enquiry/api/lFAReportAndFees/delete/" + lfaReportAndFee.id;
+        return this._http.delete(url);
     }
 
     // All about TRA
@@ -385,6 +400,10 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'borrowerFinancials':borrowerfinancials });
     }
 
+    public deleteBorrowerFinancials(borrowerfinancials: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/borrowerfinancials/" + borrowerfinancials.id;
+        return this._http.delete(url);
+    }
 
     // All about Promoter Financials
 
@@ -416,6 +435,11 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateFinancialCovenants(financialCovenants: any): Observable<any> {
         const url = "enquiry/api/loanApplications/financialcovenants/" + financialCovenants.id;
         return this._http.put(url, { 'loanApplicationId':'', 'financialCovenants':financialCovenants });
+    }
+
+    public deleteFinancialCovenants(financialCovenants: any): Observable<any> {
+        const url = "enquiry/api/loanApplications/financialcovenants/" + financialCovenants.id;
+        return this._http.delete(url);
     }
 
     // All about Promoter Detail Items

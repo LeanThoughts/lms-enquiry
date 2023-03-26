@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { BorrowerFinancialsUpdateDialogComponent } from '../borrowerFinancialsUpdate/borrowerFinancialsUpdate.component';
@@ -88,4 +89,23 @@ export class BorrowerFinancialsListComponent {
             }
         });    
     }
+
+    /**
+     * deleteBorrowerFinancials()
+     */
+    deleteBorrowerFinancials(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteBorrowerFinancials(this.selectedFinancials).subscribe(() => {
+                    this.selectedFinancials = undefined;
+                    this._loanMonitoringService.getBorrowerFinancials(this.loanApplicationId).subscribe(data => {
+                        this.borrowerFinancialsList = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

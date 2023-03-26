@@ -91,4 +91,38 @@ public class InsuranceService implements IInsuranceService {
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
         return insuranceRepository.findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
     }
+
+    @Override
+    public Insurance deleteInsurance(UUID insuranceId, String username) {
+        Insurance insurance = insuranceRepository.getOne(insuranceId);
+        LoanMonitor loanMonitor = insurance.getLoanMonitor();
+        insuranceRepository.delete(insurance);
+        updateSerialNumbers(loanMonitor);
+
+        // Change Documents for  NPA Detail Delete
+//        changeDocumentService.createChangeDocument(
+//                loanMonitor.getId(),
+//                npaDetail.getId().toString(),
+//                loanMonitor.getId().toString(),
+//                loanMonitor.getLoanApplication().getLoanContractId(),
+//                null,
+//                npaDetail,
+//                "Deleted",
+//                username,
+//                "Appraisal", "NPA Detail");
+
+        return insurance;
+    }
+
+    private void updateSerialNumbers(LoanMonitor loanMonitor) {
+        List<Insurance> insurances = insuranceRepository.findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
+        int size = insurances.size();
+        for(Insurance insurance: insurances) {
+            if (insurance.getSerialNumber() != size) {
+                insurance.setSerialNumber(size);
+                insuranceRepository.save(insurance);
+            }
+            size--;
+        }
+    }
 }

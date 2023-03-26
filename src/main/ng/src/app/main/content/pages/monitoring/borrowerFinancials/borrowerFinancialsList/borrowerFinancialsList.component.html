@@ -7,7 +7,10 @@
                 [disabled]="!selectedFinancials"> 
             Modify Financial Details
         </button>
-    </div>            
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteBorrowerFinancials()" [disabled]="!selectedFinancials"> 
+            Delete Financial Details
+        </button>
+    </div>
 
     <div class="mat-table-container" mat-white-bg style="width: 100%">
 

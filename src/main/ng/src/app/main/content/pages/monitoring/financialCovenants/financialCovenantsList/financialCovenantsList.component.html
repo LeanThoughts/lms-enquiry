@@ -7,6 +7,9 @@
                 [disabled]="!selectedFinancialCovenants"> 
             Modify Financial Covenant
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteFinancialCovenants()" [disabled]="!selectedFinancialCovenants"> 
+            Delete Financial Covenant
+        </button>
     </div>
 
     <div class="mat-table-container" mat-white-bg style="width: 100%">

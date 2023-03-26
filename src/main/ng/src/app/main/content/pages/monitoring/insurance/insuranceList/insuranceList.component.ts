@@ -2,6 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { InsuranceUpdateDialogComponent } from '../insuranceUpdate/insuranceUpdate.component';
@@ -106,5 +107,23 @@ export class InsuranceListComponent {
             return obj.value;
         else
             return '';
+    }
+
+    /**
+     * deleteInsurance()
+     */
+    deleteInsurance(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteInsurance(this.selectedInsurance).subscribe(() => {
+                    this.selectedInsurance = undefined;
+                    this._loanMonitoringService.getInsurances(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
     }
 }

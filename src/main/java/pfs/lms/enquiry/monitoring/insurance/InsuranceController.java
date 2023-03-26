@@ -31,6 +31,13 @@ public class InsuranceController {
         return ResponseEntity.ok(insurance);
     }
 
+    @DeleteMapping("/loanApplications/insurances/delete/{id}")
+    public ResponseEntity<Insurance> deleteInsurance(@PathVariable("id") UUID insuranceId, HttpServletRequest request)
+            throws CloneNotSupportedException {
+        Insurance insurance = insuranceService.deleteInsurance(insuranceId, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(insurance);
+    }
+
     @GetMapping("/loanApplications/{loanApplicationId}/insurances")
     public ResponseEntity<List<Insurance>> getInsurances(@PathVariable("loanApplicationId") UUID loanApplicationId,
                                                   HttpServletRequest request) {

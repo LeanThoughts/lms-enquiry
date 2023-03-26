@@ -131,6 +131,13 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(lendersFinancialAdvisors);
     }
 
+    @DeleteMapping("/lendersFinancialAdvisors/delete/{id}")
+    public ResponseEntity<LendersFinancialAdvisor> deleteLFA(@PathVariable("id") UUID lfaId, HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LendersFinancialAdvisor lendersFinancialAdvisor = loanMonitoringService.deleteLFA(lfaId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(lendersFinancialAdvisor);
+    }
 
 
     // create, update and list (LFA Report Submission and Fee)
@@ -161,7 +168,14 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(lfaReportAndFeeResources);
     }
 
-
+    @DeleteMapping("/lFAReportAndFees/delete/{id}")
+    public ResponseEntity<LFAReportAndFee> deleteLFAReportAndFee(@PathVariable("id") UUID lfaReportAndFeeId,
+                                                                 HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LFAReportAndFee lfaReportAndFee = loanMonitoringService.deleteLFAReportAndFee(lfaReportAndFeeId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(lfaReportAndFee);
+    }
 
     // Create update and list (TRA)
 
@@ -390,6 +404,14 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(borrowerFinancials);
     }
 
+    @DeleteMapping("/loanApplications/borrowerfinancials/{id}")
+    public ResponseEntity<BorrowerFinancials> deleteBorrowerFinancials(@PathVariable("id") UUID borrowerFinancialsId,
+                                                     HttpServletRequest request) throws CloneNotSupportedException {
+        BorrowerFinancials borrowerFinancials = loanMonitoringService.deleteBorrowerFinancials(borrowerFinancialsId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(borrowerFinancials);
+    }
+
     // Create update and list (Promoter Financials)
 
     @PostMapping("/loanApplications/promoterfinancials/create")
@@ -434,6 +456,14 @@ public class LoanMonitoringController {
 
         return ResponseEntity.ok(financialCovenants);
 
+    }
+
+    @DeleteMapping("/loanApplications/financialcovenants/{id}")
+    public ResponseEntity<FinancialCovenants> deleteFinancialCovenants(@PathVariable("id") UUID financialCovenantsId,
+                                                              HttpServletRequest request) throws CloneNotSupportedException {
+        FinancialCovenants financialCovenants = loanMonitoringService.deleteFinancialCovenants(financialCovenantsId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(financialCovenants);
     }
 
     @GetMapping("/loanApplications/{loanapplicationid}/financialcovenants")

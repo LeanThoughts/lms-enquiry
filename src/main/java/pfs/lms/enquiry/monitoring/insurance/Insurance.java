@@ -4,7 +4,6 @@ import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Insurance extends AggregateRoot<Insurance> implements Cloneable    {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
     private Integer serialNumber;

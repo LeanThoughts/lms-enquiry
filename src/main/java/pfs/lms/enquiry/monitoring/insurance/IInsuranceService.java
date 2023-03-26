@@ -10,4 +10,6 @@ public interface IInsuranceService {
     Insurance updateInsurance(InsuranceResource resource, String userName) throws CloneNotSupportedException;
 
     List<Insurance> getInsurances(UUID loanApplicationId);
+
+    Insurance deleteInsurance(UUID insuranceId, String username);
 }

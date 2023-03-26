@@ -46,9 +46,14 @@ public interface ILoanMonitoringService {
     List<LFAResource> getLendersFinancialAdvisors(String loanApplicationId, String name);
 
 
+    LendersFinancialAdvisor deleteLFA(UUID lfaId, String username);
+
     //Lenders Financial Advisor Report and Fee
     LFAReportAndFee saveLFAReportAndFee(LFAReportAndFeeResource resource, String username);
     LFAReportAndFee updateLFAReportAndFee(LFAReportAndFeeResource resource, String username) throws CloneNotSupportedException;
+
+    LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username);
+
     List<LFAReportAndFeeResource> getLFAReportAndFee(String loanApplicationId, String name);
 
     // Trust Retention Account
@@ -92,6 +97,8 @@ public interface ILoanMonitoringService {
     BorrowerFinancials updateBorrowerFinancials(BorrowerFinancialsResource resource, String username) throws CloneNotSupportedException;
     List<BorrowerFinancialsResource> getBorrowerFinancials(String loanApplicationId, String name);
 
+    BorrowerFinancials deleteBorrowerFinancials(UUID borrowerFinancialsId, String username);
+
     // Promoter Financials
     PromoterFinancials savePromoterFinancials(PromoterFinancialsResource resource, String username);
     PromoterFinancials updatePromoterFinancials(PromoterFinancialsResource resource, String username) throws CloneNotSupportedException;
@@ -106,6 +113,8 @@ public interface ILoanMonitoringService {
     // PromoterDetailsItem savePromoterDetailsItem(PromoterDetailsItemResource resource, String username);
     // PromoterDetailsItem updatePromoterDetailsItem(PromoterDetailsItemResource resource, String username);
     // List<PromoterDetailsItemResource> getPromoterDetailsItem(String loanApplicationId, String name);
+
+    FinancialCovenants deleteFinancialCovenants(UUID financialCovenantsId, String username);
 
     //Find By Loan Contract Id
     public LoanMonitor getByLoanContractId (UUID loanContractId);

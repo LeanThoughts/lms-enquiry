@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BorrowerFinancials extends AbstractEntity implements Cloneable {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
     private Integer serialNumber;

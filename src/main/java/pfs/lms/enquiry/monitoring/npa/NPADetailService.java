@@ -138,8 +138,10 @@ public class NPADetailService implements INPADetailService {
         List<NPADetail> npaDetails = npaDetailRepository.findByNpaOrderByLineItemNumberDesc(npa);
         int size = npaDetails.size();
         for(NPADetail npaDetail : npaDetails) {
-            npaDetail.setLineItemNumber(size);
-            npaDetailRepository.save(npaDetail);
+            if (npaDetail.getLineItemNumber() != size) {
+                npaDetail.setLineItemNumber(size);
+                npaDetailRepository.save(npaDetail);
+            }
             size--;
         }
     }
