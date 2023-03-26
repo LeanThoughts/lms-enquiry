@@ -59,30 +59,28 @@ public class SAPLIAReportAndFeeResource implements Serializable   {
 
         detailsResource.setInvoiceno(liaReportAndFee.getInvoiceNo());
         detailsResource.setFeeamount(liaReportAndFee.getFeeAmount().toString());
+
         detailsResource.setStatusoffeepaid(liaReportAndFee.getStatusOfFeePaid());
 
         if  (liaReportAndFee.getReportDate() != null)
             detailsResource.setReportdate(dataConversionUtility.convertDateToSAPFormat(liaReportAndFee.getReportDate()));
         else
             detailsResource.setReportdate(null);
+
         detailsResource.setRemarks(liaReportAndFee.getRemarks());
+
         if (liaReportAndFee.getPercentageCompletion() != null)
-        detailsResource.setRemarks(liaReportAndFee.getPercentageCompletion().toString());
-
- //                Sapfiinvoicedate
-//                Sapfiinvoicenumber
-//                Feeamountraisedoncustomer
-//                Statusoffeereceipt
-
+            detailsResource.setPercentagecompletion(liaReportAndFee.getPercentageCompletion().toString());
 
         if (liaReportAndFee.getNextReportDate() != null)
             detailsResource.setNextreportdate(dataConversionUtility.convertDateToSAPFormat(liaReportAndFee.getNextReportDate()));
         else
             detailsResource.setNextreportdate(null);
 
-
+        detailsResource.setFileReference(liaReportAndFee.getFileReference());
+        detailsResource.setDocumentType(liaReportAndFee.getDocumentType());
         detailsResource.setDocumenttitle(liaReportAndFee.getDocumentTitle());
-
+        detailsResource.setFileReference(liaReportAndFee.getFileReference());
 
 
         return detailsResource;

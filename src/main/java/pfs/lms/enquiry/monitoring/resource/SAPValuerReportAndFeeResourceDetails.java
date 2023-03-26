@@ -13,15 +13,15 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class SAPLFAReportAndFeeResourceDetails {
+public class SAPValuerReportAndFeeResourceDetails {
 
 
 
     @JsonProperty (value = "Id")
     private String id;
 
-    @JsonProperty (value = "LfaId")
-    private String lieId;
+    @JsonProperty (value = "ValuerId")
+    private String valuerId;
 
     @JsonProperty (value = "SerialNo")
     private Integer serialNo;
@@ -29,7 +29,7 @@ public class SAPLFAReportAndFeeResourceDetails {
     @JsonProperty (value = "Reporttype")
     private String reporttype;
 
-    @JsonProperty (value = "DateOfReceipt")
+    @JsonProperty (value = "Dateofreceipt")
     private String dateofreceipt;
 
     @JsonProperty (value = "Invoicedate")
@@ -58,8 +58,7 @@ public class SAPLFAReportAndFeeResourceDetails {
 
     @JsonProperty (value = "Documenttitle")
     private String documenttitle;
-//    @JsonProperty (value = "Documentcontent")
-//    private String documentcontent;
+
     @JsonProperty (value = "Nextreportdate")
     private String nextreportdate;
 
@@ -71,31 +70,11 @@ public class SAPLFAReportAndFeeResourceDetails {
 
     @JsonProperty (value = "Remarks")
     private String remarks;
-
     @JsonProperty (value = "Filereference")
     private String  fileReference;
 
     @JsonProperty (value = "Documenttype")
     private String documentType;
 
-    @Override
-    public String toString() {
-        return "SAPLFAReportAndFeeResourceDetails{" +
-                "id='" + id + '\'' +
-                ", lieId='" + lieId + '\'' +
-                ", serialNo=" + serialNo +
-                ", reporttype='" + reporttype + '\'' +
-                ", dateofreceipt='" + dateofreceipt + '\'' +
-                ", invoicedate='" + invoicedate + '\'' +
-                ", invoiceno='" + invoiceno + '\'' +
-                ", feeamount='" + feeamount + '\'' +
-                ", statusoffeepaid='" + statusoffeepaid + '\'' +
-                ", sapfiinvoicedate='" + sapfiinvoicedate + '\'' +
-                ", sapfiinvoicenumber='" + sapfiinvoicenumber + '\'' +
-                ", feeamountraisedoncustomer='" + feeamountraisedoncustomer + '\'' +
-                ", statusoffeereceipt='" + statusoffeereceipt + '\'' +
-                ", documenttitle='" + documenttitle + '\'' +
-                ", nextreportdate='" + nextreportdate + '\'' +
-                '}';
-    }
+
 }

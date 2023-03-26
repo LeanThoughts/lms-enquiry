@@ -56,6 +56,9 @@ public class SAPBorrowerFinancialsResource {
         detailedResource.setOverallrating(borrowerFinancials.getOverAllRating());
         detailedResource.setRemarks(borrowerFinancials.getRemarks());
 
+        detailedResource.setAnnualrptfilereference(borrowerFinancials.getAnnualReturnFileReference());
+        detailedResource.setRatingfilereference(borrowerFinancials.getRatingFileReference());
+
 
         return detailedResource;
 

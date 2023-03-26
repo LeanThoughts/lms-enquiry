@@ -55,6 +55,8 @@ import java.text.ParseException;
         detailedResource.setDocumentTitle(termsAndConditionsModification.getDocumentTitle());
         detailedResource.setCommunication(termsAndConditionsModification.getCommunication());
         detailedResource.setRemarks(termsAndConditionsModification.getRemarks());
+        detailedResource.setReasonForAmend(termsAndConditionsModification.getBrlReasonsForAmendment());
+        detailedResource.setFileReference(termsAndConditionsModification.getFileReference());
 
         //Amended Doc
         detailedResource.setAmendedDocumentType(termsAndConditionsModification.getAmendedDocumentType().toString());
@@ -64,21 +66,22 @@ import java.text.ParseException;
             detailedResource.setDateOfIssueOfAmendedDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
         } else
             detailedResource.setDateOfIssueOfAmendedDocument(null);
-
+        detailedResource.setAmendDocReason(termsAndConditionsModification.getReasonsForAmendment());
 
         // Internal Document
         if(termsAndConditionsModification.getDateOfInternalDocument() != null) {
             detailedResource.setDateOfInternalDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
         } else
             detailedResource.setDateOfInternalDocument(null);
-
         detailedResource.setInternalDocumentRemarks(termsAndConditionsModification.getInternalDocumentRemarks());
         detailedResource.setInternalDocumentTitle(termsAndConditionsModification.getInternalDocumentTitle());
         detailedResource.setInternalDocumentType(termsAndConditionsModification.getInternalDocumentType());
+        detailedResource.setInternaldocfilereference(termsAndConditionsModification.getInternalDocumentFileReference());
 
         //Lead Banker Document
         detailedResource.setLeadBankerDocumentTitle(termsAndConditionsModification.getLeadBankerDocumentTitle());
         detailedResource.setLeadBankerDocumentType(termsAndConditionsModification.getLeadBankerDocumentType());
+        detailedResource.setLbdocfilereference(termsAndConditionsModification.getLeadBankerDocumentFileReference());
 
 
         return detailedResource;

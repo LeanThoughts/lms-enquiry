@@ -67,14 +67,15 @@ public class SAPLFAReportAndFeeResource implements Serializable   {
             detailsResource.setReportdate(dataConversionUtility.convertDateToSAPFormat(lfaReportAndFee.getReportDate()));
         else
             detailsResource.setReportdate(null);
-        detailsResource.setRemarks(lfaReportAndFee.getRemarks());
-       if ( lfaReportAndFee.getPercentageCompletion() != null)
-        detailsResource.setRemarks(lfaReportAndFee.getPercentageCompletion().toString());
 
- //                Sapfiinvoicedate
-//                Sapfiinvoicenumber
-//                Feeamountraisedoncustomer
-//                Statusoffeereceipt
+        detailsResource.setRemarks(lfaReportAndFee.getRemarks());
+
+        if ( lfaReportAndFee.getPercentageCompletion() != null)
+             detailsResource.setPercentagecompletion(lfaReportAndFee.getPercentageCompletion().toString());
+
+        if ( lfaReportAndFee.getFeeAmount() != null)
+            detailsResource.setFeeamount(lfaReportAndFee.getFeeAmount().toString());
+
 
 
         if (lfaReportAndFee.getNextReportDate() != null)
@@ -82,9 +83,9 @@ public class SAPLFAReportAndFeeResource implements Serializable   {
         else
             detailsResource.setNextreportdate(null);
 
-
+        detailsResource.setDocumentType(lfaReportAndFee.getDocumentType());
         detailsResource.setDocumenttitle(lfaReportAndFee.getDocumentTitle());
-
+        detailsResource.setFileReference(lfaReportAndFee.getFileReference());
 
 
         return detailsResource;

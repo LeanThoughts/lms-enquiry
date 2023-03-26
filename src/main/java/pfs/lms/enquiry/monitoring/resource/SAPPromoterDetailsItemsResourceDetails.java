@@ -52,4 +52,5 @@ public class SAPPromoterDetailsItemsResourceDetails {
     private Double groupexposure;
 
 
+
 }

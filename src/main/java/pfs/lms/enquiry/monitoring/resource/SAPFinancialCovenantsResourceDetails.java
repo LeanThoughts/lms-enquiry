@@ -44,5 +44,8 @@ public class SAPFinancialCovenantsResourceDetails {
     @JsonProperty(value = "Remarksfordeviation")
     private String remarksfordeviation;
 
+    @JsonProperty(value = "FileReference")
+    private String fileReference;
+
 
 }

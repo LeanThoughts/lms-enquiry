@@ -40,6 +40,10 @@ import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancials;
 import pfs.lms.enquiry.monitoring.promoterfinancials.PromoterFinancialsRepository;
 import pfs.lms.enquiry.monitoring.repository.*;
 import pfs.lms.enquiry.monitoring.resource.*;
+import pfs.lms.enquiry.monitoring.valuer.Valuer;
+import pfs.lms.enquiry.monitoring.valuer.ValuerReportAndFee;
+import pfs.lms.enquiry.monitoring.valuer.ValuerReportAndFeeRepository;
+import pfs.lms.enquiry.monitoring.valuer.ValuerRepository;
 import pfs.lms.enquiry.sapintegrationservice.ISAPFileUploadIntegrationService;
 import pfs.lms.enquiry.sapintegrationservice.ISAPLoanProcessesIntegrationService;
 import pfs.lms.enquiry.monitoring.tra.TRARepository;
@@ -100,6 +104,11 @@ public class LoanMonitoringScheduledTask {
     private final LLCReportAndFeeRepository llcReportAndFeeRepository;
     private final LLCRepository llcRepository;
 
+    private final ValuerRepository valuerRepository;
+
+    private final ValuerReportAndFeeRepository valuerReportAndFeeRepository;
+
+
     private final LFAReportAndFeeRepository lfaReportAndFeeRepository;
     private final TermsAndConditionsRepository termsAndConditionsRepository;
     private final BorrowerFinancialsRepository borrowerFinancialsRepository;
@@ -122,8 +131,12 @@ public class LoanMonitoringScheduledTask {
     private final SAPLIEResource saplieResource;
     private final SAPLFAResource saplfaResource;
     private final SAPLLCResource sapllcResource;
-
     private final SAPLLCReportAndFeeResource sapllcReportAndFeeResource;
+
+    private final SAPValuerResource sapValuerResource;
+    private final SAPValuerReportAndFeeResource sapValuerReportAndFeeResource;
+
+
 
     private final SAPLIAResource sapliaResource;
      private final SAPLFAReportAndFeeResource saplfaReportAndFeeResource;
@@ -362,6 +375,58 @@ public class LoanMonitoringScheduledTask {
                                     "",
                                     "LLC Report & Fee",
                                     llcReportAndFee.getDocumentTitle(), llcReportAndFee.getDocumentType());
+                        }
+                    }
+
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+                case "Valuer":
+
+                    log.info("Attempting to Post Valuer to SAP AT :" + dateFormat.format(new Date()));
+                    Valuer valuer = valuerRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPValuerResourceDetails sapValuerResourceDetails = sapValuerResource.mapToSAP(valuer, lastChangedByUser);
+                    SAPValuerResource sapValuerResource1  = new SAPValuerResource();
+                    sapValuerResource1.setSapValuerResourceDetails(sapValuerResourceDetails);
+
+                    resource = (Object) sapValuerResource1;
+                    serviceUri = monitorServiceUri + "ValuerSet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+
+                case "Valuer Report And Fee":
+
+                    ValuerReportAndFee valuerReportAndFee = new ValuerReportAndFee();
+                    log.info("Attempting to Post Valuer Report and Fee to SAP AT :" + dateFormat.format(new Date()));
+                    Optional<ValuerReportAndFee> valuerRF = valuerReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
+
+                    valuerReportAndFee = valuerRF.get();
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPValuerReportAndFeeResourceDetails sapllcReportAndFeeResourceDetails1 = sapValuerReportAndFeeResource.mapToSAP(valuerReportAndFee, lastChangedByUser);
+                    SAPValuerReportAndFeeResource sapllcReportAndFeeResource1 = new SAPValuerReportAndFeeResource();
+                    sapllcReportAndFeeResource1.setSapValuerReportAndFeeResourceDetails(sapllcReportAndFeeResourceDetails1);
+                    resource = (Object) sapllcReportAndFeeResource1;
+                    serviceUri = monitorServiceUri + "ValuerReportAndFeeSet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    if (response != null) {
+                        if (valuerReportAndFee.getFileReference() != null && valuerReportAndFee.getFileReference().length() > 0) {
+                            response = postDocument(
+                                    valuerReportAndFee.getFileReference(),
+                                    valuerReportAndFee.getId(),
+                                    "",
+                                    "Valuer Report & Fee",
+                                    valuerReportAndFee.getDocumentTitle(), valuerReportAndFee.getDocumentType());
                         }
                     }
 
@@ -977,9 +1042,11 @@ public class LoanMonitoringScheduledTask {
         sapDocumentAttachmentResourceDetails = sapDocumentAttachmentResource.mapToSAP(
                 fileUUID.toString(),
                 entityId,
-                entityName, file.toString(),
+                entityName,
+                file.toString(),
                 mimeType,
-                fileName);
+                fileName,
+                fileReference);
 
         sapDocumentAttachmentResource.setSapDocumentAttachmentResourceDetails(sapDocumentAttachmentResourceDetails);
         Object d1 = (Object) sapDocumentAttachmentResource;
@@ -999,13 +1066,15 @@ public class LoanMonitoringScheduledTask {
 //                + ")/$value";
 
         String documentUploadUri = monitorDocumentUri + "("
-                + "Id='" + entityId + "'," + "DocSubId='" + docSubId + "',"
+                + "Id='" + entityId + "',"
+                + "DocSubId='" + docSubId + "',"
                 + "EntityId='" + entityId + "',"
                 + "EntityName='" + entityName + "',"
                 + "MimeType='" + mimeType + "',"
                 + "Filename='" + fileName + "',"
                 + "FileType='" + fileType + "',"
                 + "DocumentType='" + documentType + "',"
+                + "FileReference='" + fileReference + "',"
                 + ")/$value";
 
 

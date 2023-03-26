@@ -78,7 +78,7 @@ public class LoanMonitorScheduledTaskDelete {
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 
 
-        log.info("---------------Delete Monitoring Objects Batch Process ");
+        //log.info("---------------Delete Monitoring Objects Batch Process ");
 
         LoanMonitor loanMonitor = new LoanMonitor();
 
@@ -216,7 +216,7 @@ public class LoanMonitorScheduledTaskDelete {
                 entityId,
                 entityName, file.toString(),
                 mimeType,
-                fileName );
+                fileName, fileReference );
 
         sapDocumentAttachmentResource.setSapDocumentAttachmentResourceDetails(sapDocumentAttachmentResourceDetails);
         Object d1 = (Object) sapDocumentAttachmentResource;

@@ -17,10 +17,10 @@
                         {{ reportType.value }}
                       </mat-option>
                     </mat-select>
-                </mat-form-field> 
+                </mat-form-field>
 
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Invoice Number" formControlName="invoiceNo" maxlength="20" required>
+                    <input matInput placeholder="Invoice Number" formControlName="invoiceNo" maxlength="20"  >
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="SAP FI Invoice Date" formControlName="sapFIInvoiceDate" readonly>
@@ -30,16 +30,16 @@
                 <mat-form-field fxFlex="33">
                     <input matInput [matDatepicker]="picker1" placeholder="Date of Receipt" formControlName="dateOfReceipt" readonly required>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker> 
+                    <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
                     <input matInput readonly [matDatepicker]="picker2" placeholder="Invoice Date" formControlName="invoiceDate">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
+                    <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="SAP FI Invoice Number" formControlName="sapFIInvoiceNumber" readonly>
-                </mat-form-field>            
+                </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
@@ -56,25 +56,25 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="Fee Amount Raised On Customer" formControlName="feeAmountRaisedOnCustomer" readonly>
-                </mat-form-field>         
+                </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Document Title" maxlength="20" formControlName="documentTitle">          
+                    <input matInput placeholder="Document Title" maxlength="20" formControlName="documentTitle">
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
                     <input matInput [matDatepicker]="picker3" placeholder="Next Report Date" formControlName="nextReportDate">
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker> 
-                </mat-form-field>                
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Status of Fee Receipt" maxlength="20" formControlName="statusOfFeeReceipt" readonly>          
+                    <input matInput placeholder="Status of Fee Receipt" maxlength="20" formControlName="statusOfFeeReceipt" readonly>
                     <!-- <mat-select placeholder="Status of Fee Receipt" formControlName="statusOfFeeReceipt" readonly>
                         <mat-option *ngFor="let feeReceiptStatus of feeReceiptStatuses" [value]="feeReceiptStatus.code">
                         {{ feeReceiptStatus.value }}
                         </mat-option>
                     </mat-select> -->
-                </mat-form-field>                   
+                </mat-form-field>
             </div>
 
             <div fxLayout="row">
@@ -103,16 +103,16 @@
                 <mat-form-field fxFlex="33">
                     <input matInput [matDatepicker]="picker4" placeholder="Report Date" formControlName="reportDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-                    <mat-datepicker #picker4></mat-datepicker> 
-                </mat-form-field>  
+                    <mat-datepicker #picker4></mat-datepicker>
+                </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Percentage Completion" maxlength="5" formControlName="percentageCompletion">          
+                    <input matInput placeholder="Percentage Completion" maxlength="5" formControlName="percentageCompletion">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Remarks" maxlength="250" formControlName="remarks">          
+                    <input matInput placeholder="Remarks" maxlength="250" formControlName="remarks">
                 </mat-form-field>
             </div>
-            
+
             <div class="mt-16 mb-16" mat-dialog-actions fxLayout="row">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit

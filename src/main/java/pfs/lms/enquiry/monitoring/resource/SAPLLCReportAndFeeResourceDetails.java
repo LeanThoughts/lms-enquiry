@@ -72,6 +72,12 @@ public class SAPLLCReportAndFeeResourceDetails {
     @JsonProperty (value = "Remarks")
     private String remarks;
 
+    @JsonProperty (value = "Filereference")
+    private String  fileReference;
+
+    @JsonProperty (value = "Documenttype")
+    private String documentType;
+
     @Override
     public String toString() {
         return "SAPLLCReportAndFeeResourceDetails{" +

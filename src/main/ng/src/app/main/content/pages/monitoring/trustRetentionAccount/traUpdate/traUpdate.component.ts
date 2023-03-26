@@ -31,14 +31,14 @@ export class TRAUpdateDialogComponent implements OnInit {
     bankKeyFormControl = new FormControl();
 
     partners: PartnerModel[] = new Array();
-    
+
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<TRAUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -133,7 +133,7 @@ export class TRAUpdateDialogComponent implements OnInit {
                 this._loanMonitoringService.updateTRA(this.selectedTRA, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('TRA updated successfully.', 'OK', { duration: 5000 });
                     this._dialogRef.close({ 'refresh': true });
-                });            
+                });
             }
         }
     }
@@ -148,7 +148,7 @@ export class TRAUpdateDialogComponent implements OnInit {
             this.traUpdateForm.controls.traBankName.setValue(filteredBanks[0].bankName);
             this.traUpdateForm.controls.branch.setValue(filteredBanks[0].bankBranch || '');
             this.traUpdateForm.controls.address.setValue(filteredBanks[0].houseNumberAndStreet);
-            this.traUpdateForm.controls.ifscCode.setValue(filteredBanks[0].bankKey);
+            this.traUpdateForm.controls.ifscCode.setValue(filteredBanks[0].bankNumber);
         }
         else {
             this.traUpdateForm.controls.bankKey.setValue('');
@@ -161,7 +161,7 @@ export class TRAUpdateDialogComponent implements OnInit {
 
     /**
      * onPartnerSelect()
-     * @param event 
+     * @param event
      */
     onPartnerSelect(partner: PartnerModel): void {
         this.traUpdateForm.controls.pfsAuthorisedPerson.setValue(partner.partyName1 + ' ' + partner.partyName2);
@@ -169,7 +169,7 @@ export class TRAUpdateDialogComponent implements OnInit {
 
     /**
      * getPartyNumberAndName()
-     * @param party 
+     * @param party
      */
     getPartyNumberAndName(party: any): string {
         return party.partyNumber + " - " + party.partyName1 + ' ' + party.partyName2;

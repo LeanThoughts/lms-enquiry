@@ -30,11 +30,11 @@ export class TRAStatementUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<TRAStatementUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -63,12 +63,12 @@ export class TRAStatementUpdateDialogComponent {
         // Sort document types array
         this.documentTypes = this.documentTypes.sort((doc1, doc2) => {
             return doc1.value.localeCompare(doc2.value);
-        })
+        });
     }
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -84,13 +84,13 @@ export class TRAStatementUpdateDialogComponent {
         if (this.traStatementUpdateForm.valid) {
             if (this.traStatementUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.traStatementUpdateForm.get('file').value);      
+                formData.append('file', this.traStatementUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveTRAStatement(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -141,12 +141,12 @@ export class TRAStatementUpdateDialogComponent {
     closeClick(): void {
         this._dialogRef.close({ 'refresh': false });
     }
-    
+
     /**
      * getFileURL()
      * @param fileReference
      */
      getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }  
+    }
 }

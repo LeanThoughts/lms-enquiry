@@ -28,7 +28,6 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private LocalDate borrowerRequestLetterDate;
     private LocalDate dateOfIssueOfAmendedSanctionLetter;
     private String remarks;
-    private String reasonsForAmendment;
     private String fileReference;
     private String brlReasonsForAmendment;
 
@@ -43,6 +42,7 @@ public class TermsAndConditionsModification extends AbstractEntity implements Cl
     private String amendedDocumentRemarks;
     private String amendedDocumentTitle;
     private String amendedDocumentFileReference;
+    private String reasonsForAmendment;
 
     // Internal Document Type
     private String internalDocumentType;

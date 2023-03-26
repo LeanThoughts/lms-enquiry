@@ -19,7 +19,7 @@
                         {{ accountType.value }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field> 
+                </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Contact Name" formControlName="contactName" maxlength="60">
                 </mat-form-field>
@@ -46,7 +46,7 @@
                     <input matInput placeholder="Bank Name" [formControl]="bankNameFormControl" readonly>
                 </mat-form-field> -->
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="IFSC Code" formControlName="bankKey" maxlength="20" readonly required>
+                    <input matInput placeholder="Bank Key" formControlName="bankKey" maxlength="20" readonly required>
                 </mat-form-field>
             </div>
             <div fxLayout="row">

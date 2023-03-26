@@ -42,6 +42,12 @@ public class SAPTermsAndConditionsModificationResourceDetails {
 
     @JsonProperty(value = "Remarks")
     private String remarks;
+    @JsonProperty(value = "ReasonForAmend")
+    private String reasonForAmend;
+    @JsonProperty(value = "Filereference")
+    private String fileReference;
+
+
 
     @JsonProperty(value = "AmendedDocumentTitle")
     private String amendedDocumentTitle;
@@ -51,6 +57,13 @@ public class SAPTermsAndConditionsModificationResourceDetails {
     private String dateOfIssueOfAmendedDocument;
     @JsonProperty(value = "AmendedDocumentRemarks")
     private String amendedDocumentRemarks;
+    @JsonProperty(value = "Amendeddocfilereference")
+    private String amendeddocfilereference;
+    @JsonProperty(value = "AmendDocReason")
+    private String amendDocReason;
+
+
+
 
 
     @JsonProperty(value = "DateOfInternalDocument")
@@ -61,12 +74,15 @@ public class SAPTermsAndConditionsModificationResourceDetails {
     private String internalDocumentTitle;
     @JsonProperty(value = "InternalDocumentType")
     private String internalDocumentType;
-
+    @JsonProperty(value = "Internaldocfilereference")
+    private String internaldocfilereference;
 
     @JsonProperty(value = "LeadBankerDocumentTitle")
     private String leadBankerDocumentTitle;
     @JsonProperty(value = "LeadBankerDocumentType")
     private String leadBankerDocumentType;
+    @JsonProperty(value = "Lbdocfilereference")
+    private String lbdocfilereference;
 
 
 

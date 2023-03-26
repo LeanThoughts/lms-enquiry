@@ -58,16 +58,14 @@ public class SAPLIEReportAndFeeResource implements Serializable {
             detailsResource.setInvoicedate(null);
 
         detailsResource.setInvoiceno(lieReportAndFee.getInvoiceNo());
+
         if (lieReportAndFee.getFeeAmount() != null)
             if (lieReportAndFee.getFeeAmount() != null)
 
                 detailsResource.setFeeamount(lieReportAndFee.getFeeAmount().toString());
 
         detailsResource.setStatusoffeepaid(lieReportAndFee.getStatusOfFeePaid());
-        //                Sapfiinvoicedate
-//                Sapfiinvoicenumber
-//                Feeamountraisedoncustomer
-//                Statusoffeereceipt
+        lieReportAndFee.getFileReference();
 
 
         if (lieReportAndFee.getNextReportDate() != null)
@@ -79,13 +77,15 @@ public class SAPLIEReportAndFeeResource implements Serializable {
             detailsResource.setReportdate(dataConversionUtility.convertDateToSAPFormat(lieReportAndFee.getReportDate()));
         else
             detailsResource.setReportdate(null);
+
         detailsResource.setRemarks(lieReportAndFee.getRemarks());
+
         if (lieReportAndFee.getPercentageCompletion() != null)
-            detailsResource.setRemarks(lieReportAndFee.getPercentageCompletion().toString());
+            detailsResource.setPercentagecompletion(lieReportAndFee.getPercentageCompletion().toString());
 
-        //detailsResource.setDocumenttitle(lieReportAndFee.getDocumentTitle());
-
-        detailsResource.setDocumenttitle("application/pdf");
+        detailsResource.setDocumentType(lieReportAndFee.getDocumentType());
+        detailsResource.setDocumenttitle(lieReportAndFee.getDocumentTitle());
+        detailsResource.setFileReference(lieReportAndFee.getFileReference());
 
 
         return detailsResource;

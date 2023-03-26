@@ -55,7 +55,9 @@ public class SAPPromoterFinancialsResource {
         detailedResource.setPat(String.format("%.2f",promoterFinancials.getPat()));
         detailedResource.setOverallrating(promoterFinancials.getOverAllRating());
         detailedResource.setRemarks(promoterFinancials.getRemarks());
-        
+
+        detailedResource.setAnnualrptfilereference(promoterFinancials.getAnnualReturnFileReference());
+        detailedResource.setRatingfilereference(promoterFinancials.getRatingFileReference());
 
         return detailedResource;
 

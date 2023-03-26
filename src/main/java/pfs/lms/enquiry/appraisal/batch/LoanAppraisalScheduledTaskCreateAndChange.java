@@ -571,9 +571,11 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
          sapDocumentAttachmentResourceDetails = sapDocumentAttachmentResource.mapToSAP(
                 fileUUID.toString(),
                 entityId,
-                entityName, file.toString(),
+                entityName,
+                 file.toString(),
                 mimeType,
-                fileName );
+                fileName,
+                 fileReference);
 
         sapDocumentAttachmentResource.setSapDocumentAttachmentResourceDetails(sapDocumentAttachmentResourceDetails);
         Object d1 = (Object) sapDocumentAttachmentResource;
@@ -593,13 +595,16 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 //                + ")/$value";
 
                 String documentUploadUri = appraisalDocumentUri + "("
-                + "Id='" + entityId + "'," + "DocSubId='" + docSubId + "',"
+                + "Id='" + entityId + "',"
+                + "DocSubId='" + docSubId + "',"
                 + "EntityId='" +entityId +  "',"
                 + "EntityName='" +entityName +  "',"
                 + "MimeType='" +mimeType +  "',"
                 + "Filename='" +fileName +  "',"
                 + "FileType='" +fileType +  "',"
                 + "DocumentType='" +documentType +  "',"
+                + "FileReference='" +fileReference +  "',"
+
 //                + "DocId='" + "',"
 //                 + "UploadTime='" + "datetime'2015-07-30T00:00:00Z'',"
                 + ")/$value";

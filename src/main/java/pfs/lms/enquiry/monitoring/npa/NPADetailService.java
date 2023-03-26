@@ -3,6 +3,7 @@ package pfs.lms.enquiry.monitoring.npa;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
@@ -110,8 +111,25 @@ public class NPADetailService implements INPADetailService {
     public NPADetail deleteNPADetail(UUID npaDetailId, String username) {
         NPADetail npaDetail = npaDetailRepository.getOne(npaDetailId);
         UUID npaId = npaDetail.getNpa().getId();
+
+
+        LoanMonitor loanMonitor = npaDetail.getNpa().getLoanMonitor();
+
         npaDetailRepository.delete(npaDetail);
         updateSerialNumbers(npaId);
+
+        // Change Documents for  NPA Detail Delete
+        changeDocumentService.createChangeDocument(
+                loanMonitor.getId(),
+                npaDetail.getId().toString(),
+                loanMonitor.getId().toString(),
+                loanMonitor.getLoanApplication().getLoanContractId(),
+                null,
+                npaDetail,
+                "Deleted",
+                username,
+                "Appraisal", "NPA Detail");
+
         return npaDetail;
     }
 

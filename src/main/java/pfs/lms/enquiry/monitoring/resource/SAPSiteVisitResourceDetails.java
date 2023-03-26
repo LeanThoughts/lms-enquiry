@@ -39,4 +39,8 @@ public class SAPSiteVisitResourceDetails {
     @JsonProperty(value = "Dateoflendersmeet")
     private String dateoflendersmeet;
 
+    @JsonProperty(value = "FileReference")
+    private String fileReference;
+
+
 }

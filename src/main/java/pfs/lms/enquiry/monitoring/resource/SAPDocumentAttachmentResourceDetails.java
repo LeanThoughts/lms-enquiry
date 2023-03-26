@@ -35,6 +35,9 @@ public class SAPDocumentAttachmentResourceDetails {
     @JsonProperty (value = "Filename")
     private String filename;
 
+    @JsonProperty (value = "FileReference")
+    private String fileReference;
+
 
     public SAPDocumentAttachmentResourceDetails() {
     }

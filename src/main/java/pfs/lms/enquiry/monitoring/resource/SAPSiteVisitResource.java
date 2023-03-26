@@ -55,6 +55,8 @@ public class SAPSiteVisitResource {
         } else
             detailedResource.setDateoflendersmeet(null);
 
+        detailedResource.setFileReference(siteVisit.getFileReference());
+
         return detailedResource;
 
 

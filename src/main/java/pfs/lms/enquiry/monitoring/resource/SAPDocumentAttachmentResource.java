@@ -29,7 +29,13 @@ public class SAPDocumentAttachmentResource implements Serializable {
         this.sapDocumentAttachmentResourceDetails = sapDocumentAttachmentResourceDetails;
     }
 
-    public SAPDocumentAttachmentResourceDetails mapToSAP(String id, String entityId, String entityName, String documentContent, String mimeType, String fileName) {
+    public SAPDocumentAttachmentResourceDetails mapToSAP(String id,
+                                                         String entityId,
+                                                         String entityName,
+                                                         String documentContent,
+                                                         String mimeType,
+                                                         String fileName,
+                                                         String fileReference) {
 
         SAPDocumentAttachmentResourceDetails documentAttachmentDetailsResource = new SAPDocumentAttachmentResourceDetails();
 
@@ -39,6 +45,7 @@ public class SAPDocumentAttachmentResource implements Serializable {
         documentAttachmentDetailsResource.setEntityId(entityId);
         documentAttachmentDetailsResource.setEntityName(entityName);
         documentAttachmentDetailsResource.setFilename(fileName);
+        documentAttachmentDetailsResource.setFileReference(fileReference);
 
         return documentAttachmentDetailsResource;
     }

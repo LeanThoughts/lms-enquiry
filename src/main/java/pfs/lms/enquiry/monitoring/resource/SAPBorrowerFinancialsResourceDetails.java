@@ -50,6 +50,13 @@ public class SAPBorrowerFinancialsResourceDetails {
     @JsonProperty(value = "Remarks")
     private String remarks;
 
+    @JsonProperty(value = "Annualrptfilereference")
+    private String annualrptfilereference;
+
+    @JsonProperty(value = "Ratingfilereference")
+    private String ratingfilereference;
+
+
 
 
     @Override

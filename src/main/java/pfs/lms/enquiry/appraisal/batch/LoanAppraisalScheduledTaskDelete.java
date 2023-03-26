@@ -79,7 +79,7 @@ public class LoanAppraisalScheduledTaskDelete {
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
 
 
-        log.info("---------------syncLoanAppraisalsToBackend ");
+        //log.info("--------------- Task : Deleted Appraisal Entries  ");
 
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         CustomerRejection customerRejection = new CustomerRejection();
@@ -206,7 +206,7 @@ public class LoanAppraisalScheduledTaskDelete {
                 entityId,
                 entityName, file.toString(),
                 mimeType,
-                fileName );
+                fileName, fileReference );
 
         sapDocumentAttachmentResource.setSapDocumentAttachmentResourceDetails(sapDocumentAttachmentResourceDetails);
         Object d1 = (Object) sapDocumentAttachmentResource;
@@ -232,7 +232,8 @@ public class LoanAppraisalScheduledTaskDelete {
                 + "MimeType='" +mimeType +  "',"
                 + "Filename='" +fileName +  "',"
                 + "FileType='" +fileType +  "',"
-                + ")/$value";
+                + "FileReference='" +fileReference +  "',"
+                        + ")/$value";
 
 
         Object response =  fileUploadIntegrationService.fileUploadToSAP(documentUploadUri, filePath);

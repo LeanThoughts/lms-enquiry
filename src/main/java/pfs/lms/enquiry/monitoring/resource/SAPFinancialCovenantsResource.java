@@ -51,6 +51,8 @@ public class SAPFinancialCovenantsResource {
         detailedResource.setToltnw(String.format("%.2f",financialCovenants.getTolTnw()));
         detailedResource.setRemarksfordeviation(financialCovenants.getRemarksForDeviation());
 
+        detailedResource.setFileReference(financialCovenants.getFileReference());
+
         return detailedResource;
 
 
