@@ -109,7 +109,7 @@ public class NPADetailService implements INPADetailService {
     @Override
     public NPADetail deleteNPADetail(UUID npaDetailId, String username) {
         NPADetail npaDetail = npaDetailRepository.getOne(npaDetailId);
-        UUID npaId = npaDetail.getId();
+        UUID npaId = npaDetail.getNpa().getId();
         npaDetailRepository.delete(npaDetail);
         updateSerialNumbers(npaId);
         return npaDetail;
