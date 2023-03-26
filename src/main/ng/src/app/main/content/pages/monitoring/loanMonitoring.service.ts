@@ -466,6 +466,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'npaId':npaId, 'npaDetail':npaDetail });
     }
 
+    public deleteNPADetails(npaDetailId: string): Observable<any> {
+        const url = "enquiry/api/nPADetails/" + npaDetailId;
+        return this._http.delete(url);
+    }
+
     // All about Operating Parameters
 
     public getOperatingParameters(loanApplicationId: string): Observable<any> {

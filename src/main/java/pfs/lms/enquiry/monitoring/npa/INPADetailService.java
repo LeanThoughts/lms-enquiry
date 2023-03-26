@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.monitoring.npa;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface INPADetailService {
 
@@ -8,5 +9,7 @@ public interface INPADetailService {
 
     NPADetail updateNPADetail(NPADetailResource resource, String username) throws CloneNotSupportedException;
 
-    List<NPADetail> getNPADetail(String npaId, String username);
+    List<NPADetail> getNPADetail(String npaId);
+
+    NPADetail deleteNPADetail(UUID npaDetailId, String username);
 }

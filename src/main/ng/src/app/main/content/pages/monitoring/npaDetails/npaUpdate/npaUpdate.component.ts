@@ -7,6 +7,7 @@ import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringCo
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { NPADetailUpdateDialogComponent } from '../npaDetailsUpdate/npaDetailsUpdate.component';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 
 @Component({
     selector: 'fuse-npa-update-component',
@@ -156,8 +157,7 @@ export class NPAUpdateComponent implements OnInit {
                 this._loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
                     this.dataSource = new MatTableDataSource(data);
                     this.dataSource.sort = this.sort;
-                });
-    
+                });    
             }
         });   
     }
@@ -171,5 +171,22 @@ export class NPAUpdateComponent implements OnInit {
             return obj.value;
         else
             return '';
+    }
+
+    /**
+     * deleteNPADetails()
+     */
+    deleteNPADetails(): void {
+        const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => {
+            this._loanMonitoringService.deleteNPADetails(this.selectedNPADetail.id).subscribe(() => {
+                this.selectedNPADetail = undefined;
+                this._loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
+                    this.dataSource = new MatTableDataSource(data);
+                    this.dataSource.sort = this.sort;
+                });
+            });
+        });
     }
 }

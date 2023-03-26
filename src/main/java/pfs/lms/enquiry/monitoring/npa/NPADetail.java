@@ -3,7 +3,6 @@ package pfs.lms.enquiry.monitoring.npa;
 import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -17,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class NPADetail extends AggregateRoot<NPADetail> implements Cloneable {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private NPA npa;
 
     private String loanNumber;

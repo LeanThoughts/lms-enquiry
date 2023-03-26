@@ -139,6 +139,7 @@ const MY_FORMATS = {
     ],
     exports: [
         LoanAppraisalComponent,
+        ConfirmationDialogComponent
     ],  
     entryComponents: [
         ConfirmationDialogComponent,

@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentation;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -32,11 +32,16 @@ public class NPADetailController {
     }
 
     @GetMapping("/nPADetails/npaId/{npaId}")
-    public ResponseEntity<List<NPADetail>> getNPADetails(@PathVariable("npaId")
-                                                     String npaId, HttpServletRequest request) {
-        List<NPADetail> npaDetails = npaDetailService.getNPADetail(npaId, request.getUserPrincipal().getName());
+    public ResponseEntity<List<NPADetail>> getNPADetails(@PathVariable("npaId") String npaId,
+                                                         HttpServletRequest request) {
+        List<NPADetail> npaDetails = npaDetailService.getNPADetail(npaId);
         return ResponseEntity.ok(npaDetails);
     }
 
-
+    @DeleteMapping("/nPADetails/{npaDetailId}")
+    public ResponseEntity<NPADetail> deleteNPADetail(@PathVariable("npaDetailId") UUID npaDetailId,
+                                                     HttpServletRequest request) throws CloneNotSupportedException {
+        NPADetail npaDetail = npaDetailService.deleteNPADetail(npaDetailId, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(npaDetail);
+    }
 }

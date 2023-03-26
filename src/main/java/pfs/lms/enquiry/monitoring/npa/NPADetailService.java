@@ -99,10 +99,30 @@ public class NPADetailService implements INPADetailService {
     }
 
     @Override
-    public List<NPADetail> getNPADetail(String npaId, String username) {
+    public List<NPADetail> getNPADetail(String npaId) {
         NPA npa = npaRepository.getOne(UUID.fromString(npaId));
         return npaDetailRepository.findByNpaOrderByLineItemNumberDesc(npa);
         //return npaDetailRepository.findByNpa(npa);
 
+    }
+
+    @Override
+    public NPADetail deleteNPADetail(UUID npaDetailId, String username) {
+        NPADetail npaDetail = npaDetailRepository.getOne(npaDetailId);
+        UUID npaId = npaDetail.getId();
+        npaDetailRepository.delete(npaDetail);
+        updateSerialNumbers(npaId);
+        return npaDetail;
+    }
+
+    private void updateSerialNumbers(UUID npaId) {
+        NPA npa = npaRepository.getOne(npaId);
+        List<NPADetail> npaDetails = npaDetailRepository.findByNpaOrderByLineItemNumberDesc(npa);
+        int size = npaDetails.size();
+        for(NPADetail npaDetail : npaDetails) {
+            npaDetail.setLineItemNumber(size);
+            npaDetailRepository.save(npaDetail);
+            size--;
+        }
     }
 }
