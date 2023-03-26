@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface InsuranceRepository extends JpaRepository<Insurance, UUID> {
 
     List<Insurance> findByLoanMonitor(LoanMonitor loanMonitor);
+
+    List<Insurance> findByLoanMonitorOrderBySerialNumberDesc(LoanMonitor loanMonitor);
 }

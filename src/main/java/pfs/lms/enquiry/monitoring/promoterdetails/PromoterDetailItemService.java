@@ -98,7 +98,7 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
         PromoterDetailItem promoterDetailItem = new PromoterDetailItem();
         promoterDetailItem.setLoanMonitor(loanMonitor);
         promoterDetailItem.setSerialNumber(promoterDetailItemRepository.
-                findByLoanMonitorOrderBySerialNumber(loanMonitor).size() + 1);
+                findByLoanMonitorOrderBySerialNumberDesc(loanMonitor).size() + 1);
         promoterDetailItem.setEquityLinkInstrumentCurrent(resource.getPromoterDetailItem().getEquityLinkInstrumentCurrent());
         promoterDetailItem.setEquityLinkInstrumentSanction(resource.getPromoterDetailItem().getEquityLinkInstrumentSanction());
         promoterDetailItem.setPaidupCapitalEquityCurrent(resource.getPromoterDetailItem().getPaidupCapitalEquityCurrent());
@@ -132,7 +132,7 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanApplicationId);
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
         List<PromoterDetailItem> promoterDetailItems = promoterDetailItemRepository.
-                findByLoanMonitorOrderBySerialNumber(loanMonitor);
+                findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
         return promoterDetailItems;
     }
 }

@@ -20,7 +20,7 @@ export class InsuranceListComponent {
     loanApplicationId: string;
 
     displayedColumns = [
-        'validFrom', 'validTo', 'documentType','documentTitle', 'download'
+        'serialNumber', 'validFrom', 'validTo', 'documentType','documentTitle', 'download'
     ];
 
     selectedInsurance: any;

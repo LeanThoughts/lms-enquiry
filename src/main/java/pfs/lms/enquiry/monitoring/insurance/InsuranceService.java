@@ -89,6 +89,6 @@ public class InsuranceService implements IInsuranceService {
     public List<Insurance> getInsurances(UUID loanApplicationId) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanApplicationId);
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        return insuranceRepository.findByLoanMonitor(loanMonitor);
+        return insuranceRepository.findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
     }
 }

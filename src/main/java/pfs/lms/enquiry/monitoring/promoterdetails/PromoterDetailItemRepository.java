@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface PromoterDetailItemRepository extends JpaRepository<PromoterDetailItem, UUID> {
 
-    List<PromoterDetailItem> findByLoanMonitorOrderBySerialNumber(LoanMonitor loanMonitor);
+    List<PromoterDetailItem> findByLoanMonitorOrderBySerialNumberDesc(LoanMonitor loanMonitor);
 }

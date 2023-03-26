@@ -13,6 +13,14 @@
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
             <!-- validFrom Column -->
             <ng-container matColumnDef="validFrom">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Valid From</mat-header-cell>
