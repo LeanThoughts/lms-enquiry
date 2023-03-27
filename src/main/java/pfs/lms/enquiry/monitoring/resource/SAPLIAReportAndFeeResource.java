@@ -72,6 +72,8 @@ public class SAPLIAReportAndFeeResource implements Serializable   {
         if (liaReportAndFee.getPercentageCompletion() != null)
             detailsResource.setPercentagecompletion(liaReportAndFee.getPercentageCompletion().toString());
 
+
+
         if (liaReportAndFee.getNextReportDate() != null)
             detailsResource.setNextreportdate(dataConversionUtility.convertDateToSAPFormat(liaReportAndFee.getNextReportDate()));
         else

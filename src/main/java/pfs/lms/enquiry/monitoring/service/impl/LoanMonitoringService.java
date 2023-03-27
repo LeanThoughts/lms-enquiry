@@ -430,8 +430,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Override
     public LendersFinancialAdvisor deleteLFA(UUID lfaId, String username) {
         LendersFinancialAdvisor lfa = lfaRepository.getOne(lfaId.toString());
-        LoanMonitor loanMonitor = lfa.getLoanMonitor();
-        lfaRepository.delete(lfa);
+
 
         // Create Change Document for LFA Delete
         changeDocumentService.createChangeDocument(
@@ -445,6 +444,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 username,
                 "Appraisal", "Lenders Financial Advisor" );
 
+        LoanMonitor loanMonitor = lfa.getLoanMonitor();
+        lfaRepository.delete(lfa);
 
         updateLFASerialNumbers(loanMonitor);
 
@@ -542,8 +543,12 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
     @Override
     public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username) {
+
         LFAReportAndFee lfaReportAndFee = lfaReportAndFeeRepository.getOne(lfaReportAndFeeId.toString());
-        lfaReportAndFeeRepository.delete(lfaReportAndFee);
+
+        Optional<LFAReportAndFee> optionalLFAReportAndFee = lfaReportAndFeeRepository.findById(lfaReportAndFeeId.toString());
+        lfaReportAndFee = optionalLFAReportAndFee.get();
+
 
         // TODO - ModuleName
         UUID loanBusinessProcessObjectId =
@@ -558,9 +563,11 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 lfaReportAndFee,
-                "Updated",
+                "Deleted",
                 username,
                 "Appraisal", "LFA Report and Fee" );
+
+        lfaReportAndFeeRepository.delete(lfaReportAndFee);
 
         updateLFAReportAndFeeSerialNumbers(lfaReportAndFee.getLendersFinancialAdvisor().getId()); // TODO - ModuleName
         return lfaReportAndFee;
@@ -1616,8 +1623,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public BorrowerFinancials deleteBorrowerFinancials(UUID borrowerFinancialsId, String username) {
         BorrowerFinancials borrowerFinancials = borrowerFinancialsRepository.getOne(borrowerFinancialsId.toString());
         LoanMonitor loanMonitor = borrowerFinancials.getLoanMonitor();
-        borrowerFinancialsRepository.delete(borrowerFinancials);
-        updateBorrowerFinancialsSerialNumbers(loanMonitor);
+
 
         // Change Documents for  NPA Detail Delete
         changeDocumentService.createChangeDocument(
@@ -1631,6 +1637,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 username,
                 "Monitoring", "Borrower Financials");
 
+        borrowerFinancialsRepository.delete(borrowerFinancials);
+        updateBorrowerFinancialsSerialNumbers(loanMonitor);
         return borrowerFinancials;
     }
 
@@ -1867,8 +1875,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public FinancialCovenants deleteFinancialCovenants(UUID financialCovenantsId, String username) {
         FinancialCovenants financialCovenants = financialCovenantsRepository.getOne(financialCovenantsId.toString());
         LoanMonitor loanMonitor = financialCovenants.getLoanMonitor();
-        financialCovenantsRepository.delete(financialCovenants);
-        updateFinancialCovenantsSerialNumbers(loanMonitor);
+
 
         // Change Documents for  NPA Detail Delete
         changeDocumentService.createChangeDocument(
@@ -1882,6 +1889,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 username,
                 "Monitoring", "Financial Covenants");
 
+        financialCovenantsRepository.delete(financialCovenants);
+        updateFinancialCovenantsSerialNumbers(loanMonitor);
         return financialCovenants;
     }
 

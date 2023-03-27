@@ -112,11 +112,7 @@ public class NPADetailService implements INPADetailService {
         NPADetail npaDetail = npaDetailRepository.getOne(npaDetailId);
         UUID npaId = npaDetail.getNpa().getId();
 
-
         LoanMonitor loanMonitor = npaDetail.getNpa().getLoanMonitor();
-
-        npaDetailRepository.delete(npaDetail);
-        updateSerialNumbers(npaId);
 
         // Change Documents for  NPA Detail Delete
         changeDocumentService.createChangeDocument(
@@ -129,6 +125,9 @@ public class NPADetailService implements INPADetailService {
                 "Deleted",
                 username,
                 "Appraisal", "NPA Detail");
+
+        npaDetailRepository.delete(npaDetail);
+        updateSerialNumbers(npaId);
 
         return npaDetail;
     }

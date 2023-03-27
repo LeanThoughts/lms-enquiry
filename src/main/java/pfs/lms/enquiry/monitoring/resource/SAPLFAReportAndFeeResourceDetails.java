@@ -78,24 +78,5 @@ public class SAPLFAReportAndFeeResourceDetails {
     @JsonProperty (value = "Documenttype")
     private String documentType;
 
-    @Override
-    public String toString() {
-        return "SAPLFAReportAndFeeResourceDetails{" +
-                "id='" + id + '\'' +
-                ", lieId='" + lieId + '\'' +
-                ", serialNo=" + serialNo +
-                ", reporttype='" + reporttype + '\'' +
-                ", dateofreceipt='" + dateofreceipt + '\'' +
-                ", invoicedate='" + invoicedate + '\'' +
-                ", invoiceno='" + invoiceno + '\'' +
-                ", feeamount='" + feeamount + '\'' +
-                ", statusoffeepaid='" + statusoffeepaid + '\'' +
-                ", sapfiinvoicedate='" + sapfiinvoicedate + '\'' +
-                ", sapfiinvoicenumber='" + sapfiinvoicenumber + '\'' +
-                ", feeamountraisedoncustomer='" + feeamountraisedoncustomer + '\'' +
-                ", statusoffeereceipt='" + statusoffeereceipt + '\'' +
-                ", documenttitle='" + documenttitle + '\'' +
-                ", nextreportdate='" + nextreportdate + '\'' +
-                '}';
-    }
+
 }

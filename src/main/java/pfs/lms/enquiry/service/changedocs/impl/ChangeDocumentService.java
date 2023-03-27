@@ -57,6 +57,7 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.javers.core.diff.ListCompareAlgorithm.LEVENSHTEIN_DISTANCE;
 
@@ -69,7 +70,7 @@ import static org.javers.core.diff.ListCompareAlgorithm.LEVENSHTEIN_DISTANCE;
 @Transactional
 public class ChangeDocumentService implements IChangeDocumentService {
 
-
+    String pattern = "[$^A-Za-z0-9]+";
     @Autowired
     ChangeDocumentRepository changeDocumentRepository;
 
@@ -365,6 +366,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
         Map<String, String> result = new HashMap<>();
 
+        if (Pattern.compile(pattern).matcher(className).find()) {
+            String[] classNameComponents = className.split("\\$");
+            className = classNameComponents[0];
+        }
+
 //        if (className.contains("\\$")) {
 //            String[] classNameComponents = className.split("$");
 //            className = classNameComponents[0];
@@ -387,7 +393,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "LIEReportAndFee":
                     LIEReportAndFee lieReportAndFee = (LIEReportAndFee) object;
                     result.put("id", lieReportAndFee.getLendersIndependentEngineer().getSerialNumber().toString());
-                    result.put("description", lieReportAndFee.getReportType() + lieReportAndFee.getDateOfReceipt());
+                    result.put("description", lieReportAndFee.getReportType() + lieReportAndFee.getReportType());
                     return result;
                 case "LendersInsuranceAdvisor":
                     LendersInsuranceAdvisor lendersInsuranceAdvisor = (LendersInsuranceAdvisor) object;
@@ -397,7 +403,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "LIAReportAndFee":
                     LIAReportAndFee liaReportAndFee = (LIAReportAndFee) object;
                     result.put("id", liaReportAndFee.getLendersInsuranceAdvisor().getSerialNumber().toString());
-                    result.put("description", liaReportAndFee.getReportType() + liaReportAndFee.getDateOfReceipt());
+                    result.put("description", liaReportAndFee.getReportType() + liaReportAndFee.getReportType());
                     return result;
                 case "LendersLegalCouncil":
                     LendersLegalCouncil lendersLegalCouncil = (LendersLegalCouncil) object;
@@ -407,7 +413,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "LLCReportAndFee":
                     LLCReportAndFee llcReportAndFee = (LLCReportAndFee) object;
                     result.put("id", llcReportAndFee.getLendersLegalCouncil().getSerialNumber().toString());
-                    result.put("description", llcReportAndFee.getReportType() + llcReportAndFee.getDateOfReceipt());
+                    result.put("description", llcReportAndFee.getReportType() + llcReportAndFee.getReportType());
                     return result;
                 case "Valuer":
                     Valuer valuer = (Valuer) object;
@@ -417,7 +423,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "ValuerReportAndFee":
                     ValuerReportAndFee valuerReportAndFee = (ValuerReportAndFee) object;
                     result.put("id", valuerReportAndFee.getSerialNumber().toString());
-                    result.put("description", valuerReportAndFee.getReportType() + valuerReportAndFee.getDateOfReceipt());
+                    result.put("description", valuerReportAndFee.getReportType() + valuerReportAndFee.getReportType());
                     return result;
 
                 case "LendersFinancialAdvisor":
@@ -429,7 +435,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "LFAReportAndFee":
                     LFAReportAndFee lfaReportAndFee = (LFAReportAndFee) object;
                     result.put("id", lfaReportAndFee.getLendersFinancialAdvisor().getSerialNumber().toString());
-                    result.put("description", lfaReportAndFee.getReportType() + lfaReportAndFee.getDateOfReceipt());
+                    result.put("description", lfaReportAndFee.getReportType() + lfaReportAndFee.getReportType());
                     return result;
                 case "TrustRetentionAccount":
                     TrustRetentionAccount trustRetentionAccount = (TrustRetentionAccount) object;
