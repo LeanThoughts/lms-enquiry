@@ -36,18 +36,11 @@ public class SAPNPAResourceDetails {
     @JsonProperty (value = "SmaCategory")
     private String  smaCategory;
 
-    @Override
-    public String toString() {
-        return "SAPNPAResourceDetails{" +
-                "id='" + id + '\'' +
-                ", monitorId='" + monitorId + '\'' +
-                ", npaDeclDate='" + npaDeclDate + '\'' +
-                ", assetClassification='" + assetClassification + '\'' +
-                ", totalLoanAsset='" + totalLoanAsset + '\'' +
-                ", secLoanAsset='" + secLoanAsset + '\'' +
-                ", nonSecLoanAsset='" + nonSecLoanAsset + '\'' +
-                ", restructringType='" + restructringType + '\'' +
-                ", smaCategory='" + smaCategory + '\'' +
-                '}';
-    }
+    @JsonProperty (value = "FraudDate")
+    private String  fraudDate;
+    @JsonProperty (value = "ImpairmentReserve")
+    private String  impairmentReserve;
+    @JsonProperty (value = "ProvisionAmount")
+    private String  provisionAmount;
+
 }

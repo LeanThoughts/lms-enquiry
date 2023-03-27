@@ -10,9 +10,9 @@
     <div mat-dialog-content fusePerfectScrollbar style="height: 420px;">
         <form [formGroup]="npaDetailUpdateForm">
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Line Item Number" formControlName="lineItemNumber" maxlength="50" readonly>
-                </mat-form-field>
+<!--                <mat-form-field fxFlex="33">-->
+<!--                    <input matInput placeholder="Line Item Number" formControlName="lineItemNumber" maxlength="50" readonly>-->
+<!--                </mat-form-field>-->
 
                 <mat-form-field fxFlex="34">
                     <mat-select placeholder="NPA Asset Class" formControlName="npaAssetClass" required>
@@ -20,56 +20,56 @@
                             {{ obj.value }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field> 
-
+                </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker1" placeholder="Asset Classification Change Date" 
+                    <input matInput [matDatepicker]="picker1" placeholder="Asset Classification Change Date"
                             formControlName="assetClassificationChangeDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker> 
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+              <mat-form-field fxFlex="33">
+                <input matInput [matDatepicker]="picker2" placeholder="Provision Date" formControlName="provisionDate" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+              <input matInput placeholder="Absolute Value" formControlName="absoluteValue" maxlength="12">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="50">
+              <input matInput placeholder="Loan Asset Value" formControlName="loanAssetValue" maxlength="12" (change)="calculateNPAAmounts()">
+            </mat-form-field>
+
+          </div>
+
+            <div fxLayout="row">
+
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Percentage Secured" formControlName="percentageSecured" maxlength="5" (change)="calculateNPAAmounts()">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Percentage Unsecured" formControlName="percentageUnsecured" maxlength="5" (change)="calculateNPAAmounts()">
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker2" placeholder="Provision Date" formControlName="provisionDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
-                </mat-form-field>
-
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Percentage Secured" formControlName="percentageSecured" maxlength="5">
-                </mat-form-field>
-
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Percentage Unsecured" formControlName="percentageUnsecured" maxlength="5">
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Absolute Value" formControlName="absoluteValue" maxlength="12">
-                </mat-form-field>
-
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Loan Asset Value" formControlName="loanAssetValue" maxlength="12">
-                </mat-form-field>
-
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Secured Loan Asset" formControlName="securedLoanAsset" maxlength="12" readonly>
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+              <mat-form-field fxFlex="25">
+                <input matInput placeholder="Secured Loan Asset" formControlName="securedLoanAsset" maxlength="12" readonly>
+              </mat-form-field>
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Unsecured Loan Asset" formControlName="unsecuredLoanAsset" maxlength="12" readonly>
                 </mat-form-field>
 
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="NPA Provision Value" formControlName="npaProvisionValue" maxlength="12">
                 </mat-form-field>
 
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="25">
                     <input matInput placeholder="Net Asset Value" formControlName="netAssetValue" maxlength="12">
                 </mat-form-field>
             </div>
@@ -83,7 +83,7 @@
                     <input matInput placeholder="Remarks" formControlName="remarks" maxlength="50">
                 </mat-form-field>
             </div>
-    
+
             <div mat-dialog-actions fxLayout="row">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit

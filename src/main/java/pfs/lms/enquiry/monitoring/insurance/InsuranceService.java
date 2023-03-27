@@ -100,16 +100,16 @@ public class InsuranceService implements IInsuranceService {
         updateSerialNumbers(loanMonitor);
 
         // Change Documents for  NPA Detail Delete
-//        changeDocumentService.createChangeDocument(
-//                loanMonitor.getId(),
-//                npaDetail.getId().toString(),
-//                loanMonitor.getId().toString(),
-//                loanMonitor.getLoanApplication().getLoanContractId(),
-//                null,
-//                npaDetail,
-//                "Deleted",
-//                username,
-//                "Appraisal", "NPA Detail");
+        changeDocumentService.createChangeDocument(
+                insurance.getLoanMonitor().getId(),
+                insurance.getId().toString(),
+                insurance.getLoanMonitor().getId().toString(),
+                insurance.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                insurance,
+                "Deleted",
+                username,
+                "Monitoring", "Insurance");
 
         return insurance;
     }

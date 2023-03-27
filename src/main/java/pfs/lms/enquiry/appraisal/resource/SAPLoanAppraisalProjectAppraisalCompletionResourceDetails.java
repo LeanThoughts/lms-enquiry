@@ -37,6 +37,13 @@ public class SAPLoanAppraisalProjectAppraisalCompletionResourceDetails {
     private String agendaNoteSubmissionToCoSecy;
     @JsonProperty(value = "Remarks")
     private String remarks;
+    @JsonProperty(value = "Documenttype")
+    private String documentType;
+    @JsonProperty(value = "Documenttitle")
+    private String documentTitle;
+    @JsonProperty(value = "FileReference")
+    private String fileReference;
+
 
 
 

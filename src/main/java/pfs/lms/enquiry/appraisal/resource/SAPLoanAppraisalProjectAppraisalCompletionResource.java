@@ -73,7 +73,9 @@ public class SAPLoanAppraisalProjectAppraisalCompletionResource implements Seria
         else
             detailsResource.setRemarks("");
 
-
+        detailsResource.setDocumentTitle(projectAppraisalCompletion.getDocumentTitle());
+        detailsResource.setDocumentType(projectAppraisalCompletion.getDocumentType());
+        detailsResource.setFileReference(projectAppraisalCompletion.getFileReference());
 
         return detailsResource;
     }

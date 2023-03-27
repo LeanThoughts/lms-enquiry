@@ -36,7 +36,7 @@ export class LoanMonitoringConstants {
     // siteVisitTypes
     public static siteVisitTypes = [
         {code: "1" , value:"Site Visit"},
-        {code: "2" , value:"Lenders Meet"}        
+        {code: "2" , value:"Lenders Meet"}
     ];
 
     // reportTypes
@@ -518,7 +518,19 @@ export class LoanMonitoringConstants {
         {
          code: "ZPFSLM87",
          value: "Insurance Document"
-        }
+        },
+      {
+        code: "ZPFSLM88",
+        value: "Site Images"
+      },
+      {
+        code: "ZPFSLM89",
+        value: "Minutes of Meeting (MOM)"
+      },
+      {
+        code: "ZPFSLM90",
+        value: "Mail from Site Visit"
+      }
        ]
 
 

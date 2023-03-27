@@ -31,14 +31,14 @@ export class NPADetailUpdateDialogComponent implements OnDestroy {
      * constructor()
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService, private _loanEnquiryService: LoanEnquiryService,
-        public _dialogRef: MatDialogRef<NPADetailUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any, 
+        public _dialogRef: MatDialogRef<NPADetailUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             console.log(data, 'loan contract');
             this.loanContractId = data.loanContractId;
-        }));          
-    
+        }));
+
         // Fetch selected user details from the dialog's data attribute.
         this.selectedNPADetail = Object.assign({}, _dialogData.selectedNPADetail);
 
@@ -66,6 +66,25 @@ export class NPADetailUpdateDialogComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe
     }
+
+
+  calculateNPAAmounts(){
+    var npaDetail = this.npaDetailUpdateForm.value;
+    // console.log(' npaDetail.percentageSecured : ' + npaDetail.percentageSecured);
+    // console.log(' npaDetail.percentageUnsecured : ' +  npaDetail.percentageUnsecured);
+    // console.log(' npaDetail.loanAssetValue : ' + npaDetail.loanAssetValue);
+
+    var securedAmount     = ( npaDetail.percentageSecured   / 100 )  * npaDetail.loanAssetValue ;
+    var unSecuredAmount   = ( npaDetail.percentageUnsecured / 100 )  * npaDetail.loanAssetValue;
+
+    // console.log(' npaDetail.securedLoanAsset : ' + securedAmount);
+    // console.log('  npaDetail.unSecuredLoanAsset : ' +  unSecuredAmount);
+
+    this.npaDetailUpdateForm.get('securedLoanAsset').setValue(securedAmount);
+    this.npaDetailUpdateForm.get('unsecuredLoanAsset').setValue(unSecuredAmount);
+
+
+  }
 
     /**
      * submit()
@@ -112,7 +131,7 @@ export class NPADetailUpdateDialogComponent implements OnDestroy {
             this._loanMonitoringService.updateNPADetails(this._dialogData.npaId, this.selectedNPADetail).subscribe(() => {
                 this._matSnackBar.open('NPA details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
-            });            
+            });
         }
     }
 }

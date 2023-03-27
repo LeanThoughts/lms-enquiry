@@ -30,5 +30,5 @@ public class ProposalDetailResource {
     private Integer availabilityPeriod;
     private String availabilityPeriodUnit;
     private Double prePaymentCharges;
-    private Double feeDetailsSchedule;
+    private String feeDetailsSchedule;
 }

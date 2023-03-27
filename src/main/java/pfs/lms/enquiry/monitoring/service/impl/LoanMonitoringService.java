@@ -432,6 +432,20 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         LendersFinancialAdvisor lfa = lfaRepository.getOne(lfaId.toString());
         LoanMonitor loanMonitor = lfa.getLoanMonitor();
         lfaRepository.delete(lfa);
+
+        // Create Change Document for LFA Delete
+        changeDocumentService.createChangeDocument(
+                lfa.getLoanMonitor().getId(),
+                lfa.getId(),
+                null,
+                lfa.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                lfa,
+                "Deleted",
+                username,
+                "Appraisal", "Lenders Financial Advisor" );
+
+
         updateLFASerialNumbers(loanMonitor);
 
         return lfa;
@@ -530,7 +544,25 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username) {
         LFAReportAndFee lfaReportAndFee = lfaReportAndFeeRepository.getOne(lfaReportAndFeeId.toString());
         lfaReportAndFeeRepository.delete(lfaReportAndFee);
-        updateLFAReportAndFeeSerialNumbers(lfaReportAndFee.getLendersFinancialAdvisor().getId());
+
+        // TODO - ModuleName
+        UUID loanBusinessProcessObjectId =
+                this.getLoanBusinessProcessObjectId(lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
+                        lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),"Appraisal");
+
+        // Create Change Document for LFA Report and Fee
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                lfaReportAndFee.getId(),
+                lfaReportAndFee.getLendersFinancialAdvisor().getId(),
+                lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                lfaReportAndFee,
+                "Updated",
+                username,
+                "Appraisal", "LFA Report and Fee" );
+
+        updateLFAReportAndFeeSerialNumbers(lfaReportAndFee.getLendersFinancialAdvisor().getId()); // TODO - ModuleName
         return lfaReportAndFee;
     }
 
@@ -1508,7 +1540,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         // Change Documents for Operating Parameter
         changeDocumentService.createChangeDocument(
-                loanMonitor.getId(), borrowerFinancials.getId(),null,
+                loanMonitor.getId(),
+                borrowerFinancials.getId(),
+                null,
                 loanApplication.getLoanContractId(),
                 null,
                 borrowerFinancials,
@@ -1586,16 +1620,16 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         updateBorrowerFinancialsSerialNumbers(loanMonitor);
 
         // Change Documents for  NPA Detail Delete
-//        changeDocumentService.createChangeDocument(
-//                loanMonitor.getId(),
-//                npaDetail.getId().toString(),
-//                loanMonitor.getId().toString(),
-//                loanMonitor.getLoanApplication().getLoanContractId(),
-//                null,
-//                npaDetail,
-//                "Deleted",
-//                username,
-//                "Appraisal", "NPA Detail");
+        changeDocumentService.createChangeDocument(
+                loanMonitor.getId(),
+                borrowerFinancials.getId().toString(),
+                loanMonitor.getId().toString(),
+                loanMonitor.getLoanApplication().getLoanContractId(),
+                null,
+                borrowerFinancials,
+                "Deleted",
+                username,
+                "Monitoring", "Borrower Financials");
 
         return borrowerFinancials;
     }
@@ -1837,16 +1871,16 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         updateFinancialCovenantsSerialNumbers(loanMonitor);
 
         // Change Documents for  NPA Detail Delete
-//        changeDocumentService.createChangeDocument(
-//                loanMonitor.getId(),
-//                npaDetail.getId().toString(),
-//                loanMonitor.getId().toString(),
-//                loanMonitor.getLoanApplication().getLoanContractId(),
-//                null,
-//                npaDetail,
-//                "Deleted",
-//                username,
-//                "Appraisal", "NPA Detail");
+        changeDocumentService.createChangeDocument(
+                loanMonitor.getId(),
+                financialCovenants.getId().toString(),
+                loanMonitor.getId().toString(),
+                loanMonitor.getLoanApplication().getLoanContractId(),
+                null,
+                financialCovenants,
+                "Deleted",
+                username,
+                "Monitoring", "Financial Covenants");
 
         return financialCovenants;
     }

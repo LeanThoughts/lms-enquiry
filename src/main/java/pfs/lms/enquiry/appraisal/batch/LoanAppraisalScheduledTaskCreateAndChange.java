@@ -37,7 +37,10 @@ import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRatingRepository;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortiumRepository;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
+import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.monitoring.domain.SiteVisit;
+import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
+import pfs.lms.enquiry.monitoring.lie.LIEReportAndFeeRepository;
 import pfs.lms.enquiry.monitoring.repository.SiteVisitRepository;
 import pfs.lms.enquiry.monitoring.resource.*;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
@@ -78,11 +81,20 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     @Value("${sap.appraisalServiceUri}")
     private String appraisalServiceUri;
 
+    @Value("${sap.monitorDocumentUri}")
+    private String monitorDocumentUri;
+
+    @Value("${sap.monitorServiceUri}")
+    private String monitorServiceUri;
+
     private  final ISAPIntegrationService isapIntegrationService;
 
 
     private final FileStorage fileStorage;
     private final UserRepository userRepository;
+
+    User lastChangedByUser = new User();
+
     private final SAPIntegrationRepository sapIntegrationRepository;
     private final ISAPLoanProcessesIntegrationService sapLoanProcessesIntegrationService;
     private final ISAPFileUploadIntegrationService fileUploadIntegrationService;
@@ -121,6 +133,13 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private final SAPLoanAppraisalExternalRatingCorpLoanResource sapLoanAppraisalExternalRatingCorpLoanResource;
     private final SAPLoanAppraisalMainLocationDetailResource sapLoanAppraisalMainLocationDetailResource;
     private final SAPLoanAppraisalSubLocationDetailResource sapLoanAppraisalSubLocationDetailResource;
+
+    private final SAPLIEReportAndFeeResource saplieReportAndFeeResource;
+
+    private final LIEReportAndFeeRepository lieReportAndFeeRepository;
+
+
+    private final ISAPLoanProcessesIntegrationService sapLoanMonitoringIntegrationService;
 
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskCreateAndChange}",initialDelayString = "${batch.initialDelay}")
     public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
@@ -189,6 +208,40 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
+                 case "LIE Report And Fee":
+
+                     LIEReportAndFee lieReportAndFee = new LIEReportAndFee();
+                     log.info("Attempting to Post LIE  Report and Fee to SAP AT :" + dateFormat.format(new Date()));
+                     Optional<LIEReportAndFee> lieRF = lieReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
+
+                     lieReportAndFee = lieRF.get();
+
+                     //Set Status as in progress
+                     sapIntegrationPointer.setStatus(1); // In Posting Process
+                     sapIntegrationRepository.save(sapIntegrationPointer);
+
+                     SAPLIEReportAndFeeResourceDetails saplieReportAndFeeResourceDetails = saplieReportAndFeeResource.mapToSAP(lieReportAndFee, lastChangedByUser);
+                     SAPLIEReportAndFeeResource c = new SAPLIEReportAndFeeResource();
+                     c.setSaplieReportAndFeeResourceDetails(saplieReportAndFeeResourceDetails);
+
+                     resource = (Object) c;
+                     serviceUri = monitorServiceUri + "LIEReportAndFeeSet";
+                     response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     if (response != null) {
+                         if (lieReportAndFee.getFileReference() != null && lieReportAndFee.getFileReference().length() > 0) {
+                             response = postDocument(
+                                     lieReportAndFee.getFileReference(),
+                                     lieReportAndFee.getId(),
+                                     "",
+                                     "LIE Report & Fee",
+                                     lieReportAndFee.getDocumentTitle(), lieReportAndFee.getDocumentType());
+                         }
+                     }
+
+                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                     break;
+
                  case "External Rating Corporate Loan":
 
                      corporateLoanRiskRating = corporateLoanRiskRatingRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
@@ -304,7 +357,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      resource = (Object)  sapSiteVisitResource;
                      serviceUri = appraisalServiceUri + "SiteVisitSet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
-                     if (response != null) {
+                     if (response != null && siteVisit.getFileReference() != null) {
                          response = postDocument(
                                  siteVisit.getFileReference(),
                                  siteVisit.getId(),
@@ -336,6 +389,17 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      resource = (Object)  sapLoanAppraisalProjectApprisalCompletionResource;
                      serviceUri = appraisalServiceUri + "ProjectAppraisalCompletionSet";
                      response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                     if (response != null && projectAppraisalCompletion.getFileReference() != null) {
+                         response = postDocument(
+                                 projectAppraisalCompletion.getFileReference(),
+                                 projectAppraisalCompletion.getId().toString(),
+                                 "",
+                                 "Project Appraisal Completion",
+                                 projectAppraisalCompletion.getDocumentTitle(),
+                                 projectAppraisalCompletion.getDocumentType()
+                         );
+                     }
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
@@ -539,6 +603,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
              }
+
          }
      }
 

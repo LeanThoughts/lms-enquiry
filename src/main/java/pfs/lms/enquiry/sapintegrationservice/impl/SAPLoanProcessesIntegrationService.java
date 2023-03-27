@@ -342,6 +342,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
         }
 
+        log.info("HTTP Delete Status Code : " + responseEntity.getStatusCode().toString());
 
         return "Deleted";
 

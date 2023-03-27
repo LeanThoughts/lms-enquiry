@@ -73,32 +73,32 @@ public class SAPLoanAppraisalProposalDetailsResource implements Serializable {
             detailsResource.setMoratoriumperiodunit(proposalDetail.getMoratoriumPeriodUnit());
         else
             detailsResource.setMoratoriumperiodunit("");
-        if (detailsResource.getRepaymentperiod() != null)
+        if (proposalDetail.getRepaymentPeriod() != null)
             detailsResource.setRepaymentperiod(proposalDetail.getRepaymentPeriod().toString());
         else
             detailsResource.setRepaymentperiod("");
 
-        if (detailsResource.getRepaymentperiodunit() != null)
+        if (proposalDetail.getRepaymentPeriod() != null)
             detailsResource.setRepaymentperiodunit(proposalDetail.getRepaymentPeriodUnit());
         else
             detailsResource.setRepaymentperiodunit("");
 
-        if (detailsResource.getTenor() != null)
+        if (proposalDetail.getTenor() != null)
             detailsResource.setTenor(proposalDetail.getTenor().toString());
         else
             detailsResource.setTenor("");
 
-        if (detailsResource.getTenorunit() != null)
+        if (proposalDetail.getTenorUnit() != null)
             detailsResource.setTenorunit(proposalDetail.getTenorUnit());
         else
             detailsResource.setTenorunit("");
 
-        if (detailsResource.getAvailabilityperiod() != null)
+        if (proposalDetail.getAvailabilityPeriod() != null)
             detailsResource.setAvailabilityperiod(proposalDetail.getAvailabilityPeriod().toString());
         else
             detailsResource.setAvailabilityperiod("");
 
-        if (detailsResource.getAvailabilityperiodunit() != null)
+        if (proposalDetail.getAvailabilityPeriodUnit() != null)
             detailsResource.setAvailabilityperiodunit(proposalDetail.getAvailabilityPeriodUnit());
         else
             detailsResource.setAvailabilityperiodunit("");

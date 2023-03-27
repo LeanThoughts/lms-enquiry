@@ -38,13 +38,13 @@ export class NPAUpdateComponent implements OnInit {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
-    constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService, 
+    constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _matDialog: MatDialog) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
@@ -99,6 +99,7 @@ export class NPAUpdateComponent implements OnInit {
         this.selectedNPADetail = selectedNPADetail;
     }
 
+
     /**
      * submit()
      */
@@ -123,7 +124,7 @@ export class NPAUpdateComponent implements OnInit {
             this._loanMonitoringService.updateNPA(this.selectedNPA).subscribe((data) => {
                 this._matSnackBar.open('NPA details updated successfully.', 'OK', { duration: 7000 });
                 this.selectedNPA = data;
-            });            
+            });
         }
         else {
             this._loanMonitoringService.saveNPA(npa, this.loanApplicationId).subscribe((data) => {
@@ -152,14 +153,14 @@ export class NPAUpdateComponent implements OnInit {
             data: data
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 this._loanMonitoringService.getNPADetails(this.selectedNPA.id).subscribe(data => {
                     this.dataSource = new MatTableDataSource(data);
                     this.dataSource.sort = this.sort;
-                });    
+                });
             }
-        });   
+        });
     }
 
     /**

@@ -107,6 +107,19 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
         promoterDetailItem.setDateOfChange(resource.getPromoterDetailItem().getDateOfChange());
         promoterDetailItem.setGroupExposure(resource.getPromoterDetailItem().getGroupExposure());
         promoterDetailItem = promoterDetailItemRepository.save(promoterDetailItem);
+
+        // Change Documents for Promoter Detail
+        changeDocumentService.createChangeDocument(
+                loanMonitor.getId(),
+                promoterDetailItem.getId().toString(),
+                null,
+                loanApplication.getLoanContractId(),
+                null,
+                promoterDetailItem,
+                "Created",
+                username,
+                "Monitoring", "Promoter Detail");
+
         return promoterDetailItem;
     }
 
@@ -115,6 +128,8 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
             throws CloneNotSupportedException {
 
         PromoterDetailItem promoterDetailItem = promoterDetailItemRepository.getOne(resource.getPromoterDetailItem().getId());
+        PromoterDetailItem oldPromoterDetailItem = (PromoterDetailItem) promoterDetailItem.clone();
+
         promoterDetailItem.setEquityLinkInstrumentCurrent(resource.getPromoterDetailItem().getEquityLinkInstrumentCurrent());
         promoterDetailItem.setEquityLinkInstrumentSanction(resource.getPromoterDetailItem().getEquityLinkInstrumentSanction());
         promoterDetailItem.setPaidupCapitalEquityCurrent(resource.getPromoterDetailItem().getPaidupCapitalEquityCurrent());
@@ -123,6 +138,19 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
         promoterDetailItem.setDateOfChange(resource.getPromoterDetailItem().getDateOfChange());
         promoterDetailItem.setGroupExposure(resource.getPromoterDetailItem().getGroupExposure());
         promoterDetailItem = promoterDetailItemRepository.save(promoterDetailItem);
+
+        // Change Documents for Promoter Detail
+        changeDocumentService.createChangeDocument(
+                promoterDetailItem.getLoanMonitor().getId(),
+                promoterDetailItem.getId().toString(),
+                null,
+                promoterDetailItem.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldPromoterDetailItem,
+                promoterDetailItem,
+                "Updated",
+                username,
+                "Monitoring", "Promoter Detail");
+
         return promoterDetailItem;
     }
 

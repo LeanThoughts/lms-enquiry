@@ -36,7 +36,8 @@ public class SAPTRAStatementResource {
         detailedResource.setPeriodQuarter(traStatement.getPeriodQuarter());
         detailedResource.setPeriodYear(traStatement.getPeriodYear());
         detailedResource.setDocumenttype(traStatement.getDocumentType());
-        //detailedResource.setDocumenttitle(traStatement.getD);
+        detailedResource.setDocumenttitle(traStatement.getDocumentTitle());
+        detailedResource.setFileReference(traStatement.getFileReference());
         return detailedResource;
     }
 

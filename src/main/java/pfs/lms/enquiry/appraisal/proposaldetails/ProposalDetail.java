@@ -35,7 +35,7 @@ public class ProposalDetail extends AggregateRoot<ProposalDetail> implements Clo
     private Integer availabilityPeriod;
     private String availabilityPeriodUnit;
     private Double prePaymentCharges;
-    private Double feeDetailsSchedule;
+    private String feeDetailsSchedule;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

@@ -18,16 +18,16 @@ export class ProposalDetailsUpdateComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanAppraisalService 
-     * @param _dialogRef 
-     * @param _dialogData 
+     * @param _formBuilder
+     * @param _loanAppraisalService
+     * @param _dialogRef
+     * @param _dialogData
      */
-    constructor(_formBuilder: FormBuilder, 
+    constructor(_formBuilder: FormBuilder,
                 private _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<ProposalDetailsUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
-                private _matSnackBar: MatSnackBar) { 
+                private _matSnackBar: MatSnackBar) {
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
@@ -35,31 +35,31 @@ export class ProposalDetailsUpdateComponent {
         console.log('this._proposalDetail', this._proposalDetail);
 
         this._proposalDetailsForm = _formBuilder.group({
-            rateOfInterestPreCod: [ this._proposalDetail.rateOfInterestPreCod || undefined, 
+            rateOfInterestPreCod: [ this._proposalDetail.rateOfInterestPreCod || undefined,
                 [Validators.pattern(MonitoringRegEx.holdingPercentage)] ],
-            rateOfInterestPostCod: [ this._proposalDetail.rateOfInterestPostCod || undefined, 
+            rateOfInterestPostCod: [ this._proposalDetail.rateOfInterestPostCod || undefined,
                 [Validators.pattern(MonitoringRegEx.holdingPercentage)] ],
-            spreadReset: [ this._proposalDetail.spreadReset || undefined, 
-                [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
+            spreadReset: [ this._proposalDetail.spreadReset || undefined,
+                [Validators.pattern(MonitoringRegEx.holdingPercentage)] ],
             spreadResetUnit: [ this._proposalDetail.spreadResetUnit || undefined ],
-            effectiveRateOfInterest: [ this._proposalDetail.effectiveRateOfInterest || undefined, 
+            effectiveRateOfInterest: [ this._proposalDetail.effectiveRateOfInterest || undefined,
                 [Validators.pattern(MonitoringRegEx.holdingPercentage)] ],
-            constructionPeriod: [ this._proposalDetail.constructionPeriod || undefined, 
+            constructionPeriod: [ this._proposalDetail.constructionPeriod || undefined,
                 [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
             constructionPeriodUnit: [this._proposalDetail.constructionPeriodUnit || undefined ],
-            moratoriumPeriod: [ this._proposalDetail.moratoriumPeriod || undefined, 
+            moratoriumPeriod: [ this._proposalDetail.moratoriumPeriod || undefined,
                 [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
             moratoriumPeriodUnit: [ this._proposalDetail.moratoriumPeriodUnit || undefined ],
-            repaymentPeriod: [ this._proposalDetail.repaymentPeriod || undefined, 
+            repaymentPeriod: [ this._proposalDetail.repaymentPeriod || undefined,
                 [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
             repaymentPeriodUnit: [ this._proposalDetail.repaymentPeriodUnit || undefined ],
-            tenor: [ this._proposalDetail.tenor || undefined, 
+            tenor: [ this._proposalDetail.tenor || undefined,
                 [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
             tenorUnit: [ this._proposalDetail.tenorUnit || undefined ],
-            availabilityPeriod: [ this._proposalDetail.availabilityPeriod || undefined, 
+            availabilityPeriod: [ this._proposalDetail.availabilityPeriod || undefined,
                 [Validators.pattern(MonitoringRegEx.threeDigitsOnly)] ],
             availabilityPeriodUnit: [ this._proposalDetail.availabilityPeriodUnit || undefined ],
-            prePaymentCharges: [ this._proposalDetail.prePaymentCharges || undefined, 
+            prePaymentCharges: [ this._proposalDetail.prePaymentCharges || undefined,
                 [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)] ],
             feeDetailsSchedule: [ this._proposalDetail.feeDetailsSchedule || undefined ]
         });

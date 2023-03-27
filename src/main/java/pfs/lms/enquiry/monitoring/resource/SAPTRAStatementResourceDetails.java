@@ -42,6 +42,9 @@ public class SAPTRAStatementResourceDetails {
     private String documenttype;
     @JsonProperty(value = "Documenttitle")
     private String documenttitle;
+    @JsonProperty(value = "FileReference")
+    private String fileReference;
+
 
 
 }

@@ -24,6 +24,7 @@ public class SAPSiteVisitResourceDetails {
     @JsonProperty(value ="AppraisalId")
     private String appraisalId;
 
+
     @JsonProperty(value = "SerialNo")
     private Integer serialNo;
 
@@ -38,6 +39,22 @@ public class SAPSiteVisitResourceDetails {
 
     @JsonProperty(value = "Dateoflendersmeet")
     private String dateoflendersmeet;
+
+    @JsonProperty(value = "DocumentType")
+    private String  documentType;
+    @JsonProperty(value = "DocumentTitle")
+    private String  documentTitle;
+    @JsonProperty(value = "InitialSCOD")
+    private String  initialSCOD;
+    @JsonProperty(value = "RevisedSCOD1")
+    private String  revisedSCOD1;
+    @JsonProperty(value = "RevisedSCOD2")
+    private String  revisedSCOD2;
+    @JsonProperty(value = "Businesspartnerid")
+    private String  businesspartnerid;
+    @JsonProperty(value = "Businesspartnername")
+    private String  businesspartnername;
+
 
     @JsonProperty(value = "FileReference")
     private String fileReference;

@@ -55,6 +55,27 @@ public class SAPSiteVisitResource {
         } else
             detailedResource.setDateoflendersmeet(null);
 
+
+        if (siteVisit.getInitialSCOD() != null)
+            detailedResource.setInitialSCOD(dataConversionUtility.convertDateToSAPFormat(siteVisit.getInitialSCOD()));
+        else
+            detailedResource.setInitialSCOD(null);
+
+        if(siteVisit.getRevisedSCOD1() != null) {
+            detailedResource.setRevisedSCOD1(dataConversionUtility.convertDateToSAPFormat(siteVisit.getRevisedSCOD1()));
+        } else
+            detailedResource.setRevisedSCOD1(null);
+
+        if(siteVisit.getRevisedSCOD2() != null) {
+            detailedResource.setRevisedSCOD2(dataConversionUtility.convertDateToSAPFormat(siteVisit.getRevisedSCOD2()));
+        } else
+            detailedResource.setRevisedSCOD2(null);
+
+        detailedResource.setBusinesspartnerid(siteVisit.getBusinessPartnerId());
+        detailedResource.setBusinesspartnername(siteVisit.getBusinessPartnerName());
+        detailedResource.setDocumentType(siteVisit.getDocumentType());
+        detailedResource.setDocumentTitle(siteVisit.getDocumentTitle());
+
         detailedResource.setFileReference(siteVisit.getFileReference());
 
         return detailedResource;

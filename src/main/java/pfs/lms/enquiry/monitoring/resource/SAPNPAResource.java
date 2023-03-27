@@ -57,6 +57,14 @@ public class SAPNPAResource implements Serializable   {
         if (npa.getUnSecuredLoanAsset() != null)
             detailsResource.setNonSecLoanAsset(npa.getUnSecuredLoanAsset().toString());
 
+        if (npa.getFraudDate() != null)
+            detailsResource.setFraudDate(dataConversionUtility.convertDateToSAPFormat(npa.getFraudDate()));
+        else
+            detailsResource.setFraudDate(null);
+        if (npa.getImpairmentReserve() != null)
+            detailsResource.setImpairmentReserve(npa.getImpairmentReserve().toString());
+        if (npa.getProvisionAmount() != null)
+            detailsResource.setProvisionAmount(npa.getProvisionAmount().toString());
 
         detailsResource.setRestructringType(npa.getRestructuringType() );
         detailsResource.setSmaCategory(npa.getSmaCategory() );
