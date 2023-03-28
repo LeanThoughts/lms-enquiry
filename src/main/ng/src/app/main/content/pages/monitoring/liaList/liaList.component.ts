@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LIAUpdateDialogComponent } from '../liaUpdate/liaUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
@@ -34,7 +35,9 @@ export class LIAListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog,
+                        private _matSnackBar: MatSnackBar) {
+
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getLendersInsuranceAdvisors(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -118,6 +121,28 @@ export class LIAListComponent {
                 operation: 'displayLIA',
                 loanApplicationId: this.loanApplicationId,
                 selectedLIA: this.selectedLIA
+            }
+        });
+    }
+
+    /**
+     * deleteLIA()
+     */
+    deleteLIA(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteLIA(this.selectedLIA, this._module).subscribe(() => {
+                    this.selectedLIA = undefined;
+                    this._loanMonitoringService.getLendersInsuranceAdvisors(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected LIA. Please check if there are LIA Report and Fee entries.', 'OK', 
+                            { duration: 7000 });
+                });
             }
         });
     }

@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LIEModel } from 'app/main/content/model/lie.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { Subscription } from 'rxjs';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LLCReportAndFeeUpdateDialogComponent } from '../llcReportAndFeeUpdate/llcReportAndFeeUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
 
@@ -126,5 +127,23 @@ export class LLCReportAndFeeListComponent implements OnDestroy {
      */
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    /**
+     * deleteLLCReportAndFee()
+     */
+    deleteLLCReportAndFee(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteLLCReportAndFee(this.selectedLLCReportAndFee, this._module).subscribe(() => {
+                    this.selectedLLCReportAndFee = undefined;
+                    this._loanMonitoringService.getLLCReportsAndFees(this.selectedLLC.id).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
     }
 }

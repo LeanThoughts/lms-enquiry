@@ -111,6 +111,28 @@ public class LIAService implements ILIAService {
     }
 
     @Override
+    public LendersInsuranceAdvisor deleteLIA(UUID liaId, String moduleName, String username) {
+        LendersInsuranceAdvisor lendersInsuranceAdvisor = liaRepository.getOne(liaId.toString());
+        LoanMonitor loanMonitor = lendersInsuranceAdvisor.getLoanMonitor();
+        liaRepository.delete(lendersInsuranceAdvisor);
+        updateLIASerialNumbers(loanMonitor);
+
+        return lendersInsuranceAdvisor;
+    }
+
+    private void updateLIASerialNumbers(LoanMonitor loanMonitor) {
+        List<LendersInsuranceAdvisor> lendersInsuranceAdvisors = liaRepository.findByLoanMonitor(loanMonitor);
+        int size = lendersInsuranceAdvisors.size();
+        for(LendersInsuranceAdvisor lendersInsuranceAdvisor: lendersInsuranceAdvisors) {
+            if (lendersInsuranceAdvisor.getSerialNumber() != size) {
+                lendersInsuranceAdvisor.setSerialNumber(size);
+                liaRepository.save(lendersInsuranceAdvisor);
+            }
+            size--;
+        }
+    }
+
+    @Override
     public List<LIAResource> getLendersInsuranceAdvisors(String loanApplicationId) {
         List<LIAResource> liaResources = new ArrayList<>();
         LoanApplication loanApplication = loanApplicationRepository.getOne(UUID.fromString(loanApplicationId));
@@ -220,5 +242,26 @@ public class LIAService implements ILIAService {
         Collections.sort(liaReportAndFeeResources, Comparator.comparingInt((LIAReportAndFeeResource a) ->
                 a.getLiaReportAndFee().getSerialNumber()).reversed());
         return liaReportAndFeeResources;
+    }
+
+    @Override
+    public LIAReportAndFee deleteLIAReportAndFee(UUID liaReportAndFeeId, String moduleName, String username) {
+        LIAReportAndFee liaReportAndFee = liaReportAndFeeRepository.getOne(liaReportAndFeeId.toString());
+        liaReportAndFeeRepository.delete(liaReportAndFee);
+        updateLIAReportAndFeeSerialNumbers(liaReportAndFee.getLendersInsuranceAdvisor().getId());
+        return liaReportAndFee;
+    }
+
+    private void updateLIAReportAndFeeSerialNumbers(String liaId) {
+        LendersInsuranceAdvisor lia = liaRepository.getOne(liaId);
+        List<LIAReportAndFee> liaReportAndFees = liaReportAndFeeRepository.findByLendersInsuranceAdvisor(lia);
+        int size = liaReportAndFees.size();
+        for(LIAReportAndFee liaReportAndFee: liaReportAndFees) {
+            if (liaReportAndFee.getSerialNumber() != size) {
+                liaReportAndFee.setSerialNumber(size);
+                liaReportAndFeeRepository.save(liaReportAndFee);
+            }
+            size--;
+        }
     }
 }

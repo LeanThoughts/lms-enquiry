@@ -10,7 +10,6 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
-import pfs.lms.enquiry.monitoring.service.impl.LoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
@@ -23,13 +22,11 @@ public class LLCService implements ILLCService {
 
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanMonitorRepository loanMonitorRepository;
-    private final LLCRepository LLCRepository;
-    private final LLCReportAndFeeRepository LLCReportAndFeeRepository;
+    private final LLCRepository llcRepository;
+    private final LLCReportAndFeeRepository llcReportAndFeeRepository;
     private final ILoanMonitoringService loanMonitoringService;
     private final ILoanAppraisalService loanAppraisalService;
     private final IChangeDocumentService changeDocumentService;
-
-
     
     @Override
     public LendersLegalCouncil saveLLC(LLCResource resource, String username) throws CloneNotSupportedException {
@@ -39,7 +36,7 @@ public class LLCService implements ILLCService {
         LoanAppraisal loanAppraisal = loanAppraisalService.createLoanAppraisal(loanApplication, username);
 
         LendersLegalCouncil lendersLegalCouncil = resource.getLendersLegalCouncil();
-        lendersLegalCouncil.setSerialNumber(LLCRepository.findByLoanMonitor(loanMonitor).size() + 1);
+        lendersLegalCouncil.setSerialNumber(llcRepository.findByLoanMonitor(loanMonitor).size() + 1);
         lendersLegalCouncil.setLoanMonitor(loanMonitor);
         lendersLegalCouncil.setLoanAppraisal(loanAppraisal);
         lendersLegalCouncil.setAdvisor(resource.getLendersLegalCouncil().getAdvisor());
@@ -51,7 +48,7 @@ public class LLCService implements ILLCService {
         lendersLegalCouncil.setContactPerson(resource.getLendersLegalCouncil().getContactPerson());
         lendersLegalCouncil.setContactNumber(resource.getLendersLegalCouncil().getContactNumber());
         lendersLegalCouncil.setEmail(resource.getLendersLegalCouncil().getEmail());
-        lendersLegalCouncil = LLCRepository.save(lendersLegalCouncil);
+        lendersLegalCouncil = llcRepository.save(lendersLegalCouncil);
 
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(lendersLegalCouncil.getLoanMonitor(),
                 lendersLegalCouncil.getLoanAppraisal(),resource.getModuleName());
@@ -74,7 +71,7 @@ public class LLCService implements ILLCService {
     @Override
     public LendersLegalCouncil updateLLC(LLCResource resource, String username) throws CloneNotSupportedException {
         LendersLegalCouncil llc
-                = LLCRepository.getOne(resource.getLendersLegalCouncil().getId());
+                = llcRepository.getOne(resource.getLendersLegalCouncil().getId());
 
         //Clone the LIE Object for Change Document
         Object oldLLC = llc.clone();
@@ -88,7 +85,7 @@ public class LLCService implements ILLCService {
         llc.setContactPerson(resource.getLendersLegalCouncil().getContactPerson());
         llc.setContactNumber(resource.getLendersLegalCouncil().getContactNumber());
         llc.setEmail(resource.getLendersLegalCouncil().getEmail());
-        llc = LLCRepository.save(llc);
+        llc = llcRepository.save(llc);
 
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(llc.getLoanMonitor(),
                 llc.getLoanAppraisal(),resource.getModuleName());
@@ -114,7 +111,7 @@ public class LLCService implements ILLCService {
         LoanApplication loanApplication = loanApplicationRepository.getOne(UUID.fromString(loanApplicationId));
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
         if(loanMonitor != null) {
-            List<LendersLegalCouncil> list = LLCRepository.findByLoanMonitor(loanMonitor);
+            List<LendersLegalCouncil> list = llcRepository.findByLoanMonitor(loanMonitor);
             list.forEach(
                     lendersInsuranceAdvisor -> {
                         LLCResource llcResource = new LLCResource();
@@ -131,11 +128,11 @@ public class LLCService implements ILLCService {
 
     @Override
     public LLCReportAndFee saveLLCReportAndFee(LLCReportAndFeeResource resource, String username) throws CloneNotSupportedException {
-        LendersLegalCouncil lendersLegalCouncil = LLCRepository.getOne(resource.getLendersLegalCouncilId());
+        LendersLegalCouncil lendersLegalCouncil = llcRepository.getOne(resource.getLendersLegalCouncilId());
         LLCReportAndFee llcReportAndFee = resource.getLlcReportAndFee();
-        llcReportAndFee.setSerialNumber(LLCReportAndFeeRepository.findByLendersLegalCouncil(lendersLegalCouncil).size() + 1);
+        llcReportAndFee.setSerialNumber(llcReportAndFeeRepository.findByLendersLegalCouncil(lendersLegalCouncil).size() + 1);
         llcReportAndFee.setLendersLegalCouncil(lendersLegalCouncil);
-        llcReportAndFee = LLCReportAndFeeRepository.save(llcReportAndFee);
+        llcReportAndFee = llcReportAndFeeRepository.save(llcReportAndFee);
 
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(llcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
                 llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal() ,resource.getModuleName());
@@ -158,7 +155,7 @@ public class LLCService implements ILLCService {
     @Override
     public LLCReportAndFee updateLLCReportAndFee(LLCReportAndFeeResource resource, String username) throws CloneNotSupportedException {
         LLCReportAndFee existingllcReportAndFee
-                = LLCReportAndFeeRepository.getOne(resource.getLlcReportAndFee().getId());
+                = llcReportAndFeeRepository.getOne(resource.getLlcReportAndFee().getId());
 
         Object oldllcReportAndFee = existingllcReportAndFee.clone();
 
@@ -176,7 +173,7 @@ public class LLCService implements ILLCService {
         existingllcReportAndFee.setReportDate(resource.getLlcReportAndFee().getReportDate());
         existingllcReportAndFee.setPercentageCompletion(resource.getLlcReportAndFee().getPercentageCompletion());
         existingllcReportAndFee.setRemarks(resource.getLlcReportAndFee().getRemarks());
-        existingllcReportAndFee = LLCReportAndFeeRepository.save(existingllcReportAndFee);
+        existingllcReportAndFee = llcReportAndFeeRepository.save(existingllcReportAndFee);
 
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(existingllcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
                 existingllcReportAndFee.getLendersLegalCouncil().getLoanAppraisal(),  resource.getModuleName());
@@ -199,12 +196,12 @@ public class LLCService implements ILLCService {
     @Override
     public List<LLCReportAndFeeResource> getLLCReportAndFee(String lendersInsuranceAdvisorId) {
         List<LLCReportAndFeeResource> llcReportAndFeeResources = new ArrayList<>();
-        LendersLegalCouncil lendersLegalCouncil = LLCRepository.getOne(lendersInsuranceAdvisorId);
+        LendersLegalCouncil lendersLegalCouncil = llcRepository.getOne(lendersInsuranceAdvisorId);
         //LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
 
         if(lendersLegalCouncil != null) {
             List<LLCReportAndFee> llcReportAndFees
-                    = LLCReportAndFeeRepository.findByLendersLegalCouncil(lendersLegalCouncil);
+                    = llcReportAndFeeRepository.findByLendersLegalCouncil(lendersLegalCouncil);
             llcReportAndFees.forEach(
                     llcReportAndFee -> {
                         LLCReportAndFeeResource llcReportAndFeeResource = new LLCReportAndFeeResource();
@@ -218,5 +215,47 @@ public class LLCService implements ILLCService {
         Collections.sort(llcReportAndFeeResources, Comparator.comparingInt((LLCReportAndFeeResource a) ->
                 a.getLlcReportAndFee().getSerialNumber()).reversed());
         return llcReportAndFeeResources;
+    }
+
+    @Override
+    public LLCReportAndFee deleteLLCReportAndFee(UUID llcReportAndFeeId, String moduleName, String username) {
+        LLCReportAndFee llcReportAndFee = llcReportAndFeeRepository.getOne(llcReportAndFeeId.toString());
+        llcReportAndFeeRepository.delete(llcReportAndFee);
+        updateLLCReportAndFeeSerialNumbers(llcReportAndFee.getLendersLegalCouncil().getId());
+        return llcReportAndFee;
+    }
+
+    private void updateLLCReportAndFeeSerialNumbers(String llcId) {
+        LendersLegalCouncil lendersLegalCouncil = llcRepository.getOne(llcId);
+        List<LLCReportAndFee> llcReportAndFees = llcReportAndFeeRepository.findByLendersLegalCouncil(lendersLegalCouncil);
+        int size = llcReportAndFees.size();
+        for(LLCReportAndFee llcReportAndFee: llcReportAndFees) {
+            if (llcReportAndFee.getSerialNumber() != size) {
+                llcReportAndFee.setSerialNumber(size);
+                llcReportAndFeeRepository.save(llcReportAndFee);
+            }
+            size--;
+        }
+    }
+
+    @Override
+    public LendersLegalCouncil deleteLLC(UUID llcId, String moduleName, String username) {
+        LendersLegalCouncil llc = llcRepository.getOne(llcId.toString());
+        LoanMonitor loanMonitor = llc.getLoanMonitor();
+        llcRepository.delete(llc);
+        updateLLCSerialNumbers(loanMonitor);
+        return llc;
+    }
+
+    private void updateLLCSerialNumbers(LoanMonitor loanMonitor) {
+        List<LendersLegalCouncil> lendersLegalCouncils = llcRepository.findByLoanMonitor(loanMonitor);
+        int size = lendersLegalCouncils.size();
+        for(LendersLegalCouncil lendersLegalCouncil: lendersLegalCouncils) {
+            if (lendersLegalCouncil.getSerialNumber() != size) {
+                lendersLegalCouncil.setSerialNumber(size);
+                llcRepository.save(lendersLegalCouncil);
+            }
+            size--;
+        }
     }
 }

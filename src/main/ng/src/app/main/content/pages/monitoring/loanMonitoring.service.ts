@@ -111,6 +111,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'lendersLegalCouncil':llc, 'moduleName':module });
     }
 
+    public deleteLLC(llc: any, module: string): Observable<any> {
+        const url = "enquiry/api/lendersLegalCouncils/delete/" + llc.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
     // All about LLC Reports And Fees
 
     public getLLCReportsAndFees(llcId: string): Observable<any> {
@@ -126,6 +131,11 @@ export class LoanMonitoringService implements Resolve<any> {
         console.log('in service', llcReportAndFee);
         const url = "enquiry/api/loanApplications/llcReportAndFeeSubmission/" + llcReportAndFee.id;
         return this._http.put(url, { 'lendersLegalCouncilId': '', 'llcReportAndFee': llcReportAndFee, 'moduleName':module });
+    }
+
+    public deleteLLCReportAndFee(llcReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/lLCReportAndFees/delete/" + llcReportAndFee.id + "/moduleName/" + module;
+        return this._http.delete(url);
     }
 
     // All about LIA
@@ -144,6 +154,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'lendersInsuranceAdvisor':lia, 'moduleName':module });
     }
 
+    public deleteLIA(lia: any, module: string): Observable<any> {
+        const url = "enquiry/api/lendersInsuranceAdvisors/delete/" + lia.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
     // All about LIA Reports And Fees
 
     public getLIAReportsAndFees(liaId: string): Observable<any> {
@@ -159,6 +174,11 @@ export class LoanMonitoringService implements Resolve<any> {
         console.log('in service', liaReportAndFee);
         const url = "enquiry/api/loanApplications/liaReportAndFeeSubmission/" + liaReportAndFee.id;
         return this._http.put(url, { 'lendersInsuranceAdvisorId': '', 'liaReportAndFee': liaReportAndFee, 'moduleName':module });
+    }
+
+    public deleteLIAReportAndFee(liaReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/lIAReportAndFees/delete/" + liaReportAndFee.id + "/moduleName/" + module;
+        return this._http.delete(url);
     }
 
     // All about CLA
@@ -210,6 +230,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'lendersIndependentEngineer':lie, 'moduleName': module });
     }
 
+    public deleteLIE(lie: any, module: string): Observable<any> {
+        const url = "enquiry/api/lendersIndependentEngineers/delete/" + lie.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
 
   // All about Loan Documentation
 
@@ -245,6 +270,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'lendersIndependentEngineerId': '', 'lieReportAndFee': lieReportAndFee, 'moduleName': module });
     }
 
+    public deleteLIEReportAndFee(lieReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/lIEReportAndFees/delete/" + lieReportAndFee.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
     // All about LFA
 
     public getLendersFinancialAdvisors(loanApplicationId: string): Observable<any> {
@@ -261,8 +291,8 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'lendersFinancialAdvisor':lfa, 'moduleName': module });
     }
 
-    public deleteLFA(lfa: any): Observable<any> {
-        const url = "enquiry/api/lendersFinancialAdvisors/delete/" + lfa.id;
+    public deleteLFA(lfa: any, module: string): Observable<any> {
+        const url = "enquiry/api/lendersFinancialAdvisors/delete/" + lfa.id + "/moduleName/" + module;
         return this._http.delete(url);
     }
 
@@ -283,8 +313,8 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'lendersFinancialAdvisorId': '', 'lfaReportAndFee': lfaReportAndFee, 'moduleName': module });
     }
 
-    public deleteLFAReportAndFee(lfaReportAndFee: any): Observable<any> {
-        const url = "enquiry/api/lFAReportAndFees/delete/" + lfaReportAndFee.id;
+    public deleteLFAReportAndFee(lfaReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/lFAReportAndFees/delete/" + lfaReportAndFee.id + "/moduleName/" + module;
         return this._http.delete(url);
     }
 

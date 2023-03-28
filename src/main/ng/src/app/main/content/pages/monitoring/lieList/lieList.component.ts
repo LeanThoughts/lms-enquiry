@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LIEUpdateDialogComponent } from '../lieUpdate/lieUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
@@ -36,7 +37,9 @@ export class LIEListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog, 
+                        private _matSnackBar: MatSnackBar) {
+                            
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -120,6 +123,28 @@ export class LIEListComponent {
                 operation: 'displayLIE',
                 loanApplicationId: this.loanApplicationId,
                 selectedLIE: this.selectedLIE
+            }
+        });
+    }
+
+    /**
+     * deleteLIE()
+     */
+    deleteLIE(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteLIE(this.selectedLIE, this._module).subscribe(() => {
+                    this.selectedLIE = undefined;
+                    this._loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected LIE. Please check if there are LIE Report and Fee entries.', 'OK', 
+                            { duration: 7000 });
+                });
             }
         });
     }

@@ -31,12 +31,18 @@ public interface ILoanMonitoringService {
     //Lenders Independent Engineer
     LendersIndependentEngineer saveLIE(LIEResource resource, String username) throws CloneNotSupportedException;
     LendersIndependentEngineer updateLIE(LIEResource resource, String username) throws CloneNotSupportedException;
+
+    LendersIndependentEngineer deleteLIE(UUID lieId, String moduleName, String username);
+
     List<LIEResource> getLendersIndependentEngineers(String loanApplicationId, String name);
 
 
     //Lenders Independent Engineer Report and Fee
     LIEReportAndFee saveLIEReportAndFee(LIEReportAndFeeResource resource, String username);
     LIEReportAndFee updateLIEReportAndFee(LIEReportAndFeeResource resource, String username) throws CloneNotSupportedException;
+
+    LIEReportAndFee deleteLIEReportAndFee(UUID lieReportAndFeeId, String moduleName, String username);
+
     List<LIEReportAndFeeResource> getLIEReportAndFee(String loanApplicationId, String name);
 
 
@@ -46,13 +52,13 @@ public interface ILoanMonitoringService {
     List<LFAResource> getLendersFinancialAdvisors(String loanApplicationId, String name);
 
 
-    LendersFinancialAdvisor deleteLFA(UUID lfaId, String username);
+    LendersFinancialAdvisor deleteLFA(UUID lfaId, String moduleName, String username);
 
     //Lenders Financial Advisor Report and Fee
     LFAReportAndFee saveLFAReportAndFee(LFAReportAndFeeResource resource, String username);
     LFAReportAndFee updateLFAReportAndFee(LFAReportAndFeeResource resource, String username) throws CloneNotSupportedException;
 
-    LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username);
+    LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String moduleName, String username);
 
     List<LFAReportAndFeeResource> getLFAReportAndFee(String loanApplicationId, String name);
 

@@ -65,6 +65,16 @@ public class LoanMonitoringController {
 
     }
 
+    @DeleteMapping("/lendersIndependentEngineers/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<LendersIndependentEngineer> deleteLIE(@PathVariable("id") UUID lieId,
+                                                                @PathVariable("moduleName") String moduleName,
+                                                                HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LendersIndependentEngineer lendersIndependentEngineer = loanMonitoringService.deleteLIE(lieId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(lendersIndependentEngineer);
+    }
+
     @GetMapping("/loanApplications/{loanapplicationid}/lendersIndependentEngineers")
     public ResponseEntity getLendersIndependentEngineers(@PathVariable("loanapplicationid") String loanApplicationId,
                                                          HttpServletRequest request)
@@ -104,6 +114,16 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(lieReportAndFeeResources);
     }
 
+    @DeleteMapping("/lIEReportAndFees/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<LIEReportAndFee> deleteLIEReportAndFee(@PathVariable("id") UUID lieReportAndFeeId,
+                                                                 @PathVariable("moduleName") String moduleName,
+                                                                 HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LIEReportAndFee lieReportAndFee = loanMonitoringService.deleteLIEReportAndFee(lieReportAndFeeId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(lieReportAndFee);
+    }
+
     // create, update and list (LFA)
 
     @PostMapping("/loanApplications/lendersfinancialAdvisors/create")
@@ -131,10 +151,12 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(lendersFinancialAdvisors);
     }
 
-    @DeleteMapping("/lendersFinancialAdvisors/delete/{id}")
-    public ResponseEntity<LendersFinancialAdvisor> deleteLFA(@PathVariable("id") UUID lfaId, HttpServletRequest request)
+    @DeleteMapping("/lendersFinancialAdvisors/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<LendersFinancialAdvisor> deleteLFA(@PathVariable("id") UUID lfaId,
+                                                             @PathVariable("moduleName") String moduleName,
+                                                             HttpServletRequest request)
             throws CloneNotSupportedException {
-        LendersFinancialAdvisor lendersFinancialAdvisor = loanMonitoringService.deleteLFA(lfaId,
+        LendersFinancialAdvisor lendersFinancialAdvisor = loanMonitoringService.deleteLFA(lfaId, moduleName,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(lendersFinancialAdvisor);
     }
@@ -168,11 +190,12 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(lfaReportAndFeeResources);
     }
 
-    @DeleteMapping("/lFAReportAndFees/delete/{id}")
+    @DeleteMapping("/lFAReportAndFees/delete/{id}/moduleName/{moduleName}")
     public ResponseEntity<LFAReportAndFee> deleteLFAReportAndFee(@PathVariable("id") UUID lfaReportAndFeeId,
+                                                                 @PathVariable("moduleName") String moduleName,
                                                                  HttpServletRequest request)
             throws CloneNotSupportedException {
-        LFAReportAndFee lfaReportAndFee = loanMonitoringService.deleteLFAReportAndFee(lfaReportAndFeeId,
+        LFAReportAndFee lfaReportAndFee = loanMonitoringService.deleteLFAReportAndFee(lfaReportAndFeeId, moduleName,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(lfaReportAndFee);
     }

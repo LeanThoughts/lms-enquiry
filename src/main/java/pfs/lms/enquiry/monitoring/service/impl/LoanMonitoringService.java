@@ -204,6 +204,28 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
+    public LendersIndependentEngineer deleteLIE(UUID lieId, String moduleName, String username) {
+        LendersIndependentEngineer lie = lieRepository.getOne(lieId.toString());
+        LoanMonitor loanMonitor = lie.getLoanMonitor();
+        lieRepository.delete(lie);
+        updateLIESerialNumbers(loanMonitor);
+
+        return lie;
+    }
+
+    private void updateLIESerialNumbers(LoanMonitor loanMonitor) {
+        List<LendersIndependentEngineer> lendersIndependentEngineers = lieRepository.findByLoanMonitor(loanMonitor);
+        int size = lendersIndependentEngineers.size();
+        for(LendersIndependentEngineer lendersIndependentEngineer: lendersIndependentEngineers) {
+            if (lendersIndependentEngineer.getSerialNumber() != size) {
+                lendersIndependentEngineer.setSerialNumber(size);
+                lieRepository.save(lendersIndependentEngineer);
+            }
+            size--;
+        }
+    }
+
+    @Override
     public List<LIEResource> getLendersIndependentEngineers(String loanApplicationId, String name) {
 
         List<LIEResource> lendersIndependentEngineerResources = new ArrayList<>();
@@ -299,6 +321,28 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
+    public LIEReportAndFee deleteLIEReportAndFee(UUID lieReportAndFeeId, String moduleName, String username) {
+        LIEReportAndFee lieReportAndFee = lieReportAndFeeRepository.getOne(lieReportAndFeeId.toString());
+        lieReportAndFeeRepository.delete(lieReportAndFee);
+        updateLIEReportAndFeeSerialNumbers(lieReportAndFee.getLendersIndependentEngineer().getId());
+        return lieReportAndFee;
+    }
+
+    private void updateLIEReportAndFeeSerialNumbers(String lieId) {
+        LendersIndependentEngineer lendersIndependentEngineer = lieRepository.getOne(lieId);
+        List<LIEReportAndFee> lieReportAndFees = lieReportAndFeeRepository.findByLendersIndependentEngineer
+                (lendersIndependentEngineer);
+        int size = lieReportAndFees.size();
+        for(LIEReportAndFee lieReportAndFee: lieReportAndFees) {
+            if (lieReportAndFee.getSerialNumber() != size) {
+                lieReportAndFee.setSerialNumber(size);
+                lieReportAndFeeRepository.save(lieReportAndFee);
+            }
+            size--;
+        }
+    }
+
+    @Override
     public List<LIEReportAndFeeResource> getLIEReportAndFee(String lendersIndependentEngineerId, String name) {
 
         List<LIEReportAndFeeResource>  lieReportAndFeeResources  = new ArrayList<>();
@@ -321,7 +365,6 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 a.getLieReportAndFee().getSerialNumber()).reversed());
         return lieReportAndFeeResources;
     }
-
 
     //LFA
 
@@ -428,7 +471,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
-    public LendersFinancialAdvisor deleteLFA(UUID lfaId, String username) {
+    public LendersFinancialAdvisor deleteLFA(UUID lfaId, String moduleName, String username) {
         LendersFinancialAdvisor lfa = lfaRepository.getOne(lfaId.toString());
         LoanMonitor loanMonitor = lfa.getLoanMonitor();
         lfaRepository.delete(lfa);
@@ -541,7 +584,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
-    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username) {
+    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String moduleName, String username) {
         LFAReportAndFee lfaReportAndFee = lfaReportAndFeeRepository.getOne(lfaReportAndFeeId.toString());
         lfaReportAndFeeRepository.delete(lfaReportAndFee);
 

@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
@@ -35,7 +35,9 @@ export class LFAListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _matDialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _matDialog: MatDialog,
+                    private _matSnackBar: MatSnackBar) {
+
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getLendersFinancialAdvisors(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -133,11 +135,15 @@ export class LFAListComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((response) => {
             if (response) {
-                this._loanMonitoringService.deleteLFA(this.selectedLFA).subscribe(() => {
+                this._loanMonitoringService.deleteLFA(this.selectedLFA, this._module).subscribe(() => {
                     this.selectedLFA = undefined;
                     this._loanMonitoringService.getLendersFinancialAdvisors(this.loanApplicationId).subscribe(data => {
                         this.dataSource.data = data;
                     });
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected LFA. Please check if there are LFA Report and Fee entries.', 'OK', 
+                            { duration: 7000 });
                 });
             }
         });

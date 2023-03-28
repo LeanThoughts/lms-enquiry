@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LLCUpdateDialogComponent } from '../llcUpdate/llcUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
@@ -34,7 +35,9 @@ export class LLCListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog,
+                        private _matSnackBar: MatSnackBar) {
+
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getLendersLegalCouncils(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -118,6 +121,28 @@ export class LLCListComponent {
                 operation: 'displayLLC',
                 loanApplicationId: this.loanApplicationId,
                 selectedLLC: this.selectedLLC
+            }
+        });
+    }
+
+    /**
+     * deleteLLC()
+     */
+    deleteLLC(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteLLC(this.selectedLLC, this._module).subscribe(() => {
+                    this.selectedLLC = undefined;
+                    this._loanMonitoringService.getLendersLegalCouncils(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected LLC. Please check if there are LLC Report and Fee entries.', 'OK', 
+                            { duration: 7000 });
+                });
             }
         });
     }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -38,6 +39,16 @@ public class LIAController {
         return ResponseEntity.ok(list);
     }
 
+    @DeleteMapping("/lendersInsuranceAdvisors/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<LendersInsuranceAdvisor> deleteLIA(@PathVariable("id") UUID liaId,
+                                                             @PathVariable("moduleName") String moduleName,
+                                                             HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LendersInsuranceAdvisor lendersInsuranceAdvisor = liaService.deleteLIA(liaId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(lendersInsuranceAdvisor);
+    }
+
     @PostMapping("/loanApplications/liaReportAndFeeSubmission/create")
     public ResponseEntity createLIAReportSubmissionAndFee(@RequestBody LIAReportAndFeeResource resource, HttpServletRequest request)
             throws CloneNotSupportedException {
@@ -58,5 +69,15 @@ public class LIAController {
     {
         List<LIAReportAndFeeResource>  liaReportAndFeeResources = liaService.getLIAReportAndFee(liaId);
         return ResponseEntity.ok(liaReportAndFeeResources);
+    }
+
+    @DeleteMapping("/lIAReportAndFees/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<LIAReportAndFee> deleteLIAReportAndFee(@PathVariable("id") UUID liaReportAndFeeId,
+                                                                 @PathVariable("moduleName") String moduleName,
+                                                                 HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LIAReportAndFee liaReportAndFee = liaService.deleteLIAReportAndFee(liaReportAndFeeId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(liaReportAndFee);
     }
 }
