@@ -366,6 +366,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         return lieReportAndFeeResources;
     }
 
+
     //LFA
 
     @Override
@@ -584,9 +585,12 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
-    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String moduleName, String username) {
+    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username) {
         LFAReportAndFee lfaReportAndFee = lfaReportAndFeeRepository.getOne(lfaReportAndFeeId.toString());
-        lfaReportAndFeeRepository.delete(lfaReportAndFee);
+
+        Optional<LFAReportAndFee> optionalLFAReportAndFee = lfaReportAndFeeRepository.findById(lfaReportAndFeeId.toString());
+        lfaReportAndFee = optionalLFAReportAndFee.get();
+
 
         // TODO - ModuleName
         UUID loanBusinessProcessObjectId =
@@ -601,9 +605,11 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 lfaReportAndFee,
-                "Updated",
+                "Deleted",
                 username,
                 "Appraisal", "LFA Report and Fee" );
+
+        lfaReportAndFeeRepository.delete(lfaReportAndFee);
 
         updateLFAReportAndFeeSerialNumbers(lfaReportAndFee.getLendersFinancialAdvisor().getId()); // TODO - ModuleName
         return lfaReportAndFee;

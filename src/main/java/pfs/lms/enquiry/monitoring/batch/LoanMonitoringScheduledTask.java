@@ -457,7 +457,7 @@ public class LoanMonitoringScheduledTask {
                 case "LFA Report and Fee":
 
                     LFAReportAndFee lfaReportAndFee = new LFAReportAndFee();
-                    log.info("Attempting to Post LFS Report and Fee to SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Post LFA Report and Fee to SAP AT :" + dateFormat.format(new Date()));
                     Optional<LFAReportAndFee> lfaRF = lfaReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
 
