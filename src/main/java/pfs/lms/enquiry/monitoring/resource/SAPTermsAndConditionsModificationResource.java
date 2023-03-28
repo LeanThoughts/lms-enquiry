@@ -62,15 +62,16 @@ import java.text.ParseException;
         detailedResource.setAmendedDocumentType(termsAndConditionsModification.getAmendedDocumentType().toString());
         detailedResource.setAmendedDocumentTitle(termsAndConditionsModification.getAmendedDocumentTitle());
         detailedResource.setAmendedDocumentRemarks(termsAndConditionsModification.getAmendedDocumentRemarks());
-        if(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter() != null) {
-            detailedResource.setDateOfIssueOfAmendedDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
+        if(termsAndConditionsModification.getDateOfIssueOfAmendedDocument() != null) {
+            detailedResource.setDateOfIssueOfAmendedDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedDocument()));
         } else
             detailedResource.setDateOfIssueOfAmendedDocument(null);
         detailedResource.setAmendDocReason(termsAndConditionsModification.getReasonsForAmendment());
+        detailedResource.setAmendeddocfilereference(termsAndConditionsModification.getAmendedDocumentFileReference());
 
         // Internal Document
         if(termsAndConditionsModification.getDateOfInternalDocument() != null) {
-            detailedResource.setDateOfInternalDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfIssueOfAmendedSanctionLetter()));
+            detailedResource.setDateOfInternalDocument(dataConversionUtility.convertDateToSAPFormat(termsAndConditionsModification.getDateOfInternalDocument()));
         } else
             detailedResource.setDateOfInternalDocument(null);
         detailedResource.setInternalDocumentRemarks(termsAndConditionsModification.getInternalDocumentRemarks());
