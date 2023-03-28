@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { TRAModel } from 'app/main/content/model/tra.model';
 import { Subscription } from 'rxjs';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { TRAStatementUpdateDialogComponent } from '../traStatementUpdate/traStatementUpdate.component';
@@ -122,5 +123,23 @@ export class TRAStatementListComponent implements OnDestroy {
      */
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    /**
+     * deleteLLCReportAndFee()
+     */
+    deleteTRAStatement(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteTRAStatement(this.selectedTRAStatement, this._module).subscribe(() => {
+                    this.selectedTRAStatement = undefined;
+                    this._loanMonitoringService.getTRAStatements(this.selectedTRA.id).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
     }
 }

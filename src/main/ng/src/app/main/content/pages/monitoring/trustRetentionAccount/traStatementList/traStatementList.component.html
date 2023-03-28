@@ -8,6 +8,9 @@
                 [disabled]="!selectedTRAStatement"> 
             Modify TRA Statement
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteTRAStatement()" [disabled]="!selectedTRAStatement"> 
+            Delete TRA Statement
+        </button>
     </div>
 
     <div class="mat-table-container" mat-white-bg style="width: 100%">

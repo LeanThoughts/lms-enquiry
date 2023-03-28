@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { TRAUpdateDialogComponent } from '../traUpdate/traUpdate.component';
@@ -35,7 +36,9 @@ export class TRAListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog, 
+                        private _matSnackBar: MatSnackBar) {
+
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getTrustRetentionaccounts(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -102,5 +105,27 @@ export class TRAListComponent {
                 });
             }
         });    
+    }
+
+    /**
+     * deleteTRA()
+     */
+    deleteTRA(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteTRA(this.selectedTRA, this._module).subscribe(() => {
+                    this.selectedTRA = undefined;
+                    this._loanMonitoringService.getTrustRetentionaccounts(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected TRA. Please check if there are TRA Statements for the selected entry.', 'OK', 
+                            { duration: 7000 });
+                });
+            }
+        });
     }
 }
