@@ -585,7 +585,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
-    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String username) {
+    public LFAReportAndFee deleteLFAReportAndFee(UUID lfaReportAndFeeId, String moduleName, String username) {
         LFAReportAndFee lfaReportAndFee = lfaReportAndFeeRepository.getOne(lfaReportAndFeeId.toString());
 
         Optional<LFAReportAndFee> optionalLFAReportAndFee = lfaReportAndFeeRepository.findById(lfaReportAndFeeId.toString());
