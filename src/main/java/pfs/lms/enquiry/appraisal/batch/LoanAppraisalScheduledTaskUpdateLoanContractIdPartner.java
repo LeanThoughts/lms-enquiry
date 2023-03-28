@@ -85,9 +85,9 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
     private String userName = "admin@pfs-portal";
 
-   // @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
+   //@Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanContractId() throws ParseException, IOException {
-        log.info("---------------Update LoanContract Id on Appraisal");
+        //log.info("---------------Update LoanContract Id on Appraisal");
 
         List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
 
@@ -115,10 +115,10 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
 
 
-   // @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
+     //@Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanPartnerFromLoanApplication() throws ParseException, IOException {
 
-        log.info("---------------updateLoanPartnerFromLoanApplication ");
+        //log.info("---------------updateLoanPartnerFromLoanApplication ");
 
 
         Boolean createLoanPartner = true;
@@ -155,11 +155,11 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             createLoanPartner = true;
 
             List<LoanPartner> loanPartners = loanPartnerRepository.findByLoanAppraisalId(loanAppraisal.getId().toString());
-            log.info("Number of Partners for Loan  : " + loanPartners.size());
+            //log.info("Number of Partners for Loan  : " + loanPartners.size());
 
             for (LoanPartner loanPartner : loanPartners) {
 
-                log.info("Checking Loan Partner  " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanApplication.getLoanContractId() + "role :" + loanPartner.getRoleType());
+                //log.info("Checking Loan Partner  " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanApplication.getLoanContractId() + "role :" + loanPartner.getRoleType());
 //                if (loanPartner.getRoleType().equals("TR0100"))
 //                    continue;
                 String partnerInLoanApplication = loanApplication.getbusPartnerNumber();
@@ -167,14 +167,14 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
                 partnerInLoanApplication.replaceFirst("^0+(?!$)", "");
                 partnerInLoanPartner.replaceFirst("^0+(?!$)", "");
 
-                log.info("partnerInLoanApplication : " + partnerInLoanApplication);
-                log.info("partnerInLoanPartner     : " + partnerInLoanPartner);
+                //log.info("partnerInLoanApplication : " + partnerInLoanApplication);
+                //log.info("partnerInLoanPartner     : " + partnerInLoanPartner);
                 if (partnerInLoanApplication.equals(partnerInLoanPartner)) {
-                    log.info("Partner in loanApplication EQUAL TO  PartnerInLoanPartner" );
+                    //log.info("Partner in loanApplication EQUAL TO  PartnerInLoanPartner" );
                     createLoanPartner = false;
                     break;
                 } else {
-                    log.info("Partner in loanApplication NOT EQUAL TO  PartnerInLoanPartner" );
+                    //log.info("Partner in loanApplication NOT EQUAL TO  PartnerInLoanPartner" );
 
                 }
             }
@@ -217,18 +217,18 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
             }
         }
     }
-  // @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
+ //@Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updatePartnerList() throws ParseException, IOException, InterruptedException {
 
-       log.info("---------------update PartnerList from LIE,LFA,LIA,LLC,Valuer");
+  //     log.info("---------------update PartnerList from LIE,LFA,LIA,LLC,Valuer");
 
        List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
        List<LoanMonitor> loanMonitorList = loanMonitorRepository.findAll();
 
        for (LoanMonitor loanMonitor : loanMonitorList) {
 
-           log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getLoanApplication().getLoanContractId());
-           log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getId());
+//           log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getLoanApplication().getLoanContractId());
+//           log.info("Updating Partner List for Loan Monitor :" + loanMonitor.getId());
 
 
            LoanApplication loanApplication = loanApplicationRepository.getOne(loanMonitor.getLoanApplication().getId());

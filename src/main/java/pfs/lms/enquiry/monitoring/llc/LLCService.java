@@ -186,7 +186,7 @@ public class LLCService implements ILLCService {
                 existingllcReportAndFee.getLendersLegalCouncil().getLoanMonitor().getLoanApplication().getLoanContractId(),
                 null,
                 existingllcReportAndFee,
-                "Created",
+                "Updated",
                 username,
                 resource.getModuleName(), "LLC Report And Fee" );
 
@@ -220,6 +220,23 @@ public class LLCService implements ILLCService {
     @Override
     public LLCReportAndFee deleteLLCReportAndFee(UUID llcReportAndFeeId, String moduleName, String username) {
         LLCReportAndFee llcReportAndFee = llcReportAndFeeRepository.getOne(llcReportAndFeeId.toString());
+
+        UUID loanBusinessProcessObjectId =
+                loanMonitoringService.getLoanBusinessProcessObjectId(llcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
+                        llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal(),moduleName);
+
+        // Create Change Document for LLC Report and Fee
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                llcReportAndFee.getId(),
+                llcReportAndFee.getLendersLegalCouncil().getId(),
+                llcReportAndFee.getLendersLegalCouncil().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                llcReportAndFee,
+                "Deleted",
+                username,
+                moduleName, "LLC Report and Fee" );
+
         llcReportAndFeeRepository.delete(llcReportAndFee);
         updateLLCReportAndFeeSerialNumbers(llcReportAndFee.getLendersLegalCouncil().getId());
         return llcReportAndFee;
@@ -242,6 +259,24 @@ public class LLCService implements ILLCService {
     public LendersLegalCouncil deleteLLC(UUID llcId, String moduleName, String username) {
         LendersLegalCouncil llc = llcRepository.getOne(llcId.toString());
         LoanMonitor loanMonitor = llc.getLoanMonitor();
+
+        UUID loanBusinessProcessObjectId =
+                loanMonitoringService.getLoanBusinessProcessObjectId(llc.getLoanMonitor(),
+                        llc.getLoanAppraisal() ,moduleName);
+
+        // Create Change Document for LLC
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                llc.getId(),
+                llc.getLoanAppraisal().getId().toString(),
+                llc.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                llc,
+                "Deleted",
+                username,
+                moduleName, "\"Lenders Legal Counsel\"" );
+
+
         llcRepository.delete(llc);
         updateLLCSerialNumbers(loanMonitor);
         return llc;

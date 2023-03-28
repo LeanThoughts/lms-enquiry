@@ -85,6 +85,10 @@ public class LoanMonitoringScheduledTask {
     @Value("${sap.monitorServiceUri}")
     private String monitorServiceUri;
 
+    @Value("${sap.monitorDocumentUri}")
+    private String appraisalDocumentUri;
+
+
     private final ISAPIntegrationService isapIntegrationService;
     private final FileStorage fileStorage;
     private final UserRepository userRepository;
@@ -264,8 +268,9 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (lieReportAndFee.getFileReference() != null && lieReportAndFee.getFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     lieReportAndFee.getFileReference(),
-                                    lieReportAndFee.getId(),
+                                    lieReportAndFee.getLendersIndependentEngineer().getId(),
                                     "",
                                     "LIE Report & Fee",
                                     lieReportAndFee.getDocumentTitle(), lieReportAndFee.getDocumentType());
@@ -318,6 +323,7 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (liaReportAndFee.getFileReference() != null && liaReportAndFee.getFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     liaReportAndFee.getFileReference(),
                                     liaReportAndFee.getId(),
                                     "",
@@ -370,6 +376,7 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (llcReportAndFee.getFileReference() != null && llcReportAndFee.getFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     llcReportAndFee.getFileReference(),
                                     llcReportAndFee.getId(),
                                     "",
@@ -422,6 +429,7 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (valuerReportAndFee.getFileReference() != null && valuerReportAndFee.getFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     valuerReportAndFee.getFileReference(),
                                     valuerReportAndFee.getId(),
                                     "",
@@ -478,6 +486,7 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (lfaReportAndFee.getFileReference() != null && lfaReportAndFee.getFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     lfaReportAndFee.getFileReference(),
                                     lfaReportAndFee.getId(),
                                     "",
@@ -514,6 +523,7 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (termsAndConditionsModification.getFileReference() != null && termsAndConditionsModification.getFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     termsAndConditionsModification.getFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "1",
@@ -527,6 +537,7 @@ public class LoanMonitoringScheduledTask {
                     if (response != null) {
                         if (termsAndConditionsModification.getLeadBankerDocumentFileReference() != null && termsAndConditionsModification.getLeadBankerDocumentFileReference().length() > 0) {
                             response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
                                     termsAndConditionsModification.getLeadBankerDocumentFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "2",
@@ -540,7 +551,9 @@ public class LoanMonitoringScheduledTask {
 
                     if (response != null) {
                         if (termsAndConditionsModification.getAmendedDocumentFileReference() != null && termsAndConditionsModification.getAmendedDocumentFileReference().length() > 0) {
-                            response = postDocument(termsAndConditionsModification.getAmendedDocumentFileReference(),
+                            response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
+                                    termsAndConditionsModification.getAmendedDocumentFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "3",
                                     "TermsAndConditionsModification",
@@ -552,7 +565,9 @@ public class LoanMonitoringScheduledTask {
                     // Internal Document Type
                     if (response != null) {
                         if (termsAndConditionsModification.getInternalDocumentFileReference() != null && termsAndConditionsModification.getInternalDocumentFileReference().length() > 0) {
-                            response = postDocument(termsAndConditionsModification.getInternalDocumentFileReference(),
+                            response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
+                                    termsAndConditionsModification.getInternalDocumentFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "4",
                                     "TermsAndConditionsModification",
@@ -609,10 +624,11 @@ public class LoanMonitoringScheduledTask {
                 if (response != null) {
                     if (siteVisit.getFileReference() != null && siteVisit.getFileReference().length() > 0) {
                         response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
                                 siteVisit.getFileReference(),
                                 siteVisit.getId(),
                                 "",
-                                "SiteVisit",
+                                "Site Visit",
                                 "Document_" + siteVisit.getDocumentTitle(),
                                 siteVisit.getDocumentType()
                         );
@@ -646,6 +662,7 @@ public class LoanMonitoringScheduledTask {
                 if (response != null) {
                     if (operatingParameter.getFileReference() != null && operatingParameter.getFileReference().length() > 0) {
                         response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
                                 operatingParameter.getFileReference(),
                                 operatingParameter.getId(),
                                 "",
@@ -722,7 +739,9 @@ public class LoanMonitoringScheduledTask {
 
                 if (response != null) {
                     if (borrowerFinancials.getRatingFileReference() != null  && borrowerFinancials.getRatingFileReference().length() > 0 ) {
-                        response = postDocument(borrowerFinancials.getRatingFileReference(),
+                        response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
+                                borrowerFinancials.getRatingFileReference(),
                                 borrowerFinancials.getId(),
                                 "1",
                                 "Borrower Financials Rating File",
@@ -733,7 +752,9 @@ public class LoanMonitoringScheduledTask {
 
                 if (response != null) {
                     if (borrowerFinancials.getAnnualReturnFileReference() != null && borrowerFinancials.getAnnualReturnFileReference().length() > 0) {
-                        response = postDocument(borrowerFinancials.getAnnualReturnFileReference(),
+                        response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
+                                borrowerFinancials.getAnnualReturnFileReference(),
                                 borrowerFinancials.getId(),
                                 "2",
                                 "Borrower Financials Annual Report File",
@@ -767,7 +788,9 @@ public class LoanMonitoringScheduledTask {
 
                 if (response != null) {
                     if (promoterFinancials.getRatingFileReference() != null && promoterFinancials.getRatingFileReference().length() > 0) {
-                        response = postDocument(promoterFinancials.getRatingFileReference(),
+                        response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
+                                promoterFinancials.getRatingFileReference(),
                                 promoterFinancials.getId(),
                                 "1",
                                 "Promoter Financials Rating File",
@@ -778,7 +801,9 @@ public class LoanMonitoringScheduledTask {
                 }
                 if (response != null) {
                     if (promoterFinancials.getAnnualReturnFileReference() != null && promoterFinancials.getAnnualReturnFileReference().length() > 0) {
-                        response = postDocument(promoterFinancials.getAnnualReturnFileReference(),
+                        response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
+                                promoterFinancials.getAnnualReturnFileReference(),
                                 promoterFinancials.getId(),
                                 "2",
                                 "Promoter Financials Annual Report File",
@@ -951,6 +976,7 @@ public class LoanMonitoringScheduledTask {
                 if (response != null) {
                     if (trustRetentionAccountStatement.getFileReference() != null && trustRetentionAccountStatement.getFileReference().length() > 0) {
                         response = postDocument(
+                                sapIntegrationPointer.getSubBusinessProcessName(),
                                 trustRetentionAccountStatement.getFileReference(),
                                 trustRetentionAccountStatement.getId(), "" +
                                         "", "Trust Retention Account Statement",
@@ -1013,11 +1039,22 @@ public class LoanMonitoringScheduledTask {
 
 }
 
-    private Object postDocument(String fileReference,
+    private Object postDocument(String businessProcessName,
+                                String fileReference,
                                 String entityId, String docSubId,
                                 String entityName,
                                 String fileName,
                                 String documentType) throws IOException {
+        String documentServiceUri = monitorDocumentUri;
+        switch (businessProcessName) {
+            case "Monitoring":
+                documentServiceUri = monitorDocumentUri;
+                break;
+            case "Appraisal":
+                documentServiceUri = appraisalDocumentUri;
+                break;
+        }
+
         if (fileReference.length() == 0) {
             log.error("File Reference is Empty; Posting to SAP Aborted for Process Name :" + entityName + " entityId : " + entityId);
             return null;
@@ -1065,7 +1102,7 @@ public class LoanMonitoringScheduledTask {
 //                + "FileType='" +fileType +  "',"
 //                + ")/$value";
 
-        String documentUploadUri = monitorDocumentUri + "("
+        String documentUploadUri = documentServiceUri + "("
                 + "Id='" + entityId + "',"
                 + "DocSubId='" + docSubId + "',"
                 + "EntityId='" + entityId + "',"

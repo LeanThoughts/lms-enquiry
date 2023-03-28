@@ -43,6 +43,8 @@ public class SAPLIAReportAndFeeResource implements Serializable   {
        SAPLIAReportAndFeeResourceDetails detailsResource= new SAPLIAReportAndFeeResourceDetails();
 
         detailsResource.setLiaRptFeeId(liaReportAndFee.getId());
+        detailsResource.setLiaId(liaReportAndFee.getLendersInsuranceAdvisor().getId());
+
         detailsResource.setSerialNo(liaReportAndFee.getSerialNumber());
         detailsResource.setReporttype(liaReportAndFee.getReportType());
         detailsResource.setLiaId(liaReportAndFee.getLendersInsuranceAdvisor().getId());

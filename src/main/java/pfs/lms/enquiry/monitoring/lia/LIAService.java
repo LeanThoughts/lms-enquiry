@@ -114,6 +114,24 @@ public class LIAService implements ILIAService {
     public LendersInsuranceAdvisor deleteLIA(UUID liaId, String moduleName, String username) {
         LendersInsuranceAdvisor lendersInsuranceAdvisor = liaRepository.getOne(liaId.toString());
         LoanMonitor loanMonitor = lendersInsuranceAdvisor.getLoanMonitor();
+
+        UUID loanBusinessProcessObjectId =
+                loanMonitoringService.getLoanBusinessProcessObjectId(lendersInsuranceAdvisor.getLoanMonitor(),
+                        lendersInsuranceAdvisor.getLoanAppraisal(),moduleName);
+
+        // Create Change Document for LIA Delete
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                lendersInsuranceAdvisor.getId(),
+                lendersInsuranceAdvisor.getId(),
+                lendersInsuranceAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                lendersInsuranceAdvisor,
+                "Deleted",
+                username,
+                moduleName, "Lenders Insurance Advisor" );
+
+
         liaRepository.delete(lendersInsuranceAdvisor);
         updateLIASerialNumbers(loanMonitor);
 
@@ -247,6 +265,23 @@ public class LIAService implements ILIAService {
     @Override
     public LIAReportAndFee deleteLIAReportAndFee(UUID liaReportAndFeeId, String moduleName, String username) {
         LIAReportAndFee liaReportAndFee = liaReportAndFeeRepository.getOne(liaReportAndFeeId.toString());
+
+        UUID loanBusinessProcessObjectId =
+                loanMonitoringService.getLoanBusinessProcessObjectId(liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor(),
+                        liaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal(),moduleName);
+
+        // Create Change Document for LIA Delete
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                liaReportAndFee.getId(),
+                liaReportAndFee.getId(),
+                liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                liaReportAndFee,
+                "Deleted",
+                username,
+                moduleName, "LIA Report And Fee" );
+
         liaReportAndFeeRepository.delete(liaReportAndFee);
         updateLIAReportAndFeeSerialNumbers(liaReportAndFee.getLendersInsuranceAdvisor().getId());
         return liaReportAndFee;

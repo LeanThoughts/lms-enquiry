@@ -235,7 +235,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                                      lieReportAndFee.getId(),
                                      "",
                                      "LIE Report & Fee",
-                                     lieReportAndFee.getDocumentTitle(), lieReportAndFee.getDocumentType());
+                                     lieReportAndFee.getDocumentTitle(),
+                                     lieReportAndFee.getDocumentType());
                          }
                      }
 

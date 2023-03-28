@@ -28,11 +28,14 @@ public class SAPTRAStatementResource {
 
         detailedResource.setId(traStatement.getId());
         detailedResource.setTraId(traStatement.getTrustRetentionAccount().getId().toString());
+
         detailedResource.setSerialNo(traStatement.getSerialNumber());
 
         detailedResource.setViewrights(traStatement.getViewRights());
         detailedResource.setRemarks(traStatement.getRemarks());
-        //detailedResource.setTraaccountnumber(traStatement.get);
+
+        detailedResource.setTraaccountnumber(traStatement.getTrustRetentionAccount().getAccountNumber());
+
         detailedResource.setPeriodQuarter(traStatement.getPeriodQuarter());
         detailedResource.setPeriodYear(traStatement.getPeriodYear());
         detailedResource.setDocumenttype(traStatement.getDocumentType());

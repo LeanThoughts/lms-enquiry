@@ -207,6 +207,22 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public LendersIndependentEngineer deleteLIE(UUID lieId, String moduleName, String username) {
         LendersIndependentEngineer lie = lieRepository.getOne(lieId.toString());
         LoanMonitor loanMonitor = lie.getLoanMonitor();
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lie.getLoanMonitor(),
+                lie.getLoanAppraisal(), moduleName);
+
+        // Create Change Document for LIE Delete
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                lie.getId(),
+                null,
+                lie.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                lie,
+                "Deleted",
+                username,
+                moduleName, "Lenders Independent Engineer" );
+
         lieRepository.delete(lie);
         updateLIESerialNumbers(loanMonitor);
 
@@ -323,6 +339,22 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Override
     public LIEReportAndFee deleteLIEReportAndFee(UUID lieReportAndFeeId, String moduleName, String username) {
         LIEReportAndFee lieReportAndFee = lieReportAndFeeRepository.getOne(lieReportAndFeeId.toString());
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor(),
+                lieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal(),moduleName);
+
+        // Create Change Document for LIE Delete
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                lieReportAndFee.getId(),
+                null,
+                lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                lieReportAndFee,
+                "Deleted",
+                username,
+                moduleName, "LIE Report And Fee" );
+
         lieReportAndFeeRepository.delete(lieReportAndFee);
         updateLIEReportAndFeeSerialNumbers(lieReportAndFee.getLendersIndependentEngineer().getId());
         return lieReportAndFee;
@@ -475,11 +507,14 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public LendersFinancialAdvisor deleteLFA(UUID lfaId, String moduleName, String username) {
         LendersFinancialAdvisor lfa = lfaRepository.getOne(lfaId.toString());
         LoanMonitor loanMonitor = lfa.getLoanMonitor();
-        lfaRepository.delete(lfa);
+
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lfa.getLoanMonitor(),
+                lfa.getLoanAppraisal(),moduleName);
 
         // Create Change Document for LFA Delete
         changeDocumentService.createChangeDocument(
-                lfa.getLoanMonitor().getId(),
+                loanBusinessProcessObjectId,
                 lfa.getId(),
                 null,
                 lfa.getLoanMonitor().getLoanApplication().getLoanContractId(),
@@ -487,8 +522,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfa,
                 "Deleted",
                 username,
-                "Appraisal", "Lenders Financial Advisor" );
+                moduleName, "Lenders Financial Advisor" );
 
+        lfaRepository.delete(lfa);
 
         updateLFASerialNumbers(loanMonitor);
 
@@ -592,10 +628,10 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         lfaReportAndFee = optionalLFAReportAndFee.get();
 
 
-        // TODO - ModuleName
+
         UUID loanBusinessProcessObjectId =
                 this.getLoanBusinessProcessObjectId(lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
-                        lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),"Appraisal");
+                        lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),moduleName);
 
         // Create Change Document for LFA Report and Fee
         changeDocumentService.createChangeDocument(
@@ -607,7 +643,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfaReportAndFee,
                 "Deleted",
                 username,
-                "Appraisal", "LFA Report and Fee" );
+                moduleName, "LFA Report and Fee" );
 
         lfaReportAndFeeRepository.delete(lfaReportAndFee);
 
