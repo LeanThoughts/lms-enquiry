@@ -293,6 +293,16 @@ public class LoanMonitoringController {
 
     }
 
+    @DeleteMapping("/termsAndConditionsModifications/delete/{id}")
+    public ResponseEntity<TermsAndConditionsModification> deleteTermsAndConditions(
+                                                       @PathVariable("id") UUID termsAndConditionsId,
+                                                       HttpServletRequest request)
+            throws CloneNotSupportedException {
+        TermsAndConditionsModification termsAndConditionsModification = loanMonitoringService.deleteTermsAndConditions(
+                termsAndConditionsId, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(termsAndConditionsModification);
+    }
+
     @GetMapping("/loanApplications/{loanapplicationid}/termsandconditions")
     public ResponseEntity getTermsAndConditions(@PathVariable("loanapplicationid") String loanApplicationId,
                                                     HttpServletRequest request)
@@ -328,6 +338,15 @@ public class LoanMonitoringController {
 
     }
 
+    @DeleteMapping("/securityCompliances/delete/{id}")
+    public ResponseEntity<SecurityCompliance> deleteSecurityCompliance(@PathVariable("id") UUID securityComplianceId,
+                                                                   HttpServletRequest request)
+            throws CloneNotSupportedException {
+        SecurityCompliance securityCompliance = loanMonitoringService.deleteSecurityCompliance(securityComplianceId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(securityCompliance);
+    }
+
     @GetMapping("/loanApplications/{loanapplicationid}/securitycompliances")
     public ResponseEntity getSecurityCompliance(@PathVariable("loanapplicationid") String loanApplicationId,
                                                 HttpServletRequest request)
@@ -353,6 +372,16 @@ public class LoanMonitoringController {
 
         return ResponseEntity.ok(siteVisit);
 
+    }
+
+    @DeleteMapping("/siteVisits/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<SiteVisit> deleteSiteVisit(@PathVariable("id") UUID siteVisitId,
+                                                     @PathVariable("moduleName") String moduleName,
+                                                     HttpServletRequest request)
+            throws CloneNotSupportedException {
+        SiteVisit siteVisit = loanMonitoringService.deleteSiteVisit(siteVisitId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(siteVisit);
     }
 
     @GetMapping("/loanApplications/{loanapplicationid}/sitevisits")
@@ -416,6 +445,15 @@ public class LoanMonitoringController {
 
         return ResponseEntity.ok(rateOfInterest);
 
+    }
+
+    @DeleteMapping("/rateOfInterests/delete/{id}")
+    public ResponseEntity<RateOfInterest> deleteRateOfInterest(@PathVariable("id") UUID rateOfInterestId,
+                                                                   HttpServletRequest request)
+            throws CloneNotSupportedException {
+        RateOfInterest rateOfInterest = loanMonitoringService.deleteRateOfInterest(rateOfInterestId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(rateOfInterest);
     }
 
     @GetMapping("/loanApplications/{loanapplicationid}/rateofinterest")

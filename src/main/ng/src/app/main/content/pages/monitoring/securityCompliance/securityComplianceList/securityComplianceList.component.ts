@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { SecurityComplianceUpdateDialogComponent } from '../securityComplianceUpdate/securityComplianceUpdate.component';
@@ -96,4 +97,23 @@ export class SecurityComplianceListComponent {
             }
         });    
     }
+
+    /**
+     * deleteSecurityCompliance()
+     */
+    deleteSecurityCompliance(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteSecurityCompliance(this.selectedSecurityCompliance).subscribe(() => {
+                    this.selectedSecurityCompliance = undefined;
+                    this._loanMonitoringService.getSecurityCompliances(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

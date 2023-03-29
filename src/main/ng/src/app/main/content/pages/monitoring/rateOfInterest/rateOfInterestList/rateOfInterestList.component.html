@@ -7,6 +7,10 @@
                 [disabled]="!selectedRateOfInterest"> 
             Modify Rate of Interest
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteRateOfInterest()" [disabled]="!selectedRateOfInterest"> 
+            Delete Rate of Interest
+        </button>
+
     </div> 
     <div class="mat-table-container" mat-white-bg style="width: 100%">
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>

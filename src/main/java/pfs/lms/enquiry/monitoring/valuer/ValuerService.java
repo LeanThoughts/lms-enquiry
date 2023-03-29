@@ -106,6 +106,44 @@ public class ValuerService implements IValuerService {
     }
 
     @Override
+    public Valuer deleteValuer(UUID valuerId, String moduleName, String username) {
+        Valuer valuer = valuerRepository.getOne(valuerId.toString());
+        LoanMonitor loanMonitor = valuer.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lie.getLoanMonitor(),
+//                lie.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                lie.getId(),
+//                null,
+//                lie.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                lie,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        valuerRepository.delete(valuer);
+        updateValuerSerialNumbers(loanMonitor);
+
+        return valuer;
+    }
+
+    private void updateValuerSerialNumbers(LoanMonitor loanMonitor) {
+        List<Valuer> valuers = valuerRepository.findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
+        int size = valuers.size();
+        for(Valuer valuer: valuers) {
+            if (valuer.getSerialNumber() != size) {
+                valuer.setSerialNumber(size);
+                valuerRepository.save(valuer);
+            }
+            size--;
+        }
+    }
+
+    @Override
     public List<ValuerResource> getValuers(String loanApplicationId) {
         List<ValuerResource> valuers = new ArrayList<>();
         LoanApplication loanApplication = loanApplicationRepository.getOne(UUID.fromString(loanApplicationId));
@@ -216,4 +254,42 @@ public class ValuerService implements IValuerService {
                 a.getValuerReportAndFee().getSerialNumber()).reversed());
         return valuerReportAndFeeResources;
     }
+
+    @Override
+    public ValuerReportAndFee deleteValuerReportAndFee(UUID valuerReportAndFeeId, String moduleName, String username) {
+        ValuerReportAndFee valuerReportAndFee = valuerReportAndFeeRepository.getOne(valuerReportAndFeeId.toString());
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor(),
+//                lieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal(),moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                lieReportAndFee.getId(),
+//                null,
+//                lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                lieReportAndFee,
+//                "Deleted",
+//                username,
+//                moduleName, "LIE Report And Fee" );
+
+        valuerReportAndFeeRepository.delete(valuerReportAndFee);
+        updateValuerReportAndFeeSerialNumbers(valuerReportAndFee.getValuer().getId());
+        return valuerReportAndFee;
+    }
+
+    private void updateValuerReportAndFeeSerialNumbers(String valuerId) {
+        Valuer valuer = valuerRepository.getOne(valuerId);
+        List<ValuerReportAndFee> valuerReportAndFees = valuerReportAndFeeRepository.findByValuer(valuer);
+        int size = valuerReportAndFees.size();
+        for(ValuerReportAndFee valuerReportAndFee: valuerReportAndFees) {
+            if (valuerReportAndFee.getSerialNumber() != size) {
+                valuerReportAndFee.setSerialNumber(size);
+                valuerReportAndFeeRepository.save(valuerReportAndFee);
+            }
+            size--;
+        }
+    }
+
 }

@@ -81,16 +81,25 @@ public interface ILoanMonitoringService {
     //Terms and Conditions
     TermsAndConditionsModification saveTermsAndConditions(TermsAndConditionsResource resource, String username);
     TermsAndConditionsModification updateTermsAndConditions(TermsAndConditionsResource resource, String username) throws CloneNotSupportedException;
+
+    TermsAndConditionsModification deleteTermsAndConditions(UUID siteVisitId, String username);
+
     List<TermsAndConditionsResource> getTermsAndConditions(String loanApplicationId, String name);
 
     // Security Compliance
     SecurityCompliance saveSecurityCompliance(SecurityComplianceResource resource, String username);
     SecurityCompliance updateSecurityCompliance(SecurityComplianceResource resource, String username) throws CloneNotSupportedException;
+
+    SecurityCompliance deleteSecurityCompliance(UUID securityComplianceId, String username);
+
     List<SecurityComplianceResource> getSecurityCompliance(String loanApplicationId, String name);
 
     // Site Visit
     SiteVisit saveSiteVisit(SiteVisitResource resource, String app, String username) throws CloneNotSupportedException;
     SiteVisit updateSiteVisit(SiteVisitResource resource, String username) throws CloneNotSupportedException;
+
+    SiteVisit deleteSiteVisit(UUID siteVisitId, String moduleName, String username);
+
     List<SiteVisitResource> getSiteVisit(String loanApplicationId, String name);
 
     // Operating Parameter
@@ -104,6 +113,8 @@ public interface ILoanMonitoringService {
     RateOfInterest saveRateOfInterest(RateOfInterestResource resource, String username);
     RateOfInterest updateRateOfInterest(RateOfInterestResource resource, String username) throws CloneNotSupportedException;
     List<RateOfInterestResource> getRateOfInterest(String loanApplicationId, String name);
+
+    RateOfInterest deleteRateOfInterest(UUID rateOfInterestId, String username);
 
     // Borrower Financials
     BorrowerFinancials saveBorrowerFinancials(BorrowerFinancialsResource resource, String username);

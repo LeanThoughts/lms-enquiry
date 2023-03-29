@@ -9,4 +9,6 @@ import java.util.List;
 public interface SecurityComplianceRepository extends JpaRepository<SecurityCompliance, String> {
 
     List<SecurityCompliance> findByLoanMonitor(LoanMonitor loanMonitor);
+
+    List<SecurityCompliance> findByLoanMonitorOrderBySerialNumberDesc(LoanMonitor loanMonitor);
 }

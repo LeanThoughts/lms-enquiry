@@ -3,7 +3,6 @@ package pfs.lms.enquiry.monitoring.valuer;
 import lombok.*;
 import pfs.lms.enquiry.domain.AbstractEntity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -17,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ValuerReportAndFee extends AbstractEntity implements Cloneable {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Valuer valuer;
 
     private Integer serialNumber;

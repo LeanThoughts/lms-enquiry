@@ -10,4 +10,6 @@ public interface ValuerRepository extends JpaRepository<Valuer, String> {
     List<Valuer> findByLoanMonitor(LoanMonitor loanMonitor);
 
     List<Valuer> findByLoanMonitorAndBpCode(LoanMonitor loanMonitor, String bpCode);
+
+    List<Valuer> findByLoanMonitorOrderBySerialNumberDesc(LoanMonitor loanMonitor);
 }

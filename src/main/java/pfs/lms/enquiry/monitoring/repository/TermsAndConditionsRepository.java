@@ -10,4 +10,5 @@ public interface TermsAndConditionsRepository extends JpaRepository<TermsAndCond
 
     List<TermsAndConditionsModification> findByLoanMonitor(LoanMonitor loanMonitor);
 
+    List<TermsAndConditionsModification> findByLoanMonitorOrderBySerialNumberDesc(LoanMonitor loanMonitor);
 }

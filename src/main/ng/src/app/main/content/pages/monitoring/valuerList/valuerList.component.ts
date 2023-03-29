@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../loanMonitoring.service';
 import { ValuerUpdateDialogComponent } from '../valuerUpdate/valuerUpdate.component';
@@ -34,7 +35,9 @@ export class ValuerListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog,
+                        private _matSnackBar: MatSnackBar) {
+                            
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getValuers(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -121,4 +124,27 @@ export class ValuerListComponent {
             }
         });
     }
+
+    /**
+     * deleteValuer()
+     */
+    deleteValuer(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteValuer(this.selectedValuer, this._module).subscribe(() => {
+                    this.selectedValuer = undefined;
+                    this._loanMonitoringService.getValuers(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected Valuer. Please check if there are Valuer Report and Fee entries.', 'OK', 
+                            { duration: 7000 });
+                });
+            }
+        });
+    }
+
 }

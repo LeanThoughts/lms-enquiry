@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { TandCUpdateDialogComponent } from '../tandcUpdate/tandcUpdate.component';
@@ -112,4 +113,23 @@ export class TandCListComponent implements OnInit {
             }
         });
     }
+
+    /**
+     * deleteTermsAndConditions()
+     */
+    deleteTermsAndConditions(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteTandC(this.selectedTandC).subscribe(() => {
+                    this.selectedTandC = undefined;
+                    this._loanMonitoringService.getTermsAndConditions(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

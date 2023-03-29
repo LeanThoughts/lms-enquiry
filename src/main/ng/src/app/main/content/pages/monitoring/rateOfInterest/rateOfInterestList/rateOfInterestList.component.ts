@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { RateOfInterestUpdateDialogComponent } from '../rateOfInterestUpdate/rateOfInterestUpdate.component';
@@ -126,4 +127,23 @@ export class RateOfInterestListComponent {
         else
             return '';
     }
+
+    /**
+     * deleteRateOfInterest()
+     */
+    deleteRateOfInterest(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteRateOfInterest(this.selectedRateOfInterest).subscribe(() => {
+                    this.selectedRateOfInterest = undefined;
+                    this._loanMonitoringService.getRateOfInterests(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

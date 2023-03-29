@@ -78,6 +78,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'valuer':valuer, 'moduleName':module });
     }
 
+    public deleteValuer(valuer: any, module: string): Observable<any> {
+        const url = "enquiry/api/valuers/delete/" + valuer.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
     // All about Valuer Reports And Fees
 
     public getValuerReportsAndFees(valuerId: string): Observable<any> {
@@ -93,6 +98,11 @@ export class LoanMonitoringService implements Resolve<any> {
         console.log('in service', valuerReportAndFee);
         const url = "enquiry/api/loanApplications/valuerReportAndFeeSubmission/" + valuerReportAndFee.id;
         return this._http.put(url, { 'valuerId': '', 'valuerReportAndFee': valuerReportAndFee, 'moduleName':module });
+    }
+
+    public deleteValuerReportAndFee(valuerReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/valuerReportAndFees/delete/" + valuerReportAndFee.id + "/moduleName/" + module;
+        return this._http.delete(url);
     }
 
     // All about LLC
@@ -380,6 +390,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'termsAndConditionsModification':tandc });
     }
 
+    public deleteTandC(tandc: any): Observable<any> {
+        const url = "enquiry/api/termsAndConditions/delete/" + tandc.id;
+        return this._http.delete(url);
+    }
+
     // All about Security Compliance
 
     public getSecurityCompliances(loanApplicationId: string): Observable<any> {
@@ -394,6 +409,11 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateSecurityCompliance(securityCompliance: any): Observable<any> {
         const url = "enquiry/api/loanApplications/securitycompliance/" + securityCompliance.id;
         return this._http.put(url, { 'loanApplicationId':'', 'securityCompliance':securityCompliance });
+    }
+
+    public deleteSecurityCompliance(securityCompliance: any): Observable<any> {
+        const url = "enquiry/api/securityCompliances/delete/" + securityCompliance.id;
+        return this._http.delete(url);
     }
 
     // All about Site Visit
@@ -412,6 +432,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'siteVisit':siteVisit });
     }
 
+    public deleteSiteVisit(siteVisit: any, module: string): Observable<any> {
+        const url = "enquiry/api/siteVisits/delete/" + siteVisit.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
     // All about Rate of Interest
 
     public getRateOfInterests(loanApplicationId: string): Observable<any> {
@@ -426,6 +451,11 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateRateOfInterest(rateOfInterest: any): Observable<any> {
         const url = "enquiry/api/loanApplications/rateofinterest/" + rateOfInterest.id;
         return this._http.put(url, { 'loanApplicationId':'', 'rateOfInterest':rateOfInterest });
+    }
+
+    public deleteRateOfInterest(rateOfInterest: any): Observable<any> {
+        const url = "enquiry/api/rateOfInterests/delete/" + rateOfInterest.id;
+        return this._http.delete(url);
     }
 
     // All about Borrower Financials

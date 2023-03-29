@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LIEModel } from 'app/main/content/model/lie.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { Subscription } from 'rxjs';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
 import { ValuerReportAndFeeUpdateDialogComponent } from '../valuerReportAndFeeUpdate/valuerReportAndFeeUpdate.component';
 
@@ -127,4 +128,23 @@ export class ValuerReportAndFeeListComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
     }
+
+    /**
+     * deleteValuerReportAndFee()
+     */
+    deleteValuerReportAndFee(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteValuerReportAndFee(this.selectedValuerReportAndFee, this._module).subscribe(() => {
+                    this.selectedValuerReportAndFee = undefined;
+                    this._loanMonitoringService.getValuerReportsAndFees(this.selectedValuer.id).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

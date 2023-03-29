@@ -1046,6 +1046,45 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
     }
 
+    @Override
+    public TermsAndConditionsModification deleteTermsAndConditions(UUID siteVisitId, String username) {
+        TermsAndConditionsModification termsAndConditionsModification = termsAndConditionsRepository.
+                getOne(siteVisitId.toString());
+        LoanMonitor loanMonitor = termsAndConditionsModification.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(siteVisit.getLoanMonitor(),
+//                siteVisit.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                siteVisit.getId(),
+//                null,
+//                siteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                siteVisit,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        termsAndConditionsRepository.delete(termsAndConditionsModification);
+        updateTermsAndConditionsSerialNumbers(loanMonitor);
+
+        return termsAndConditionsModification;
+    }
+
+    private void updateTermsAndConditionsSerialNumbers(LoanMonitor loanMonitor) {
+        List<TermsAndConditionsModification> termsAndConditionsModifications =
+                termsAndConditionsRepository.findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
+        int size = termsAndConditionsModifications.size();
+        for(TermsAndConditionsModification termsAndConditionsModification: termsAndConditionsModifications) {
+            if (termsAndConditionsModification.getSerialNumber() != size) {
+                termsAndConditionsModification.setSerialNumber(size);
+                termsAndConditionsRepository.save(termsAndConditionsModification);
+            }
+            size--;
+        }
+    }
 
     @Override
     public List<TermsAndConditionsResource> getTermsAndConditions(String loanApplicationId, String name) {
@@ -1184,6 +1223,45 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         return existingSecurityCompliance;
 
+    }
+
+    @Override
+    public SecurityCompliance deleteSecurityCompliance(UUID securityComplianceId, String username) {
+        SecurityCompliance securityCompliance = securityComplianceRepository.getOne(securityComplianceId.toString());
+        LoanMonitor loanMonitor = securityCompliance.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
+//                operatingParameter.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                operatingParameter.getId(),
+//                null,
+//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                operatingParameter,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        securityComplianceRepository.delete(securityCompliance);
+        updateSecurityComplianceSerialNumbers(loanMonitor);
+
+        return securityCompliance;
+    }
+
+    private void updateSecurityComplianceSerialNumbers(LoanMonitor loanMonitor) {
+        List<SecurityCompliance> securityCompliances = securityComplianceRepository.
+                findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
+        int size = securityCompliances.size();
+        for(SecurityCompliance securityCompliance: securityCompliances) {
+            if (securityCompliance.getSerialNumber() != size) {
+                securityCompliance.setSerialNumber(size);
+                securityComplianceRepository.save(securityCompliance);
+            }
+            size--;
+        }
     }
 
     @Override
@@ -1376,6 +1454,44 @@ public class LoanMonitoringService implements ILoanMonitoringService {
          }
         return existingSiteVisit;
 
+    }
+
+    @Override
+    public SiteVisit deleteSiteVisit(UUID siteVisitId, String moduleName, String username) {
+        SiteVisit siteVisit = siteVisitRepository.getOne(siteVisitId.toString());
+        String loanMonitorId = siteVisit.getLoanMonitoringId();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(siteVisit.getLoanMonitor(),
+//                siteVisit.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                siteVisit.getId(),
+//                null,
+//                siteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                siteVisit,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        siteVisitRepository.delete(siteVisit);
+        updateSiteVisitSerialNumbers(loanMonitorId);
+
+        return siteVisit;
+    }
+
+    private void updateSiteVisitSerialNumbers(String loanMonitorId) {
+        List<SiteVisit> siteVisits = siteVisitRepository.findByLoanMonitoringId(loanMonitorId);
+        int size = siteVisits.size();
+        for(SiteVisit siteVisit: siteVisits) {
+            if (siteVisit.getSerialNumber() != size) {
+                siteVisit.setSerialNumber(size);
+                siteVisitRepository.save(siteVisit);
+            }
+            size--;
+        }
     }
 
     @Override
@@ -1661,6 +1777,45 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 a.getRateOfInterest().getSerialNumber()).reversed());
         return rateOfInterestResources;
 
+    }
+
+    @Override
+    public RateOfInterest deleteRateOfInterest(UUID rateOfInterestId, String username) {
+        RateOfInterest rateOfInterest = rateOfInterestRepository.getOne(rateOfInterestId.toString());
+        LoanMonitor loanMonitor = rateOfInterest.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
+//                operatingParameter.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                operatingParameter.getId(),
+//                null,
+//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                operatingParameter,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        rateOfInterestRepository.delete(rateOfInterest);
+        updateRateOfInterestSerialNumbers(loanMonitor);
+
+        return rateOfInterest;
+    }
+
+    private void updateRateOfInterestSerialNumbers(LoanMonitor loanMonitor) {
+        List<RateOfInterest> rateOfInterests = rateOfInterestRepository.
+                findByLoanMonitor(loanMonitor);
+        int size = rateOfInterests.size();
+        for(RateOfInterest rateOfInterest: rateOfInterests) {
+            if (rateOfInterest.getSerialNumber() != size) {
+                rateOfInterest.setSerialNumber(size);
+                rateOfInterestRepository.save(rateOfInterest);
+            }
+            size--;
+        }
     }
 
     // Borrower Financials

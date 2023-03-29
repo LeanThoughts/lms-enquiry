@@ -7,6 +7,10 @@
                 [disabled]="!selectedTandC"> 
             Modify T&C 
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteTermsAndConditions()" [disabled]="!selectedTandC"> 
+            Delete T&C
+        </button>
+
     </div>
 
     <div class="mat-table-container" mat-white-bg style="width: 100%">
