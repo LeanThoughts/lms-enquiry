@@ -334,6 +334,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'trustRetentionAccount':tra, 'moduleName': module });
     }
 
+    public deleteTRA(tra: any, module: string): Observable<any> {
+        const url = "enquiry/api/trustRetentionAccounts/delete/" + tra.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
     // All about TRA Statement
 
     public getTRAStatements(traId: string): Observable<any> {
@@ -348,6 +353,11 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateTRAStatement(traStatement: any, module: string): Observable<any> {
         const url = "enquiry/api/loanApplications/trastatement/" + traStatement.id;
         return this._http.put(url, { 'trustRetentionAccountId': '', 'trustRetentionAccountStatement': traStatement, 'moduleName': module });
+    }
+
+    public deleteTRAStatement(traStatement: any, module: string): Observable<any> {
+        const url = "enquiry/api/trustRetentionAccountStatements/delete/" + traStatement.id + "/moduleName/" + module;
+        return this._http.delete(url);
     }
 
     // All about Terms & Conditions

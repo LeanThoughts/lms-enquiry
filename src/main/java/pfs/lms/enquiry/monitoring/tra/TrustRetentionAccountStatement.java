@@ -3,7 +3,6 @@ package pfs.lms.enquiry.monitoring.tra;
 import lombok.*;
 import pfs.lms.enquiry.domain.AbstractEntity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -16,7 +15,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class    TrustRetentionAccountStatement extends AbstractEntity  implements Cloneable{
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TrustRetentionAccount trustRetentionAccount;
 
     private Integer serialNumber;

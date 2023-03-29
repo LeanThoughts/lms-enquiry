@@ -801,6 +801,49 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     }
 
     @Override
+    public TrustRetentionAccountStatement deleteTRAStatement(UUID traStatementId, String moduleName, String username) {
+        TrustRetentionAccountStatement traStatement = traStatementRepository.getOne(traStatementId.toString());
+        traStatementRepository.delete(traStatement);
+        updateTRAStatementSerialNumbers(traStatement.getTrustRetentionAccount().getId());
+        return traStatement;
+    }
+
+    private void updateTRAStatementSerialNumbers(String traId) {
+        TrustRetentionAccount trustRetentionAccount = traRepository.getOne(traId);
+        List<TrustRetentionAccountStatement> traStatements = traStatementRepository.
+                findByTrustRetentionAccount(trustRetentionAccount);
+        int size = traStatements.size();
+        for(TrustRetentionAccountStatement trustRetentionAccountStatement: traStatements) {
+            if (trustRetentionAccountStatement.getSerialNumber() != size) {
+                trustRetentionAccountStatement.setSerialNumber(size);
+                traStatementRepository.save(trustRetentionAccountStatement);
+            }
+            size--;
+        }
+    }
+
+    @Override
+    public TrustRetentionAccount deleteTRA(UUID traId, String moduleName, String username) {
+        TrustRetentionAccount tra = traRepository.getOne(traId.toString());
+        LoanMonitor loanMonitor = tra.getLoanMonitor();
+        traRepository.delete(tra);
+        updateTRASerialNumbers(loanMonitor);
+        return tra;
+    }
+
+    private void updateTRASerialNumbers(LoanMonitor loanMonitor) {
+        List<TrustRetentionAccount> trustRetentionAccounts = traRepository.findByLoanMonitor(loanMonitor);
+        int size = trustRetentionAccounts.size();
+        for(TrustRetentionAccount trustRetentionAccount: trustRetentionAccounts) {
+            if (trustRetentionAccount.getSerialNumber() != size) {
+                trustRetentionAccount.setSerialNumber(size);
+                traRepository.save(trustRetentionAccount);
+            }
+            size--;
+        }
+    }
+
+    @Override
     public TrustRetentionAccountStatement saveTRAStatement(TRAStatementResource resource, String username) {
         TrustRetentionAccount trustRetentionAccount = traRepository.getOne(resource.getTrustRetentionAccountId());
         TrustRetentionAccountStatement trustRetentionAccountStatement = resource.getTrustRetentionAccountStatement();

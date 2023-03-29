@@ -65,6 +65,11 @@ public interface ILoanMonitoringService {
     // Trust Retention Account
     TrustRetentionAccount saveTRA(TRAResource resource, String username);
     TrustRetentionAccount updateTRA(TRAResource resource, String username) throws CloneNotSupportedException;
+
+    TrustRetentionAccountStatement deleteTRAStatement(UUID traStatementId, String moduleName, String username);
+
+    TrustRetentionAccount deleteTRA(UUID traId, String moduleName, String username);
+
     List<TRAResource> getTrustRetentionAccounts(String loanApplicationId, String name);
 
     //TRA STATEMENT

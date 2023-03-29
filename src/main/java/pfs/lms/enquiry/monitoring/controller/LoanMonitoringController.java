@@ -227,6 +227,16 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(trustRetentionAccounts);
     }
 
+    @DeleteMapping("/trustRetentionAccounts/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<TrustRetentionAccount> deleteTRA(@PathVariable("id") UUID traId,
+                                                           @PathVariable("moduleName") String moduleName,
+                                                           HttpServletRequest request)
+            throws CloneNotSupportedException {
+        TrustRetentionAccount trustRetentionAccount = loanMonitoringService.deleteTRA(traId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(trustRetentionAccount);
+    }
+
     // create, update and list (TRA Statement)
 
     @PostMapping("/loanApplications/trastatement/create")
@@ -255,6 +265,15 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(traStatementResources);
     }
 
+    @DeleteMapping("/trustRetentionAccountStatements/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<TrustRetentionAccountStatement> deleteTRAStatement(@PathVariable("id") UUID traStatementId,
+                                                                             @PathVariable("moduleName") String moduleName,
+                                                                             HttpServletRequest request)
+            throws CloneNotSupportedException {
+        TrustRetentionAccountStatement traStatement = loanMonitoringService.deleteTRAStatement(traStatementId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(traStatement);
+    }
 
     // Create update and list (Terms and Conditions)
 
