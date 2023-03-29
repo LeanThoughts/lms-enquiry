@@ -4,7 +4,6 @@ import lombok.*;
 import pfs.lms.enquiry.domain.AbstractEntity;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -20,7 +19,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class OperatingParameterPLF extends AbstractEntity implements Cloneable {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
     private Integer serialNumber;

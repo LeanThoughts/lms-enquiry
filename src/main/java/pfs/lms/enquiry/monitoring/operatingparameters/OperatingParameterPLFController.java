@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -40,5 +41,14 @@ public class OperatingParameterPLFController {
         List<OperatingParameterPLFResource> operatingParameterPLFs = operatingParameterPLFService.getOperatingParameterPLF(loanApplicationId,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(operatingParameterPLFs);
+    }
+
+    @DeleteMapping("/operatingParameterPLFs/delete/{id}")
+    public ResponseEntity<OperatingParameterPLF> deleteOperatingParameter(@PathVariable("id") UUID operatingParameterPLFId,
+                                                                          HttpServletRequest request)
+            throws CloneNotSupportedException {
+        OperatingParameterPLF operatingParameterPLF = operatingParameterPLFService.
+                deleteOperatingParameterPLF(operatingParameterPLFId, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(operatingParameterPLF);
     }
 }

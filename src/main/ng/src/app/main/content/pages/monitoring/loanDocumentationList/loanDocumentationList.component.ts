@@ -5,6 +5,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../loanMonitoring.service';
 import { LoanDocumentationUpdateDialogComponent } from '../loanDocumentationUpdate/loanDocumentationUpdate.component';
 import {LoanMonitoringConstants} from '../../../model/loanMonitoringConstants';
+import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 
 @Component({
     selector: 'fuse-loan-documentation-list',
@@ -131,7 +132,10 @@ export class LoanDocumentationListComponent {
         });
     }
 
-  displayLoanDocumentation(): void {
+    /**
+     * displayLoanDocumentation()
+     */
+    displayLoanDocumentation(): void {
         // Open the dialog.
         const dialogRef = this._dialog.open(LoanDocumentationUpdateDialogComponent, {
             panelClass: 'fuse-loan-documentation-dialog',
@@ -143,4 +147,23 @@ export class LoanDocumentationListComponent {
             }
         });
     }
+
+    /**
+     * deleteLoanDocumentation()
+     */
+    deleteLoanDocumentation(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteLoanDocumentation(this.selectedLoanDocumentation, this._module).subscribe(() => {
+                    this.selectedLoanDocumentation = undefined;
+                    this._loanMonitoringService.getLoanDocumentations(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

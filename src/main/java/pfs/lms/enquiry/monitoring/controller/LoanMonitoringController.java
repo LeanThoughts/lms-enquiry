@@ -391,6 +391,15 @@ public class LoanMonitoringController {
         return ResponseEntity.ok(operatingParameters);
     }
 
+    @DeleteMapping("/operatingParameters/delete/{id}")
+    public ResponseEntity<OperatingParameter> deleteOperatingParameter(@PathVariable("id") UUID operatingParameterId,
+                                                                       HttpServletRequest request)
+            throws CloneNotSupportedException {
+        OperatingParameter operatingParameter = loanMonitoringService.deleteOperatingParameter(operatingParameterId,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(operatingParameter);
+    }
+
     // Create update and list (Rate Of Interest)
 
     @PostMapping("/loanApplications/rateofinterest/create")

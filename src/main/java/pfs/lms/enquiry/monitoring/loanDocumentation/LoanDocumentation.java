@@ -1,13 +1,12 @@
 package pfs.lms.enquiry.monitoring.loanDocumentation;
 
 import lombok.*;
-import pfs.lms.enquiry.domain.AbstractEntity;
 import pfs.lms.enquiry.domain.AggregateRoot;
-import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
-import pfs.lms.enquiry.monitoring.npa.NPA;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class LoanDocumentation extends AggregateRoot<LoanDocumentation> implements Cloneable {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
     private Integer serialNumber;

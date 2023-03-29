@@ -4,7 +4,6 @@ import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PromoterDetailItem extends AggregateRoot<PromoterDetailItem> implements Cloneable    {
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
     private Integer serialNumber;

@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { PromoterDetailsUpdateDialogComponent } from '../promoterDetailsUpdate/promoterDetailsUpdate.component';
@@ -83,4 +84,23 @@ export class PromoterDetailsItemListComponent {
             }
         });
     }
+
+    /**
+     * deletePromoterDetailItem()
+     */
+    deletePromoterDetailItem(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deletePromoterDetailItem(this.selectedPromoterDetailItem).subscribe(() => {
+                    this.selectedPromoterDetailItem = undefined;
+                    this._loanMonitoringService.getPromoterDetailItems(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

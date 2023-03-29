@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { Subscription } from 'rxjs';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { OperatingParameterPLFUpdateDialogComponent } from '../operatingParameterPLFUpdate/operatingParameterPLFUpdate.component';
@@ -75,4 +76,23 @@ export class OperatingParameterPLFListComponent {
             }
         });    
     }
+
+    /**
+     * deleteOperatingParameterPLF()
+     */
+    deleteOperatingParameterPLF(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deleteOperatingParameterPLF(this.selectedOperatingParameterPLF).subscribe(() => {
+                    this.selectedOperatingParameterPLF = undefined;
+                    this._loanMonitoringService.getOperatingParameterPLFs(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+    
 }

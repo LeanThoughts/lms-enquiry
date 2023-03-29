@@ -7,6 +7,10 @@
                 [disabled]="!selectedPromoterDetailItem"> 
             Modify Promoter Details
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deletePromoterDetailItem()" [disabled]="!selectedPromoterDetailItem"> 
+            Delete Promoter Details
+        </button>
+
     </div>
 
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">

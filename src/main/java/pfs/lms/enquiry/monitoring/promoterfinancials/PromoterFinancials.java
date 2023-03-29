@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PromoterFinancials extends AbstractEntity implements Cloneable {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
     @ManyToOne(cascade={CascadeType.ALL})

@@ -1502,6 +1502,43 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
     }
 
+    @Override
+    public OperatingParameter deleteOperatingParameter(UUID operatingParameterId, String username) {
+        OperatingParameter operatingParameter = operatingParameterRepository.getOne(operatingParameterId.toString());
+        LoanMonitor loanMonitor = operatingParameter.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
+//                operatingParameter.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                operatingParameter.getId(),
+//                null,
+//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                operatingParameter,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        operatingParameterRepository.delete(operatingParameter);
+        updateOperatingParameterSerialNumbers(loanMonitor);
+
+        return operatingParameter;
+    }
+
+    private void updateOperatingParameterSerialNumbers(LoanMonitor loanMonitor) {
+        List<OperatingParameter> operatingParameters = operatingParameterRepository.findByLoanMonitor(loanMonitor);
+        int size = operatingParameters.size();
+        for(OperatingParameter operatingParameter: operatingParameters) {
+            if (operatingParameter.getSerialNumber() != size) {
+                operatingParameter.setSerialNumber(size);
+                operatingParameterRepository.save(operatingParameter);
+            }
+            size--;
+        }
+    }
 
     //Rate Of Interest
 
@@ -1882,6 +1919,45 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         Collections.sort(promoterFinancialsResources, Comparator.comparingInt((PromoterFinancialsResource a) ->
                 a.getPromoterFinancials().getSerialNumber()).reversed());
         return promoterFinancialsResources;
+    }
+
+    @Override
+    public PromoterFinancials deletePromoterFinancials(UUID promoterFinancialsId, String username) {
+        PromoterFinancials promoterFinancials = promoterfinancialsRepository.getOne(promoterFinancialsId.toString());
+        LoanMonitor loanMonitor = promoterFinancials.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
+//                operatingParameter.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                operatingParameter.getId(),
+//                null,
+//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                operatingParameter,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        promoterfinancialsRepository.delete(promoterFinancials);
+        updatePromoterFinancialsSerialNumbers(loanMonitor);
+
+        return promoterFinancials;
+    }
+
+    private void updatePromoterFinancialsSerialNumbers(LoanMonitor loanMonitor) {
+        List<PromoterFinancials> promoterFinancials = promoterfinancialsRepository.
+                findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
+        int size = promoterFinancials.size();
+        for(PromoterFinancials financials: promoterFinancials) {
+            if (financials.getSerialNumber() != size) {
+                financials.setSerialNumber(size);
+                promoterfinancialsRepository.save(financials);
+            }
+            size--;
+        }
     }
 
     // Financial Covenants

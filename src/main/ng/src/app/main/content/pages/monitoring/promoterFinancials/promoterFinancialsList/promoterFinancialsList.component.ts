@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
+import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { PromoterFinancialsUpdateDialogComponent } from '../promoterFinancialsUpdate/promoterFinancialsUpdate.component';
@@ -81,4 +82,23 @@ export class PromoterFinancialsListComponent {
             }
         });    
     }    
+
+    /**
+     * deletePromoterFinancials()
+     */
+    deletePromoterFinancials(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._loanMonitoringService.deletePromoterFinancials(this.selectedFinancials).subscribe(() => {
+                    this.selectedFinancials = undefined;
+                    this._loanMonitoringService.getPromoterFinancials(this.loanApplicationId).subscribe(data => {
+                        this.dataSource.data = data;
+                    });
+                });
+            }
+        });
+    }
+
 }

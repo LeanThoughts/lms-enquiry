@@ -12,4 +12,6 @@ public interface IPromoterDetailItemService {
             throws CloneNotSupportedException;
 
     List<PromoterDetailItem> getPromoterDetailItems(UUID loanApplicationId);
+
+    PromoterDetailItem deletePromoterDetailItem(UUID promoterDetailItemId, String username);
 }

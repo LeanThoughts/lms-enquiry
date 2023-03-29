@@ -236,22 +236,26 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
 
-  // All about Loan Documentation
+    // All about Loan Documentation
 
-  public getLoanDocumentations(loanApplicationId: string): Observable<any> {
-    return this._http.get('enquiry/api/nPAs/loanDocumentation/loanApplication/' + loanApplicationId    );
-  }
+    public getLoanDocumentations(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/nPAs/loanDocumentation/loanApplication/' + loanApplicationId    );
+    }
 
-  public saveLoanDocumentation(loanDocumentation: any, loanApplicationId: any, module: string): Observable<any> {
-    const url = 'enquiry/api/nPAs/loanDocumentation/create';
-    return this._http.post(url, { 'loanApplicationId': loanApplicationId, 'loanDocumentation': loanDocumentation, 'moduleName': module });
-  }
+    public saveLoanDocumentation(loanDocumentation: any, loanApplicationId: any, module: string): Observable<any> {
+        const url = 'enquiry/api/nPAs/loanDocumentation/create';
+        return this._http.post(url, { 'loanApplicationId': loanApplicationId, 'loanDocumentation': loanDocumentation, 'moduleName': module });
+    }
 
-  public updateLoanDocumentation(loanDocumentation: any, module: string): Observable<any> {
-    const url = 'enquiry/api/nPAs/loanDocumentation/' + loanDocumentation.id;
-    return this._http.put(url, { 'loanApplicationId': '', 'loanDocumentation': loanDocumentation, 'moduleName': module });
-  }
+    public updateLoanDocumentation(loanDocumentation: any, module: string): Observable<any> {
+        const url = 'enquiry/api/nPAs/loanDocumentation/' + loanDocumentation.id;
+        return this._http.put(url, { 'loanApplicationId': '', 'loanDocumentation': loanDocumentation, 'moduleName': module });
+    }
 
+    public deleteLoanDocumentation(loanDocumentation: any, module: string): Observable<any> {
+        const url = "enquiry/api/loanDocumentations/delete/" + loanDocumentation.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
 
   // All about LIE Reports And Fees
 
@@ -461,6 +465,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'promoterFinancials':promoterfinancials });
     }
 
+    public deletePromoterFinancials(promoterfinancials: any): Observable<any> {
+        const url = "enquiry/api/promoterFinancials/delete/" + promoterfinancials.id;
+        return this._http.delete(url);
+    }
+
     // All about Financial Covenants
 
     public getFinancialCovenants(loanApplicationId: string): Observable<any> {
@@ -496,6 +505,11 @@ export class LoanMonitoringService implements Resolve<any> {
     public updatePromoterDetailItem(promoterDetailItem: any): Observable<any> {
         const url = "enquiry/api/promoterDetailItems/update";
         return this._http.put(url, { 'loanApplicationId':'', 'promoterDetailItem':promoterDetailItem });
+    }
+
+    public deletePromoterDetailItem(promoterDetailItem: any): Observable<any> {
+        const url = "enquiry/api/promoterDetailItems/delete/" + promoterDetailItem.id;
+        return this._http.delete(url);
     }
 
     // All about NPA
@@ -551,6 +565,11 @@ export class LoanMonitoringService implements Resolve<any> {
         return this._http.put(url, { 'loanApplicationId':'', 'operatingParameter':operatingParameter });
     }
 
+    public deleteOperatingParameter(operatingParameter: any): Observable<any> {
+        const url = "enquiry/api/operatingParameters/delete/" + operatingParameter.id;
+        return this._http.delete(url);
+    }
+
     // All about Operating Parameter PLF
 
     public getOperatingParameterPLFs(loanApplicationId: string): Observable<any> {
@@ -565,6 +584,11 @@ export class LoanMonitoringService implements Resolve<any> {
     public updateOperatingParameterPLF(operatingParameterPLF: any): Observable<any> {
         const url = "enquiry/api/loanApplications/operatingparameterplf/" + operatingParameterPLF.id;
         return this._http.put(url, { 'loanApplicationId':'', 'operatingParameterPLF':operatingParameterPLF });
+    }
+
+    public deleteOperatingParameterPLF(operatingParameterPLF: any): Observable<any> {
+        const url = "enquiry/api/operatingParameterPLFs/delete/" + operatingParameterPLF.id;
+        return this._http.delete(url);
     }
 
     // All about Project Monitoring Data

@@ -5,10 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
-import pfs.lms.enquiry.monitoring.npa.INPAService;
-import pfs.lms.enquiry.monitoring.npa.NPA;
-import pfs.lms.enquiry.monitoring.npa.NPARepository;
-import pfs.lms.enquiry.monitoring.npa.NPAResource;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.DocumentationStatusRepository;
@@ -103,5 +99,43 @@ public class LoanDocumentationService implements ILoanDocumentationService {
         LoanApplication loanApplication = loanApplicationRepository.getOne(UUID.fromString(loanApplicationId));
         LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
         return loanDocumentationRepository.findByLoanMonitor(loanMonitor);
+    }
+
+    @Override
+    public LoanDocumentation deleteLoanDocumentation(UUID loanDocumentationId, String moduleName, String username) {
+        LoanDocumentation loanDocumentation = loanDocumentationRepository.getOne(loanDocumentationId);
+        LoanMonitor loanMonitor = loanDocumentation.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId =
+//                loanMonitoringService.getLoanBusinessProcessObjectId(loanDocumentation.getLoanMonitor(),
+//                        loanDocumentation.getLoanAppraisal() ,moduleName);
+//
+//        // Create Change Document for LLC
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                loanDocumentation.getId(),
+//                loanDocumentation.getLoanAppraisal().getId().toString(),
+//                loanDocumentation.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                loanDocumentation,
+//                "Deleted",
+//                username,
+//                moduleName, "\"Lenders Legal Counsel\"" );
+
+        loanDocumentationRepository.delete(loanDocumentation);
+        updateLoanDocumentationSerialNumbers(loanMonitor);
+        return loanDocumentation;
+    }
+
+    private void updateLoanDocumentationSerialNumbers(LoanMonitor loanMonitor) {
+        List<LoanDocumentation> LoanDocumentations = loanDocumentationRepository.findByLoanMonitor(loanMonitor);
+        int size = LoanDocumentations.size();
+        for(LoanDocumentation LoanDocumentation: LoanDocumentations) {
+            if (LoanDocumentation.getSerialNumber() != size) {
+                LoanDocumentation.setSerialNumber(size);
+                loanDocumentationRepository.save(LoanDocumentation);
+            }
+            size--;
+        }
     }
 }

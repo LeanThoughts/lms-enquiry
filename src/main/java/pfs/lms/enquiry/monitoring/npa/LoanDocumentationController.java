@@ -4,16 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.monitoring.loanDocumentation.ILoanDocumentationService;
 import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentation;
 import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentationResource;
-import pfs.lms.enquiry.monitoring.npa.NPADetail;
-
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -50,4 +48,13 @@ public class LoanDocumentationController {
         return ResponseEntity.ok(loanDocumentation);
     }
 
+    @DeleteMapping("/loanDocumentations/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<LoanDocumentation> deleteLoanDocumentation(@PathVariable("id") UUID loanDocumentationId,
+                                                                     @PathVariable("moduleName") String moduleName,
+                                                                     HttpServletRequest request)
+            throws CloneNotSupportedException {
+        LoanDocumentation loanDocumentation = loanDocumentationService.deleteLoanDocumentation(
+                loanDocumentationId, moduleName, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(loanDocumentation);
+    }
 }

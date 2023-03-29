@@ -8,4 +8,5 @@ import java.util.List;
 public interface PromoterFinancialsRepository extends JpaRepository<PromoterFinancials, String> {
 
     List<PromoterFinancials> findByLoanMonitor(LoanMonitor loanMonitor);
+    List<PromoterFinancials> findByLoanMonitorOrderBySerialNumberDesc(LoanMonitor loanMonitor);
 }

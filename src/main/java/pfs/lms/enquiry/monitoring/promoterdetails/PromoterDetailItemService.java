@@ -163,4 +163,44 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
                 findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
         return promoterDetailItems;
     }
+
+    @Override
+    public PromoterDetailItem deletePromoterDetailItem(UUID promoterDetailItemId, String username) {
+        PromoterDetailItem promoterDetailItem = promoterDetailItemRepository.getOne(promoterDetailItemId);
+        LoanMonitor loanMonitor = promoterDetailItem.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
+//                operatingParameter.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                operatingParameter.getId(),
+//                null,
+//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                operatingParameter,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        promoterDetailItemRepository.delete(promoterDetailItem);
+        updatePromoterDetailItemSerialNumbers(loanMonitor);
+
+        return promoterDetailItem;
+    }
+
+    private void updatePromoterDetailItemSerialNumbers(LoanMonitor loanMonitor) {
+        List<PromoterDetailItem> promoterDetailItems = promoterDetailItemRepository.
+                findByLoanMonitorOrderBySerialNumberDesc(loanMonitor);
+        int size = promoterDetailItems.size();
+        for(PromoterDetailItem promoterDetailItem: promoterDetailItems) {
+            if (promoterDetailItem.getSerialNumber() != size) {
+                promoterDetailItem.setSerialNumber(size);
+                promoterDetailItemRepository.save(promoterDetailItem);
+            }
+            size--;
+        }
+    }
+
 }

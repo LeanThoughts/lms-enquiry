@@ -112,4 +112,43 @@ public class OperatingParameterPLFService implements IOperatingParameterPLFServi
                 a.getOperatingParameterPLF().getSerialNumber()).reversed());
         return operatingParameterPLFResources;
     }
+
+    @Override
+    public OperatingParameterPLF deleteOperatingParameterPLF(UUID operatingParameterId, String username) {
+        OperatingParameterPLF operatingParameterPLF = operatingParameterPLFRepository.
+                getOne(operatingParameterId.toString());
+        LoanMonitor loanMonitor = operatingParameterPLF.getLoanMonitor();
+
+//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
+//                operatingParameter.getLoanAppraisal(), moduleName);
+//
+//        // Create Change Document for LIE Delete
+//        changeDocumentService.createChangeDocument(
+//                loanBusinessProcessObjectId,
+//                operatingParameter.getId(),
+//                null,
+//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+//                null,
+//                operatingParameter,
+//                "Deleted",
+//                username,
+//                moduleName, "Lenders Independent Engineer" );
+
+        operatingParameterPLFRepository.delete(operatingParameterPLF);
+        updateOperatingParameterPLFSerialNumbers(loanMonitor);
+
+        return operatingParameterPLF;
+    }
+
+    private void updateOperatingParameterPLFSerialNumbers(LoanMonitor loanMonitor) {
+        List<OperatingParameterPLF> operatingParameterPLFList = operatingParameterPLFRepository.findByLoanMonitor(loanMonitor);
+        int size = operatingParameterPLFList.size();
+        for(OperatingParameterPLF operatingParameterPLF: operatingParameterPLFList) {
+            if (operatingParameterPLF.getSerialNumber() != size) {
+                operatingParameterPLF.setSerialNumber(size);
+                operatingParameterPLFRepository.save(operatingParameterPLF);
+            }
+            size--;
+        }
+    }
 }

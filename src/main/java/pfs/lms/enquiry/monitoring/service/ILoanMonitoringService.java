@@ -98,6 +98,8 @@ public interface ILoanMonitoringService {
     OperatingParameter updateOperatingParameter(OperatingParameterResource resource, String username) throws CloneNotSupportedException;
     List<OperatingParameterResource> getOperatingParameter(String loanApplicationId, String name);
 
+    OperatingParameter deleteOperatingParameter(UUID operatingParameterId, String username);
+
     // Rate Of Interest
     RateOfInterest saveRateOfInterest(RateOfInterestResource resource, String username);
     RateOfInterest updateRateOfInterest(RateOfInterestResource resource, String username) throws CloneNotSupportedException;
@@ -114,6 +116,8 @@ public interface ILoanMonitoringService {
     PromoterFinancials savePromoterFinancials(PromoterFinancialsResource resource, String username);
     PromoterFinancials updatePromoterFinancials(PromoterFinancialsResource resource, String username) throws CloneNotSupportedException;
     List<PromoterFinancialsResource> getPromoterFinancials(String loanApplicationId, String name);
+
+    PromoterFinancials deletePromoterFinancials(UUID promoterFinancialsId, String username);
 
     //  Financial Covenants
     FinancialCovenants saveFinancialCovenants(FinancialCovenantsResource resource, String username);
