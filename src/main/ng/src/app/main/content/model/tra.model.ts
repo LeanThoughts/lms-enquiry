@@ -23,7 +23,7 @@ export class TRAModel
     {
         this.id = _tra.id || '';
         this.bankKey = _tra.bankKey || '';
-        this.traBankName = _tra.tRABankName || '';
+        this.traBankName = _tra.traBankName || '';
         this.branch = _tra.branch || '';
         this.address = _tra.address || '';
         this.beneficiaryName = _tra.beneficiaryName || '';

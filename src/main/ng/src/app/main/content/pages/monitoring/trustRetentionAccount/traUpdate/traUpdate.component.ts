@@ -53,6 +53,8 @@ export class TRAUpdateDialogComponent implements OnInit {
             this.selectedTRA = new TRAModel({});
         }
 
+        console.log('selected TRA is', this.selectedTRA);
+
         this.traUpdateForm = _formBuilder.group({
             bankKey: [this.selectedTRA.bankKey || ''],
             traBankName: [this.selectedTRA.traBankName || ''],
@@ -73,6 +75,8 @@ export class TRAUpdateDialogComponent implements OnInit {
 
         _loanMonitoringService.getTRAAccountTypes().subscribe(response => {
             this.accountTypes = response;
+            console.log('account types', this.accountTypes);
+            this.traUpdateForm.controls.typeOfAccount.setValue(this.accountTypes[0].code);
         });
 
         _loanMonitoringService.getTRAAuthorizedPersons().subscribe(response => {
@@ -96,7 +100,6 @@ export class TRAUpdateDialogComponent implements OnInit {
             map(value => value ? this._filterStates(value) : this.banks.slice())
         );
 
-        this.traUpdateForm.controls.typeOfAccount.setValue(this.accountTypes[0].code);
     }
 
     private _filterStates(value: string): any {
@@ -110,7 +113,9 @@ export class TRAUpdateDialogComponent implements OnInit {
     submit(): void {
         if (this.traUpdateForm.valid) {
             var tra: TRAModel = new TRAModel(this.traUpdateForm.value);
+            console.log('after new model', tra);
             if (this._dialogData.operation === 'addTRA') {
+                console.log('tra is 1', tra);
                 this._loanMonitoringService.saveTRA(tra, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('TRA added successfully.', 'OK', { duration: 5000 });
                     this._dialogRef.close({ 'refresh': true });
@@ -130,6 +135,7 @@ export class TRAUpdateDialogComponent implements OnInit {
                 this.selectedTRA.pfsAuthorisedPersonBPCode  = tra.pfsAuthorisedPersonBPCode;
                 this.selectedTRA.pfsAuthorisedPerson  = tra.pfsAuthorisedPerson;
                 this.selectedTRA.beneficiaryName  = tra.beneficiaryName;
+                console.log('tra is 1', tra);
                 this._loanMonitoringService.updateTRA(this.selectedTRA, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('TRA updated successfully.', 'OK', { duration: 5000 });
                     this._dialogRef.close({ 'refresh': true });
@@ -143,6 +149,7 @@ export class TRAUpdateDialogComponent implements OnInit {
      */
      validateBank($event) {
         const filteredBanks = this.banks.filter(bank => bank.bankKey === $event.target.value);
+        console.log('filtered banks', filteredBanks);
         if (filteredBanks.length > 0) {
             this.traUpdateForm.controls.bankKey.setValue(this.bankKeyFormControl.value);
             this.traUpdateForm.controls.traBankName.setValue(filteredBanks[0].bankName);
