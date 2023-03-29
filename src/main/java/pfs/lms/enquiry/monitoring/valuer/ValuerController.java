@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -27,6 +28,15 @@ public class ValuerController {
     public ResponseEntity updateValuer(@PathVariable("id") String valuerId, @RequestBody ValuerResource resource,
                                     HttpServletRequest request) throws CloneNotSupportedException {
         Valuer valuer = valuerService.updateValuer(resource, request.getUserPrincipal().getName());
+        return ResponseEntity.ok(valuer);
+    }
+
+    @DeleteMapping("/valuers/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<Valuer> deleteValuer(@PathVariable("id") UUID valuerId,
+                                               @PathVariable("moduleName") String moduleName,
+                                               HttpServletRequest request)
+            throws CloneNotSupportedException {
+        Valuer valuer = valuerService.deleteValuer(valuerId, moduleName, request.getUserPrincipal().getName());
         return ResponseEntity.ok(valuer);
     }
 
@@ -60,4 +70,15 @@ public class ValuerController {
         List<ValuerReportAndFeeResource> valuerReportAndFeeResources = valuerService.getValuerReportAndFees(valuerId);
         return ResponseEntity.ok(valuerReportAndFeeResources);
     }
+
+    @DeleteMapping("/valuerReportAndFees/delete/{id}/moduleName/{moduleName}")
+    public ResponseEntity<ValuerReportAndFee> deleteValuerReportAndFee(@PathVariable("id") UUID valuerReportAndFeeId,
+                                                                       @PathVariable("moduleName") String moduleName,
+                                                                       HttpServletRequest request)
+            throws CloneNotSupportedException {
+        ValuerReportAndFee valuerReportAndFee = valuerService.deleteValuerReportAndFee(valuerReportAndFeeId, moduleName,
+                request.getUserPrincipal().getName());
+        return ResponseEntity.ok(valuerReportAndFee);
+    }
+
 }
