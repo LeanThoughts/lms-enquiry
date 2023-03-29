@@ -78,9 +78,9 @@ riskRating:
   baseUrl: http://192.168.1.247:8090/risk/api
 batch:
   loanApplicationsScheduledTask: 5000
-  loanMonitoringScheduledTask: 300000
-  loanAppraisalScheduledTaskCreateAndChange:  400000
-  loanAppraisalScheduledTaskDelete:  500000
+  loanMonitoringScheduledTask: 6000
+  loanAppraisalScheduledTaskCreateAndChange:  7000
+  loanAppraisalScheduledTaskDelete:  8000
   loanAppraisalScheduledTaskUpdateLoanPartner : 600000
   loanAppraisalScheduledTaskUpdateLoanContractId: 300000
   updateMainLoanPartner: 6000000
