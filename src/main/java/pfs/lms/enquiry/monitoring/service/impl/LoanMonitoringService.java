@@ -803,6 +803,22 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Override
     public TrustRetentionAccountStatement deleteTRAStatement(UUID traStatementId, String moduleName, String username) {
         TrustRetentionAccountStatement traStatement = traStatementRepository.getOne(traStatementId.toString());
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(traStatement.getTrustRetentionAccount().getLoanMonitor(),
+                traStatement.getTrustRetentionAccount().getLoanAppraisal(), moduleName);
+
+        // Change Documents for TRA A/c
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                traStatement.getId(),
+                null,
+                traStatement.getTrustRetentionAccount().getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                traStatement,
+                "Deleted",
+                username,
+                moduleName, "TRA Account Statement");
+
         traStatementRepository.delete(traStatement);
         updateTRAStatementSerialNumbers(traStatement.getTrustRetentionAccount().getId());
         return traStatement;
@@ -826,6 +842,22 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public TrustRetentionAccount deleteTRA(UUID traId, String moduleName, String username) {
         TrustRetentionAccount tra = traRepository.getOne(traId.toString());
         LoanMonitor loanMonitor = tra.getLoanMonitor();
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(tra.getLoanMonitor(),
+                tra.getLoanAppraisal(), moduleName);
+
+        // Change Documents for TRA A/c
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                tra.getId(),
+                null,
+                tra.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                tra,
+                "Deleted",
+                username,
+                moduleName, "TRA Account");
+
         traRepository.delete(tra);
         updateTRASerialNumbers(loanMonitor);
         return tra;
@@ -1232,18 +1264,18 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
 //                operatingParameter.getLoanAppraisal(), moduleName);
-//
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                operatingParameter.getId(),
-//                null,
-//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                operatingParameter,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+
+        // Create Change Document for SecurityCompliance Delete
+        changeDocumentService.createChangeDocument(
+                securityCompliance.getLoanMonitor().getId(),
+                securityCompliance.getId(),
+                null,
+                securityCompliance.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                securityCompliance,
+                "Deleted",
+                username,
+                "Monitoring", "Security Compliance" );
 
         securityComplianceRepository.delete(securityCompliance);
         updateSecurityComplianceSerialNumbers(loanMonitor);
@@ -1461,20 +1493,23 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         SiteVisit siteVisit = siteVisitRepository.getOne(siteVisitId.toString());
         String loanMonitorId = siteVisit.getLoanMonitoringId();
 
-//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(siteVisit.getLoanMonitor(),
-//                siteVisit.getLoanAppraisal(), moduleName);
-//
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                siteVisit.getId(),
-//                null,
-//                siteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                siteVisit,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(siteVisit.getLoanMonitoringId()));
+        LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(siteVisit.getLoanMonitoringId()));
+
+        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(loanMonitor,
+                loanAppraisal, moduleName);
+
+        // Create Change Document for SiteVisit Delete
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                siteVisit.getId(),
+                null,
+                loanMonitor.getLoanApplication().getLoanContractId(),
+                null,
+                siteVisit,
+                "Deleted",
+                username,
+                moduleName, "Site Visit" );
 
         siteVisitRepository.delete(siteVisit);
         updateSiteVisitSerialNumbers(loanMonitorId);
@@ -1623,20 +1658,19 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         OperatingParameter operatingParameter = operatingParameterRepository.getOne(operatingParameterId.toString());
         LoanMonitor loanMonitor = operatingParameter.getLoanMonitor();
 
-//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
-//                operatingParameter.getLoanAppraisal(), moduleName);
-//
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                operatingParameter.getId(),
-//                null,
-//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                operatingParameter,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+
+
+        // Create Change Document for OperatingParameter Delete
+        changeDocumentService.createChangeDocument(
+                operatingParameter.getLoanMonitor().getId(),
+                operatingParameter.getId(),
+                null,
+                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                operatingParameter,
+                "Deleted",
+                username,
+                "Monitoring", "Operating Parameter" );
 
         operatingParameterRepository.delete(operatingParameter);
         updateOperatingParameterSerialNumbers(loanMonitor);
@@ -1787,17 +1821,17 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
 //                operatingParameter.getLoanAppraisal(), moduleName);
 //
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                operatingParameter.getId(),
-//                null,
-//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                operatingParameter,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        // Create Change Document for RateOfInterest Delete
+        changeDocumentService.createChangeDocument(
+                rateOfInterest.getLoanMonitor().getId(),
+                rateOfInterest.getId(),
+                null,
+                rateOfInterest.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                rateOfInterest,
+                "Deleted",
+                username,
+                "Monitoring", "Rate of Interest");
 
         rateOfInterestRepository.delete(rateOfInterest);
         updateRateOfInterestSerialNumbers(loanMonitor);
@@ -1939,7 +1973,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         borrowerFinancialsRepository.delete(borrowerFinancials);
         updateBorrowerFinancialsSerialNumbers(loanMonitor);
 
-        // Change Documents for  NPA Detail Delete
+        // Change Documents for  Borrower Financials
         changeDocumentService.createChangeDocument(
                 loanMonitor.getId(),
                 borrowerFinancials.getId().toString(),
@@ -2038,7 +2072,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         existingpromoterfinancials.setRemarks(resource.getPromoterFinancials().getRemarks());
         existingpromoterfinancials = promoterfinancialsRepository.save(existingpromoterfinancials);
 
-        // Change Documents fooldPromoterDetailsr Promoter Financials
+        // Change Documents Promoter Financials
         changeDocumentService.createChangeDocument(
                 existingpromoterfinancials.getLoanMonitor().getId(), existingpromoterfinancials.getId(),null,
                 existingpromoterfinancials.getLoanMonitor().getLoanApplication().getLoanContractId(),
@@ -2081,20 +2115,19 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         PromoterFinancials promoterFinancials = promoterfinancialsRepository.getOne(promoterFinancialsId.toString());
         LoanMonitor loanMonitor = promoterFinancials.getLoanMonitor();
 
-//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
-//                operatingParameter.getLoanAppraisal(), moduleName);
-//
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                operatingParameter.getId(),
-//                null,
-//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                operatingParameter,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+
+
+        // Create Change Document for PromoterFinancials Delete
+        changeDocumentService.createChangeDocument(
+                promoterFinancials.getLoanMonitor().getId(),
+                promoterFinancials.getId(),
+                null,
+                promoterFinancials.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                promoterFinancials,
+                "Deleted",
+                username,
+                "Monitoring", "Promoter Financials" );
 
         promoterfinancialsRepository.delete(promoterFinancials);
         updatePromoterFinancialsSerialNumbers(loanMonitor);
@@ -2226,10 +2259,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public FinancialCovenants deleteFinancialCovenants(UUID financialCovenantsId, String username) {
         FinancialCovenants financialCovenants = financialCovenantsRepository.getOne(financialCovenantsId.toString());
         LoanMonitor loanMonitor = financialCovenants.getLoanMonitor();
-        financialCovenantsRepository.delete(financialCovenants);
-        updateFinancialCovenantsSerialNumbers(loanMonitor);
 
-        // Change Documents for  NPA Detail Delete
+
+        // Change Documents for  Financial Covenants Delete
         changeDocumentService.createChangeDocument(
                 loanMonitor.getId(),
                 financialCovenants.getId().toString(),
@@ -2241,6 +2273,8 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 username,
                 "Monitoring", "Financial Covenants");
 
+        financialCovenantsRepository.delete(financialCovenants);
+        updateFinancialCovenantsSerialNumbers(loanMonitor);
         return financialCovenants;
     }
 

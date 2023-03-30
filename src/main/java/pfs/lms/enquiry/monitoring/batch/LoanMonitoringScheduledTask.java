@@ -207,8 +207,11 @@ public class LoanMonitoringScheduledTask {
 
             switch (sapIntegrationPointer.getSubBusinessProcessName()) {
                 case "Header":
-                    log.info("Attempting to Post MonitorHeader to SAP AT :" + dateFormat.format(new Date()));
                     LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    log.info("Attempting to Post MonitorHeader to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + loanMonitor.getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -227,8 +230,12 @@ public class LoanMonitoringScheduledTask {
 
                 case "Lenders Independent Engineer":
 
-                    log.info("Attempting to Post LIE to SAP AT :" + dateFormat.format(new Date()));
                     lendersIndependentEngineer = lieRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+
+                    log.info("Attempting to Post LIE to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lendersIndependentEngineer.getLoanMonitor().getLoanApplication().getLoanContractId());
+
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -248,7 +255,10 @@ public class LoanMonitoringScheduledTask {
                 case "LIE Report And Fee":
 
                     LIEReportAndFee lieReportAndFee = new LIEReportAndFee();
-                    log.info("Attempting to Post LIE  Report and Fee to SAP AT :" + dateFormat.format(new Date()));
+
+                    log.info("Attempting to Post LIE  Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId());
+
                     Optional<LIEReportAndFee> lieRF = lieReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     lieReportAndFee = lieRF.get();
@@ -282,8 +292,9 @@ public class LoanMonitoringScheduledTask {
 
                 case "Lenders Insurance Advisor":
 
-                    log.info("Attempting to Post LIA to SAP AT :" + dateFormat.format(new Date()));
                     LendersInsuranceAdvisor lendersInsuranceAdvisor = liaRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+                    log.info("Attempting to Post LIA to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lendersInsuranceAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId());
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -303,7 +314,9 @@ public class LoanMonitoringScheduledTask {
                 case "LIA Report And Fee":
 
                     LIAReportAndFee liaReportAndFee = new LIAReportAndFee();
-                    log.info("Attempting to Post LIA  Report and Fee to SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Post LIA  Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId());
+
                     Optional<LIAReportAndFee> liaRF = liaReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     liaReportAndFee = liaRF.get();
@@ -336,8 +349,10 @@ public class LoanMonitoringScheduledTask {
                     break;
                 case "Lenders Legal Counsel":
 
-                    log.info("Attempting to Post LLC to SAP AT :" + dateFormat.format(new Date()));
-                    LendersLegalCouncil lendersLegalCouncil = llcRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+                  LendersLegalCouncil lendersLegalCouncil = llcRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+                    log.info("Attempting to Post LLC to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lendersLegalCouncil.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -357,10 +372,12 @@ public class LoanMonitoringScheduledTask {
                 case "LLC Report And Fee":
 
                     LLCReportAndFee llcReportAndFee = new LLCReportAndFee();
-                    log.info("Attempting to Post LLC  Report and Fee to SAP AT :" + dateFormat.format(new Date()));
-                    Optional<LLCReportAndFee> llcRF = llcReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
+                    Optional<LLCReportAndFee> llcRF = llcReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
                     llcReportAndFee = llcRF.get();
+
+                    log.info("Attempting to Post LLC  Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + llcReportAndFee.getLendersLegalCouncil().getLoanMonitor().getLoanApplication().getLoanContractId());
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -389,8 +406,10 @@ public class LoanMonitoringScheduledTask {
                     break;
                 case "Valuer":
 
-                    log.info("Attempting to Post Valuer to SAP AT :" + dateFormat.format(new Date()));
                     Valuer valuer = valuerRepository.getOne(sapIntegrationPointer.getBusinessObjectId());
+                    log.info("Attempting to Post Valuer to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + valuer.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -410,10 +429,13 @@ public class LoanMonitoringScheduledTask {
                 case "Valuer Report And Fee":
 
                     ValuerReportAndFee valuerReportAndFee = new ValuerReportAndFee();
-                    log.info("Attempting to Post Valuer Report and Fee to SAP AT :" + dateFormat.format(new Date()));
                     Optional<ValuerReportAndFee> valuerRF = valuerReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     valuerReportAndFee = valuerRF.get();
+
+                    log.info("Attempting to Post Valuer Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + valuerReportAndFee.getValuer().getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -443,10 +465,13 @@ public class LoanMonitoringScheduledTask {
                 case "Lenders Financial Advisor":
 
                     LendersFinancialAdvisor lendersFinancialAdvisor = new LendersFinancialAdvisor();
-                    log.info("Attempting to Post LendersFinancialAdvisor to SAP AT :" + dateFormat.format(new Date()));
                     Optional<LendersFinancialAdvisor> lfa = lfaRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     lendersFinancialAdvisor = lfa.get();
+
+                    log.info("Attempting to Post LendersFinancialAdvisor to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lendersFinancialAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -465,11 +490,13 @@ public class LoanMonitoringScheduledTask {
                 case "LFA Report and Fee":
 
                     LFAReportAndFee lfaReportAndFee = new LFAReportAndFee();
-                    log.info("Attempting to Post LFA Report and Fee to SAP AT :" + dateFormat.format(new Date()));
                     Optional<LFAReportAndFee> lfaRF = lfaReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
-
                     lfaReportAndFee = lfaRF.get();
+
+                    log.info("Attempting to Post LFA Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -501,11 +528,12 @@ public class LoanMonitoringScheduledTask {
                 case "Terms and Conditions":
 
                     TermsAndConditionsModification termsAndConditionsModification = new TermsAndConditionsModification();
-                    log.info("Attempting to Post Terms and Conditions to SAP AT :" + dateFormat.format(new Date()));
                     Optional<TermsAndConditionsModification> traMod = termsAndConditionsRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
-
                     termsAndConditionsModification = traMod.get();
+                    log.info("Attempting to Post Terms and Conditions to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + termsAndConditionsModification.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -582,10 +610,12 @@ public class LoanMonitoringScheduledTask {
             case "Security Compliance":
 
                 SecurityCompliance securityCompliance = new SecurityCompliance();
-                log.info("Attempting to Post Security Compliance to SAP AT :" + dateFormat.format(new Date()));
                 Optional<SecurityCompliance> secCompl = securityComplianceRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 securityCompliance = secCompl.get();
+                log.info("Attempting to Post Security Compliance to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + securityCompliance.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -604,10 +634,12 @@ public class LoanMonitoringScheduledTask {
 
             case "Site Visit":
                 SiteVisit siteVisit = new SiteVisit();
-                log.info("Attempting to Post Site Visit to SAP AT :" + dateFormat.format(new Date()));
                 Optional<SiteVisit> sV = siteVisitRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 siteVisit = sV.get();
+                log.info("Attempting to Post Site Visit to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + siteVisit.getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -642,10 +674,11 @@ public class LoanMonitoringScheduledTask {
 
                 OperatingParameter operatingParameter = new OperatingParameter();
 
-                log.info("Attempting to Post Operating Parameter to SAP AT :" + dateFormat.format(new Date()));
                 Optional<OperatingParameter> oP = operatingParameterRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 operatingParameter = oP.get();
+                log.info("Attempting to Post Operating Parameter to SAP AT :" + dateFormat.format(new Date())
+                + "Loan Contract: " + operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId());
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -677,10 +710,12 @@ public class LoanMonitoringScheduledTask {
                 break;
             case "Operating Parameter PLF":
                 OperatingParameterPLF operatingParameterPLF = new OperatingParameterPLF();
-                log.info("Attempting to Post Operating Parameter PLF to SAP AT :" + dateFormat.format(new Date()));
-                Optional<OperatingParameterPLF> oPPLF = operatingParameterPLFRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
+                 Optional<OperatingParameterPLF> oPPLF = operatingParameterPLFRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 operatingParameterPLF = oPPLF.get();
+                log.info("Attempting to Post Operating Parameter PLF to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + operatingParameterPLF.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -698,11 +733,14 @@ public class LoanMonitoringScheduledTask {
                 break;
 
             case "Rate of Interest":
-                RateOfInterest rateOfInterest = new RateOfInterest();
-                log.info("Attempting to Post Rate of Interest to SAP AT :" + dateFormat.format(new Date()));
-                Optional<RateOfInterest> roi = rateOfInterestRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
+                 RateOfInterest rateOfInterest = new RateOfInterest();
+                 Optional<RateOfInterest> roi = rateOfInterestRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 rateOfInterest = roi.get();
+
+                log.info("Attempting to Post Rate of Interest to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + rateOfInterest.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -720,10 +758,12 @@ public class LoanMonitoringScheduledTask {
                 break;
             case "Borrower Financials":
                 BorrowerFinancials borrowerFinancials = new BorrowerFinancials();
-                log.info("Attempting to Post Borrower Financials to SAP AT :" + dateFormat.format(new Date()));
                 Optional<BorrowerFinancials> bf = borrowerFinancialsRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 borrowerFinancials = bf.get();
+                log.info("Attempting to Post Borrower Financials to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + borrowerFinancials.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -769,10 +809,12 @@ public class LoanMonitoringScheduledTask {
                 break;
             case "Promoter Financials":
                 PromoterFinancials promoterFinancials = new PromoterFinancials();
-                log.info("Attempting to Post Promoter Financials to SAP AT :" + dateFormat.format(new Date()));
                 Optional<PromoterFinancials> pf = promoterFinancialsRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 promoterFinancials = pf.get();
+                log.info("Attempting to Post Promoter Financials to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + promoterFinancials.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -818,10 +860,12 @@ public class LoanMonitoringScheduledTask {
 
             case "Financial Covenants":
                 FinancialCovenants financialCovenants = new FinancialCovenants();
-                log.info("Attempting to Post Financial Covenants  to SAP AT :" + dateFormat.format(new Date()));
                 Optional<FinancialCovenants> fc = financialCovenantsRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 financialCovenants = fc.get();
+                log.info("Attempting to Post Financial Covenants  to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + financialCovenants.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -860,10 +904,12 @@ public class LoanMonitoringScheduledTask {
                 break;
             case "ProjectMonitoring":
                 ProjectMonitoringData projectMonitoringData = new ProjectMonitoringData();
-                log.info("Attempting to Post ProjectMonitoring  to SAP AT :" + dateFormat.format(new Date()));
                 Optional<ProjectMonitoringData> pmd =
                         projectMonitoringDataRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
                 projectMonitoringData = pmd.get();
+                log.info("Attempting to Post ProjectMonitoring  to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + projectMonitoringData.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -883,10 +929,13 @@ public class LoanMonitoringScheduledTask {
                 break;
             case "Project Monitoring Item":
                 ProjectMonitoringDataItem projectMonitoringDataItem = new ProjectMonitoringDataItem();
-                log.info("Attempting to Post ProjectMonitoringDataItem  to SAP AT :" + dateFormat.format(new Date()));
                 Optional<ProjectMonitoringDataItem> pmdi =
                         projectMonitoringDataItemRepository.findById(sapIntegrationPointer.getBusinessObjectId());
                 projectMonitoringDataItem = pmdi.get();
+
+                log.info("Attempting to Post ProjectMonitoringDataItem  to SAP AT :" + dateFormat.format(new Date()));
+                        //+ "Loan Contract: " + projectMonitoringDataItem.get().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -906,10 +955,11 @@ public class LoanMonitoringScheduledTask {
                 break;
             case "Project Monitoring History":
                 ProjectMonitoringDataItemHistory projectMonitoringDataItemHistory = new ProjectMonitoringDataItemHistory();
-                log.info("Attempting to Post ProjectMonitoringDataItemHistory  to SAP AT :" + dateFormat.format(new Date()));
                 Optional<ProjectMonitoringDataItemHistory> pmdih =
                         projectMonitoringDataItemHistoryRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
                 projectMonitoringDataItemHistory = pmdih.get();
+
+                log.info("Attempting to Post ProjectMonitoringDataItemHistory  to SAP AT :" + dateFormat.format(new Date()));
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -930,10 +980,12 @@ public class LoanMonitoringScheduledTask {
             case "TRA Account":
                 TrustRetentionAccount trustRetentionAccount = new TrustRetentionAccount();
 
-                log.info("Attempting to Post TrustRetentionAccount to SAP AT :" + dateFormat.format(new Date()));
                 Optional<TrustRetentionAccount> tra = traRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
-
                 trustRetentionAccount = tra.get();
+
+                log.info("Attempting to Post TrustRetentionAccount to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + trustRetentionAccount.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -956,10 +1008,13 @@ public class LoanMonitoringScheduledTask {
             case "TRA Account Statement":
                 TrustRetentionAccountStatement trustRetentionAccountStatement = new TrustRetentionAccountStatement();
 
-                log.info("Attempting to Post TrustRetentionAccountStatement to SAP AT :" + dateFormat.format(new Date()));
                 Optional<TrustRetentionAccountStatement> tras = traStatementRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                 trustRetentionAccountStatement = tras.get();
+
+                log.info("Attempting to Post TrustRetentionAccountStatement to SAP AT :" + dateFormat.format(new Date())
+                        + "Loan Contract: " + trustRetentionAccountStatement.getTrustRetentionAccount().getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                 //Set Status as in progress
                 sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -991,10 +1046,12 @@ public class LoanMonitoringScheduledTask {
                 case "NPA Detail":
                     NPADetail npaDetail = new NPADetail();
 
-                    log.info("Attempting to Post NPA Detail to SAP AT :" + dateFormat.format(new Date()));
                     Optional<NPADetail> npaDetailOptional = npaDetailRepository.findById(UUID.fromString( sapIntegrationPointer.getBusinessObjectId())) ;
-
                     npaDetail = npaDetailOptional.get();
+
+                    log.info("Attempting to Post NPA Detail to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + npaDetail.getNpa().getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -1014,10 +1071,13 @@ public class LoanMonitoringScheduledTask {
                 case "NPA":
                     NPA npa = new NPA();
 
-                    log.info("Attempting to Post NPA to SAP AT :" + dateFormat.format(new Date()));
                     Optional<NPA> npaOptional = npaRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
 
                     npa = npaOptional.get();
+
+                    log.info("Attempting to Post NPA to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + npa.getLoanMonitor().getLoanApplication().getLoanContractId());
+
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process

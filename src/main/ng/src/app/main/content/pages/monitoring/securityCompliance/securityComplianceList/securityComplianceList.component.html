@@ -1,16 +1,16 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSecurityCompliance('addSecurityCompliance')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSecurityCompliance('addSecurityCompliance')">
             Add New Security
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSecurityCompliance('updateSecurityCompliance')" 
-                [disabled]="!selectedSecurityCompliance"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSecurityCompliance('updateSecurityCompliance')"
+                [disabled]="!selectedSecurityCompliance">
             Modify Security
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSecurityCompliance()" [disabled]="!selectedRateOfInterest"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSecurityCompliance()" [disabled]="!selectedSecurityCompliance">
             Delete Security
         </button>
-    </div>            
+    </div>
 
     <div class="mat-table-container" mat-white-bg style="width: 100%">
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
@@ -22,7 +22,7 @@
                     <p class="text-truncate">{{ obj.securityCompliance.serialNumber }}</p>
                 </mat-cell>
             </ng-container>
-            
+
             <!-- particulars Column -->
             <ng-container matColumnDef="particulars">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Particulars</mat-header-cell>
@@ -106,7 +106,7 @@
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            
+
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.securityCompliance)"
                 [ngClass]="{'highlight':obj.securityCompliance === selectedSecurityCompliance}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>

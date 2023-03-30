@@ -110,20 +110,20 @@ public class ValuerService implements IValuerService {
         Valuer valuer = valuerRepository.getOne(valuerId.toString());
         LoanMonitor loanMonitor = valuer.getLoanMonitor();
 
-//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lie.getLoanMonitor(),
-//                lie.getLoanAppraisal(), moduleName);
-//
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                lie.getId(),
-//                null,
-//                lie.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                lie,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(valuer.getLoanMonitor(),
+                valuer.getLoanAppraisal(), moduleName);
+
+        // Create Change Document for LIE Delete
+        changeDocumentService.createChangeDocument(
+                loanBusinessProcessObjectId,
+                valuer.getId(),
+                null,
+                valuer.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                valuer,
+                "Deleted",
+                username,
+                moduleName, "Valuer" );
 
         valuerRepository.delete(valuer);
         updateValuerSerialNumbers(loanMonitor);

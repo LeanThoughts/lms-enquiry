@@ -442,7 +442,8 @@ public class LoanMonitorScheduledTaskDelete {
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
                     if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
-                    break; }
+                    break;
+            }
         }
     }
 

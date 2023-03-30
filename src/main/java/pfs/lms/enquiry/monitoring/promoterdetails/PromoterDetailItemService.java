@@ -169,20 +169,17 @@ public class PromoterDetailItemService implements IPromoterDetailItemService {
         PromoterDetailItem promoterDetailItem = promoterDetailItemRepository.getOne(promoterDetailItemId);
         LoanMonitor loanMonitor = promoterDetailItem.getLoanMonitor();
 
-//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
-//                operatingParameter.getLoanAppraisal(), moduleName);
-//
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                operatingParameter.getId(),
-//                null,
-//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                operatingParameter,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        // Create Change Document for PromoterDetailItem
+        changeDocumentService.createChangeDocument(
+                promoterDetailItem.getLoanMonitor().getId(),
+                promoterDetailItem.getId().toString(),
+                null,
+                promoterDetailItem.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                promoterDetailItem,
+                "Deleted",
+                username,
+                "Monitoring", "Promoter Detail" );
 
         promoterDetailItemRepository.delete(promoterDetailItem);
         updatePromoterDetailItemSerialNumbers(loanMonitor);

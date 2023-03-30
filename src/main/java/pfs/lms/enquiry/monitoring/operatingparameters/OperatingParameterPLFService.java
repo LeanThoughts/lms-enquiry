@@ -77,7 +77,7 @@ public class OperatingParameterPLFService implements IOperatingParameterPLFServi
         existingOperatingParameterPLF.setActualYearlyAveragePlfCuf(resource.getOperatingParameterPLF().getActualYearlyAveragePlfCuf());
         existingOperatingParameterPLF = operatingParameterPLFRepository.save(existingOperatingParameterPLF);
 
-        // Change Documents for Operating Parameter
+        // Change Documents for Operating Parameter PLF
         changeDocumentService.createChangeDocument(
                 existingOperatingParameterPLF.getLoanMonitor().getId(),
                 existingOperatingParameterPLF.getId(),null,
@@ -119,20 +119,18 @@ public class OperatingParameterPLFService implements IOperatingParameterPLFServi
                 getOne(operatingParameterId.toString());
         LoanMonitor loanMonitor = operatingParameterPLF.getLoanMonitor();
 
-//        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(operatingParameter.getLoanMonitor(),
-//                operatingParameter.getLoanAppraisal(), moduleName);
 //
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                operatingParameter.getId(),
-//                null,
-//                operatingParameter.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                operatingParameter,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        // Create Change Document for Operating Parameter PLF
+        changeDocumentService.createChangeDocument(
+                operatingParameterPLF.getLoanMonitor().getId(),
+                operatingParameterPLF.getId(),
+                null,
+                operatingParameterPLF.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                operatingParameterPLF,
+                "Deleted",
+                username,
+                "Monitoring", "Operating Parameter PLF" );
 
         operatingParameterPLFRepository.delete(operatingParameterPLF);
         updateOperatingParameterPLFSerialNumbers(loanMonitor);

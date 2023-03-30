@@ -109,18 +109,18 @@ public class LoanDocumentationService implements ILoanDocumentationService {
 //        UUID loanBusinessProcessObjectId =
 //                loanMonitoringService.getLoanBusinessProcessObjectId(loanDocumentation.getLoanMonitor(),
 //                        loanDocumentation.getLoanAppraisal() ,moduleName);
-//
-//        // Create Change Document for LLC
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                loanDocumentation.getId(),
-//                loanDocumentation.getLoanAppraisal().getId().toString(),
-//                loanDocumentation.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                loanDocumentation,
-//                "Deleted",
-//                username,
-//                moduleName, "\"Lenders Legal Counsel\"" );
+
+        // Create Change Document for LLC
+        changeDocumentService.createChangeDocument(
+                loanDocumentation.getLoanMonitor().getId(),
+                loanDocumentation.getId().toString(),
+                loanDocumentation.getLoanMonitor().getId().toString(),
+                loanDocumentation.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                loanDocumentation,
+                "Deleted",
+                username,
+                moduleName, "Loan Documentation" );
 
         loanDocumentationRepository.delete(loanDocumentation);
         updateLoanDocumentationSerialNumbers(loanMonitor);

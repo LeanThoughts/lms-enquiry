@@ -118,7 +118,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
      @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanPartnerFromLoanApplication() throws ParseException, IOException {
 
-        //log.info("---------------updateLoanPartnerFromLoanApplication ");
+         log.info("---------------Update LoanPartner From LoanApplication ");
 
 
         Boolean createLoanPartner = true;
@@ -221,7 +221,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updatePartnerList() throws ParseException, IOException, InterruptedException {
 
-  //     log.info("---------------update PartnerList from LIE,LFA,LIA,LLC,Valuer");
+     log.info("---------------Update PartnerList from LIE,LFA,LIA,LLC,Valuer");
 
        List<LoanAppraisal> loanAppraisalList = loanAppraisalRepository.findAll();
        List<LoanMonitor> loanMonitorList = loanMonitorRepository.findAll();
