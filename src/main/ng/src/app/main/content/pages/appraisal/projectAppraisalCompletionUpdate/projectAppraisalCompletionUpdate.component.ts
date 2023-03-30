@@ -140,7 +140,12 @@ export class ProjectAppraisalCompletionUpdateComponent {
                 this._projectAppraisalCompletion.agendaNoteApprovalByMDAndCEO = formValues.agendaNoteApprovalByMDAndCEO;
                 this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy = formValues.agendaNoteSubmissionToCoSecy;
                 this._projectAppraisalCompletion.remarks = formValues.remarks;
-                this._projectAppraisalCompletion.fileReference = formValues.fileReference;
+                if (fileReference !== '') {
+                    this._projectAppraisalCompletion.fileReference = fileReference;
+                }
+                else {
+                    this._projectAppraisalCompletion.fileReference = formValues.fileReference;
+                }
                 this._projectAppraisalCompletion.documentTitle = formValues.documentTitle;
                 this._projectAppraisalCompletion.documentType = formValues.documentType;
                 this._loanAppraisalService.updateProjectAppraisalCompletion(this._projectAppraisalCompletion).subscribe(response => {

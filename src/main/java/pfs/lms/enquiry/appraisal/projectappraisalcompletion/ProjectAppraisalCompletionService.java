@@ -94,7 +94,13 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
         projectAppraisalCompletion.setDateOfProjectAppraisalCompletion(projectAppraisalCompletionResource.
                 getDateOfProjectAppraisalCompletion());
         projectAppraisalCompletion.setRemarks(projectAppraisalCompletionResource.getRemarks());
-        projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
+
+        if (projectAppraisalCompletionResource.getFileReference() != null) {
+            if (!projectAppraisalCompletionResource.getFileReference().equals(""))
+                projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
+        }
+
+        // projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
         projectAppraisalCompletion.setDocumentTitle(projectAppraisalCompletionResource.getDocumentTitle());
         projectAppraisalCompletion.setDocumentType(projectAppraisalCompletionResource.getDocumentType());
         projectAppraisalCompletion = projectAppraisalCompletionRepository.save(projectAppraisalCompletion);
