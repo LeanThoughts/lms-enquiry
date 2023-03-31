@@ -47,7 +47,7 @@ public class LoanMonitoringController {
 
     private final SiteVisitRepository siteVisitRepository;
 
-    // Create update and list (LIE)
+    // Create update And list (LIE)
 
     @PostMapping("/loanApplications/lendersindependentengineers/create")
     public ResponseEntity createLIE(@RequestBody LIEResource resource, HttpServletRequest request) throws CloneNotSupportedException {
@@ -86,7 +86,7 @@ public class LoanMonitoringController {
 
 
 
-    // create, update and list (LIE Report Submission and Fee)
+    // create, update and list (LIE Report Submission)
 
     @PostMapping("/loanApplications/liereportandfeesubmission/create")
     public ResponseEntity createLIEReportSubmissionAndFee(@RequestBody LIEReportAndFeeResource resource, HttpServletRequest request) {

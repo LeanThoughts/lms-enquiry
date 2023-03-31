@@ -137,7 +137,7 @@ public class LLCService implements ILLCService {
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(llcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
                 llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal() ,resource.getModuleName());
 
-        // Create Change Document for LLC Report and Fee
+        // Create Change Document for LLC Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 llcReportAndFee.getId(),
@@ -178,7 +178,7 @@ public class LLCService implements ILLCService {
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(existingllcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
                 existingllcReportAndFee.getLendersLegalCouncil().getLoanAppraisal(),  resource.getModuleName());
 
-        // Create Change Document for LLC Report and Fee
+        // Create Change Document for LLC Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 existingllcReportAndFee.getId(),
@@ -225,7 +225,7 @@ public class LLCService implements ILLCService {
                 loanMonitoringService.getLoanBusinessProcessObjectId(llcReportAndFee.getLendersLegalCouncil().getLoanMonitor(),
                         llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal(),moduleName);
 
-        // Create Change Document for LLC Report and Fee
+        // Create Change Document for LLC Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 llcReportAndFee.getId(),
@@ -235,7 +235,7 @@ public class LLCService implements ILLCService {
                 llcReportAndFee,
                 "Deleted",
                 username,
-                moduleName, "LLC Report and Fee" );
+                moduleName, "LLC Report And Fee" );
 
         llcReportAndFeeRepository.delete(llcReportAndFee);
         updateLLCReportAndFeeSerialNumbers(llcReportAndFee.getLendersLegalCouncil().getId());

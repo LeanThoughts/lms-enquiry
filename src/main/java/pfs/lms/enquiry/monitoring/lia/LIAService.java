@@ -182,7 +182,7 @@ public class LIAService implements ILIAService {
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor(),
                 liaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal(),resource.getModuleName());
 
-        // Create Change Document for LIA Report and Fee
+        // Create Change Document for LIA Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 liaReportAndFee.getId(),

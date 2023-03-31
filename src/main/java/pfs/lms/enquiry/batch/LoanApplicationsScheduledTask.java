@@ -137,7 +137,7 @@ public class LoanApplicationsScheduledTask {
                  log.info("SAP Business Partner Number :" + partner.getPartyNumber());
 
 
-                 //Create entries for Loan Appraisal and Monitoring
+                 //Create entries for Loan Appraisal And Monitoring
 
                 LoanApplication loanApplication1 = loanApplicationRepository.getOne(loanApplication.getId());
 

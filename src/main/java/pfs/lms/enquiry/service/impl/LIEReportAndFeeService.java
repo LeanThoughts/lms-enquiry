@@ -50,7 +50,7 @@ public class LIEReportAndFeeService implements ILIEReportAndFeeService{
                 lieReportAndFee,
                 "Created",
                 username,
-                "Monitoring", "Lenders Independent Engineer-LIE Report & Fee" );
+                "Monitoring", "LIE Report And Fee" );
 
         return lieReportAndFee;
     }
@@ -81,7 +81,7 @@ public class LIEReportAndFeeService implements ILIEReportAndFeeService{
                 resource.getLieReportAndFee(),
                 "Updated",
                 username,
-                "Monitoring", "Lenders Independent Engineer-LIE Report & Fee" );
+                "Monitoring", "LIE Report And Fee" );
 
 
         return existinglieReportAndFee;

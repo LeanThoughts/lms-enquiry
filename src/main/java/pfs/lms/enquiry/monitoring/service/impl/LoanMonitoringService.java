@@ -278,7 +278,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor(),
                 lieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal(),resource.getModuleName());
 
-        // Create Change Document for LIE Report and Fee
+        // Create Change Document for LIE Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 lieReportAndFee.getId(),
@@ -555,7 +555,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
                 lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),resource.getModuleName());
 
-        // Create Change Document for LFA Report and Fee
+        // Create Change Document for LFA Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 lfaReportAndFee.getId(),
@@ -565,7 +565,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfaReportAndFee,
                 "Created",
                 username,
-                resource.getModuleName(), "LFA Report and Fee" );
+                resource.getModuleName(), "LFA Report And Fee" );
 
         return lfaReportAndFee;
 
@@ -603,7 +603,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
         UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(existinglfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
                 existinglfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),resource.getModuleName());
 
-        // Create Change Document for LFA Report and Fee
+        // Create Change Document for LFA Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 existinglfaReportAndFee.getId(),
@@ -613,7 +613,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existinglfaReportAndFee,
                 "Updated",
                 username,
-                resource.getModuleName(), "LFA Report and Fee" );
+                resource.getModuleName(), "LFA Report And Fee" );
 
 
         return existinglfaReportAndFee;
@@ -633,7 +633,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 this.getLoanBusinessProcessObjectId(lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor(),
                         lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal(),moduleName);
 
-        // Create Change Document for LFA Report and Fee
+        // Create Change Document for LFA Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 lfaReportAndFee.getId(),
@@ -643,7 +643,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 lfaReportAndFee,
                 "Deleted",
                 username,
-                moduleName, "LFA Report and Fee" );
+                moduleName, "LFA Report And Fee" );
 
         lfaReportAndFeeRepository.delete(lfaReportAndFee);
 
@@ -962,7 +962,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
     }
 
-    //Terms and Conditions
+    //Terms And Conditions
     @Override
     public TermsAndConditionsModification saveTermsAndConditions(TermsAndConditionsResource resource, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
@@ -1014,7 +1014,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 
         termsAndConditions = termsAndConditionsRepository.save(termsAndConditions);
 
-        // Change Documents for Terms and Conditions
+        // Change Documents for Terms And Conditions
         changeDocumentService.createChangeDocument(
                 loanMonitor.getId(),termsAndConditions.getId(),null,
                 loanApplication.getLoanContractId(),
@@ -1022,7 +1022,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 termsAndConditions,
                 "Created",
                 username,
-                "Monitoring", "Terms and Conditions" );
+                "Monitoring", "Terms And Conditions" );
 
         return termsAndConditions;
 
@@ -1071,7 +1071,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 existingTermsAndConditionsModification,
                 "Updated",
                 username,
-                "Monitoring", "Terms and Conditions" );
+                "Monitoring", "Terms And Conditions" );
 
 
         return existingTermsAndConditionsModification;
@@ -1087,17 +1087,17 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(siteVisit.getLoanMonitor(),
 //                siteVisit.getLoanAppraisal(), moduleName);
 //
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                siteVisit.getId(),
-//                null,
-//                siteVisit.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                siteVisit,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        // Create Change Document for Terms And Conditions Delete
+        changeDocumentService.createChangeDocument(
+                termsAndConditionsModification.getLoanMonitor().getId(),
+                termsAndConditionsModification.getId(),
+                null,
+                termsAndConditionsModification.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                termsAndConditionsModification,
+                "Deleted",
+                username,
+                "Monitoring", "Terms And Conditions" );
 
         termsAndConditionsRepository.delete(termsAndConditionsModification);
         updateTermsAndConditionsSerialNumbers(loanMonitor);

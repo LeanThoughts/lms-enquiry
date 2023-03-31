@@ -170,7 +170,7 @@ public class LoanMonitoringScheduledTask {
     private final SAPNPAResource sapnpaResource;
 
     @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}", initialDelayString = "${batch.initialDelay}")
-    public void syncLoanApplicationsToBackend() throws ParseException, IOException {
+    public void syncLoanApplicationsToBackend() throws Exception {
 
         LendersIndependentEngineer lendersIndependentEngineer = new LendersIndependentEngineer();
 
@@ -235,8 +235,6 @@ public class LoanMonitoringScheduledTask {
                     log.info("Attempting to Post LIE to SAP AT :" + dateFormat.format(new Date())
                             + "Loan Contract: " + lendersIndependentEngineer.getLoanMonitor().getLoanApplication().getLoanContractId());
 
-
-
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
                     sapIntegrationRepository.save(sapIntegrationPointer);
@@ -256,13 +254,12 @@ public class LoanMonitoringScheduledTask {
 
                     LIEReportAndFee lieReportAndFee = new LIEReportAndFee();
 
-                    log.info("Attempting to Post LIE  Report and Fee to SAP AT :" + dateFormat.format(new Date())
-                            + "Loan Contract: " + lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId());
-
                     Optional<LIEReportAndFee> lieRF = lieReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     lieReportAndFee = lieRF.get();
 
+                    log.info("Attempting to Post LIE  Report And Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + lieReportAndFee.getLendersIndependentEngineer().getLoanMonitor().getLoanApplication().getLoanContractId());
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
                     sapIntegrationRepository.save(sapIntegrationPointer);
@@ -280,9 +277,9 @@ public class LoanMonitoringScheduledTask {
                             response = postDocument(
                                     sapIntegrationPointer.getSubBusinessProcessName(),
                                     lieReportAndFee.getFileReference(),
-                                    lieReportAndFee.getLendersIndependentEngineer().getId(),
+                                    lieReportAndFee.getId(),
                                     "",
-                                    "LIE Report & Fee",
+                                    "LIE Report And Fee",
                                     lieReportAndFee.getDocumentTitle(), lieReportAndFee.getDocumentType());
                         }
                     }
@@ -314,13 +311,12 @@ public class LoanMonitoringScheduledTask {
                 case "LIA Report And Fee":
 
                     LIAReportAndFee liaReportAndFee = new LIAReportAndFee();
-                    log.info("Attempting to Post LIA  Report and Fee to SAP AT :" + dateFormat.format(new Date())
-                            + "Loan Contract: " + liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId());
-
                     Optional<LIAReportAndFee> liaRF = liaReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     liaReportAndFee = liaRF.get();
 
+                    log.info("Attempting to Post LIA  Report And Fee to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + liaReportAndFee.getLendersInsuranceAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId());
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
                     sapIntegrationRepository.save(sapIntegrationPointer);
@@ -340,7 +336,7 @@ public class LoanMonitoringScheduledTask {
                                     liaReportAndFee.getFileReference(),
                                     liaReportAndFee.getId(),
                                     "",
-                                    "LIA Report & Fee",
+                                    "LIA Report And Fee",
                                     liaReportAndFee.getDocumentTitle(), liaReportAndFee.getDocumentType());
                         }
                     }
@@ -376,7 +372,7 @@ public class LoanMonitoringScheduledTask {
                     Optional<LLCReportAndFee> llcRF = llcReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
                     llcReportAndFee = llcRF.get();
 
-                    log.info("Attempting to Post LLC  Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                    log.info("Attempting to Post LLC  Report And Fee to SAP AT :" + dateFormat.format(new Date())
                             + "Loan Contract: " + llcReportAndFee.getLendersLegalCouncil().getLoanMonitor().getLoanApplication().getLoanContractId());
 
                     //Set Status as in progress
@@ -397,7 +393,7 @@ public class LoanMonitoringScheduledTask {
                                     llcReportAndFee.getFileReference(),
                                     llcReportAndFee.getId(),
                                     "",
-                                    "LLC Report & Fee",
+                                    "LLC Report And Fee",
                                     llcReportAndFee.getDocumentTitle(), llcReportAndFee.getDocumentType());
                         }
                     }
@@ -433,7 +429,7 @@ public class LoanMonitoringScheduledTask {
 
                     valuerReportAndFee = valuerRF.get();
 
-                    log.info("Attempting to Post Valuer Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                    log.info("Attempting to Post Valuer Report And Fee to SAP AT :" + dateFormat.format(new Date())
                             + "Loan Contract: " + valuerReportAndFee.getValuer().getLoanMonitor().getLoanApplication().getLoanContractId());
 
 
@@ -455,7 +451,7 @@ public class LoanMonitoringScheduledTask {
                                     valuerReportAndFee.getFileReference(),
                                     valuerReportAndFee.getId(),
                                     "",
-                                    "Valuer Report & Fee",
+                                    "Valuer Report And Fee",
                                     valuerReportAndFee.getDocumentTitle(), valuerReportAndFee.getDocumentType());
                         }
                     }
@@ -484,17 +480,17 @@ public class LoanMonitoringScheduledTask {
                     serviceUri = monitorServiceUri + "LendersFinancialAdvisorSet";
                     response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
-                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                        updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
 
-                case "LFA Report and Fee":
+                case "LFA Report And Fee":
 
                     LFAReportAndFee lfaReportAndFee = new LFAReportAndFee();
                     Optional<LFAReportAndFee> lfaRF = lfaReportAndFeeRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     lfaReportAndFee = lfaRF.get();
 
-                    log.info("Attempting to Post LFA Report and Fee to SAP AT :" + dateFormat.format(new Date())
+                    log.info("Attempting to Post LFA Report And Fee to SAP AT :" + dateFormat.format(new Date())
                             + "Loan Contract: " + lfaReportAndFee.getLendersFinancialAdvisor().getLoanMonitor().getLoanApplication().getLoanContractId());
 
 
@@ -517,7 +513,7 @@ public class LoanMonitoringScheduledTask {
                                     lfaReportAndFee.getFileReference(),
                                     lfaReportAndFee.getId(),
                                     "",
-                                    "LFA Report & Fee",
+                                    "LFA Report And Fee",
                                     lfaReportAndFee.getDocumentTitle(),
                                     lfaReportAndFee.getDocumentType());
                         }
@@ -525,13 +521,13 @@ public class LoanMonitoringScheduledTask {
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "Terms and Conditions":
+                case "Terms And Conditions":
 
                     TermsAndConditionsModification termsAndConditionsModification = new TermsAndConditionsModification();
                     Optional<TermsAndConditionsModification> traMod = termsAndConditionsRepository.findById(sapIntegrationPointer.getBusinessObjectId().toString());
 
                     termsAndConditionsModification = traMod.get();
-                    log.info("Attempting to Post Terms and Conditions to SAP AT :" + dateFormat.format(new Date())
+                    log.info("Attempting to Post Terms And Conditions to SAP AT :" + dateFormat.format(new Date())
                             + "Loan Contract: " + termsAndConditionsModification.getLoanMonitor().getLoanApplication().getLoanContractId());
 
 
@@ -555,7 +551,7 @@ public class LoanMonitoringScheduledTask {
                                     termsAndConditionsModification.getFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "1",
-                                    "TermsAndConditionsModification",
+                                    "Terms And Conditions",
                                     "Borrower_Request_Letter_" + termsAndConditionsModification.getDocumentTitle(),
                                     termsAndConditionsModification.getDocumentType()
                             );
@@ -569,7 +565,7 @@ public class LoanMonitoringScheduledTask {
                                     termsAndConditionsModification.getLeadBankerDocumentFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "2",
-                                    "TermsAndConditionsModification",
+                                    "Terms And Conditions",
                                     "Lead_Banker_Doc_" + termsAndConditionsModification.getLeadBankerDocumentTitle(),
                                     termsAndConditionsModification.getLeadBankerDocumentType()
                             );
@@ -584,7 +580,7 @@ public class LoanMonitoringScheduledTask {
                                     termsAndConditionsModification.getAmendedDocumentFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "3",
-                                    "TermsAndConditionsModification",
+                                    "Terms And Conditions",
                                     "T&C_Amended_Document_" + termsAndConditionsModification.getAmendedDocumentTitle(),
                                     termsAndConditionsModification.getAmendedDocumentType());
                         }
@@ -598,7 +594,7 @@ public class LoanMonitoringScheduledTask {
                                     termsAndConditionsModification.getInternalDocumentFileReference(),
                                     termsAndConditionsModification.getId(),
                                     "4",
-                                    "TermsAndConditionsModification",
+                                    "Terms And Conditions",
                                     "Internal Document_" + termsAndConditionsModification.getAmendedDocumentTitle(),
                                     termsAndConditionsModification.getInternalDocumentType()
                             );
@@ -1034,7 +1030,7 @@ public class LoanMonitoringScheduledTask {
                                 sapIntegrationPointer.getSubBusinessProcessName(),
                                 trustRetentionAccountStatement.getFileReference(),
                                 trustRetentionAccountStatement.getId(), "" +
-                                        "", "Trust Retention Account Statement",
+                                        "", "TRA Statement",
                                 trustRetentionAccountStatement.getDocumentTitle(),
                                 trustRetentionAccountStatement.getDocumentType()
                         );
@@ -1094,14 +1090,17 @@ public class LoanMonitoringScheduledTask {
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-        }
+                default:
+                    log.info("Entity : -- " + sapIntegrationPointer.getSubBusinessProcessName() + " -- Not found for upload to SAP" );
+            }
     }
 
 }
 
     private Object postDocument(String businessProcessName,
                                 String fileReference,
-                                String entityId, String docSubId,
+                                String entityId,
+                                String docSubId,
                                 String entityName,
                                 String fileName,
                                 String documentType) throws IOException {

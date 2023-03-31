@@ -133,7 +133,7 @@ public class CLAService implements ICLAService {
         claReportAndFee.setCommonLoanAgreement(commonLoanAgreement);
         claReportAndFee = claReportAndFeeRepository.save(claReportAndFee);
 
-        // Create Change Document for LIE Report and Fee
+        // Create Change Document for LIE Report And Fee
 //        changeDocumentService.createChangeDocument(
 //                lendersInsuranceAdvisor.getLoanMonitor().getId(), liaReportAndFee.getId(),lendersInsuranceAdvisor.getId(),
 //                lendersInsuranceAdvisor.getLoanMonitor().getLoanApplication().getLoanContractId(),

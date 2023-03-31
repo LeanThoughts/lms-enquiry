@@ -74,7 +74,7 @@ public class LoanMonitorScheduledTaskDelete {
 
 
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskDelete}", initialDelayString = "${batch.initialDelay}")
-    public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
+    public void syncLoanAppraisalsToBackend() throws Exception {
 
 
         //log.info("---------------Delete Monitoring Objects Batch Process ");
@@ -114,11 +114,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LendersIndependentEngineerSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "LIE Report and Fee":
-                    log.info("Attempting to Delete LIE Report and Fee from SAP AT :" + dateFormat.format(new Date()));
+                case "LIE Report And Fee":
+                    log.info("Attempting to Delete LIE Report And Fee from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -127,7 +126,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LIEReportAndFeeSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Lenders Financial Advisor":
@@ -140,11 +138,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LendersFinancialAdvisorSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "LFA Report and Fee":
-                    log.info("Attempting to Delete LFA Report and Fee from SAP AT :" + dateFormat.format(new Date()));
+                case "LFA Report And Fee":
+                    log.info("Attempting to Delete LFA Report And Fee from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -153,7 +150,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LFAReportAndFeeSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Lenders Legal Counsel":
@@ -166,11 +162,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LendersLegalCounselSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "LLC Report and Fee":
-                    log.info("Attempting to Delete LLC Report and Fee from SAP AT :" + dateFormat.format(new Date()));
+                case "LLC Report And Fee":
+                    log.info("Attempting to Delete LLC Report And Fee from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -179,7 +174,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LLCReportAndFeeSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Lenders Insurance Advisor":
@@ -192,11 +186,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LendersInsuranceAdvisorSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "LIA Report and Fee":
-                    log.info("Attempting to Delete LIA Report and Fee from SAP AT :" + dateFormat.format(new Date()));
+                case "LIA Report And Fee":
+                    log.info("Attempting to Delete LIA Report And Fee from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -205,7 +198,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LIAReportAndFeeSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
 
@@ -219,11 +211,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "ValuerSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "Valuer Report and Fee":
-                    log.info("Attempting to Delete Valuer Report and Fee from SAP AT :" + dateFormat.format(new Date()));
+                case "Valuer Report And Fee":
+                    log.info("Attempting to Delete Valuer Report And Fee from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -232,7 +223,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "ValuerReportAndFeeSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "NPA":
@@ -245,7 +235,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "NPASet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "NPA Detail":
@@ -258,7 +247,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "NPADetailSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Insurance":
@@ -271,7 +259,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "InsuranceSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Rate of Interest":
@@ -284,11 +271,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "InterestRateSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "Terms and Conditions":
-                    log.info("Attempting to Terms and Conditions from SAP AT :" + dateFormat.format(new Date()));
+                case "Terms And Conditions":
+                    log.info("Attempting to Delete Terms And Conditions from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -297,11 +283,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "TermsAndConditionsModificationSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Security Compliance":
-                    log.info("Attempting to Security Compliance from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Security Compliance from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -310,11 +295,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "SecurityComplianceSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Site Visit":
-                    log.info("Attempting to Site Visit from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Site Visit from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -323,11 +307,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "SiteVisitSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Operating Parameter":
-                    log.info("Attempting to Operating Parameter from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Operating Parameter from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -336,7 +319,6 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "OperatingParameterSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Operating Parameter PLF":
@@ -349,11 +331,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "OperatingParameterPLFSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Borrower Financials":
-                    log.info("Attempting to Borrower Financials from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Borrower Financials from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -362,11 +343,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "BorrowerFinancialsSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Promoter Detail":
-                    log.info("Attempting to Promoter Detail from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Promoter Detail from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -375,11 +355,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "PromoterDetailsItemSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Promoter Financials":
-                    log.info("Attempting to Promoter Financials from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Promoter Financials from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -388,11 +367,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "PromoterFinancialsSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Financial Covenants":
-                    log.info("Attempting to Financial Covenants from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Financial Covenants from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -401,11 +379,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "FinancialCovenantsSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "TRA Account":
-                    log.info("Attempting to TRA Account from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete TRA Account from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -414,11 +391,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "TRAAccountSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "TRA Account Statement":
-                    log.info("Attempting to TRA Account Statement from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete TRA Account Statement from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -427,11 +403,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "TRAAccountStatementSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "Loan Documentation":
-                    log.info("Attempting to Loan Documentation from SAP AT :" + dateFormat.format(new Date()));
+                    log.info("Attempting to Delete Loan Documentation from SAP AT :" + dateFormat.format(new Date()));
 
                     //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
@@ -440,9 +415,10 @@ public class LoanMonitorScheduledTaskDelete {
                     objectId = sapIntegrationPointer.getBusinessObjectId();
                     serviceUri = monitorServiceUri + "LoanDocumentationSet";
                     response = sapLoanProcessesIntegrationService.deleteResourceFromSAP(serviceUri, objectId, MediaType.APPLICATION_JSON);
-                    if (response != null)
                         updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
+                default:
+                    log.info("Entity : -- " + sapIntegrationPointer.getSubBusinessProcessName() + " -- Not found for upload to SAP" );
             }
         }
     }

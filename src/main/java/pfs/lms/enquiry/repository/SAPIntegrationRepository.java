@@ -10,9 +10,10 @@ public interface SAPIntegrationRepository extends JpaRepository<SAPIntegrationPo
 
     List<SAPIntegrationPointer> getByBusinessProcessNameAndStatus(String businessProcessName, Integer status);
 
-    List<SAPIntegrationPointer> getByBusinessObjectIdAndStatus(String businessObejctId, Integer status);
+    List<SAPIntegrationPointer> getByBusinessObjectIdAndStatus(String businessObjectId, Integer status);
 
     List<SAPIntegrationPointer> getByBusinessProcessNameAndStatusAndMode(String businessObjectId, Integer status, char mode);
+    List<SAPIntegrationPointer> getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode(String businessProcessName, String subBusinessProcessName, Integer status, char mode);
 
-    //SAPIntegrationRepository save(SAPIntegrationPointer sapIntegrationPointer);
+
 }

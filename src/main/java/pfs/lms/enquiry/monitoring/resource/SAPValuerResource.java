@@ -59,7 +59,7 @@ public class SAPValuerResource implements Serializable   {
 
 
         if (valuer.getContractPeriodFrom() != null)
-        detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(valuer.getContractPeriodTo()));
+        detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(valuer.getContractPeriodFrom()));
         else
             detailsResource.setContractPeriodTo(null);
 

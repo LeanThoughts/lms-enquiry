@@ -76,7 +76,7 @@ public class LIEService implements ILIEService {
                 lendersIndependentEngineer,
                 "Created",
                 username,
-                "Monitoring", "Lenders Independent Engineer-LIE Report & Fee" );
+                "Monitoring", "Lenders Independent Engineer" );
 
         return lendersIndependentEngineer;
 

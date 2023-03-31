@@ -76,7 +76,7 @@ public class LoanAppraisalScheduledTaskDelete {
     private final SAPLoanAppraisalProjectDataResource sapLoanAppraisalProjectDataResource;
 
     @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskDelete}",initialDelayString = "${batch.initialDelay}")
-    public void syncLoanAppraisalsToBackend() throws ParseException, IOException {
+    public void syncLoanAppraisalsToBackend() throws Exception {
 
 
         //log.info("--------------- Task : Deleted Appraisal Entries  ");
@@ -172,6 +172,8 @@ public class LoanAppraisalScheduledTaskDelete {
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
+                 default:
+                     log.info("Entity : -- " + sapIntegrationPointer.getSubBusinessProcessName() + " -- Not found for upload to SAP" );
              }
          }
      }

@@ -85,7 +85,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
     private String userName = "admin@pfs-portal";
 
-   @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
+   //@Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanContractId}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanContractId() throws ParseException, IOException {
         //log.info("---------------Update LoanContract Id on Appraisal");
 
@@ -115,7 +115,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
 
 
 
-     @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
+    // @Scheduled(fixedRateString = "${batch.updateMainLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updateLoanPartnerFromLoanApplication() throws ParseException, IOException {
 
          log.info("---------------Update LoanPartner From LoanApplication ");
@@ -218,7 +218,7 @@ public class LoanAppraisalScheduledTaskUpdateLoanContractIdPartner {
         }
     }
 
-    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
+    //@Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskUpdateLoanPartner}",initialDelayString = "${batch.initialDelay}")
     public void updatePartnerList() throws ParseException, IOException, InterruptedException {
 
      log.info("---------------Update PartnerList from LIE,LFA,LIA,LLC,Valuer");

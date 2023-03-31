@@ -175,7 +175,7 @@ public class ValuerService implements IValuerService {
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(valuerReportAndFee.getValuer().getLoanMonitor(),
                 valuerReportAndFee.getValuer().getLoanAppraisal() ,resource.getModuleName());
 
-        // Create Change Document for LLC Report and Fee
+        // Create Change Document for LLC Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 valuerReportAndFee.getId(),
@@ -216,7 +216,7 @@ public class ValuerService implements IValuerService {
         UUID loanBusinessProcessObjectId = loanMonitoringService.getLoanBusinessProcessObjectId(valuerReportAndFee.getValuer().getLoanMonitor(),
                 valuerReportAndFee.getValuer().getLoanAppraisal(),  resource.getModuleName());
 
-        // Create Change Document for LLC Report and Fee
+        // Create Change Document for LLC Report And Fee
         changeDocumentService.createChangeDocument(
                 loanBusinessProcessObjectId,
                 valuerReportAndFee.getId(),

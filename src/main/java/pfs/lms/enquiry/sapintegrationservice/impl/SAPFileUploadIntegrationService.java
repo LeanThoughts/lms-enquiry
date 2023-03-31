@@ -127,7 +127,7 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
         };
 
         // This nested HttpEntiy is important to create the correct
-        // Content-Disposition entry with metadata "name" and "filename"
+        // Content-Disposition entry with metadata "name" And "filename"
         MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
         ContentDisposition contentDisposition = ContentDisposition
                 .builder("form-data")
