@@ -31,11 +31,11 @@ export class LIAReportAndFeeUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LIAReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -53,7 +53,7 @@ export class LIAReportAndFeeUpdateDialogComponent {
 
         this.liaUpdateForm = _formBuilder.group({
             reportType: [this.selectedLIAReportAndFee.reportType],
-            dateOfReceipt: [this.selectedLIAReportAndFee.dateOfReceipt || ''], 
+            dateOfReceipt: [this.selectedLIAReportAndFee.dateOfReceipt || ''],
             invoiceDate: [this.selectedLIAReportAndFee.invoiceDate || ''],
             invoiceNo: [this.selectedLIAReportAndFee.invoiceNo],
             feeAmount: [this.selectedLIAReportAndFee.feeAmount, [Validators.pattern(MonitoringRegEx.genericAmount)]],
@@ -67,7 +67,7 @@ export class LIAReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedLIAReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedLIAReportAndFee.feeAmountRaisedOnCustomer],
             reportDate: [this.selectedLIAReportAndFee.reportDate || ''],
-            percentageCompletion: [this.selectedLIAReportAndFee.percentageCompletion || ''],
+            percentageCompletion: [this.selectedLIAReportAndFee.percentageCompletion , [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedLIAReportAndFee.remarks || '']
         });
 
@@ -79,7 +79,7 @@ export class LIAReportAndFeeUpdateDialogComponent {
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -95,13 +95,13 @@ export class LIAReportAndFeeUpdateDialogComponent {
         if (this.liaUpdateForm.valid) {
             if (this.liaUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.liaUpdateForm.get('file').value);      
+                formData.append('file', this.liaUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveLIAReportAndFee(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -116,7 +116,7 @@ export class LIAReportAndFeeUpdateDialogComponent {
             }
         }
     }
-    
+
     /**
      * saveLIAReportAndFee()
      */
@@ -168,5 +168,5 @@ export class LIAReportAndFeeUpdateDialogComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }  
+    }
 }

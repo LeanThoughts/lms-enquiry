@@ -31,11 +31,11 @@ export class LFAReportAndFeeUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LFAReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -67,7 +67,7 @@ export class LFAReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedLFAReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedLFAReportAndFee.feeAmountRaisedOnCustomer],
             reportDate: [this.selectedLFAReportAndFee.reportDate || ''],
-            percentageCompletion: [this.selectedLFAReportAndFee.percentageCompletion || ''],
+            percentageCompletion: [this.selectedLFAReportAndFee.percentageCompletion, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedLFAReportAndFee.remarks || '']
         });
 
@@ -79,7 +79,7 @@ export class LFAReportAndFeeUpdateDialogComponent {
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -95,13 +95,13 @@ export class LFAReportAndFeeUpdateDialogComponent {
         if (this.lfaUpdateForm.valid) {
             if (this.lfaUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.lfaUpdateForm.get('file').value);      
+                formData.append('file', this.lfaUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveLFAReportAndFee(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -175,5 +175,5 @@ export class LFAReportAndFeeUpdateDialogComponent {
      */
      getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }  
+    }
 }

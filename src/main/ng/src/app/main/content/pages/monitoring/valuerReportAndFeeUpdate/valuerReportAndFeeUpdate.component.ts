@@ -31,11 +31,11 @@ export class ValuerReportAndFeeUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<ValuerReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -53,7 +53,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
 
         this.valuerUpdateForm = _formBuilder.group({
             reportType: [this.selectedValuerReportAndFee.reportType],
-            dateOfReceipt: [this.selectedValuerReportAndFee.dateOfReceipt || ''], 
+            dateOfReceipt: [this.selectedValuerReportAndFee.dateOfReceipt || ''],
             invoiceDate: [this.selectedValuerReportAndFee.invoiceDate || ''],
             invoiceNo: [this.selectedValuerReportAndFee.invoiceNo],
             feeAmount: [this.selectedValuerReportAndFee.feeAmount, [Validators.pattern(MonitoringRegEx.genericAmount)]],
@@ -67,7 +67,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedValuerReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedValuerReportAndFee.feeAmountRaisedOnCustomer],
             reportDate: [this.selectedValuerReportAndFee.reportDate || ''],
-            percentageCompletion: [this.selectedValuerReportAndFee.percentageCompletion || ''],
+            percentageCompletion: [this.selectedValuerReportAndFee.percentageCompletion, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedValuerReportAndFee.remarks || '']
         });
 
@@ -79,7 +79,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -95,13 +95,13 @@ export class ValuerReportAndFeeUpdateDialogComponent {
         if (this.valuerUpdateForm.valid) {
             if (this.valuerUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.valuerUpdateForm.get('file').value);      
+                formData.append('file', this.valuerUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveValuerReportAndFee(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -116,7 +116,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
             }
         }
     }
-    
+
     /**
      * saveValuerReportAndFee()
      */
@@ -168,5 +168,5 @@ export class ValuerReportAndFeeUpdateDialogComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }  
+    }
 }

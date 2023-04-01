@@ -20,7 +20,7 @@ public interface IRiskClient {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/riskModelPDF/external",
             method = RequestMethod.GET,consumes = "application/pdf")
-    ResponseEntity<ByteArray> printRiskReport(@RequestParam(value = "id", required = true) Long id);
+    byte[] printRiskReport(@RequestParam(value = "id", required = true) Long id);
 
 
 

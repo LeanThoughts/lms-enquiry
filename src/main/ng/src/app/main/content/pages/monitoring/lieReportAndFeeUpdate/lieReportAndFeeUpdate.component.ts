@@ -31,11 +31,11 @@ export class LIEReportAndFeeUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LIEReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -53,7 +53,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
 
         this.lieUpdateForm = _formBuilder.group({
             reportType: [this.selectedLIEReportAndFee.reportType],
-            dateOfReceipt: [this.selectedLIEReportAndFee.dateOfReceipt || ''], 
+            dateOfReceipt: [this.selectedLIEReportAndFee.dateOfReceipt || ''],
             invoiceDate: [this.selectedLIEReportAndFee.invoiceDate || ''],
             invoiceNo: [this.selectedLIEReportAndFee.invoiceNo],
             feeAmount: [this.selectedLIEReportAndFee.feeAmount, [Validators.pattern(MonitoringRegEx.genericAmount)]],
@@ -67,7 +67,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedLIEReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedLIEReportAndFee.feeAmountRaisedOnCustomer],
             reportDate: [this.selectedLIEReportAndFee.reportDate || ''],
-            percentageCompletion: [this.selectedLIEReportAndFee.percentageCompletion || ''],
+            percentageCompletion: [this.selectedLIEReportAndFee.percentageCompletion, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedLIEReportAndFee.remarks || '']
         });
 
@@ -79,7 +79,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -107,7 +107,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
         //     if (this._dialogData.operation === 'addLIEReportAndFee') {
         //         if (this.lieUpdateForm.get('file').value !== '') {
         //             var formData = new FormData();
-        //             formData.append('file', this.lieUpdateForm.get('file').value);      
+        //             formData.append('file', this.lieUpdateForm.get('file').value);
         //             this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
         //                 (response) => {
         //                     lieReportAndFee.fileReference = response.fileReference;
@@ -117,7 +117,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
         //                     });
         //                 },
         //                 (error) => {
-        //                     this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+        //                     this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
         //                         'OK', { duration: 7000 });
         //                 }
         //             );
@@ -133,7 +133,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
         //     else {
         //         if (this.lieUpdateForm.get('file').value !== '') {
         //             var formData = new FormData();
-        //             formData.append('file', this.lieUpdateForm.get('file').value);      
+        //             formData.append('file', this.lieUpdateForm.get('file').value);
         //             this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
         //                 (response) => {
         //                     this.selectedLIEReportAndFee.reportType = lieReportAndFee.reportType;
@@ -156,7 +156,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
         //                     });
         //                 },
         //                 (error) => {
-        //                     this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+        //                     this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
         //                         'OK', { duration: 7000 });
         //                 }
         //             );
@@ -187,13 +187,13 @@ export class LIEReportAndFeeUpdateDialogComponent {
         if (this.lieUpdateForm.valid) {
             if (this.lieUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.lieUpdateForm.get('file').value);      
+                formData.append('file', this.lieUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveLIEReportAndFee(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -260,5 +260,5 @@ export class LIEReportAndFeeUpdateDialogComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }  
+    }
 }

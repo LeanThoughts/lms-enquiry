@@ -31,11 +31,11 @@ export class LLCReportAndFeeUpdateDialogComponent {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
+     * @param _formBuilder
+     * @param _loanMonitoringService
+     * @param _dialogRef
+     * @param _dialogData
+     * @param _matSnackBar
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LLCReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -53,7 +53,7 @@ export class LLCReportAndFeeUpdateDialogComponent {
 
         this.llcUpdateForm = _formBuilder.group({
             reportType: [this.selectedLLCReportAndFee.reportType],
-            dateOfReceipt: [this.selectedLLCReportAndFee.dateOfReceipt || ''], 
+            dateOfReceipt: [this.selectedLLCReportAndFee.dateOfReceipt || ''],
             invoiceDate: [this.selectedLLCReportAndFee.invoiceDate || ''],
             invoiceNo: [this.selectedLLCReportAndFee.invoiceNo],
             feeAmount: [this.selectedLLCReportAndFee.feeAmount, [Validators.pattern(MonitoringRegEx.genericAmount)]],
@@ -67,7 +67,7 @@ export class LLCReportAndFeeUpdateDialogComponent {
             sapFIInvoiceNumber: [this.selectedLLCReportAndFee.sapFIInvoiceNumber],
             feeAmountRaisedOnCustomer: [this.selectedLLCReportAndFee.feeAmountRaisedOnCustomer],
             reportDate: [this.selectedLLCReportAndFee.reportDate || ''],
-            percentageCompletion: [this.selectedLLCReportAndFee.percentageCompletion || ''],
+            percentageCompletion: [this.selectedLLCReportAndFee.percentageCompletion , [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedLLCReportAndFee.remarks || '']
         });
 
@@ -79,7 +79,7 @@ export class LLCReportAndFeeUpdateDialogComponent {
 
     /**
      * onFileSelect()
-     * @param event 
+     * @param event
      */
     onFileSelect(event) {
         if (event.target.files.length > 0) {
@@ -95,13 +95,13 @@ export class LLCReportAndFeeUpdateDialogComponent {
         if (this.llcUpdateForm.valid) {
             if (this.llcUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.llcUpdateForm.get('file').value);      
+                formData.append('file', this.llcUpdateForm.get('file').value);
                 this._loanMonitoringService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveLLCReportAndFee(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -116,7 +116,7 @@ export class LLCReportAndFeeUpdateDialogComponent {
             }
         }
     }
-    
+
     /**
      * saveLLCReportAndFee()
      */
@@ -168,5 +168,5 @@ export class LLCReportAndFeeUpdateDialogComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
-    }  
+    }
 }
