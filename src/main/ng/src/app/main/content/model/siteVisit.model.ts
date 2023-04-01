@@ -35,5 +35,7 @@ export class SiteVisitModel {
         this.initialSCOD = _siteVisit.initialSCOD || undefined;
         this.revisedSCOD1 = _siteVisit.revisedSCOD1 || undefined;
         this.revisedSCOD2 = _siteVisit.revisedSCOD2 || undefined;
+        this.businessPartnerId = _siteVisit.businessPartnerId || '';
+        this.businessPartnerName = _siteVisit.businessPartnerName || '';
     }
 }

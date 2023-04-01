@@ -77,8 +77,8 @@ export class ProjectDataComponent implements OnDestroy {
         this.dataSource1.push({particulars: 'Unit of Measure', description: this._projectData.projectCapacityUnitMeasure});
         this.dataSource1.push({particulars: 'Number of Units', description: this._projectData.numberOfUnits});
         this.dataSource1.push({particulars: 'Design PLF CUF', description: this._projectData.designPlfCuf});
-        this.dataSource1.push({particulars: 'Technology Supplier', description: this._projectData.mainContractor});
-        this.dataSource1.push({particulars: 'EPC Contractor', description: this._projectData.epcContractor});
+        this.dataSource1.push({particulars: 'Technology Supplier', description: this.getTechnologySupplier(this._projectData.mainContractor)});
+        this.dataSource1.push({particulars: 'EPC Contractor', description: this.getEPCContractor(this._projectData.epcContractor)});
         this.dataSource1.push({particulars: 'Resource Assessment Agency', description: this._projectData.resourceAssessmentAgency});
         this.dataSource1.push({particulars: 'O&M Contractor', description: this._projectData.oandmContractor});
         
@@ -185,5 +185,31 @@ export class ProjectDataComponent implements OnDestroy {
                 this.populateDisplayTables();
             }
         });   
+    }
+
+    /**
+     * getTechnologySupplier()
+     */
+    getTechnologySupplier(technologySupplierId): string {
+        const technologySupplier = this._activatedRoute.snapshot.data.routeResolvedData[13].filter(ts => ts.id === technologySupplierId);
+        if (technologySupplier.length > 0) {
+            return technologySupplier[0].partyName1 + ' ' + technologySupplier[0].partyName2;
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * getEPCContractor()
+     */
+    getEPCContractor(epcContractorId): string {
+        const epcContractor = this._activatedRoute.snapshot.data.routeResolvedData[14].filter(ts => ts.id === epcContractorId);
+        if (epcContractor.length > 0) {
+            return epcContractor[0].partyName1 + ' ' + epcContractor[0].partyName2;
+        }
+        else {
+            return '';
+        }
     }
 }

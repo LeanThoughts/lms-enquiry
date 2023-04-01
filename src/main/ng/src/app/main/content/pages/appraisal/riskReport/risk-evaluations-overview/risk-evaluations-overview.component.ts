@@ -55,4 +55,11 @@ export class RiskEvaluationsOverviewComponent {
     onRowSelect(obj: any): void {
         this.selectedRow = obj;
     }
+
+    /**
+     * print()
+     */
+    print(): void {
+        (window as any).open('risk/api/riskModelPDF?id=' + this.selectedRow.riskEvalId, '_blank');
+    }
 }

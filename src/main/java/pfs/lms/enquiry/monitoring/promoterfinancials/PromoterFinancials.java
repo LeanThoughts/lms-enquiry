@@ -3,9 +3,10 @@ package pfs.lms.enquiry.monitoring.promoterfinancials;
 import lombok.*;
 import pfs.lms.enquiry.domain.AbstractEntity;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
-import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -19,9 +20,9 @@ public class PromoterFinancials extends AbstractEntity implements Cloneable {
     @ManyToOne(fetch = FetchType.EAGER)
     private LoanMonitor loanMonitor;
 
-    @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name="borrowerFinancialsId")
-    private BorrowerFinancials borrowerFinancialsId;//(Fkey)
+//    @ManyToOne(cascade={CascadeType.ALL})
+//    @JoinColumn(name="borrowerFinancialsId")
+//    private String borrowerFinancialsId;//(Fkey)
 
     private Integer serialNumber;
     private Integer fiscalYear;

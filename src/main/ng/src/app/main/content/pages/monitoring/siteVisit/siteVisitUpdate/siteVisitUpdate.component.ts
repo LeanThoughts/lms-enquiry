@@ -71,10 +71,11 @@ export class SiteVisitUpdateDialogComponent {
 
         this._loanAppraisalService.getPartnersByRole('ZLM024').subscribe(response => {
             this.partners = response;
-        });
-        this._loanAppraisalService.getPartnersByRole('ZLM028').subscribe(response => {
-            response.map((partner) => {
-                this.partners.push(partner);
+            this._loanAppraisalService.getPartnersByRole('ZLM028').subscribe(response => {
+                response.map((partner) => {
+                    this.partners.push(partner);
+                });
+                this.siteVisitUpdateForm.controls.displayBusinessPartnerId.setValue(this.selectedSiteVisit.businessPartnerId);
             });
         });
     }
