@@ -7,12 +7,14 @@ import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class NPADetailService implements INPADetailService {
 
     private final NPARepository npaRepository;

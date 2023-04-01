@@ -10,11 +10,13 @@ import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class ProjectMonitoringDataService implements IProjectMonitoringDataService {
 
     private final LoanApplicationRepository loanApplicationRepository;

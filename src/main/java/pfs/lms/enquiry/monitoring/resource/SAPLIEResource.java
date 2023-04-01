@@ -51,14 +51,14 @@ public class SAPLIEResource implements Serializable   {
         else
             detailsResource.setDateOfAppointment(null);
 
-        if (lendersIndependentEngineer.getContractPeriodFrom() != null)
-        detailsResource.setContractPeriodFrom(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodFrom()));
-        else
-            detailsResource.setContractPeriodFrom(null);
-
-
-        if (lendersIndependentEngineer.getContractPeriodFrom() != null)
+        if (lendersIndependentEngineer.getContractPeriodTo() != null)
         detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodTo()));
+        else
+            detailsResource.setContractPeriodTo(null);
+
+
+        if (lendersIndependentEngineer.getContractPeriodFrom() != null)
+        detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodFrom()));
         else
             detailsResource.setContractPeriodTo(null);
 

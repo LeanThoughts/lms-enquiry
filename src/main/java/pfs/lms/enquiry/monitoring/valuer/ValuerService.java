@@ -13,11 +13,13 @@ import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ValuerService implements IValuerService {
 
     private final LoanApplicationRepository loanApplicationRepository;

@@ -13,12 +13,14 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.impl.ChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class LoanDocumentationService implements ILoanDocumentationService {
 
     private final LoanDocumentationRepository loanDocumentationRepository;

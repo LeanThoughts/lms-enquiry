@@ -102,7 +102,6 @@ public class LoanMonitorScheduledTaskDelete {
         String serviceUri = new String();
 
         for (SAPIntegrationPointer sapIntegrationPointer : sapIntegrationPointers) {
-
             switch (sapIntegrationPointer.getSubBusinessProcessName()) {
                 case "Lenders Independent Engineer":
                     log.info("Attempting to Delete Lenders Independent Engineer from SAP AT :" + dateFormat.format(new Date()));

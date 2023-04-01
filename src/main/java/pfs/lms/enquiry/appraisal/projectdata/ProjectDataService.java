@@ -16,6 +16,7 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @EnableFeignClients
+@Transactional
 public class ProjectDataService implements IProjectDataService {
 
     private final ProjectDataRepository projectDataRepository;

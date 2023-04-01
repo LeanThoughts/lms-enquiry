@@ -18,6 +18,7 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProjectMonitoringDataItemService implements IProjectMonitoringDataItemService {
     private final LoanMonitorRepository loanMonitorRepository;
 

@@ -10,12 +10,14 @@ import pfs.lms.enquiry.monitoring.service.impl.LoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class PromoterDetailItemService implements IPromoterDetailItemService {
 
     private final PromoterDetailItemRepository promoterDetailItemRepository;

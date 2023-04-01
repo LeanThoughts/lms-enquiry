@@ -34,7 +34,7 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-
+@Transactional
 public class LoanMonitoringService implements ILoanMonitoringService {
 
     private final LIERepository lieRepository;
@@ -1970,8 +1970,7 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     public BorrowerFinancials deleteBorrowerFinancials(UUID borrowerFinancialsId, String username) {
         BorrowerFinancials borrowerFinancials = borrowerFinancialsRepository.getOne(borrowerFinancialsId.toString());
         LoanMonitor loanMonitor = borrowerFinancials.getLoanMonitor();
-        borrowerFinancialsRepository.delete(borrowerFinancials);
-        updateBorrowerFinancialsSerialNumbers(loanMonitor);
+
 
         // Change Documents for  Borrower Financials
         changeDocumentService.createChangeDocument(
@@ -1984,6 +1983,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 "Deleted",
                 username,
                 "Monitoring", "Borrower Financials");
+
+        borrowerFinancialsRepository.delete(borrowerFinancials);
+        updateBorrowerFinancialsSerialNumbers(loanMonitor);
 
         return borrowerFinancials;
     }

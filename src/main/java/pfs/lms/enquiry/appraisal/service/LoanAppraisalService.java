@@ -10,9 +10,12 @@ import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LoanAppraisalService implements ILoanAppraisalService {
 
     @Autowired

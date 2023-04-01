@@ -10,10 +10,12 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.impl.ChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SubLocationDetailService implements ISubLocationDetailService {
 
     private final ChangeDocumentService changeDocumentService;

@@ -9,11 +9,13 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.service.changedocs.impl.ChangeDocumentService;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OperatingParameterPLFService implements IOperatingParameterPLFService {
 
     private final LoanApplicationRepository loanApplicationRepository;

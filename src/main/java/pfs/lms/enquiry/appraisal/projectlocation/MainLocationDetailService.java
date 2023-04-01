@@ -9,9 +9,12 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MainLocationDetailService implements IMainLocationDetailService {
 
     private final LoanApplicationRepository loanApplicationRepository;

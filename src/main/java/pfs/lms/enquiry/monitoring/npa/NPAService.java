@@ -11,11 +11,13 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.impl.ChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class NPAService implements INPAService {
 
     private final NPARepository npaRepository;

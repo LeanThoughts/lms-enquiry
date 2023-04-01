@@ -13,11 +13,13 @@ import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LIAService implements ILIAService {
 
     private final LoanApplicationRepository loanApplicationRepository;

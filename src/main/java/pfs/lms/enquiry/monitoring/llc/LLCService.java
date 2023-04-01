@@ -13,11 +13,13 @@ import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LLCService implements ILLCService {
 
     private final LoanApplicationRepository loanApplicationRepository;
@@ -274,7 +276,7 @@ public class LLCService implements ILLCService {
                 llc,
                 "Deleted",
                 username,
-                moduleName, "\"Lenders Legal Counsel\"" );
+                moduleName, "Lenders Legal Counsel" );
 
 
         llcRepository.delete(llc);
