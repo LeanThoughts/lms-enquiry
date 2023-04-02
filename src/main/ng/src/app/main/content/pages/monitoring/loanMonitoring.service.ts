@@ -41,6 +41,27 @@ export class LoanMonitoringService implements Resolve<any> {
         return this.getLoanContractExtension(this._loanEnquiryService.selectedEnquiry.value.id);
     }
 
+    // All about End Use Certificate
+
+    public getEndUseCertificates(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/endUseCertificates/loanApplicationId/' + loanApplicationId);
+    }
+
+    public saveEndUseCertificate(endUseCertificate: any, loanApplicationId: any): Observable<any> {
+        const url = "enquiry/api/endUseCertificates/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'endUseCertificate':endUseCertificate });
+    }
+
+    public updateEndUseCertificate(endUseCertificate: any): Observable<any> {
+        const url = "enquiry/api/endUseCertificates/update";
+        return this._http.put(url, { 'loanApplicationId':'', 'endUseCertificate':endUseCertificate });
+    }
+
+    public deleteEndUseCertificate(endUseCertificate: any): Observable<any> {
+        const url = "enquiry/api/endUseCertificates/delete/" + endUseCertificate.id;
+        return this._http.delete(url);
+    }
+    
     // All about Insurance
 
     public getInsurances(loanApplicationId: string): Observable<any> {

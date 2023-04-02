@@ -1,0 +1,81 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addEndUseCertificate()"> 
+            Add End Use Certificate 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateEndUseCertificate()" [disabled]="!selectedEndUseCertificate">
+            Modify End Use Certificate 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteEndUseCertificate()" [disabled]="!selectedEndUseCertificate"> 
+            Delete End Use Certificate 
+        </button>
+    </div>
+    
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- eventDate Column -->
+            <ng-container matColumnDef="eventDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Event Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.eventDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- endUseCertificateDate Column -->
+            <ng-container matColumnDef="endUseCertificateDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Certificate Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.endUseCertificateDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- endUseCertificateDueDate Column -->
+            <ng-container matColumnDef="endUseCertificateDueDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Certificate Due Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.endUseCertificateDueDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentType Column -->
+            <ng-container matColumnDef="documentType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ getDocumentTypeDescription(obj.documentType) }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentTitle Column -->
+            <ng-container matColumnDef="documentTitle">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentTitle }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- download Column -->
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <a [href]="getFileURL(obj.fileReference)" *ngIf="obj.fileReference !== ''">Download</a>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+                [ngClass]="{'highlight':obj === selectedEndUseCertificate}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>

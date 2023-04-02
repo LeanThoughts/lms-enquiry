@@ -60,6 +60,6 @@ export class RiskEvaluationsOverviewComponent {
      * print()
      */
     print(): void {
-        (window as any).open('risk/api/riskModelPDF?id=' + this.selectedRow.riskEvalId, '_blank');
+        (window as any).open('enquiry/api/riskModelPDF?id=' + this.selectedRow.riskEvalId, '_blank');
     }
 }

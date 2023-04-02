@@ -74,6 +74,8 @@ import { InsuranceListComponent } from './insurance/insuranceList/insuranceList.
 import { InsuranceUpdateDialogComponent } from './insurance/insuranceUpdate/insuranceUpdate.component';
 import { LoanDocumentationListComponent } from './loanDocumentationList/loanDocumentationList.component';
 import { LoanDocumentationUpdateDialogComponent } from './loanDocumentationUpdate/loanDocumentationUpdate.component';
+import { EndUseCertificateListComponent } from './endUseCertificate/endUseCertificateList/endUseCertificateList.component';
+import { EndUseCertificateUpdateDialogComponent } from './endUseCertificate/endUseCertificateUpdate/endUseCertificateUpdate.component';
 
 const routes = [
     {
@@ -170,7 +172,9 @@ const routes = [
         LoanDocumentationListComponent,
         LoanDocumentationUpdateDialogComponent,
         InsuranceListComponent,
-        InsuranceUpdateDialogComponent
+        InsuranceUpdateDialogComponent,
+        EndUseCertificateListComponent,
+        EndUseCertificateUpdateDialogComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -284,7 +288,8 @@ const routes = [
         ProjectMonitoringDataItemHistoryComponent,
         LoanDocumentationListComponent,
         LoanDocumentationUpdateDialogComponent,
-        InsuranceUpdateDialogComponent
+        InsuranceUpdateDialogComponent,
+        EndUseCertificateUpdateDialogComponent
     ]
 })
 export class LoanMonitoringModule {
