@@ -12,8 +12,12 @@ import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
 import pfs.lms.enquiry.service.impl.PartnerService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.TreeSet;
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 @ApiController
 @RequiredArgsConstructor
 public class PartnerController {
@@ -107,6 +111,7 @@ public class PartnerController {
 
         Partner partner = partnerRepository.findByUserName(email);
 
+
         if (partner != null){
             return ResponseEntity.ok(partner);
 
@@ -134,6 +139,8 @@ public class PartnerController {
     public ResponseEntity getLendersInsuranceAdvisors(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getLendersInsuranceAdvisors();
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -146,6 +153,8 @@ public class PartnerController {
     public ResponseEntity getCommonLoanAgreements(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getLendersIndependentEngineers();
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -158,6 +167,8 @@ public class PartnerController {
     public ResponseEntity getValuers(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getValuers();
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -170,6 +181,8 @@ public class PartnerController {
     public ResponseEntity getLendersLegalCouncils(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getLendersLegalCounsels();
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -182,7 +195,9 @@ public class PartnerController {
     public ResponseEntity getLendersIndependentEngineers(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getLendersIndependentEngineers();
-        if (partners != null) {
+        partners = this.removeDuplicatesById(partners);
+
+            if (partners != null) {
             return ResponseEntity.ok(partners);
         }
         else {
@@ -194,6 +209,8 @@ public class PartnerController {
     public ResponseEntity getLendersFinancialAdvisors(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getLendersFinancialAdvisors();
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -206,6 +223,8 @@ public class PartnerController {
     public ResponseEntity getTRAAuthorizedPersons(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getTRAAuthorizedPersons();
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null) {
             return ResponseEntity.ok(partners);
         }
@@ -219,6 +238,8 @@ public class PartnerController {
                                                            HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getPartnersByRoleType(roleType);
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null)
             return ResponseEntity.ok(partners);
         else
@@ -230,6 +251,8 @@ public class PartnerController {
                                                            HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.findByPartyRole(roleType);
+        partners = this.removeDuplicatesById(partners);
+
         if (partners != null)
             return ResponseEntity.ok(partners);
         else
@@ -243,5 +266,14 @@ public class PartnerController {
 
         return  ResponseEntity.ok(partner);
     }
+
+    private List<Partner> removeDuplicatesById(List<Partner> partners) {
+
+        List<Partner> uniquePartners = partners.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Partner::getPartyNumber))),
+                        ArrayList::new));
+        return uniquePartners;
+    }
+
 
 }

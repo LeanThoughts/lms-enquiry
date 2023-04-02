@@ -12,9 +12,9 @@ import java.io.Serializable;
 import java.text.ParseException;
 
 @Component
-@JsonInclude (JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties (ignoreUnknown = true)
-public class SAPLIEResource implements Serializable   {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SAPLIEResource implements Serializable {
 
 
     public SAPLIEResource() {
@@ -34,10 +34,10 @@ public class SAPLIEResource implements Serializable   {
     }
 
     public SAPLIEResourceDetails
-                    mapToSAP(LendersIndependentEngineer lendersIndependentEngineer, User lastProcessedBy) throws ParseException {
-        DataConversionUtility dataConversionUtility =  new DataConversionUtility();
+    mapToSAP(LendersIndependentEngineer lendersIndependentEngineer, User lastProcessedBy) throws ParseException {
+        DataConversionUtility dataConversionUtility = new DataConversionUtility();
 
-       SAPLIEResourceDetails detailsResource= new SAPLIEResourceDetails();
+        SAPLIEResourceDetails detailsResource = new SAPLIEResourceDetails();
 
         detailsResource.setId(lendersIndependentEngineer.getId());
         detailsResource.setMonitorId(lendersIndependentEngineer.getLoanMonitor().getId().toString());
@@ -51,14 +51,14 @@ public class SAPLIEResource implements Serializable   {
         else
             detailsResource.setDateOfAppointment(null);
 
-        if (lendersIndependentEngineer.getContractPeriodTo() != null)
-        detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodTo()));
-        else
-            detailsResource.setContractPeriodTo(null);
-
-
         if (lendersIndependentEngineer.getContractPeriodFrom() != null)
-        detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodFrom()));
+            detailsResource.setContractPeriodFrom(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodFrom()));
+        else
+            detailsResource.setContractPeriodFrom(null);
+
+
+        if (lendersIndependentEngineer.getContractPeriodTo() != null)
+            detailsResource.setContractPeriodTo(dataConversionUtility.convertDateToSAPFormat(lendersIndependentEngineer.getContractPeriodTo()));
         else
             detailsResource.setContractPeriodTo(null);
 

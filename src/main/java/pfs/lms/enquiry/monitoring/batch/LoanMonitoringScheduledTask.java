@@ -1030,7 +1030,7 @@ public class LoanMonitoringScheduledTask {
                                 sapIntegrationPointer.getSubBusinessProcessName(),
                                 trustRetentionAccountStatement.getFileReference(),
                                 trustRetentionAccountStatement.getId(), "" +
-                                        "", "TRA Statement",
+                                        "", "TRA Account Statement",
                                 trustRetentionAccountStatement.getDocumentTitle(),
                                 trustRetentionAccountStatement.getDocumentType()
                         );
