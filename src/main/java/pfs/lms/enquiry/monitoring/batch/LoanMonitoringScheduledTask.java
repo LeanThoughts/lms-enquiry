@@ -11,6 +11,10 @@ import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancialsRepository;
 import pfs.lms.enquiry.monitoring.domain.*;
+import pfs.lms.enquiry.monitoring.endusecertificate.EndUseCertificate;
+import pfs.lms.enquiry.monitoring.endusecertificate.EndUseCertificateRepository;
+import pfs.lms.enquiry.monitoring.insurance.Insurance;
+import pfs.lms.enquiry.monitoring.insurance.InsuranceRepository;
 import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFee;
 import pfs.lms.enquiry.monitoring.lfa.LFAReportAndFeeRepository;
 import pfs.lms.enquiry.monitoring.lfa.LFARepository;
@@ -27,6 +31,8 @@ import pfs.lms.enquiry.monitoring.llc.LLCReportAndFee;
 import pfs.lms.enquiry.monitoring.llc.LLCReportAndFeeRepository;
 import pfs.lms.enquiry.monitoring.llc.LLCRepository;
 import pfs.lms.enquiry.monitoring.llc.LendersLegalCouncil;
+import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentation;
+import pfs.lms.enquiry.monitoring.loanDocumentation.LoanDocumentationRepository;
 import pfs.lms.enquiry.monitoring.npa.NPA;
 import pfs.lms.enquiry.monitoring.npa.NPADetail;
 import pfs.lms.enquiry.monitoring.npa.NPADetailRepository;
@@ -168,6 +174,15 @@ public class LoanMonitoringScheduledTask {
 
     private final SAPNPADetailResource sapnpaDetailResource;
     private final SAPNPAResource sapnpaResource;
+
+    private final InsuranceRepository insuranceRepository;
+    private final SAPInsuranceResource sapInsuranceResource;
+
+    private final LoanDocumentationRepository loanDocumentationRepository;
+    private final SAPLoanDocumentationResource sapLoanDocumentationResource;
+
+    private final EndUseCertificateRepository endUseCertificateRepository;
+    private final SAPEndUseCertificateResource sapEndUseCertificateResource;
 
     @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}", initialDelayString = "${batch.initialDelay}")
     public void syncLoanApplicationsToBackend() throws Exception {
@@ -1088,6 +1103,121 @@ public class LoanMonitoringScheduledTask {
                     serviceUri = monitorServiceUri + "NPASet";
                     response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
 
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+                case "Loan Documentation":
+                    LoanDocumentation loanDocumentation = new LoanDocumentation();
+
+                    Optional<LoanDocumentation> loanDocumentationOptional = loanDocumentationRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    loanDocumentation = loanDocumentationOptional.get();
+
+                    log.info("Attempting to Post Loan Documentation to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + loanDocumentation.getLoanMonitor().getLoanApplication().getLoanContractId());
+
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPLoanDocumentationResourceDetails sapLoanDocumentationResourceDetails = sapLoanDocumentationResource.mapToSAP(loanDocumentation);
+                    SAPLoanDocumentationResource sapLoanDocumentationResource1 = new SAPLoanDocumentationResource();
+                    sapLoanDocumentationResource1.setSAPNPAResourceDetails(sapLoanDocumentationResourceDetails);
+
+                    resource = (Object) sapLoanDocumentationResourceDetails;
+                    serviceUri = monitorServiceUri + "LoanDocumentationSet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    if (response != null) {
+                        if (loanDocumentation.getFileReference() != null && loanDocumentation.getFileReference().length() > 0) {
+                            response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
+                                    loanDocumentation.getFileReference(),
+                                    loanDocumentation.getId().toString(), "" +
+                                            "", "Loan Documentation",
+                                    loanDocumentation.getDocumentTitle(),
+                                    loanDocumentation.getDocumentType()
+                            );
+                        }
+                    }
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+                case "Insurance":
+                    Insurance insurance = new Insurance();
+
+                    Optional<Insurance> insuranceOptional = insuranceRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    insurance = insuranceOptional.get();
+
+                    log.info("Attempting to Post Insurance to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + insurance.getLoanMonitor().getLoanApplication().getLoanContractId());
+
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPInsuranceResourceDetails sapInsuranceResourceDetails = sapInsuranceResource.mapToSAP(insurance);
+                    SAPInsuranceResource sapInsuranceResource1 = new SAPInsuranceResource();
+                    sapInsuranceResource1.setSapInsuranceResourceDetails(sapInsuranceResourceDetails);
+
+
+
+                    resource = (Object) sapInsuranceResourceDetails;
+                    serviceUri = monitorServiceUri + "InsuranceSet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    if (response != null) {
+                        if (insurance.getFileReference() != null && insurance.getFileReference().length() > 0) {
+                            response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
+                                    insurance.getFileReference(),
+                                    insurance.getId().toString(), "" +
+                                            "", "Insurance",
+                                    insurance.getDocumentTitle(),
+                                    insurance.getDocumentType()
+                            );
+                        }
+                    }
+                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+                case "End Use Certificate":
+                    EndUseCertificate endUseCertificate = new EndUseCertificate();
+
+                    Optional<EndUseCertificate> endUseCertificateOptional = endUseCertificateRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    endUseCertificate = endUseCertificateOptional.get();
+
+                    log.info("Attempting to End Use Certificate to SAP AT :" + dateFormat.format(new Date())
+                            + "Loan Contract: " + endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId());
+
+
+                    //Set Status as in progress
+                    sapIntegrationPointer.setStatus(1); // In Posting Process
+                    sapIntegrationRepository.save(sapIntegrationPointer);
+
+                    SAPEndUseCertificateResourceDetails sapEndUseCertificateResourceDetails = sapEndUseCertificateResource.mapToSAP(endUseCertificate,lastChangedByUser);
+                    SAPEndUseCertificateResource sapEndUseCertificateResource = new SAPEndUseCertificateResource();
+                    sapEndUseCertificateResource.setSapEndUseCertificateResourceDetails(sapEndUseCertificateResourceDetails);
+
+
+
+                    resource = (Object) sapEndUseCertificateResourceDetails;
+                    serviceUri = monitorServiceUri + "EndUseCertificateSet";
+                    response = sapLoanMonitoringIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+
+                    if (response != null) {
+                        if (endUseCertificate.getFileReference() != null && endUseCertificate.getFileReference().length() > 0) {
+                            response = postDocument(
+                                    sapIntegrationPointer.getSubBusinessProcessName(),
+                                    endUseCertificate.getFileReference(),
+                                    endUseCertificate.getId().toString(), "" +
+                                            "", "End Use Certificate",
+                                    endUseCertificate.getDocumentTitle(),
+                                    endUseCertificate.getDocumentType()
+                            );
+                        }
+                    }
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 default:

@@ -44,16 +44,16 @@ public class EndUseCertificateService implements IEndUseCertificateService {
         endUseCertificate.setRemarks(resource.getEndUseCertificate().getRemarks());
         endUseCertificate = endUseCertificateRepository.save(endUseCertificate);
 
-        // Change Documents for Insurance Details
-//        changeDocumentService.createChangeDocument(
-//                endUseCertificate.getLoanMonitor().getId(),
-//                endUseCertificate.getId().toString(),null,
-//                endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                endUseCertificate,
-//                "Created",
-//                username,
-//                "Monitoring", "Insurance");
+        // Change Documents for End Use Certificate Details
+        changeDocumentService.createChangeDocument(
+                endUseCertificate.getLoanMonitor().getId(),
+                endUseCertificate.getId().toString(),null,
+                endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                endUseCertificate,
+                "Created",
+                username,
+                "Monitoring", "End Use Certificate");
 
         return endUseCertificate;
     }
@@ -76,17 +76,17 @@ public class EndUseCertificateService implements IEndUseCertificateService {
         endUseCertificate.setRemarks(resource.getEndUseCertificate().getRemarks());
         endUseCertificate = endUseCertificateRepository.save(endUseCertificate);
 
-        // Change Documents for Promoter Details
-//        changeDocumentService.createChangeDocument(
-//                endUseCertificate.getLoanMonitor().getId(),
-//                endUseCertificate.getId().toString(),
-//                null,
-//                endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldEndUseCertificate,
-//                endUseCertificate,
-//                "Updated",
-//                username,
-//                "Monitoring", "Insurance");
+        // Change Documents for End Use Certificate Details
+        changeDocumentService.createChangeDocument(
+                endUseCertificate.getLoanMonitor().getId(),
+                endUseCertificate.getId().toString(),
+                null,
+                endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldEndUseCertificate,
+                endUseCertificate,
+                "Updated",
+                username,
+                "Monitoring", "End Use Certificate");
 
         return endUseCertificate;
     }
@@ -102,21 +102,22 @@ public class EndUseCertificateService implements IEndUseCertificateService {
     public EndUseCertificate deleteEndUseCertificate(UUID endUseCertificateId, String username) {
         EndUseCertificate endUseCertificate = endUseCertificateRepository.getOne(endUseCertificateId);
         LoanMonitor loanMonitor = endUseCertificate.getLoanMonitor();
+
+
+        // Change Documents for End Use Certificate Delete
+        changeDocumentService.createChangeDocument(
+                endUseCertificate.getLoanMonitor().getId(),
+                endUseCertificate.getId().toString(),
+                endUseCertificate.getLoanMonitor().getId().toString(),
+                endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                endUseCertificate,
+                "Deleted",
+                username,
+                "Monitoring", "End Use Certificate");
+
         endUseCertificateRepository.delete(endUseCertificate);
         updateSerialNumbers(loanMonitor);
-
-        // Change Documents for  NPA Detail Delete
-//        changeDocumentService.createChangeDocument(
-//                endUseCertificate.getLoanMonitor().getId(),
-//                endUseCertificate.getId().toString(),
-//                endUseCertificate.getLoanMonitor().getId().toString(),
-//                endUseCertificate.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                endUseCertificate,
-//                "Deleted",
-//                username,
-//                "Monitoring", "Insurance");
-
         return endUseCertificate;
     }
 

@@ -11,23 +11,23 @@
         <form [formGroup]="endUseCertificateUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker1" placeholder="Event Date" formControlName="eventDate" readonly>
+                    <input matInput [matDatepicker]="picker1" placeholder="Event Date" formControlName="eventDate" readonly required>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1 [disabled]="!allowUpdates"></mat-datepicker> 
+                    <mat-datepicker #picker1 [disabled]="!allowUpdates"></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date by which End use Cert is required" 
+                    <input matInput [matDatepicker]="picker2" placeholder="Date by which End use Cert is required"
                             formControlName="endUseCertificateDueDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2 [disabled]="!allowUpdates"></mat-datepicker> 
+                    <mat-datepicker #picker2 [disabled]="!allowUpdates"></mat-datepicker>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker3" placeholder="Date of End use certificate" 
+                    <input matInput [matDatepicker]="picker3" placeholder="Date of End use certificate"
                             formControlName="endUseCertificateDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3 [disabled]="!allowUpdates"></mat-datepicker> 
+                    <mat-datepicker #picker3 [disabled]="!allowUpdates"></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Document Type" formControlName="documentType" required>
@@ -40,7 +40,7 @@
             </div>
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Document Title" maxlength="20" formControlName="documentTitle">          
+                    <input matInput placeholder="Document Title" maxlength="20" formControlName="documentTitle">
                 </mat-form-field>
                 <div fxLayout="column" fxFlex="50">
                     <div fxLayout="row">
@@ -58,7 +58,7 @@
             </div>
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Remarks" maxlength="100" formControlName="remarks">          
+                    <input matInput placeholder="Remarks" maxlength="100" formControlName="remarks">
                 </mat-form-field>
             </div>
 

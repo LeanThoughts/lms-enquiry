@@ -23,13 +23,13 @@ public class SAPInsuranceResource implements Serializable   {
     @JsonProperty(value = "d")
     private SAPInsuranceResourceDetails sapInsuranceResourceDetails;
 
-    public SAPInsuranceResourceDetails getSAPNPAResourceDetails() {
+    public SAPInsuranceResourceDetails getSapInsuranceResourceDetails() {
         return sapInsuranceResourceDetails;
     }
 
 
 
-    public void setSAPNPAResourceDetails(SAPInsuranceResourceDetails sapInsuranceResourceDetails) {
+    public void setSapInsuranceResourceDetails(SAPInsuranceResourceDetails sapInsuranceResourceDetails) {
         this.sapInsuranceResourceDetails = sapInsuranceResourceDetails;
     }
 
