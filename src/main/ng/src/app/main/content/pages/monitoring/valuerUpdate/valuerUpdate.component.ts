@@ -26,6 +26,9 @@ export class ValuerUpdateDialogComponent implements OnInit {
     partners: PartnerModel[] = new Array();
 
     allowUpdates: boolean = true;
+    allowBusinessPartnerUpdates = true;
+
+    valuerList: any;
 
     /**
      * constructor()
@@ -45,9 +48,11 @@ export class ValuerUpdateDialogComponent implements OnInit {
             if (_dialogData.operation === 'displayValuer') {
                 this.dialogTitle = 'View Valuer Details';
                 this.allowUpdates = false;
+                this.allowBusinessPartnerUpdates = false;
             }
             else {
                 this.dialogTitle = 'Modify Valuer';
+                this.allowBusinessPartnerUpdates = false;
             }
         }
         else {
@@ -59,6 +64,10 @@ export class ValuerUpdateDialogComponent implements OnInit {
                 this.partners.push(new PartnerModel(element));
             });
         })
+
+        this._loanMonitoringService.getValuers(this._dialogData.loanApplicationId).subscribe(data => {
+            this.valuerList = data;
+        });
     }
 
     /**
@@ -82,35 +91,42 @@ export class ValuerUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.valuerUpdateForm.valid) {
-            // To solve the utc time zone issue
             var valuer: LIEModel = new LIEModel(this.valuerUpdateForm.value);
-            var dt = new Date(valuer.dateOfAppointment);
-            valuer.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(valuer.contractPeriodFrom);
-            valuer.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(valuer.contractPeriodTo);
-            valuer.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            const filteredList = this.valuerList.filter(obj => obj.valuer.bpCode  === valuer.bpCode);
+            if (filteredList.length == 0) {
+                // To solve the utc time zone issue
+                var dt = new Date(valuer.dateOfAppointment);
+                valuer.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(valuer.contractPeriodFrom);
+                valuer.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(valuer.contractPeriodTo);
+                valuer.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addValuer') {
-                this._loanMonitoringService.saveValuer(valuer, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('Valuer added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+                if (this._dialogData.operation === 'addValuer') {
+                    this._loanMonitoringService.saveValuer(valuer, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('Valuer added successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
+                }
+                else {
+                    this.selectedValuer.bpCode  = valuer.bpCode;
+                    this.selectedValuer.name = valuer.name;
+                    this.selectedValuer.dateOfAppointment = valuer.dateOfAppointment;
+                    this.selectedValuer.contactPerson = valuer.contactPerson;
+                    this.selectedValuer.contractPeriodFrom = valuer.contractPeriodFrom;
+                    this.selectedValuer.contractPeriodTo = valuer.contractPeriodTo;
+                    this.selectedValuer.contactNumber = valuer.contactNumber;
+                    this.selectedValuer.email = valuer.email;
+
+                    this._loanMonitoringService.updateValuer(this.selectedValuer, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('Valuer updated successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });            
+                }
             }
             else {
-                this.selectedValuer.bpCode  = valuer.bpCode;
-                this.selectedValuer.name = valuer.name;
-                this.selectedValuer.dateOfAppointment = valuer.dateOfAppointment;
-                this.selectedValuer.contactPerson = valuer.contactPerson;
-                this.selectedValuer.contractPeriodFrom = valuer.contractPeriodFrom;
-                this.selectedValuer.contractPeriodTo = valuer.contractPeriodTo;
-                this.selectedValuer.contactNumber = valuer.contactNumber;
-                this.selectedValuer.email = valuer.email;
-
-                this._loanMonitoringService.updateValuer(this.selectedValuer, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('Valuer updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });            
+                this._matSnackBar.open('Business partner ' + valuer.bpCode + ' is already in the list. Please select a different business partner.', 
+                        'OK', { duration: 7000 });
             }
         }
     }

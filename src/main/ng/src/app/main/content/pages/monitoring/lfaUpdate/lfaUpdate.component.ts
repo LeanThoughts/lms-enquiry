@@ -25,15 +25,13 @@ export class LFAUpdateDialogComponent implements OnInit {
     //businessPartnerRoles = LoanMonitoringConstants.businessPartnerRoles;
     partners: PartnerModel[] = new Array();
     
-    allowUpdates: boolean = true;
+    allowUpdates = true;
+    allowBusinessPartnerUpdates = true;
+
+    lfaList: any;
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _loanMonitoringService 
-     * @param _dialogRef 
-     * @param _dialogData 
-     * @param _matSnackBar 
      */
     constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LFAUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
@@ -45,9 +43,11 @@ export class LFAUpdateDialogComponent implements OnInit {
             if (_dialogData.operation === 'displayLFA') {
                 this.dialogTitle = 'View LFA Details';
                 this.allowUpdates = false;
+                this.allowBusinessPartnerUpdates = false;
             }
             else {
                 this.dialogTitle = 'Modify LFA';
+                this.allowBusinessPartnerUpdates = false;
             }
         }
         else {
@@ -58,7 +58,11 @@ export class LFAUpdateDialogComponent implements OnInit {
             response.forEach(element => {
                 this.partners.push(new PartnerModel(element));
             });
-        })   
+        })
+
+        this._loanMonitoringService.getLendersFinancialAdvisors(this._dialogData.loanApplicationId).subscribe(data => {
+            this.lfaList = data;
+        });
     }
 
     /**
@@ -82,34 +86,41 @@ export class LFAUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.lfaUpdateForm.valid) {
-            // To solve the utc time zone issue
             var lfa: LFAModel = new LFAModel(this.lfaUpdateForm.value);
-            var dt = new Date(lfa.dateOfAppointment);
-            lfa.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(lfa.contractPeriodFrom);
-            lfa.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(lfa.contractPeriodTo);
-            lfa.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            const filteredList = this.lfaList.filter(obj => obj.lendersFinancialAdvisor.bpCode  === lfa.bpCode);
+            if (filteredList.length == 0) {
+                // To solve the utc time zone issue
+                var dt = new Date(lfa.dateOfAppointment);
+                lfa.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(lfa.contractPeriodFrom);
+                lfa.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(lfa.contractPeriodTo);
+                lfa.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addLFA') {
-                this._loanMonitoringService.saveLFA(lfa, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('LFA added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+                if (this._dialogData.operation === 'addLFA') {
+                    this._loanMonitoringService.saveLFA(lfa, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('LFA added successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
+                }
+                else {
+                    this.selectedLFA.bpCode  = lfa.bpCode;
+                    this.selectedLFA.name = lfa.name;
+                    this.selectedLFA.dateOfAppointment = lfa.dateOfAppointment;
+                    this.selectedLFA.contactPerson = lfa.contactPerson;
+                    this.selectedLFA.contractPeriodFrom = lfa.contractPeriodFrom;
+                    this.selectedLFA.contractPeriodTo = lfa.contractPeriodTo;
+                    this.selectedLFA.contactNumber = lfa.contactNumber;
+                    this.selectedLFA.email = lfa.email;
+                    this._loanMonitoringService.updateLFA(this.selectedLFA, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('LFA updated successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });            
+                }
             }
             else {
-                this.selectedLFA.bpCode  = lfa.bpCode;
-                this.selectedLFA.name = lfa.name;
-                this.selectedLFA.dateOfAppointment = lfa.dateOfAppointment;
-                this.selectedLFA.contactPerson = lfa.contactPerson;
-                this.selectedLFA.contractPeriodFrom = lfa.contractPeriodFrom;
-                this.selectedLFA.contractPeriodTo = lfa.contractPeriodTo;
-                this.selectedLFA.contactNumber = lfa.contactNumber;
-                this.selectedLFA.email = lfa.email;
-                this._loanMonitoringService.updateLFA(this.selectedLFA, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('LFA updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });            
+                this._matSnackBar.open('Business partner ' + lfa.bpCode + ' is already in the list. Please select a different business partner.', 
+                        'OK', { duration: 7000 });
             }
         }
     }

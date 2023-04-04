@@ -26,6 +26,9 @@ export class LIAUpdateDialogComponent implements OnInit {
     partners: PartnerModel[] = new Array();
 
     allowUpdates: boolean = true;
+    allowBusinessPartnerUpdates = true;
+
+    liaList: any;
 
     /**
      * constructor()
@@ -45,9 +48,11 @@ export class LIAUpdateDialogComponent implements OnInit {
             if (_dialogData.operation === 'displayLIA') {
                 this.dialogTitle = 'View LIA Details';
                 this.allowUpdates = false;
+                this.allowBusinessPartnerUpdates = false;
             }
             else {
                 this.dialogTitle = 'Modify LIA';
+                this.allowBusinessPartnerUpdates = false;
             }
         }
         else {
@@ -59,6 +64,10 @@ export class LIAUpdateDialogComponent implements OnInit {
                 this.partners.push(new PartnerModel(element));
             });
         })
+
+        this._loanMonitoringService.getLendersInsuranceAdvisors(this._dialogData.loanApplicationId).subscribe(data => {
+            this.liaList = data;
+        });
     }
 
     /**
@@ -82,35 +91,42 @@ export class LIAUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.liaUpdateForm.valid) {
-            // To solve the utc time zone issue
             var lia: LIEModel = new LIEModel(this.liaUpdateForm.value);
-            var dt = new Date(lia.dateOfAppointment);
-            lia.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(lia.contractPeriodFrom);
-            lia.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(lia.contractPeriodTo);
-            lia.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            const filteredList = this.liaList.filter(obj => obj.lendersInsuranceAdvisor.bpCode  === lia.bpCode);
+            if (filteredList.length == 0) {
+                // To solve the utc time zone issue
+                var dt = new Date(lia.dateOfAppointment);
+                lia.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(lia.contractPeriodFrom);
+                lia.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(lia.contractPeriodTo);
+                lia.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addLIA') {
-                this._loanMonitoringService.saveLIA(lia, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('LIA added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+                if (this._dialogData.operation === 'addLIA') {
+                    this._loanMonitoringService.saveLIA(lia, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('LIA added successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
+                }
+                else {
+                    this.selectedLIA.bpCode  = lia.bpCode;
+                    this.selectedLIA.name = lia.name;
+                    this.selectedLIA.dateOfAppointment = lia.dateOfAppointment;
+                    this.selectedLIA.contactPerson = lia.contactPerson;
+                    this.selectedLIA.contractPeriodFrom = lia.contractPeriodFrom;
+                    this.selectedLIA.contractPeriodTo = lia.contractPeriodTo;
+                    this.selectedLIA.contactNumber = lia.contactNumber;
+                    this.selectedLIA.email = lia.email;
+
+                    this._loanMonitoringService.updateLIA(this.selectedLIA, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('LIA updated successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });            
+                }
             }
             else {
-                this.selectedLIA.bpCode  = lia.bpCode;
-                this.selectedLIA.name = lia.name;
-                this.selectedLIA.dateOfAppointment = lia.dateOfAppointment;
-                this.selectedLIA.contactPerson = lia.contactPerson;
-                this.selectedLIA.contractPeriodFrom = lia.contractPeriodFrom;
-                this.selectedLIA.contractPeriodTo = lia.contractPeriodTo;
-                this.selectedLIA.contactNumber = lia.contactNumber;
-                this.selectedLIA.email = lia.email;
-
-                this._loanMonitoringService.updateLIA(this.selectedLIA, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('LIA updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });            
+                this._matSnackBar.open('Business partner ' + lia.bpCode + ' is already in the list. Please select a different business partner.', 
+                        'OK', { duration: 7000 });
             }
         }
     }

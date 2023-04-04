@@ -26,6 +26,9 @@ export class LLCUpdateDialogComponent implements OnInit {
     partners: PartnerModel[] = new Array();
 
     allowUpdates: boolean = true;
+    allowBusinessPartnerUpdates = true;
+
+    llcList: any;
 
     /**
      * constructor()
@@ -45,9 +48,11 @@ export class LLCUpdateDialogComponent implements OnInit {
             if (_dialogData.operation === 'displayLLC') {
                 this.dialogTitle = 'View LLC Details';
                 this.allowUpdates = false;
+                this.allowBusinessPartnerUpdates = false;
             }
             else {
                 this.dialogTitle = 'Modify LLC';
+                this.allowBusinessPartnerUpdates = false;
             }
         }
         else {
@@ -59,6 +64,10 @@ export class LLCUpdateDialogComponent implements OnInit {
                 this.partners.push(new PartnerModel(element));
             });
         })
+
+        this._loanMonitoringService.getLendersLegalCouncils(this._dialogData.loanApplicationId).subscribe(data => {
+            this.llcList = data;
+        });
     }
 
     /**
@@ -82,35 +91,42 @@ export class LLCUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.llcUpdateForm.valid) {
-            // To solve the utc time zone issue
             var llc: LIEModel = new LIEModel(this.llcUpdateForm.value);
-            var dt = new Date(llc.dateOfAppointment);
-            llc.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(llc.contractPeriodFrom);
-            llc.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            dt = new Date(llc.contractPeriodTo);
-            llc.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            const filteredList = this.llcList.filter(obj => obj.lendersLegalCouncil.bpCode  === llc.bpCode);
+            if (filteredList.length == 0) {
+                // To solve the utc time zone issue
+                var dt = new Date(llc.dateOfAppointment);
+                llc.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(llc.contractPeriodFrom);
+                llc.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+                dt = new Date(llc.contractPeriodTo);
+                llc.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addLLC') {
-                this._loanMonitoringService.saveLLC(llc, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('LLC added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
+                if (this._dialogData.operation === 'addLLC') {
+                    this._loanMonitoringService.saveLLC(llc, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('LLC added successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
+                }
+                else {
+                    this.selectedLLC.bpCode  = llc.bpCode;
+                    this.selectedLLC.name = llc.name;
+                    this.selectedLLC.dateOfAppointment = llc.dateOfAppointment;
+                    this.selectedLLC.contactPerson = llc.contactPerson;
+                    this.selectedLLC.contractPeriodFrom = llc.contractPeriodFrom;
+                    this.selectedLLC.contractPeriodTo = llc.contractPeriodTo;
+                    this.selectedLLC.contactNumber = llc.contactNumber;
+                    this.selectedLLC.email = llc.email;
+
+                    this._loanMonitoringService.updateLLC(this.selectedLLC, this._dialogData.module).subscribe(() => {
+                        this._matSnackBar.open('LLC updated successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });            
+                }
             }
             else {
-                this.selectedLLC.bpCode  = llc.bpCode;
-                this.selectedLLC.name = llc.name;
-                this.selectedLLC.dateOfAppointment = llc.dateOfAppointment;
-                this.selectedLLC.contactPerson = llc.contactPerson;
-                this.selectedLLC.contractPeriodFrom = llc.contractPeriodFrom;
-                this.selectedLLC.contractPeriodTo = llc.contractPeriodTo;
-                this.selectedLLC.contactNumber = llc.contactNumber;
-                this.selectedLLC.email = llc.email;
-
-                this._loanMonitoringService.updateLLC(this.selectedLLC, this._dialogData.module).subscribe(() => {
-                    this._matSnackBar.open('LLC updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });            
+                this._matSnackBar.open('Business partner ' + llc.bpCode + ' is already in the list. Please select a different business partner.', 
+                        'OK', { duration: 7000 });
             }
         }
     }

@@ -95,6 +95,9 @@ export class EndUseCertificateUpdateDialogComponent implements OnInit {
         }
     }
 
+    /**
+     * saveEndUseCertificateDetails()
+     */
     saveEndUseCertificateDetails(fileReference: string) {
         if (this.endUseCertificateUpdateForm.valid) {
 

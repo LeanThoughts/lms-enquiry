@@ -11,7 +11,7 @@
         <form [formGroup]="valuerUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Bus. Partner Id" formControlName="bpCode" required [disabled]="!allowUpdates">
+                    <mat-select placeholder="Bus. Partner Id" formControlName="bpCode" required [disabled]="!allowBusinessPartnerUpdates">
                         <mat-option *ngFor="let partner of partners" [value]="partner.partyNumber" (click)="onPartnerSelect(partner)">
                           {{ getPartyNumberAndName(partner) }}
                         </mat-option>
@@ -36,7 +36,7 @@
                     <mat-datepicker #picker3 [disabled]="!allowUpdates"></mat-datepicker> 
                 </mat-form-field>
             </div>
-            <div fxLayout="row" class="mt-16">
+            <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker1" placeholder="Date of Appointment" formControlName="dateOfAppointment" 
                             [matDatepickerFilter]="dateOfAppointmentFilter" readonly>
@@ -62,7 +62,7 @@
                   </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row" *ngIf="allowUpdates">
+            <div mat-dialog-actions fxLayout="row" *ngIf="allowUpdates" class="mb-8">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>
