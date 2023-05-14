@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -34,16 +33,19 @@ public class UploadController {
     public @ResponseBody
     FileReference handleFileUpload(@RequestParam(value = "file") MultipartFile file) throws Exception {
         UUID filePointer = null;
+//        if (!file.isEmpty()) {
+//            try {
+//                filePointer = storage.saveFile(file);
+//                return new FileReference(filePointer.toString());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
         if (!file.isEmpty()) {
-            try {
-                filePointer = storage.saveFile(file);
-                return new FileReference(filePointer.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            filePointer = storage.saveFile(file);
+            return new FileReference(filePointer.toString());
         }
-
-            return null;
+        return null;
 
     }
 

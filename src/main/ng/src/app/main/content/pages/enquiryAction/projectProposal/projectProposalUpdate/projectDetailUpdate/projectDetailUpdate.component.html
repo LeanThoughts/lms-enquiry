@@ -7,8 +7,8 @@
 
     <form [formGroup]="_projectDetailForm">
         <!-- -->
-        <div fxLayout="row">
-            <p fxFlex="100"><b>Project Details</b></p>
+        <div >
+            <p ><b>Project Details</b></p>
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="33">
@@ -23,8 +23,8 @@
         </div>
 
         <!---->
-        <div fxLayout="row">
-            <p fxFlex="100"><b>Brief Project Summary</b></p>
+        <div >
+            <p ><b>Brief Project Summary</b></p>
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="100">
@@ -32,10 +32,10 @@
             </mat-form-field>
         </div>
         <div fxLayout="row">
-            <mat-form-field fxFlex="33">
+            <mat-form-field fxFlex="25">
                 <input matInput placeholder="Project Capacity" formControlName="projectCapacity" maxlength="10" >
             </mat-form-field>
-            <mat-form-field fxFlex="34">
+            <mat-form-field fxFlex="25">
                 <mat-select placeholder="Project Capacity unit" formControlName="projectCapacityUnit">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let unitOfMeasure of unitOfMeasures" [value]="unitOfMeasure.code">
@@ -43,9 +43,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-        </div>
-        <div fxLayout="row">
-            <mat-form-field fxFlex="50">
+            <mat-form-field fxFlex="25">
                 <mat-select placeholder="Project Location - State" formControlName="state">
                     <mat-option> </mat-option>
                     <mat-option *ngFor="let state of states" [value]="state.code">
@@ -53,14 +51,14 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="50">
+            <mat-form-field fxFlex="25">
                 <input matInput placeholder="Project District" formControlName="district" maxlength="100">
             </mat-form-field>
         </div>
 
         <!-- -->
-        <div fxLayout="row">
-            <p fxFlex="100"><b>Loan Type, Amounts and Interest Rate</b></p>
+        <div >
+            <p ><b>Loan Type, Amounts and Interest Rate</b></p>
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
@@ -142,8 +140,8 @@
     </form>
 
     <!-- -->
-    <div fxLayout="row">
-        <p fxFlex="100"><b>Rating</b></p>
+    <div>
+        <p ><b>Rating</b></p>
     </div>
     
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">

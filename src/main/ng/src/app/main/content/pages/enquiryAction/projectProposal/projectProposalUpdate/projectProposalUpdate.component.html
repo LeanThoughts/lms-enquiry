@@ -17,38 +17,36 @@
             </mat-expansion-panel-header>
             <form [formGroup]="projectProposalForm">
                 <div fxLayout="row">
-                    <mat-form-field fxFlex="33">
+                    <mat-form-field fxFlex="25">
                         <input matInput placeholder="Loan Enquiry Id" formControlName="loanEnquiryNumber" readonly>
                     </mat-form-field>
-                    <mat-form-field fxFlex="34">
+                    <mat-form-field fxFlex="25">
                         <input matInput [matDatepicker]="picker2" placeholder="Date of Proposal" formControlName="proposalFormSharingDate">
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker> 
                     </mat-form-field>
-                    <mat-form-field fxFlex="33">
+                    <mat-form-field fxFlex="25">
                         <mat-select placeholder="Status" formControlName="proposalStatus" required>
                             <mat-option [value]="'Final'">Final</mat-option>
                             <mat-option [value]="'Draft'">Draft</mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
-                <div fxLayout="row">
-                    <mat-form-field fxFlex="33">
+                    <mat-form-field fxFlex="25">
                         <input matInput placeholder="Document Name" formControlName="documentName">
                     </mat-form-field>
-                    <mat-form-field fxFlex="34">
+                </div>
+                <div fxLayout="row">
+                    <mat-form-field fxFlex="25">
                         <mat-select placeholder="Document Type" formControlName="documentType" required>
                             <mat-option [value]="'0'">PDF</mat-option>
                             <mat-option [value]="'1'">JPEG</mat-option>
                             <mat-option [value]="'2'">Others</mat-option>
                         </mat-select>
                     </mat-form-field>                
-                    <mat-form-field fxFlex="33">
+                    <mat-form-field fxFlex="25">
                         <input matInput placeholder="Document Version" formControlName="documentVersion">
                     </mat-form-field>
-                </div>
-                <div fxLayout="row">
-                    <div fxFlex="33">
+                    <div fxFlex="25">
                         <div fxLayout="column">
                             <label for="document">Upload Document (PDF)</label>
                             <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
@@ -59,12 +57,14 @@
                             <mat-icon>cloud_download</mat-icon>
                         </a>
                     </div> -->
-                    <mat-form-field fxFlex="34">
-                        <input matInput placeholder="Additional Details" formControlName="additionalDetails">
-                    </mat-form-field>
-                    <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()" style="height:fit-content; margin: 10px;">
-                        Submit
-                    </button>
+                    <div fxFlex="25" fxLayout="row">
+                        <mat-form-field fxFlex="75">
+                            <input matInput placeholder="Additional Details" formControlName="additionalDetails">
+                        </mat-form-field>
+                        <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()" style="height:fit-content; margin: 10px;">
+                            Submit
+                        </button>
+                    </div>
                 </div>
             </form>
         </mat-expansion-panel>
