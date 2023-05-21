@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface MainLocationDetailRepository extends JpaRepository<MainLocationDetail, UUID> {
 
     Optional<MainLocationDetail> findByLoanAppraisalId(UUID loanAppraisalId);
+
 }

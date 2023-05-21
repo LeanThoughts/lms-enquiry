@@ -10,6 +10,10 @@ import pfs.lms.enquiry.appraisal.loanpartner.ILoanPartnerService;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerResource;
+import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
+import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetailRepository;
+import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
+import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetailRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
@@ -24,10 +28,10 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -47,6 +51,8 @@ public class LoanApplicationService implements ILoanApplicationService {
     private final IChangeDocumentService changeDocumentService;
     private final LoanMonitorRepository loanMonitorRepository;
     private final LoanAppraisalRepository loanAppraisalRepository;
+    private final MainLocationDetailRepository mainLocationDetailRepository;
+    private final SubLocationDetailRepository subLocationDetailRepository;
 
     @Override
     public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException {
@@ -448,12 +454,85 @@ public class LoanApplicationService implements ILoanApplicationService {
 
         }
 
-
-
-
+        if (resource.getMainLocationDetail() != null) {
+            log.info("Migrating Main Location : " +resource.getMainLocationDetail().getLocation());
+            this.migrateMainLocation(resource.getMainLocationDetail(), loanAppraisal);
+        }
+        if (resource.getSubLocationDetailList() != null) {
+            log.info("Migrating Sub Location : " +resource.getMainLocationDetail().getLocation());
+            this.migrateSubLocation(resource.getSubLocationDetailList(), loanAppraisal);
+        }
         return loanApplication;
     }
 
+@Override
+    public MainLocationDetail migrateMainLocation( MainLocationDetail mainLocationDetail, LoanAppraisal loanAppraisal) {
+
+        MainLocationDetail existingMainLocationDetail = new MainLocationDetail();
+        // Find Main Location for Loan
+        Optional<MainLocationDetail> existingMainLocationDetailOptional
+                = mainLocationDetailRepository.findByLoanAppraisalId(loanAppraisal.getId());
+
+        if (existingMainLocationDetailOptional != null)
+            existingMainLocationDetail = existingMainLocationDetailOptional.get();
+
+        if (existingMainLocationDetail.getId() != null) {
+            log.info("Updating Main Location : "  + mainLocationDetail.getLocation());
+
+            existingMainLocationDetail.setLocation(mainLocationDetail.getLocation());
+            existingMainLocationDetail.setState(mainLocationDetail.getState());
+            existingMainLocationDetail.setDistrict(mainLocationDetail.getDistrict());
+            existingMainLocationDetail.setRegion(mainLocationDetail.getRegion());
+            existingMainLocationDetail.setNearestVillage(mainLocationDetail.getNearestVillage());
+            existingMainLocationDetail.setNearestVillageDistance(mainLocationDetail.getNearestVillageDistance());
+            existingMainLocationDetail.setNearestRailwayStation(mainLocationDetail.getNearestRailwayStation());
+            existingMainLocationDetail.setNearestRailwayStationDistance(mainLocationDetail.getNearestRailwayStationDistance());
+            existingMainLocationDetail.setNearestAirport(mainLocationDetail.getNearestAirport());
+            existingMainLocationDetail.setNearestAirportDistance(mainLocationDetail.getNearestAirportDistance());
+            existingMainLocationDetail.setNearestSeaport(mainLocationDetail.getNearestSeaport());
+            existingMainLocationDetail.setNearestSeaportDistance(mainLocationDetail.getNearestSeaportDistance());
+            existingMainLocationDetail.setNearestFunctionalAirport(mainLocationDetail.getNearestFunctionalAirport());
+            existingMainLocationDetail.setNearestFunctionalAirportDistance(mainLocationDetail.getNearestFunctionalAirportDistance());
+
+            mainLocationDetailRepository.save(existingMainLocationDetail);
+            return existingMainLocationDetail;
+        }
+
+        log.info("Creating Main Location : "  + mainLocationDetail.getLocation());
+        mainLocationDetail.setLoanAppraisal(loanAppraisal);
+        mainLocationDetailRepository.save(mainLocationDetail);
+        return mainLocationDetail;
+
+    }
+
+    @Override
+    public List<SubLocationDetail> migrateSubLocation(List<SubLocationDetail> subLocationDetailList, LoanAppraisal loanAppraisal) {
+        for (SubLocationDetail subLocationDetail :subLocationDetailList ) {
+            SubLocationDetail existingSubLocation = subLocationDetailRepository.findByLoanAppraisalIdAndSerialNumber(loanAppraisal.getId(), subLocationDetail.getSerialNumber());
+            if (existingSubLocation != null) {
+                existingSubLocation.setLocation(subLocationDetail.getLocation());
+                existingSubLocation.setState(subLocationDetail.getState());
+                existingSubLocation.setDistrict(subLocationDetail.getDistrict());
+                existingSubLocation.setRegion(subLocationDetail.getRegion());
+                existingSubLocation.setNearestVillage(subLocationDetail.getNearestVillage());
+                existingSubLocation.setNearestVillageDistance(subLocationDetail.getNearestVillageDistance());
+                existingSubLocation.setNearestRailwayStation(subLocationDetail.getNearestRailwayStation());
+                existingSubLocation.setNearestRailwayStationDistance(subLocationDetail.getNearestRailwayStationDistance());
+                existingSubLocation.setNearestAirport(subLocationDetail.getNearestAirport());
+                existingSubLocation.setNearestAirportDistance(subLocationDetail.getNearestAirportDistance());
+                existingSubLocation.setNearestSeaport(subLocationDetail.getNearestSeaport());
+                existingSubLocation.setNearestSeaportDistance(subLocationDetail.getNearestSeaportDistance());
+                existingSubLocation.setNearestFunctionalAirport(subLocationDetail.getNearestFunctionalAirport());
+                existingSubLocation.setNearestFunctionalAirportDistance(subLocationDetail.getNearestFunctionalAirportDistance());
+                subLocationDetailRepository.save(existingSubLocation);
+            }
+            existingSubLocation.setLoanAppraisal(loanAppraisal);
+            subLocationDetailRepository.save(subLocationDetail);
+        }
+
+
+        return null;
+    }
 
     @Override
     public LoanApplication migrateUpdate(LoanApplication loanApplication, Partner partner, String username) {

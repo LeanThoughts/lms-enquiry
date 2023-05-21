@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
+import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
+import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.LoanContractExtension;
 import pfs.lms.enquiry.domain.Partner;
@@ -21,4 +23,6 @@ public class LoanMigrationResource {
     private Partner partner; //Main Loan Partner (TR0100)
     private LoanContractExtension loanContractExtension;
     private List<LoanPartner> loanPartners;
+    private MainLocationDetail mainLocationDetail;
+    private List<SubLocationDetail> subLocationDetailList;
 }

@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface SubLocationDetailRepository extends JpaRepository<SubLocationDetail, UUID> {
 
     List<SubLocationDetail> findByLoanAppraisalId(UUID loanAppraisalId);
+    SubLocationDetail findByLoanAppraisalIdAndSerialNumber(UUID loanAppraisalId, Integer serialNumber);
 }
