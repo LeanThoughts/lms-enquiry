@@ -28,15 +28,15 @@ public class SubLocationDetail extends AggregateRoot<SubLocationDetail> implemen
     private String district;
     private String region;
     private String nearestVillage;
-    private Integer nearestVillageDistance;
+    private Double nearestVillageDistance;
     private String nearestRailwayStation;
-    private Integer nearestRailwayStationDistance;
+    private Double nearestRailwayStationDistance;
     private String nearestAirport;
-    private Integer nearestAirportDistance;
+    private Double nearestAirportDistance;
     private String nearestSeaport;
-    private Integer nearestSeaportDistance;
+    private Double nearestSeaportDistance;
     private String nearestFunctionalAirport;
-    private Integer nearestFunctionalAirportDistance;
+    private Double nearestFunctionalAirportDistance;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
