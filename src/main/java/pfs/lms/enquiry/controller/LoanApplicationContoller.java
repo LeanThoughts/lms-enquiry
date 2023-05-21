@@ -224,6 +224,8 @@ public class LoanApplicationContoller {
         LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
         loanApplicationResource.setLoanApplication(resource.getLoanApplication());
         loanApplicationResource.setPartner(resource.getPartner());
+        loanApplicationResource.setMainLocationDetail(resource.getMainLocationDetail());
+        loanApplicationResource.setSubLocationDetailList(resource.getSubLocationDetailList());
         LoanApplication loanApplication = loanApplicationService.migrate(loanApplicationResource, request.getUserPrincipal().getName());
 
 
