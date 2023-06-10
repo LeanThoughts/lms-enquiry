@@ -18,6 +18,10 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
+import pfs.lms.enquiry.monitoring.npa.NPA;
+import pfs.lms.enquiry.monitoring.npa.NPADetail;
+import pfs.lms.enquiry.monitoring.npa.NPADetailRepository;
+import pfs.lms.enquiry.monitoring.npa.NPARepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
@@ -53,6 +57,8 @@ public class LoanApplicationService implements ILoanApplicationService {
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final MainLocationDetailRepository mainLocationDetailRepository;
     private final SubLocationDetailRepository subLocationDetailRepository;
+    private final NPARepository npaRepository;
+    private final NPADetailRepository npaDetailRepository;
 
     @Override
     public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException {
@@ -462,6 +468,18 @@ public class LoanApplicationService implements ILoanApplicationService {
             log.info("Migrating Sub Location : " +resource.getMainLocationDetail().getLocation());
             this.migrateSubLocation(resource.getSubLocationDetailList(), loanAppraisal);
         }
+
+
+        if (resource.getNpa() != null) {
+            NPA npa = new NPA();
+            log.info("Migrating NPA Header : " + resource.getNpa().getAssetClass());
+            npa = this.migrateNPA(resource.getNpa(), loanMonitor);
+
+            if (resource.getNpaDetailList() != null) {
+                log.info("Migrating NPA Items: " + resource.getMainLocationDetail().getLocation());
+                this.migrateNPADetails(resource.getNpaDetailList(), loanMonitor, npa);
+            }
+        }
         return loanApplication;
     }
 
@@ -473,7 +491,7 @@ public class LoanApplicationService implements ILoanApplicationService {
         Optional<MainLocationDetail> existingMainLocationDetailOptional
                 = mainLocationDetailRepository.findByLoanAppraisalId(loanAppraisal.getId());
 
-        if (existingMainLocationDetailOptional != null)
+        if (existingMainLocationDetailOptional.isPresent() )
             existingMainLocationDetail = existingMainLocationDetailOptional.get();
 
         if (existingMainLocationDetail.getId() != null) {
@@ -525,12 +543,74 @@ public class LoanApplicationService implements ILoanApplicationService {
                 existingSubLocation.setNearestFunctionalAirport(subLocationDetail.getNearestFunctionalAirport());
                 existingSubLocation.setNearestFunctionalAirportDistance(subLocationDetail.getNearestFunctionalAirportDistance());
                 subLocationDetailRepository.save(existingSubLocation);
+            } else {
+                subLocationDetail.setLoanAppraisal(loanAppraisal);
+                subLocationDetailRepository.save(subLocationDetail);
             }
-            existingSubLocation.setLoanAppraisal(loanAppraisal);
-            subLocationDetailRepository.save(subLocationDetail);
         }
 
 
+        return null;
+    }
+
+
+    public NPA migrateNPA(NPA npa, LoanMonitor loanMonitor) {
+
+         NPA existingNPA = npaRepository.findByLoanMonitor(loanMonitor);
+
+        if (existingNPA != null) {
+            log.info("Updating NPA Header : "  + npa.getAssetClass());
+
+            existingNPA.setAssetClass(npa.getAssetClass());
+            existingNPA.setTotalLoanAsset(npa.getTotalLoanAsset());
+            existingNPA.setSecuredLoanAsset(npa.getSecuredLoanAsset());
+            existingNPA.setUnSecuredLoanAsset(npa.getUnSecuredLoanAsset());
+            existingNPA.setRestructuringType(npa.getRestructuringType());
+            existingNPA.setSmaCategory(npa.getSmaCategory());
+            existingNPA.setFraudDate(npa.getFraudDate());
+            existingNPA.setImpairmentReserve(npa.getImpairmentReserve());
+            existingNPA.setProvisionAmount(npa.getProvisionAmount());
+
+
+            npaRepository.save(existingNPA);
+            return existingNPA;
+        }
+
+        log.info("Creating NPA Header : "  + npa.getAssetClass());
+        npa.setLoanMonitor(loanMonitor);
+        npaRepository.save(npa);
+        return npa;
+
+    }
+
+
+    private List<NPADetail> migrateNPADetails(List<NPADetail> npaDetailList, LoanMonitor loanMonitor, NPA npa) {
+        for (NPADetail npaDetail :npaDetailList ) {
+
+            List<NPADetail> existingNPADetailList = npaDetailRepository.findByNpa(npa);
+            NPADetail existingNPADetail = npaDetailRepository.findByNpaAndLineItemNumber(  npa, npaDetail.getLineItemNumber());
+
+            if (existingNPADetail != null) {
+                existingNPADetail.setLoanNumber(loanMonitor.getLoanApplication().getLoanContractId());
+                existingNPADetail.setLineItemNumber(npaDetail.getLineItemNumber());
+                existingNPADetail.setNpaAssetClass(npaDetail.getNpaAssetClass());
+                existingNPADetail.setAssetClassificationChangeDate(npaDetail.getAssetClassificationChangeDate());
+                existingNPADetail.setProvisionDate(npaDetail.getProvisionDate());
+                existingNPADetail.setPercentageSecured(npaDetail.getPercentageSecured());
+                existingNPADetail.setPercentageUnsecured(npaDetail.getPercentageUnsecured());
+                existingNPADetail.setSecuredLoanAsset(npaDetail.getSecuredLoanAsset());
+                existingNPADetail.setUnsecuredLoanAsset(npaDetail.getUnsecuredLoanAsset());
+                existingNPADetail.setLoanAssetValue(npaDetail.getLoanAssetValue());
+                existingNPADetail.setAbsoluteValue(npaDetail.getAbsoluteValue());
+                existingNPADetail.setNetAssetValue(npaDetail.getNetAssetValue());
+                existingNPADetail.setRemarks(npaDetail.getRemarks());
+
+                npaDetailRepository.save(existingNPADetail);
+            } else {
+                npaDetail.setNpa(npa);
+                npaDetailRepository.save(npaDetail);
+            }
+        }
         return null;
     }
 

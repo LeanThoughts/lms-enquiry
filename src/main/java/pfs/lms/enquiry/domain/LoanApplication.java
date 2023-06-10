@@ -165,6 +165,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
      * 08-Rejected
      */
     private Integer functionalStatus;
+    private String  functionalStatusDescription;
+
 
     /**
      * 01-Approved
@@ -286,6 +288,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("technicalStatus") Integer technicalStatus,
                            @JsonProperty("technicalStatusDescription") String technicalStatusDescription,
                            @JsonProperty("functionalStatus") Integer functionalStatus,
+                           @JsonProperty("functionalStatusDescription") Integer functionalStatusDescription,
                            @JsonProperty("finalDecisionStatus") Integer finalDecisionStatus,
                            @JsonProperty("rejectionCategory") Integer rejectionCategory,
                            @JsonProperty("rejectionReason") String rejectionReason,
@@ -366,6 +369,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
             this.functionalStatus = 1;
         else
             this.functionalStatus = functionalStatus;
+
+        this.functionalStatusDescription = String.valueOf(functionalStatusDescription);
 
         this.finalDecisionStatus = finalDecisionStatus;
         this.rejectionCategory = rejectionCategory;
@@ -660,6 +665,14 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
 
     public String getProjectName() {
         return projectName;
+    }
+
+    public String getFunctionalStatusDescription() {
+        return functionalStatusDescription;
+    }
+
+    public void setFunctionalStatusDescription(String functionalStatusDescription) {
+        this.functionalStatusDescription = functionalStatusDescription;
     }
 
     public String getProjectDepartmentInitiator() {

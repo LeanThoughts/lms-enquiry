@@ -9,5 +9,7 @@ public interface NPADetailRepository extends JpaRepository<NPADetail, UUID> {
 
     List<NPADetail> findByNpaOrderByLineItemNumberDesc(NPA npa);
 
+    NPADetail findByNpaAndLineItemNumber(NPA npa, Integer lineItemNumber);
+
     List<NPADetail> findByNpa(NPA npa);
 }

@@ -1,16 +1,24 @@
-<div class="mat-table-container" style="width: 160%">
+<div class="mat-table-container" style="width: 120%">
 
     <!-- <mat-table class="enquiries-table" #table [dataSource]="dataSource" *fuseIfOnDom [@animateStagger]="{value:'50'}" fusePerfectScrollbar> -->
     <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
+      <!-- Functional Status Column -->
+      <ng-container matColumnDef="functionalStatusDescription">
+        <mat-header-cell *matHeaderCellDef mat-sort-header >Status</mat-header-cell>
+        <mat-cell *matCellDef="let enquiry" >
+          <p class="text-truncate">{{ enquiry.functionalStatusDescription }}</p>
+        </mat-cell>
+      </ng-container>
+
         <!-- busPartnerNumber Column -->
         <ng-container matColumnDef="busPartnerNumber">
-            <mat-header-cell *matHeaderCellDef mat-sort-header >BP Code</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header >BP Id</mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
                 <p class="text-truncate">{{ enquiry.busPartnerNumber }}</p>
             </mat-cell>
         </ng-container>
-        
+
         <!-- borrowerName Column -->
         <ng-container matColumnDef="borrowerName">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Borrower Name</mat-header-cell>
@@ -18,7 +26,7 @@
                 <p class="text-truncate">{{ enquiry.borrowerName }}</p>
             </mat-cell>
         </ng-container>
-        
+
         <!-- loanContractId Column -->
         <ng-container matColumnDef="loanContractId">
             <mat-header-cell *matHeaderCellDef mat-sort-header  >Loan Contract</mat-header-cell>
@@ -34,10 +42,10 @@
                 <p class="text-truncate">{{ enquiry.projectName }}</p>
             </mat-cell>
         </ng-container>
-        
+
         <!-- projectLocationState Column -->
         <ng-container matColumnDef="projectLocationState">
-            <mat-header-cell *matHeaderCellDef mat-sort-header >Project Location</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Project Location State</mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
                 <p class="text-truncate">{{ enquiry.projectLocationState }}</p>
             </mat-cell>

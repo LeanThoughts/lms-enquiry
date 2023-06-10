@@ -136,7 +136,7 @@ public class LoanApplicationContoller {
                         log.info("Loan Applicant is   NULL for Loan : " + loanApplication.getLoanContractId());
                         Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
                         resources.add(loanApplicationResource);
 
@@ -144,7 +144,7 @@ public class LoanApplicationContoller {
                         //log.info("Loan Applicant is not NULL:" + partnerRepository.findById(loanApplication.getLoanApplicant()));
                         Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                         resources.add(loanApplicationResource);
@@ -226,6 +226,8 @@ public class LoanApplicationContoller {
         loanApplicationResource.setPartner(resource.getPartner());
         loanApplicationResource.setMainLocationDetail(resource.getMainLocationDetail());
         loanApplicationResource.setSubLocationDetailList(resource.getSubLocationDetailList());
+        loanApplicationResource.setNpa(resource.getNpa());
+        loanApplicationResource.setNpaDetailList(resource.getNpaDetailList());
         LoanApplication loanApplication = loanApplicationService.migrate(loanApplicationResource, request.getUserPrincipal().getName());
 
 
@@ -693,7 +695,7 @@ public class LoanApplicationContoller {
                             break;
                     }
                 }
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                 resources.add(loanApplicationResource);
@@ -845,8 +847,47 @@ public class LoanApplicationContoller {
                             break;
                     }
                 }
+                /**
+                 * 01-Enquiry Stage
+                 * 02-ICC ApprovalStage
+                 * 03-Appraisal Stage
+                 * 04-Board Approval Stage
+                 * 05-Loan Documentation Stage
+                 * 06-Loan Disbursement Stage
+                 * 07-Approved
+                 * 08-Rejected
+                 */
+                if (loanApplication.getFunctionalStatus() != null) {
+                    switch (loanApplication.getTechnicalStatus()) {
+                        case 1:
+                            loanApplication.setFunctionalStatusDescription("Enquiry Stage");
+                            break;
+                        case 2:
+                            loanApplication.setFunctionalStatusDescription("ICC ApprovalStage");
+                            break;
+                        case 3:
+                            loanApplication.setFunctionalStatusDescription("Appraisal Stage");
+                            break;
+                        case 4:
+                            loanApplication.setFunctionalStatusDescription("Board Approval Stage");
+                            break;
+                        case 5:
+                            loanApplication.setFunctionalStatusDescription("Loan Documentation Stage");
+                            break;
+                        case 6:
+                            loanApplication.setFunctionalStatusDescription("Loan Disbursement Stage");
+                            break;
+                        case 7:
+                            loanApplication.setFunctionalStatusDescription("Approved");
+                            break;
+                        case 8:
+                            loanApplication.setFunctionalStatusDescription("Rejected");
+                            break;
 
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null);
+                    }
+                }
+
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                 resources.add(loanApplicationResource);

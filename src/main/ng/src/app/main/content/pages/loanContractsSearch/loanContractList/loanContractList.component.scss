@@ -13,3 +13,41 @@ mat-paginator.mat-paginator.paginator--centered {
 .highlight{
   background: #FFA500; /* orange */
 }
+.mat-column-functionalStatusDescription {
+  flex: 0 0 10%;
+}
+.mat-column-busPartnerNumber {
+  flex: 0 0 5%;
+}
+.mat-column-borrowerName {
+  flex: 0 0 10%;
+}
+.mat-column-loanContractId {
+  flex: 0 0 5%;
+}
+.mat-column-projectName {
+  flex: 0 0 15%;
+}
+.mat-column-projectLocationState {
+  flex: 0 0 8%;
+}
+.mat-column-projectTypeDescription {
+  flex: 0 0 12%;
+}
+.mat-column-loanClassDescription {
+  flex: 0 0 8%;
+}
+.mat-column-projectCapacity {
+  flex: 0 0 6%;
+}
+.mat-column-assistanceTypeDescription {
+  flex: 0 0 8%;
+}
+.mat-column-projectCost {
+  flex: 0 0 8%;
+}
+
+
+
+
+

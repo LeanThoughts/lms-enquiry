@@ -28,7 +28,7 @@ export class LoanContractListComponent implements OnInit {
 
 
     displayedColumns = [
-        'busPartnerNumber', 'borrowerName', 'loanContractId', 'projectName', 'projectLocationState', 'projectTypeDescription', 'loanClassDescription', 
+      'functionalStatusDescription', 'busPartnerNumber', 'borrowerName', 'loanContractId', 'projectName', 'projectLocationState', 'projectTypeDescription', 'loanClassDescription',
         'projectCapacity', 'assistanceTypeDescription', 'projectCost'
     ];
 
