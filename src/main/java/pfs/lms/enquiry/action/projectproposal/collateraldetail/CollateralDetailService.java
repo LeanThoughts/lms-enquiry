@@ -27,17 +27,17 @@ public class CollateralDetailService implements ICollateralDetailService {
         collateralDetail.setDetails(resource.getDetails());
         collateralDetail = collateralDetailRepository.save(collateralDetail);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Collateral Detail
+        changeDocumentService.createChangeDocument(
+                projectProposal.getEnquiryAction().getId(),
+                projectProposal.getId().toString(),
+                projectProposal.getEnquiryAction().getId().toString(),
+                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                null,
+                collateralDetail,
+                "Created",
+                username,
+                "EnquiryAction", "Collateral Detail" );
 
         return collateralDetail;
     }
@@ -50,23 +50,23 @@ public class CollateralDetailService implements ICollateralDetailService {
                 collateralDetailRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+      Object oldCollateralDetail = collateralDetail.clone();
 
         collateralDetail.setCollateralType(resource.getCollateralType());
         collateralDetail.setDetails(resource.getDetails());
         collateralDetail = collateralDetailRepository.save(collateralDetail);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Collateral Detail
+        changeDocumentService.createChangeDocument(
+                collateralDetail.getProjectProposal().getId(),
+                collateralDetail.getId().toString(),
+                collateralDetail.getProjectProposal().getId().toString(),
+                collateralDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getLoanContractId(),
+                oldCollateralDetail,
+                collateralDetail,
+                "Updated",
+                username,
+                "EnquiryAction", "Collateral Detail" );
 
         return collateralDetail;
     }

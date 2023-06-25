@@ -50,14 +50,14 @@ public class ProjectProposalService implements IProjectProposalService {
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "EnquiryAction", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "EnquiryAction", "Header");
                     return obj;
                 });
         ProjectProposal projectProposal = new ProjectProposal();
@@ -71,16 +71,16 @@ public class ProjectProposalService implements IProjectProposalService {
         projectProposal = projectProposalRepository.save(projectProposal);
 
         // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        changeDocumentService.createChangeDocument(
+                projectProposal.getEnquiryAction().getId(),
+                projectProposal.getId().toString(),
+                projectProposal.getEnquiryAction().getId().toString(),
+                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                null,
+                projectProposal,
+                "Created",
+                username,
+                "EnquiryAction", "Project Proposal" );
 
         return projectProposal;
     }
@@ -103,16 +103,16 @@ public class ProjectProposalService implements IProjectProposalService {
         projectProposal = projectProposalRepository.save(projectProposal);
 
         // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        changeDocumentService.createChangeDocument(
+                projectProposal.getEnquiryAction().getId(),
+                projectProposal.getId().toString(),
+                projectProposal.getEnquiryAction().getId().toString(),
+                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                oldRejectByPFS,
+                projectProposal,
+                "Updated",
+                username,
+                "EnquiryAction", "Project Proposal" );
 
         return projectProposal;
     }

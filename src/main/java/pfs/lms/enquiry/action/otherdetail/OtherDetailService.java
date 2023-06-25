@@ -30,14 +30,14 @@ public class OtherDetailService implements IOtherDetailService {
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "EnquiryAction", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "EnquiryAction", "Header");
                     return obj;
                 });
         OtherDetail otherDetail = new OtherDetail();
@@ -55,16 +55,16 @@ public class OtherDetailService implements IOtherDetailService {
         otherDetail = otherDetailRepository.save(otherDetail);
 
         // Change Documents for Other Detail
-//        changeDocumentService.createChangeDocument(
-//                otherDetail.getEnquiryAction().getId(),
-//                otherDetail.getId().toString(),
-//                otherDetail.getEnquiryAction().getId().toString(),
-//                otherDetail.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                otherDetail,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Other Detail" );
+        changeDocumentService.createChangeDocument(
+                otherDetail.getEnquiryAction().getId(),
+                otherDetail.getId().toString(),
+                otherDetail.getEnquiryAction().getId().toString(),
+                otherDetail.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                null,
+                otherDetail,
+                "Created",
+                username,
+                "EnquiryAction", "Other Detail" );
 
         return otherDetail;
     }
@@ -91,16 +91,16 @@ public class OtherDetailService implements IOtherDetailService {
         otherDetail = otherDetailRepository.save(otherDetail);
 
         // Change Documents for Other Detail
-//        changeDocumentService.createChangeDocument(
-//                otherDetail.getEnquiryAction().getId(),
-//                otherDetail.getId().toString(),
-//                otherDetail.getEnquiryAction().getId().toString(),
-//                otherDetail.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                otherDetail,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Other Detail");
+        changeDocumentService.createChangeDocument(
+                otherDetail.getEnquiryAction().getId(),
+                otherDetail.getId().toString(),
+                otherDetail.getEnquiryAction().getId().toString(),
+                otherDetail.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                oldRejectByPFS,
+                otherDetail,
+                "Updated",
+                username,
+                "EnquiryAction", "Other Detail");
 
         return otherDetail;
     }

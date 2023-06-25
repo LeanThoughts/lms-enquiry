@@ -73,6 +73,9 @@ public class WorkflowController {
                 return ResponseEntity.ok(processObject);
             case "Appraisal" :
                 return ResponseEntity.ok(processObject);
+            case "EnquiryAction" :
+                return ResponseEntity.ok(processObject);
+
 
         }
 

@@ -30,14 +30,14 @@ public class RejectByPfsService implements IRejectByPfsService {
                     obj.setLoanApplication(loanApplication);
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "EnquiryAction", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "EnquiryAction", "Header");
                     return obj;
                 });
         RejectByPfs rejectByPFS = new RejectByPfs();
@@ -48,16 +48,16 @@ public class RejectByPfsService implements IRejectByPfsService {
         rejectByPFS = rejectByPFSRepository.save(rejectByPFS);
 
         // Change Documents for Reject By PFS
-//        changeDocumentService.createChangeDocument(
-//                rejectByPFS.getEnquiryAction().getId(),
-//                rejectByPFS.getId().toString(),
-//                rejectByPFS.getEnquiryAction().getId().toString(),
-//                rejectByPFS.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                rejectByPFS,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Reject By PFS" );
+        changeDocumentService.createChangeDocument(
+                rejectByPFS.getEnquiryAction().getId(),
+                rejectByPFS.getId().toString(),
+                rejectByPFS.getEnquiryAction().getId().toString(),
+                rejectByPFS.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                null,
+                rejectByPFS,
+                "Created",
+                username,
+                "EnquiryAction", "Reject By PFS" );
 
         return rejectByPFS;
     }
@@ -77,16 +77,16 @@ public class RejectByPfsService implements IRejectByPfsService {
         rejectByPFS = rejectByPFSRepository.save(rejectByPFS);
 
         // Change Documents for Reject By PFS
-//        changeDocumentService.createChangeDocument(
-//                rejectByPFS.getEnquiryAction().getId(),
-//                rejectByPFS.getId().toString(),
-//                rejectByPFS.getEnquiryAction().getId().toString(),
-//                rejectByPFS.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                rejectByPFS,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Reject By PFS" );
+        changeDocumentService.createChangeDocument(
+                rejectByPFS.getEnquiryAction().getId(),
+                rejectByPFS.getId().toString(),
+                rejectByPFS.getEnquiryAction().getId().toString(),
+                rejectByPFS.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                oldRejectByPFS,
+                rejectByPFS,
+                "Updated",
+                username,
+                "EnquiryAction", "Reject By PFS" );
 
         return rejectByPFS;
     }

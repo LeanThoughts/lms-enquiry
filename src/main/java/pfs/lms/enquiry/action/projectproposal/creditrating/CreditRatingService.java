@@ -30,17 +30,17 @@ public class CreditRatingService implements ICreditRatingService {
         creditRating.setCreditStandingText(resource.getCreditStandingText());
         creditRating = creditRatingRepository.save(creditRating);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Credit Rating Resource
+        changeDocumentService.createChangeDocument(
+                creditRating.getProjectProposal().getEnquiryAction().getId(),
+                creditRating.getId().toString(),
+                creditRating.getProjectProposal().getId().toString(),
+                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                null,
+                creditRating,
+                "Created",
+                username,
+                "EnquiryAction", "Credit Rating" );
 
         return creditRating;
     }
@@ -53,7 +53,7 @@ public class CreditRatingService implements ICreditRatingService {
                 creditRatingRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+      Object oldCreditRating = creditRating.clone();
 
         creditRating.setCreditRatingAgency(resource.getCreditRatingAgency());
         creditRating.setCreditRating(resource.getCreditRating());
@@ -61,17 +61,17 @@ public class CreditRatingService implements ICreditRatingService {
         creditRating.setCreditStandingText(resource.getCreditStandingText());
         creditRating = creditRatingRepository.save(creditRating);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+         // Change Documents for Credit Rating
+        changeDocumentService.createChangeDocument(
+                creditRating.getProjectProposal().getId(),
+                creditRating.getId().toString(),
+                creditRating.getProjectProposal().getId().toString(),
+                creditRating.getProjectProposal().getEnquiryAction().getLoanApplication().getLoanContractId(),
+                oldCreditRating,
+                creditRating,
+                "Updated",
+                username,
+                "EnquiryAction", "Credit Rating" );
 
         return creditRating;
     }
