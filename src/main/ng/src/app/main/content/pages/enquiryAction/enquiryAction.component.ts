@@ -54,6 +54,10 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
+                _enquiryActionService.getLoanApplication(data).subscribe(loanApplication => {
+                    console.log('loanApplication is', loanApplication);
+                    _enquiryActionService._loanApplication = loanApplication;
+                });
             })
         );
 

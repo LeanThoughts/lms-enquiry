@@ -2,26 +2,20 @@ package pfs.lms.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.mail.service.LoanNotificationService;
 import pfs.lms.enquiry.process.LoanApplicationEngine;
-import pfs.lms.enquiry.reports.EnquiryReportExcel;
 import pfs.lms.enquiry.reports.EnquiryReportExcelV1;
 import pfs.lms.enquiry.reports.EnquiryReportPDF;
 import pfs.lms.enquiry.repository.*;
@@ -30,20 +24,19 @@ import pfs.lms.enquiry.service.ILoanApplicationService;
 import pfs.lms.enquiry.service.ILoanContractExtensionService;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -366,6 +359,18 @@ public class LoanApplicationContoller {
             return (ResponseEntity) ResponseEntity.notFound();
         }
 
+    }
+
+    @GetMapping("/loanApplications/{id}")
+    public ResponseEntity<LoanApplicationResource> getLoanApplication(@PathVariable("id") String loanApplicationId) {
+        LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
+        LoanApplication loanApplication = loanApplicationRepository.getOne(UUID.fromString(loanApplicationId));
+        loanApplicationResource.setLoanApplication(loanApplication);
+        if (loanApplication.getLoanApplicant() != null) {
+            Partner partner = partnerRepository.getOne(loanApplication.getLoanApplicant());
+            loanApplicationResource.setPartner(partner);
+        }
+        return ResponseEntity.ok(loanApplicationResource);
     }
 
     // Get Loan Application by Loan Number - Cross Application Call

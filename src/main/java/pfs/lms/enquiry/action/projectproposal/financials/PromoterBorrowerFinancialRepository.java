@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface PromoterBorrowerFinancialRepository extends JpaRepository<PromoterBorrowerFinancial, UUID> {
 
-    List<PromoterBorrowerFinancial> findByProjectProposalId(UUID projectProposalId);
+    List<PromoterBorrowerFinancial> findByProjectProposalIdOrderByFiscalPeriod(UUID projectProposalId);
 }

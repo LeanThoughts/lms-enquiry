@@ -5,4 +5,5 @@ public interface IProjectCostService {
     ProjectCost create(ProjectCostResource resource, String username);
 
     ProjectCost update(ProjectCostResource resource, String username) throws CloneNotSupportedException;
+
 }

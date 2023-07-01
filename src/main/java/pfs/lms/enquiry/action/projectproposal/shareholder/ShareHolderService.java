@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
+import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -72,5 +74,13 @@ public class ShareHolderService implements IShareHolderService {
 //                "EnquiryAction", "Project Proposal" );
 
         return shareHolder;
+    }
+
+    @Override
+    public ShareHolder delete(UUID shareHolderId, String username) {
+        ShareHolder shareHolder = shareHolderRepository.findById(shareHolderId)
+                .orElseThrow(() -> new EntityNotFoundException(shareHolderId.toString()));
+        shareHolderRepository.delete(shareHolder);
+        return  shareHolder;
     }
 }

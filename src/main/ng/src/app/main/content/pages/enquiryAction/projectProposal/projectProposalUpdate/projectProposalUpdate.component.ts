@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../enquiryAction.service';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
   selector: 'fuse-project-proposal-update',
@@ -19,6 +20,8 @@ export class ProjectProposalUpdateComponent {
     projectProposal: any = {};
     projectProposalForm: FormGroup;
 
+    documentTypes = LoanMonitoringConstants.documentTypes;
+    
     /**
      * constructor()
      */
@@ -36,7 +39,7 @@ export class ProjectProposalUpdateComponent {
         }
 
         this.projectProposalForm = this._formBuilder.group({
-            loanEnquiryNumber: [ this.projectProposal.loanEnquiryNumber || '' ],
+            loanEnquiryNumber: [ this.projectProposal.loanEnquiryNumber || _enquiryActionService._loanApplication.loanApplication.enquiryNo.id ],
             proposalFormSharingDate: [ this.projectProposal.proposalFormSharingDate || undefined ],
             proposalStatus: [ this.projectProposal.proposalStatus || '' ],
             documentName: [ this.projectProposal.documentName || '' ],

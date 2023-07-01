@@ -36,13 +36,14 @@
                     </mat-form-field>
                 </div>
                 <div fxLayout="row">
-                    <mat-form-field fxFlex="25">
+                    <mat-form-field fxFlex="33">
                         <mat-select placeholder="Document Type" formControlName="documentType" required>
-                            <mat-option [value]="'0'">PDF</mat-option>
-                            <mat-option [value]="'1'">JPEG</mat-option>
-                            <mat-option [value]="'2'">Others</mat-option>
+                          <mat-option> </mat-option>
+                          <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                            {{ documentType.value }}
+                          </mat-option>
                         </mat-select>
-                    </mat-form-field>                
+                    </mat-form-field>              
                     <mat-form-field fxFlex="25">
                         <input matInput placeholder="Document Version" formControlName="documentVersion">
                     </mat-form-field>

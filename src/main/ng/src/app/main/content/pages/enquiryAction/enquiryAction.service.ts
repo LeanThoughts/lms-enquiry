@@ -9,6 +9,8 @@ export class EnquiryActionService implements Resolve<any> {
 
     _enquiryAction: BehaviorSubject<any> = new BehaviorSubject({});
 
+    _loanApplication: any;
+    
     /**
      * constructor()
      */
@@ -29,7 +31,14 @@ export class EnquiryActionService implements Resolve<any> {
             this.getProjectProposals(this._enquiryAction.value.id)
         ]);
     }
-    
+
+    /**
+     * getLoanApplication()
+     */
+    public getLoanApplication(loanApplicationId: string): Observable<any> {
+        return this._http.get("enquiry/api/loanApplications/" + loanApplicationId);
+    }
+
     /**
      * getEnquiryAction()
      */
@@ -129,10 +138,10 @@ export class EnquiryActionService implements Resolve<any> {
     }
         
     /**
-     * getShareHolders()
+     * getFinancials)
      */
     public getFinancials(projectProposalId: string): Observable<any> {
-        return this._http.get("enquiry/api/promoterBorrowerFinancials/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
+        return this._http.get("enquiry/api/promoterBorrowerFinancials/search/findByProjectProposalIdOrderByFiscalPeriod?projectProposalId=" + projectProposalId);
     }
 
     /**
@@ -168,6 +177,14 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public updateShareHolder(shareHolder: any): Observable<any> {
         return this._http.put("enquiry/api/shareHolders/update", shareHolder);
+    }
+
+    /**
+     * deleteShareHolder()
+     */
+    public deleteShareHolder(shareHolder: any): Observable<any> {
+        const url = "enquiry/api/shareHolders/delete/" + shareHolder.id;
+        return this._http.delete(url);
     }
 
     /**

@@ -6,6 +6,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from 'app/main/content/pages/enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../../enquiryAction.service';
 import { OtherDetailsFileUploadComponent } from '../otherDetailFileUpload/otherDetailFileUpload.component';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
     selector: 'fuse-project-proposal-other-detail-update',
@@ -38,7 +39,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
     _selectedDocument: any;
     dataSource: MatTableDataSource<any>;
     displayedColumns = [
-        'documentType', 'documentName'
+        'documentType', 'documentName', 'download'
     ];
 
     /**
@@ -149,5 +150,23 @@ export class ProjectProposalOtherDetailUpdateComponent {
                 });
             }
         });    
+    }
+
+    /**
+     * getDocumentTypeDescription()
+     */
+    getDocumentTypeDescription(documentType: string): string {
+        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        if (obj !== undefined)
+            return obj.value;
+        else
+            return '';
+    }
+
+    /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
     }
 }

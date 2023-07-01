@@ -46,7 +46,7 @@ export class RejectByPFSComponent {
      */
     populateDisplayTable(): void {
         this.dataSource1 = [];
-        this.dataSource1.push({particulars: 'Category', description: this._rejectBy.rejectionCategory});
+        this.dataSource1.push({particulars: 'Category', description: this.getRejectionCategoryDescription(this._rejectBy.rejectionCategory)});
         this.dataSource1.push({particulars: 'Reason for Rejection', description: this._rejectBy.rejectionReason});
         this.dataSource1.push({particulars: 'Date of Rejection', description: this.getFormattedDate(this._rejectBy.rejectionDate)});
     }
@@ -84,5 +84,19 @@ export class RejectByPFSComponent {
                 this.populateDisplayTable();
             }
         });    
+    }
+    
+    getRejectionCategoryDescription(rejectionCategory: number): string {
+        console.log(rejectionCategory);
+        if (rejectionCategory == 2)
+            return 'Rejected by BD';
+        else if (rejectionCategory == 3)
+            return 'Rejected by ICC';
+        else if (rejectionCategory == 4)
+            return 'Rejected by Appraisal';
+        else if (rejectionCategory == 5)
+            return 'Rejected by Board';
+        else
+            return '';
     }
 }

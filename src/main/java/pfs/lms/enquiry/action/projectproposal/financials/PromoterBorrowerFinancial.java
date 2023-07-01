@@ -4,6 +4,7 @@ import lombok.*;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -22,7 +23,9 @@ public class PromoterBorrowerFinancial extends AggregateRoot<PromoterBorrowerFin
     @ManyToOne(fetch = FetchType.EAGER)
     private ProjectProposal projectProposal;
 
+    @Column(unique=true)
     private String fiscalPeriod;
+
     private Double revenue;
     private Double ebitda;
     private Double depreciation;

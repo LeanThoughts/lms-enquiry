@@ -57,7 +57,7 @@ export class ProjectDetailUpdateComponent {
                 private _dialogRef: MatDialog, 
                 private _matSnackBar: MatSnackBar,
                 public _enquiryActionService: EnquiryActionService,
-                public _enquiryApplicationService: LoanEnquiryService) { 
+                public _enquiryApplicationService: LoanEnquiryService, _loanEnquiryService: LoanEnquiryService) { 
 
         // Initialize dropdown values
         this._enquiryApplicationService.getUnitOfMeasures().subscribe(response => {
@@ -74,19 +74,21 @@ export class ProjectDetailUpdateComponent {
         });
         this.productTypes = productTypes;
 
+        console.log('this._enquiryActionService._loanApplication', this._enquiryActionService._loanApplication);
         this._projectDetailForm = this._formBuilder.group({
-            projectName: new FormControl(''),
-            borrowerName: new FormControl(''),
-            promoterName: new FormControl(''),
-            loanPurpose: new FormControl(''),
-            projectCapacity: new FormControl('', [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
-            projectCapacityUnit: new FormControl(''),
-            state: new FormControl(''),
-            district: new FormControl(''),
-            productType: new FormControl(''),
-            loanClass: new FormControl(''),
-            assistanceType: new FormControl(''),
-            financingType: new FormControl(''),
+            projectName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectName),
+            borrowerName: new FormControl(this.getBorrowerName()),
+            promoterName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.promoterName),
+            loanPurpose: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanPurpose),
+            projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity, 
+                [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
+            projectCapacityUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacityUnit),
+            state: new FormControl(this._enquiryActionService._loanApplication.loanApplication.state),
+            district: new FormControl(this._enquiryActionService._loanApplication.loanApplication.district),
+            productType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.productCode),
+            loanClass: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanClass),
+            assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
+            financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
             endUseOfFunds: new FormControl(''),
             roi: new FormControl(''),
             fees: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
@@ -98,7 +100,18 @@ export class ProjectDetailUpdateComponent {
             constructionPeriodUnit: new FormControl(''),
         });
         
-        this.initializeFormValues();
+        if (JSON.stringify(this._projectDetail) !== JSON.stringify({})) // update mode, initialize for values ...
+            this.initializeFormValues();
+    }
+
+    /**
+     * getBorrowerName()
+     */
+    getBorrowerName(): string {
+        let name = this._enquiryActionService._loanApplication.partner.partyName1 + ' ' + 
+            this._enquiryActionService._loanApplication.partner.partyName2;
+        console.log('borrower name is', name);
+        return name.trim();
     }
 
     /**
