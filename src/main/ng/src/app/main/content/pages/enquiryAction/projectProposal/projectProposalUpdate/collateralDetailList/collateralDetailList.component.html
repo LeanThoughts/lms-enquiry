@@ -17,7 +17,7 @@
                 <ng-container matColumnDef="collateralType">
                     <mat-header-cell *matHeaderCellDef>Collateral Type</mat-header-cell>
                     <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.collateralType }}</p>
+                        <p class="text-truncate">{{ getCollateralTypeDescription(obj.collateralType) }}</p>
                     </mat-cell>
                 </ng-container>
       

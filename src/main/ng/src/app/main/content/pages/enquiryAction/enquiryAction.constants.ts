@@ -10,6 +10,93 @@ export const productTypes = [
     { code: "991", value: "Short Term Loan for Vehicle" }    
 ]
 
+export const collateralTypes = [
+    {
+    "Code": "Z00007",
+    "Value": "PFS:Personal Guarantee"
+    },
+    {
+    "Code": "Z00008",
+    "Value": "PFS:Corporate Guarantee"
+    },
+    {
+    "Code": "Z00009",
+    "Value": "PFS:Bank Guarantee"
+    },
+    {
+    "Code": "Z30001",
+    "Value": "Securities"
+    },
+    {
+    "Code": "ZCL001",
+    "Value": "DSRA Account"
+    },
+    {
+    "Code": "ZCL002",
+    "Value": "TRA Account"
+    },
+    {
+    "Code": "ZCL003",
+    "Value": "Other Current Assets"
+    },
+    {
+    "Code": "ZDE001",
+    "Value": "Plant and Machinery"
+    },
+    {
+    "Code": "ZDE002",
+    "Value": "Furniture and Fixtures"
+    },
+    {
+    "Code": "ZDE003",
+    "Value": "Office Equipment"
+    },
+    {
+    "Code": "ZDE004",
+    "Value": "Other Movables"
+    },
+    {
+    "Code": "ZIN002",
+    "Value": "Inventory"
+    },
+    {
+    "Code": "ZOT001",
+    "Value": "Project Clearances"
+    },
+    {
+    "Code": "ZOT002",
+    "Value": "Project Documents"
+    },
+    {
+    "Code": "ZOT003",
+    "Value": "Bank Guarantees under project documents"
+    },
+    {
+    "Code": "ZOT004",
+    "Value": "Approvals"
+    },
+    {
+    "Code": "ZOT005",
+    "Value": "Claims from Insurances"
+    },
+    {
+    "Code": "ZOT006",
+    "Value": "Claims from letter of credit"
+    },
+    {
+    "Code": "ZPA001",
+    "Value": "Patents"
+    },
+    {
+    "Code": "ZRE001",
+    "Value": "Land"
+    },
+    {
+    "Code": "ZRE002",
+    "Value": "Building"
+    }
+]
+
 export const documentTypes = [
     { code: "ZPFSLM1", value: "PFS Project Notes" },
     { code: "ZPFSLM10", value: "Loan Agreement" },

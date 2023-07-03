@@ -12,11 +12,9 @@
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
                     <mat-select placeholder="Collateral Type" formControlName="collateralType" required>
-                        <mat-option [value]="'301'">Bridge Loan</mat-option>
-                        <mat-option [value]="'302'">Short Term Loan</mat-option>
-                        <mat-option [value]="'303'">Term Loan</mat-option>
-                        <mat-option [value]="'304'">Debentures</mat-option>
-                        <mat-option [value]="'305'">Non Fund Based Loan</mat-option>
+                        <mat-option *ngFor="let type of collateralTypes" [value]="type.Code">
+                            {{ type.Value }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

@@ -3,6 +3,7 @@ import { MatDialog, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { EnquiryActionService } from '../../../enquiryAction.service';
 import { CollateralDetailUpdateComponent } from '../collateralDetailUpdate/collateralDetailUpdate.component';
+import { collateralTypes } from '../../../enquiryAction.constants';
 
 @Component({
     selector: 'fuse-collateral-detail-list',
@@ -71,5 +72,15 @@ export class CollateralDetailListComponent {
                 });
             }
         });    
+    }
+
+    getCollateralTypeDescription(code: string): string {
+        let description = ''
+        collateralTypes.forEach(obj => {
+            if (obj.Code === code) {
+                description = obj.Value;
+            }
+        })
+        return description;
     }
 }

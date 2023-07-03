@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EnquiryActionService } from '../../../enquiryAction.service';
+import { collateralTypes } from '../../../enquiryAction.constants';
 
 @Component({
   selector: 'fuse-collateral-detail-update',
@@ -15,6 +16,8 @@ export class CollateralDetailUpdateComponent {
     _collateralDetail: any;
     _collateralDetailUpdateForm: FormGroup;
 
+    collateralTypes = collateralTypes;
+    
     /**
      * constructor()
      */

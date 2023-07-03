@@ -234,6 +234,16 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     @Nullable
     private String contactFaxNumber;
 
+    private String projectCoreSector;
+    private String renewableFlag;
+    private String policyExposure;
+    private String endUseOfFunds;
+    private Double fees;
+    private Integer moratoriumPeriod;
+    private String moratoriumPeriodUnit;
+    private Integer constructionPeriod;
+    private String constructionPeriodUnit;
+
 
     @JsonCreator
     public LoanApplication(@JsonProperty("id") UUID id,
@@ -310,7 +320,18 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("contactTelePhone") String contactTelePhone,
                            @JsonProperty("contactLandLinePhone") String contactLandLinePhone,
                            @JsonProperty("contactEmail") String contactEmail,
-                           @JsonProperty("contactFaxNumber") String contactFaxNumber
+                           @JsonProperty("contactFaxNumber") String contactFaxNumber,
+
+                           @JsonProperty("projectCoreSector")  String projectCoreSector,
+                            @JsonProperty("renewableFlag")  String renewableFlag,
+                            @JsonProperty("policyExposure")  String policyExposure,
+                            @JsonProperty("endUseOfFunds")  String endUseOfFunds,
+                            @JsonProperty("fees")  Double fees,
+                            @JsonProperty("moratoriumPeriod")  Integer moratoriumPeriod,
+                            @JsonProperty("moratoriumPeriodUnit")  String moratoriumPeriodUnit,
+                            @JsonProperty("constructionPeriod")  Integer constructionPeriod,
+                            @JsonProperty("constructionPeriodUnit")  String constructionPeriodUnit
+
                            ) {
         this.id = id;
         this.version = version;
@@ -395,6 +416,16 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
         this.contactLandLinePhone =contactLandLinePhone;
         this.contactEmail = contactEmail;
         this.contactFaxNumber = contactFaxNumber;
+
+        this.projectCoreSector = projectCoreSector;
+        this.renewableFlag = renewableFlag;
+        this.policyExposure = policyExposure;
+        this.endUseOfFunds = endUseOfFunds;
+        this.fees = fees;
+        this.moratoriumPeriod = moratoriumPeriod;
+        this.moratoriumPeriodUnit = moratoriumPeriodUnit;
+        this.constructionPeriod = constructionPeriod;
+        this.constructionPeriodUnit = constructionPeriodUnit;
     }
 
 
@@ -524,6 +555,78 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
 
     public Double getProjectCost() {
         return this.projectCost;
+    }
+
+    public String getProjectCoreSector() {
+        return projectCoreSector;
+    }
+
+    public void setProjectCoreSector(String projectCoreSector) {
+        this.projectCoreSector = projectCoreSector;
+    }
+
+    public String getRenewableFlag() {
+        return renewableFlag;
+    }
+
+    public void setRenewableFlag(String renewableFlag) {
+        this.renewableFlag = renewableFlag;
+    }
+
+    public String getPolicyExposure() {
+        return policyExposure;
+    }
+
+    public void setPolicyExposure(String policyExposure) {
+        this.policyExposure = policyExposure;
+    }
+
+    public String getEndUseOfFunds() {
+        return endUseOfFunds;
+    }
+
+    public void setEndUseOfFunds(String endUseOfFunds) {
+        this.endUseOfFunds = endUseOfFunds;
+    }
+
+    public Double getFees() {
+        return fees;
+    }
+
+    public void setFees(Double fees) {
+        this.fees = fees;
+    }
+
+    public Integer getMoratoriumPeriod() {
+        return moratoriumPeriod;
+    }
+
+    public void setMoratoriumPeriod(Integer moratoriumPeriod) {
+        this.moratoriumPeriod = moratoriumPeriod;
+    }
+
+    public String getMoratoriumPeriodUnit() {
+        return moratoriumPeriodUnit;
+    }
+
+    public void setMoratoriumPeriodUnit(String moratoriumPeriodUnit) {
+        this.moratoriumPeriodUnit = moratoriumPeriodUnit;
+    }
+
+    public Integer getConstructionPeriod() {
+        return constructionPeriod;
+    }
+
+    public void setConstructionPeriod(Integer constructionPeriod) {
+        this.constructionPeriod = constructionPeriod;
+    }
+
+    public String getConstructionPeriodUnit() {
+        return constructionPeriodUnit;
+    }
+
+    public void setConstructionPeriodUnit(String constructionPeriodUnit) {
+        this.constructionPeriodUnit = constructionPeriodUnit;
     }
 
     public Double getProjectDebtAmount() {

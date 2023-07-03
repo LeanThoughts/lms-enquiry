@@ -17,12 +17,15 @@ export class PromoterBorrowerFinancialListComponent {
 
     _projectProposal: any;
 
+    _financials: any;
+
     @Input()
     set projectProposal(pp: any) {
         this._projectProposal = pp;
         console.log('project proposal in input is', this._projectProposal);
         if (this._projectProposal !== undefined && JSON.stringify(this._projectProposal) !== JSON.stringify({})) {
             this._enquiryActionService.getFinancials(this._projectProposal.id).subscribe(response => {
+                this._financials = response._embedded.promoterBorrowerFinancials;
                 this.dataSource = new MatTableDataSource(response._embedded.promoterBorrowerFinancials);
             });
         }
@@ -55,7 +58,8 @@ export class PromoterBorrowerFinancialListComponent {
         // Open the dialog.
         var data = {
             'projectProposalId': this._projectProposal.id,
-            'financial': {}
+            'financial': {},
+            'financials': this._financials
         };
         if (operation === 'modifyFinancial') {
             data.financial = this._selectedFinancial;
@@ -70,6 +74,7 @@ export class PromoterBorrowerFinancialListComponent {
             if (data.refresh === true) {
                 this._enquiryActionService.getFinancials(this._projectProposal.id).subscribe(response => {
                     this.dataSource.data = response._embedded.promoterBorrowerFinancials;
+                    this._financials = response._embedded.promoterBorrowerFinancials;
                 });
             }
         });    
