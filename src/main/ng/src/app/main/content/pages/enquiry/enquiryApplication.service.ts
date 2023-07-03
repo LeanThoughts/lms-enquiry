@@ -16,6 +16,8 @@ export class LoanEnquiryService implements Resolve<any> {
 
   selectedEnquiry: BehaviorSubject<any> = new BehaviorSubject({});
 
+  loanContractSearchValues = undefined;
+  
   /**
    *
    * @param _http

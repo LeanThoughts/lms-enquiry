@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,7 +19,7 @@ import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
     styleUrls: ['./loanContractsSearch.component.scss'],
     animations: fuseAnimations
 })
-export class LoanContractsSearchComponent {
+export class LoanContractsSearchComponent implements OnInit, OnDestroy {
 
     @ViewChild(MatPaginator ) paginator: MatPaginator;
 
@@ -86,6 +86,29 @@ export class LoanContractsSearchComponent {
         });
 
         console.log('_appService.currentUser', _appService.currentUser);
+    }
+
+    ngOnDestroy(): void {
+        this._service.loanContractSearchValues = this.loanContractsSearchForm.value;
+    }
+
+    ngOnInit(): void {
+        if (this._service.loanContractSearchValues !== undefined) {
+            let formValues = this._service.loanContractSearchValues;
+            this.loanContractsSearchForm.controls['accountStatus'].setValue(formValues.accountStatus);
+            this.loanContractsSearchForm.controls['technicalStatus'].setValue(formValues.technicalStatus);
+            this.loanContractsSearchForm.controls['partyName'].setValue(formValues.partyName);
+            this.loanContractsSearchForm.controls['projectLocationState'].setValue(formValues.projectLocationState);
+            this.loanContractsSearchForm.controls['loanClass'].setValue(formValues.loanClass);
+            this.loanContractsSearchForm.controls['projectType'].setValue(formValues.projectType);
+            this.loanContractsSearchForm.controls['financingType'].setValue(formValues.financingType);
+            this.loanContractsSearchForm.controls['assistanceType'].setValue(formValues.assistanceType);
+            this.loanContractsSearchForm.controls['borrowerCodeFrom'].setValue(formValues.borrowerCodeFrom);
+            this.loanContractsSearchForm.controls['borrowerCodeTo'].setValue(formValues.borrowerCodeTo);
+            this.loanContractsSearchForm.controls['loanNumberFrom'].setValue(formValues.loanNumberFrom);
+            this.loanContractsSearchForm.controls['loanNumberTo'].setValue(formValues.loanNumberTo);
+
+        }
     }
 
     /**
