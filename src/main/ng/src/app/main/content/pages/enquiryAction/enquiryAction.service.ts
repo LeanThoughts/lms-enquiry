@@ -75,6 +75,14 @@ export class EnquiryActionService implements Resolve<any> {
     }
     
     /**
+     * deleteOtherDetailsDocument()
+     */
+    public deleteOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
+        const url = "enquiry/api/otherDetailsDocuments/delete/" + otherDetialsDocument.id;
+        return this._http.delete(url);
+    }
+
+    /**
      * getProjectProposalOtherDetails()
      */
     public getProjectProposalOtherDetails(projectProposalId: string): Observable<any> {
@@ -116,6 +124,14 @@ export class EnquiryActionService implements Resolve<any> {
         return this._http.put("enquiry/api/creditRatings/update", creditRating);
     }
         
+    /**
+     * deleteCreditRating()
+     */
+    public deleteCreditRating(creditRating: any): Observable<any> {
+        const url = "enquiry/api/creditRatings/delete/" + creditRating.id;
+        return this._http.delete(url);
+    }
+
     /**
      * getProjectDetail()
      */

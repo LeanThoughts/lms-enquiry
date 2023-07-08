@@ -17,7 +17,7 @@ public class RejectByPfsResource {
     private UUID id;
     private UUID loanApplicationId;
 
-    private Integer rejectionCategory;
+    private String rejectionCategory;
     private String rejectionReason;
     private LocalDate rejectionDate;
 }

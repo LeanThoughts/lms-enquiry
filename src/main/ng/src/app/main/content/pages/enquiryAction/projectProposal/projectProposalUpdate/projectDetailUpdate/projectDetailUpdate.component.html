@@ -1,4 +1,4 @@
-<div class="content p-8">
+<div class="content p-8" style="background-color: lightgrey !important;">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
             Submit
@@ -151,7 +151,7 @@
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
                 [disabled]="!_selectedCreditRating"> Modify 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" 
                 [disabled]="!_selectedCreditRating"> Delete 
         </button>
     </div>

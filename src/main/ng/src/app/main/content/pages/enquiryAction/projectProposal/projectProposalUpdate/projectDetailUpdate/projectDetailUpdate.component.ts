@@ -8,6 +8,7 @@ import { LoanEnquiryService } from 'app/main/content/pages/enquiry/enquiryApplic
 import { productTypes } from '../../../enquiryAction.constants';
 import { EnquiryActionService } from '../../../enquiryAction.service';
 import { CreditRatingUpdateComponent } from '../creditRatingUpdate/creditRatingUpdate.component';
+import { ConfirmationDialogComponent } from 'app/main/content/pages/appraisal/confirmationDialog/confirmationDialog.component';
 
 @Component({
     selector: 'fuse-project-detail-update',
@@ -225,5 +226,23 @@ export class ProjectDetailUpdateComponent {
                 });
             }
         });    
+    }
+
+    /**
+     * delete()
+     */
+    delete(): void {
+        const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((data) => {
+            if (data.response) {
+                this._enquiryActionService.deleteCreditRating(this._selectedCreditRating).subscribe(() => {
+                    this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(response => {
+                        this.dataSource.data = response._embedded.creditRatings;
+                    });
+                    this._selectedCreditRating = undefined;
+                });
+            }
+        });     
     }
 }

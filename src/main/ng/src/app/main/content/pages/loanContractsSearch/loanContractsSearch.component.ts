@@ -222,4 +222,12 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         }
         this._router.navigate([to]);
     }
+
+    /**
+     * reset()
+     */
+    reset(): void {
+        this.loanContractsSearchForm.reset();
+        this._service.loanContractSearchValues = undefined;
+    }
 }

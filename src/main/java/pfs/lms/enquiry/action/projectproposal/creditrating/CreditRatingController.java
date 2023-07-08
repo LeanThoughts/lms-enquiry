@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.action.projectproposal.otherdetailsdocument.OtherDetailsDocument;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -27,5 +27,12 @@ public class CreditRatingController {
     public ResponseEntity<CreditRating> update(@RequestBody CreditRatingResource resource,
                                                HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(creditRatingService.update(resource, request.getUserPrincipal().getName()));
+    }
+
+    @DeleteMapping("/creditRatings/delete/{id}")
+    public ResponseEntity<CreditRating> delete(@PathVariable("id") UUID creditRatingId,
+                                                       HttpServletRequest request) {
+        CreditRating creditRating = creditRatingService.delete(creditRatingId,request.getUserPrincipal().getName());
+        return ResponseEntity.ok(creditRating);
     }
 }

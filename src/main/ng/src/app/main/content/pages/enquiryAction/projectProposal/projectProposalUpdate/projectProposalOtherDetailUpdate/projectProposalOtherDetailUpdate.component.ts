@@ -7,6 +7,7 @@ import { LoanEnquiryService } from 'app/main/content/pages/enquiry/enquiryApplic
 import { EnquiryActionService } from '../../../enquiryAction.service';
 import { OtherDetailsFileUploadComponent } from '../otherDetailFileUpload/otherDetailFileUpload.component';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { ConfirmationDialogComponent } from 'app/main/content/pages/appraisal/confirmationDialog/confirmationDialog.component';
 
 @Component({
     selector: 'fuse-project-proposal-other-detail-update',
@@ -168,5 +169,23 @@ export class ProjectProposalOtherDetailUpdateComponent {
      */
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
+     * delete()
+     */
+    delete(): void {
+        const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((data) => {
+            if (data.response) {
+                this._enquiryActionService.deleteOtherDetailsDocument(this._selectedDocument).subscribe(() => {
+                    this._enquiryActionService.getOtherDetailsDocuments(this._projectProposal.id).subscribe(response => {
+                        this.dataSource.data = response._embedded.otherDetailsDocuments;
+                    });
+                    this._selectedDocument = undefined;
+                });
+            }
+        });   
     }
 }

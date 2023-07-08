@@ -8,6 +8,7 @@ import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -74,5 +75,13 @@ public class CreditRatingService implements ICreditRatingService {
                 "EnquiryAction", "Credit Rating" );
 
         return creditRating;
+    }
+
+    @Override
+    public CreditRating delete(UUID creditRatingId, String username) {
+        CreditRating creditRating = creditRatingRepository.findById(creditRatingId)
+                .orElseThrow(() -> new EntityNotFoundException(creditRatingId.toString()));
+        creditRatingRepository.delete(creditRating);
+        return  creditRating;
     }
 }

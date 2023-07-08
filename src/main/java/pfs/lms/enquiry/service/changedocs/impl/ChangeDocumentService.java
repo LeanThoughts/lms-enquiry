@@ -20,7 +20,7 @@ import pfs.lms.enquiry.action.projectproposal.collateraldetail.CollateralDetail;
 import pfs.lms.enquiry.action.projectproposal.creditrating.CreditRating;
 import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuaranteeTimeline;
 import pfs.lms.enquiry.action.projectproposal.financials.PromoterBorrowerFinancial;
-import pfs.lms.enquiry.action.projectproposal.otherdetailsdocuent.OtherDetailsDocument;
+import pfs.lms.enquiry.action.projectproposal.otherdetailsdocument.OtherDetailsDocument;
 import pfs.lms.enquiry.action.projectproposal.projectcost.ProjectCost;
 import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
 import pfs.lms.enquiry.action.rejectbycustomer.RejectByCustomer;

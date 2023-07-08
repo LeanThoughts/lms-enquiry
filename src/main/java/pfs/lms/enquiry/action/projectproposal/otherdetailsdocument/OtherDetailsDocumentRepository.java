@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.projectproposal.otherdetailsdocuent;
+package pfs.lms.enquiry.action.projectproposal.otherdetailsdocument;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

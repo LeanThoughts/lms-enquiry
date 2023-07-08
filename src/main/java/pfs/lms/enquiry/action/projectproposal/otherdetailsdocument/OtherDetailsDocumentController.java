@@ -1,14 +1,13 @@
-package pfs.lms.enquiry.action.projectproposal.otherdetailsdocuent;
+package pfs.lms.enquiry.action.projectproposal.otherdetailsdocument;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -27,5 +26,13 @@ public class OtherDetailsDocumentController {
     public ResponseEntity<OtherDetailsDocument> update(@RequestBody OtherDetailsDocumentResource resource,
                                                        HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(otherDetailsDocumentService.update(resource, request.getUserPrincipal().getName()));
+    }
+
+    @DeleteMapping("/otherDetailsDocuments/delete/{id}")
+    public ResponseEntity<OtherDetailsDocument> delete(@PathVariable("id") UUID otherDetailsDocumentId,
+                                                       HttpServletRequest request) {
+        OtherDetailsDocument otherDetailsDocument = otherDetailsDocumentService.
+                delete(otherDetailsDocumentId,request.getUserPrincipal().getName());
+        return ResponseEntity.ok(otherDetailsDocument);
     }
 }

@@ -144,15 +144,19 @@ export class ProjectCostUpdateComponent implements OnDestroy {
         });    
     }
 
+    /**
+     * delete()
+     */
     delete(): void {
         const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((data) => {
+            if (data.response) {
                 this._enquiryActionService.deleteShareHolder(this._selectedShareHolder).subscribe(() => {
                     this._enquiryActionService.getShareHolders(this._projectProposal.id).subscribe(response => {
                         this.dataSource.data = response._embedded.shareHolders;
                     });
+                    this._selectedShareHolder = undefined;
                 });
             }
         });        

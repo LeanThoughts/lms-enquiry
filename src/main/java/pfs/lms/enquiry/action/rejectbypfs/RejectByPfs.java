@@ -23,7 +23,7 @@ public class RejectByPfs extends AggregateRoot<RejectByPfs> implements Cloneable
     @OneToOne(fetch = FetchType.EAGER)
     private EnquiryAction enquiryAction;
 
-    private Integer rejectionCategory;
+    private String rejectionCategory;
     private String rejectionReason;
     private LocalDate rejectionDate;
 

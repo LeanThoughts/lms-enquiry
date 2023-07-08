@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.projectproposal.otherdetailsdocuent;
+package pfs.lms.enquiry.action.projectproposal.otherdetailsdocument;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,7 @@ import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -72,5 +73,13 @@ public class OtherDetailsDocumentService implements IOtherDetailsDocumentService
 //                "EnquiryAction", "Project Proposal" );
 
         return otherDetailsDocument;
+    }
+
+    @Override
+    public OtherDetailsDocument delete(UUID otherDetailsDocumentId, String username) {
+        OtherDetailsDocument otherDetailsDocument = otherDetailsDocumentRepository.findById(otherDetailsDocumentId)
+                .orElseThrow(() -> new EntityNotFoundException(otherDetailsDocumentId.toString()));
+        otherDetailsDocumentRepository.delete(otherDetailsDocument);
+        return  otherDetailsDocument;
     }
 }

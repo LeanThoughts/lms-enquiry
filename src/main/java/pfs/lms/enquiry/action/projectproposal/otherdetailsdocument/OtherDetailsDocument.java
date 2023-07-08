@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.action.projectproposal.otherdetailsdocuent;
+package pfs.lms.enquiry.action.projectproposal.otherdetailsdocument;
 
 import lombok.*;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
