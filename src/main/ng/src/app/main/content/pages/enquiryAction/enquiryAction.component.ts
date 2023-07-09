@@ -33,14 +33,14 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
 
     /**
      * constructor()
-     * @param _formBuilder 
-     * @param _service 
-     * @param _router 
-     * @param _dialogRef 
+     * @param _formBuilder
+     * @param _service
+     * @param _router
+     * @param _dialogRef
      */
-    constructor(private _formBuilder: FormBuilder, 
-                public _loanEnquiryService: LoanEnquiryService, 
-                public _activatedRoute: ActivatedRoute, 
+    constructor(private _formBuilder: FormBuilder,
+                public _loanEnquiryService: LoanEnquiryService,
+                public _activatedRoute: ActivatedRoute,
                 private _dialogRef: MatDialog,
                 public _appService: AppService,
                 public _enquiryActionService: EnquiryActionService,
@@ -49,8 +49,8 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
             console.log('this.selectedEnquiry', this.selectedEnquiry);
-        }));          
-        
+        }));
+
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
@@ -101,4 +101,26 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
     sendAppraisalForApproval(): void {
 
     }
+
+  /**
+   * sendEnquiryActionForApproval()
+   */
+  sendEnquiryActionForApproval(): void {
+    let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+    let email = this._appService.currentUser.email;
+    this._matSnackBar.open('Please wait while attempting to send enquiry for approval.', 'OK', { duration: 25000 });
+    this._enquiryActionService.sendMonitoringForApproval(this.enquiryAction.id, name, email).subscribe(
+      response => {
+        this.enquiryAction = response;
+        this._matSnackBar.dismiss();
+        this._matSnackBar.open('Enquiry is sent for approval.', 'OK', { duration: 7000 });
+      },
+      error => {
+        this.disableSendForApproval = false;
+        this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
+          'OK', { duration: 7000 });
+      });
+    this.disableSendForApproval = true;
+  }
+
 }

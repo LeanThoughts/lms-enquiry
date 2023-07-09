@@ -9,8 +9,6 @@ export class EnquiryActionService implements Resolve<any> {
 
     _enquiryAction: BehaviorSubject<any> = new BehaviorSubject({});
 
-    _loanApplication: any;
-    
     /**
      * constructor()
      */
@@ -33,13 +31,6 @@ export class EnquiryActionService implements Resolve<any> {
     }
 
     /**
-     * getLoanApplication()
-     */
-    public getLoanApplication(loanApplicationId: string): Observable<any> {
-        return this._http.get("enquiry/api/loanApplications/" + loanApplicationId);
-    }
-
-    /**
      * getEnquiryAction()
      */
     public getEnquiryAction(loanApplicationId: string): Observable<any> {
@@ -51,7 +42,7 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);
-    }  
+    }
 
     /**
      * getOtherDetailsDocument()
@@ -72,14 +63,6 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public updateOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
         return this._http.put("enquiry/api/otherDetailsDocuments/update", otherDetialsDocument);
-    }
-    
-    /**
-     * deleteOtherDetailsDocument()
-     */
-    public deleteOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
-        const url = "enquiry/api/otherDetailsDocuments/delete/" + otherDetialsDocument.id;
-        return this._http.delete(url);
     }
 
     /**
@@ -102,7 +85,7 @@ export class EnquiryActionService implements Resolve<any> {
     public updateProjectProposalOtherDetails(otherDetials: any): Observable<any> {
         return this._http.put("enquiry/api/projectProposalOtherDetails/update", otherDetials);
     }
-    
+
     /**
      * getCreditRatings()
      */
@@ -122,14 +105,6 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public updateCreditRating(creditRating: any): Observable<any> {
         return this._http.put("enquiry/api/creditRatings/update", creditRating);
-    }
-        
-    /**
-     * deleteCreditRating()
-     */
-    public deleteCreditRating(creditRating: any): Observable<any> {
-        const url = "enquiry/api/creditRatings/delete/" + creditRating.id;
-        return this._http.delete(url);
     }
 
     /**
@@ -152,12 +127,12 @@ export class EnquiryActionService implements Resolve<any> {
     public updateProjectDetail(projectDetail: any): Observable<any> {
         return this._http.put("enquiry/api/projectDetails/update", projectDetail);
     }
-        
+
     /**
-     * getFinancials)
+     * getShareHolders()
      */
     public getFinancials(projectProposalId: string): Observable<any> {
-        return this._http.get("enquiry/api/promoterBorrowerFinancials/search/findByProjectProposalIdOrderByFiscalPeriod?projectProposalId=" + projectProposalId);
+        return this._http.get("enquiry/api/promoterBorrowerFinancials/search/findByProjectProposalId?projectProposalId=" + projectProposalId);
     }
 
     /**
@@ -173,7 +148,7 @@ export class EnquiryActionService implements Resolve<any> {
     public updateFinancial(financial: any): Observable<any> {
         return this._http.put("enquiry/api/promoterBorrowerFinancials/update", financial);
     }
-    
+
     /**
      * getShareHolders()
      */
@@ -193,14 +168,6 @@ export class EnquiryActionService implements Resolve<any> {
      */
     public updateShareHolder(shareHolder: any): Observable<any> {
         return this._http.put("enquiry/api/shareHolders/update", shareHolder);
-    }
-
-    /**
-     * deleteShareHolder()
-     */
-    public deleteShareHolder(shareHolder: any): Observable<any> {
-        const url = "enquiry/api/shareHolders/delete/" + shareHolder.id;
-        return this._http.delete(url);
     }
 
     /**
@@ -368,7 +335,7 @@ export class EnquiryActionService implements Resolve<any> {
             )
         });
     }
-    
+
     /**
      * createReasonForDelay()
      */
@@ -432,7 +399,7 @@ export class EnquiryActionService implements Resolve<any> {
             )
         });
     }
-    
+
     /**
      * createRejectByPFS()
      */

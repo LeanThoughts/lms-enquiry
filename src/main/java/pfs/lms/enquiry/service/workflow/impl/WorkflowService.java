@@ -122,9 +122,9 @@ public class WorkflowService implements IWorkflowService {
         variables.put("workflowStatus", "In Approval");
 
 
-        log.info("ABOUT TO START WORKFLOW......... PROCES NAME   :  "  + processName);
-        log.info("ABOUT TO START WORKFLOW......... FROM EMAIL    : "  + username);
-        log.info("ABOUT TO START WORKFLOW......... LOAN CONTRACT : "  + loanContractId);
+        log.info("ABOUT TO START WORKFLOW......... PROCESS NAME     :  "  + processName);
+        log.info("ABOUT TO START WORKFLOW......... FROM EMAIL       : "  + username);
+        log.info("ABOUT TO START WORKFLOW......... LOAN CONTRACT    : "  + loanContractId);
 
         runtimeService = processEngine.getRuntimeService();
 
