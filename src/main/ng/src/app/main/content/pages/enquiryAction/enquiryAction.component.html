@@ -13,9 +13,9 @@
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button mat-raised-button class="mr-8 mb-8" (click)="sendEnquiryActionForApproval()">
-                <!-- [disabled]="(enquiryAction == {} ||
-                    enquiryAction.workFlowStatusCode === 2) || disableSendForApproval === true"> -->
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendEnquiryActionForApproval()"
+                [disabled]="(enquiryAction == {} ||
+                    enquiryAction.workFlowStatusCode === 2) || disableSendForApproval === true">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
             </button>
         </div>

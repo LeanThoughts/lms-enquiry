@@ -9,6 +9,8 @@ export class EnquiryActionService implements Resolve<any> {
 
     _enquiryAction: BehaviorSubject<any> = new BehaviorSubject({});
 
+    _loanApplication: any;
+
     /**
      * constructor()
      */
@@ -28,6 +30,38 @@ export class EnquiryActionService implements Resolve<any> {
             this.getOtherDetails(this._enquiryAction.value.id),
             this.getProjectProposals(this._enquiryAction.value.id)
         ]);
+    }
+
+    public sendEnquiryActionForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'EnquiryAction'
+        }
+        return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }
+
+    public deleteShareHolder(shareHolder: any): Observable<any> {
+        const url = "enquiry/api/shareHolders/delete/" + shareHolder.id;
+        return this._http.delete(url);
+    }
+
+    public deleteCreditRating(creditRating: any): Observable<any> {
+        const url = "enquiry/api/creditRatings/delete/" + creditRating.id;
+        return this._http.delete(url);
+    }
+    
+    public deleteOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
+        const url = "enquiry/api/otherDetailsDocuments/delete/" + otherDetialsDocument.id;
+        return this._http.delete(url);
+    }
+
+    /**
+     * getLoanApplication()
+     */
+    public getLoanApplication(loanApplicationId: string): Observable<any> {
+        return this._http.get("enquiry/api/loanApplications/" + loanApplicationId);
     }
 
     /**
