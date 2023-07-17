@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { EnquiryAlertsService } from '../enquiryAlerts.service';
 import { EnquiryApplicationModel } from 'app/main/content/model/enquiryApplication.model';
+import { log } from 'console';
 
 @Component({
     selector: 'fuse-enquiry-alerts-list',

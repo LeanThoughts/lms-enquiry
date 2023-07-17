@@ -101,7 +101,9 @@ export class EnquiryReviewComponent implements OnInit {
     this.isCurrentUserAdmin();
 
     // Initialize loanApplication.
-    this.loanApplication = _route.snapshot.data.routeResolvedData[5];
+    this.loanApplication = _route.snapshot.data.routeResolvedData[5].loanApplication;
+    console.log(this.loanApplication);
+    
     //this.partner = _route.snapshot.data.routeResolvedData[8];
 
     // Disable the Form
@@ -115,14 +117,16 @@ export class EnquiryReviewComponent implements OnInit {
 
     // Initialize partner.
     this.partner = new PartnerModel({});
-    this._enquiryAlertsService.getPartner(this.loanApplication.loanApplicant).subscribe((result) => {
+    if (this.loanApplication.loanApplicant !== null && this.loanApplication.loanApplicant !== undefined) {
+        this._enquiryAlertsService.getPartner(this.loanApplication.loanApplicant).subscribe((result) => {
 
-      //console.log("Inside GET PARTNER : loanApplicant" + this.loanApplication.loanApplicant);
-      this.partner = result;
-      //console.log("Inside GET PARTNER : Partner Number" + this.partner.partyNumber);
+        //console.log("Inside GET PARTNER : loanApplicant" + this.loanApplication.loanApplicant);
+        this.partner = result;
+        //console.log("Inside GET PARTNER : Partner Number" + this.partner.partyNumber);
 
-      this.initializePartnerForm(); // Refresh the partner form with data.
-    });
+        this.initializePartnerForm(); // Refresh the partner form with data.
+        });
+    }
 
     // Initialize the forms.
     this.initializeLoanApplicationForms();
@@ -168,9 +172,11 @@ export class EnquiryReviewComponent implements OnInit {
   ngOnInit() {
 
     // Project Name Length
-    this.projectNameLength = this.loanEnquiryFormStep1.value.projectName.length;
+    if (this.loanEnquiryFormStep1.value.projectName !== null)
+        this.projectNameLength = this.loanEnquiryFormStep1.value.projectName.length;
     // Purpose Length
-    this.loanPurposeLength = this.loanEnquiryFormStep1.value.loanPurpose.length;
+    if (this.loanEnquiryFormStep1.value.loanPurpose !== null)
+        this.loanPurposeLength = this.loanEnquiryFormStep1.value.loanPurpose.length;
 
     this.applicantEmailFilteredOptions = this.applicantEmailFormControl.valueChanges
         .pipe(
@@ -270,7 +276,7 @@ export class EnquiryReviewComponent implements OnInit {
     });
 
     this.loanEnquiryFormStep4 = this._formBuilder.group({
-      enquiryNo: [this.loanApplication.enquiryNo.id],
+      enquiryNo: [getEnquiryNo(this.loanApplication)],
       loanContractId: [this.loanApplication.loanContractId],
       partyNumber: [this.loanApplication.busPartnerNumber]
 
@@ -682,4 +688,12 @@ function validateUser(isValid: any) {
 
     }
   };
+}
+
+function getEnquiryNo(loanApplication: any): any {
+    let en = '';
+    if (loanApplication.enquiryNo === undefined || loanApplication.enquiryNo === null)
+        en = '';
+    else
+        en = loanApplication.enquiryNo.id;
 }
