@@ -48,6 +48,8 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setMoratoriumPeriodUnit(resource.getMoratoriumPeriodUnit());
         projectDetail.setConstructionPeriod(resource.getConstructionPeriod());
         projectDetail.setConstructionPeriodUnit(resource.getConstructionPeriodUnit());
+        projectDetail.setStatus(resource.getStatus());
+        projectDetail.setRoi(resource.getRoi());
         projectDetail = projectDetailRepository.save(projectDetail);
 
         // Change Documents for Project Proposal
@@ -99,6 +101,8 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setMoratoriumPeriodUnit(resource.getMoratoriumPeriodUnit());
         projectDetail.setConstructionPeriod(resource.getConstructionPeriod());
         projectDetail.setConstructionPeriodUnit(resource.getConstructionPeriodUnit());
+        projectDetail.setStatus(resource.getStatus());
+        projectDetail.setRoi(resource.getRoi());
         projectDetail = projectDetailRepository.save(projectDetail);
 
         // Change Documents for Project Proposal

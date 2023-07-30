@@ -40,12 +40,15 @@ public class ProjectDetail extends AggregateRoot<ProjectDetail> implements Clone
     private String policyExposure;
     private String endUseOfFunds;
     private Double fees;
+    private Integer roi;
     private Integer tenorYear;
     private Integer tenorMonths;
     private Integer moratoriumPeriod;
     private String moratoriumPeriodUnit;
     private Integer constructionPeriod;
     private String constructionPeriodUnit;
+
+    private String status;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

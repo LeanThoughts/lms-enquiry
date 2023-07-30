@@ -6,9 +6,9 @@
         <!-- BREADCRUMB -->
         <div class="breadcrumb text-truncate h4 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
             *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
-            Loan Appraisal : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.projectName }}
+            Loan Enquiry : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.projectName }}
             <br>
-            Status: {{ _enquiryActionService._enquiryAction?.workFlowStatusDescription }}
+            Functional Status Description: {{ _enquiryActionService._enquiryAction?.workFlowStatusDescription }}
         </div>
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
@@ -87,17 +87,17 @@
 
         <mat-tab-group class="mt-16">
 
-            <!-- Reject by PFS tab starts here -->
-            <mat-tab label="Rejected by PFS">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-reject-by-pfs></fuse-reject-by-pfs>
-                </div>
-            </mat-tab>
-
             <!-- Project Proposal tab starts here -->
             <mat-tab label="Project Proposal">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-project-proposal></fuse-project-proposal>
+                </div>
+            </mat-tab>
+
+            <!-- Reject by PFS tab starts here -->
+            <mat-tab label="Rejected by PFS">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-reject-by-pfs></fuse-reject-by-pfs>
                 </div>
             </mat-tab>
 

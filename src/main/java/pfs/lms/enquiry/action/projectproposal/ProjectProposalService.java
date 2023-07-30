@@ -62,6 +62,8 @@ public class ProjectProposalService implements IProjectProposalService {
                 });
         ProjectProposal projectProposal = new ProjectProposal();
         projectProposal.setEnquiryAction(enquiryAction);
+        projectProposal.setSerialNumber(projectProposalRepository.
+                findByEnquiryActionId(enquiryAction.getId()).size() + 1);
         projectProposal.setAdditionalDetails(resource.getAdditionalDetails());
         projectProposal.setProposalFormSharingDate(resource.getProposalFormSharingDate());
         projectProposal.setDocumentName(resource.getDocumentName());

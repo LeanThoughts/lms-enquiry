@@ -11,13 +11,21 @@
             <p ><b>Project Details</b></p>
         </div>
         <div fxLayout="row">
-            <mat-form-field fxFlex="33">
+            <mat-form-field fxFlex="25">
                 <input matInput placeholder="Name of Project" formControlName="projectName" maxlength="100" required>
             </mat-form-field>
-            <mat-form-field fxFlex="34">
+
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Status" formControlName="status">
+                    <mat-option [value]="'Draft'">Draft</mat-option>
+                    <mat-option [value]="'Final'">Final</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="25">
                 <input matInput placeholder="Borrower Name" formControlName="borrowerName" maxlength="150" >
             </mat-form-field>
-            <mat-form-field fxFlex="33">
+            <mat-form-field fxFlex="25">
                 <input matInput placeholder="Name of Sponsor/Group" formControlName="promoterName" maxlength="150">
             </mat-form-field>
         </div>

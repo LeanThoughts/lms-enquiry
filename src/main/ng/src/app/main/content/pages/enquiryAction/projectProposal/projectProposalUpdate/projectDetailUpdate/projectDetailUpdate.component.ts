@@ -104,6 +104,7 @@ export class ProjectDetailUpdateComponent {
             constructionPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriod, 
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             constructionPeriodUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriodUnit),
+            status: new FormControl('Draft')
         });
         
         if (JSON.stringify(this._projectDetail) !== JSON.stringify({})) // update mode, initialize for values ...
@@ -158,6 +159,7 @@ export class ProjectDetailUpdateComponent {
                 this._projectDetail.moratoriumPeriodUnit = formValues.moratoriumPeriodUnit;
                 this._projectDetail.constructionPeriod = formValues.constructionPeriod;
                 this._projectDetail.constructionPeriodUnit = formValues.constructionPeriodUnit;
+                this._projectDetail.status = formValues.status;
                 this._enquiryActionService.updateProjectDetail(this._projectDetail).subscribe(response => {
                     this._projectDetail = response;
                     this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
@@ -187,11 +189,12 @@ export class ProjectDetailUpdateComponent {
             'roi': this._projectDetail.roi || '',
             'fees': this._projectDetail.fees || '',
             'tenorYear': this._projectDetail.tenorYear || '',
-            'tenorMonths': this._projectDetail.ternorMonths || '',
+            'tenorMonths': this._projectDetail.tenorMonths || '',
             'moratoriumPeriod': this._projectDetail.moratoriumPeriod || '',
             'moratoriumPeriodUnit': this._projectDetail.moratoriumPeriodUnit || '',
             'constructionPeriod': this._projectDetail.constructionPeriod || '',
-            'constructionPeriodUnit': this._projectDetail.constructionPeriodUnit || ''
+            'constructionPeriodUnit': this._projectDetail.constructionPeriodUnit || '',
+            'status': this._projectDetail.status || ''
         });
     }
 
