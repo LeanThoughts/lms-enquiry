@@ -22,7 +22,7 @@ export class ProjectProposalListComponent {
     dataSource: MatTableDataSource<any>;
     
     displayedColumns = [
-        'proposalFormSharingDate'
+        'serialNumber', 'proposalFormSharingDate', 'proposalStatus'
     ];
 
     /**
@@ -76,6 +76,6 @@ export class ProjectProposalListComponent {
      * generateTeaser()
      */
     generateTeaser(): void {       
-        console.log('in generate teaser');
+        (window as any).open('enquiry/api/teaser/excel/generate?projectProposalId=' + this._selectedProjectProposal.id, '_blank');
     }
 }

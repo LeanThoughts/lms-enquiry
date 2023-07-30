@@ -16,11 +16,27 @@
 
             <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
     
+                <!-- serialNumber Column -->
+                <ng-container matColumnDef="serialNumber">
+                    <mat-header-cell *matHeaderCellDef>Sl. No.</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.serialNumber }}</p>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- proposalFormSharingDate Column -->
                 <ng-container matColumnDef="proposalFormSharingDate">
                     <mat-header-cell *matHeaderCellDef>Proposal Date</mat-header-cell>
                     <mat-cell *matCellDef="let obj" >
                         <p class="text-truncate">{{ obj.proposalFormSharingDate | date: 'dd/MM/yyyy' }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- proposalStatus Column -->
+                <ng-container matColumnDef="proposalStatus">
+                    <mat-header-cell *matHeaderCellDef>Proposal Date</mat-header-cell>
+                    <mat-cell *matCellDef="let obj" >
+                        <p class="text-truncate">{{ obj.proposalStatus }}</p>
                     </mat-cell>
                 </ng-container>
       
