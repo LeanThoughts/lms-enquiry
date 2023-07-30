@@ -13,6 +13,29 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.action.EnquiryAction;
+import pfs.lms.enquiry.action.EnquiryActionRepository;
+import pfs.lms.enquiry.action.otherdetail.OtherDetail;
+import pfs.lms.enquiry.action.otherdetail.OtherDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
+import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
+import pfs.lms.enquiry.action.projectproposal.collateraldetail.CollateralDetail;
+import pfs.lms.enquiry.action.projectproposal.collateraldetail.CollateralDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.creditrating.CreditRatingRepository;
+import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuaranteeTimeline;
+import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuaranteeTimelineRepository;
+import pfs.lms.enquiry.action.projectproposal.financials.PromoterBorrowerFinancial;
+import pfs.lms.enquiry.action.projectproposal.financials.PromoterBorrowerFinancialRepository;
+import pfs.lms.enquiry.action.projectproposal.projectcost.ProjectCost;
+import pfs.lms.enquiry.action.projectproposal.projectcost.ProjectCostRepository;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetail;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.projectproposalotherdetail.ProjectProposalOtherDetail;
+import pfs.lms.enquiry.action.projectproposal.projectproposalotherdetail.ProjectProposalOtherDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
+import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolderRepository;
+import pfs.lms.enquiry.action.teaser.ITeaserService;
+import pfs.lms.enquiry.action.teaser.TeaserResource;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.mail.service.LoanNotificationService;
 import pfs.lms.enquiry.process.LoanApplicationEngine;
@@ -23,6 +46,7 @@ import pfs.lms.enquiry.resource.*;
 import pfs.lms.enquiry.service.ILoanApplicationService;
 import pfs.lms.enquiry.service.ILoanContractExtensionService;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
+import pfs.lms.enquiry.service.impl.PartnerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,10 +57,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -68,6 +89,21 @@ public class LoanApplicationContoller {
     private final LoanClassRepository loanClassRepository;
     private final ProjectTypeRepository projectTypeRepository;
     private final FinancingTypeRepository financingTypeRepository;
+
+     private final PartnerService partnerService;
+     private final EnquiryActionRepository enquiryActionRepository;
+     private final ProjectProposalRepository projectProposalRepository;
+     private final ShareHolderRepository shareHolderRepository;
+     private final CollateralDetailRepository collateralDetailRepository;
+     private final ProjectDetailRepository projectDetailRepository;
+     private final ProjectCostRepository projectCostRepository;
+     private final DealGuaranteeTimelineRepository dealGuaranteeTimelineRepository;
+     private final PromoterBorrowerFinancialRepository promoterBorrowerFinancialRepository;
+     private final ProjectProposalOtherDetailRepository projectProposalOtherDetailRepository;
+     private final OtherDetailRepository otherDetailRepository;
+     private final CreditRatingRepository creditRatingRepository;
+
+     private final ITeaserService teaserService;
 
     @GetMapping("/loanApplications")
     public ResponseEntity get(@RequestParam(value = "status", required = false) Integer status, HttpServletRequest request,
@@ -438,7 +474,66 @@ public class LoanApplicationContoller {
         return ResponseEntity.ok(resources);
     }
 
-    @GetMapping(value = "/loanApplications/search/excel")
+    @GetMapping(value = "/loanApplications/teaser/excel")
+    public void searchAndGenerateExcelDoc(
+            HttpServletResponse response,
+            @RequestParam(required = false) String loanEnquiryId,
+            HttpServletRequest request) throws IOException, ParseException {
+
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=LoanEnquiry_Teaser_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        LoanApplication loanApplication = new LoanApplication();
+        EnquiryNo enquiryNo = new EnquiryNo();
+
+        enquiryNo.setId(5112L);
+        loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
+
+        EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplicationId(loanApplication.getId());
+        List<ProjectProposal> projectProposals = projectProposalRepository.findByEnquiryActionId(enquiryAction.getId());
+        Collections.sort(projectProposals, new Comparator<ProjectProposal>() {
+            @Override
+            public int compare(ProjectProposal p1, ProjectProposal p2) {
+                return p1.getProposalFormSharingDate().compareTo(p2.getProposalFormSharingDate());
+            }
+        });
+
+        ProjectProposal projectProposal = projectProposals.get(0);
+
+        TeaserResource teaserResource = new TeaserResource();
+        teaserResource.setLoanApplication(loanApplication);
+        teaserResource.setPartner(partnerRepository.findByPartyNumber( Integer.parseInt(loanApplication.getbusPartnerNumber())) );
+
+        List<CollateralDetail> collateralDetails    = collateralDetailRepository.findByProjectProposalId(projectProposal.getId());
+        List<ShareHolder> shareHolders              = shareHolderRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectCost projectCost                     = projectCostRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectDetail projectDetail                 = projectDetailRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectProposalOtherDetail projectProposalOtherDetail = projectProposalOtherDetailRepository.findByProjectProposalId(projectProposal.getId());
+        List<PromoterBorrowerFinancial> promoterBorrowerFinancials   = promoterBorrowerFinancialRepository.findByProjectProposalId(projectProposal.getId());
+        DealGuaranteeTimeline dealGuaranteeTimeline = dealGuaranteeTimelineRepository.findByProjectProposalId(projectProposal.getId());
+
+        teaserResource.setEnquiryAction(enquiryAction);
+        teaserResource.setProjectProposal(projectProposal);
+        teaserResource.setProjectDetail(projectDetail);
+        teaserResource.setCollateralDetails(collateralDetails);
+        teaserResource.setShareHolders(shareHolders);
+        teaserResource.setProjectProposalOtherDetail(projectProposalOtherDetail);
+        teaserResource.setProjectCost(projectCost);
+        teaserResource.setPromoterBorrowerFinancials(promoterBorrowerFinancials);
+        teaserResource.setDealGuaranteeTimeline(dealGuaranteeTimeline);
+
+
+        SXSSFWorkbook sxssfWorkbook  = teaserService.generateTeaserExcel(response, teaserResource);
+
+
+    }
+
+        @GetMapping(value = "/loanApplications/search/excel")
     public void searchAndGenerateExcel(
             HttpServletResponse response,
             @RequestParam(required = false) String enquiryDateFrom,
