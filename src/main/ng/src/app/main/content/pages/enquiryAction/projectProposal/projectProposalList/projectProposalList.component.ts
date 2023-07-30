@@ -71,4 +71,11 @@ export class ProjectProposalListComponent {
             });
         });    
     }
+
+    /**
+     * generateTeaser()
+     */
+    generateTeaser(): void {       
+        console.log('in generate teaser');
+    }
 }

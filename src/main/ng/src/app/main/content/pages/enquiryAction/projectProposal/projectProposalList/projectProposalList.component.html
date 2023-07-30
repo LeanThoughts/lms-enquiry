@@ -6,6 +6,9 @@
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyProjectProposal')" 
                 [disabled]="!_selectedProjectProposal"> Modify Proposal 
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="generateTeaser()" 
+                [disabled]="!_selectedProjectProposal"> Generate Teaser 
+        </button>
     </div>
 
     <div  fxLayout="row">
