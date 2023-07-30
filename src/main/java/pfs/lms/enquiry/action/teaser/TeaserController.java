@@ -2,6 +2,7 @@ package pfs.lms.enquiry.action.teaser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pfs.lms.enquiry.config.ApiController;
@@ -13,11 +14,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @ApiController
 @RequiredArgsConstructor
 public class TeaserController {
+
+    private final ITeaserService teaserService;
 
     @GetMapping(value = "/teaser/excelv1")
     public void generateTeaserExcel(){
@@ -29,7 +33,7 @@ public class TeaserController {
     @GetMapping("/teaser/excel/generate")
     public void generateTeaserExcel(
             HttpServletResponse response,
-            @RequestParam(required = false) String loanEnquiryId,
+            @RequestParam(required = true) String projectProposalId,
             HttpServletRequest request) throws IOException, ParseException {
 
         response.setContentType("application/octet-stream");
@@ -40,13 +44,7 @@ public class TeaserController {
         String headerValue = "attachment; filename=LoanEnquiryTeaser_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
-//        LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
-//
-//
-//
-//        TeaserService teaserService = new TeaserService(loanApplicationResource);
-//        teaserService.generateTeaserExcel(response);
-
+        SXSSFWorkbook sxssfWorkbook =  teaserService.generateTeaserExcelForProposal(response, UUID.fromString(projectProposalId));
 
     }
 }

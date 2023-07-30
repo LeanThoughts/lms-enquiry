@@ -14,9 +14,33 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Locale;
+import java.util.*;
 
+import pfs.lms.enquiry.action.EnquiryAction;
+import pfs.lms.enquiry.action.EnquiryActionRepository;
+import pfs.lms.enquiry.action.otherdetail.OtherDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
+import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
+import pfs.lms.enquiry.action.projectproposal.collateraldetail.CollateralDetail;
+import pfs.lms.enquiry.action.projectproposal.collateraldetail.CollateralDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.creditrating.CreditRatingRepository;
+import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuaranteeTimeline;
+import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuaranteeTimelineRepository;
+import pfs.lms.enquiry.action.projectproposal.financials.PromoterBorrowerFinancial;
+import pfs.lms.enquiry.action.projectproposal.financials.PromoterBorrowerFinancialRepository;
+import pfs.lms.enquiry.action.projectproposal.projectcost.ProjectCost;
+import pfs.lms.enquiry.action.projectproposal.projectcost.ProjectCostRepository;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetail;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.projectproposalotherdetail.ProjectProposalOtherDetail;
+import pfs.lms.enquiry.action.projectproposal.projectproposalotherdetail.ProjectProposalOtherDetailRepository;
+import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
+import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolderRepository;
+import pfs.lms.enquiry.domain.EnquiryNo;
+import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.AssistanceTypeRepository;
+import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.ProjectTypeRepository;
 
 
@@ -30,8 +54,58 @@ public class TeaserService implements ITeaserService {
 
     private final ProjectTypeRepository projectTypeRepository;
     private final AssistanceTypeRepository assistanceTypeRepository;
+    private final EnquiryActionRepository enquiryActionRepository;
+    private final ProjectProposalRepository projectProposalRepository;
+    private final ShareHolderRepository shareHolderRepository;
+    private final CollateralDetailRepository collateralDetailRepository;
+    private final ProjectDetailRepository projectDetailRepository;
+    private final ProjectCostRepository projectCostRepository;
+    private final DealGuaranteeTimelineRepository dealGuaranteeTimelineRepository;
+    private final PromoterBorrowerFinancialRepository promoterBorrowerFinancialRepository;
+    private final ProjectProposalOtherDetailRepository projectProposalOtherDetailRepository;
+    private final OtherDetailRepository otherDetailRepository;
+    private final CreditRatingRepository creditRatingRepository;
+    private final LoanApplicationRepository loanApplicationRepository;
+    private final PartnerRepository partnerRepository;
 
     private TeaserContent teaserContent;
+
+    @Override
+    public SXSSFWorkbook generateTeaserExcelForProposal(HttpServletResponse response, UUID projectProposalId) throws IOException, ParseException {
+
+        LoanApplication loanApplication = new LoanApplication();
+
+        ProjectProposal projectProposal = projectProposalRepository.getOne(projectProposalId);
+        loanApplication = projectProposal.getEnquiryAction().getLoanApplication();
+
+
+        TeaserResource teaserResource = new TeaserResource();
+        teaserResource.setLoanApplication(loanApplication);
+        teaserResource.setPartner(partnerRepository.findByPartyNumber( Integer.parseInt(loanApplication.getbusPartnerNumber())) );
+
+        List<CollateralDetail> collateralDetails    = collateralDetailRepository.findByProjectProposalId(projectProposal.getId());
+        List<ShareHolder> shareHolders              = shareHolderRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectCost projectCost                     = projectCostRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectDetail projectDetail                 = projectDetailRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectProposalOtherDetail projectProposalOtherDetail = projectProposalOtherDetailRepository.findByProjectProposalId(projectProposal.getId());
+        List<PromoterBorrowerFinancial> promoterBorrowerFinancials   = promoterBorrowerFinancialRepository.findByProjectProposalId(projectProposal.getId());
+        DealGuaranteeTimeline dealGuaranteeTimeline = dealGuaranteeTimelineRepository.findByProjectProposalId(projectProposal.getId());
+
+        teaserResource.setProjectProposal(projectProposal);
+        teaserResource.setProjectDetail(projectDetail);
+        teaserResource.setCollateralDetails(collateralDetails);
+        teaserResource.setShareHolders(shareHolders);
+        teaserResource.setProjectProposalOtherDetail(projectProposalOtherDetail);
+        teaserResource.setProjectCost(projectCost);
+        teaserResource.setPromoterBorrowerFinancials(promoterBorrowerFinancials);
+        teaserResource.setDealGuaranteeTimeline(dealGuaranteeTimeline);
+
+
+        SXSSFWorkbook sxssfWorkbook  = this.generateTeaserExcel(response, teaserResource);
+
+        return sxssfWorkbook;
+
+    }
 
     @Override
     public SXSSFWorkbook generateTeaserExcel(HttpServletResponse response,TeaserResource teaserResource) throws IOException, ParseException {

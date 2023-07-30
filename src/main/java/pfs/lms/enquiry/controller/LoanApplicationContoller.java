@@ -90,18 +90,10 @@ public class LoanApplicationContoller {
     private final ProjectTypeRepository projectTypeRepository;
     private final FinancingTypeRepository financingTypeRepository;
 
-     private final PartnerService partnerService;
-     private final EnquiryActionRepository enquiryActionRepository;
-     private final ProjectProposalRepository projectProposalRepository;
-     private final ShareHolderRepository shareHolderRepository;
-     private final CollateralDetailRepository collateralDetailRepository;
-     private final ProjectDetailRepository projectDetailRepository;
-     private final ProjectCostRepository projectCostRepository;
-     private final DealGuaranteeTimelineRepository dealGuaranteeTimelineRepository;
-     private final PromoterBorrowerFinancialRepository promoterBorrowerFinancialRepository;
-     private final ProjectProposalOtherDetailRepository projectProposalOtherDetailRepository;
-     private final OtherDetailRepository otherDetailRepository;
-     private final CreditRatingRepository creditRatingRepository;
+    private final PartnerService partnerService;
+
+
+
 
      private final ITeaserService teaserService;
 
@@ -474,64 +466,7 @@ public class LoanApplicationContoller {
         return ResponseEntity.ok(resources);
     }
 
-    @GetMapping(value = "/loanApplications/teaser/excel")
-    public void searchAndGenerateExcelDoc(
-            HttpServletResponse response,
-            @RequestParam(required = false) String loanEnquiryId,
-            HttpServletRequest request) throws IOException, ParseException {
 
-        response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=LoanEnquiry_Teaser_" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-
-        LoanApplication loanApplication = new LoanApplication();
-        EnquiryNo enquiryNo = new EnquiryNo();
-
-        enquiryNo.setId(5112L);
-        loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
-
-        EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplicationId(loanApplication.getId());
-        List<ProjectProposal> projectProposals = projectProposalRepository.findByEnquiryActionId(enquiryAction.getId());
-        Collections.sort(projectProposals, new Comparator<ProjectProposal>() {
-            @Override
-            public int compare(ProjectProposal p1, ProjectProposal p2) {
-                return p1.getProposalFormSharingDate().compareTo(p2.getProposalFormSharingDate());
-            }
-        });
-
-        ProjectProposal projectProposal = projectProposals.get(0);
-
-        TeaserResource teaserResource = new TeaserResource();
-        teaserResource.setLoanApplication(loanApplication);
-        teaserResource.setPartner(partnerRepository.findByPartyNumber( Integer.parseInt(loanApplication.getbusPartnerNumber())) );
-
-        List<CollateralDetail> collateralDetails    = collateralDetailRepository.findByProjectProposalId(projectProposal.getId());
-        List<ShareHolder> shareHolders              = shareHolderRepository.findByProjectProposalId(projectProposal.getId());
-        ProjectCost projectCost                     = projectCostRepository.findByProjectProposalId(projectProposal.getId());
-        ProjectDetail projectDetail                 = projectDetailRepository.findByProjectProposalId(projectProposal.getId());
-        ProjectProposalOtherDetail projectProposalOtherDetail = projectProposalOtherDetailRepository.findByProjectProposalId(projectProposal.getId());
-        List<PromoterBorrowerFinancial> promoterBorrowerFinancials   = promoterBorrowerFinancialRepository.findByProjectProposalId(projectProposal.getId());
-        DealGuaranteeTimeline dealGuaranteeTimeline = dealGuaranteeTimelineRepository.findByProjectProposalId(projectProposal.getId());
-
-        teaserResource.setEnquiryAction(enquiryAction);
-        teaserResource.setProjectProposal(projectProposal);
-        teaserResource.setProjectDetail(projectDetail);
-        teaserResource.setCollateralDetails(collateralDetails);
-        teaserResource.setShareHolders(shareHolders);
-        teaserResource.setProjectProposalOtherDetail(projectProposalOtherDetail);
-        teaserResource.setProjectCost(projectCost);
-        teaserResource.setPromoterBorrowerFinancials(promoterBorrowerFinancials);
-        teaserResource.setDealGuaranteeTimeline(dealGuaranteeTimeline);
-
-
-        SXSSFWorkbook sxssfWorkbook  = teaserService.generateTeaserExcel(response, teaserResource);
-
-
-    }
 
         @GetMapping(value = "/loanApplications/search/excel")
     public void searchAndGenerateExcel(
