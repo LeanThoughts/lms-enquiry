@@ -2,10 +2,9 @@ package pfs.lms.enquiry.action.teaser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pfs.lms.enquiry.resource.LoanApplicationResource;
+import pfs.lms.enquiry.config.ApiController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Slf4j
-@RepositoryRestController
+@ApiController
 @RequiredArgsConstructor
 public class TeaserController {
 
@@ -27,7 +26,7 @@ public class TeaserController {
 
     }
 
-    @GetMapping(value = "/teaser/excel/generate")
+    @GetMapping("/teaser/excel/generate")
     public void generateTeaserExcel(
             HttpServletResponse response,
             @RequestParam(required = false) String loanEnquiryId,
