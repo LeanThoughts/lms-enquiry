@@ -409,75 +409,78 @@ public class LoanApplicationService implements ILoanApplicationService {
         // Add entries for partners associated with the loan
 
 
-        //Create entries for Loan Appraisal and Monitoring
+        //Create entries for Loan Appraisal and Monitoring - ONLY If Loan Contract is Present
 
         LoanApplication loanApplication1 = loanApplicationRepository.getOne(loanApplication.getId());
+        if (loanApplication1.getLoanContractId() != null) {
 
-        LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication1)
-                .orElseGet(() -> {
-                    LoanAppraisal obj = new LoanAppraisal();
-                    obj.setLoanApplication(loanApplication1);
-                    obj.setLoanContractId(loanApplication1.getLoanContractId());
-                    obj = loanAppraisalRepository.save(obj);
+            LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication1)
+                    .orElseGet(() -> {
+                        LoanAppraisal obj = new LoanAppraisal();
+                        obj.setLoanApplication(loanApplication1);
+                        obj.setLoanContractId(loanApplication1.getLoanContractId());
+                        obj = loanAppraisalRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-                    changeDocumentService.createChangeDocument(
-                            obj.getId(),
-                            obj.getId().toString(),
-                            obj.getId().toString(),
-                            loanApplication1.getLoanContractId(),
-                            null,
-                            obj,
-                            "Created",
-                            "admin@gmail.com",
-                            "Appraisal", "Header");
-                    log.info("Loan Appraisal Header Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+                        // Change Documents for Appraisal Header
+                        changeDocumentService.createChangeDocument(
+                                obj.getId(),
+                                obj.getId().toString(),
+                                obj.getId().toString(),
+                                loanApplication1.getLoanContractId(),
+                                null,
+                                obj,
+                                "Created",
+                                "admin@gmail.com",
+                                "Appraisal", "Header");
+                        log.info("Loan Appraisal Header Created : Loan Contract Id :" + loanApplication1.getLoanContractId());
 
-                    return obj;
-                });
-
-
-        LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
-        if(loanMonitor == null)
-        {
-            loanMonitor = new LoanMonitor();
-            loanMonitor.setLoanApplication(loanApplication1);
-            loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
-            loanMonitor = loanMonitorRepository.save(loanMonitor);
-
-            // Change Documents for Monitoring Header
-            changeDocumentService.createChangeDocument(
-                    loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
-                    loanApplication.getLoanContractId(),
-                    null,
-                    loanMonitor,
-                    "Created",
-                    "admin@gmail.com",
-                    "Monitoring", "Header");
-
-            log.info("Loan Monitoring Header Created : Loan Contract Id :" +loanApplication1.getLoanContractId());
+                        return obj;
+                    });
 
 
-        }
+            LoanMonitor loanMonitor = loanMonitorRepository.findByLoanApplication(loanApplication);
+            if (loanMonitor == null && loanApplication1.getLoanContractId() != null) {
 
-        if (resource.getMainLocationDetail() != null) {
-            log.info("Migrating Main Location : " +resource.getMainLocationDetail().getLocation());
-            this.migrateMainLocation(resource.getMainLocationDetail(), loanAppraisal);
-        }
-        if (resource.getSubLocationDetailList() != null) {
-            log.info("Migrating Sub Location : " +resource.getMainLocationDetail().getLocation());
-            this.migrateSubLocation(resource.getSubLocationDetailList(), loanAppraisal);
-        }
+                loanMonitor = new LoanMonitor();
+                loanMonitor.setLoanApplication(loanApplication1);
+                loanMonitor.setWorkFlowStatusCode(01);
+                loanMonitor.setWorkFlowStatusDescription("Created");
+                loanMonitor = loanMonitorRepository.save(loanMonitor);
+
+                // Change Documents for Monitoring Header
+                changeDocumentService.createChangeDocument(
+                        loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
+                        loanApplication.getLoanContractId(),
+                        null,
+                        loanMonitor,
+                        "Created",
+                        "admin@gmail.com",
+                        "Monitoring", "Header");
+
+                log.info("Loan Monitoring Header Created : Loan Contract Id :" + loanApplication1.getLoanContractId());
 
 
-        if (resource.getNpa() != null) {
-            NPA npa = new NPA();
-            log.info("Migrating NPA Header : " + resource.getNpa().getAssetClass());
-            npa = this.migrateNPA(resource.getNpa(), loanMonitor);
+            }
 
-            if (resource.getNpaDetailList() != null) {
-                log.info("Migrating NPA Items: " + resource.getMainLocationDetail().getLocation());
-                this.migrateNPADetails(resource.getNpaDetailList(), loanMonitor, npa);
+            if (resource.getMainLocationDetail() != null) {
+                log.info("Migrating Main Location : " + resource.getMainLocationDetail().getLocation());
+                this.migrateMainLocation(resource.getMainLocationDetail(), loanAppraisal);
+            }
+            if (resource.getSubLocationDetailList() != null) {
+                log.info("Migrating Sub Location : " + resource.getMainLocationDetail().getLocation());
+                this.migrateSubLocation(resource.getSubLocationDetailList(), loanAppraisal);
+            }
+
+
+            if (resource.getNpa() != null) {
+                NPA npa = new NPA();
+                log.info("Migrating NPA Header : " + resource.getNpa().getAssetClass());
+                npa = this.migrateNPA(resource.getNpa(), loanMonitor);
+
+                if (resource.getNpaDetailList() != null) {
+                    log.info("Migrating NPA Items: " + resource.getMainLocationDetail().getLocation());
+                    this.migrateNPADetails(resource.getNpaDetailList(), loanMonitor, npa);
+                }
             }
         }
         return loanApplication;

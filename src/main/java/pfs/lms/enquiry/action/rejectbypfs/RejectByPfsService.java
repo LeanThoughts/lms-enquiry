@@ -52,7 +52,7 @@ public class RejectByPfsService implements IRejectByPfsService {
                 rejectByPFS.getEnquiryAction().getId(),
                 rejectByPFS.getId().toString(),
                 rejectByPFS.getEnquiryAction().getId().toString(),
-                rejectByPFS.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                rejectByPFS.getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
                 null,
                 rejectByPFS,
                 "Created",

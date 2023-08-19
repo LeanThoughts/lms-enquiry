@@ -36,7 +36,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     assistanceTypes: Array<any>;
     states: Array<string>;
     technicalStatuses: Array<any>;
-    
+
     monitoring: boolean = false;
     appraisal: boolean = false;
 
@@ -49,7 +49,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      */
     constructor(_route: ActivatedRoute, _formBuilder: FormBuilder, public _appService: AppService,
                 public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
-                private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService, 
+                private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
                 private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
@@ -60,7 +60,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             loanClass: [],
             projectType: [],
             financingType: [],
-            assistanceType: [],            
+            assistanceType: [],
             borrowerCodeFrom: [],
             borrowerCodeTo: [],
             loanNumberFrom: [],
@@ -77,7 +77,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this.states = _route.snapshot.data.routeResolvedData[3];
         this.assistanceTypes = _route.snapshot.data.routeResolvedData[4]._embedded.assistanceTypes;
         this.technicalStatuses = _route.snapshot.data.routeResolvedData[5];
-        
+
         _route.snapshot.data.routeResolvedData[6].forEach(element => {
             if (element.authorizationObject === 'Execute Appraisal')
                 this.appraisal = true;
@@ -188,7 +188,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToEnquiryAction()
      */
     redirectToEnquiryAction(): void {
-        if (this._service.selectedEnquiry.value.loanContractId !== undefined) {
+        if (this._service.selectedEnquiry.value.loanContractId === undefined) {
             this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._enquiryActionService._enquiryAction.next(response);
                 this.redirect('/enquiryAction');
@@ -202,14 +202,14 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             })
         }
         else {
-            this._matSnackBar.open('Loan is still in the enquiry phase. Process cannot only be executed after the enquiry is approved by BD Team',
+            this._matSnackBar.open('Loan has already completed the enquiry phase ! ',
                 'OK', { duration: 7000 });
         }
     }
 
     /**
      * redirect()
-     * @param to 
+     * @param to
      */
     redirect(to: string): void {
         if (this._enquiryAlertsService.selectedLoanApplicationId !== undefined) {

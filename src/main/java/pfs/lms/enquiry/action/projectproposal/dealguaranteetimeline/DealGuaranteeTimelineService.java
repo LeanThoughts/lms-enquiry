@@ -38,16 +38,16 @@ public class DealGuaranteeTimelineService implements IDealGuaranteeTimelineServi
         dealGuaranteeTimeline = dealGuaranteeTimelineRepository.save(dealGuaranteeTimeline);
 
         // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        changeDocumentService.createChangeDocument(
+                dealGuaranteeTimeline.getProjectProposal().getId(),
+                dealGuaranteeTimeline.getId().toString(),
+                dealGuaranteeTimeline.getProjectProposal().getId().toString(),
+                dealGuaranteeTimeline.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                dealGuaranteeTimeline,
+                "Created",
+                username,
+                "EnquiryAction", "Deal Guarantee Timeline" );
 
         return dealGuaranteeTimeline;
     }
@@ -60,7 +60,7 @@ public class DealGuaranteeTimelineService implements IDealGuaranteeTimelineServi
                 dealGuaranteeTimelineRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+        Object oldDealGuaranteeTimeline = dealGuaranteeTimeline.clone();
 
         dealGuaranteeTimeline.setDealTransactionStructure(resource.getDealTransactionStructure());
         dealGuaranteeTimeline.setDeviations(resource.getDeviations());
@@ -76,16 +76,16 @@ public class DealGuaranteeTimelineService implements IDealGuaranteeTimelineServi
         dealGuaranteeTimeline = dealGuaranteeTimelineRepository.save(dealGuaranteeTimeline);
 
         // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        changeDocumentService.createChangeDocument(
+                dealGuaranteeTimeline.getProjectProposal().getId(),
+                dealGuaranteeTimeline.getId().toString(),
+                dealGuaranteeTimeline.getProjectProposal().getId().toString(),
+                dealGuaranteeTimeline.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldDealGuaranteeTimeline,
+                dealGuaranteeTimeline,
+                "Updated",
+                username,
+                "EnquiryAction", "Deal Guarantee Timeline" );
 
         return dealGuaranteeTimeline;
     }

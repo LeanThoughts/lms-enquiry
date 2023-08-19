@@ -52,17 +52,17 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setRoi(resource.getRoi());
         projectDetail = projectDetailRepository.save(projectDetail);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Project Detail
+        changeDocumentService.createChangeDocument(
+                projectDetail.getProjectProposal().getId(),
+                projectDetail.getId().toString(),
+                projectDetail.getProjectProposal().getId().toString(),
+                projectDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                projectDetail,
+                "Created",
+                username,
+                "EnquiryAction", "Project Detail" );
 
         return projectDetail;
     }
@@ -75,7 +75,7 @@ public class ProjectDetailService implements IProjectDetailService {
                 projectDetailRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+         Object oldObject = projectDetail.clone();
 
         projectDetail.setProjectName(resource.getProjectName());
         projectDetail.setBorrowerName(resource.getBorrowerName());
@@ -105,17 +105,17 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setRoi(resource.getRoi());
         projectDetail = projectDetailRepository.save(projectDetail);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Project Detail
+        changeDocumentService.createChangeDocument(
+                projectDetail.getProjectProposal().getId(),
+                projectDetail.getId().toString(),
+                projectDetail.getProjectProposal().getId().toString(),
+                projectDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldObject,
+                projectDetail,
+                "Updated",
+                username,
+                "EnquiryAction", "Project Detail" );
 
         return projectDetail;
     }

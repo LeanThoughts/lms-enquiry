@@ -28,7 +28,7 @@ public class SAPLoanAppraisalHeaderResource implements Serializable   {
 
 
 
-    public void setsapMonitorHeaderResourceDetails (SAPLoanAppraisalHeaderResourceDetails sapLoanAppraisalHeaderResourceDetails) {
+    public void setSapLoanAppraisalHeaderResourceDetails (SAPLoanAppraisalHeaderResourceDetails sapLoanAppraisalHeaderResourceDetails) {
         this.sapMonitorHeaderResourceDetails = sapLoanAppraisalHeaderResourceDetails;
     }
 

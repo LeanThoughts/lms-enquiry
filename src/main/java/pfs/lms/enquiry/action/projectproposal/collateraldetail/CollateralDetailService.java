@@ -29,10 +29,10 @@ public class CollateralDetailService implements ICollateralDetailService {
 
         // Change Documents for Collateral Detail
         changeDocumentService.createChangeDocument(
-                projectProposal.getEnquiryAction().getId(),
-                projectProposal.getId().toString(),
-                projectProposal.getEnquiryAction().getId().toString(),
-                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                collateralDetail.getProjectProposal().getId(),
+                collateralDetail.getId().toString(),
+                collateralDetail.getProjectProposal().getId().toString(),
+                collateralDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
                 null,
                 collateralDetail,
                 "Created",
@@ -61,7 +61,7 @@ public class CollateralDetailService implements ICollateralDetailService {
                 collateralDetail.getProjectProposal().getId(),
                 collateralDetail.getId().toString(),
                 collateralDetail.getProjectProposal().getId().toString(),
-                collateralDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getLoanContractId(),
+                collateralDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
                 oldCollateralDetail,
                 collateralDetail,
                 "Updated",

@@ -59,16 +59,16 @@ public class PromoterBorrowerFinancialService implements IPromoterBorrowerFinanc
         promoterBorrowerFinancial = promoterBorrowerFinancialRepository.save(promoterBorrowerFinancial);
 
         // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        changeDocumentService.createChangeDocument(
+                promoterBorrowerFinancial.getProjectProposal().getId(),
+                promoterBorrowerFinancial.getId().toString(),
+                promoterBorrowerFinancial.getProjectProposal().getId().toString(),
+                promoterBorrowerFinancial.getProjectProposal().getEnquiryAction().getLoanApplication().getLoanContractId(),
+                null,
+                promoterBorrowerFinancial,
+                "Created",
+                username,
+                "EnquiryAction", "Promoter Borrower Financial" );
 
         return promoterBorrowerFinancial;
     }
@@ -81,7 +81,7 @@ public class PromoterBorrowerFinancialService implements IPromoterBorrowerFinanc
                 promoterBorrowerFinancialRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+        Object oldObject = promoterBorrowerFinancial.clone();
 
         promoterBorrowerFinancial.setFiscalPeriod(resource.getFiscalPeriod());
         promoterBorrowerFinancial.setRevenue(resource.getRevenue());
@@ -118,16 +118,16 @@ public class PromoterBorrowerFinancialService implements IPromoterBorrowerFinanc
         promoterBorrowerFinancial = promoterBorrowerFinancialRepository.save(promoterBorrowerFinancial);
 
         // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        changeDocumentService.createChangeDocument(
+                promoterBorrowerFinancial.getProjectProposal().getId(),
+                promoterBorrowerFinancial.getId().toString(),
+                promoterBorrowerFinancial.getProjectProposal().getId().toString(),
+                promoterBorrowerFinancial.getProjectProposal().getEnquiryAction().getLoanApplication().getLoanContractId(),
+                oldObject,
+                promoterBorrowerFinancial,
+                "Updated",
+                username,
+                "EnquiryAction", "Promoter Borrower Financial" );
 
         return promoterBorrowerFinancial;
     }

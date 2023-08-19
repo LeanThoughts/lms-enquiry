@@ -41,15 +41,15 @@
           <activiti:expression><![CDATA[${fromEmail}]]></activiti:expression>
         </activiti:field>
         <activiti:field name="subject">
-          <activiti:expression><![CDATA[Loans Portal:  ${processName} for Loan Contract ${loanContractId} : Approval request was rejected]]></activiti:expression>
+          <activiti:expression><![CDATA[Loans Portal:  ${processName} for Id: ${loanContractId} : Approval request was rejected]]></activiti:expression>
         </activiti:field>
         <activiti:field name="html">
           <activiti:expression><![CDATA[Hello  ${requestorName},
           <br> <br>
           Your approval request for the following process was rejected: <br> <br>
-              &#009 ProcessName  :&#009 ${processName} <br>
-              &#009 Loan Contract :&#009 ${loanContractId} <br>
-              &#009 Processed By  :&#009 ${approverName} <br> <br>
+              &#009 ProcessName               :&#009 ${processName} <br>
+              &#009 Loan Contract/Enquiry Id  :&#009 ${loanContractId} <br>
+              &#009 Processed By              :&#009 ${approverName} <br> <br>
 
               &#009 Reason for Rejection:&#009 ${rejectionReason} <br>
            <br> <br>
@@ -88,15 +88,15 @@
           <activiti:expression><![CDATA[${fromEmail}]]></activiti:expression>
         </activiti:field>
         <activiti:field name="subject">
-          <activiti:expression><![CDATA[Loans Portal:  ${processName} for Loan Contract ${loanContractId} : Approved]]></activiti:expression>
+          <activiti:expression><![CDATA[Loans Portal:  ${processName} for Id: ${loanContractId} : Approved]]></activiti:expression>
         </activiti:field>
         <activiti:field name="html">
           <activiti:expression><![CDATA[Hello ${requestorName},
           <br> <br>
           Your request for the following process was approved: <br> <br>
-              &#009 ProcessName  :&#009 ${processName} <br>
-              &#009 Loan Contract :&#009 ${loanContractId} <br>
-              &#009 Processed By  :&#009 ${approverName} <br> <br>
+              &#009 ProcessName               :&#009 ${processName} <br>
+              &#009 Loan Contract/Enquiry Id  :&#009 ${loanContractId} <br>
+              &#009 Processed By              :&#009 ${approverName} <br> <br>
 
            <br> <br>
           Regards <br>
@@ -114,15 +114,15 @@
           <activiti:expression><![CDATA[${fromEmail}]]></activiti:expression>
         </activiti:field>
         <activiti:field name="subject">
-          <activiti:expression><![CDATA[Loans Portal:  ${processName} for Loan Contract ${loanContractId} : Approval Request]]></activiti:expression>
+          <activiti:expression><![CDATA[Loans Portal:  ${processName} for Id: ${loanContractId} : Approval Request]]></activiti:expression>
         </activiti:field>
         <activiti:field name="html">
           <activiti:expression><![CDATA[Hello ${approverName},
           <br> <br>
           Your are requested to process the following approval request: <br> <br>
-              &#009 Process Name  :&#009 ${processName} <br>
-              &#009 Loan Contract :&#009 ${loanContractId} <br>
-              &#009 Requested By  :&#009 ${requestorName} <br> <br>
+              &#009 ProcessName               :&#009 ${processName} <br>
+              &#009 Loan Contract/Enquiry Id  :&#009 ${loanContractId} <br>
+              &#009 Requested By              :&#009 ${requestorName} <br> <br>
 
            <br> <br>
           Regards <br>

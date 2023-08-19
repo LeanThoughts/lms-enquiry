@@ -204,7 +204,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                              sapLoanAppraisalHeaderResource.mapLoanAppraisalHeaderToSAP(loanAppraisal);
 
                      SAPLoanAppraisalHeaderResource sapLoanAppraisalHeaderResource = new SAPLoanAppraisalHeaderResource();
-                     sapLoanAppraisalHeaderResource.setsapMonitorHeaderResourceDetails(sapLoanAppraisalHeaderResourceDetails);
+                     sapLoanAppraisalHeaderResource.setSapLoanAppraisalHeaderResourceDetails(sapLoanAppraisalHeaderResourceDetails);
 
                      resource = (Object) sapLoanAppraisalHeaderResource;
                      serviceUri = appraisalServiceUri + "AppraisalHeaderSet";
@@ -477,6 +477,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      } catch (Exception ex) {
                          log.error("Error Replicating Loan Partner to SAP : " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanAppraisal.getLoanContractId());
                      }
+                     if (loanAppraisal.getLoanContractId() == null)
+                         continue;
                      log.info("Attempting to Post Appraisal Loan Partner to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString()
                      + "Loan Contract: " + loanPartner.getLoanApplication().getLoanContractId());
 

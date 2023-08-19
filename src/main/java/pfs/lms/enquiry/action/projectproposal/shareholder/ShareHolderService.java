@@ -31,17 +31,17 @@ public class ShareHolderService implements IShareHolderService {
         shareHolder.setPercentageHolding(resource.getPercentageHolding());
         shareHolder = shareHolderRepository.save(shareHolder);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Share Holder
+        changeDocumentService.createChangeDocument(
+                shareHolder.getProjectProposal().getId(),
+                shareHolder.getId().toString(),
+                shareHolder.getProjectProposal().getId().toString(),
+                shareHolder.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                projectProposal,
+                "Created",
+                username,
+                "EnquiryAction", "Share Holder" );
 
         return shareHolder;
     }
@@ -54,24 +54,24 @@ public class ShareHolderService implements IShareHolderService {
                 shareHolderRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+         Object oldObject = shareHolder.clone();
 
         shareHolder.setCompanyName(resource.getCompanyName());
         shareHolder.setEquityCapital(resource.getEquityCapital());
         shareHolder.setPercentageHolding(resource.getPercentageHolding());
         shareHolder = shareHolderRepository.save(shareHolder);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Share Holder
+        changeDocumentService.createChangeDocument(
+                shareHolder.getProjectProposal().getId(),
+                shareHolder.getId().toString(),
+                shareHolder.getProjectProposal().getId().toString(),
+                shareHolder.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldObject,
+                shareHolder,
+                "Updated",
+                username,
+                "EnquiryAction", "Share Holder" );
 
         return shareHolder;
     }
@@ -81,6 +81,17 @@ public class ShareHolderService implements IShareHolderService {
         ShareHolder shareHolder = shareHolderRepository.findById(shareHolderId)
                 .orElseThrow(() -> new EntityNotFoundException(shareHolderId.toString()));
         shareHolderRepository.delete(shareHolder);
+        changeDocumentService.createChangeDocument(
+                shareHolder.getId(),
+                shareHolder.getId().toString(),
+                shareHolder.getId().toString(),
+                shareHolder.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                shareHolder,
+                "Deleted",
+                username,
+                "EnquiryAction", "Share Holder");
+
         return  shareHolder;
     }
 }

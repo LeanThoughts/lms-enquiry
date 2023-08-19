@@ -36,7 +36,7 @@ public class CreditRatingService implements ICreditRatingService {
                 creditRating.getProjectProposal().getEnquiryAction().getId(),
                 creditRating.getId().toString(),
                 creditRating.getProjectProposal().getId().toString(),
-                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
+                projectProposal.getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
                 null,
                 creditRating,
                 "Created",
@@ -67,7 +67,7 @@ public class CreditRatingService implements ICreditRatingService {
                 creditRating.getProjectProposal().getId(),
                 creditRating.getId().toString(),
                 creditRating.getProjectProposal().getId().toString(),
-                creditRating.getProjectProposal().getEnquiryAction().getLoanApplication().getLoanContractId(),
+                creditRating.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
                 oldCreditRating,
                 creditRating,
                 "Updated",
@@ -82,6 +82,18 @@ public class CreditRatingService implements ICreditRatingService {
         CreditRating creditRating = creditRatingRepository.findById(creditRatingId)
                 .orElseThrow(() -> new EntityNotFoundException(creditRatingId.toString()));
         creditRatingRepository.delete(creditRating);
+
+        changeDocumentService.createChangeDocument(
+                creditRating.getId(),
+                creditRating.getId().toString(),
+                creditRating.getId().toString(),
+                creditRating.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                creditRating,
+                "Deleted",
+                username,
+                "EnquiryAction", "Credit Rating");
+
         return  creditRating;
     }
 }

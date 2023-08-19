@@ -81,14 +81,14 @@ public class TeaserService implements ITeaserService {
 
         TeaserResource teaserResource = new TeaserResource();
         teaserResource.setLoanApplication(loanApplication);
-        teaserResource.setPartner(partnerRepository.findByPartyNumber( Integer.parseInt(loanApplication.getbusPartnerNumber())) );
+        teaserResource.setPartner(partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber())));
 
-        List<CollateralDetail> collateralDetails    = collateralDetailRepository.findByProjectProposalId(projectProposal.getId());
-        List<ShareHolder> shareHolders              = shareHolderRepository.findByProjectProposalId(projectProposal.getId());
-        ProjectCost projectCost                     = projectCostRepository.findByProjectProposalId(projectProposal.getId());
-        ProjectDetail projectDetail                 = projectDetailRepository.findByProjectProposalId(projectProposal.getId());
+        List<CollateralDetail> collateralDetails = collateralDetailRepository.findByProjectProposalId(projectProposal.getId());
+        List<ShareHolder> shareHolders = shareHolderRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectCost projectCost = projectCostRepository.findByProjectProposalId(projectProposal.getId());
+        ProjectDetail projectDetail = projectDetailRepository.findByProjectProposalId(projectProposal.getId());
         ProjectProposalOtherDetail projectProposalOtherDetail = projectProposalOtherDetailRepository.findByProjectProposalId(projectProposal.getId());
-        List<PromoterBorrowerFinancial> promoterBorrowerFinancials   = promoterBorrowerFinancialRepository.findByProjectProposalId(projectProposal.getId());
+        List<PromoterBorrowerFinancial> promoterBorrowerFinancials = promoterBorrowerFinancialRepository.findByProjectProposalId(projectProposal.getId());
         DealGuaranteeTimeline dealGuaranteeTimeline = dealGuaranteeTimelineRepository.findByProjectProposalId(projectProposal.getId());
 
         teaserResource.setProjectProposal(projectProposal);
@@ -101,38 +101,39 @@ public class TeaserService implements ITeaserService {
         teaserResource.setDealGuaranteeTimeline(dealGuaranteeTimeline);
 
 
-        SXSSFWorkbook sxssfWorkbook  = this.generateTeaserExcel(response, teaserResource);
+        SXSSFWorkbook sxssfWorkbook = this.generateTeaserExcel(response, teaserResource);
 
         return sxssfWorkbook;
 
     }
 
     @Override
-    public SXSSFWorkbook generateTeaserExcel(HttpServletResponse response,TeaserResource teaserResource) throws IOException, ParseException {
+    public SXSSFWorkbook generateTeaserExcel(HttpServletResponse response, TeaserResource teaserResource) throws IOException, ParseException {
         sxssfWorkbook = new SXSSFWorkbook();
         TeaserExcel teaserExcel = new TeaserExcel();
+        sxssfWorkbook = teaserExcel.writeHeaderLineSXSS(sxssfWorkbook, sxssfSheet);
 
-
-        this.teaserContent = getTeaserContent(teaserResource);
-
-        //Purpose - Assistance Type
-
-
-
-        try {
-            sxssfWorkbook   = teaserExcel.writeHeaderLineSXSS(sxssfWorkbook,sxssfSheet);
-            sxssfWorkbook   = teaserExcel.writeContentLinesSXSS( sxssfWorkbook,sxssfWorkbook.getSheet("Teaser"),teaserContent);
-            sxssfSheet      = teaserExcel.writeContentShareHolding(teaserResource.getShareHolders(),sxssfWorkbook.getSheet("Teaser"),sxssfWorkbook);
-            sxssfSheet      = teaserExcel.writeProjectCost(teaserContent,sxssfWorkbook.getSheet("Teaser"),sxssfWorkbook);
-            sxssfSheet      = teaserExcel.writePage2Items(teaserResource.getDealGuaranteeTimeline(),sxssfWorkbook.getSheet("Teaser"),sxssfWorkbook);
-            sxssfSheet      = teaserExcel.writePage3Items(teaserResource.getPromoterBorrowerFinancials(),sxssfWorkbook.getSheet("Teaser"),sxssfWorkbook);
-
-
-        } catch ( Exception exception) {
-            log.error("EXCEPTION :  " + exception.toString());
+        if (teaserResource.getProjectDetail() != null) {
+            this.teaserContent = getTeaserContent(teaserResource);
+        } else {
+            return sxssfWorkbook;
         }
 
+        try {
+            sxssfWorkbook = teaserExcel.writeContentLinesSXSS(sxssfWorkbook, sxssfWorkbook.getSheet("Teaser"), teaserContent);
+            if (teaserResource.getShareHolders() != null)
+                sxssfSheet = teaserExcel.writeContentShareHolding(teaserResource.getShareHolders(), sxssfWorkbook.getSheet("Teaser"), sxssfWorkbook);
+            if (teaserContent != null)
+                sxssfSheet = teaserExcel.writeProjectCost(teaserContent, sxssfWorkbook.getSheet("Teaser"), sxssfWorkbook);
+            if (teaserResource.getDealGuaranteeTimeline() != null)
+                sxssfSheet = teaserExcel.writePage2Items(teaserResource.getDealGuaranteeTimeline(), sxssfWorkbook.getSheet("Teaser"), sxssfWorkbook);
+            if (teaserResource.getPromoterBorrowerFinancials() != null)
+                sxssfSheet = teaserExcel.writePage3Items(teaserResource.getPromoterBorrowerFinancials(), sxssfWorkbook.getSheet("Teaser"), sxssfWorkbook);
 
+
+        } catch (Exception exception) {
+            log.error("EXCEPTION :  " + exception.toString());
+        }
 
 
         ServletOutputStream outputStream = response.getOutputStream();
@@ -158,13 +159,13 @@ public class TeaserService implements ITeaserService {
         teaserContent.setTotalCorporateStructuredLoanRequirement("");
         teaserContent.setEndUseOFundsFromPFS(teaserResource.projectDetail.getEndUseOfFunds());
         //teaserContent.setRateOfInterest(teaserResource.getProjectDetail());
-        if ( teaserResource.getProjectDetail().getTenorYear() != null )
+        if (teaserResource.getProjectDetail().getTenorYear() != null)
             teaserContent.setTenure(teaserResource.getProjectDetail().getTenorYear() + " Years");
 
-        if ( teaserResource.getProjectDetail().getTenorMonths() != null )
+        if (teaserResource.getProjectDetail().getTenorMonths() != null)
             teaserContent.setTenure(teaserContent.getTenure() + " " + teaserResource.getProjectDetail().getTenorMonths() + " Months");
 
-        if ( teaserResource.getProjectDetail().getMoratoriumPeriod() != null )
+        if (teaserResource.getProjectDetail().getMoratoriumPeriod() != null)
             teaserContent.setMoratoriumPeriod(teaserResource.getProjectDetail().getMoratoriumPeriod().toString());
         if (teaserResource.getProjectDetail().getMoratoriumPeriodUnit() != null)
             teaserContent.setMoratoriumPeriod(teaserContent.getMoratoriumPeriod() + getPeriodUnit(teaserResource.getProjectDetail().getMoratoriumPeriodUnit()));
@@ -177,43 +178,45 @@ public class TeaserService implements ITeaserService {
         teaserContent.setTotalTOLTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTolTNW()));
         teaserContent.setDelaysInDebtServicing(teaserResource.getProjectProposalOtherDetail().getDelayInDebtServicing());
 
-        teaserContent.setProjectCost(formatAmount( teaserResource.getProjectCost().getProjectCost()));
-        teaserContent.setDebt(formatAmount( teaserResource.getProjectCost().getDebt()));
-        teaserContent.setEquity(formatAmount( teaserResource.getProjectCost().getEquity()));
+        teaserContent.setProjectCost(formatAmount(teaserResource.getProjectCost().getProjectCost()));
+        teaserContent.setDebt(formatAmount(teaserResource.getProjectCost().getDebt()));
+        teaserContent.setEquity(formatAmount(teaserResource.getProjectCost().getEquity()));
         teaserContent.setDebtEquityRatio(teaserResource.getProjectCost().getDebtEquityRatio().toString());
 
 
-
-
-        return  teaserContent;
+        return teaserContent;
     }
 
-    private String formatAmount(Double amount){
+    private String formatAmount(Double amount) {
 
 //        return NumberFormat.getCurrencyInstance(new Locale("en", "IN"))
 //                .format(amount);
         NumberFormat formatter = new DecimalFormat("#0.00");
-        return  formatter.format(amount);
+        return formatter.format(amount);
 
     }
 
-    private String getPeriodUnit(String periodUnit){
+    private String getPeriodUnit(String periodUnit) {
         String unitName;
 
-        switch (periodUnit){
+        switch (periodUnit) {
             case "1":
-                unitName = "Days"; break;
+                unitName = "Days";
+                break;
             case "2":
-                unitName = "Weeks";break;
+                unitName = "Weeks";
+                break;
             case "3":
-                unitName = "Months";break;
+                unitName = "Months";
+                break;
             case "4":
-                unitName = "Years";break;
+                unitName = "Years";
+                break;
             default:
                 unitName = "";
         }
 
-        return  unitName;
+        return unitName;
 
     }
 }

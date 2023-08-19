@@ -37,6 +37,11 @@ public class LoanPartnerService implements ILoanPartnerService {
 
         // Save loan partner details
         LoanApplication loanApplication = loanApplicationRepository.getOne(loanPartnerResource.getLoanApplicationId());
+
+        // If there is no loan contract i.e. project is in enquiry stage, do not create a loan partner
+//        if ( loanApplication.getLoanContractId() == null)
+//            return null;
+
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();

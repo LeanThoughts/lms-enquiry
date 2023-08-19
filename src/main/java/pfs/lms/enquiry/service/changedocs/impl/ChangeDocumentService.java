@@ -673,6 +673,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", enquiryAction.getId().toString());
                     result.put("description", enquiryAction.getLoanContractId().toString());
                     return result;
+                case "ProjectProposal":
+                    ProjectProposal projectProposal = (ProjectProposal) object;
+                    result.put("id", projectProposal.getId().toString());
+                    result.put("description", projectProposal.getProposalStatus().toString());
+                    return result;
                 case "CollateralDetail":
                     CollateralDetail collateralDetail = (CollateralDetail) object;
                     result.put("id", collateralDetail.getCollateralType().toString());
@@ -723,11 +728,6 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", otherDetail.getId().toString());
                     result.put("description", otherDetail.getEnquiryDate().toString());
                     return result;
-                case "ProjectProposal":
-                    ProjectProposal projectProposal = (ProjectProposal) object;
-                    result.put("id", projectProposal.getId().toString());
-                    result.put("description", projectProposal.getProposalStatus().toString());
-                    return result;
                 case "RejectByCustomer":
                     RejectByCustomer rejectByCustomer = (RejectByCustomer) object;
                     result.put("id", rejectByCustomer.getId().toString());
@@ -738,6 +738,8 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", rejectByPfs.getId().toString());
                     result.put("description", rejectByPfs.getRejectionDate().toString());
                     return result;
+
+
             }
 
         } catch (Exception ex) {
@@ -761,6 +763,9 @@ public class ChangeDocumentService implements IChangeDocumentService {
         LoanApplication loanApplication = new LoanApplication();
         if (loanContractId != null) {
             loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
+            if (loanApplication == null) {
+                loanApplication = loanApplicationRepository.findByEnquiryNo(new EnquiryNo(Long.parseLong(loanContractId)));
+            }
             changeDocument.setLoanApplication(loanApplication);
             changeDocument.setLoanContractId(loanContractId);
         }

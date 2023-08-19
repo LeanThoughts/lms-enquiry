@@ -30,17 +30,17 @@ public class OtherDetailsDocumentService implements IOtherDetailsDocumentService
         otherDetailsDocument.setFileReference(resource.getFileReference());
         otherDetailsDocument = otherDetailsDocumentRepository.save(otherDetailsDocument);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Other Details Document
+        changeDocumentService.createChangeDocument(
+                otherDetailsDocument.getProjectProposal().getId(),
+                otherDetailsDocument.getId().toString(),
+                otherDetailsDocument.getProjectProposal().getId().toString(),
+                otherDetailsDocument.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                otherDetailsDocument,
+                "Created",
+                username,
+                "EnquiryAction", "Other Details Document" );
 
         return otherDetailsDocument;
     }
@@ -53,24 +53,24 @@ public class OtherDetailsDocumentService implements IOtherDetailsDocumentService
                 otherDetailsDocumentRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+          Object oldObject = otherDetailsDocument.clone();
 
         otherDetailsDocument.setDocumentName(resource.getDocumentName());
         otherDetailsDocument.setDocumentType(resource.getDocumentType());
         otherDetailsDocument.setFileReference(resource.getFileReference());
         otherDetailsDocument = otherDetailsDocumentRepository.save(otherDetailsDocument);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Other Details Document
+        changeDocumentService.createChangeDocument(
+                otherDetailsDocument.getProjectProposal().getId(),
+                otherDetailsDocument.getId().toString(),
+                otherDetailsDocument.getProjectProposal().getId().toString(),
+                otherDetailsDocument.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldObject,
+                otherDetailsDocument,
+                "Updated",
+                username,
+                "EnquiryAction", "Other Details Document" );
 
         return otherDetailsDocument;
     }
@@ -80,6 +80,18 @@ public class OtherDetailsDocumentService implements IOtherDetailsDocumentService
         OtherDetailsDocument otherDetailsDocument = otherDetailsDocumentRepository.findById(otherDetailsDocumentId)
                 .orElseThrow(() -> new EntityNotFoundException(otherDetailsDocumentId.toString()));
         otherDetailsDocumentRepository.delete(otherDetailsDocument);
+
+        changeDocumentService.createChangeDocument(
+                otherDetailsDocument.getId(),
+                otherDetailsDocument.getId().toString(),
+                otherDetailsDocument.getId().toString(),
+                otherDetailsDocument.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                otherDetailsDocument,
+                "Deleted",
+                username,
+                "EnquiryAction", "Other Details Document");
+
         return  otherDetailsDocument;
     }
 }

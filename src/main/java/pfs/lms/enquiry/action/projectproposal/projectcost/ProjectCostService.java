@@ -31,17 +31,17 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebtEquityRatio(resource.getDebtEquityRatio());
         projectCost = projectCostRepository.save(projectCost);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Project Cost
+        changeDocumentService.createChangeDocument(
+                projectCost.getProjectProposal().getId(),
+                projectCost.getId().toString(),
+                projectCost.getProjectProposal().getId().toString(),
+                projectCost.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                projectCost,
+                "Created",
+                username,
+                "EnquiryAction", "Project Cost" );
 
         return projectCost;
     }
@@ -54,7 +54,7 @@ public class ProjectCostService implements IProjectCostService {
                 projectCostRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+         Object oldObject = projectCost.clone();
 
         projectCost.setProjectCost(resource.getProjectCost());
         projectCost.setDebt(resource.getDebt());
@@ -63,17 +63,17 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebtEquityRatio(resource.getDebtEquityRatio());
         projectCost = projectCostRepository.save(projectCost);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Project Cost
+        changeDocumentService.createChangeDocument(
+                projectCost.getProjectProposal().getId(),
+                projectCost.getId().toString(),
+                projectCost.getProjectProposal().getId().toString(),
+                projectCost.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldObject,
+                projectCost,
+                "Updated",
+                username,
+                "EnquiryAction", "Project Cost" );
 
         return projectCost;
     }

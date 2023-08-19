@@ -34,17 +34,17 @@ public class ProjectProposalOtherDetailService implements IProjectProposalOtherD
         projectProposalOtherDetail.setDelayInDebtServicing(resource.getDelayInDebtServicing());
         projectProposalOtherDetail = projectProposalOtherDetailRepository.save(projectProposalOtherDetail);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                null,
-//                projectProposal,
-//                "Created",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Project Proposal Other Detail
+        changeDocumentService.createChangeDocument(
+                projectProposalOtherDetail.getProjectProposal().getId(),
+                projectProposalOtherDetail.getId().toString(),
+                projectProposalOtherDetail.getProjectProposal().getId().toString(),
+                projectProposalOtherDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                projectProposalOtherDetail,
+                "Created",
+                username,
+                "EnquiryAction", "Project Proposal Other Detail" );
 
         return projectProposalOtherDetail;
     }
@@ -57,7 +57,7 @@ public class ProjectProposalOtherDetailService implements IProjectProposalOtherD
                 projectProposalOtherDetailRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        // Object oldRejectByPFS = projectProposal.clone();
+          Object oldObject = projectProposalOtherDetail.clone();
 
         projectProposalOtherDetail.setSourceAndCashFlow(resource.getSourceAndCashFlow());
         projectProposalOtherDetail.setOptimumDateOfLoan(resource.getOptimumDateOfLoan());
@@ -69,17 +69,17 @@ public class ProjectProposalOtherDetailService implements IProjectProposalOtherD
         projectProposalOtherDetail.setDelayInDebtServicing(resource.getDelayInDebtServicing());
         projectProposalOtherDetail = projectProposalOtherDetailRepository.save(projectProposalOtherDetail);
 
-        // Change Documents for Project Proposal
-//        changeDocumentService.createChangeDocument(
-//                projectProposal.getEnquiryAction().getId(),
-//                projectProposal.getId().toString(),
-//                projectProposal.getEnquiryAction().getId().toString(),
-//                projectProposal.getEnquiryAction().getLoanApplication().getLoanContractId(),
-//                oldRejectByPFS,
-//                projectProposal,
-//                "Updated",
-//                username,
-//                "EnquiryAction", "Project Proposal" );
+        // Change Documents for Project Proposal Other Detail
+        changeDocumentService.createChangeDocument(
+                projectProposalOtherDetail.getProjectProposal().getId(),
+                projectProposalOtherDetail.getId().toString(),
+                projectProposalOtherDetail.getProjectProposal().getId().toString(),
+                projectProposalOtherDetail.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldObject,
+                projectProposalOtherDetail,
+                "Updated",
+                username,
+                "EnquiryAction", "Project Proposal Other Detail" );
 
         return projectProposalOtherDetail;
     }
