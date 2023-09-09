@@ -1,5 +1,7 @@
 package pfs.lms.enquiry.action.projectproposal;
 
+import pfs.lms.enquiry.action.EnquiryAction;
+
 public interface IProjectProposalService {
 
 //    ProjectProposalResource getProjectProposal(UUID enquiryActionId);
@@ -7,4 +9,6 @@ public interface IProjectProposalService {
     ProjectProposal create(ProjectProposalResource resource, String username);
 
     ProjectProposal update(ProjectProposalResource resource, String username) throws CloneNotSupportedException;
+
+    ProjectProposal processApprovedEnquiry(EnquiryAction enquiryAction) throws CloneNotSupportedException;
 }

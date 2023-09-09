@@ -159,10 +159,13 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
      * 02-ICC ApprovalStage
      * 03-Appraisal Stage
      * 04-Board Approval Stage
-     * 05-Loan Documentation Stage
-     * 06-Loan Disbursement Stage
-     * 07-Approved
-     * 08-Rejected
+     * 05-Sanction Stage
+     * 06-Loan Documentation Stage
+     * 07-Loan Disbursement Stage - "TODO - Change to Status '07' in R/3 replication report
+     * 08-Approved
+     * 09-Rejected
+     * 10-Monitoring
+     * 11-Recovery
      */
     private Integer functionalStatus;
     private String  functionalStatusDescription;

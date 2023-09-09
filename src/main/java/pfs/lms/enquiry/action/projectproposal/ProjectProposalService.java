@@ -6,16 +6,20 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.action.EnquiryAction;
 import pfs.lms.enquiry.action.EnquiryActionRepository;
 import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuaranteeTimelineRepository;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetail;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetailRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectProposalService implements IProjectProposalService {
+    private final ProjectDetailRepository projectDetailRepository;
 
     private final IChangeDocumentService changeDocumentService;
 
@@ -117,5 +121,45 @@ public class ProjectProposalService implements IProjectProposalService {
                 "EnquiryAction", "Project Proposal" );
 
         return projectProposal;
+    }
+
+    @Override
+    public ProjectProposal processApprovedEnquiry(EnquiryAction enquiryAction) throws CloneNotSupportedException {
+
+        //Get the Project Proposal with the Final Status
+
+        List<ProjectProposal> projectProposalList = projectProposalRepository.findByEnquiryActionId(enquiryAction.getId());
+        ProjectProposal projectProposalFinal = projectProposalList.stream()
+                .filter(projectProposal -> "Final".equals(projectProposal.getProposalStatus()))
+                .findFirst()
+                .orElse(null);
+        if (projectProposalFinal == null)
+            return null;
+
+        ProjectDetail projectDetail = projectDetailRepository.findByProjectProposalId(projectProposalFinal.getId());
+
+        // Update Loan Application with Project Details
+
+
+
+
+        // Set the Loan Contract Status
+
+        // Create Loan Contract in SAP
+
+
+
+        return null;
+    }
+
+
+    private LoanApplication updateLoanApplicationFromProposal( ProjectProposal projectProposal){
+        LoanApplication loanApplication = projectProposal.getEnquiryAction().getLoanApplication();
+
+
+       // loanApplication.
+
+
+        return  null;
     }
 }

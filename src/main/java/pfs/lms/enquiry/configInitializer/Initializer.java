@@ -47,6 +47,8 @@ public class Initializer implements CommandLineRunner {
     private final DocumentationTypeRepository documentationTypeRepository;
     private final DocumentationStatusRepository documentationStatusRepository;
 
+    private final CustomerRejectionReasonRepository customerRejectionReasonRepository;
+
     @Override
     public void run(String... strings) throws Exception {
 
@@ -557,6 +559,45 @@ public class Initializer implements CommandLineRunner {
 
         }
 
+        if (customerRejectionReasonRepository.findAll().size() == 0) {
+            CustomerRejectionReason c1 = new CustomerRejectionReason("01","Competitors' conditions better");
+            CustomerRejectionReason c2 = new CustomerRejectionReason("02","Withdrawal without reason");
+            CustomerRejectionReason c3 = new CustomerRejectionReason("03","Too little capital");
+            CustomerRejectionReason c4 = new CustomerRejectionReason("04","Unacceptable rating");
+            CustomerRejectionReason c5 = new CustomerRejectionReason("05","Insufficient financing");
+            CustomerRejectionReason c6 = new CustomerRejectionReason("06","Too many uncovered parts");
+            CustomerRejectionReason c7 = new CustomerRejectionReason("07","High collateral requirements");
+            CustomerRejectionReason c8 = new CustomerRejectionReason("08","Too high construction costs");
+            CustomerRejectionReason c9 = new CustomerRejectionReason("09","Unfavorable analysis of demand, location");
+            CustomerRejectionReason c10 = new CustomerRejectionReason("10","Better conditions for competition");
+            CustomerRejectionReason c11 = new CustomerRejectionReason("11","Incorrect entry");
+            CustomerRejectionReason c12 = new CustomerRejectionReason("12","Application: Data incomplete");
+            CustomerRejectionReason c13 = new CustomerRejectionReason("13","Other Reasons");
+            CustomerRejectionReason c14 = new CustomerRejectionReason("14","Expiry of Validity of Sanction letter");
+            CustomerRejectionReason c15 = new CustomerRejectionReason("15","Non-payment of processing fees");
+            CustomerRejectionReason c16 = new CustomerRejectionReason("16","SCOD &/or Availability period Lapsed");
+
+            customerRejectionReasonRepository.saveAll(Arrays.asList(c1,
+                    c2,
+                    c3,
+                    c4,
+                    c5,
+                    c6,
+                    c7,
+                    c8,
+                    c9,
+                    c10,
+                    c11,
+                    c12,
+                    c13,
+                    c14,
+                    c15,
+                    c16
+            ));
+        }
+
+
+        log.info("Added Customer Rejection Reasons");
 
 //        WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName("Monitoring");
 //        if (workflowApprover == null) {

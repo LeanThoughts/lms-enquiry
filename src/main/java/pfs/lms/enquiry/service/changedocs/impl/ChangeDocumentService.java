@@ -22,6 +22,7 @@ import pfs.lms.enquiry.action.projectproposal.dealguaranteetimeline.DealGuarante
 import pfs.lms.enquiry.action.projectproposal.financials.PromoterBorrowerFinancial;
 import pfs.lms.enquiry.action.projectproposal.otherdetailsdocument.OtherDetailsDocument;
 import pfs.lms.enquiry.action.projectproposal.projectcost.ProjectCost;
+import pfs.lms.enquiry.action.projectproposal.projectdetail.ProjectDetail;
 import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
 import pfs.lms.enquiry.action.rejectbycustomer.RejectByCustomer;
 import pfs.lms.enquiry.action.rejectbypfs.RejectByPfs;
@@ -677,6 +678,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     ProjectProposal projectProposal = (ProjectProposal) object;
                     result.put("id", projectProposal.getId().toString());
                     result.put("description", projectProposal.getProposalStatus().toString());
+                    return result;
+                case "ProjectDetail":
+                    ProjectDetail projectDetail = (ProjectDetail) object;
+                    result.put("id", projectDetail.getProjectName().toString());
+                    result.put("description", projectDetail.getStatus());
                     return result;
                 case "CollateralDetail":
                     CollateralDetail collateralDetail = (CollateralDetail) object;
