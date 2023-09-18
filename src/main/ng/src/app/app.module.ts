@@ -39,6 +39,7 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { LoanAppraisalModule } from './main/content/pages/appraisal/loanAppraisal.module';
 import { InboxComponent } from './main/content/pages/inbox/inbox.component';
 import { EnquiryActionModule } from './main/content/pages/enquiryAction/enquiryAction.module';
+import { BoardApprovalModule } from './main/content/pages/boardApproval/boardApproval.module';
 
 const appRoutes: Routes = [
     {
@@ -102,6 +103,7 @@ const appRoutes: Routes = [
         LoanMonitoringModule,
         LoanAppraisalModule,
         EnquiryActionModule,
+        BoardApprovalModule,
 
         // Workflow
         InboxModule,

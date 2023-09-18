@@ -12,6 +12,7 @@ import { AppService } from 'app/app.service';
 import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
+import { BoardApprovalService } from '../boardApproval/boardApproval.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -39,6 +40,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
 
     monitoring: boolean = false;
     appraisal: boolean = false;
+    boardApproval: boolean = true; // Fix this later
 
     /**
      *
@@ -50,7 +52,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     constructor(_route: ActivatedRoute, _formBuilder: FormBuilder, public _appService: AppService,
                 public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
-                private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService) {
+                private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService, 
+                private _boardApprovalService: BoardApprovalService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -170,10 +173,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 this._loanAppraisalService._loanAppraisalBS.next(response);
                 this.redirect('/loanAppraisal');
             }, (error: HttpErrorResponse) => {
-                console.log('handling error now');
                 if (error.status === 404) {
                     this._loanAppraisalService._loanAppraisal = { id: '' };
-                    console.log('404 error and redirecting: ', this._loanAppraisalService._loanAppraisal);
                     this.redirect('/loanAppraisal');
                 }
             })
@@ -193,10 +194,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 this._enquiryActionService._enquiryAction.next(response);
                 this.redirect('/enquiryAction');
             }, (error: HttpErrorResponse) => {
-                console.log('handling error now');
                 if (error.status === 404) {
                     this._enquiryActionService._enquiryAction.next({ id: '' });
-                    console.log('404 error and redirecting: ', this._enquiryActionService._enquiryAction.value);
                     this.redirect('/enquiryAction');
                 }
             })
@@ -205,6 +204,21 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             this._matSnackBar.open('Loan has already completed the enquiry phase ! ',
                 'OK', { duration: 7000 });
         }
+    }
+
+    /**
+     * redirectToBoardApproval()
+     */
+    redirectToBoardApproval(): void {
+        this._boardApprovalService.getBoardApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+            this._boardApprovalService._boardApproval.next(response);
+            this.redirect('/boardApproval');
+        }, (error: HttpErrorResponse) => {
+            if (error.status === 404) {
+                this._boardApprovalService._boardApproval.next({ id: '' });
+                this.redirect('/boardApproval');
+            }
+        })
     }
 
     /**

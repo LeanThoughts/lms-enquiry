@@ -24,6 +24,9 @@
                     )">
                 Loan Appraisal
             </button>
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToBoardApproval()" *ngIf="boardApproval">
+                Board Approval
+            </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToMonitorLoan()" *ngIf="monitoring"
                     [disabled]="_service.selectedLoanApplicationId == undefined && 
                     (_appService.currentUser.role.localeCompare('ZLM024') != 0 || 
