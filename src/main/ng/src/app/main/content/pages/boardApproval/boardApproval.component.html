@@ -77,10 +77,24 @@
         </div>
 
         <mat-tab-group class="mt-16">
+            <!-- Deferred by board tab starts here -->
+            <mat-tab label="Deferred By Board">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-deferred-by-board></fuse-deferred-by-board>
+                </div>
+            </mat-tab>
+
             <!-- Reason for delay tab starts here -->
             <mat-tab label="Reason For Delay">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-board-approval-reason-for-delay></fuse-board-approval-reason-for-delay>
+                </div>
+            </mat-tab>
+            
+            <!-- Rejected by board tab starts here -->
+            <mat-tab label="Rejected By Board">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-rejected-by-board></fuse-rejected-by-board>
                 </div>
             </mat-tab>
         </mat-tab-group>

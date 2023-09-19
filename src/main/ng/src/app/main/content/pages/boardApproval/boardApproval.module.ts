@@ -20,6 +20,10 @@ import { BoardApprovalService } from './boardApproval.service';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { BoardApprovalReasonForDelayComponent } from './reasonForDelay/reasonForDelay.component';
 import { BoardApprovalReasonForDelayUpdateDialogComponent } from './reasonForDelayUpdate/reasonForDelayUpdate.component';
+import { DeferredByBoardComponent } from './deferredByBoard/deferredByBoard.component';
+import { DeferredByBoardUpdateDialogComponent } from './deferredByBoardUpdate/deferredByBoardUpdate.component';
+import { RejectedByBoardComponent } from './rejectedByBoard/rejectedByBoard.component';
+import { RejectedByBoardUpdateDialogComponent } from './rejectedByBoardUpdate/rejectedByBoardUpdate.component';
 
 const routes = [
     {
@@ -70,7 +74,11 @@ const MY_FORMATS = {
     declarations: [
         BoardApprovalComponent,
         BoardApprovalReasonForDelayComponent,
-        BoardApprovalReasonForDelayUpdateDialogComponent
+        BoardApprovalReasonForDelayUpdateDialogComponent,
+        DeferredByBoardComponent,
+        DeferredByBoardUpdateDialogComponent,
+        RejectedByBoardComponent,
+        RejectedByBoardUpdateDialogComponent
     ],
     providers: [
         BoardApprovalService,
@@ -84,10 +92,16 @@ const MY_FORMATS = {
     exports: [
         BoardApprovalComponent,
         BoardApprovalReasonForDelayComponent,
-        BoardApprovalReasonForDelayUpdateDialogComponent
+        BoardApprovalReasonForDelayUpdateDialogComponent,
+        DeferredByBoardComponent,
+        DeferredByBoardUpdateDialogComponent,
+        RejectedByBoardComponent,
+        RejectedByBoardUpdateDialogComponent
     ],
     entryComponents: [
-        BoardApprovalReasonForDelayUpdateDialogComponent
+        BoardApprovalReasonForDelayUpdateDialogComponent,
+        DeferredByBoardUpdateDialogComponent,
+        RejectedByBoardUpdateDialogComponent
     ]
 })
 export class BoardApprovalModule {

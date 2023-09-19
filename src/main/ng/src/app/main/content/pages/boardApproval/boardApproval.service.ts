@@ -50,4 +50,62 @@ export class BoardApprovalService {
     public deleteBoardApprovalReasonForDelay(boardApprovalReasonForDelayId: string) {
         return this._http.delete("enquiry/api/boardApprovalReasonForDelays/delete/" + boardApprovalReasonForDelayId);
     }
+
+    /**
+     * getDeferredByBoards()
+     */
+    public getDeferredByBoards(): Observable<any> {
+        return this._http.get("enquiry/api/deferredByBoards/search/findByBoardApprovalId?boardApprovalId=" + 
+            this._boardApproval.value.id);
+    }
+
+    /**
+     * createDeferredByBoard()
+     */
+    public createDeferredByBoard(deferredByBoard: any): Observable<any> {
+        return this._http.post("enquiry/api/deferredByBoards/create", deferredByBoard);
+    }
+
+    /**
+     * updateDeferredByBoard()
+     */
+    public updateDeferredByBoard(deferredByBoard: any): Observable<any> {
+        return this._http.put("enquiry/api/deferredByBoards/update", deferredByBoard);
+    }
+
+    /**
+     * deleteDeferredByBoard()
+     */
+    public deleteDeferredByBoard(deferredByBoardId: string) {
+        return this._http.delete("enquiry/api/deferredByBoards/delete/" + deferredByBoardId);
+    }
+
+    /**
+     * getRejectedByBoards()
+     */
+    public getRejectedByBoards(): Observable<any> {
+        return this._http.get("enquiry/api/rejectedByBoards/search/findByBoardApprovalId?boardApprovalId=" + 
+            this._boardApproval.value.id);
+    }
+
+    /**
+     * createRejectedByBoard()
+     */
+    public createRejectedByBoard(rejectedByBoard: any): Observable<any> {
+        return this._http.post("enquiry/api/rejectedByBoards/create", rejectedByBoard);
+    }
+
+    /**
+     * updateRejectedByBoard()
+     */
+    public updateRejectedByBoard(rejectedByBoard: any): Observable<any> {
+        return this._http.put("enquiry/api/rejectedByBoards/update", rejectedByBoard);
+    }
+
+    /**
+     * deleteRejectedByBoard()
+     */
+    public deleteRejectedByBoard(rejectedByBoardId: string) {
+        return this._http.delete("enquiry/api/rejectedByBoards/delete/" + rejectedByBoardId);
+    }
 }
