@@ -24,6 +24,10 @@ import { DeferredByBoardComponent } from './deferredByBoard/deferredByBoard.comp
 import { DeferredByBoardUpdateDialogComponent } from './deferredByBoardUpdate/deferredByBoardUpdate.component';
 import { RejectedByBoardComponent } from './rejectedByBoard/rejectedByBoard.component';
 import { RejectedByBoardUpdateDialogComponent } from './rejectedByBoardUpdate/rejectedByBoardUpdate.component';
+import { ApprovalByBoardComponent } from './approvalByBoard/approvalByBoard.component';
+import { ApprovalByBoardUpdateDialogComponent } from './approvalByBoardUpdate/approvalByBoardUpdate.component';
+import { BoardApprovalRejectedByCustomerUpdateDialogComponent } from './rejectedByCustomerUpdate/rejectedByCustomerUpdate.component';
+import { BoardApprovalRejectedByCustomerComponent } from './rejectedByCustomer/rejectedByCustomer.component';
 
 const routes = [
     {
@@ -78,7 +82,11 @@ const MY_FORMATS = {
         DeferredByBoardComponent,
         DeferredByBoardUpdateDialogComponent,
         RejectedByBoardComponent,
-        RejectedByBoardUpdateDialogComponent
+        RejectedByBoardUpdateDialogComponent,
+        ApprovalByBoardComponent,
+        ApprovalByBoardUpdateDialogComponent,
+        BoardApprovalRejectedByCustomerComponent,
+        BoardApprovalRejectedByCustomerUpdateDialogComponent
     ],
     providers: [
         BoardApprovalService,
@@ -96,12 +104,18 @@ const MY_FORMATS = {
         DeferredByBoardComponent,
         DeferredByBoardUpdateDialogComponent,
         RejectedByBoardComponent,
-        RejectedByBoardUpdateDialogComponent
+        RejectedByBoardUpdateDialogComponent,
+        ApprovalByBoardComponent,
+        ApprovalByBoardUpdateDialogComponent,
+        BoardApprovalRejectedByCustomerComponent,
+        BoardApprovalRejectedByCustomerUpdateDialogComponent
     ],
     entryComponents: [
         BoardApprovalReasonForDelayUpdateDialogComponent,
         DeferredByBoardUpdateDialogComponent,
-        RejectedByBoardUpdateDialogComponent
+        RejectedByBoardUpdateDialogComponent,
+        ApprovalByBoardUpdateDialogComponent,
+        BoardApprovalRejectedByCustomerUpdateDialogComponent
     ]
 })
 export class BoardApprovalModule {

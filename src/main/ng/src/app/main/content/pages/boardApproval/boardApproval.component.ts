@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { Subscription } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
+import { BoardApprovalService } from './boardApproval.service';
+import { AppService } from 'app/app.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'fuse-boardapproval',
@@ -21,11 +24,13 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
 
     expandPanel1 = true;
 
+    boardApproval: any;
+
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, 
-                public _loanEnquiryService: LoanEnquiryService) {
+    constructor(private _formBuilder: FormBuilder, public _appService: AppService, private _matSnackBar: MatSnackBar,
+                public _loanEnquiryService: LoanEnquiryService, private _boardApprovalService: BoardApprovalService) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
@@ -35,6 +40,9 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
+                this._boardApprovalService.getBoardApproval(this.loanApplicationId).subscribe(ba => {
+                    this.boardApproval = ba;
+                });
             })
         );
     }
@@ -69,20 +77,20 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
      * sendAppraisalForApproval()
      */
     sendForApproval(): void {
-        // let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-        // let email = this._appService.currentUser.email;
-        // this._matSnackBar.open('Please wait while attempting to send the appraisal for approval.', 'OK', { duration: 25000 });
-        // this._loanAppraisalService.sendAppraisalForApproval(this.loanAppraisal.id, name, email).subscribe(
-        //     response => {
-        //         this.loanAppraisal = response;
-        //         this._matSnackBar.dismiss();
-        //         this._matSnackBar.open('Appraisal is sent for approval.', 'OK', { duration: 7000 });
-        //     },
-        //     error => {
-        //         this.disableSendForApproval = false;
-        //         this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
-        //             'OK', { duration: 7000 });
-        //     });
-        // this.disableSendForApproval = true;
+        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+        let email = this._appService.currentUser.email;
+        this._matSnackBar.open('Please wait while attempting to send the board approval for approval.', 'OK', { duration: 25000 });
+        this._boardApprovalService.sendBoardApprovalForWorkflowApproval(this.boardApproval.id, name, email).subscribe(
+            response => {
+                this.boardApproval = response;
+                this._matSnackBar.dismiss();
+                this._matSnackBar.open('Board approval is sent for approval.', 'OK', { duration: 7000 });
+            },
+            error => {
+                this.disableSendForApproval = false;
+                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
+                    'OK', { duration: 7000 });
+            });
+        this.disableSendForApproval = true;
     }    
 }

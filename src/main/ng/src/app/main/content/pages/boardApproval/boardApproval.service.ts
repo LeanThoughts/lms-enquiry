@@ -108,4 +108,82 @@ export class BoardApprovalService {
     public deleteRejectedByBoard(rejectedByBoardId: string) {
         return this._http.delete("enquiry/api/rejectedByBoards/delete/" + rejectedByBoardId);
     }
+
+    /**
+     * getApprovalByBoards()
+     */
+    public getApprovalByBoards(): Observable<any> {
+        return this._http.get("enquiry/api/approvalByBoards/search/findByBoardApprovalId?boardApprovalId=" + 
+            this._boardApproval.value.id);
+    }
+
+    /**
+     * createApprovalByBoard()
+     */
+    public createApprovalByBoard(approvalByBoard: any): Observable<any> {
+        return this._http.post("enquiry/api/approvalByBoards/create", approvalByBoard);
+    }
+
+    /**
+     * updateApprovalByBoard()
+     */
+    public updateApprovalByBoard(approvalByBoard: any): Observable<any> {
+        return this._http.put("enquiry/api/approvalByBoards/update", approvalByBoard);
+    }
+
+    /**
+     * deleteApprovalByBoard()
+     */
+    public deleteApprovalByBoard(approvalByBoardId: string) {
+        return this._http.delete("enquiry/api/approvalByBoards/delete/" + approvalByBoardId);
+    }
+
+    /**
+     * getCustomerRejectionReasons()
+     */
+    public getCustomerRejectionReasons(): Observable<any> {
+        return this._http.get("enquiry/api/customerRejectionReasons");
+    }
+
+    /**
+     * getRejectedByCustomers()
+     */
+    public getRejectedByCustomers(): Observable<any> {
+        return this._http.get("enquiry/api/boardApprovalRejectedByCustomers/search/findByBoardApprovalId?boardApprovalId=" + 
+            this._boardApproval.value.id);
+    }
+
+    /**
+     * createRejectedByCustomer()
+     */
+    public createRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this._http.post("enquiry/api/boardApprovalRejectedByCustomers/create", rejectedByCustomer);
+    }
+
+    /**
+     * updateRejectedByCustomer()
+     */
+    public updateRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this._http.put("enquiry/api/boardApprovalRejectedByCustomers/update", rejectedByCustomer);
+    }
+
+    /**
+     * deleteRejectedByCustomer()
+     */
+    public deleteRejectedByCustomer(rejectedByCustomerId: string) {
+        return this._http.delete("enquiry/api/boardApprovalRejectedByCustomers/delete/" + rejectedByCustomerId);
+    }
+
+    /**
+     * sendBoardApprovalForWorkflowApproval()
+     */
+    public sendBoardApprovalForWorkflowApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'Monitoring'
+        }
+        return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }
 }
