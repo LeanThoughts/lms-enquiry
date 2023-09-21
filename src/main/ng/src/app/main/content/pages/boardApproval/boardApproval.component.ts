@@ -40,11 +40,12 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
-                this._boardApprovalService.getBoardApproval(this.loanApplicationId).subscribe(ba => {
-                    this.boardApproval = ba;
-                });
             })
         );
+
+        this.subscriptions.add(this._boardApprovalService._boardApproval.subscribe(data => {
+            this.boardApproval = data;
+        }));
     }
 
     /**
