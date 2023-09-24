@@ -8,22 +8,17 @@
         </mat-toolbar-row>
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
-        <form [formGroup]="rejectedByBoardForm">
-            <div fxLayout="row">
-                <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Meeting Number" formControlName="meetingNumber" maxlength="10" required>
-                </mat-form-field>
-            </div>
+        <form [formGroup]="reasonForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Meeting Date" formControlName="meetingDate" readonly>
+                    <input matInput [matDatepicker]="picker2" placeholder="Date" formControlName="date" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Details" formControlName="details" maxlength="200" required>
+                    <input matInput placeholder="Reason for Delay (if any)" formControlName="reason" maxlength="200" required>
                 </mat-form-field>
             </div>
 

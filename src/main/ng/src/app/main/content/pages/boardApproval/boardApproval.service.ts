@@ -182,7 +182,7 @@ export class BoardApprovalService {
             'businessProcessId': businessProcessId,
             'requestorName': requestorName,
             'requestorEmail': requestorEmail,
-            'processName': 'Monitoring'
+            'processName': 'BoardApproval'
         }
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
     }

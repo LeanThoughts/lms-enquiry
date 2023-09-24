@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { BoardApprovalService } from '../boardApproval.service';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-deferred-by-board-update-dialog',
@@ -36,7 +37,7 @@ export class DeferredByBoardUpdateDialogComponent implements OnInit {
             }
         }
         this.deferredByBoardForm = this._formBuilder.group({
-            meetingNumber: [this.selectedDeferredByBoard.meetingNumber || ''],
+            meetingNumber: [this.selectedDeferredByBoard.meetingNumber || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             meetingDate: [this.selectedDeferredByBoard.meetingDate || ''],
             details: [this.selectedDeferredByBoard.details || ''],
         });

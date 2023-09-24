@@ -40,6 +40,7 @@ import { LoanAppraisalModule } from './main/content/pages/appraisal/loanAppraisa
 import { InboxComponent } from './main/content/pages/inbox/inbox.component';
 import { EnquiryActionModule } from './main/content/pages/enquiryAction/enquiryAction.module';
 import { BoardApprovalModule } from './main/content/pages/boardApproval/boardApproval.module';
+import { SanctionModule } from './main/content/pages/sanction/sanction.module';
 
 const appRoutes: Routes = [
     {
@@ -104,6 +105,7 @@ const appRoutes: Routes = [
         LoanAppraisalModule,
         EnquiryActionModule,
         BoardApprovalModule,
+        SanctionModule,
 
         // Workflow
         InboxModule,

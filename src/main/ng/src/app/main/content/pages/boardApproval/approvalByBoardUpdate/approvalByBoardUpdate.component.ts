@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { BoardApprovalService } from '../boardApproval.service';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-approval-by-board-update-dialog',
@@ -36,7 +37,7 @@ export class ApprovalByBoardUpdateDialogComponent implements OnInit {
             }
         }
         this.approvalByBoardForm = this._formBuilder.group({
-            meetingNumber: [this.selectedApprovalByBoard.meetingNumber || ''],
+            meetingNumber: [this.selectedApprovalByBoard.meetingNumber || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             meetingDate: [this.selectedApprovalByBoard.meetingDate || ''],
             details: [this.selectedApprovalByBoard.details || ''],
         });

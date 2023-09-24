@@ -16,16 +16,28 @@
                     [disabled]="_service.selectedLoanApplicationId === undefined">
                 Process Enquiry
             </button>
+            <button class="mr-8 btn" mat-raised-button color="accent" [disabled]="_service.selectedLoanApplicationId === undefined">
+                ICC Stage
+            </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToLoanAppraisal()" *ngIf="appraisal"
                     [disabled]="_service.selectedLoanApplicationId === undefined &&
                     (
                         _appService.currentUser.role.localeCompare('ZLM024') !== 0 || 
                         _appService.currentUser.role.localeCompare('ZLM040') !== 0
                     )">
-                Loan Appraisal
+                Appraisal
             </button>
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToBoardApproval()" *ngIf="boardApproval">
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToBoardApproval()" *ngIf="boardApproval"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
                 Board Approval
+            </button>
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToSanction()" *ngIf="sanction"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                Sanction
+            </button>
+            <button class="mr-8 btn" mat-raised-button color="accent"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                Documentation
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToMonitorLoan()" *ngIf="monitoring"
                     [disabled]="_service.selectedLoanApplicationId == undefined && 
@@ -33,6 +45,10 @@
                     _appService.currentUser.role.localeCompare('ZLM040') != 0 || 
                     _appService.currentUser.role.localeCompare('ZLM023') != 0)">
                 Loan Monitoring
+            </button>
+            <button class="mr-8 btn" mat-raised-button color="accent"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                Recovery
             </button>
         </div>
         <!-- / TOOLBAR -->

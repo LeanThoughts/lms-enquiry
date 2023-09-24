@@ -13,6 +13,7 @@ import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 import { BoardApprovalService } from '../boardApproval/boardApproval.service';
+import { SanctionService } from '../sanction/sanction.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -41,6 +42,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     monitoring: boolean = false;
     appraisal: boolean = false;
     boardApproval: boolean = true; // Fix this later
+    sanction: boolean = true; // fix this later
 
     /**
      *
@@ -53,7 +55,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
                 private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService, 
-                private _boardApprovalService: BoardApprovalService) {
+                private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -213,10 +215,27 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this._boardApprovalService.getBoardApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
             this._boardApprovalService._boardApproval.next(response);
             this.redirect('/boardApproval');
-        }, (error: HttpErrorResponse) => {
+        }, 
+        (error: HttpErrorResponse) => {
             if (error.status === 404) {
                 this._boardApprovalService._boardApproval.next({ id: '' });
                 this.redirect('/boardApproval');
+            }
+        })
+    }
+
+    /**
+     * redirectToSanction()
+     */
+    redirectToSanction(): void {
+        this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+            this._sanctionService._sanction.next(response);
+            this.redirect('/sanction');
+        }, 
+        (error: HttpErrorResponse) => {
+            if (error.status === 404) {
+                this._sanctionService._sanction.next({ id: '' });
+                this.redirect('/sanction');
             }
         })
     }
