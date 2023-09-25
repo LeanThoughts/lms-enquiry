@@ -25,6 +25,8 @@ export class ApprovalByBoardComponent {
 
     selectedApprovalByBoard: any;
 
+    disableAdd = true;
+
     /**
      * constructor()
      */
@@ -40,6 +42,10 @@ export class ApprovalByBoardComponent {
      */
     refreshTable(): void {
         this._boardApprovalService.getApprovalByBoards().subscribe(data => {
+            if (data._embedded.approvalByBoards.length === 0)
+                this.disableAdd = false;
+            else
+                this.disableAdd = true;
             this.dataSource = new MatTableDataSource(data._embedded.approvalByBoards);
             this.dataSource.sort = this.sort;
         });

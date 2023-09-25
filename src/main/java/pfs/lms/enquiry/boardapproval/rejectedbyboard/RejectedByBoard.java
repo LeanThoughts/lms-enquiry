@@ -6,7 +6,7 @@ import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class RejectedByBoard extends AggregateRoot<RejectedByBoard> implements Cloneable {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private BoardApproval boardApproval;
 
     private Integer meetingNumber;
