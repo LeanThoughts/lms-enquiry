@@ -23,6 +23,8 @@ import { SanctionComponent } from './sanction.component';
 import { SanctionReasonForDelayUpdateDialogComponent } from './reasonForDelayUpdate/reasonForDelayUpdate.component';
 import { SanctionRejectedByCustomerComponent } from './rejectedByCustomer/rejectedByCustomer.component';
 import { SanctionRejectedByCustomerUpdateDialogComponent } from './rejectedByCustomerUpdate/rejectedByCustomerUpdate.component';
+import { PaymentReceiptPreSanctionComponent } from './paymentReceiptPreSanction/paymentReceiptPreSanction.component';
+import { PaymentReceiptPreSanctionUpdateDialogComponent } from './paymentReceiptPreSanctionUpdate/paymentReceiptPreSanctionUpdate.component';
 
 const routes = [
     {
@@ -75,7 +77,9 @@ const MY_FORMATS = {
         SanctionReasonForDelayComponent,
         SanctionReasonForDelayUpdateDialogComponent,
         SanctionRejectedByCustomerComponent,
-        SanctionRejectedByCustomerUpdateDialogComponent
+        SanctionRejectedByCustomerUpdateDialogComponent,
+        PaymentReceiptPreSanctionComponent,
+        PaymentReceiptPreSanctionUpdateDialogComponent
     ],
     providers: [
         SanctionService,
@@ -92,10 +96,13 @@ const MY_FORMATS = {
         SanctionReasonForDelayUpdateDialogComponent,
         SanctionRejectedByCustomerComponent,
         SanctionRejectedByCustomerUpdateDialogComponent,
+        PaymentReceiptPreSanctionComponent,
+        PaymentReceiptPreSanctionUpdateDialogComponent
     ],
     entryComponents: [
         SanctionReasonForDelayUpdateDialogComponent,
         SanctionRejectedByCustomerUpdateDialogComponent,
+        PaymentReceiptPreSanctionUpdateDialogComponent
     ]
 })
 export class SanctionModule {
