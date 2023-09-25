@@ -1,19 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
-import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { SanctionService } from '../sanction.service';
-import { SanctionReasonForDelayUpdateDialogComponent } from '../reasonForDelayUpdate/reasonForDelayUpdate.component';
-import { PaymentReceiptPreSanctionUpdateDialogComponent } from '../paymentReceiptPreSanctionUpdate/paymentReceiptPreSanctionUpdate.component';
+import { PaymentReceiptPostSanctionUpdateDialogComponent } from '../paymentReceiptPostSanctionUpdate/paymentReceiptPostSanctionUpdate.component';
 
 @Component({
-    selector: 'fuse-payment-receipt-pre-sanction',
-    templateUrl: './paymentReceiptPreSanction.component.html',
-    styleUrls: ['./paymentReceiptPreSanction.component.scss'],
+    selector: 'fuse-payment-receipt-post-sanction',
+    templateUrl: './paymentReceiptPostSanction.component.html',
+    styleUrls: ['./paymentReceiptPostSanction.component.scss'],
     animations: fuseAnimations
 })
-export class PaymentReceiptPreSanctionComponent {
+export class PaymentReceiptPostSanctionComponent {
     
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
@@ -53,8 +51,8 @@ export class PaymentReceiptPreSanctionComponent {
      */
     add(): void {
         // Open the dialog.
-        const dialogRef = this._matDialog.open(PaymentReceiptPreSanctionUpdateDialogComponent, {
-            panelClass: 'fuse-payment-receipt-pre-sanction-update-dialog',
+        const dialogRef = this._matDialog.open(PaymentReceiptPostSanctionUpdateDialogComponent, {
+            panelClass: 'fuse-payment-receipt-post-sanction-update-dialog',
             width: '850px',
             data: {
                 operation: 'addPaymentReceipt',
