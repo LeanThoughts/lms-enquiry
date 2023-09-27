@@ -7,6 +7,7 @@ import { BoardApprovalService } from './boardApproval.service';
 import { AppService } from 'app/app.service';
 import { MatSnackBar } from '@angular/material';
 
+
 @Component({
     selector: 'fuse-boardapproval',
     templateUrl: './boardapproval.component.html',
@@ -35,8 +36,8 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
             console.log('this.selectedEnquiry', this.selectedEnquiry);
-        }));          
-        
+        }));
+
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
@@ -89,9 +90,9 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
             },
             error => {
                 this.disableSendForApproval = false;
-                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
+                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
                     'OK', { duration: 7000 });
             });
         this.disableSendForApproval = true;
-    }    
+    }
 }
