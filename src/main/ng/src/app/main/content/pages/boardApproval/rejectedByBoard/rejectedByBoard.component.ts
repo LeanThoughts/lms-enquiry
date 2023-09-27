@@ -25,6 +25,8 @@ export class RejectedByBoardComponent {
 
     selectedRejectedByBoard: any;
 
+    disableAdd = true;
+
     /**
      * constructor()
      */
@@ -40,6 +42,10 @@ export class RejectedByBoardComponent {
      */
     refreshTable(): void {
         this._boardApprovalService.getRejectedByBoards().subscribe(data => {
+            if (data._embedded.rejectedByBoards.length === 0)
+                this.disableAdd = false;
+            else
+                this.disableAdd = true;
             this.dataSource = new MatTableDataSource(data._embedded.rejectedByBoards);
             this.dataSource.sort = this.sort;
         });

@@ -1,6 +1,6 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()" [disabled]="disableAdd"> Add </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedRejectedByCustomer"> 
             Modify 
         </button>

@@ -25,6 +25,8 @@ export class BoardApprovalRejectedByCustomerComponent {
 
     selectedRejectedByCustomer: any;
 
+    disableAdd = true;
+
     /**
      * constructor()
      */
@@ -40,6 +42,10 @@ export class BoardApprovalRejectedByCustomerComponent {
      */
     refreshTable(): void {
         this._boardApprovalService.getRejectedByCustomers().subscribe(data => {
+            if (data._embedded.boardApprovalRejectedByCustomers.length === 0)
+                this.disableAdd = false;
+            else
+                this.disableAdd = true;
             this.dataSource = new MatTableDataSource(data._embedded.boardApprovalRejectedByCustomers);
             this.dataSource.sort = this.sort;
         });
