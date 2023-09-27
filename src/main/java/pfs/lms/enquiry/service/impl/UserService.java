@@ -4,20 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
-import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.repository.UserRoleRepository;
-import pfs.lms.enquiry.resource.PartnerResourceByAlphabet;
-import pfs.lms.enquiry.resource.PartnerResourceByEmail;
-import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
-import pfs.lms.enquiry.service.IPartnerService;
 import pfs.lms.enquiry.service.IUserService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j

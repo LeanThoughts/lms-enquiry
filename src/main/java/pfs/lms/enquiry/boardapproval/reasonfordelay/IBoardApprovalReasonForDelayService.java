@@ -10,5 +10,5 @@ public interface IBoardApprovalReasonForDelayService {
     BoardApprovalReasonForDelay updateReasonForDelay(BoardApprovalReasonForDelayResource boardApprovalReasonForDelayResource,
                                                      String username) throws CloneNotSupportedException;
 
-    BoardApprovalReasonForDelay deleteReasonForDelay(UUID boardApprovalReasonForDelayId) throws CloneNotSupportedException;
+    BoardApprovalReasonForDelay deleteReasonForDelay(UUID boardApprovalReasonForDelayId,String username) throws CloneNotSupportedException;
 }

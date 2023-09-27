@@ -35,15 +35,15 @@ public class BoardApprovalRejectedByCustomerService implements IBoardApprovalRej
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = boardApprovalRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Board Approval Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Board Approval", "Header");
                     return obj;
                 });
         BoardApprovalRejectedByCustomer boardApprovalRejectedByCustomer = new BoardApprovalRejectedByCustomer();
@@ -54,17 +54,17 @@ public class BoardApprovalRejectedByCustomerService implements IBoardApprovalRej
         boardApprovalRejectedByCustomer.setDetails(resource.getDetails());
         boardApprovalRejectedByCustomer = boardApprovalRejectedByCustomerRepository.save(boardApprovalRejectedByCustomer);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for BoardApprovalRejectedByCustomer
+        changeDocumentService.createChangeDocument(
+                boardApprovalRejectedByCustomer.getBoardApproval().getId(),
+                boardApprovalRejectedByCustomer.getId().toString(),
+                boardApprovalRejectedByCustomer.getBoardApproval().getId().toString(),
+                boardApprovalRejectedByCustomer.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                boardApprovalRejectedByCustomer,
+                "Created",
+                username,
+                "Board Approval", "BoardApprovalRejectedByCustomer");
 
         return boardApprovalRejectedByCustomer;
     }

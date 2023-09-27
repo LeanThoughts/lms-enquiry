@@ -32,6 +32,11 @@ public class EnquiryAction extends AggregateRoot<EnquiryAction> implements Clone
 
     private String processInstanceId;
 
+    //Workflow Status
+    // 01 - Created //11 Updated
+    // 02 - Sent for Approval
+    // 03 - Approved
+    // 04 - Rejected
     private Integer workFlowStatusCode;
 
     private String workFlowStatusDescription;

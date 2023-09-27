@@ -31,6 +31,8 @@ public class ProjectProposal extends AggregateRoot<ProjectProposal> implements C
     private String documentVersion;
     private String proposalStatus;
 
+    private String lastChangedByUser;
+
     private Integer serialNumber;
 
     public Object clone () throws CloneNotSupportedException {

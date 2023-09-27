@@ -12,6 +12,8 @@ import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalHeaderResource;
 import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalHeaderResourceDetails;
 import pfs.lms.enquiry.domain.*;
+import pfs.lms.enquiry.repository.SAPIntegrationRepository;
+import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancialsRepository;
 import pfs.lms.enquiry.monitoring.domain.*;
@@ -60,7 +62,6 @@ import pfs.lms.enquiry.monitoring.tra.TRARepository;
 import pfs.lms.enquiry.monitoring.tra.TRAStatementRepository;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccount;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccountStatement;
-import pfs.lms.enquiry.repository.*;
 import pfs.lms.enquiry.resource.FileResource;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
 import pfs.lms.enquiry.vault.FilePointer;
@@ -1259,6 +1260,12 @@ public class LoanMonitoringScheduledTask {
                         }
                     }
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                    break;
+                case "Reason For Delay":
+                    break;
+                case "Customer Rejection":
+                    break;
+                case "Loan Partner":
                     break;
                 default:
                     log.info("Entity : -- " + sapIntegrationPointer.getSubBusinessProcessName() + " -- Not found for upload to SAP" );

@@ -40,7 +40,7 @@ public class ProjectDetail extends AggregateRoot<ProjectDetail> implements Clone
     private String policyExposure;
     private String endUseOfFunds;
     private Double fees;
-    private Integer roi;
+    private Double roi;
     private Integer tenorYear;
     private Integer tenorMonths;
     private Integer moratoriumPeriod;

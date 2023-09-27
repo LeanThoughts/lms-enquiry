@@ -42,7 +42,12 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     /**
         Values maintained in DB
      */
-    private String projectType; //VDARL-ZZPROJECT_TYPE
+
+    private String loanType;
+    private String purposeOfLoan;
+    private String projectType;        //VDARL-ZZPROJECT_TYPE (Sub-Sector)
+    private String projectTypeCoreSector; //VDARL-  (Core-Sector)
+
 
     /**
      1	Sole Lending
@@ -162,10 +167,10 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
      * 05-Sanction Stage
      * 06-Loan Documentation Stage
      * 07-Loan Disbursement Stage - "TODO - Change to Status '07' in R/3 replication report
-     * 08-Approved
-     * 09-Rejected
-     * 10-Monitoring
-     * 11-Recovery
+     * 08-Monitoring
+     * 09-Recovery
+     * 90- Planned Completed
+     * 99- Actual Completed
      */
     private Integer functionalStatus;
     private String  functionalStatusDescription;
@@ -247,6 +252,14 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     private Integer constructionPeriod;
     private String constructionPeriodUnit;
 
+    private String sourceAndCashFlow;
+    private LocalDate optimumDateOfLoan;
+    private String consolidatedGroupLeverage;
+    private Double totalDebtTNW;
+    private Double tolTNW;
+    private Double totalDebtTNWPercentage;
+    private Double tolTNWPercentage;
+    private String delayInDebtServicing;
 
     @JsonCreator
     public LoanApplication(@JsonProperty("id") UUID id,
@@ -333,7 +346,16 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                             @JsonProperty("moratoriumPeriod")  Integer moratoriumPeriod,
                             @JsonProperty("moratoriumPeriodUnit")  String moratoriumPeriodUnit,
                             @JsonProperty("constructionPeriod")  Integer constructionPeriod,
-                            @JsonProperty("constructionPeriodUnit")  String constructionPeriodUnit
+                            @JsonProperty("constructionPeriodUnit")  String constructionPeriodUnit,
+
+                            @JsonProperty("sourceAndCashFlow") String sourceAndCashFlow,
+                            @JsonProperty("optimumDateOfLoan") LocalDate optimumDateOfLoan,
+                            @JsonProperty("consolidatedGroupLeverage") String consolidatedGroupLeverage,
+                            @JsonProperty("totalDebtTNW") Double totalDebtTNW,
+                            @JsonProperty("tolTNW") Double tolTNW,
+                            @JsonProperty("totalDebtTNWPercentage") Double totalDebtTNWPercentage,
+                            @JsonProperty("tolTNWPercentage") Double tolTNWPercentage,
+                            @JsonProperty("delayInDebtServicing") String delayInDebtServicing
 
                            ) {
         this.id = id;
@@ -429,6 +451,15 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
         this.moratoriumPeriodUnit = moratoriumPeriodUnit;
         this.constructionPeriod = constructionPeriod;
         this.constructionPeriodUnit = constructionPeriodUnit;
+
+       this.sourceAndCashFlow = sourceAndCashFlow;
+       this.optimumDateOfLoan = optimumDateOfLoan;
+       this.consolidatedGroupLeverage = consolidatedGroupLeverage;
+       this.totalDebtTNW = totalDebtTNW;
+       this.tolTNW = tolTNW;
+       this.totalDebtTNWPercentage = totalDebtTNWPercentage;
+       this.tolTNWPercentage = tolTNWPercentage;
+       this.delayInDebtServicing = delayInDebtServicing;
     }
 
 
@@ -831,6 +862,42 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     @Nullable
     public String getContactFaxNumber() {
         return contactFaxNumber;
+    }
+
+//    public String getBusPartnerNumber() {
+//        return busPartnerNumber;
+//    }
+
+    public String getSourceAndCashFlow() {
+        return sourceAndCashFlow;
+    }
+
+    public LocalDate getOptimumDateOfLoan() {
+        return optimumDateOfLoan;
+    }
+
+    public String getConsolidatedGroupLeverage() {
+        return consolidatedGroupLeverage;
+    }
+
+    public Double getTotalDebtTNW() {
+        return totalDebtTNW;
+    }
+
+    public Double getTolTNW() {
+        return tolTNW;
+    }
+
+    public Double getTotalDebtTNWPercentage() {
+        return totalDebtTNWPercentage;
+    }
+
+    public Double getTolTNWPercentage() {
+        return tolTNWPercentage;
+    }
+
+    public String getDelayInDebtServicing() {
+        return delayInDebtServicing;
     }
 
     @Value

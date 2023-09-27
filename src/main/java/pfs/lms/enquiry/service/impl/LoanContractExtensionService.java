@@ -1,6 +1,5 @@
 package pfs.lms.enquiry.service.impl;
 
-import com.google.common.base.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +11,14 @@ import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerResource;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.LoanContractExtension;
-import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.LoanContractExtensionRepository;
 import pfs.lms.enquiry.resource.LoanContractExtensionResource;
 import pfs.lms.enquiry.service.ILoanContractExtensionService;
-import pfs.lms.enquiry.service.IPartnerService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Slf4j

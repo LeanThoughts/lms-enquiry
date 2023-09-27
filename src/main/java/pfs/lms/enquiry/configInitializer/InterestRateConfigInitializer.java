@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.repository.*;
+import pfs.lms.enquiry.repository.*;
 
 /**
  * Created by sajeev on 14-May-21.

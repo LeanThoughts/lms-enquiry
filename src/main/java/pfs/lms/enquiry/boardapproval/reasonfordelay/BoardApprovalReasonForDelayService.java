@@ -33,15 +33,15 @@ public class BoardApprovalReasonForDelayService implements IBoardApprovalReasonF
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = boardApprovalRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Board Approval Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Board Approval", "Header");
                     return obj;
                 });
         BoardApprovalReasonForDelay boardApprovalReasonForDelay = new BoardApprovalReasonForDelay();
@@ -52,17 +52,17 @@ public class BoardApprovalReasonForDelayService implements IBoardApprovalReasonF
         boardApprovalReasonForDelay.setDeleteFlag(false);
         boardApprovalReasonForDelay = repository.save(boardApprovalReasonForDelay);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for BoardApprovalReasonForDelay
+        changeDocumentService.createChangeDocument(
+                boardApprovalReasonForDelay.getBoardApproval().getId(),
+                boardApprovalReasonForDelay.getId().toString(),
+                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
+                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                boardApprovalReasonForDelay,
+                "Created",
+                username,
+                "Board Approval", "BoardApprovalReasonForDelay" );
 
         return boardApprovalReasonForDelay;
     }
@@ -79,27 +79,40 @@ public class BoardApprovalReasonForDelayService implements IBoardApprovalReasonF
         boardApprovalReasonForDelay.setReason(resource.getReason());
         boardApprovalReasonForDelay = repository.save(boardApprovalReasonForDelay);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for BoardApprovalReasonForDelay
+        changeDocumentService.createChangeDocument(
+                boardApprovalReasonForDelay.getBoardApproval().getId(),
+                boardApprovalReasonForDelay.getId().toString(),
+                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
+                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
+                oldReasonForDelay,
+                boardApprovalReasonForDelay,
+                "Updated",
+                username,
+                "Appraisal", "BoardApprovalReasonForDelay" );
 
         return boardApprovalReasonForDelay;
     }
 
     @Override
-    public BoardApprovalReasonForDelay deleteReasonForDelay(UUID boardApprovalReasonForDelayId) throws CloneNotSupportedException {
+    public BoardApprovalReasonForDelay deleteReasonForDelay(UUID boardApprovalReasonForDelayId, String username) throws CloneNotSupportedException {
         BoardApprovalReasonForDelay boardApprovalReasonForDelay = repository.findById(boardApprovalReasonForDelayId).
                 orElseThrow(() -> new EntityNotFoundException(boardApprovalReasonForDelayId.toString()));
         boardApprovalReasonForDelay.setDeleteFlag(true);
         boardApprovalReasonForDelay = repository.save(boardApprovalReasonForDelay);
+
+        // Change Documents for BoardApprovalReasonForDelay
+        changeDocumentService.createChangeDocument(
+                boardApprovalReasonForDelay.getBoardApproval().getId(),
+                boardApprovalReasonForDelay.getId().toString(),
+                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
+                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                boardApprovalReasonForDelay,
+                "Deleted",
+                username,
+                "Board Approval", "BoardApprovalReasonForDelay" );
+
         return boardApprovalReasonForDelay;
-    }
+     }
 }

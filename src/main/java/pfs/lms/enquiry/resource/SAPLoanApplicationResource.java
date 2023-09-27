@@ -4,20 +4,29 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
+import pfs.lms.enquiry.boardapproval.BoardApproval;
+import pfs.lms.enquiry.boardapproval.approvalbyboard.ApprovalByBoard;
+import pfs.lms.enquiry.boardapproval.deferredbyboard.DeferredByBoard;
+import pfs.lms.enquiry.boardapproval.reasonfordelay.BoardApprovalReasonForDelay;
+import pfs.lms.enquiry.boardapproval.rejectedbyboard.RejectedByBoard;
+import pfs.lms.enquiry.boardapproval.rejectedbycustomer.BoardApprovalRejectedByCustomer;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
-import pfs.lms.enquiry.repository.UserRepository;
+import pfs.lms.enquiry.utils.DataConversionUtility;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 @Component
-@JsonInclude (JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties (ignoreUnknown = true)
-public class SAPLoanApplicationResource implements Serializable   {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SAPLoanApplicationResource implements Serializable {
 
 
 
@@ -37,8 +46,100 @@ public class SAPLoanApplicationResource implements Serializable   {
     }
 
 
+    public SAPLoanApplicationDetailsResource mapBoardApproval(SAPLoanApplicationDetailsResource detailsResource,
+                                                              LoanApplication loanApplication,
+                                                              BoardApproval boardApproval,
+                                                              List<DeferredByBoard> deferredByBoardList,
+                                                              List<BoardApprovalReasonForDelay> boardApprovalReasonForDelayList,
+                                                              List<RejectedByBoard> rejectedByBoardRepositoryList,
+                                                              List<ApprovalByBoard> approvalByBoardList,
+                                                              List<BoardApprovalRejectedByCustomer> boardApprovalRejectedByCustomerList
+    ) throws ParseException {
+
+
+        ApprovalByBoard approvalByBoard = new ApprovalByBoard();
+        DeferredByBoard deferredByBoard = new DeferredByBoard();
+        BoardApprovalReasonForDelay boardApprovalReasonForDelay = new BoardApprovalReasonForDelay();
+        RejectedByBoard rejectedByBoard = new RejectedByBoard();
+        BoardApprovalRejectedByCustomer boardApprovalRejectedByCustomer = new BoardApprovalRejectedByCustomer();
+
+        if (boardApproval.getWorkFlowStatusCode() <= 2) {
+            return detailsResource;
+        }
+//        if (loanApplication.getFunctionalStatus() != 4)
+//            return detailsResource;
+
+        if (approvalByBoardList.size() > 0)
+            approvalByBoard = approvalByBoardList.get(0);
+//        if (deferredByBoardList.size() > 0)
+//            deferredByBoard = deferredByBoardList.get(0);
+        if (rejectedByBoardRepositoryList.size() > 0)
+            rejectedByBoard = rejectedByBoardRepositoryList.get(0);
+        if (approvalByBoardList.size() > 0)
+            approvalByBoard = approvalByBoardList.get(0);
+        if (boardApprovalRejectedByCustomerList.size() > 0)
+            boardApprovalRejectedByCustomer = boardApprovalRejectedByCustomerList.get(0);
+
+        if (approvalByBoard != null) {
+            detailsResource.setBoardMeetingNumber(approvalByBoard.getMeetingNumber().toString());
+            if (approvalByBoard.getMeetingDate() != null)
+                detailsResource.setBoardApprovalDate(DataConversionUtility.convertDateToSAPFormat(approvalByBoard.getMeetingDate()));
+            else
+                detailsResource.setBoardApprovalDate(null);
+
+            if (approvalByBoard.getDetails() != null)
+                detailsResource.setBoardApprovalRemarks(approvalByBoard.getDetails());
+            detailsResource.setbODStatus("4"); //Approved by Board
+            return detailsResource;
+        }
+        if (rejectedByBoard != null) {
+            detailsResource.setBoardMeetingNumber(rejectedByBoard.getMeetingNumber().toString());
+            if (rejectedByBoard.getMeetingDate() != null)
+                detailsResource.setBoardApprovalDate(DataConversionUtility.convertDateToSAPFormat(rejectedByBoard.getMeetingDate()));
+            else
+                detailsResource.setBoardApprovalDate(null);
+
+            if (rejectedByBoard.getDetails() != null)
+                detailsResource.setBoardApprovalRemarks(rejectedByBoard.getDetails());
+            detailsResource.setbODStatus("3"); //Rejected by Board
+            return detailsResource;
+        }
+        if (boardApprovalRejectedByCustomer != null) {
+            detailsResource.setbODStatus("5"); //Rejected by Customer
+            return detailsResource;
+        }
+
+        // Use the Latest DeferredByBoard Item
+        if (deferredByBoardList != null) {
+
+            // Sort by Board Meeting Date
+            Comparator<DeferredByBoard> comparator = (d1,d2)->{
+                return d1.getMeetingDate().compareTo(d2.getMeetingDate());
+            };
+            Collections.sort(deferredByBoardList,comparator);
+
+            deferredByBoard = deferredByBoardList.get(0);
+
+            detailsResource.setBoardMeetingNumber(deferredByBoard.getMeetingNumber().toString());
+            if (deferredByBoard.getMeetingDate() != null)
+                detailsResource.setBoardApprovalDate(DataConversionUtility.convertDateToSAPFormat(deferredByBoard.getMeetingDate()));
+            else
+                detailsResource.setBoardApprovalDate(null);
+
+            if (deferredByBoard.getDetails() != null)
+                detailsResource.setBoardApprovalRemarks(deferredByBoard.getDetails());
+            detailsResource.setbODStatus("1"); //Deferred by Board
+            return detailsResource;
+        }
+
+
+
+        return detailsResource;
+
+    }
+
     public SAPLoanApplicationDetailsResource
-                    mapLoanApplicationToSAP(LoanApplication loanApplication, Partner partner, User lastProcessedBy) throws ParseException {
+    mapLoanApplicationToSAP(LoanApplication loanApplication, Partner partner, User lastProcessedBy) throws ParseException {
 
         SAPLoanApplicationDetailsResource detailsResource = new SAPLoanApplicationDetailsResource();
 
@@ -46,17 +147,17 @@ public class SAPLoanApplicationResource implements Serializable   {
         detailsResource.setPartnerExternalNumber(" ");
         detailsResource.setPartnerRole("TR0100");
         detailsResource.setName1(partner.getPartyName1());
-        detailsResource.setName2(partner.getPartyName2() == null? "": partner.getPartyName2());
+        detailsResource.setName2(partner.getPartyName2() == null ? "" : partner.getPartyName2());
         if (partner.getPartyCategory() != null)
-             detailsResource.setPartnerCategory(partner.getPartyCategory().toString());
+            detailsResource.setPartnerCategory(partner.getPartyCategory().toString());
 
-        if (partner.getEmail().contains("@") == false){
+        if (partner.getEmail().contains("@") == false) {
             partner.setEmail(partner.getEmail() + "@dummy.co.in");
         }
 
         detailsResource.setEmail(partner.getEmail());
         detailsResource.setCity(partner.getCity());
-        detailsResource.setRegiogroup(partner.getState());
+        detailsResource.setState(partner.getState());
         detailsResource.setPostalCode(partner.getPostalCode());
         detailsResource.setHouseNo(partner.getAddressLine1());
         detailsResource.setStreet(partner.getStreet());
@@ -75,9 +176,9 @@ public class SAPLoanApplicationResource implements Serializable   {
 
         detailsResource.setTerm(loanApplication.getTerm());
 
-        detailsResource.setProjectCapaacity(loanApplication.getProjectCapacity() == null? "0.00":
+        detailsResource.setProjectCapaacity(loanApplication.getProjectCapacity() == null ? "0.00" :
                 String.format("%.2f", loanApplication.getProjectCapacity()));
-        if (loanApplication.getProjectCapacityUnit() != null){
+        if (loanApplication.getProjectCapacityUnit() != null) {
             detailsResource.setProjectCapacityUnit(loanApplication.getProjectCapacityUnit());
         } else {
             detailsResource.setProjectCapacityUnit("");
@@ -89,34 +190,36 @@ public class SAPLoanApplicationResource implements Serializable   {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = sdf.parse(scheduledCOD);
             long millis = date.getTime();
-            detailsResource.setScheduledCommDate ("\\/Date(" + millis + ")\\/");
-        }
-        else {
+            detailsResource.setScheduledCommDate("\\/Date(" + millis + ")\\/");
+        } else {
             detailsResource.setScheduledCommDate(null);
         }
 
-        detailsResource.setProjectCostInCrores(loanApplication.getProjectCost() == null? "0.000":
+        detailsResource.setProjectCostInCrores(loanApplication.getProjectCost() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getProjectCost()));
-        detailsResource.setDebtAmountInCrores(loanApplication.getProjectDebtAmount() == null? "0.000":
+        detailsResource.setDebtAmountInCrores(loanApplication.getProjectDebtAmount() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getProjectDebtAmount()));
-        detailsResource.setEquityAmountInCrores(loanApplication.getEquity() == null? "0.000":
+        detailsResource.setEquityAmountInCrores(loanApplication.getEquity() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getEquity()));
         detailsResource.setCurrency("INR");
-        detailsResource.setApplicationCapitalInCrores(loanApplication.getPfsDebtAmount() == null? "0.000":
+        detailsResource.setApplicationCapitalInCrores(loanApplication.getPfsDebtAmount() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getPfsDebtAmount()));
-        // detailsResource.setLoanPurpose(loanApplication.getLoanPurpose());
-        // Send empty string for loan purpose. Will be handled at SAP.
-        detailsResource.setLoanPurpose("");
+
+        detailsResource.setLoanPurpose(loanApplication.getLoanPurpose());
+
+        detailsResource.setPurpose(loanApplication.getLoanPurpose()); //Demand Letter Text
+
         detailsResource.setGroupCompanyName(loanApplication.getGroupCompany());
         detailsResource.setPromoterName(loanApplication.getPromoterName());
-        detailsResource.setPromoterPATInCrores(loanApplication.getPromoterPATAmount() == null? "0.000":
+        detailsResource.setPromoterPATInCrores(loanApplication.getPromoterPATAmount() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getPromoterPATAmount()));
         detailsResource.setPromoterAreaOfBusiness(loanApplication.getPromoterAreaOfBusinessNature());
         detailsResource.setPromoterRating(loanApplication.getRating());
-        detailsResource.setPromoterNetWorthInCrores(loanApplication.getPromoterNetWorthAmount() == null? "0.000":
+        detailsResource.setPromoterNetWorthInCrores(loanApplication.getPromoterNetWorthAmount() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getPromoterNetWorthAmount()));
         detailsResource.setPromoterKeyDirector(loanApplication.getPromoterKeyDirector());
-        detailsResource.setLoanStatus(Integer.toString(loanApplication.getFunctionalStatus()));
+
+
         detailsResource.setProjectName(loanApplication.getProjectName());
 
         detailsResource.setTenorYear(loanApplication.getTenorYear().toString());
@@ -143,7 +246,39 @@ public class SAPLoanApplicationResource implements Serializable   {
         if (lastProcessedBy != null)
             detailsResource.setLoanOfficer(lastProcessedBy.getSapBPNumber());
 
+        detailsResource.setLoanStatus(this.getLoanStatus(loanApplication.getFunctionalStatus(), loanApplication.getTechnicalStatus()));
+
+        detailsResource.setiCCClearanceDate(null);
 
         return detailsResource;
+    }
+
+    private String getLoanStatus(Integer functionalStatus, Integer technicalStatus) {
+
+        String loanStatus = "";
+
+        switch (functionalStatus) {
+            case 1: //01-Enquiry Stage
+                loanStatus = "1"; //Application
+            case 2: // 02-ICC ApprovalStage
+                loanStatus = "1"; //Application
+            case 3: //03-Appraisal Stage
+                loanStatus = "1"; //Application
+            case 4: //04-Board Approval Stage
+                loanStatus = "1"; //Application
+            case 5: //05-Sanction Stage
+                if (technicalStatus == 4)
+                    loanStatus = "20"; //Offer
+                else
+                    loanStatus = "1"; //Application
+            case 6: //06-Loan Documentation Stage
+                loanStatus = "60"; //Contract
+            case 7: //07-Disbursement Stage
+                loanStatus = "60"; //Contract
+            default:
+                loanStatus = "1"; //Application
+        }
+        return loanStatus;
+
     }
 }

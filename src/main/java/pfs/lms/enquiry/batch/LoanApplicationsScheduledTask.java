@@ -7,6 +7,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
+import pfs.lms.enquiry.boardapproval.BoardApproval;
+import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
+import pfs.lms.enquiry.boardapproval.approvalbyboard.ApprovalByBoard;
+import pfs.lms.enquiry.boardapproval.approvalbyboard.ApprovalByBoardRepository;
+import pfs.lms.enquiry.boardapproval.deferredbyboard.DeferredByBoard;
+import pfs.lms.enquiry.boardapproval.deferredbyboard.DeferredByBoardRepository;
+import pfs.lms.enquiry.boardapproval.reasonfordelay.BoardApprovalReasonForDelay;
+import pfs.lms.enquiry.boardapproval.reasonfordelay.BoardApprovalReasonForDelayRepository;
+import pfs.lms.enquiry.boardapproval.rejectedbyboard.RejectedByBoard;
+import pfs.lms.enquiry.boardapproval.rejectedbyboard.RejectedByBoardRepository;
+import pfs.lms.enquiry.boardapproval.rejectedbycustomer.BoardApprovalRejectedByCustomer;
+import pfs.lms.enquiry.boardapproval.rejectedbycustomer.BoardApprovalRejectedByCustomerRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
@@ -24,7 +36,6 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,15 +69,34 @@ public class LoanApplicationsScheduledTask {
     @Autowired
     private IChangeDocumentService changeDocumentService;
 
-    public LoanApplicationsScheduledTask(LoanApplicationRepository loanApplicationRepository, ISAPIntegrationService isapIntegrationService, PartnerRepository partnerRepository) {
+    @Autowired
+    private BoardApprovalRepository boardApprovalRepository;
+
+    @Autowired
+    private ApprovalByBoardRepository approvalByBoardRepository;
+
+    @Autowired
+    private  DeferredByBoardRepository deferredByBoardRepository;
+
+    @Autowired
+    private BoardApprovalReasonForDelayRepository boardApprovalReasonForDelayRepository;
+
+    @Autowired
+    private RejectedByBoardRepository rejectedByBoardRepository;
+
+    @Autowired
+    private BoardApprovalRejectedByCustomerRepository boardApprovalRejectedByCustomerRepository;
+
+    public LoanApplicationsScheduledTask(LoanApplicationRepository loanApplicationRepository,
+                                         ISAPIntegrationService isapIntegrationService,
+                                         PartnerRepository partnerRepository) {
         this.loanApplicationRepository = loanApplicationRepository;
         this.isapIntegrationService = isapIntegrationService;
         this.partnerRepository = partnerRepository;
+        this.deferredByBoardRepository = deferredByBoardRepository;
     }
-    @Scheduled(fixedRateString = "${batch.loanApplicationsScheduledTask}",initialDelayString = "${batch.initialDelay}")
+    @Scheduled(fixedRateString = "${batch.loanApplicationsScheduledTask}0",initialDelayString = "${batch.initialDelay}")
     public void syncLoanApplicationsToBackend() throws ParseException {
-       // log.info("The time is now {}", dateFormat.format(new Date()));
-       //  log.info("The time is now :" + dateFormat.format(new Date()));
 
         //Collect Loan Application with the following SAP Posting Statuses
         // 0 - Not Posted in SAP
@@ -101,12 +131,37 @@ public class LoanApplicationsScheduledTask {
             loanApplicationResource.setPartner(partner);
             loanApplicationResource.setLoanApplication(loanApplication);
 
-
             // Find Last Changed By User
             User lastChangedByUser = userRepository.findByEmail(loanApplication.getChangedByUserName());
 
+            //Map Loan Application and Partner
             SAPLoanApplicationDetailsResource detailsResource=
                     sapLoanApplicationResource.mapLoanApplicationToSAP(loanApplication,partner,lastChangedByUser);
+
+            // Map Board Approval Details
+            BoardApproval boardApproval = boardApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+            if (boardApproval != null) {
+                List<ApprovalByBoard> approvalByBoardList = approvalByBoardRepository.findByBoardApprovalId(boardApproval.getId());
+                //TODO - There will only be one ApprovalByBoard
+                //if (approvalByBoardList.size() > 0) {
+                    ApprovalByBoard approvalByBoard = approvalByBoardList.get(0);
+                    List<DeferredByBoard> deferredByBoardList = deferredByBoardRepository.findByBoardApprovalId(boardApproval.getId());
+                    List<BoardApprovalReasonForDelay> boardApprovalReasonForDelayList = boardApprovalReasonForDelayRepository.findByBoardApprovalId(boardApproval.getId());
+                    List<RejectedByBoard> rejectedByBoardRepositoryList = rejectedByBoardRepository.findByBoardApprovalId(boardApproval.getId());
+                    List<BoardApprovalRejectedByCustomer> boardApprovalRejectedByCustomerList = boardApprovalRejectedByCustomerRepository.findByBoardApprovalId(boardApproval.getId());
+
+                    detailsResource = sapLoanApplicationResource.mapBoardApproval(
+                            detailsResource,
+                            loanApplication,
+                            boardApproval,
+                            deferredByBoardList,
+                            boardApprovalReasonForDelayList,
+                            rejectedByBoardRepositoryList,
+                            approvalByBoardList,
+                            boardApprovalRejectedByCustomerList );
+
+            }
+
 
 
             SAPLoanApplicationResource d = new SAPLoanApplicationResource();

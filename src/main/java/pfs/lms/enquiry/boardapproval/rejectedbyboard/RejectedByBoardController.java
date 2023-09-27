@@ -31,6 +31,6 @@ public class RejectedByBoardController {
     @DeleteMapping("/rejectedByBoards/delete/{id}")
     public ResponseEntity<RejectedByBoard> update(@PathVariable("id") UUID id,
                                                   HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.delete(id));
+        return ResponseEntity.ok(service.delete(id,  request.getUserPrincipal().getName()));
     }
 }

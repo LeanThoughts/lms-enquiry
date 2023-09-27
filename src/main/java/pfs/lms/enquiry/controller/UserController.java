@@ -2,7 +2,6 @@ package pfs.lms.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -25,10 +24,8 @@ import pfs.lms.enquiry.service.IPartnerService;
 import pfs.lms.enquiry.service.ISignupService;
 import pfs.lms.enquiry.service.IUserService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j

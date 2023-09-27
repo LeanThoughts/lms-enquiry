@@ -31,6 +31,6 @@ public class BoardApprovalReasonForDelayController {
     @DeleteMapping("/boardApprovalReasonForDelays/delete/{id}")
     public ResponseEntity<BoardApprovalReasonForDelay> updateReasonForDelay(@PathVariable("id") UUID id,
                                                                             HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.deleteReasonForDelay(id));
+        return ResponseEntity.ok(service.deleteReasonForDelay(id ,request.getUserPrincipal().getName()));
     }
 }

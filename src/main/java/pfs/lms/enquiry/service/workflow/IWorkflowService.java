@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.service.workflow;
 
 import pfs.lms.enquiry.dto.WorkflowTaskDTO;
+import pfs.lms.enquiry.exception.HandledException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -14,10 +15,10 @@ public interface IWorkflowService {
     public Object startWorkflowProcessInstance (UUID businessProcessId,
                                                      String requestorName,
                                                      String requestorEmail,
-                                                     String processName);
+                                                     String processName) throws HandledException;
 
 
-    public Object approveTask(String processInstanceId, UUID businessProcessId, String processName);
+    public Object approveTask(String processInstanceId, UUID businessProcessId, String processName, String userName) throws CloneNotSupportedException;
 
     public Object rejectTask(String processInstanceId, UUID businessProcessId, String processName, String rejectionReason,String requestorEmail);
 

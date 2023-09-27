@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import pfs.lms.enquiry.config.ApiController;
-import pfs.lms.enquiry.domain.LoanApplication;
-import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.mail.domain.MailObject;
 import pfs.lms.enquiry.mail.repository.MailObjectRepository;
 import pfs.lms.enquiry.mail.resource.MailSearchResource;
@@ -20,8 +18,6 @@ import pfs.lms.enquiry.mail.service.EmailQueryService;
 import pfs.lms.enquiry.mail.service.RiskNotificationService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
-import pfs.lms.enquiry.resource.ProcessorResource;
-import pfs.lms.enquiry.resource.SearchResource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
