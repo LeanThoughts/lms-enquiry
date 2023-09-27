@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'fuse-boardapproval',
-    templateUrl: './boardapproval.component.html',
+    templateUrl: './boardApproval.component.html',
     animations: fuseAnimations
 })
 export class BoardApprovalComponent implements OnInit, OnDestroy {
