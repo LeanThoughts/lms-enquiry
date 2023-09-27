@@ -47,6 +47,16 @@ export class PaymentReceiptPostSanctionComponent {
     }
 
     /**
+     * refreshTable()
+     */
+    refreshTable(): void {
+        this._sactionService.getPaymentReceipts('pre').subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.paymentReceiptPostSanctions);
+            this.dataSource.sort = this.sort;
+        });
+    }
+
+    /**
      * add()
      */
     add(): void {

@@ -21,21 +21,21 @@
             <ng-container matColumnDef="proformaInvoiceDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Proforma Invoice Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.proformaInvoiceDate }}</p>
+                    <p class="text-truncate">{{ obj.proformaInvoiceDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="feeInvoice">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Invoice</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.feeInvoice }}</p>
+                    <p class="text-truncate">{{ obj.feeInvoice | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="amount">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Amount</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.amount }}</p>
+                    <p class="text-truncate">{{ obj.amount | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -49,14 +49,14 @@
             <ng-container matColumnDef="amountReceived">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Amount Received</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.amountReceived }}</p>
+                    <p class="text-truncate">{{ obj.amountReceived | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="dateOfTransfer">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Date of Transfer</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.dateOfTransfer }}</p>
+                    <p class="text-truncate">{{ obj.dateOfTransfer | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 

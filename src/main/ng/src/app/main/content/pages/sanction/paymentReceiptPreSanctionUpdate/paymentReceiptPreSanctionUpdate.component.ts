@@ -3,6 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { SanctionService } from '../sanction.service';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-payment-receipt-pre-sanction-update-dialog',
@@ -38,10 +39,10 @@ export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
         this.paymentReceiptForm = this._formBuilder.group({
             proformaInvoiceNumber: [this.selectedPaymentReceipt.proformaInvoiceNumber || ''],
             proformaInvoiceDate: [this.selectedPaymentReceipt.proformaInvoiceDate || ''],
-            feeInvoice: [this.selectedPaymentReceipt.feeInvoice || ''],
-            amount: [this.selectedPaymentReceipt.amount || ''],
+            feeInvoice: [this.selectedPaymentReceipt.feeInvoice || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
+            amount: [this.selectedPaymentReceipt.amount || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
             payee: [this.selectedPaymentReceipt.payee || ''],
-            amountReceived: [this.selectedPaymentReceipt.amountReceived || ''],
+            amountReceived: [this.selectedPaymentReceipt.amountReceived || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
             dateOfTransfer: [this.selectedPaymentReceipt.dateOfTransfer || ''],
             rtgsNeftNumber: [this.selectedPaymentReceipt.rtgsNeftNumber || ''],
             referenceNumber: [this.selectedPaymentReceipt.referenceNumber || '']
@@ -58,28 +59,37 @@ export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
      * submit()
      */
     submit(): void {
-        // if (this.paymentReceiptForm.valid) {
-        //     var paymentReceipt = this.paymentReceiptForm.value;
+        if (this.paymentReceiptForm.valid) {
+            var paymentReceipt = this.paymentReceiptForm.value;
                 
-        //     // To solve the utc time zone issue
-        //     var dt = new Date(paymentReceipt.date);
-        //     paymentReceipt.date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            // To solve the utc time zone issue
+            var dt = new Date(paymentReceipt.proformaInvoiceDate);
+            paymentReceipt.proformaInvoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(paymentReceipt.dateOfTransfer);
+            paymentReceipt.dateOfTransfer = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-        //     if (this._dialogData.operation === 'addReason') {
-        //         paymentReceipt.loanApplicationId = this.loanApplicationId;
-        //         this._sanctionService.createSanctionReasonForDelay(paymentReceipt).subscribe(() => {
-        //             this._matSnackBar.open('Reason for delay added successfully.', 'OK', { duration: 7000 });
-        //             this._dialogRef.close({ 'refresh': true });
-        //         });
-        //     }
-        //     else {
-        //         this.selectedPaymentReceipt.reason = paymentReceipt.reason;
-        //         this.selectedPaymentReceipt.date = paymentReceipt.date;
-        //         this._sanctionService.updateSanctionReasonForDelay(this.selectedPaymentReceipt).subscribe(() => {
-        //             this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
-        //             this._dialogRef.close({ 'refresh': true });
-        //         });            
-        //     }
-        // }
+            if (this._dialogData.operation === 'addPaymentReceipt') {
+                paymentReceipt.loanApplicationId = this.loanApplicationId;
+                this._sanctionService.createPaymentReceipt(paymentReceipt, 'pre').subscribe(() => {
+                    this._matSnackBar.open('Payment receipt added successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });
+            }
+            else {
+                this.selectedPaymentReceipt.proformaInvoiceNumber = paymentReceipt.proformaInvoiceNumber;
+                this.selectedPaymentReceipt.proformaInvoiceDate = paymentReceipt.proformaInvoiceDate;
+                this.selectedPaymentReceipt.feeInvoice = paymentReceipt.feeInvoice;
+                this.selectedPaymentReceipt.amount = paymentReceipt.amount;
+                this.selectedPaymentReceipt.payee = paymentReceipt.payee;
+                this.selectedPaymentReceipt.amountReceived = paymentReceipt.amountReceived;
+                this.selectedPaymentReceipt.dateOfTransfer = paymentReceipt.dateOfTransfer;
+                this.selectedPaymentReceipt.rtgsNeftNumber = paymentReceipt.rtgsNeftNumber;
+                this.selectedPaymentReceipt.referenceNumber = paymentReceipt.referenceNumber;
+                this._sanctionService.updatePaymentReceipt(this.selectedPaymentReceipt, 'pre').subscribe(() => {
+                    this._matSnackBar.open('Payment receipt updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });            
+            }
+        }
     }
 }

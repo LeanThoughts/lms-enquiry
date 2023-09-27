@@ -4,7 +4,6 @@ import { fuseAnimations } from '@fuse/animations';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { SanctionService } from '../sanction.service';
-import { SanctionReasonForDelayUpdateDialogComponent } from '../reasonForDelayUpdate/reasonForDelayUpdate.component';
 import { PaymentReceiptPreSanctionUpdateDialogComponent } from '../paymentReceiptPreSanctionUpdate/paymentReceiptPreSanctionUpdate.component';
 
 @Component({
@@ -34,10 +33,7 @@ export class PaymentReceiptPreSanctionComponent {
                     private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        // _sactionService.getReasonForDelays().subscribe(data => {
-        //     this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
-        //     this.dataSource.sort = this.sort;
-        // });
+        this.refreshTable();
     }
 
     /**
@@ -46,6 +42,16 @@ export class PaymentReceiptPreSanctionComponent {
      */
     onSelect(row: any): void {
         this.selectedPaymentReceipt = row;
+    }
+
+    /**
+     * refreshTable()
+     */
+    refreshTable(): void {
+        this._sactionService.getPaymentReceipts('pre').subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.paymentReceiptPreSanctions);
+            this.dataSource.sort = this.sort;
+        });
     }
 
     /**
@@ -65,18 +71,12 @@ export class PaymentReceiptPreSanctionComponent {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 if (this._sactionService._sanction.value.id !== '') {
-                    this._sactionService.getReasonForDelays().subscribe(data => {
-                        this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
-                        this.dataSource.sort = this.sort;
-                    });    
+                    this.refreshTable(); 
                 }
                 else {
                     this._sactionService.getSanction(this.loanApplicationId).subscribe(data => {
                         this._sactionService._sanction.next(data);
-                        this._sactionService.getReasonForDelays().subscribe(data => {
-                            this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
-                            this.dataSource.sort = this.sort;
-                        });  
+                        this.refreshTable();
                     });
                 }
             }
@@ -88,45 +88,39 @@ export class PaymentReceiptPreSanctionComponent {
      */
     update(): void {
         // Open the dialog.
-        // const dialogRef = this._matDialog.open(SanctionReasonForDelayUpdateDialogComponent, {
-        //     panelClass: 'fuse-sanction-reason-for-delay-update-dialog',
-        //     width: '750px',
-        //     data: {
-        //         operation: 'updateReason',
-        //         loanApplicationId: this.loanApplicationId,
-        //         selectedReason: this.selectedPaymentReceipt
-        //     }
-        // });
-        // // Subscribe to the dialog close event to intercept the action taken.
-        // dialogRef.afterClosed().subscribe((result) => { 
-        //     if (result.refresh) {
-        //         this._sactionService.getReasonForDelays().subscribe(data => {
-        //             this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
-        //             this.dataSource.sort = this.sort;
-        //         });
-        //     }
-        // });
+        const dialogRef = this._matDialog.open(PaymentReceiptPreSanctionUpdateDialogComponent, {
+            panelClass: 'fuse-payment-receipt-pre-sanction-update-dialog',
+            width: '850px',
+            data: {
+                operation: 'updatePaymentReceipt',
+                loanApplicationId: this.loanApplicationId,
+                selectedPaymentReceipt: this.selectedPaymentReceipt
+            }
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => { 
+            if (result.refresh) {
+                this.refreshTable();
+            }
+        });
     }
 
     /**
      * delete()
      */
     delete(): void {
-    //     const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
-    //     // Subscribe to the dialog close event to intercept the action taken.
-    //     dialogRef.afterClosed().subscribe((response) => {
-    //         if (response) {
-    //             this._sactionService.deleteSanctionReasonForDelay(this.selectedPaymentReceipt.id).subscribe(() => {
-    //                 this.selectedPaymentReceipt = undefined;
-    //                 this._sactionService.getReasonForDelays().subscribe(data => {
-    //                     this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
-    //                     this.dataSource.sort = this.sort;
-    //                 });
-    //             },
-    //             (error) => {
-    //                 this._matSnackBar.open('Unable to delete selected reason for delay.', 'OK', { duration: 7000 });
-    //             });
-    //         }
-    //     });
+        const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._sactionService.deletePaymentReceipt(this.selectedPaymentReceipt.id, 'pre').subscribe(() => {
+                    this.selectedPaymentReceipt = undefined;
+                    this.refreshTable();
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected payment receipt.', 'OK', { duration: 7000 });
+                });
+            }
+        });
     }
 }

@@ -88,6 +88,56 @@ export class SanctionService {
     }
 
     /**
+     * getPaymentReceipts()
+     */
+    public getPaymentReceipts(preOrPost: string): Observable<any> {
+        if (preOrPost === 'pre') {
+            return this._http.get("enquiry/api/paymentReceiptPreSanctions/search/findBySanctionId?sanctionId=" + 
+                    this._sanction.value.id);
+        }
+        else {
+            return this._http.get("enquiry/api/paymentReceiptPostSanctions/search/findBySanctionId?sanctionId=" + 
+                    this._sanction.value.id);
+        }
+    }
+
+    /**
+     * createPaymentReceipt()
+     */
+    public createPaymentReceipt(paymentReceipt: any, preOrPost: string): Observable<any> {
+        if (preOrPost === 'pre') {
+            return this._http.post("enquiry/api/paymentReceiptPreSanctions/create", paymentReceipt);
+        }
+        else {
+            return this._http.post("enquiry/api/paymentReceiptPostSanctions/create", paymentReceipt);
+        }
+    }
+
+    /**
+     * updatePaymentReceipt()
+     */
+    public updatePaymentReceipt(paymentReceipt: any, preOrPost: string): Observable<any> {
+        if (preOrPost === 'pre') {
+            return this._http.put("enquiry/api/paymentReceiptPreSanctions/update", paymentReceipt);
+        }
+        else {
+            return this._http.put("enquiry/api/paymentReceiptPostSanctions/update", paymentReceipt);
+        }
+    }
+
+    /**
+     * deletePaymentReceipt()
+     */
+    public deletePaymentReceipt(rejectedByCustomerId: string, preOrPost: string) {
+        if (preOrPost === 'pre') {
+            return this._http.delete("enquiry/api/paymentReceiptPreSanctions/delete/" + rejectedByCustomerId);
+        }
+        else {
+            return this._http.delete("enquiry/api/paymentReceiptPostSanctions/delete/" + rejectedByCustomerId);
+        }
+    }
+
+    /**
      * sendSanctionForWorkflowApproval()
      */
     public sendSanctionForWorkflowApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
