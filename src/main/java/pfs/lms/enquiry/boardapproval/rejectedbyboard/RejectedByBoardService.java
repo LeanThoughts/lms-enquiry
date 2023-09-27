@@ -33,15 +33,15 @@ public class RejectedByBoardService implements IRejectedByBoardService {
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = boardApprovalRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Board Approval Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Board Approval", "Header");
                     return obj;
                 });
         RejectedByBoard rejectedByBoard = new RejectedByBoard();
@@ -51,17 +51,17 @@ public class RejectedByBoardService implements IRejectedByBoardService {
         rejectedByBoard.setDetails(resource.getDetails());
         rejectedByBoard = rejectedByBoardRepository.save(rejectedByBoard);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for RejectedByBoard
+        changeDocumentService.createChangeDocument(
+                rejectedByBoard.getBoardApproval().getId(),
+                rejectedByBoard.getId().toString(),
+                rejectedByBoard.getBoardApproval().getId().toString(),
+                rejectedByBoard.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                rejectedByBoard,
+                "Created",
+                username,
+                "Board Approval", "RejectedByBoard" );
 
         return rejectedByBoard;
     }
@@ -71,33 +71,45 @@ public class RejectedByBoardService implements IRejectedByBoardService {
         RejectedByBoard rejectedByBoard = rejectedByBoardRepository.findById(resource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = rejectedByBoard.clone();
+        Object oldRejectedByBoard = rejectedByBoard.clone();
 
         rejectedByBoard.setMeetingNumber(resource.getMeetingNumber());
         rejectedByBoard.setMeetingDate(resource.getMeetingDate());
         rejectedByBoard.setDetails(resource.getDetails());
         rejectedByBoard = rejectedByBoardRepository.save(rejectedByBoard);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for RejectedByBoard
+        changeDocumentService.createChangeDocument(
+                rejectedByBoard.getBoardApproval().getId(),
+                rejectedByBoard.getId().toString(),
+                rejectedByBoard.getBoardApproval().getId().toString(),
+                rejectedByBoard.getBoardApproval().getLoanApplication().getLoanContractId(),
+                oldRejectedByBoard,
+                rejectedByBoard,
+                "Updated",
+                username,
+                "Board Approval", "RejectedByBoard" );
 
         return rejectedByBoard;
     }
 
     @Override
-    public RejectedByBoard delete(UUID deferredByBoardId) throws CloneNotSupportedException {
+    public RejectedByBoard delete(UUID deferredByBoardId, String username) throws CloneNotSupportedException {
         RejectedByBoard rejectedByBoard = rejectedByBoardRepository.findById(deferredByBoardId)
                 .orElseThrow(() -> new EntityNotFoundException(deferredByBoardId.toString()));
         rejectedByBoardRepository.delete(rejectedByBoard);
+        // Change Documents for RejectedByBoard
+        changeDocumentService.createChangeDocument(
+                rejectedByBoard.getBoardApproval().getId(),
+                rejectedByBoard.getId().toString(),
+                rejectedByBoard.getBoardApproval().getId().toString(),
+                rejectedByBoard.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                rejectedByBoard,
+                "Deleted",
+                username,
+                "Board Approval", "RejectedByBoard" );
+
         return rejectedByBoard;
     }
 }

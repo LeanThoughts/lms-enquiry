@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.ConditionType;
-import pfs.lms.enquiry.domain.ReferenceInterestRate;
 import pfs.lms.enquiry.repository.ConditionTypeRepository;
-import pfs.lms.enquiry.repository.ReferenceInterestRateRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

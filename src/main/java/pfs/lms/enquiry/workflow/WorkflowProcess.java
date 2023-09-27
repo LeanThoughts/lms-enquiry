@@ -1,12 +1,9 @@
 package pfs.lms.enquiry.workflow;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
-import org.activiti.engine.task.IdentityLink;
-import org.activiti.engine.test.Deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +13,6 @@ import pfs.lms.enquiry.domain.WorkflowApprover;
 import pfs.lms.enquiry.repository.WorkflowApproverRepository;
 import pfs.lms.enquiry.vault.FileSystemStorage;
 
-import org.activiti.spring.boot.AbstractProcessEngineAutoConfiguration;
-
-import java.io.InputStream;
 import java.util.List;
 
 /**

@@ -49,7 +49,7 @@ spring:
 oauth:
   baseUrl: https://enquiry.pfs-ess.com/auth
 sap:
-  postUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet?sap-client=300
+  postUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V2_SRV/LoanApplicationSet?sap-client=300
   baseUrl: http://192.168.1.205:8000
   serviceUri: /sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet
   monitorServiceUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/

@@ -1,16 +1,13 @@
 package pfs.lms.enquiry.service.impl;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
 import pfs.lms.enquiry.service.ISAPIntegrationPointerService;
-import pfs.lms.enquiry.service.ISAPIntegrationService;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by sajeev on 13-Jun-21.

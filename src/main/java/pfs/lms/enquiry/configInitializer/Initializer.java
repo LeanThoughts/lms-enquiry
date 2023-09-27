@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.*;
-import pfs.lms.enquiry.repository.*;
+ import pfs.lms.enquiry.repository.*;
 
 import java.util.Arrays;
 
@@ -18,7 +18,10 @@ public class Initializer implements CommandLineRunner {
 
     private final ProjectTypeRepository projectTypeRepository;
 
+    private final ProjectTypeCoreSectorRepository projectTypeCoreSectorRepository;
+
     private final FinancingTypeRepository financingTypeRepository;
+    private final LoanTypeRepository loanTypeRepository;
 
     private final AssistanceTypeRepository assistanceTypeRepository;
 
@@ -48,6 +51,8 @@ public class Initializer implements CommandLineRunner {
     private final DocumentationStatusRepository documentationStatusRepository;
 
     private final CustomerRejectionReasonRepository customerRejectionReasonRepository;
+
+    private final PurposeOfLoanRepository purposeOfLoanRepository;
 
     @Override
     public void run(String... strings) throws Exception {
@@ -174,6 +179,62 @@ public class Initializer implements CommandLineRunner {
             log.info("Added project type sample data");
         }
 
+        projectTypeCoreSectorRepository.deleteAll();
+        ProjectTypeCoreSector ptcs0 = new ProjectTypeCoreSector("0","");
+        ProjectTypeCoreSector ptcs1 = new ProjectTypeCoreSector("1","Infrastructure");
+        ProjectTypeCoreSector ptcs2 = new ProjectTypeCoreSector("2","NonInfrastructure");
+        projectTypeCoreSectorRepository.saveAll(Arrays.asList(ptcs0,ptcs1,ptcs2));
+
+
+        purposeOfLoanRepository.deleteAll();
+
+        PurposeOfLoan p1 = new PurposeOfLoan("1","Term Loan");
+        PurposeOfLoan p2 = new PurposeOfLoan("10","Term Loan/Sub Debt");
+        PurposeOfLoan p3 = new PurposeOfLoan("1a","TL-Term Loan");
+        PurposeOfLoan p4 = new PurposeOfLoan("1b","TL - Term Loan & Non-fund bas");
+        PurposeOfLoan p5 = new PurposeOfLoan("1c","TL Cost Overrun Funding");
+        PurposeOfLoan p6 = new PurposeOfLoan("1d","TL-Refinancing");
+        PurposeOfLoan p7 = new PurposeOfLoan("1e","TL-Acquisition Financing");
+        PurposeOfLoan p8 = new PurposeOfLoan("1f","TL-Refinancing/Top up");
+        PurposeOfLoan p9 = new PurposeOfLoan("1g","TL-Take out financing");
+        PurposeOfLoan p10 = new PurposeOfLoan("1h","TL-Top Up Loan");
+        PurposeOfLoan p11 = new PurposeOfLoan("1i","TL-Sub Debt");
+        PurposeOfLoan p12 = new PurposeOfLoan("1j","TL-Cash Flow Securitization");
+        PurposeOfLoan p13 = new PurposeOfLoan("1k","TL-Others");
+        PurposeOfLoan p14 = new PurposeOfLoan("2","Term Loan & Non-fund based");
+        PurposeOfLoan p15 = new PurposeOfLoan("20","NFBF-CAPEX");
+        PurposeOfLoan p16 = new PurposeOfLoan("21","NFBF-BG/PBG");
+        PurposeOfLoan p17 = new PurposeOfLoan("22","NFBF-OTHERS");
+        PurposeOfLoan p18 = new PurposeOfLoan("2a","LOC-Buyers Credit");
+        PurposeOfLoan p19 = new PurposeOfLoan("2b","LOC-Foreign Letter of Credit");
+        PurposeOfLoan p20 = new PurposeOfLoan("2c","LOC-Inland Letter of Credit");
+        PurposeOfLoan p21 = new PurposeOfLoan("2d","LOC-Performance Bank Guarante");
+        PurposeOfLoan p22 = new PurposeOfLoan("2e","LOC-Usance Letter of Credit");
+        PurposeOfLoan p23 = new PurposeOfLoan("2f","LOC-Mobilization Advance Bank");
+        PurposeOfLoan p24 = new PurposeOfLoan("2g","LOC-Advance Bank Guarantee");
+        PurposeOfLoan p25 = new PurposeOfLoan("2h","LOC-Others");
+        PurposeOfLoan p26 = new PurposeOfLoan("3","Term Loan (Cost Overrun Fundi");
+        PurposeOfLoan p27 = new PurposeOfLoan("3a","CL-Medium Term Capex");
+        PurposeOfLoan p28 = new PurposeOfLoan("3b","CL-Short Term Capex");
+        PurposeOfLoan p29 = new PurposeOfLoan("3c","CL-Acquisition Financing");
+        PurposeOfLoan p30 = new PurposeOfLoan("3d","CL-Bridge Loan");
+        PurposeOfLoan p31 = new PurposeOfLoan("3e","CL-Revolving Facility");
+        PurposeOfLoan p32 = new PurposeOfLoan("3f","CL-Working Cap/Cash Flow Mism");
+        PurposeOfLoan p33 = new PurposeOfLoan("3g","CL-Working Capital Refinancin");
+        PurposeOfLoan p34 = new PurposeOfLoan("3h","CL-Debenture-NCD");
+        PurposeOfLoan p35 = new PurposeOfLoan("3i","CL-Cash Flow Mismatch");
+        PurposeOfLoan p36 = new PurposeOfLoan("3j","CL-Others");
+        PurposeOfLoan p37 = new PurposeOfLoan("4","Term Loan / Refinancing");
+        PurposeOfLoan p38 = new PurposeOfLoan("5","Term Loan (Cost Overrun)");
+        PurposeOfLoan p39 = new PurposeOfLoan("6","Term Loan/Acquisition Financi");
+        PurposeOfLoan p40 = new PurposeOfLoan("7","Term Loan/Refinancing/Top up");
+        PurposeOfLoan p41 = new PurposeOfLoan("8","Term Loan/Take out financing");
+        PurposeOfLoan p42 = new PurposeOfLoan("9","Term Loan/Top Up Loan");
+
+        purposeOfLoanRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42));
+        log.info("Loan Purposes  ");
+
+
         financingTypeRepository.deleteAll();
 
         if (financingTypeRepository.count() == 0) {
@@ -181,8 +242,21 @@ public class Initializer implements CommandLineRunner {
             FinancingType ft2 = new FinancingType("2", "Multiple Banking");
             FinancingType ft3 = new FinancingType("3", "Consortium Lending");
             financingTypeRepository.saveAll(Arrays.asList(ft1, ft2, ft3));
-            log.info("Added financing type sample data");
+            log.info("Added financing type  ");
         }
+        loanTypeRepository.deleteAll();
+
+        if (loanTypeRepository.count() == 0) {
+            LoanType lt1 = new LoanType("001", "Term Loan");
+            LoanType lt2 = new LoanType("002", "Non Fund Loan");
+            LoanType lt3 = new LoanType("003", "Corporate Loan");
+            loanTypeRepository.saveAll(Arrays.asList(lt1, lt2, lt3));
+            log.info("Added Loan types  ");
+        }
+
+
+
+
 
         DocumentationType documentationType = documentationTypeRepository.findByCode("1");
         if (documentationType == null){
@@ -267,6 +341,7 @@ public class Initializer implements CommandLineRunner {
         }
 
 
+
         log.info("Added assistance type sample data");
 
 
@@ -283,16 +358,16 @@ public class Initializer implements CommandLineRunner {
 
         productRepository.deleteAll();
         if (productRepository.count() == 0) {
-            Product p1 = new Product("301", "Bridge Loan");
-            Product p2 = new Product("302", "Short Term Loan");
-            Product p3 = new Product("303", "Term Loan");
-            Product p4 = new Product("304", "Debentures");
-            Product p5 = new Product("305", "Non Fund Based Loan");
-            Product p6 = new Product("30F", "Facilities");
-            Product p7 = new Product("310", "Facilities Drawdown-NFB Loan");
-            Product p8 = new Product("311", "Facilities Drawdown-Term Loan");
-            Product p9 = new Product("991", "Short Term Loan for Vehicle");
-            productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9));
+            Product pr1 = new Product("301", "Bridge Loan");
+            Product pr2 = new Product("302", "Short Term Loan");
+            Product pr3 = new Product("303", "Term Loan");
+            Product pr4 = new Product("304", "Debentures");
+            Product pr5 = new Product("305", "Non Fund Based Loan");
+            Product pr6 = new Product("30F", "Facilities");
+            Product pr7 = new Product("310", "Facilities Drawdown-NFB Loan");
+            Product pr8 = new Product("311", "Facilities Drawdown-Term Loan");
+            Product pr9 = new Product("991", "Short Term Loan for Vehicle");
+            productRepository.saveAll(Arrays.asList(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9));
             log.info("Added products sample data");
         }
 

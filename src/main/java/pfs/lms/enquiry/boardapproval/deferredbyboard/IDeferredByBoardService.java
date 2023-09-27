@@ -9,5 +9,5 @@ public interface IDeferredByBoardService {
     DeferredByBoard update(DeferredByBoardResource deferredByBoardResource, String username)
             throws CloneNotSupportedException;
 
-    DeferredByBoard delete(UUID deferredByBoardId) throws CloneNotSupportedException;
+    DeferredByBoard delete(UUID deferredByBoardId, String username) throws CloneNotSupportedException;
 }

@@ -12,7 +12,6 @@ import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.mail.service.RiskNotificationService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
-import pfs.lms.enquiry.resource.EmailId;
 import pfs.lms.enquiry.resource.ProcessorResource;
 
 @ApiController

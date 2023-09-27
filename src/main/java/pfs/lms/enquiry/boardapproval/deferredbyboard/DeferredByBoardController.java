@@ -31,6 +31,6 @@ public class DeferredByBoardController {
     @DeleteMapping("/deferredByBoards/delete/{id}")
     public ResponseEntity<DeferredByBoard> update(@PathVariable("id") UUID id,
                                                   HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.delete(id));
+        return ResponseEntity.ok(service.delete(id,  request.getUserPrincipal().getName()));
     }
 }

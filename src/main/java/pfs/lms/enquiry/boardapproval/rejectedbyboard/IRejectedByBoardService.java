@@ -9,5 +9,5 @@ public interface IRejectedByBoardService {
     RejectedByBoard update(RejectedByBoardResource rejectedByBoardResource, String username)
             throws CloneNotSupportedException;
 
-    RejectedByBoard delete(UUID rejectedByBoardId) throws CloneNotSupportedException;
+    RejectedByBoard delete(UUID rejectedByBoardId, String username) throws CloneNotSupportedException;
 }

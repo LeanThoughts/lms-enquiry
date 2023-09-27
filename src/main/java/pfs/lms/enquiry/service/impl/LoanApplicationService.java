@@ -135,45 +135,6 @@ public class LoanApplicationService implements ILoanApplicationService {
             applicant = partnerService.save(applicant);
         }
 
-
-        // If No, create a new user
-
-        // Check if the user is a Main Loan Partner or a Loan Officer
-
-
-        // If the user is a Main Loan Partner
-
-
-        //
-
-        //Get the partner from partner service
-//        Partner applicant = partnerService.getOne(resource.getPartner().getEmail());
-//        if (applicant == null) {
-//            applicant = new Partner();
-//            applicant.setUserName(username);
-//            applicant.setPartyRole("TR0100");
-//        }
-//        applicant.setAddressLine1(resource.getPartner().getAddressLine1());
-//        applicant.setAddressLine2(resource.getPartner().getAddressLine2());
-//        applicant.setCity(resource.getPartner().getCity());
-//        applicant.setContactNumber(resource.getPartner().getContactNumber());
-//        applicant.setContactPersonName(resource.getPartner().getContactPersonName());
-//        applicant.setCountry(resource.getPartner().getCountry());
-//        applicant.setGroupCompany(resource.getPartner().getGroupCompany());
-//        applicant.setPan(resource.getPartner().getPan());
-//        applicant.setPartyCategory(resource.getPartner().getPartyCategory());
-//        applicant.setPartyName1(resource.getPartner().getPartyName1());
-//        applicant.setPartyName2(resource.getPartner().getPartyName2());
-//        applicant.setPartyNumber(resource.getPartner().getPartyNumber());
-//        applicant.setPostalCode(resource.getPartner().getPostalCode());
-//        applicant.setState(resource.getPartner().getState());
-//        applicant.setStreet(resource.getPartner().getStreet());
-//        applicant.setEmail(resource.getPartner().getEmail());
-//        applicant = partnerService.save(applicant);
-//
-//        // Partner applicant = partnerService.save(resource.getPartner()); // delete
-//        // Partner app = partnerService.getOne(username); // delete
-
         //Set it to the Loan Application
         LoanApplication loanApplication = resource.getLoanApplication();
 

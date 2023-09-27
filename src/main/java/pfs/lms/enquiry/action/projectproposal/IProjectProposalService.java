@@ -10,5 +10,5 @@ public interface IProjectProposalService {
 
     ProjectProposal update(ProjectProposalResource resource, String username) throws CloneNotSupportedException;
 
-    ProjectProposal processApprovedEnquiry(EnquiryAction enquiryAction) throws CloneNotSupportedException;
+    ProjectProposal processApprovedEnquiry(EnquiryAction enquiryAction,String username) throws CloneNotSupportedException;
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.dto.WorkflowTaskDTO;
+import pfs.lms.enquiry.exception.HandledException;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.resource.WorkflowProcessRequestResource;
@@ -59,7 +60,7 @@ public class WorkflowController {
     // Start Workflow Process
     @PutMapping("/startprocess")
     public ResponseEntity<Object> startProcess(@RequestBody WorkflowRequestResource workflowRequestResource,
-                                               HttpServletRequest httpServletRequest) {
+                                               HttpServletRequest httpServletRequest) throws HandledException {
 
 
         Object processObject = workflowService.startWorkflowProcessInstance(
@@ -75,7 +76,8 @@ public class WorkflowController {
                 return ResponseEntity.ok(processObject);
             case "EnquiryAction" :
                 return ResponseEntity.ok(processObject);
-
+            case "BoardApproval" :
+                return ResponseEntity.ok(processObject);
 
         }
 
@@ -87,13 +89,13 @@ public class WorkflowController {
     // Approve Workflow
     @PutMapping("/approvetask")
     public ResponseEntity<Object> approveTask(@RequestBody WorkflowProcessRequestResource workflowProcessRequestResource,
-                                              HttpServletRequest httpServletRequest) {
+                                              HttpServletRequest httpServletRequest) throws CloneNotSupportedException {
 
 
 
         Object processObject = workflowService.approveTask(workflowProcessRequestResource.getProcessInstanceId(),
                                     workflowProcessRequestResource.getBusinessProcessId(),
-                                    workflowProcessRequestResource.getProcessName() );
+                                    workflowProcessRequestResource.getProcessName(), httpServletRequest.getUserPrincipal().getName());
 
 
 

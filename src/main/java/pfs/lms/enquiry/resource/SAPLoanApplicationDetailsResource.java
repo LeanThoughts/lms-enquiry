@@ -57,8 +57,9 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "District")
     private String district;
 
-    @JsonProperty(value = "Regiogroup")
-    private String regiogroup;
+    @JsonProperty(value = "State")
+    private String state;
+
 
     @JsonProperty(value = "PostalCode")
     private String postalCode;
@@ -83,12 +84,12 @@ public class SAPLoanApplicationDetailsResource {
     private String applicationDate;
 
     @JsonProperty(value = "LoanClass")
-    private String loanClass;
+    private String loanClass; //LOAN_CLASS
 
     @JsonProperty(value = "FinancingType")
-    private String financingType;
+    private String financingType;  //SFIWO
 
-    @JsonProperty(value = "projectType")
+    @JsonProperty(value = "ProjectType")
     private String projectType;
 
     @JsonProperty(value = "DebtEquityIndicator")
@@ -130,13 +131,23 @@ public class SAPLoanApplicationDetailsResource {
     private String applicationCapitalInCrores;
 
     @JsonProperty(value = "LoanPurpose")
-    private String loanPurpose;
+    private String loanPurpose; //SVZWECK
+
+
+    @JsonProperty(value = "Purpose")
+    private String purpose; //Demand Letter Text
 
     @JsonProperty(value = "ScheduledCommDate")
     private String scheduledCommDate;
 
+    @JsonProperty(value = "ActualCOD")
+    private String actualCOD;
+
     @JsonProperty(value = "GroupCompanyName")
     private String groupCompanyName;
+
+    @JsonProperty(value = "GroupCompany")
+    private String groupCompany;
 
     @JsonProperty(value = "PromoterName")
     private String promoterName;
@@ -157,7 +168,13 @@ public class SAPLoanApplicationDetailsResource {
     private String promoterKeyDirector;
 
     @JsonProperty(value = "LoanStatus")
-    private String loanStatus;
+    private String loanStatus; //SSTATI
+
+    @JsonProperty(value = "DisbursementStatus")
+    private String disbursementStatus;
+
+    @JsonProperty(value = "FirstDisbursementDate")
+    private String firstDisbursementDate;
 
     @JsonProperty(value = "Term")
     private String term;
@@ -185,7 +202,8 @@ public class SAPLoanApplicationDetailsResource {
 
     @JsonProperty(value =  "ContactLandLinePhone")
     private String contactLandLinePhone;
-
+    @JsonProperty(value = "ContactNumber")
+    private String contactNumber;
     @JsonProperty(value = "ContactEmail")
     private String contactEmail;
 
@@ -196,6 +214,10 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "LoanContractAmount")
     private String  loanContractAmount;
 
+    @JsonProperty(value = "SanctionLetterDate")
+    private String  sanctionLetterDate;
+    @JsonProperty(value = "SanctionLetterAmount")
+    private String  sanctionLetterAmount;
     @JsonProperty(value = "LoanRevisedSanctionAmount")
     private String  loanRevisedSanctionAmount;
 
@@ -208,6 +230,30 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "IndustrySector")
     private String industrySector;
 
+    @JsonProperty(value = "BoardMeetingNumber")
+    private String boardMeetingNumber;
+    @JsonProperty(value = "BoardApprovalDate")
+    private String boardApprovalDate;
+    @JsonProperty(value = "BoardApprovalRemarks")
+    private String boardApprovalRemarks;
+    @JsonProperty(value = "BODStatus")
+    private String bODStatus;
+    @JsonProperty(value = "ICCClearanceDate")
+    private String iCCClearanceDate;
+    @JsonProperty(value = "ICCMeetNumber")
+    private String iCCMeetNumber;
+    @JsonProperty(value = "ICCStatus")
+    private String iCCStatus;
+    @JsonProperty(value = "ICCRemarks")
+    private String iCCRemarks;
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
 
     public SAPLoanApplicationDetailsResource() {
 
@@ -226,7 +272,7 @@ public class SAPLoanApplicationDetailsResource {
         this.email = "";
         this.city = "";
         this.district = "";
-        this.regiogroup = "";
+        this.state = "";
         this.postalCode = "";
         this.houseNo = "";
         this.street = "";
@@ -271,6 +317,15 @@ public class SAPLoanApplicationDetailsResource {
         this.contactFaxNumber ="";
 
         this.industrySector = "";
+
+        this.boardMeetingNumber = "";
+        this.boardApprovalDate = "";
+        this.boardApprovalRemarks = "";
+        this.bODStatus = "";
+        this.iCCClearanceDate = "";
+        this.iCCMeetNumber = "";
+        this.iCCStatus = "";
+        this.iCCRemarks = "";
     }
 
     public String getLoanContract() {
@@ -393,13 +448,6 @@ public class SAPLoanApplicationDetailsResource {
         this.district = district;
     }
 
-    public String getRegiogroup() {
-        return regiogroup;
-    }
-
-    public void setRegiogroup(String regiogroup) {
-        this.regiogroup = regiogroup;
-    }
 
     public String getPostalCode() {
         return postalCode;
@@ -787,6 +835,134 @@ public class SAPLoanApplicationDetailsResource {
         this.industrySector = industrySector;
     }
 
+    public String getBoardMeetingNumber() {
+        return boardMeetingNumber;
+    }
+
+    public void setBoardMeetingNumber(String boardMeetingNumber) {
+        this.boardMeetingNumber = boardMeetingNumber;
+    }
+
+    public String getBoardApprovalDate() {
+        return boardApprovalDate;
+    }
+
+    public void setBoardApprovalDate(String boardApprovalDate) {
+        this.boardApprovalDate = boardApprovalDate;
+    }
+
+    public String getBoardApprovalRemarks() {
+        return boardApprovalRemarks;
+    }
+
+    public void setBoardApprovalRemarks(String boardApprovalRemarks) {
+        this.boardApprovalRemarks = boardApprovalRemarks;
+    }
+
+    public String getbODStatus() {
+        return bODStatus;
+    }
+
+    public void setbODStatus(String bODStatus) {
+        this.bODStatus = bODStatus;
+    }
+
+    public String getiCCClearanceDate() {
+        return iCCClearanceDate;
+    }
+
+    public void setiCCClearanceDate(String iCCClearanceDate) {
+        this.iCCClearanceDate = iCCClearanceDate;
+    }
+
+    public String getiCCMeetNumber() {
+        return iCCMeetNumber;
+    }
+
+    public void setiCCMeetNumber(String iCCMeetNumber) {
+        this.iCCMeetNumber = iCCMeetNumber;
+    }
+
+    public String getiCCStatus() {
+        return iCCStatus;
+    }
+
+    public void setiCCStatus(String iCCStatus) {
+        this.iCCStatus = iCCStatus;
+    }
+
+    public String getiCCRemarks() {
+        return iCCRemarks;
+    }
+
+    public void setiCCRemarks(String iCCRemarks) {
+        this.iCCRemarks = iCCRemarks;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getActualCOD() {
+        return actualCOD;
+    }
+
+    public void setActualCOD(String actualCOD) {
+        this.actualCOD = actualCOD;
+    }
+
+    public String getGroupCompany() {
+        return groupCompany;
+    }
+
+    public void setGroupCompany(String groupCompany) {
+        this.groupCompany = groupCompany;
+    }
+
+    public String getDisbursementStatus() {
+        return disbursementStatus;
+    }
+
+    public void setDisbursementStatus(String disbursementStatus) {
+        this.disbursementStatus = disbursementStatus;
+    }
+
+    public String getFirstDisbursementDate() {
+        return firstDisbursementDate;
+    }
+
+    public void setFirstDisbursementDate(String firstDisbursementDate) {
+        this.firstDisbursementDate = firstDisbursementDate;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getSanctionLetterDate() {
+        return sanctionLetterDate;
+    }
+
+    public void setSanctionLetterDate(String sanctionLetterDate) {
+        this.sanctionLetterDate = sanctionLetterDate;
+    }
+
+    public String getSanctionLetterAmount() {
+        return sanctionLetterAmount;
+    }
+
+    public void setSanctionLetterAmount(String sanctionLetterAmount) {
+        this.sanctionLetterAmount = sanctionLetterAmount;
+    }
+
     @Override
     public String toString() {
         return "SAPLoanApplicationDetailsResource{" +
@@ -805,7 +981,7 @@ public class SAPLoanApplicationDetailsResource {
                 ", email='" + email + '\'' +
                 ", city='" + city + '\'' +
                 ", district='" + district + '\'' +
-                ", regiogroup='" + regiogroup + '\'' +
+                ", state='" + state + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", houseNo='" + houseNo + '\'' +
                 ", street='" + street + '\'' +

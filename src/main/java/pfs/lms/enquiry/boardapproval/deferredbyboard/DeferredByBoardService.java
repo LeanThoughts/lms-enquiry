@@ -33,16 +33,17 @@ public class DeferredByBoardService implements IDeferredByBoardService {
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = boardApprovalRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Board Approval Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Board Approval", "Header");
                     return obj;
+
                 });
         DeferredByBoard deferredByBoard = new DeferredByBoard();
         deferredByBoard.setBoardApproval(boardApproval);
@@ -51,17 +52,17 @@ public class DeferredByBoardService implements IDeferredByBoardService {
         deferredByBoard.setDetails(resource.getDetails());
         deferredByBoard = deferredByBoardRepository.save(deferredByBoard);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for DeferredByBoard
+        changeDocumentService.createChangeDocument(
+                deferredByBoard.getBoardApproval().getId(),
+                deferredByBoard.getId().toString(),
+                deferredByBoard.getBoardApproval().getId().toString(),
+                deferredByBoard.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                deferredByBoard,
+                "Created",
+                username,
+                "Board Approval", "DeferredByBoard");
 
         return deferredByBoard;
     }
@@ -71,33 +72,46 @@ public class DeferredByBoardService implements IDeferredByBoardService {
         DeferredByBoard deferredByBoard = deferredByBoardRepository.findById(resource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = deferredByBoard.clone();
+        Object oldDeferredByBoard = deferredByBoard.clone();
 
         deferredByBoard.setMeetingNumber(resource.getMeetingNumber());
         deferredByBoard.setMeetingDate(resource.getMeetingDate());
         deferredByBoard.setDetails(resource.getDetails());
         deferredByBoard = deferredByBoardRepository.save(deferredByBoard);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for DeferredByBoard
+        changeDocumentService.createChangeDocument(
+                deferredByBoard.getBoardApproval().getId(),
+                deferredByBoard.getId().toString(),
+                deferredByBoard.getBoardApproval().getId().toString(),
+                deferredByBoard.getBoardApproval().getLoanApplication().getLoanContractId(),
+                oldDeferredByBoard,
+                deferredByBoard,
+                "Updated",
+                username,
+        "Board Approval", "DeferredByBoard");
 
         return deferredByBoard;
     }
 
     @Override
-    public DeferredByBoard delete(UUID deferredByBoardId) throws CloneNotSupportedException {
+    public DeferredByBoard delete(UUID deferredByBoardId, String username) throws CloneNotSupportedException {
         DeferredByBoard deferredByBoard = deferredByBoardRepository.findById(deferredByBoardId)
                 .orElseThrow(() -> new EntityNotFoundException(deferredByBoardId.toString()));
         deferredByBoardRepository.delete(deferredByBoard);
+
+        // Change Documents for DeferredByBoard
+        changeDocumentService.createChangeDocument(
+                deferredByBoard.getBoardApproval().getId(),
+                deferredByBoard.getId().toString(),
+                deferredByBoard.getBoardApproval().getId().toString(),
+                deferredByBoard.getBoardApproval().getLoanApplication().getLoanContractId(),
+                null,
+                deferredByBoard,
+                "Deleted",
+                username,
+                "Board Approval", "DeferredByBoard");
+
         return deferredByBoard;
     }
 }

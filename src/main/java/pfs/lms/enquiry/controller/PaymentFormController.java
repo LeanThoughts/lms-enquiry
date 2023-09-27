@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pfs.lms.enquiry.config.ApiController;
-import pfs.lms.enquiry.domain.ConditionType;
 import pfs.lms.enquiry.domain.PaymentForm;
-import pfs.lms.enquiry.repository.ConditionTypeRepository;
 import pfs.lms.enquiry.repository.PaymentFormRepository;
 
 import javax.servlet.http.HttpServletRequest;

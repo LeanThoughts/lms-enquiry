@@ -6,20 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
-import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
-import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejectionRepository;
-import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
-import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetailRepository;
-import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
-import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletionRepository;
-import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
-import pfs.lms.enquiry.appraisal.projectdata.ProjectDataRepository;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalCustomerRejectionResource;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalFurtherDetailResource;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalHeaderResource;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalProjectDataResource;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResource;
@@ -35,7 +22,6 @@ import pfs.lms.enquiry.vault.FileStorage;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

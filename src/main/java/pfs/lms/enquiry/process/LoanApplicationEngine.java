@@ -11,7 +11,6 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.LoanApplicationStatusRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.resource.LoanApplicationResource;
-import pfs.lms.enquiry.resource.LoanNumberResource;
 import pfs.lms.enquiry.resource.SAPLoanApplicationDetailsResource;
 import pfs.lms.enquiry.resource.SAPLoanApplicationResource;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
@@ -55,7 +54,7 @@ public class LoanApplicationEngine {
         detailsResource.setName2(partner.getPartyName2() == null? "": partner.getPartyName2());
         detailsResource.setEmail(partner.getEmail());
         detailsResource.setCity(partner.getCity());
-        detailsResource.setRegiogroup(partner.getState());
+        detailsResource.setState(partner.getState());
         detailsResource.setPostalCode(partner.getPostalCode());
         detailsResource.setHouseNo(partner.getAddressLine1());
         detailsResource.setStreet(partner.getStreet());

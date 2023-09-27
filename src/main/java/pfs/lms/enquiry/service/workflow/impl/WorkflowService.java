@@ -11,12 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.action.EnquiryAction;
 import pfs.lms.enquiry.action.EnquiryActionRepository;
+import pfs.lms.enquiry.action.projectproposal.ProjectProposalService;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
+import pfs.lms.enquiry.boardapproval.BoardApproval;
+import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
+import pfs.lms.enquiry.boardapproval.BoardApprovalService;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.exception.HandledException;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.domain.WorkflowApprover;
@@ -37,6 +43,7 @@ import java.util.*;
  * Created by sajeev on 09-Mar-21.
  */
 @Service
+@Component
 @RequiredArgsConstructor
 public class WorkflowService implements IWorkflowService {
 
@@ -64,18 +71,25 @@ public class WorkflowService implements IWorkflowService {
     @Autowired
     private EnquiryActionRepository enquiryActionRepository;
 
+    @Autowired
+    private BoardApprovalRepository boardApprovalRepository;
+
 
     @Autowired
     private UserRepository userRepository;
 
     private static final Logger log = LoggerFactory.getLogger(FileSystemStorage.class);
 
+    private final ProjectProposalService projectProposalService;
+
+    private final BoardApprovalService boardApprovalService;
+
 
     @Override
     public Object startWorkflowProcessInstance(UUID businessProcessId,
                                                String requestorName,
                                                String requestorEmail,
-                                               String processName) {
+                                               String processName) throws HandledException {
 
 
 
@@ -86,6 +100,7 @@ public class WorkflowService implements IWorkflowService {
         LoanMonitor loanMonitor = new LoanMonitor();
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         EnquiryAction enquiryAction = new EnquiryAction();
+        BoardApproval boardApproval = new BoardApproval();
         LoanApplication loanApplication = new LoanApplication();
         String loanContractId = null;
         String loanEnquiryId = null;
@@ -123,11 +138,23 @@ public class WorkflowService implements IWorkflowService {
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "Process Enquiry";
                 break;
+            case "BoardApproval" :
+                //Fetch the Entity
+                boardApproval = boardApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                boardApproval.setWorkFlowStatusCode(02); boardApproval.setWorkFlowStatusDescription("Sent for Approval");
+                loanApplication = boardApproval.getLoanApplication();
+                objectId = loanApplication.getEnquiryNo().getId().toString();
+                processDescription = "Board Approval";
+                break;
         }
 
 
         //Deterimine Approver Name and Email
         WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName(processName);
+        if ( workflowApprover == null){
+            throw new HandledException("000", "Workflow approver not mainatained for process : " +processName);
+        }
 
         User user = userRepository.findByEmail(requestorEmail);
         String requestorFullName =  user.getFirstName() + " " + user.getLastName();
@@ -181,19 +208,25 @@ public class WorkflowService implements IWorkflowService {
                 enquiryAction.setProcessInstanceId(processInstanceId);
                 enquiryAction = enquiryActionRepository.save(enquiryAction);
                 return enquiryAction;
+            case "BoardApproval" :
+                //Save entity with the Process Instance and workflow status code
+                boardApproval.setProcessInstanceId(processInstanceId);
+                boardApproval = boardApprovalRepository.save(boardApproval);
+                return boardApproval;
         }
 
         return null;
     }
 
     @Override
-    public Object approveTask(String processInstanceId, UUID businessProcessId, String processName) {
+    public Object approveTask(String processInstanceId, UUID businessProcessId, String processName, String username) throws CloneNotSupportedException {
 
 
         Map<String, Object> variables = new HashMap<>();
         LoanMonitor loanMonitor = new LoanMonitor();
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         EnquiryAction enquiryAction = new EnquiryAction();
+        BoardApproval boardApproval = new BoardApproval();
         String loanContractId = null;
         String loanEnquiryId = null;
 
@@ -223,6 +256,14 @@ public class WorkflowService implements IWorkflowService {
                 loanEnquiryId =  enquiryAction.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = enquiryAction.getProcessInstanceId();
                 break;
+            case "Board Approval" :
+                //Fetch the Entity
+                boardApproval = boardApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                boardApproval.setWorkFlowStatusCode(03); boardApproval.setWorkFlowStatusDescription("Approved");
+                loanEnquiryId =  boardApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = boardApproval.getProcessInstanceId();
+                break;
         }
 
         // Fetch the Task
@@ -247,23 +288,33 @@ public class WorkflowService implements IWorkflowService {
             case "Monitoring":
                 //Save entity with the new workflow status code
                 loanMonitor.setWorkFlowStatusDescription("Approved");
-                loanMonitor.setWorkFlowStatusCode(2);
+                loanMonitor.setWorkFlowStatusCode(3);
                 loanMonitor.setProcessInstanceId(processInstanceId);
+                loanMonitorRepository.save(loanMonitor);
                 return loanMonitor;
             case "Appraisal" :
                 //Save entity with the new workflow status code
                 loanAppraisal.setWorkFlowStatusDescription("Approved");
-                loanAppraisal.setWorkFlowStatusCode(2);
+                loanAppraisal.setWorkFlowStatusCode(3);
                 loanAppraisal.setProcessInstanceId(processInstanceId);
+                loanAppraisalRepository.save(loanAppraisal);
                 return loanAppraisal;
-            case "EnquiryAction" :
+            case "Process Enquiry" :
                 //Save entity with the new workflow status code
                 enquiryAction.setWorkFlowStatusDescription("Approved");
-                enquiryAction.setWorkFlowStatusCode(2);
+                enquiryAction.setWorkFlowStatusCode(3);
                 enquiryAction.setProcessInstanceId(processInstanceId);
-                //enquiryAction.sendToSAP(enquiryAction);
+                enquiryActionRepository.save(enquiryAction); enquiryActionRepository.flush();
+                projectProposalService.processApprovedEnquiry(enquiryAction,username);
                 return enquiryAction;
-
+            case "Board Approval" :
+                //Save entity with the new workflow status code
+                boardApproval.setWorkFlowStatusDescription("Approved");
+                boardApproval.setWorkFlowStatusCode(3);
+                boardApproval.setProcessInstanceId(processInstanceId);
+                boardApprovalRepository.save(boardApproval); boardApprovalRepository.flush();
+                boardApprovalService.processApprovedBoardApproval(boardApproval,username);
+                return enquiryAction;
         }
 
         return null;
@@ -279,6 +330,7 @@ public class WorkflowService implements IWorkflowService {
         LoanMonitor loanMonitor = new LoanMonitor();
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         EnquiryAction enquiryAction = new EnquiryAction();
+        BoardApproval boardApproval = new BoardApproval();
         String loanContractId = null;
         String loanEnquiryId = null;
 
@@ -288,7 +340,7 @@ public class WorkflowService implements IWorkflowService {
                 //Fetch the Entity
                 loanMonitor = loanMonitorRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "04" - Rejected
-                loanMonitor.setWorkFlowStatusCode(04); loanMonitor.setWorkFlowStatusDescription("Rejected");
+                loanMonitor.setWorkFlowStatusCode(4); loanMonitor.setWorkFlowStatusDescription("Rejected");
                 loanContractId =  loanMonitor.getLoanApplication().getLoanContractId();
                 processInstanceId = loanMonitor.getProcessInstanceId();
                 break;
@@ -296,7 +348,7 @@ public class WorkflowService implements IWorkflowService {
                 //Fetch the Entity
                 loanAppraisal = loanAppraisalRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "04" - Rejected
-                loanAppraisal.setWorkFlowStatusCode(04); loanAppraisal.setWorkFlowStatusDescription("Rejected");
+                loanAppraisal.setWorkFlowStatusCode(4); loanAppraisal.setWorkFlowStatusDescription("Rejected");
                 loanContractId =  loanAppraisal.getLoanApplication().getLoanContractId();
                 processInstanceId = loanAppraisal.getProcessInstanceId();
                 break;
@@ -304,9 +356,17 @@ public class WorkflowService implements IWorkflowService {
                 //Fetch the Entity
                 enquiryAction = enquiryActionRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "04" - Rejected
-                enquiryAction.setWorkFlowStatusCode(04); enquiryAction.setWorkFlowStatusDescription("Rejected");
+                enquiryAction.setWorkFlowStatusCode(4); enquiryAction.setWorkFlowStatusDescription("Rejected");
                 loanEnquiryId =  enquiryAction.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = enquiryAction.getProcessInstanceId();
+                break;
+            case "Board Approval" :
+                //Fetch the Entity
+                boardApproval = boardApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                boardApproval.setWorkFlowStatusCode(4); boardApproval.setWorkFlowStatusDescription("Rejected");
+                loanEnquiryId =  boardApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = boardApproval.getProcessInstanceId();
                 break;
         }
 
@@ -341,6 +401,28 @@ public class WorkflowService implements IWorkflowService {
                 loanMonitor = loanMonitorRepository.save(loanMonitor);
                  return loanMonitor;
             case "Appraisal" :
+                //Fetch the Entity
+                loanAppraisal = loanAppraisalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                loanAppraisal.setWorkFlowStatusCode(4); loanAppraisal.setWorkFlowStatusDescription("Rejected");
+                loanContractId =  loanAppraisal.getLoanApplication().getLoanContractId();
+                processInstanceId = loanAppraisal.getProcessInstanceId();
+                break;
+            case "Process Enquiry" :
+                //Fetch the Entity
+                enquiryAction = enquiryActionRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                enquiryAction.setWorkFlowStatusCode(4); enquiryAction.setWorkFlowStatusDescription("Rejected");
+                loanEnquiryId =  enquiryAction.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = enquiryAction.getProcessInstanceId();
+                break;
+            case "Board Approval" :
+                //Fetch the Entity
+                boardApproval = boardApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                boardApproval.setWorkFlowStatusCode(4); boardApproval.setWorkFlowStatusDescription("Rejected");
+                loanEnquiryId =  boardApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = boardApproval.getProcessInstanceId();
                 break;
         }
 
