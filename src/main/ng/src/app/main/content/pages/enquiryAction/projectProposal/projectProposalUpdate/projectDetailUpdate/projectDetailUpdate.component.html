@@ -70,10 +70,10 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Product Type (Type of Loan)" formControlName="productType">
+                <mat-select placeholder="Loan Type" formControlName="productType">
                     <mat-option></mat-option>
-                    <mat-option *ngFor="let productType of productTypes" [value]="productType.code">
-                        {{ productType.value }}
+                    <mat-option *ngFor="let loanType of loanTypes" [value]="loanType.code">
+                        {{ loanType.value }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -102,6 +102,33 @@
                 </mat-select>
             </mat-form-field>
         </div>
+
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Project Type (Sub Sector)" formControlName="projectType">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let projectType of projectTypes" [value]="projectType.code">
+                        {{ projectType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Project type (Core Sector)" formControlName="projectTypeCoreSector" >
+                    <mat-option *ngFor="let projectTypeCoreSector of projectTypeCoreSectors" [value]="projectTypeCoreSector.code">
+                        {{ projectTypeCoreSector.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Purpose of Loan" formControlName="purposeOfLoan">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let purposeOfLoan of purposeOfLoans" [value]="purposeOfLoan.code">
+                        {{ purposeOfLoan.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
         <div fxLayout="row">
             <mat-form-field fxFlex="50">
                 <input matInput placeholder="End use of the funds to be availed from PFS" formControlName="endUseOfFunds"  maxlength="100">

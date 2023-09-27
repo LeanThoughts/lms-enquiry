@@ -32,7 +32,12 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setProjectCapacityUnit(resource.getProjectCapacityUnit());
         projectDetail.setState(resource.getState());
         projectDetail.setDistrict(resource.getDistrict());
-        projectDetail.setProductType(resource.getProductType());
+
+        projectDetail.setProjectType(resource.getProjectType());
+        projectDetail.setLoanType(resource.getLoanType());
+        projectDetail.setProjectTypeCoreSector(resource.getProjectTypeCoreSector());
+        projectDetail.setPurposeOfLoan(resource.getPurposeOfLoan());
+
         projectDetail.setLoanClass(resource.getLoanClass());
         projectDetail.setAssistanceType(resource.getAssistanceType());
         projectDetail.setFinancingType(resource.getFinancingType());
@@ -85,7 +90,6 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setProjectCapacityUnit(resource.getProjectCapacityUnit());
         projectDetail.setState(resource.getState());
         projectDetail.setDistrict(resource.getDistrict());
-        projectDetail.setProductType(resource.getProductType());
         projectDetail.setLoanClass(resource.getLoanClass());
         projectDetail.setAssistanceType(resource.getAssistanceType());
         projectDetail.setFinancingType(resource.getFinancingType());
@@ -103,6 +107,12 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setConstructionPeriodUnit(resource.getConstructionPeriodUnit());
         projectDetail.setStatus(resource.getStatus());
         projectDetail.setRoi(resource.getRoi());
+
+        projectDetail.setProjectType(resource.getProjectType());
+        projectDetail.setLoanType(resource.getLoanType());
+        projectDetail.setProjectTypeCoreSector(resource.getProjectTypeCoreSector());
+        projectDetail.setPurposeOfLoan(resource.getPurposeOfLoan());
+
         projectDetail = projectDetailRepository.save(projectDetail);
 
         // Change Documents for Project Detail

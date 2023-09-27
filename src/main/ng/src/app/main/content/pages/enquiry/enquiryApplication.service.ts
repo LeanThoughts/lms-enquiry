@@ -63,6 +63,18 @@ export class LoanEnquiryService implements Resolve<any> {
     return this._http.get('enquiry/api/partners/all');
   }
 
+    public getLoanTypes(): Observable<any> {
+        return this._http.get('enquiry/api/loanTypes?sort=code&size=500');
+    }
+
+    public getProjectTypeCoreSectors(): Observable<any> {
+        return this._http.get('enquiry/api/projectTypeCoreSectors?sort=code&size=500');
+    }
+
+    public getPurposeOfLoans(): Observable<any> {
+        return this._http.get('enquiry/api/purposeOfLoans?sort=code&size=500');
+    }
+
   /**
    * getUserRoleAuthorizations()
    */
@@ -102,7 +114,7 @@ export class LoanEnquiryService implements Resolve<any> {
    * Returns a list of project types.
    */
   public getProjectTypes(): Observable<any> {
-    return this._http.get('enquiry/api/projectTypes?sort=code&size=100');
+    return this._http.get('enquiry/api/projectTypes?sort=code&size=200');
   }
 
   /**

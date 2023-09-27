@@ -42,4 +42,8 @@ public class ProjectDetailResource {
     private Integer constructionPeriod;
     private String constructionPeriodUnit;
     private String status;
+
+    private String loanType;
+    private String projectTypeCoreSector;
+    private String purposeOfLoan;
 }

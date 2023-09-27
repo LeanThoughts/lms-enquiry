@@ -30,11 +30,9 @@ public class ProjectDetail extends AggregateRoot<ProjectDetail> implements Clone
     private String projectCapacityUnit;
     private String state;
     private String district;
-    private String productType;
     private String loanClass;
     private String assistanceType; // (Loan Purpose)
     private String financingType;
-    private String projectType;
     private String projectCoreSector;
     private String renewableFlag;
     private String policyExposure;
@@ -47,6 +45,11 @@ public class ProjectDetail extends AggregateRoot<ProjectDetail> implements Clone
     private String moratoriumPeriodUnit;
     private Integer constructionPeriod;
     private String constructionPeriodUnit;
+
+    private String loanType;
+    private String projectTypeCoreSector;
+    private String purposeOfLoan;
+    private String projectType;
 
     private String status;
 

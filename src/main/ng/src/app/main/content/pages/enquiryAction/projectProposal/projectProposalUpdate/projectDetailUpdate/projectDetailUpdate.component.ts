@@ -25,10 +25,14 @@ export class ProjectDetailUpdateComponent {
 
     unitOfMeasures = [];
     states = StateModel.getStates();
-    productTypes = [];
     loanClasses = [];
     assistanceTypes = [];
     financingTypes = [];
+
+    projectTypes = [];
+    loanTypes = [];
+    projectTypeCoreSectors = [];
+    purposeOfLoans = [];
 
     @Input()
     set projectProposal(pp: any) {
@@ -73,7 +77,19 @@ export class ProjectDetailUpdateComponent {
         this._enquiryApplicationService.getFinancingTypes().subscribe(response => {
             this.financingTypes = response._embedded.financingTypes;
         });
-        this.productTypes = productTypes;
+
+        this._enquiryApplicationService.getLoanTypes().subscribe(response => {
+            this.loanTypes = response._embedded.loanTypes;
+        });
+        this._enquiryApplicationService.getProjectTypeCoreSectors().subscribe(response => {
+            this.projectTypeCoreSectors = response._embedded.projectTypeCoreSectors;
+        });
+        this._enquiryApplicationService.getPurposeOfLoans().subscribe(response => {
+            this.purposeOfLoans = response._embedded.purposeOfLoans;
+        });
+        this._enquiryApplicationService.getProjectTypes().subscribe(response => {
+            this.projectTypes = response._embedded.projectTypes;
+        });
 
         console.log('this._enquiryActionService._loanApplication', this._enquiryActionService._loanApplication);
         this._projectDetailForm = this._formBuilder.group({
@@ -86,7 +102,7 @@ export class ProjectDetailUpdateComponent {
             projectCapacityUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacityUnit),
             state: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectLocationState),
             district: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectDistrict),
-            productType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.productCode),
+            loanType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanType),
             loanClass: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanClass),
             assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
             financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
@@ -104,7 +120,11 @@ export class ProjectDetailUpdateComponent {
             constructionPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriod, 
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             constructionPeriodUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriodUnit),
-            status: new FormControl('Draft')
+            status: new FormControl('Draft'),
+
+            projectTypeCoreSector: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectTypeCoreSector),
+            purposeOfLoan: new FormControl(this._enquiryActionService._loanApplication.loanApplication.purposeOfLoan),
+            projectType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectType),
         });
         
         if (JSON.stringify(this._projectDetail) !== JSON.stringify({})) // update mode, initialize for values ...
@@ -146,7 +166,7 @@ export class ProjectDetailUpdateComponent {
                 this._projectDetail.projectCapacityUnit = formValues.projectCapacityUnit;
                 this._projectDetail.state = formValues.state;
                 this._projectDetail.district = formValues.district;
-                this._projectDetail.productType = formValues.productType;
+                this._projectDetail.loanType = formValues.loanType;
                 this._projectDetail.loanClass = formValues.loanClass;
                 this._projectDetail.assistanceType = formValues.assistanceType;
                 this._projectDetail.financingType = formValues.financingType;
@@ -160,6 +180,9 @@ export class ProjectDetailUpdateComponent {
                 this._projectDetail.constructionPeriod = formValues.constructionPeriod;
                 this._projectDetail.constructionPeriodUnit = formValues.constructionPeriodUnit;
                 this._projectDetail.status = formValues.status;
+                this._projectDetail.projectTypeCoreSector = formValues.projectTypeCoreSector;
+                this._projectDetail.purposeOfLoan = formValues.purposeOfLoan;
+                this._projectDetail.projectType = formValues.projectType;
                 this._enquiryActionService.updateProjectDetail(this._projectDetail).subscribe(response => {
                     this._projectDetail = response;
                     this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
@@ -181,7 +204,7 @@ export class ProjectDetailUpdateComponent {
             'projectCapacityUnit': this._projectDetail.projectCapacityUnit || '',
             'state': this._projectDetail.state || '',
             'district': this._projectDetail.district || '',
-            'productType': this._projectDetail.productType || '',
+            'loanType': this._projectDetail.loanType || '',
             'loanClass': this._projectDetail.loanClass || '',
             'assistanceType': this._projectDetail.assistanceType || '',
             'financingType': this._projectDetail.financingType || '',
@@ -194,7 +217,10 @@ export class ProjectDetailUpdateComponent {
             'moratoriumPeriodUnit': this._projectDetail.moratoriumPeriodUnit || '',
             'constructionPeriod': this._projectDetail.constructionPeriod || '',
             'constructionPeriodUnit': this._projectDetail.constructionPeriodUnit || '',
-            'status': this._projectDetail.status || ''
+            'status': this._projectDetail.status || '',
+            'projectTypeCoreSector': this._projectDetail.projectTypeCoreSector || '',
+            'purposeOfLoan': this._projectDetail.purposeOfLoan || '',
+            'projectType': this._projectDetail.projectType || ''
         });
     }
 
