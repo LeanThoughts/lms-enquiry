@@ -138,6 +138,35 @@ export class SanctionService {
     }
 
     /**
+     * getSanctionLetters()
+     */
+    public getSanctionLetters(): Observable<any> {
+        return this._http.get("enquiry/api/sanctionLetters/search/findBySanctionId?sanctionId=" + 
+            this._sanction.value.id);
+    }
+
+    /**
+     * createSanctionLetter()
+     */
+    public createSanctionLetter(sanctionLetter: any): Observable<any> {
+        return this._http.post("enquiry/api/sanctionLetters/create", sanctionLetter);
+    }
+
+    /**
+     * updateSanctionLetter()
+     */
+    public updateSanctionLetter(sanctionLetter: any): Observable<any> {
+        return this._http.put("enquiry/api/sanctionLetters/update", sanctionLetter);
+    }
+
+    /**
+     * deleteSanctionLetter()
+     */
+    public deleteSanctionLetter(sanctionLetterId: string) {
+        return this._http.delete("enquiry/api/sanctionLetters/delete/" + sanctionLetterId);
+    }
+    
+    /**
      * sendSanctionForWorkflowApproval()
      */
     public sendSanctionForWorkflowApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
@@ -148,5 +177,12 @@ export class SanctionService {
             'processName': 'Sanction'
         }
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }
+
+    /**
+     * uploadVaultDocument()
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/upload', file);
     }
 }

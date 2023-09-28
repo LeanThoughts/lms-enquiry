@@ -27,6 +27,8 @@ import { PaymentReceiptPreSanctionComponent } from './paymentReceiptPreSanction/
 import { PaymentReceiptPreSanctionUpdateDialogComponent } from './paymentReceiptPreSanctionUpdate/paymentReceiptPreSanctionUpdate.component';
 import { PaymentReceiptPostSanctionComponent } from './paymentReceiptPostSanction/paymentReceiptPostSanction.component';
 import { PaymentReceiptPostSanctionUpdateDialogComponent } from './paymentReceiptPostSanctionUpdate/paymentReceiptPostSanctionUpdate.component';
+import { sanctionLetterComponent } from './sanctionLetter/sanctionLetter.component';
+import { SanctionLetterUpdateDialogComponent } from './sanctionLetterUpdate/sanctionLetterUpdate.component';
 
 const routes = [
     {
@@ -83,7 +85,9 @@ const MY_FORMATS = {
         PaymentReceiptPreSanctionComponent,
         PaymentReceiptPreSanctionUpdateDialogComponent,
         PaymentReceiptPostSanctionComponent,
-        PaymentReceiptPostSanctionUpdateDialogComponent
+        PaymentReceiptPostSanctionUpdateDialogComponent,
+        sanctionLetterComponent,
+        SanctionLetterUpdateDialogComponent
     ],
     providers: [
         SanctionService,
@@ -103,13 +107,16 @@ const MY_FORMATS = {
         PaymentReceiptPreSanctionComponent,
         PaymentReceiptPreSanctionUpdateDialogComponent,
         PaymentReceiptPostSanctionComponent,
-        PaymentReceiptPostSanctionUpdateDialogComponent
+        PaymentReceiptPostSanctionUpdateDialogComponent,
+        sanctionLetterComponent,
+        SanctionLetterUpdateDialogComponent
     ],
     entryComponents: [
         SanctionReasonForDelayUpdateDialogComponent,
         SanctionRejectedByCustomerUpdateDialogComponent,
         PaymentReceiptPreSanctionUpdateDialogComponent,
-        PaymentReceiptPostSanctionUpdateDialogComponent
+        PaymentReceiptPostSanctionUpdateDialogComponent,
+        SanctionLetterUpdateDialogComponent
     ]
 })
 export class SanctionModule {

@@ -70,7 +70,7 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Loan Type" formControlName="productType">
+                <mat-select placeholder="Loan Type" formControlName="loanType">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let loanType of loanTypes" [value]="loanType.code">
                         {{ loanType.value }}
