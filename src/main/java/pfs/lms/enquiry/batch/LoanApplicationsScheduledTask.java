@@ -138,29 +138,29 @@ public class LoanApplicationsScheduledTask {
             SAPLoanApplicationDetailsResource detailsResource=
                     sapLoanApplicationResource.mapLoanApplicationToSAP(loanApplication,partner,lastChangedByUser);
 
-            // Map Board Approval Details
-            BoardApproval boardApproval = boardApprovalRepository.findByLoanApplicationId(loanApplication.getId());
-            if (boardApproval != null) {
-                List<ApprovalByBoard> approvalByBoardList = approvalByBoardRepository.findByBoardApprovalId(boardApproval.getId());
-                //TODO - There will only be one ApprovalByBoard
-                //if (approvalByBoardList.size() > 0) {
-                    ApprovalByBoard approvalByBoard = approvalByBoardList.get(0);
-                    List<DeferredByBoard> deferredByBoardList = deferredByBoardRepository.findByBoardApprovalId(boardApproval.getId());
-                    List<BoardApprovalReasonForDelay> boardApprovalReasonForDelayList = boardApprovalReasonForDelayRepository.findByBoardApprovalId(boardApproval.getId());
-                    List<RejectedByBoard> rejectedByBoardRepositoryList = rejectedByBoardRepository.findByBoardApprovalId(boardApproval.getId());
-                    List<BoardApprovalRejectedByCustomer> boardApprovalRejectedByCustomerList = boardApprovalRejectedByCustomerRepository.findByBoardApprovalId(boardApproval.getId());
-
-                    detailsResource = sapLoanApplicationResource.mapBoardApproval(
-                            detailsResource,
-                            loanApplication,
-                            boardApproval,
-                            deferredByBoardList,
-                            boardApprovalReasonForDelayList,
-                            rejectedByBoardRepositoryList,
-                            approvalByBoardList,
-                            boardApprovalRejectedByCustomerList );
-
-            }
+//            // Map Board Approval Details
+//            BoardApproval boardApproval = boardApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+//            if (boardApproval != null) {
+//                List<ApprovalByBoard> approvalByBoardList = approvalByBoardRepository.findByBoardApprovalId(boardApproval.getId());
+//                //TODO - There will only be one ApprovalByBoard
+//                //if (approvalByBoardList.size() > 0) {
+//                    ApprovalByBoard approvalByBoard = approvalByBoardList.get(0);
+//                    List<DeferredByBoard> deferredByBoardList = deferredByBoardRepository.findByBoardApprovalId(boardApproval.getId());
+//                    List<BoardApprovalReasonForDelay> boardApprovalReasonForDelayList = boardApprovalReasonForDelayRepository.findByBoardApprovalId(boardApproval.getId());
+//                    List<RejectedByBoard> rejectedByBoardRepositoryList = rejectedByBoardRepository.findByBoardApprovalId(boardApproval.getId());
+//                    List<BoardApprovalRejectedByCustomer> boardApprovalRejectedByCustomerList = boardApprovalRejectedByCustomerRepository.findByBoardApprovalId(boardApproval.getId());
+//
+//                    detailsResource = sapLoanApplicationResource.mapBoardApproval(
+//                            detailsResource,
+//                            loanApplication,
+//                            boardApproval,
+//                            deferredByBoardList,
+//                            boardApprovalReasonForDelayList,
+//                            rejectedByBoardRepositoryList,
+//                            approvalByBoardList,
+//                            boardApprovalRejectedByCustomerList );
+//
+//            }
 
 
 

@@ -33,15 +33,15 @@ public class SanctionLetterService implements ISanctionLetterService {
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = sanctionRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Sanction Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Sanction", "Header");
                     return obj;
                 });
         SanctionLetter sanctionLetter = new SanctionLetter();
@@ -56,17 +56,16 @@ public class SanctionLetterService implements ISanctionLetterService {
         sanctionLetter.setFileReference(resource.getFileReference());
         sanctionLetter = sanctionLetterRepository.save(sanctionLetter);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+         changeDocumentService.createChangeDocument(
+                 sanctionLetter.getSanction().getId(),
+                 sanctionLetter.getId().toString(),
+                 sanctionLetter.getSanction().getId().toString(),
+                 sanctionLetter.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                 sanctionLetter,
+                "Created",
+                username,
+                "Sanction", "SanctionLetter" );
 
         return sanctionLetter;
     }
@@ -76,7 +75,7 @@ public class SanctionLetterService implements ISanctionLetterService {
         SanctionLetter sanctionLetter = sanctionLetterRepository.findById(resource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = sanctionLetter.clone();
+        Object oldObject = sanctionLetter.clone();
 
         sanctionLetter.setSanctionLetterAcceptanceDate(resource.getSanctionLetterAcceptanceDate());
         sanctionLetter.setSanctionLetterIssueDate(resource.getSanctionLetterIssueDate());
@@ -87,27 +86,36 @@ public class SanctionLetterService implements ISanctionLetterService {
         sanctionLetter.setFileReference(resource.getFileReference());
         sanctionLetter = sanctionLetterRepository.save(sanctionLetter);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        changeDocumentService.createChangeDocument(
+                sanctionLetter.getSanction().getId(),
+                sanctionLetter.getId().toString(),
+                sanctionLetter.getSanction().getId().toString(),
+                sanctionLetter.getSanction().getLoanApplication().getLoanContractId(),
+                oldObject,
+                sanctionLetter,
+                "Updated",
+                username,
+                "Sanction", "SanctionLetter" );
 
         return sanctionLetter;
     }
 
     @Override
-    public SanctionLetter delete(UUID sanctionLetterId) throws CloneNotSupportedException {
+    public SanctionLetter delete(UUID sanctionLetterId, String username) throws CloneNotSupportedException {
         SanctionLetter sanctionLetter = sanctionLetterRepository
                 .findById(sanctionLetterId)
                 .orElseThrow(() -> new EntityNotFoundException(sanctionLetterId.toString()));
         sanctionLetterRepository.delete(sanctionLetter);
+        changeDocumentService.createChangeDocument(
+                sanctionLetter.getSanction().getId(),
+                sanctionLetter.getId().toString(),
+                sanctionLetter.getSanction().getId().toString(),
+                sanctionLetter.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                sanctionLetter,
+                "Deleted",
+                username,
+                "Sanction", "SanctionLetter" );
         return sanctionLetter;
     }
 }

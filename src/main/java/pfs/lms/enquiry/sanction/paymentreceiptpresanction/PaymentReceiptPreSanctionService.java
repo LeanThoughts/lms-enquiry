@@ -33,15 +33,15 @@ public class PaymentReceiptPreSanctionService implements IPaymentReceiptPreSanct
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = sanctionRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                     //Change Documents for Sanction Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Sanction", "Header");
                     return obj;
                 });
         PaymentReceiptPreSanction paymentReceiptPreSanction = new PaymentReceiptPreSanction();
@@ -57,17 +57,17 @@ public class PaymentReceiptPreSanctionService implements IPaymentReceiptPreSanct
         paymentReceiptPreSanction.setRtgsNeftNumber(resource.getRtgsNeftNumber());
         paymentReceiptPreSanction = paymentReceiptPreSanctionRepository.save(paymentReceiptPreSanction);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for paymentReceiptPreSanction
+        changeDocumentService.createChangeDocument(
+                paymentReceiptPreSanction.getSanction().getId(),
+                paymentReceiptPreSanction.getId().toString(),
+                paymentReceiptPreSanction.getSanction().getId().toString(),
+                paymentReceiptPreSanction.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                paymentReceiptPreSanction,
+                "Created",
+                username,
+                "Sanction", "PaymentReceiptPreSanction" );
 
         return paymentReceiptPreSanction;
     }
@@ -78,7 +78,7 @@ public class PaymentReceiptPreSanctionService implements IPaymentReceiptPreSanct
                 paymentReceiptPreSanctionRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = paymentReceiptPreSanction.clone();
+        Object oldObject = paymentReceiptPreSanction.clone();
 
         paymentReceiptPreSanction.setPayee(resource.getPayee());
         paymentReceiptPreSanction.setAmount(resource.getAmount());
@@ -91,26 +91,37 @@ public class PaymentReceiptPreSanctionService implements IPaymentReceiptPreSanct
         paymentReceiptPreSanction.setRtgsNeftNumber(resource.getRtgsNeftNumber());
         paymentReceiptPreSanction = paymentReceiptPreSanctionRepository.save(paymentReceiptPreSanction);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for paymentReceiptPreSanction
+        changeDocumentService.createChangeDocument(
+                paymentReceiptPreSanction.getSanction().getId(),
+                paymentReceiptPreSanction.getId().toString(),
+                paymentReceiptPreSanction.getSanction().getId().toString(),
+                paymentReceiptPreSanction.getSanction().getLoanApplication().getLoanContractId(),
+                oldObject,
+                paymentReceiptPreSanction,
+                "Updated",
+                username,
+                "Sanction", "PaymentReceiptPreSanction" );
 
         return paymentReceiptPreSanction;
     }
 
     @Override
-    public PaymentReceiptPreSanction deletePaymentReceipt(UUID paymentReceiptId) throws CloneNotSupportedException {
+    public PaymentReceiptPreSanction deletePaymentReceipt(UUID paymentReceiptId, String username) throws CloneNotSupportedException {
         PaymentReceiptPreSanction paymentReceiptPreSanction = paymentReceiptPreSanctionRepository.findById(paymentReceiptId).
                 orElseThrow(() -> new EntityNotFoundException(paymentReceiptId.toString()));
         paymentReceiptPreSanctionRepository.delete(paymentReceiptPreSanction);
+        // Change Documents for paymentReceiptPreSanction
+        changeDocumentService.createChangeDocument(
+                paymentReceiptPreSanction.getSanction().getId(),
+                paymentReceiptPreSanction.getId().toString(),
+                paymentReceiptPreSanction.getSanction().getId().toString(),
+                paymentReceiptPreSanction.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                paymentReceiptPreSanction,
+                "Deleted",
+                username,
+                "Sanction", "PaymentReceiptPreSanction" );
         return paymentReceiptPreSanction;
     }
 }

@@ -166,7 +166,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
      * 04-Board Approval Stage
      * 05-Sanction Stage
      * 06-Loan Documentation Stage
-     * 07-Loan Disbursement Stage - "TODO - Change to Status '07' in R/3 replication report
+     * 07-Loan Disbursement Stage -
      * 08-Monitoring
      * 09-Recovery
      * 90- Planned Completed
@@ -191,9 +191,6 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     5 - Rejected by Board
     */
     private Integer rejectionCategory;
-
-
-
 
     @Size(max = 100)
     private String rejectionReason;
@@ -261,6 +258,21 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     private Double tolTNWPercentage;
     private String delayInDebtServicing;
 
+
+    private LocalDate enquiryCompletionDate;
+    private String enquiryRemarks;
+    private LocalDate termSheetAcceptance;
+    private String feeRemarks;
+
+    private String boardMeetingNumber;
+    private LocalDate boardApprovalDate;
+    private String boardApprovalRemarks;
+    private String bODStatus;
+    private LocalDate iCCClearanceDate;
+    private String iCCMeetNumber;
+    private String iCCStatus;
+    private String iCCRemarks;
+
     @JsonCreator
     public LoanApplication(@JsonProperty("id") UUID id,
                            @JsonProperty("version") Long version,
@@ -277,6 +289,9 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("loanApplicant") UUID loanApplicant,
                            @JsonProperty("loanClass") String loanClass,
                            @JsonProperty("projectType") String projectType,
+                           @JsonProperty("projectTypeCoreSector") String projectTypeCoreSector,
+                           @JsonProperty("loanType") String loanType,
+
                            @JsonProperty("financingType") String financingType,
                            @JsonProperty("assistanceType") String assistanceType,
                            @JsonProperty("projectCapacity") Double projectCapacity,
@@ -300,6 +315,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("pfsDebtAmount") Double pfsDebtAmount,
                            @JsonProperty("pfsSubDebtAmount") Double pfsSubDebtAmount,
                            @JsonProperty("loanPurpose") String loanPurpose,
+                           @JsonProperty("purposeOfLoan") String purposeOfLoan,
+
                            @JsonProperty("leadFIName") String leadFIName,
                            @JsonProperty("leadFILoanAmount") Double leadFILoanAmount,
                            @JsonProperty("expectedInterestRate") Double expectedInterestRate,
@@ -338,7 +355,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("contactEmail") String contactEmail,
                            @JsonProperty("contactFaxNumber") String contactFaxNumber,
 
-                           @JsonProperty("projectCoreSector")  String projectCoreSector,
+                            @JsonProperty("projectCoreSector")  String projectCoreSector,
                             @JsonProperty("renewableFlag")  String renewableFlag,
                             @JsonProperty("policyExposure")  String policyExposure,
                             @JsonProperty("endUseOfFunds")  String endUseOfFunds,
@@ -355,9 +372,22 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                             @JsonProperty("tolTNW") Double tolTNW,
                             @JsonProperty("totalDebtTNWPercentage") Double totalDebtTNWPercentage,
                             @JsonProperty("tolTNWPercentage") Double tolTNWPercentage,
-                            @JsonProperty("delayInDebtServicing") String delayInDebtServicing
+                            @JsonProperty("delayInDebtServicing") String delayInDebtServicing,
+                           @JsonProperty("enquiryCompletionDate") LocalDate enquiryCompletionDate,
+                           @JsonProperty("enquiryRemarks") String  enquiryRemarks,
+                           @JsonProperty("termSheetAcceptance") LocalDate termSheetAcceptance,
+                           @JsonProperty("feeRemarks") String feeRemarks,
+                           @JsonProperty("boardMeetingNumber") String  boardMeetingNumber,
+                           @JsonProperty("boardApprovalDate") LocalDate  boardApprovalDate,
+                           @JsonProperty("boardApprovalRemarks") String  boardApprovalRemarks,
+                           @JsonProperty("bODStatus") String  bODStatus,
+                           @JsonProperty("iCCClearanceDate") LocalDate iCCClearanceDate  ,
+                           @JsonProperty("iCCMeetNumber") String  iCCMeetNumber,
+                           @JsonProperty("iCCStatus") String  iCCStatus,
+                           @JsonProperty("iCCRemarks") String  iCCRemarks
 
                            ) {
+
         this.id = id;
         this.version = version;
         this.createdOn = createdOn;
@@ -460,6 +490,23 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
        this.totalDebtTNWPercentage = totalDebtTNWPercentage;
        this.tolTNWPercentage = tolTNWPercentage;
        this.delayInDebtServicing = delayInDebtServicing;
+
+        this.boardMeetingNumber = boardMeetingNumber;
+        this.boardApprovalDate = boardApprovalDate;
+        this.boardApprovalRemarks = boardApprovalRemarks;
+        this.bODStatus = bODStatus;
+        this.iCCClearanceDate = iCCClearanceDate;
+        this.iCCMeetNumber = iCCMeetNumber;
+        this.iCCStatus = iCCStatus;
+        this.iCCRemarks = iCCRemarks;
+
+
+       this.enquiryRemarks = enquiryRemarks;
+       this.enquiryCompletionDate = enquiryCompletionDate;
+       this.termSheetAcceptance = termSheetAcceptance;
+       this.feeRemarks = feeRemarks;
+
+
     }
 
 
@@ -898,6 +945,66 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
 
     public String getDelayInDebtServicing() {
         return delayInDebtServicing;
+    }
+
+    public String getLoanType() {
+        return loanType;
+    }
+
+    public String getPurposeOfLoan() {
+        return purposeOfLoan;
+    }
+
+    public String getProjectTypeCoreSector() {
+        return projectTypeCoreSector;
+    }
+
+    public LocalDate getEnquiryCompletionDate() {
+        return enquiryCompletionDate;
+    }
+
+    public String getEnquiryRemarks() {
+        return enquiryRemarks;
+    }
+
+    public LocalDate getTermSheetAcceptance() {
+        return termSheetAcceptance;
+    }
+
+    public String getFeeRemarks() {
+        return feeRemarks;
+    }
+
+    public String getBoardMeetingNumber() {
+        return boardMeetingNumber;
+    }
+
+    public LocalDate getBoardApprovalDate() {
+        return boardApprovalDate;
+    }
+
+    public String getBoardApprovalRemarks() {
+        return boardApprovalRemarks;
+    }
+
+    public String getbODStatus() {
+        return bODStatus;
+    }
+
+    public LocalDate getiCCClearanceDate() {
+        return iCCClearanceDate;
+    }
+
+    public String getiCCMeetNumber() {
+        return iCCMeetNumber;
+    }
+
+    public String getiCCStatus() {
+        return iCCStatus;
+    }
+
+    public String getiCCRemarks() {
+        return iCCRemarks;
     }
 
     @Value

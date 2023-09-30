@@ -9,5 +9,5 @@ public interface ISanctionLetterService {
     SanctionLetter update(SanctionLetterResource sanctionLetterResource, String username)
             throws CloneNotSupportedException;
 
-    SanctionLetter delete(UUID sanctionLetterId) throws CloneNotSupportedException;
+    SanctionLetter delete(UUID sanctionLetterId,String username) throws CloneNotSupportedException;
 }

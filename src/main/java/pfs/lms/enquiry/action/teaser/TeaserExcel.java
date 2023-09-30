@@ -140,7 +140,11 @@ public class TeaserExcel {
         content = new TeaserLineContent(++serialNo, contentStyle,"Rate of Interest", titleStyle, teaserContent.getRateOfInterest(), null, "Fee", titleStyle, teaserContent.getFee(), contentStyle, "Tenure", contentStyle, teaserContent.getTenure(), contentStyle, "Moratorium", titleStyle ,teaserContent.getMoratoriumPeriod(), contentStyle );
         writeDataLinesSXSSFirstPage(++currentContentRow,content, false, 2,8);
 
-        content = new TeaserLineContent(++serialNo, contentStyle,"Source and cash flow of repayment of loan and Interest", titleStyle, "Pls also share the excel calculations of both DSCR and Cash DSCR separately.\n" + teaserContent.getSourceAndCashFlow(), contentStyle, null, null, null, null, null, null, null, null, null, null ,null, null );
+
+        String sourceAndCashFlow = "";
+        if ( teaserContent.getSourceAndCashFlow() != null) sourceAndCashFlow = teaserContent.getSourceAndCashFlow();
+
+        content = new TeaserLineContent(++serialNo, contentStyle,"Source and cash flow of repayment of loan and Interest", titleStyle, "Pls also share the excel calculations of both DSCR and Cash DSCR separately.\n" + sourceAndCashFlow, contentStyle, null, null, null, null, null, null, null, null, null, null ,null, null );
         writeDataLinesSXSSFirstPage(++currentContentRow,content, true, 2,8);
 
         content = new TeaserLineContent(++serialNo, contentStyle,"Other Collateral", titleStyle, "", null, null, null, null, null, null, null, null, null, null, null,null, null);
@@ -353,6 +357,9 @@ public class TeaserExcel {
         CellStyle titleStyle = getTitleStyle(sxssfWorkbook);
         CellStyle contentStyle = getContentStyle(sxssfWorkbook);
 
+        if (dealGuaranteeTimeline==null){
+            dealGuaranteeTimeline = new DealGuaranteeTimeline();
+        }
 
         content = new TeaserLineContent(serialNumberSecondSection ,titleStyle, "Deal Transaction Structure", contentStyle,  dealGuaranteeTimeline.getDealTransactionStructure(), contentStyle, null, null, null, null, null, null, null, null,null, null,null, null);
         writeDataLinesSXSSFirstPage(++currentContentRow,content, true, 2,8);
@@ -438,7 +445,7 @@ public class TeaserExcel {
         }
 
 
-        content = new TeaserLineContent(serialNumberSecondSection, titleStyle, "Promoter/Borrower Group Profile and Financials", contentStyle, "Particulars(INR CRs)", financialsHeaderStyle, promoterBorrowerFinancial_Year1.getFiscalPeriod(), financialsHeaderStyle, promoterBorrowerFinancial_Year2.getFiscalPeriod(), financialsHeaderStyle, promoterBorrowerFinancial_Year3.getFiscalPeriod(), financialsHeaderStyle, promoterBorrowerFinancial_Year4.getFiscalPeriod(), financialsHeaderStyle, null, null, null, null);
+        content = new TeaserLineContent(++serialNumberSecondSection, titleStyle, "Promoter/Borrower Group Profile and Financials", contentStyle, "Particulars(INR CRs)", financialsHeaderStyle, promoterBorrowerFinancial_Year1.getFiscalPeriod(), financialsHeaderStyle, promoterBorrowerFinancial_Year2.getFiscalPeriod(), financialsHeaderStyle, promoterBorrowerFinancial_Year3.getFiscalPeriod(), financialsHeaderStyle, promoterBorrowerFinancial_Year4.getFiscalPeriod(), financialsHeaderStyle, null, null, null, null);
         writeDataLinesSXSSThirdPage(++currentContentRow, content, true, 7, 8);
 
         content = new TeaserLineContent("", titleStyle, "", contentStyle, "Profit & Loss", finanacialsStyle, null, null, null, null, null, null, null, null, null, null, null, null);

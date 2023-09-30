@@ -29,7 +29,6 @@ import java.util.List;
 public class SAPLoanApplicationResource implements Serializable {
 
 
-
     public SAPLoanApplicationResource() {
         sapLoanApplicationDetailsResource = new SAPLoanApplicationDetailsResource();
     }
@@ -113,10 +112,10 @@ public class SAPLoanApplicationResource implements Serializable {
         if (deferredByBoardList != null) {
 
             // Sort by Board Meeting Date
-            Comparator<DeferredByBoard> comparator = (d1,d2)->{
+            Comparator<DeferredByBoard> comparator = (d1, d2) -> {
                 return d1.getMeetingDate().compareTo(d2.getMeetingDate());
             };
-            Collections.sort(deferredByBoardList,comparator);
+            Collections.sort(deferredByBoardList, comparator);
 
             deferredByBoard = deferredByBoardList.get(0);
 
@@ -131,7 +130,6 @@ public class SAPLoanApplicationResource implements Serializable {
             detailsResource.setbODStatus("1"); //Deferred by Board
             return detailsResource;
         }
-
 
 
         return detailsResource;
@@ -169,12 +167,7 @@ public class SAPLoanApplicationResource implements Serializable {
             detailsResource.setBusPartnerNumber(partner.getPartyNumber().toString());
 
         detailsResource.setApplicationDate("\\/Date(" + System.currentTimeMillis() + ")\\/");
-        detailsResource.setLoanClass(loanApplication.getLoanClass());
-        detailsResource.setFinancingType(loanApplication.getFinancingType());
-        detailsResource.setDebtEquityIndicator(loanApplication.getAssistanceType());
-        detailsResource.setProjectType(loanApplication.getProjectType());
 
-        detailsResource.setTerm(loanApplication.getTerm());
 
         detailsResource.setProjectCapaacity(loanApplication.getProjectCapacity() == null ? "0.00" :
                 String.format("%.2f", loanApplication.getProjectCapacity()));
@@ -205,9 +198,16 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setApplicationCapitalInCrores(loanApplication.getPfsDebtAmount() == null ? "0.000" :
                 String.format("%.3f", loanApplication.getPfsDebtAmount()));
 
-        detailsResource.setLoanPurpose(loanApplication.getLoanPurpose());
-
+        detailsResource.setLoanPurpose(loanApplication.getPurposeOfLoan());
         detailsResource.setPurpose(loanApplication.getLoanPurpose()); //Demand Letter Text
+        detailsResource.setLoanClass(loanApplication.getLoanClass());
+        detailsResource.setFinancingType(loanApplication.getFinancingType());
+        detailsResource.setDebtEquityIndicator(loanApplication.getAssistanceType());
+        detailsResource.setProjectType(loanApplication.getProjectType());
+        detailsResource.setProjectTypeCoreSector(loanApplication.getProjectTypeCoreSector());
+        detailsResource.setLoanType(loanApplication.getLoanType());
+        detailsResource.setTerm(loanApplication.getTerm());
+
 
         detailsResource.setGroupCompanyName(loanApplication.getGroupCompany());
         detailsResource.setPromoterName(loanApplication.getPromoterName());
@@ -241,6 +241,42 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setContactFaxNumber(loanApplication.getContactFaxNumber());
         detailsResource.setContactLandLinePhone(loanApplication.getContactLandLinePhone());
         detailsResource.setContactTelePhone(loanApplication.getContactTelePhone());
+
+        //Board Approval
+        detailsResource.setbODStatus(loanApplication.getbODStatus());
+        detailsResource.setBoardMeetingNumber(loanApplication.getBoardMeetingNumber());
+        detailsResource.setBoardApprovalRemarks(loanApplication.getBoardApprovalRemarks());
+        if (loanApplication.getBoardApprovalDate() != null)
+            detailsResource.setBoardApprovalDate(DataConversionUtility.convertDateToSAPFormat(loanApplication.getBoardApprovalDate()));
+        else
+            detailsResource.setBoardApprovalDate(null);
+
+        //ICC
+        detailsResource.setiCCStatus(loanApplication.getiCCStatus());
+        detailsResource.setiCCMeetNumber(loanApplication.getiCCMeetNumber());
+        detailsResource.setiCCRemarks(loanApplication.getiCCRemarks());
+        if (loanApplication.getiCCClearanceDate() != null)
+            detailsResource.setiCCClearanceDate(DataConversionUtility.convertDateToSAPFormat(loanApplication.getiCCClearanceDate()));
+        else
+            detailsResource.setiCCClearanceDate(null);
+
+        //Enquiry Completion
+        if (loanApplication.getEnquiryCompletionDate() != null)
+            detailsResource.setEnquiryCompletionDate(DataConversionUtility.convertDateToSAPFormat(loanApplication.getEnquiryCompletionDate()));
+        else
+            detailsResource.setEnquiryCompletionDate(null);
+        detailsResource.setEnquiryRemarks(loanApplication.getEnquiryRemarks());
+
+        //Fee
+        if (loanApplication.getTermSheetAcceptance() != null)
+            detailsResource.setTermSheetAcceptance(DataConversionUtility.convertDateToSAPFormat(loanApplication.getTermSheetAcceptance()));
+        else
+            detailsResource.setTermSheetAcceptance(null);
+        detailsResource.setFeeRemarks(loanApplication.getFeeRemarks());
+
+
+
+        detailsResource.setLoanContract(loanApplication.getLoanContractId());
 
         // Set Loan Officer
         if (lastProcessedBy != null)

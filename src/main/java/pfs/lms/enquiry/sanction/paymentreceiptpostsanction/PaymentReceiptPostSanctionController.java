@@ -31,6 +31,6 @@ public class PaymentReceiptPostSanctionController {
     @DeleteMapping("/paymentReceiptPostSanctions/delete/{id}")
     public ResponseEntity<PaymentReceiptPostSanction> updatePaymentReceipt(@PathVariable("id") UUID id,
                                                                            HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.deletePaymentReceipt(id));
+        return ResponseEntity.ok(service.deletePaymentReceipt(id, request.getUserPrincipal().getName()));
     }
 }

@@ -89,8 +89,14 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "FinancingType")
     private String financingType;  //SFIWO
 
+    @JsonProperty(value = "LoanType")
+    private String loanType;  //STITEL
     @JsonProperty(value = "ProjectType")
     private String projectType;
+
+    @JsonProperty(value = "ProjectTypeCoreSector")
+    private String  projectTypeCoreSector;
+
 
     @JsonProperty(value = "DebtEquityIndicator")
     private String debtEquityIndicator;
@@ -131,11 +137,11 @@ public class SAPLoanApplicationDetailsResource {
     private String applicationCapitalInCrores;
 
     @JsonProperty(value = "LoanPurpose")
-    private String loanPurpose; //SVZWECK
+    private String loanPurpose; //SVZWECK  LoanApplication.purposeOfLoan
 
 
     @JsonProperty(value = "Purpose")
-    private String purpose; //Demand Letter Text
+    private String purpose; //Demand Letter Text - LoanApplication.loanPurpose
 
     @JsonProperty(value = "ScheduledCommDate")
     private String scheduledCommDate;
@@ -247,12 +253,70 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "ICCRemarks")
     private String iCCRemarks;
 
+    @JsonProperty(value = "EnquiryCompletionDate")
+    private String enquiryCompletionDate;
+    @JsonProperty(value = "EnquiryRemarks")
+    private String enquiryRemarks;
+    @JsonProperty(value = "TermSheetAcceptance")
+    private String termSheetAcceptance;
+    @JsonProperty(value = "FeeRemarks")
+    private String FeeRemarks;
+
+
     public String getPurpose() {
         return purpose;
     }
 
     public void setPurpose(String purpose) {
         this.purpose = purpose;
+    }
+
+    public String getLoanType() {
+        return loanType;
+    }
+
+    public void setLoanType(String loanType) {
+        this.loanType = loanType;
+    }
+
+    public String getProjectTypeCoreSector() {
+        return projectTypeCoreSector;
+    }
+
+    public void setProjectTypeCoreSector(String projectTypeCoreSector) {
+        this.projectTypeCoreSector = projectTypeCoreSector;
+    }
+
+    public String getEnquiryCompletionDate() {
+        return enquiryCompletionDate;
+    }
+
+    public void setEnquiryCompletionDate(String enquiryCompletionDate) {
+        this.enquiryCompletionDate = enquiryCompletionDate;
+    }
+
+    public String getEnquiryRemarks() {
+        return enquiryRemarks;
+    }
+
+    public void setEnquiryRemarks(String enquiryRemarks) {
+        this.enquiryRemarks = enquiryRemarks;
+    }
+
+    public String getTermSheetAcceptance() {
+        return termSheetAcceptance;
+    }
+
+    public void setTermSheetAcceptance(String termSheetAcceptance) {
+        this.termSheetAcceptance = termSheetAcceptance;
+    }
+
+    public String getFeeRemarks() {
+        return FeeRemarks;
+    }
+
+    public void setFeeRemarks(String feeRemarks) {
+        FeeRemarks = feeRemarks;
     }
 
     public SAPLoanApplicationDetailsResource() {

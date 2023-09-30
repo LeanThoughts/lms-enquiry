@@ -33,15 +33,15 @@ public class PaymentReceiptPostSanctionService implements IPaymentReceiptPostSan
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = sanctionRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Sanction Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Sanction", "Header");
                     return obj;
                 });
         PaymentReceiptPostSanction paymentReceiptPostSanction = new PaymentReceiptPostSanction();
@@ -57,17 +57,17 @@ public class PaymentReceiptPostSanctionService implements IPaymentReceiptPostSan
         paymentReceiptPostSanction.setRtgsNeftNumber(resource.getRtgsNeftNumber());
         paymentReceiptPostSanction = paymentReceiptPostSanctionRepository.save(paymentReceiptPostSanction);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for PaymentReceiptPostSanction
+        changeDocumentService.createChangeDocument(
+                paymentReceiptPostSanction.getSanction().getId(),
+                paymentReceiptPostSanction.getId().toString(),
+                paymentReceiptPostSanction.getSanction().getId().toString(),
+                paymentReceiptPostSanction.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                paymentReceiptPostSanction,
+                "Created",
+                username,
+                "Sanction", "PaymentReceiptPostSanction" );
 
         return paymentReceiptPostSanction;
     }
@@ -78,7 +78,7 @@ public class PaymentReceiptPostSanctionService implements IPaymentReceiptPostSan
                 paymentReceiptPostSanctionRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = paymentReceiptPostSanction.clone();
+        Object oldObject = paymentReceiptPostSanction.clone();
 
         paymentReceiptPostSanction.setPayee(resource.getPayee());
         paymentReceiptPostSanction.setAmount(resource.getAmount());
@@ -91,26 +91,37 @@ public class PaymentReceiptPostSanctionService implements IPaymentReceiptPostSan
         paymentReceiptPostSanction.setRtgsNeftNumber(resource.getRtgsNeftNumber());
         paymentReceiptPostSanction = paymentReceiptPostSanctionRepository.save(paymentReceiptPostSanction);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        changeDocumentService.createChangeDocument(
+                paymentReceiptPostSanction.getSanction().getId(),
+                paymentReceiptPostSanction.getId().toString(),
+                paymentReceiptPostSanction.getSanction().getId().toString(),
+                paymentReceiptPostSanction.getSanction().getLoanApplication().getLoanContractId(),
+                oldObject,
+                paymentReceiptPostSanction,
+                "Updated",
+                username,
+                "Sanction", "PaymentReceiptPostSanction" );
 
         return paymentReceiptPostSanction;
     }
 
     @Override
-    public PaymentReceiptPostSanction deletePaymentReceipt(UUID paymentReceiptId) throws CloneNotSupportedException {
+    public PaymentReceiptPostSanction deletePaymentReceipt(UUID paymentReceiptId, String username) throws CloneNotSupportedException {
         PaymentReceiptPostSanction paymentReceiptPostSanction = paymentReceiptPostSanctionRepository.findById(paymentReceiptId).
                 orElseThrow(() -> new EntityNotFoundException(paymentReceiptId.toString()));
         paymentReceiptPostSanctionRepository.delete(paymentReceiptPostSanction);
+
+        // Change Documents for PaymentReceiptPostSanction
+        changeDocumentService.createChangeDocument(
+                paymentReceiptPostSanction.getSanction().getId(),
+                paymentReceiptPostSanction.getId().toString(),
+                paymentReceiptPostSanction.getSanction().getId().toString(),
+                paymentReceiptPostSanction.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                paymentReceiptPostSanction,
+                "Deleted",
+                username,
+                "Sanction", "PaymentReceiptPostSanction" );
         return paymentReceiptPostSanction;
     }
 }

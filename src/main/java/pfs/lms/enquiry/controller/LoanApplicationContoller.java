@@ -405,6 +405,12 @@ public class LoanApplicationContoller {
 
         LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
         LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
+
+        // In case where the loan application is still in enquiry phase
+        if (loanApplication == null){
+           loanApplication = loanApplicationRepository.findByEnquiryNo(new EnquiryNo(Long.parseLong(loanContractId)));
+        }
+
         if (loanApplication != null) {
             Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).get();
             loanApplicationResource.setLoanApplication(loanApplication);

@@ -31,6 +31,6 @@ public class SanctionLetterController {
     @DeleteMapping("/sanctionLetters/delete/{id}")
     public ResponseEntity<SanctionLetter> delete(@PathVariable("id") UUID id,
                                                  HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.delete(id));
+        return ResponseEntity.ok(service.delete(id,request.getUserPrincipal().getName()));
     }
 }

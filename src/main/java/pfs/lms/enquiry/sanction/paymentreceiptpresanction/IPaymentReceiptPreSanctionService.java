@@ -10,5 +10,5 @@ public interface IPaymentReceiptPreSanctionService {
     PaymentReceiptPreSanction updatePaymentReceipt(PaymentReceiptPreSanctionResource paymentReceiptPreSanctionResource,
                                                    String username) throws CloneNotSupportedException;
 
-    PaymentReceiptPreSanction deletePaymentReceipt(UUID paymentReceiptId) throws CloneNotSupportedException;
+    PaymentReceiptPreSanction deletePaymentReceipt(UUID paymentReceiptId, String username) throws CloneNotSupportedException;
 }
