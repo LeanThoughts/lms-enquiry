@@ -29,6 +29,14 @@ public class SanctionLetter extends AggregateRoot<SanctionLetter> implements Clo
     private String fileReference;
     private String remarks;
 
+    private String type;
+    private LocalDate dateOfAmendment;
+    private Double originalSanctionAmount;
+    private Double originalInterestRate;
+    private Double revisedSanctionAmount;
+    private Double revisedInterestRate;
+    private LocalDate sanctionLetterValidToDate;
+
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

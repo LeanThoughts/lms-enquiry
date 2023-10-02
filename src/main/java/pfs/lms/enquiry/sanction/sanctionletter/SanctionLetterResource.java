@@ -27,4 +27,12 @@ public class SanctionLetterResource {
     private String documentTitle;
     private String fileReference;
     private String remarks;
+
+    private String type;
+    private LocalDate dateOfAmendment;
+    private Double originalSanctionAmount;
+    private Double originalInterestRate;
+    private Double revisedSanctionAmount;
+    private Double revisedInterestRate;
+    private LocalDate sanctionLetterValidToDate;
 }

@@ -54,6 +54,14 @@ public class SanctionLetterService implements ISanctionLetterService {
         sanctionLetter.setDocumentTitle(resource.getDocumentTitle());
         sanctionLetter.setDocumentType(resource.getDocumentType());
         sanctionLetter.setFileReference(resource.getFileReference());
+        sanctionLetter.setType(resource.getType());
+        sanctionLetter.setDateOfAmendment(resource.getDateOfAmendment());
+        sanctionLetter.setOriginalSanctionAmount(resource.getOriginalSanctionAmount());
+        sanctionLetter.setOriginalInterestRate(resource.getOriginalInterestRate());
+        sanctionLetter.setRevisedSanctionAmount(resource.getRevisedSanctionAmount());
+        sanctionLetter.setRevisedInterestRate(resource.getRevisedInterestRate());
+        sanctionLetter.setSanctionLetterValidToDate(resource.getSanctionLetterValidToDate());
+
         sanctionLetter = sanctionLetterRepository.save(sanctionLetter);
 
         // Change Documents for Reason Delay
@@ -85,6 +93,13 @@ public class SanctionLetterService implements ISanctionLetterService {
         sanctionLetter.setDocumentTitle(resource.getDocumentTitle());
         sanctionLetter.setDocumentType(resource.getDocumentType());
         sanctionLetter.setFileReference(resource.getFileReference());
+        sanctionLetter.setType(resource.getType());
+        sanctionLetter.setDateOfAmendment(resource.getDateOfAmendment());
+        sanctionLetter.setOriginalSanctionAmount(resource.getOriginalSanctionAmount());
+        sanctionLetter.setOriginalInterestRate(resource.getOriginalInterestRate());
+        sanctionLetter.setRevisedSanctionAmount(resource.getRevisedSanctionAmount());
+        sanctionLetter.setRevisedInterestRate(resource.getRevisedInterestRate());
+        sanctionLetter.setSanctionLetterValidToDate(resource.getSanctionLetterValidToDate());
         sanctionLetter = sanctionLetterRepository.save(sanctionLetter);
 
         // Change Documents for Reason Delay
