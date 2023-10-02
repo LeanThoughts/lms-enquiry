@@ -9,5 +9,5 @@ public interface ISanctionRejectedByCustomerService {
     SanctionRejectedByCustomer update(SanctionRejectedByCustomerResource sanctionRejectedByCustomerResource, String username)
             throws CloneNotSupportedException;
 
-    SanctionRejectedByCustomer delete(UUID rejectedByBoardId) throws CloneNotSupportedException;
+    SanctionRejectedByCustomer delete(UUID rejectedByBoardId,String username) throws CloneNotSupportedException;
 }

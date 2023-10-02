@@ -33,15 +33,15 @@ public class SanctionRejectedByCustomerService implements ISanctionRejectedByCus
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = sanctionRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Sanction Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Sanction", "Header");
                     return obj;
                 });
         SanctionRejectedByCustomer sanctionRejectedByCustomer = new SanctionRejectedByCustomer();
@@ -52,17 +52,17 @@ public class SanctionRejectedByCustomerService implements ISanctionRejectedByCus
         sanctionRejectedByCustomer.setDetails(resource.getDetails());
         sanctionRejectedByCustomer = sanctionRejectedByCustomerRepository.save(sanctionRejectedByCustomer);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+
+        changeDocumentService.createChangeDocument(
+                sanctionRejectedByCustomer.getSanction().getId(),
+                sanctionRejectedByCustomer.getId().toString(),
+                sanctionRejectedByCustomer.getSanction().getId().toString(),
+                sanctionRejectedByCustomer.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                sanctionRejectedByCustomer,
+                "Created",
+                username,
+                "Sanction", "SanctionRejectedByCustomer" );
 
         return sanctionRejectedByCustomer;
     }
@@ -72,7 +72,7 @@ public class SanctionRejectedByCustomerService implements ISanctionRejectedByCus
         SanctionRejectedByCustomer sanctionRejectedByCustomer = sanctionRejectedByCustomerRepository.findById(resource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = sanctionRejectedByCustomer.clone();
+        Object oldObject = sanctionRejectedByCustomer.clone();
 
         sanctionRejectedByCustomer.setApprovalByBoardMeetingNumber(resource.getApprovalByBoardMeetingNumber());
         sanctionRejectedByCustomer.setMeetingDate(resource.getMeetingDate());
@@ -80,27 +80,36 @@ public class SanctionRejectedByCustomerService implements ISanctionRejectedByCus
         sanctionRejectedByCustomer.setDetails(resource.getDetails());
         sanctionRejectedByCustomer = sanctionRejectedByCustomerRepository.save(sanctionRejectedByCustomer);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        changeDocumentService.createChangeDocument(
+                sanctionRejectedByCustomer.getSanction().getId(),
+                sanctionRejectedByCustomer.getId().toString(),
+                sanctionRejectedByCustomer.getSanction().getId().toString(),
+                sanctionRejectedByCustomer.getSanction().getLoanApplication().getLoanContractId(),
+                oldObject,
+                sanctionRejectedByCustomer,
+                "Updated",
+                username,
+                "Sanction", "SanctionRejectedByCustomer" );
 
         return sanctionRejectedByCustomer;
     }
 
     @Override
-    public SanctionRejectedByCustomer delete(UUID sanctionRejectedByCustomerId) throws CloneNotSupportedException {
+    public SanctionRejectedByCustomer delete(UUID sanctionRejectedByCustomerId,String username) throws CloneNotSupportedException {
         SanctionRejectedByCustomer sanctionRejectedByCustomer = sanctionRejectedByCustomerRepository
                 .findById(sanctionRejectedByCustomerId)
                 .orElseThrow(() -> new EntityNotFoundException(sanctionRejectedByCustomerId.toString()));
         sanctionRejectedByCustomerRepository.delete(sanctionRejectedByCustomer);
+        changeDocumentService.createChangeDocument(
+                sanctionRejectedByCustomer.getSanction().getId(),
+                sanctionRejectedByCustomer.getId().toString(),
+                sanctionRejectedByCustomer.getSanction().getId().toString(),
+                sanctionRejectedByCustomer.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                sanctionRejectedByCustomer,
+                "Deleted",
+                username,
+                "Sanction", "SanctionRejectedByCustomer" );
         return sanctionRejectedByCustomer;
     }
 }

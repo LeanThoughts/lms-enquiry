@@ -155,30 +155,47 @@ public class TeaserService implements ITeaserService {
         teaserContent.setTotalCorporateStructuredLoanRequirement("");
         teaserContent.setEndUseOFundsFromPFS(teaserResource.projectDetail.getEndUseOfFunds());
         //teaserContent.setRateOfInterest(teaserResource.getProjectDetail());
-        if (teaserResource.getProjectDetail().getTenorYear() != null)
-            teaserContent.setTenure(teaserResource.getProjectDetail().getTenorYear() + " Years");
 
-        if (teaserResource.getProjectDetail().getTenorMonths() != null)
-            teaserContent.setTenure(teaserContent.getTenure() + " " + teaserResource.getProjectDetail().getTenorMonths() + " Months");
+        if (teaserResource.getProjectDetail() != null) {
+            if (teaserResource.getProjectDetail().getTenorYear() != null)
+                teaserContent.setTenure(teaserResource.getProjectDetail().getTenorYear() + " Years");
+            if (teaserResource.getProjectDetail().getTenorMonths() != null)
+                teaserContent.setTenure(teaserContent.getTenure() + " " + teaserResource.getProjectDetail().getTenorMonths() + " Months");
+            if (teaserResource.getProjectDetail().getMoratoriumPeriod() != null)
+                teaserContent.setMoratoriumPeriod(teaserResource.getProjectDetail().getMoratoriumPeriod().toString());
+            if (teaserResource.getProjectDetail().getMoratoriumPeriodUnit() != null)
+                teaserContent.setMoratoriumPeriod(teaserContent.getMoratoriumPeriod() + getPeriodUnit(teaserResource.getProjectDetail().getMoratoriumPeriodUnit()));
+            if (teaserResource.getProjectDetail().getFees() != null)
+                teaserContent.setFee(formatAmount(teaserResource.getProjectDetail().getFees()));
+        }
 
-        if (teaserResource.getProjectDetail().getMoratoriumPeriod() != null)
-            teaserContent.setMoratoriumPeriod(teaserResource.getProjectDetail().getMoratoriumPeriod().toString());
-        if (teaserResource.getProjectDetail().getMoratoriumPeriodUnit() != null)
-            teaserContent.setMoratoriumPeriod(teaserContent.getMoratoriumPeriod() + getPeriodUnit(teaserResource.getProjectDetail().getMoratoriumPeriodUnit()));
+        if (teaserResource.getProjectProposalOtherDetail() != null) {
+            teaserContent.setSourceAndCashFlow(teaserResource.getProjectProposalOtherDetail().getSourceAndCashFlow());
+            teaserContent.setQuantificationOfSecurity("");
+            teaserContent.setConsolidatedGroupLeverage(teaserResource.getProjectProposalOtherDetail().getConsolidatedGroupLeverage());
 
-        teaserContent.setFee(formatAmount(teaserResource.getProjectDetail().getFees()));
-        teaserContent.setSourceAndCashFlow(teaserResource.getProjectProposalOtherDetail().getSourceAndCashFlow());
-        teaserContent.setQuantificationOfSecurity("");
-        teaserContent.setConsolidatedGroupLeverage(teaserResource.getProjectProposalOtherDetail().getConsolidatedGroupLeverage());
-        teaserContent.setTotalDebitTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTotalDebtTNW()));
-        teaserContent.setTotalTOLTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTolTNW()));
-        teaserContent.setDelaysInDebtServicing(teaserResource.getProjectProposalOtherDetail().getDelayInDebtServicing());
+            if (teaserResource.getProjectProposalOtherDetail().getTotalDebtTNW() != null)
+                teaserContent.setTotalDebitTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTotalDebtTNW()));
 
-        teaserContent.setProjectCost(formatAmount(teaserResource.getProjectCost().getProjectCost()));
-        teaserContent.setDebt(formatAmount(teaserResource.getProjectCost().getDebt()));
-        teaserContent.setEquity(formatAmount(teaserResource.getProjectCost().getEquity()));
-        teaserContent.setDebtEquityRatio(teaserResource.getProjectCost().getDebtEquityRatio().toString());
+            if (teaserResource.getProjectProposalOtherDetail().getTolTNW() != null)
+                teaserContent.setTotalTOLTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTolTNW()));
 
+            teaserContent.setDelaysInDebtServicing(teaserResource.getProjectProposalOtherDetail().getDelayInDebtServicing());
+        }
+
+        if (teaserResource.getProjectCost() != null) {
+
+            if (teaserResource.getProjectCost().getProjectCost() != null)
+                teaserContent.setProjectCost(formatAmount(teaserResource.getProjectCost().getProjectCost()));
+
+            if (teaserResource.getProjectCost().getDebt() != null)
+                teaserContent.setDebt(formatAmount(teaserResource.getProjectCost().getDebt()));
+
+            if (teaserResource.getProjectCost().getEquity() != null)
+                teaserContent.setEquity(formatAmount(teaserResource.getProjectCost().getEquity()));
+
+            teaserContent.setDebtEquityRatio(teaserResource.getProjectCost().getDebtEquityRatio().toString());
+        }
 
         return teaserContent;
     }

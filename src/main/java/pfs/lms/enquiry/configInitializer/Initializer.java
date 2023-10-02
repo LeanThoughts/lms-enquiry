@@ -53,6 +53,8 @@ public class Initializer implements CommandLineRunner {
     private final CustomerRejectionReasonRepository customerRejectionReasonRepository;
 
     private final PurposeOfLoanRepository purposeOfLoanRepository;
+    private final FeeTypeRepository feeTypeRepository;
+    private final SanctionTypeRepository sanctionTypeRepository;
 
     @Override
     public void run(String... strings) throws Exception {
@@ -371,6 +373,55 @@ public class Initializer implements CommandLineRunner {
             log.info("Added products sample data");
         }
 
+        sanctionTypeRepository.deleteAll();
+        if(sanctionTypeRepository.count() == 0){
+            SanctionType st1 = new SanctionType(" ","Original Sanction");
+            SanctionType st2 = new SanctionType("1","Change in Saction Amount");
+            SanctionType st3 = new SanctionType("2","Timeline Extension");
+            SanctionType st4 = new SanctionType("3","Waiver of Condition");
+            SanctionType st5 = new SanctionType("4","Language Modification");
+            SanctionType st6 = new SanctionType("5","Change in Intt Rate");
+            SanctionType st7 = new SanctionType("6","Reimbursement");
+            SanctionType st8 = new SanctionType("7","Waiver of billed amt");
+            sanctionTypeRepository.saveAll(Arrays.asList(st1, st2, st3, st4, st5, st6, st7));
+            log.info("Added Sanction Types");
+        }
+
+        feeTypeRepository.deleteAll();
+        if(feeTypeRepository.count() == 0){
+            FeeType ft1 = new FeeType("9501","Application Fees");
+            FeeType ft2 = new FeeType("9502","Processing Fees");
+            FeeType ft3 = new FeeType("9503","Upfront Fees");
+            FeeType ft4 = new FeeType("9504","Lead FI Fees");
+            FeeType ft5 = new FeeType("9505","Lender Agent Fee");
+            FeeType ft6 = new FeeType("9506","Management Fee");
+            FeeType ft7 = new FeeType("9507","Monitoring Fee");
+            FeeType ft8 = new FeeType("9508","Additional Monitoring Fee");
+            FeeType ft9 = new FeeType("9509","Security Trustee Fee");
+            FeeType ft10 = new FeeType("9510","Letter of Comfort Fee");
+            FeeType ft11 = new FeeType("9511","Foreclosure Fees");
+            FeeType ft12 = new FeeType("9512","RE-validation Fees");
+            FeeType ft13 = new FeeType("9516","Underwriting Fees");
+            FeeType ft14 = new FeeType("9517","Appraisal Note Sharing Fees");
+            FeeType ft15 = new FeeType("9518","Commitment Fees");
+            FeeType ft16 = new FeeType("9519","Syndication Fees");
+            FeeType ft17 = new FeeType("9520","Other Fees");
+            FeeType ft18 = new FeeType("9521","Facility Agent Fee");
+            FeeType ft19 = new FeeType("9522","NoGo Fee");
+            FeeType ft20 = new FeeType("9524","Project Advisory Fees");
+            FeeType ft21 = new FeeType("9527","Loan Documentation Fees");
+            FeeType ft22 = new FeeType("9528","Legal Counsel Fees");
+            FeeType ft23 = new FeeType("9529","Lender's Engineers Fees");
+            FeeType ft24 = new FeeType("9530","Lender's Financial Adv. Fees");
+            FeeType ft25 = new FeeType("9531","Lenders Insurance Adv. Fees");
+            FeeType ft26 = new FeeType("9532","Other Out of Pocket Exp Fees");
+            FeeType ft27 = new FeeType("9533","Other Re-imbursements Fees");
+
+            feeTypeRepository.saveAll(Arrays.asList(ft1,ft2,ft3,ft4,ft5,ft6,ft7,ft8,ft9,ft10,ft11,ft12,ft13,ft14,ft15,ft16,ft17,ft18,ft19,ft20,
+                    ft21,ft22,ft23,ft24,ft25,ft26,ft27));
+            log.info("Added Fee Types");
+        }
+
         industrySectorRepository.deleteAll();
 
         if (industrySectorRepository.count() == 0) {
@@ -670,6 +721,8 @@ public class Initializer implements CommandLineRunner {
                     c16
             ));
         }
+
+
 
 
         log.info("Added Customer Rejection Reasons");

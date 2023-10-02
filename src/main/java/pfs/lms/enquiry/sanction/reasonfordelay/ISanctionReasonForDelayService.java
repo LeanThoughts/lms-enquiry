@@ -10,5 +10,5 @@ public interface ISanctionReasonForDelayService {
     SanctionReasonForDelay updateReasonForDelay(SanctionReasonForDelayResource sanctionReasonForDelayResource,
                                                 String username) throws CloneNotSupportedException;
 
-    SanctionReasonForDelay deleteReasonForDelay(UUID sanctionReasonForDelayId) throws CloneNotSupportedException;
+    SanctionReasonForDelay deleteReasonForDelay(UUID sanctionReasonForDelayId,String username) throws CloneNotSupportedException;
 }

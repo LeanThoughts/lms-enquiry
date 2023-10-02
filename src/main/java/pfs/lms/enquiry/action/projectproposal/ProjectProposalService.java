@@ -179,25 +179,33 @@ public class ProjectProposalService implements IProjectProposalService {
 
         loanApplication.setProjectName(projectDetail.getProjectName());
         loanApplication.setPromoterName(projectDetail.getPromoterName());
-        loanApplication.setLoanPurpose(projectDetail.getLoanPurpose());
         loanApplication.setProjectLocationState(projectDetail.getState());
         loanApplication.setProjectDistrict(projectDetail.getDistrict());
 
-        loanApplication.setProductCode(enquiryCompletion.getProductType());
-        loanApplication.setTerm(enquiryCompletion.getTerm());
-        loanApplication.setDecisionDate(enquiryCompletion.getDate());
+        if (enquiryCompletion!= null) {
+            loanApplication.setProductCode(enquiryCompletion.getProductType());
+            loanApplication.setTerm(enquiryCompletion.getTerm());
+            loanApplication.setDecisionDate(enquiryCompletion.getDate());
+            loanApplication.setEnquiryCompletionDate(enquiryCompletion.getDate());
+            loanApplication.setEnquiryRemarks(enquiryCompletion.getRemarks());
+        }
 
-
+        loanApplication.setLoanType(projectDetail.getLoanType());
         loanApplication.setLoanClass(projectDetail.getLoanClass());
-        loanApplication.setProjectType(projectDetail.getProjectType());
         loanApplication.setFinancingType(projectDetail.getFinancingType());
         loanApplication.setAssistanceType(projectDetail.getAssistanceType());
-        loanApplication.setProjectCapacity(projectDetail.getProjectCapacity());
-        loanApplication.setProjectCapacityUnit(projectDetail.getProjectCapacityUnit());
+        loanApplication.setProjectType(projectDetail.getProjectType());
+        loanApplication.setProjectCoreSector(projectDetail.getProjectTypeCoreSector());
+        loanApplication.setLoanPurpose(projectDetail.getLoanPurpose());
+        loanApplication.setPurposeOfLoan(projectDetail.getPurposeOfLoan());
 
         loanApplication.setProjectCoreSector(projectDetail.getProjectCoreSector());
         loanApplication.setRenewableFlag(projectDetail.getRenewableFlag());
         loanApplication.setPolicyExposure(projectDetail.getPolicyExposure());
+
+        loanApplication.setProjectCapacity(projectDetail.getProjectCapacity());
+        loanApplication.setProjectCapacityUnit(projectDetail.getProjectCapacityUnit());
+
         loanApplication.setEndUseOfFunds(projectDetail.getEndUseOfFunds());
         loanApplication.setFees(projectDetail.getFees());
         loanApplication.setExpectedInterestRate(projectDetail.getRoi());

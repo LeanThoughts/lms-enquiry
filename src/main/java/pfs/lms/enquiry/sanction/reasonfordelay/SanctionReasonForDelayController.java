@@ -31,6 +31,6 @@ public class SanctionReasonForDelayController {
     @DeleteMapping("/sanctionReasonForDelays/delete/{id}")
     public ResponseEntity<SanctionReasonForDelay> updateReasonForDelay(@PathVariable("id") UUID id,
                                                                        HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.deleteReasonForDelay(id));
+        return ResponseEntity.ok(service.deleteReasonForDelay(id,request.getUserPrincipal().getName()));
     }
 }

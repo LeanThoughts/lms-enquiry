@@ -33,15 +33,15 @@ public class SanctionReasonForDelayService implements ISanctionReasonForDelaySer
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = sanctionRepository.save(obj);
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Sanction Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Sanction", "Header");
                     return obj;
                 });
         SanctionReasonForDelay sanctionReasonForDelay = new SanctionReasonForDelay();
@@ -52,17 +52,17 @@ public class SanctionReasonForDelayService implements ISanctionReasonForDelaySer
         sanctionReasonForDelay.setDeleteFlag(false);
         sanctionReasonForDelay = sanctionReasonForDelayRepository.save(sanctionReasonForDelay);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                null,
-//                boardApprovalReasonForDelay,
-//                "Created",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for SanctionReasonForDelay
+        changeDocumentService.createChangeDocument(
+                sanctionReasonForDelay.getSanction().getId(),
+                sanctionReasonForDelay.getId().toString(),
+                sanctionReasonForDelay.getSanction().getId().toString(),
+                sanctionReasonForDelay.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                sanctionReasonForDelay,
+                "Created",
+                username,
+                "Sanction", "SanctionReasonForDelay" );
 
         return sanctionReasonForDelay;
     }
@@ -73,33 +73,45 @@ public class SanctionReasonForDelayService implements ISanctionReasonForDelaySer
                 sanctionReasonForDelayRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldReasonForDelay = sanctionReasonForDelay.clone();
+        Object oldObject = sanctionReasonForDelay.clone();
 
         sanctionReasonForDelay.setDate(resource.getDate());
         sanctionReasonForDelay.setReason(resource.getReason());
         sanctionReasonForDelay = sanctionReasonForDelayRepository.save(sanctionReasonForDelay);
 
-        // Change Documents for Reason Delay
-//        changeDocumentService.createChangeDocument(
-//                boardApprovalReasonForDelay.getBoardApproval().getId(),
-//                boardApprovalReasonForDelay.getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getId().toString(),
-//                boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getLoanContractId(),
-//                oldReasonForDelay,
-//                boardApprovalReasonForDelay,
-//                "Updated",
-//                username,
-//                "Appraisal", "Reason For Delay" );
+        // Change Documents for SanctionReasonForDelay
+        changeDocumentService.createChangeDocument(
+                sanctionReasonForDelay.getSanction().getId(),
+                sanctionReasonForDelay.getId().toString(),
+                sanctionReasonForDelay.getSanction().getId().toString(),
+                sanctionReasonForDelay.getSanction().getLoanApplication().getLoanContractId(),
+                oldObject,
+                sanctionReasonForDelay,
+                "Updated",
+                username,
+                "Sanction", "SanctionReasonForDelay" );
 
         return sanctionReasonForDelay;
     }
 
     @Override
-    public SanctionReasonForDelay deleteReasonForDelay(UUID sanctionReasonForDelayId) throws CloneNotSupportedException {
+    public SanctionReasonForDelay deleteReasonForDelay(UUID sanctionReasonForDelayId, String username) throws CloneNotSupportedException {
         SanctionReasonForDelay sanctionReasonForDelay = sanctionReasonForDelayRepository.findById(sanctionReasonForDelayId).
                 orElseThrow(() -> new EntityNotFoundException(sanctionReasonForDelayId.toString()));
         sanctionReasonForDelay.setDeleteFlag(true);
         sanctionReasonForDelay = sanctionReasonForDelayRepository.save(sanctionReasonForDelay);
+
+        // Change Documents for SanctionReasonForDelay
+        changeDocumentService.createChangeDocument(
+                sanctionReasonForDelay.getSanction().getId(),
+                sanctionReasonForDelay.getId().toString(),
+                sanctionReasonForDelay.getSanction().getId().toString(),
+                sanctionReasonForDelay.getSanction().getLoanApplication().getLoanContractId(),
+                null,
+                sanctionReasonForDelay,
+                "Deleted",
+                username,
+                "Sanction", "SanctionReasonForDelay" );
         return sanctionReasonForDelay;
     }
 }

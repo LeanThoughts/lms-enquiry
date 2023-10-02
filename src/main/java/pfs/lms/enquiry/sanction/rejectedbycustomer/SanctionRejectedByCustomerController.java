@@ -31,6 +31,6 @@ public class SanctionRejectedByCustomerController {
     @DeleteMapping("/sanctionRejectedByCustomers/delete/{id}")
     public ResponseEntity<SanctionRejectedByCustomer> update(@PathVariable("id") UUID id,
                                                              HttpServletRequest request) throws CloneNotSupportedException {
-        return ResponseEntity.ok(service.delete(id));
+        return ResponseEntity.ok(service.delete(id,request.getUserPrincipal().getName()));
     }
 }
