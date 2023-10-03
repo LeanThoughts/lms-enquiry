@@ -262,6 +262,30 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "FeeRemarks")
     private String FeeRemarks;
 
+    @JsonProperty(value = "MoratoriumPeriod")
+    private String moratoriumPeriod;
+    @JsonProperty(value = "MoratoriumPeriodUnit")
+    private String moratoriumPeriodUnit;
+    @JsonProperty(value = "ConstructionPeriod")
+    private String constructionPeriod;
+    @JsonProperty(value = "ConstructionPeriodUnit")
+    private String constructionPeriodUnit;
+
+    public void setMoratoriumPeriod(String moratoriumPeriod) {
+        this.moratoriumPeriod = moratoriumPeriod;
+    }
+
+    public void setMoratoriumPeriodUnit(String moratoriumPeriodUnit) {
+        this.moratoriumPeriodUnit = moratoriumPeriodUnit;
+    }
+
+    public void setConstructionPeriod(String constructionPeriod) {
+        this.constructionPeriod = constructionPeriod;
+    }
+
+    public void setConstructionPeriodUnit(String constructionPeriodUnit) {
+        this.constructionPeriodUnit = constructionPeriodUnit;
+    }
 
     public String getPurpose() {
         return purpose;

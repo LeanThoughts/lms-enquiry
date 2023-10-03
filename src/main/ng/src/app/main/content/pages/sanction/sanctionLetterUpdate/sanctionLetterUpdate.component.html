@@ -12,93 +12,102 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Searial Number" formControlName="serialNumber" readonly>
-                </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput [matDatepicker]="picker1" placeholder="Sanction Letter Issue Date" formControlName="sanctionLetterIssueDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker> 
-                </mat-form-field>
-                <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker2" placeholder="Borrower Request Letter Date" formControlName="borrowerRequestLetterDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
+                    <input matInput placeholder="Serial Number" formControlName="serialNumber" readonly>
                 </mat-form-field>
             </div>
 
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker3" placeholder="Sanction Letter Acceptance Date" formControlName="sanctionLetterAcceptanceDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker> 
-                </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Document Title" maxlength="50" formControlName="documentTitle">          
-                </mat-form-field>
-                <mat-form-field fxFlex="33">
-                    <mat-select placeholder="Document Type" formControlName="documentType" required>
-                      <mat-option> </mat-option>
-                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
-                        {{ documentType.value }}
-                      </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <mat-select placeholder="Type" formControlName="type" required (selectionChange)="enableControls($event)">
-                      <mat-option *ngFor="let sanctionType of sanctionTypes" [value]="sanctionType.code">
-                        {{ sanctionType.value }}
-                      </mat-option>
-                    </mat-select>
-                </mat-form-field>
+              <mat-form-field fxFlex="33">
+                <mat-select placeholder="Type" formControlName="type" required (selectionChange)="enableControls($event)">
+                  <mat-option *ngFor="let sanctionType of sanctionTypes" [value]="sanctionType.code">
+                    {{ sanctionType.value }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
                 <mat-form-field fxFlex="33" *ngIf="!dateOfAmendmentHidden">
-                    <input matInput [matDatepicker]="picker4" placeholder="Date of Amendment" formControlName="dateOfAmendment" 
+                    <input matInput [matDatepicker]="picker4" placeholder="Date of Amendment" formControlName="dateOfAmendment"
                             readonly [required]="dateOfAmendmentRequired">
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-                    <mat-datepicker #picker4></mat-datepicker> 
+                    <mat-datepicker #picker4></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Original Sanction Amount" maxlength="20" formControlName="documentTitle" 
-                            [required]="originalSanctionAmountRequired" [readonly]="originalSanctionAmountReadonly">          
-                </mat-form-field>
+              <mat-form-field fxFlex="34">
+                <input matInput [matDatepicker]="picker2" placeholder="Borrower Request Letter Date" formControlName="borrowerRequestLetterDate" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+
             </div>
 
-            <div fxLayout="row">
-                <mat-form-field fxFlex="34">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+              <input matInput placeholder="Original Sanction Amount" maxlength="20" formControlName="documentTitle"
+                     [required]="originalSanctionAmountRequired" [readonly]="originalSanctionAmountReadonly">
+            </mat-form-field>
+            <mat-form-field fxFlex="50" *ngIf="!revisedSanctionAmountHidden">
+              <input matInput placeholder="Revised Sanction Amount" maxlength="20" formControlName="revisedSanctionAmount"
+                     [required]="revisedSanctionAmountRequired" [readonly]="revisedSanctionAmountReadonly">
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+                <mat-form-field fxFlex="50">
                     <input matInput placeholder="Original Interest Rate" maxlength="5" formControlName="originalInterestRate"
                             [readonly]="originalInterestRateReadonly">
                 </mat-form-field>
-                <mat-form-field fxFlex="34" *ngIf="!revisedSanctionAmountHidden">
-                    <input matInput placeholder="Revised Sanction Amount" maxlength="20" formControlName="revisedSanctionAmount"
-                            [required]="revisedSanctionAmountRequired" [readonly]="revisedSanctionAmountReadonly">          
-                </mat-form-field>
-                <mat-form-field fxFlex="34" *ngIf="!revisedInterestRateHidden">
+
+                <mat-form-field fxFlex="50" *ngIf="!revisedInterestRateHidden">
                     <input matInput placeholder="Revised Interest Rate" maxlength="5" formControlName="revisedInterestRate"
-                            [readonly]="revisedInterestRateReadonly">          
+                            [readonly]="revisedInterestRateReadonly">
                 </mat-form-field>
             </div>
 
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker5" placeholder="Sanction Letter Valid To Date" formControlName="sanctionLetterValidToDate" 
-                            readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
-                    <mat-datepicker #picker5></mat-datepicker> 
-                </mat-form-field>
-                <div fxFlex="26">
-                    <div fxLayout="column">
-                        <label for="document">Upload Document (PDF)</label>
-                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
-                    </div>
-                </div>
-                <div fxFlex="8">
-                    <a [href]="getFileURL(selectedSanctionLetter.fileReference)" *ngIf="selectedSanctionLetter.fileReference !== ''">
-                        <mat-icon>cloud_download</mat-icon>
-                    </a>
-                </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+              <input matInput [matDatepicker]="picker1" placeholder="Sanction Letter Issue Date" formControlName="sanctionLetterIssueDate" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field fxFlex="50">
+              <input matInput [matDatepicker]="picker5" placeholder="Sanction Letter Valid To Date" formControlName="sanctionLetterValidToDate"
+                     readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+              <mat-datepicker #picker5></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="34">
+              <input matInput placeholder="Document Title" maxlength="50" formControlName="documentTitle">
+            </mat-form-field>
+            <mat-form-field fxFlex="33">
+              <mat-select placeholder="Document Type" formControlName="documentType" required>
+                <mat-option> </mat-option>
+                <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                  {{ documentType.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div fxFlex="26">
+              <div fxLayout="column">
+                <label for="document">Upload Document (PDF)</label>
+                <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document"/>
+              </div>
             </div>
+            <div fxFlex="8">
+              <a [href]="getFileURL(selectedSanctionLetter.fileReference)" *ngIf="selectedSanctionLetter.fileReference !== ''">
+                <mat-icon>cloud_download</mat-icon>
+              </a>
+            </div>
+          </div>
+<!--          -->
+<!--            <div fxLayout="row">-->
+<!--              -->
+
+
+<!--            </div>-->
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
@@ -106,6 +115,13 @@
                 </mat-form-field>
             </div>
 
+          <div fxLayout="row">
+          <mat-form-field fxFlex="33">
+            <input matInput [matDatepicker]="picker3" placeholder="Sanction Letter Acceptance Date" formControlName="sanctionLetterAcceptanceDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+          </mat-form-field>
+          </div>
 
             <div mat-dialog-actions fxLayout="row" class="mb-8">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">

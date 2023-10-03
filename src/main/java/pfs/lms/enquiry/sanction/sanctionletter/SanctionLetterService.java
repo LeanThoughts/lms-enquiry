@@ -61,7 +61,7 @@ public class SanctionLetterService implements ISanctionLetterService {
         sanctionLetter.setRevisedSanctionAmount(resource.getRevisedSanctionAmount());
         sanctionLetter.setRevisedInterestRate(resource.getRevisedInterestRate());
         sanctionLetter.setSanctionLetterValidToDate(resource.getSanctionLetterValidToDate());
-
+        sanctionLetter.setPostedInSAP(5);//Created
         sanctionLetter = sanctionLetterRepository.save(sanctionLetter);
 
          changeDocumentService.createChangeDocument(
@@ -99,6 +99,7 @@ public class SanctionLetterService implements ISanctionLetterService {
         sanctionLetter.setRevisedSanctionAmount(resource.getRevisedSanctionAmount());
         sanctionLetter.setRevisedInterestRate(resource.getRevisedInterestRate());
         sanctionLetter.setSanctionLetterValidToDate(resource.getSanctionLetterValidToDate());
+        sanctionLetter.setPostedInSAP(6);//Updated
         sanctionLetter = sanctionLetterRepository.save(sanctionLetter);
 
         changeDocumentService.createChangeDocument(

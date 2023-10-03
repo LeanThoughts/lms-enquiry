@@ -196,10 +196,9 @@ public class ProjectProposalService implements IProjectProposalService {
         loanApplication.setAssistanceType(projectDetail.getAssistanceType());
         loanApplication.setProjectType(projectDetail.getProjectType());
         loanApplication.setProjectCoreSector(projectDetail.getProjectTypeCoreSector());
-        loanApplication.setLoanPurpose(projectDetail.getLoanPurpose());
+        loanApplication.setLoanPurpose(projectDetail.getLoanPurpose()); // Demand Letter Text
         loanApplication.setPurposeOfLoan(projectDetail.getPurposeOfLoan());
 
-        loanApplication.setProjectCoreSector(projectDetail.getProjectCoreSector());
         loanApplication.setRenewableFlag(projectDetail.getRenewableFlag());
         loanApplication.setPolicyExposure(projectDetail.getPolicyExposure());
 

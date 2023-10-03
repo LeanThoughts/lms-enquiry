@@ -26,10 +26,11 @@ import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.repository.SanctionTypeRepository;
 import pfs.lms.enquiry.repository.UserRepository;
-import pfs.lms.enquiry.resource.LoanApplicationResource;
-import pfs.lms.enquiry.resource.SAPLoanApplicationDetailsResource;
-import pfs.lms.enquiry.resource.SAPLoanApplicationResource;
+import pfs.lms.enquiry.resource.*;
+import pfs.lms.enquiry.sanction.sanctionletter.SanctionLetter;
+import pfs.lms.enquiry.sanction.sanctionletter.SanctionLetterRepository;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
@@ -86,6 +87,10 @@ public class LoanApplicationsScheduledTask {
 
     @Autowired
     private BoardApprovalRejectedByCustomerRepository boardApprovalRejectedByCustomerRepository;
+    @Autowired
+    private SanctionTypeRepository sanctionTypeRepository;
+    @Autowired
+    private SanctionLetterRepository sanctionLetterRepository;
 
     public LoanApplicationsScheduledTask(LoanApplicationRepository loanApplicationRepository,
                                          ISAPIntegrationService isapIntegrationService,
@@ -95,6 +100,62 @@ public class LoanApplicationsScheduledTask {
         this.partnerRepository = partnerRepository;
         this.deferredByBoardRepository = deferredByBoardRepository;
     }
+    @Scheduled(fixedRateString = "${batch.loanApplicationsScheduledTask}0",initialDelayString = "${batch.initialDelay}")
+    public void syncSanctionLetterToBackend() throws ParseException {
+
+         //Collect Loan Application with the following SAP Posting Statuses
+        // 0 - Not Posted in SAP
+        // 2 - Posting Failed
+        // 4 - Approved but not Posted in SAP Yet
+        List<SanctionLetter> sanctionLetterList = sanctionLetterRepository.findByPostedInSAP(0);
+        sanctionLetterList.addAll(sanctionLetterRepository.findByPostedInSAP(2));
+        sanctionLetterList.addAll(sanctionLetterRepository.findByPostedInSAP(4));
+
+
+        for(SanctionLetter sanctionLetter: sanctionLetterList) {
+            LoanApplication loanApplication = sanctionLetter.getSanction().getLoanApplication();
+            log.info("-----------------------------------------------------------------------------------------------");
+            log.info("Attempting to Post Sanction Letter in SAP: Loan Application :" + loanApplication.getLoanContractId());
+
+
+            // Set SAP Posting Status to Attempted to Post - "1"
+            sanctionLetter.setPostedInSAP(1);
+            sanctionLetterRepository.saveAndFlush(sanctionLetter);
+
+            SAPSanctionLetterResource sapSanctionLetterResource = new SAPSanctionLetterResource();
+            SAPSanctionLetterDetailsResource sapSanctionLetterDetailsResource = sapSanctionLetterResource.mapSanctionLetter(sanctionLetter);
+
+            SAPSanctionLetterResource d = new SAPSanctionLetterResource();
+            d.setSapSanctionLetterDetailsResource(sapSanctionLetterDetailsResource);
+
+            sapSanctionLetterResource = isapIntegrationService.postSanctionLetter(d);
+            if (sapSanctionLetterResource != null) {
+                //loanApplication.responseFromSAP(sapLoanApplicationResource);
+
+                // Set SAP Posting Status to "Posting Successfully"  - "3"
+                sanctionLetter.setPostedInSAP(3);
+                sanctionLetter = sanctionLetterRepository.saveAndFlush(sanctionLetter);
+                log.info("Loan Contract Id in SAP: " + loanApplication.getLoanContractId());
+
+                log.info("-----------------------------------------------------------------------------------------------");
+                log.info("Successfully Posted Sanction Letter in SAP: Loan Contract Id :" + loanApplication.getLoanContractId());
+
+
+            }else {
+
+                // Set SAP Posting Status to "Posting Failed"  - "2"
+                sanctionLetter.setPostedInSAP(2);
+                sanctionLetter = sanctionLetterRepository.saveAndFlush(sanctionLetter);
+
+                log.info("-----------------------------------------------------------------------------------------------" );
+                log.info("Failed to Post Sanction Letter in SAP: Loan Application :" +loanApplication.getId());
+            }
+        }
+
+
+    }
+
+
     @Scheduled(fixedRateString = "${batch.loanApplicationsScheduledTask}0",initialDelayString = "${batch.initialDelay}")
     public void syncLoanApplicationsToBackend() throws ParseException {
 
@@ -138,32 +199,6 @@ public class LoanApplicationsScheduledTask {
             SAPLoanApplicationDetailsResource detailsResource=
                     sapLoanApplicationResource.mapLoanApplicationToSAP(loanApplication,partner,lastChangedByUser);
 
-//            // Map Board Approval Details
-//            BoardApproval boardApproval = boardApprovalRepository.findByLoanApplicationId(loanApplication.getId());
-//            if (boardApproval != null) {
-//                List<ApprovalByBoard> approvalByBoardList = approvalByBoardRepository.findByBoardApprovalId(boardApproval.getId());
-//                //TODO - There will only be one ApprovalByBoard
-//                //if (approvalByBoardList.size() > 0) {
-//                    ApprovalByBoard approvalByBoard = approvalByBoardList.get(0);
-//                    List<DeferredByBoard> deferredByBoardList = deferredByBoardRepository.findByBoardApprovalId(boardApproval.getId());
-//                    List<BoardApprovalReasonForDelay> boardApprovalReasonForDelayList = boardApprovalReasonForDelayRepository.findByBoardApprovalId(boardApproval.getId());
-//                    List<RejectedByBoard> rejectedByBoardRepositoryList = rejectedByBoardRepository.findByBoardApprovalId(boardApproval.getId());
-//                    List<BoardApprovalRejectedByCustomer> boardApprovalRejectedByCustomerList = boardApprovalRejectedByCustomerRepository.findByBoardApprovalId(boardApproval.getId());
-//
-//                    detailsResource = sapLoanApplicationResource.mapBoardApproval(
-//                            detailsResource,
-//                            loanApplication,
-//                            boardApproval,
-//                            deferredByBoardList,
-//                            boardApprovalReasonForDelayList,
-//                            rejectedByBoardRepositoryList,
-//                            approvalByBoardList,
-//                            boardApprovalRejectedByCustomerList );
-//
-//            }
-
-
-
             SAPLoanApplicationResource d = new SAPLoanApplicationResource();
             d.setSapLoanApplicationDetailsResource(detailsResource);
 
@@ -181,7 +216,7 @@ public class LoanApplicationsScheduledTask {
                 partner.setPartyNumber(Integer.parseInt(sapLoanApplicationResource.getSapLoanApplicationDetailsResource().getBusPartnerNumber()));
                 partner = partnerRepository.save(partner);
 
-                //Update SA{ Business Partner Number to the User of the Loan Applicant
+                //Update SAP Business Partner Number to the User of the Loan Applicant
                 User user = userRepository.findByEmail(partner.getEmail());
                 if (user != null) {
                     user.setSapBPNumber(sapLoanApplicationResource.getSapLoanApplicationDetailsResource().getBusPartnerNumber());

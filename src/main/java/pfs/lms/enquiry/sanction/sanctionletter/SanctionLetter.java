@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.sanction.sanctionletter;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.sanction.Sanction;
 
@@ -36,6 +37,16 @@ public class SanctionLetter extends AggregateRoot<SanctionLetter> implements Clo
     private Double revisedSanctionAmount;
     private Double revisedInterestRate;
     private LocalDate sanctionLetterValidToDate;
+
+    //0 - Not Posted
+    //1 - Attempted to Post
+    //2 - Errors
+    //3 - Posted Successfully
+    //4 - Approved but Posting Pending
+    //5 - Created
+    //6 - Updated
+    @Nullable
+    private Integer postedInSAP;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

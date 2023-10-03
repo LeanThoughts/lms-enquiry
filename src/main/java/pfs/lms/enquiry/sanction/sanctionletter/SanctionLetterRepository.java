@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface SanctionLetterRepository extends JpaRepository<SanctionLetter, UUID> {
 
     List<SanctionLetter> findBySanctionId(UUID sanctionId);
+    List<SanctionLetter> findByPostedInSAP(Integer postedInSAP);
 }

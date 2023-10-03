@@ -242,6 +242,11 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setContactLandLinePhone(loanApplication.getContactLandLinePhone());
         detailsResource.setContactTelePhone(loanApplication.getContactTelePhone());
 
+        detailsResource.setConstructionPeriod(loanApplication.getConstructionPeriod().toString());
+        detailsResource.setConstructionPeriodUnit(loanApplication.getConstructionPeriodUnit());
+        detailsResource.setMoratoriumPeriod(loanApplication.getMoratoriumPeriod().toString());
+        detailsResource.setMoratoriumPeriodUnit(loanApplication.getMoratoriumPeriodUnit());
+
         //Board Approval
         detailsResource.setbODStatus(loanApplication.getbODStatus());
         detailsResource.setBoardMeetingNumber(loanApplication.getBoardMeetingNumber());
