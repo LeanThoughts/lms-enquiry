@@ -185,4 +185,11 @@ export class SanctionService {
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);
     }
+
+    /**
+     * getSanctionTypes()
+     */
+    public getSanctionTypes(): Observable<any> {
+        return this._http.get('http://localhost:8080/enquiry/api/sanctionTypes?size=100');
+    }
 }

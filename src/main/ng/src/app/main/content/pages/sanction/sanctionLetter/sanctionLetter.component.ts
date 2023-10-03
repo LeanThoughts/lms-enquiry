@@ -59,7 +59,7 @@ export class sanctionLetterComponent {
         // Open the dialog.
         const dialogRef = this._matDialog.open(SanctionLetterUpdateDialogComponent, {
             panelClass: 'fuse-sanction-letter-update-dialog',
-            width: '850px',
+            width: '1000px',
             data: {
                 operation: 'addSanctionLetter',
                 loanApplicationId: this.loanApplicationId,
@@ -88,7 +88,7 @@ export class sanctionLetterComponent {
         // Open the dialog.
         const dialogRef = this._matDialog.open(SanctionLetterUpdateDialogComponent, {
             panelClass: 'fuse-sanction-letter-update-dialog',
-            width: '850px',
+            width: '1000px',
             data: {
                 operation: 'updateSanctionLetter',
                 loanApplicationId: this.loanApplicationId,
