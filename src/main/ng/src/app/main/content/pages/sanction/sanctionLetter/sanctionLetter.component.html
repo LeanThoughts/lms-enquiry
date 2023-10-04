@@ -18,6 +18,13 @@
                 </mat-cell>
             </ng-container>
             
+            <ng-container matColumnDef="sanctionType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    {{ getSanctionTypeDescription(obj.type) }}
+                </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="sanctionLetterIssueDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Sanction Letter Issue Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
@@ -25,31 +32,45 @@
                 </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="borrowerRequestLetterDate">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Borrower Request Letter Date</mat-header-cell>
+            <ng-container matColumnDef="sanctionLetterValidToDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sanction Letter Issue Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.borrowerRequestLetterDate | date: 'dd/MM/yyyy' }}</p>
+                    <p class="text-truncate">{{ obj.sanctionLetterValidToDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="sanctionLetterAcceptanceDate">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Sanction Letter Acceptance Date</mat-header-cell>
+            <ng-container matColumnDef="originalSanctionAmount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Original Sanction Amount</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.sanctionLetterAcceptanceDate | date: 'dd/MM/yyyy' }}</p>
+                    <p class="text-truncate">{{ obj.originalSanctionAmount | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="documentType">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
+            <ng-container matColumnDef="revisedSanctionAmount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Sanction Amount</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.documentType }}</p>
+                    <p class="text-truncate">{{ obj.revisedSanctionAmount | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="documentTitle">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Title</mat-header-cell>
+            <ng-container matColumnDef="originalInterestRate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Original Interest Rate</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.documentTitle }}</p>
+                    <p class="text-truncate">{{ obj.originalInterestRate | number: '1.2-2' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="revisedInterestRate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Revised Interest Rate</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.revisedInterestRate | number: '1.2-2' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <a [href]="getFileURL(obj.fileReference)" *ngIf="obj.fileReference !== ''">Download</a>
                 </mat-cell>
             </ng-container>
 

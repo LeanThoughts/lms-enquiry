@@ -18,12 +18,15 @@ export class sanctionLetterComponent {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'serialNumber', 'sanctionLetterIssueDate', 'borrowerRequestLetterDate', 'sanctionLetterAcceptanceDate', 'documentType', 'documentTitle'
+        'serialNumber', 'sanctionType', 'sanctionLetterIssueDate', 'sanctionLetterValidToDate', 'originalSanctionAmount', 'revisedSanctionAmount', 
+                'originalInterestRate', 'revisedInterestRate', 'download'
     ];
 
     loanApplicationId: string;
 
     selectedSanctionLetter: any;
+
+    sanctionTypes: any;
 
     /**
      * constructor()
@@ -31,6 +34,10 @@ export class sanctionLetterComponent {
     constructor(_loanEnquiryService: LoanEnquiryService, private _sanctionService: SanctionService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar) {
 
+        this._sanctionService.getSanctionTypes().subscribe(data => {
+            this.sanctionTypes = data._embedded.sanctionTypes;
+        });
+                
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
     }
@@ -120,5 +127,22 @@ export class sanctionLetterComponent {
                 });
             }
         });
+    }
+
+    /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
+     * getSanctionTypeDescription()
+     */
+    getSanctionTypeDescription(code: string): string {
+        const obj = this.sanctionTypes.find(sanctionType => {
+            return sanctionType.code === code;
+        })
+        return obj.value;
     }
 }
