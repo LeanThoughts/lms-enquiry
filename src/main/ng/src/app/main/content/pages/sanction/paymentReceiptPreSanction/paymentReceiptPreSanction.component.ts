@@ -18,13 +18,14 @@ export class PaymentReceiptPreSanctionComponent {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'proformaInvoiceNumber', 'proformaInvoiceDate', 'feeInvoice', 'amount', 'payee', 'amountReceived', 'dateOfTransfer', 
+        'proformaInvoiceNumber', 'proformaInvoiceDate', 'feeType', 'amount', 'payee', 'amountReceived', 'dateOfTransfer', 
                 'rtgsNeftNumber', 'referenceNumber'
     ];
 
     loanApplicationId: string;
 
     selectedPaymentReceipt: any;
+    feeTypes: any;
 
     /**
      * constructor()
@@ -33,6 +34,9 @@ export class PaymentReceiptPreSanctionComponent {
                     private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
+        this._sactionService.getFeeTypes().subscribe(data => {
+            this.feeTypes = data._embedded.feeTypes;
+        });
         this.refreshTable();
     }
 
@@ -123,4 +127,14 @@ export class PaymentReceiptPreSanctionComponent {
             }
         });
     }
+
+    /**
+     * getFeeTypeDescription()
+     */
+    getFeeTypeDescription(code): string {
+        const obj = this.feeTypes.find(feeType => {
+            return feeType.code === code;
+        });
+        return obj.value;
+    }    
 }

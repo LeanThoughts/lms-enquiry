@@ -20,6 +20,8 @@ export class PaymentReceiptPostSanctionUpdateDialogComponent implements OnInit {
 
     paymentReceiptForm: FormGroup;
 
+    feeTypes: any;
+
     /**
      * constructor()
      */
@@ -35,10 +37,15 @@ export class PaymentReceiptPostSanctionUpdateDialogComponent implements OnInit {
                 this.dialogTitle = 'Modify Payment Receipt - Pre Sanction';
             }
         }
+
+        this._sanctionService.getFeeTypes().subscribe(data => {
+            this.feeTypes = data._embedded.feeTypes;
+        });
+
         this.paymentReceiptForm = this._formBuilder.group({
             proformaInvoiceNumber: [this.selectedPaymentReceipt.proformaInvoiceNumber || ''],
             proformaInvoiceDate: [this.selectedPaymentReceipt.proformaInvoiceDate || ''],
-            feeInvoice: [this.selectedPaymentReceipt.feeInvoice || ''],
+            feeType: [this.selectedPaymentReceipt.feeType || ''],
             amount: [this.selectedPaymentReceipt.amount || ''],
             payee: [this.selectedPaymentReceipt.payee || ''],
             amountReceived: [this.selectedPaymentReceipt.amountReceived || ''],
@@ -58,28 +65,37 @@ export class PaymentReceiptPostSanctionUpdateDialogComponent implements OnInit {
      * submit()
      */
     submit(): void {
-        // if (this.paymentReceiptForm.valid) {
-        //     var paymentReceipt = this.paymentReceiptForm.value;
+        if (this.paymentReceiptForm.valid) {
+            var paymentReceipt = this.paymentReceiptForm.value;
                 
-        //     // To solve the utc time zone issue
-        //     var dt = new Date(paymentReceipt.date);
-        //     paymentReceipt.date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            // To solve the utc time zone issue
+            var dt = new Date(paymentReceipt.proformaInvoiceDate);
+            paymentReceipt.proformaInvoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(paymentReceipt.dateOfTransfer);
+            paymentReceipt.dateOfTransfer = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-        //     if (this._dialogData.operation === 'addReason') {
-        //         paymentReceipt.loanApplicationId = this.loanApplicationId;
-        //         this._sanctionService.createSanctionReasonForDelay(paymentReceipt).subscribe(() => {
-        //             this._matSnackBar.open('Reason for delay added successfully.', 'OK', { duration: 7000 });
-        //             this._dialogRef.close({ 'refresh': true });
-        //         });
-        //     }
-        //     else {
-        //         this.selectedPaymentReceipt.reason = paymentReceipt.reason;
-        //         this.selectedPaymentReceipt.date = paymentReceipt.date;
-        //         this._sanctionService.updateSanctionReasonForDelay(this.selectedPaymentReceipt).subscribe(() => {
-        //             this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
-        //             this._dialogRef.close({ 'refresh': true });
-        //         });            
-        //     }
-        // }
+            if (this._dialogData.operation === 'addPaymentReceipt') {
+                paymentReceipt.loanApplicationId = this.loanApplicationId;
+                this._sanctionService.createPaymentReceipt(paymentReceipt, 'post').subscribe(() => {
+                    this._matSnackBar.open('Payment receipt added successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });
+            }
+            else {
+                this.selectedPaymentReceipt.proformaInvoiceNumber = paymentReceipt.proformaInvoiceNumber;
+                this.selectedPaymentReceipt.proformaInvoiceDate = paymentReceipt.proformaInvoiceDate;
+                this.selectedPaymentReceipt.feeType = paymentReceipt.feeType;
+                this.selectedPaymentReceipt.amount = paymentReceipt.amount;
+                this.selectedPaymentReceipt.payee = paymentReceipt.payee;
+                this.selectedPaymentReceipt.amountReceived = paymentReceipt.amountReceived;
+                this.selectedPaymentReceipt.dateOfTransfer = paymentReceipt.dateOfTransfer;
+                this.selectedPaymentReceipt.rtgsNeftNumber = paymentReceipt.rtgsNeftNumber;
+                this.selectedPaymentReceipt.referenceNumber = paymentReceipt.referenceNumber;
+                this._sanctionService.updatePaymentReceipt(this.selectedPaymentReceipt, 'post').subscribe(() => {
+                    this._matSnackBar.open('Payment receipt updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });            
+            }
+        }
     }
 }

@@ -25,10 +25,10 @@
                 </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="feeInvoice">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Invoice</mat-header-cell>
+            <ng-container matColumnDef="feeType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Type</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.feeInvoice | number: '1.2-2' }}</p>
+                    <p class="text-truncate">{{ getFeeTypeDescription(obj.feeType) }}</p>
                 </mat-cell>
             </ng-container>
 

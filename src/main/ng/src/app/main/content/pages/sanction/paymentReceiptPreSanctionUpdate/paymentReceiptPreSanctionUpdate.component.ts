@@ -21,6 +21,8 @@ export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
 
     paymentReceiptForm: FormGroup;
 
+    feeTypes: any;
+
     /**
      * constructor()
      */
@@ -36,10 +38,15 @@ export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
                 this.dialogTitle = 'Modify Payment Receipt - Pre Sanction';
             }
         }
+
+        this._sanctionService.getFeeTypes().subscribe(data => {
+            this.feeTypes = data._embedded.feeTypes;
+        });
+
         this.paymentReceiptForm = this._formBuilder.group({
             proformaInvoiceNumber: [this.selectedPaymentReceipt.proformaInvoiceNumber || ''],
             proformaInvoiceDate: [this.selectedPaymentReceipt.proformaInvoiceDate || ''],
-            feeInvoice: [this.selectedPaymentReceipt.feeInvoice || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
+            feeType: [this.selectedPaymentReceipt.feeType || ''],
             amount: [this.selectedPaymentReceipt.amount || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
             payee: [this.selectedPaymentReceipt.payee || ''],
             amountReceived: [this.selectedPaymentReceipt.amountReceived || '', [Validators.pattern(MonitoringRegEx.genericAmount)]],
@@ -78,7 +85,7 @@ export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
             else {
                 this.selectedPaymentReceipt.proformaInvoiceNumber = paymentReceipt.proformaInvoiceNumber;
                 this.selectedPaymentReceipt.proformaInvoiceDate = paymentReceipt.proformaInvoiceDate;
-                this.selectedPaymentReceipt.feeInvoice = paymentReceipt.feeInvoice;
+                this.selectedPaymentReceipt.feeType = paymentReceipt.feeType;
                 this.selectedPaymentReceipt.amount = paymentReceipt.amount;
                 this.selectedPaymentReceipt.payee = paymentReceipt.payee;
                 this.selectedPaymentReceipt.amountReceived = paymentReceipt.amountReceived;

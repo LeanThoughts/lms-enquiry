@@ -49,9 +49,9 @@ public class PaymentReceiptPostSanctionService implements IPaymentReceiptPostSan
         paymentReceiptPostSanction.setAmount(resource.getAmount());
         paymentReceiptPostSanction.setAmountReceived(resource.getAmountReceived());
         paymentReceiptPostSanction.setSanction(sanction);
-        paymentReceiptPostSanction.setFeeInvoice(resource.getFeeInvoice());
+        paymentReceiptPostSanction.setFeeType(resource.getFeeType());
         paymentReceiptPostSanction.setDateOfTransfer(resource.getDateOfTransfer());
-        paymentReceiptPostSanction.setProformaInvoiceDate(resource.getProformaInvoiceDate());
+        paymentReceiptPostSanction.setProformaInvoiceNumber(resource.getProformaInvoiceNumber());
         paymentReceiptPostSanction.setProformaInvoiceDate(resource.getProformaInvoiceDate());
         paymentReceiptPostSanction.setReferenceNumber(resource.getReferenceNumber());
         paymentReceiptPostSanction.setRtgsNeftNumber(resource.getRtgsNeftNumber());
@@ -83,9 +83,9 @@ public class PaymentReceiptPostSanctionService implements IPaymentReceiptPostSan
         paymentReceiptPostSanction.setPayee(resource.getPayee());
         paymentReceiptPostSanction.setAmount(resource.getAmount());
         paymentReceiptPostSanction.setAmountReceived(resource.getAmountReceived());
-        paymentReceiptPostSanction.setFeeInvoice(resource.getFeeInvoice());
+        paymentReceiptPostSanction.setFeeType(resource.getFeeType());
         paymentReceiptPostSanction.setDateOfTransfer(resource.getDateOfTransfer());
-        paymentReceiptPostSanction.setProformaInvoiceDate(resource.getProformaInvoiceDate());
+        paymentReceiptPostSanction.setProformaInvoiceNumber(resource.getProformaInvoiceNumber());
         paymentReceiptPostSanction.setProformaInvoiceDate(resource.getProformaInvoiceDate());
         paymentReceiptPostSanction.setReferenceNumber(resource.getReferenceNumber());
         paymentReceiptPostSanction.setRtgsNeftNumber(resource.getRtgsNeftNumber());

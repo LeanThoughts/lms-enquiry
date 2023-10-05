@@ -22,7 +22,11 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Fee Invoice" formControlName="feeInvoice" maxlength="200">
+                    <mat-select placeholder="Fee Type" formControlName="feeType" required>
+                        <mat-option *ngFor="let feeType of feeTypes" [value]="feeType.code">
+                            {{ feeType.value }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Amount" formControlName="amount" maxlength="20">

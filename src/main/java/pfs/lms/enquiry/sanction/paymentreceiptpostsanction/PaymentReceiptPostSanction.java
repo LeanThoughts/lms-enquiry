@@ -25,7 +25,7 @@ public class PaymentReceiptPostSanction extends AggregateRoot<PaymentReceiptPost
 
     private String proformaInvoiceNumber;
     private LocalDate proformaInvoiceDate;
-    private Double feeInvoice;
+    private String feeType;
     private Double amount;
     private String payee;
     private Double amountReceived;

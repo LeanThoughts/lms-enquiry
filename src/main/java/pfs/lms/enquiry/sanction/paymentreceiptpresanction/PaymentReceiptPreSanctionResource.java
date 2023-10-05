@@ -19,7 +19,7 @@ public class PaymentReceiptPreSanctionResource {
 
     private String proformaInvoiceNumber;
     private LocalDate proformaInvoiceDate;
-    private Double feeInvoice;
+    private String feeType;
     private Double amount;
     private String payee;
     private Double amountReceived;
