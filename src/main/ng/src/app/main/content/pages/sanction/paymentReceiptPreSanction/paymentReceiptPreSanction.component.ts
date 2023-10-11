@@ -36,8 +36,8 @@ export class PaymentReceiptPreSanctionComponent {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._sactionService.getFeeTypes().subscribe(data => {
             this.feeTypes = data._embedded.feeTypes;
+            this.refreshTable();
         });
-        this.refreshTable();
     }
 
     /**

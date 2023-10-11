@@ -17,6 +17,8 @@ export class SanctionComponent implements OnInit, OnDestroy {
     disableSendForApproval: boolean = false;
 
     loanApplicationId: string;
+    loanApplication: any;
+
     selectedEnquiry: any;
     selectedEnquiryForm: FormGroup;
 
@@ -35,11 +37,15 @@ export class SanctionComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
             console.log('this.selectedEnquiry', this.selectedEnquiry);
-        }));          
+        }));
         
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
+                // this._loanEnquiryService.getLoanApplication(this.loanApplicationId).subscribe(loanApplicaiton => {
+                //     console.log('loan application is', loanApplicaiton);
+                //     this.loanApplication = loanApplicaiton;
+                // });
             })
         );
 

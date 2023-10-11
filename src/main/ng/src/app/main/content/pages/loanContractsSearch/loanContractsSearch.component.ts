@@ -44,6 +44,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     boardApproval: boolean = true; // Fix this later
     sanction: boolean = true; // fix this later
 
+
     /**
      *
      * @param _formBuilder
@@ -228,16 +229,53 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToSanction()
      */
     redirectToSanction(): void {
-        this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-            this._sanctionService._sanction.next(response);
-            this.redirect('/sanction');
-        }, 
-        (error: HttpErrorResponse) => {
-            if (error.status === 404) {
-                this._sanctionService._sanction.next({ id: '' });
+        const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
+        console.log('functional status is', functionalStatus);
+
+        if (functionalStatus == 5) {
+            // Redirect to Sanction
+            this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._sanctionService._sanction.next(response);
                 this.redirect('/sanction');
-            }
-        })
+            }, 
+            (error: HttpErrorResponse) => {
+                if (error.status === 404) {
+                    this._sanctionService._sanction.next({ id: '' });
+                    this.redirect('/sanction');
+                }
+            });
+        }
+        else if (functionalStatus == 4) {
+            const loanApplicationId = this._service.selectedEnquiry.value.id;
+            this._boardApprovalService.getBoardApproval(loanApplicationId).subscribe(data => {
+                if (data.workFlowStatusCode = 3) {
+                    // Redirect to Sanction
+                    this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                        this._sanctionService._sanction.next(response);
+                        this.redirect('/sanction');
+                    }, 
+                    (error: HttpErrorResponse) => {
+                        if (error.status === 404) {
+                            this._sanctionService._sanction.next({ id: '' });
+                            this.redirect('/sanction');
+                        }
+                    });
+                }
+                else if (data.workFlowStatusCode == 1 || data.workFlowStatusCode == 2) {
+                    this._matSnackBar.open('Board approval workflow not completed for loan.', 'OK', { duration: 7000 });
+                }
+                else if (data.workFlowStatusCode == 4) {
+                    this._matSnackBar.open('Board Approval is rejected. Sanction not possible.', 'OK', { duration: 7000 });
+                }
+                else if (data.workFlowStatusCode > 5) {
+                    this._matSnackBar.open('Board Approval is in ... state.', 'OK', { duration: 7000 });
+                }
+            })
+        }
+        else if (functionalStatus >= 1 && functionalStatus <= 3) {
+            this._matSnackBar.open('Loan is still in 01-Enquiry Stage /02-ICC Approval Stage/ 03-Appraisal Stage. Sanction not Possible.',
+                'OK', { duration: 7000 });
+        }
     }
 
     /**

@@ -233,6 +233,10 @@ export class LoanEnquiryService implements Resolve<any> {
     return this._http.get<any>('enquiry/api/loanApplications/loanContractId/' + loanContractId);
   }
 
+    public getLoanApplication(loanApplicationId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/loanApplications/' + loanApplicationId);
+    }
+
   private generateQueryParamsUrl(request: Array<String>): string {
     let i = 0;
     let queryParams = '';

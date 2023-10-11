@@ -74,7 +74,10 @@ export class ProjectProposalUpdateComponent {
                     this.projectProposal = response;
                     this._matSnackBar.open('Project Proposal created successfully.', 'OK', { duration: 7000 });
                     this.displayTabs = true;
-                });
+                },
+                (errorResponse => {
+                    this._matSnackBar.open(errorResponse.error.message, 'OK', { duration: 7000 });
+                }));
             }
             else {
                 console.log('updating');
@@ -87,7 +90,10 @@ export class ProjectProposalUpdateComponent {
                 this._enquiryActionService.updateProjectProposal(this.projectProposal).subscribe(response => {
                     this.projectProposal = response;
                     this._matSnackBar.open('Project Proposal updated successfully.', 'OK', { duration: 7000 });
-                });
+                },
+                (errorResponse => {
+                    this._matSnackBar.open(errorResponse.error.message, 'OK', { duration: 7000 });
+                }));
             }
         }
     }

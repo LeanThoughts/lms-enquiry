@@ -271,7 +271,7 @@ export class EnquiryActionService implements Resolve<any> {
      * getProjectProposals()
      */
     public getProjectProposals(enquiryActionId: string): Observable<any> {
-        return this._http.get("enquiry/api/projectProposals/search/findByEnquiryActionId?enquiryActionId=" + enquiryActionId);
+        return this._http.get("enquiry/api/projectProposals/search/findByEnquiryActionIdOrderBySerialNumber?enquiryActionId=" + enquiryActionId);
     }
 
     /**

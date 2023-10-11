@@ -77,13 +77,13 @@ export class PromoterBorrowerFinancialUpdateComponent {
     submit(): void {
         if (this._financialUpdateForm.valid) {
             var formValues = this._financialUpdateForm.value;
-            let found = false;
-            this._financials.forEach(obj => {
-                if (obj.fiscalPeriod === formValues.fiscalPeriod)
-                    found = true
-            });
-            if (!found) {
-                if (JSON.stringify(this._financial) === JSON.stringify({})) { // Insert a new record ...
+            if (JSON.stringify(this._financial) === JSON.stringify({})) { // Insert a new record ...
+                let found = false;
+                this._financials.forEach(obj => {
+                    if (obj.fiscalPeriod === formValues.fiscalPeriod)
+                        found = true
+                });
+                if (!found) {
                     console.log('inserting new record');
                     formValues.projectProposalId = this._dialogData.projectProposalId;
                     this._enquiryActionService.createFinancial(formValues).subscribe(response => {
@@ -92,52 +92,53 @@ export class PromoterBorrowerFinancialUpdateComponent {
                     });
                 }
                 else {
-                    console.log('updating');
-                    this._financial.fiscalPeriod = formValues.fiscalPeriod;
-    
-                    this._financial.revenue = formValues.revenue;
-                    this._financial.depreciation = formValues.depreciation;
-                    this._financial.pbt = formValues.pbt;
-                    this._financial.netCashAccruals = formValues.netCashAccruals;
-                    this._financial.ebitda = formValues.ebitda;
-                    this._financial.interestExpense = formValues.interestExpense;
-                    this._financial.pat = formValues.pat;
-    
-                    this._financial.wcDebt = formValues.wcDebt;
-                    this._financial.totalOutstandingLiabilities = formValues.totalOutstandingLiabilities;
-                    this._financial.adjustedTangibleNetWorth = formValues.adjustedTangibleNetWorth;
-                    this._financial.subAsso = formValues.subAsso;
-                    this._financial.cpltd = formValues.cpltd;
-                    this._financial.shareCapital = formValues.shareCapital;
-                    this._financial.cashAndBankBalance = formValues.cashAndBankBalance;
-                    this._financial.netFixedAssets = formValues.netFixedAssets;
-                    this._financial.ltDebt = formValues.ltDebt;
-                    this._financial.reservesAndSurplus = formValues.reservesAndSurplus;
-                    this._financial.currentAssets = formValues.currentAssets;
-                    this._financial.quasiEquity = formValues.quasiEquity;
-                    this._financial.totalDebt = formValues.totalDebt;
-                    this._financial.tangibleNetWorth = formValues.tangibleNetWorth;
-                    this._financial.currentLiabilities = formValues.currentLiabilities;
-    
-                    this._financial.ebitdaMarginPercentage = formValues.ebitdaMarginPercentage;
-                    this._financial.totalDebtEbitda = formValues.totalDebtEbitda;
-                    this._financial.totalDebtTnw = formValues.totalDebtTnw;
-                    this._financial.currentRatio = formValues.currentRatio;
-                    this._financial.ebitdaInterest = formValues.ebitdaInterest;
-                    this._financial.termDebtEbitda = formValues.termDebtEbitda;
-                    this._financial.tnw = formValues.tnw;
-                    this._financial.cashDscr = formValues.cashDscr;
-                    this._financial.dscr = formValues.dscr;
-    
-                    this._enquiryActionService.updateFinancial(this._financial).subscribe(response => {
-                        this._matSnackBar.open('Financial details updated successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }    
+                    this._matSnackBar.open('Data for fiscal year already found. Please select a different fiscal year.', 'OK', 
+                            { duration: 7000 });
+                }        
             }
             else {
-                this._matSnackBar.open('Data for fiscal year already found. Please select a different fiscal year.', 'OK', { duration: 7000 });
-            }
+                console.log('updating');
+                this._financial.fiscalPeriod = formValues.fiscalPeriod;
+
+                this._financial.revenue = formValues.revenue;
+                this._financial.depreciation = formValues.depreciation;
+                this._financial.pbt = formValues.pbt;
+                this._financial.netCashAccruals = formValues.netCashAccruals;
+                this._financial.ebitda = formValues.ebitda;
+                this._financial.interestExpense = formValues.interestExpense;
+                this._financial.pat = formValues.pat;
+
+                this._financial.wcDebt = formValues.wcDebt;
+                this._financial.totalOutstandingLiabilities = formValues.totalOutstandingLiabilities;
+                this._financial.adjustedTangibleNetWorth = formValues.adjustedTangibleNetWorth;
+                this._financial.subAsso = formValues.subAsso;
+                this._financial.cpltd = formValues.cpltd;
+                this._financial.shareCapital = formValues.shareCapital;
+                this._financial.cashAndBankBalance = formValues.cashAndBankBalance;
+                this._financial.netFixedAssets = formValues.netFixedAssets;
+                this._financial.ltDebt = formValues.ltDebt;
+                this._financial.reservesAndSurplus = formValues.reservesAndSurplus;
+                this._financial.currentAssets = formValues.currentAssets;
+                this._financial.quasiEquity = formValues.quasiEquity;
+                this._financial.totalDebt = formValues.totalDebt;
+                this._financial.tangibleNetWorth = formValues.tangibleNetWorth;
+                this._financial.currentLiabilities = formValues.currentLiabilities;
+
+                this._financial.ebitdaMarginPercentage = formValues.ebitdaMarginPercentage;
+                this._financial.totalDebtEbitda = formValues.totalDebtEbitda;
+                this._financial.totalDebtTnw = formValues.totalDebtTnw;
+                this._financial.currentRatio = formValues.currentRatio;
+                this._financial.ebitdaInterest = formValues.ebitdaInterest;
+                this._financial.termDebtEbitda = formValues.termDebtEbitda;
+                this._financial.tnw = formValues.tnw;
+                this._financial.cashDscr = formValues.cashDscr;
+                this._financial.dscr = formValues.dscr;
+
+                this._enquiryActionService.updateFinancial(this._financial).subscribe(response => {
+                    this._matSnackBar.open('Financial details updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });
+            }    
         }
     }
 

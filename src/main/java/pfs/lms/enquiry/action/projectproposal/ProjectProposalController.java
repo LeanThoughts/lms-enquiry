@@ -19,13 +19,13 @@ public class ProjectProposalController {
 
     @PostMapping("/projectProposals/create")
     public ResponseEntity<ProjectProposal> createProjectProposal(@RequestBody ProjectProposalResource resource,
-                                                                HttpServletRequest request) {
+                                                                HttpServletRequest request) throws Exception {
         return ResponseEntity.ok(projectProposalService.create(resource,request.getUserPrincipal().getName()));
     }
 
     @PutMapping("/projectProposals/update")
     public ResponseEntity<ProjectProposal> updateProjectProposal(@RequestBody ProjectProposalResource resource,
-                                                                HttpServletRequest request) throws CloneNotSupportedException {
+                                                                HttpServletRequest request) throws Exception {
         return ResponseEntity.ok(projectProposalService.update(resource,request.getUserPrincipal().getName()));
     }
 }

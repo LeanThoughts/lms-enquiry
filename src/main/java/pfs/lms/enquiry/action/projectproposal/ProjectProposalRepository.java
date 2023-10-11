@@ -7,5 +7,7 @@ import java.util.UUID;
 
 public interface ProjectProposalRepository extends JpaRepository<ProjectProposal, UUID> {
 
-    List<ProjectProposal> findByEnquiryActionId(UUID enquiryActionId);
+    List<ProjectProposal> findByEnquiryActionIdOrderBySerialNumber(UUID enquiryActionId);
+
+    List<ProjectProposal> findByEnquiryActionIdAndProposalStatus(UUID enquiryActionId, String proposalStatus);
 }

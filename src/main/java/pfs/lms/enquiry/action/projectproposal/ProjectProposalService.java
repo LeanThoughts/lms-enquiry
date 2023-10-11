@@ -63,7 +63,7 @@ public class ProjectProposalService implements IProjectProposalService {
 //    }
 
     @Override
-    public ProjectProposal create(ProjectProposalResource resource, String username) {
+    public ProjectProposal create(ProjectProposalResource resource, String username) throws Exception {
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
@@ -81,10 +81,18 @@ public class ProjectProposalService implements IProjectProposalService {
                             "EnquiryAction", "Header");
                     return obj;
                 });
+
+        if (resource.getProposalStatus().equals("Final")) {
+            List<ProjectProposal> projectProposals = projectProposalRepository.
+                    findByEnquiryActionIdAndProposalStatus(enquiryAction.getId(), "Final");
+            if (projectProposals.size() > 0)
+                throw new Exception("Only one project proposal with status Final can exist in the system");
+        }
+
         ProjectProposal projectProposal = new ProjectProposal();
         projectProposal.setEnquiryAction(enquiryAction);
         projectProposal.setSerialNumber(projectProposalRepository.
-                findByEnquiryActionId(enquiryAction.getId()).size() + 1);
+                findByEnquiryActionIdOrderBySerialNumber(enquiryAction.getId()).size() + 1);
         projectProposal.setAdditionalDetails(resource.getAdditionalDetails());
         projectProposal.setProposalFormSharingDate(resource.getProposalFormSharingDate());
         projectProposal.setDocumentName(resource.getDocumentName());
@@ -112,13 +120,19 @@ public class ProjectProposalService implements IProjectProposalService {
 
     @Override
     public ProjectProposal update(ProjectProposalResource resource, String username)
-            throws CloneNotSupportedException {
+            throws Exception {
         ProjectProposal projectProposal =
                 projectProposalRepository.findById(resource.getId())
                         .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
-        Object oldRejectByPFS = projectProposal.clone();
+        if (resource.getProposalStatus().equals("Final")) {
+            List<ProjectProposal> projectProposals = projectProposalRepository.
+                    findByEnquiryActionIdAndProposalStatus(projectProposal.getEnquiryAction().getId(), "Final");
+            if (projectProposals.size() > 0 && !projectProposals.get(0).getId().equals(projectProposal.getId()))
+                throw new Exception("Only one project proposal with status Final can exist in the system");
+        }
 
+        Object oldProjectProposal = projectProposal.clone();
         projectProposal.setAdditionalDetails(resource.getAdditionalDetails());
         projectProposal.setProposalFormSharingDate(resource.getProposalFormSharingDate());
         projectProposal.setDocumentName(resource.getDocumentName());
@@ -134,7 +148,7 @@ public class ProjectProposalService implements IProjectProposalService {
                 projectProposal.getId().toString(),
                 projectProposal.getEnquiryAction().getId().toString(),
                 projectProposal.getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString(),
-                oldRejectByPFS,
+                oldProjectProposal,
                 projectProposal,
                 "Updated",
                 username,
@@ -148,7 +162,7 @@ public class ProjectProposalService implements IProjectProposalService {
 
         //Get the Project Proposal with the Final Status
 
-        List<ProjectProposal> projectProposalList = projectProposalRepository.findByEnquiryActionId(enquiryAction.getId());
+        List<ProjectProposal> projectProposalList = projectProposalRepository.findByEnquiryActionIdOrderBySerialNumber(enquiryAction.getId());
         ProjectProposal projectProposalFinal = projectProposalList.stream()
                 .filter(projectProposal -> "Final".equals(projectProposal.getProposalStatus()))
                 .findFirst()

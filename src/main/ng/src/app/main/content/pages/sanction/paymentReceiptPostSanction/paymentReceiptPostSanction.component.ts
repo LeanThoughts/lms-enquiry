@@ -38,9 +38,8 @@ export class PaymentReceiptPostSanctionComponent {
 
         this._sactionService.getFeeTypes().subscribe(data => {
             this.feeTypes = data._embedded.feeTypes;
+            this.refreshTable();
         });
-        
-        this.refreshTable();
     }
 
     /**
