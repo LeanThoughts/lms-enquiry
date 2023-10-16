@@ -273,8 +273,19 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             })
         }
         else if (functionalStatus >= 1 && functionalStatus <= 3) {
-            this._matSnackBar.open('Loan is still in 01-Enquiry Stage /02-ICC Approval Stage/ 03-Appraisal Stage. Sanction not Possible.',
-                'OK', { duration: 7000 });
+            // this._matSnackBar.open('Loan is still in 01-Enquiry Stage /02-ICC Approval Stage/ 03-Appraisal Stage. Sanction not Possible.',
+            //     'OK', { duration: 7000 });
+            
+            this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._sanctionService._sanction.next(response);
+                this.redirect('/sanction');
+            }, 
+            (error: HttpErrorResponse) => {
+                if (error.status === 404) {
+                    this._sanctionService._sanction.next({ id: '' });
+                    this.redirect('/sanction');
+                }
+            });
         }
     }
 

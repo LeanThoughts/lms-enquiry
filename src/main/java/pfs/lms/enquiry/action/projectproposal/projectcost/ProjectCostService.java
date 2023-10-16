@@ -8,6 +8,7 @@ import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 
 @Slf4j
 @Service
@@ -28,7 +29,11 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebt(resource.getDebt());
         projectCost.setEquity(resource.getEquity());
         projectCost.setPfsDebtAmount(resource.getPfsDebtAmount());
-        projectCost.setDebtEquityRatio(resource.getDebtEquityRatio());
+        if (resource.getDebt() > 0 && resource.getEquity() > 0) {
+            double d = resource.getDebt() / resource.getEquity();
+            d = new BigDecimal(d).setScale(2).doubleValue();
+            projectCost.setDebtEquityRatio(d);
+        }
         projectCost = projectCostRepository.save(projectCost);
 
         // Change Documents for Project Cost
@@ -60,7 +65,11 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebt(resource.getDebt());
         projectCost.setEquity(resource.getEquity());
         projectCost.setPfsDebtAmount(resource.getPfsDebtAmount());
-        projectCost.setDebtEquityRatio(resource.getDebtEquityRatio());
+        if (resource.getDebt() > 0 && resource.getEquity() > 0) {
+            double d = resource.getDebt() / resource.getEquity();
+            d = new BigDecimal(d).setScale(2).doubleValue();
+            projectCost.setDebtEquityRatio(d);
+        }
         projectCost = projectCostRepository.save(projectCost);
 
         // Change Documents for Project Cost

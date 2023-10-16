@@ -32,7 +32,7 @@ export class EnquiryCompletionUpdateComponent {
             productType: [ this._enquiryCompletion.productType || '' ],
             term: [ this._enquiryCompletion.term || '' ],
             remarks: [ this._enquiryCompletion.remarks || '' ],
-            date: [ this._enquiryCompletion.date || undefined ],
+            date: [ this._enquiryCompletion.date || undefined ]
         });
     }
 

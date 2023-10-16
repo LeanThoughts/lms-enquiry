@@ -7,6 +7,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from './loanMonitoring.service';
 import { AppService } from 'app/app.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'fuse-loanmonitoring',
@@ -41,7 +42,7 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
      */
     constructor(private _formBuilder: FormBuilder, public _loanEnquiryService: LoanEnquiryService, private _router: Router, private _dialogRef: MatDialog,
                 private _loanMonitoringService: LoanMonitoringService, public _appService: AppService, private _matSnackBar: MatSnackBar,
-                private _activatedRoute: ActivatedRoute) {
+                private _activatedRoute: ActivatedRoute, private _location: Location) {
         
         _activatedRoute.data.subscribe((data) => {
             console.log('loan monitoring route resolved data', data);
@@ -136,6 +137,7 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
                     'OK', { duration: 7000 });
             });
         this.disableSendForApproval = true;
+        this._location.back();
     }
 
     /**

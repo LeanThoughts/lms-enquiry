@@ -19,7 +19,7 @@
             </ng-container>
             
             <ng-container matColumnDef="sanctionType">
-                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     {{ getSanctionTypeDescription(obj.type) }}
                 </mat-cell>
@@ -33,7 +33,7 @@
             </ng-container>
 
             <ng-container matColumnDef="sanctionLetterValidToDate">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Sanction Letter Issue Date</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sanction Letter Valid To Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.sanctionLetterValidToDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>

@@ -234,6 +234,7 @@ export class LoanEnquiryService implements Resolve<any> {
   }
 
     public getLoanApplication(loanApplicationId: string): Observable<any> {
+        console.log('inside get loan application **** enquiry/api/loanApplications/' + loanApplicationId);
         return this._http.get<any>('enquiry/api/loanApplications/' + loanApplicationId);
     }
 

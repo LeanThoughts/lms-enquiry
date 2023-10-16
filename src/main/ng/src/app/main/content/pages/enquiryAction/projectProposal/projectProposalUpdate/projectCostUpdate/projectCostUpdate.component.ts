@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
@@ -13,12 +13,13 @@ import { ConfirmationDialogComponent } from 'app/main/content/pages/appraisal/co
     styleUrls: ['./projectCostUpdate.component.scss'],
     animations: fuseAnimations
 })
-export class ProjectCostUpdateComponent implements OnDestroy {
+export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
 
     _projectCostForm: FormGroup;
     _projectCost: any = {};
 
     _projectProposal: any;
+    _loanApplication: any;
 
     @Input()
     set projectProposal(pp: any) {
@@ -33,6 +34,8 @@ export class ProjectCostUpdateComponent implements OnDestroy {
                 this.dataSource = new MatTableDataSource(response._embedded.shareHolders);
             });
         }
+
+        this._loanApplication = this._enquiryActionService._loanApplication;
     }
 
     _selectedShareHolder: any;
@@ -56,9 +59,13 @@ export class ProjectCostUpdateComponent implements OnDestroy {
             debt: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             equity: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             pfsDebtAmount: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
-            debtEquityRatio: new FormControl('', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)])
+            debtEquityRatio: new FormControl('')
         });
         
+        console.log('loan application in constructor is', this._loanApplication);
+    }
+    ngOnInit(): void {
+        console.log('loan application in oninit is', this._loanApplication);
         this.initializeFormValues();
     }
 
@@ -92,6 +99,7 @@ export class ProjectCostUpdateComponent implements OnDestroy {
                 this._projectCost.debtEquityRatio = formValues.debtEquityRatio;
                 this._enquiryActionService.updateProjectCost(this._projectCost).subscribe(response => {
                     this._projectCost = response;
+                    this.initializeFormValues();
                     this._matSnackBar.open('Project cost updated successfully.', 'OK', { duration: 7000 });
                 });
             }
@@ -102,13 +110,21 @@ export class ProjectCostUpdateComponent implements OnDestroy {
      * initializeFormValues()
      */
     initializeFormValues(): void {
-        this._projectCostForm.setValue({
-            'projectCost': this._projectCost.projectCost || '',
-            'debt': this._projectCost.debt || '',
-            'equity': this._projectCost.equity || '',
-            'pfsDebtAmount': this._projectCost.pfsDebtAmount || '',
-            'debtEquityRatio': this._projectCost.debtEquityRatio || ''
-        });
+        console.log('loan application in initialize is', this._loanApplication);
+        console.log('project cost length is', Object.keys(this._projectCost).length);
+        if (Object.keys(this._projectCost).length < 1) {
+            this._projectCostForm.get('projectCost').setValue(this._loanApplication.loanApplication.projectCost);
+            this._projectCostForm.get('debt').setValue(this._loanApplication.loanApplication.projectDebtAmount);
+            this._projectCostForm.get('equity').setValue(this._loanApplication.loanApplication.equity);
+            this._projectCostForm.get('pfsDebtAmount').setValue(this._loanApplication.loanApplication.pfsDebtAmount);
+        }
+        else {
+            this._projectCostForm.get('projectCost').setValue(this._projectCost.projectCost);
+            this._projectCostForm.get('debt').setValue(this._projectCost.debt);
+            this._projectCostForm.get('equity').setValue(this._projectCost.equity);
+            this._projectCostForm.get('pfsDebtAmount').setValue(this._projectCost.pfsDebtAmount);
+            this._projectCostForm.get('debtEquityRatio').setValue(this._projectCost.debtEquityRatio);
+        }
     }
 
     /**

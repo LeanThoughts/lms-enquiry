@@ -7,6 +7,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
 import { LoanAppraisalService } from './loanAppraisal.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'fuse-loanappraisal',
@@ -43,7 +44,8 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                 private _dialogRef: MatDialog,
                 public _appService: AppService,
                 public _loanAppraisalService: LoanAppraisalService,
-                private _matSnackBar: MatSnackBar) {
+                private _matSnackBar: MatSnackBar,
+                private _location: Location) {
 
         this.loanAppraisal = _loanAppraisalService._loanAppraisal;
         console.log('loan appraisal in appraisal component constructor is', this.loanAppraisal);
@@ -112,5 +114,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
                     'OK', { duration: 7000 });
             });
         this.disableSendForApproval = true;
+        this._location.back();
     }    
 }

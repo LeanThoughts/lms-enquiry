@@ -6,6 +6,7 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { SanctionService } from './sanction.service';
 import { AppService } from 'app/app.service';
 import { MatSnackBar } from '@angular/material';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'fuse-sanction',
@@ -32,7 +33,8 @@ export class SanctionComponent implements OnInit, OnDestroy {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, public _appService: AppService, private _matSnackBar: MatSnackBar,
-                public _loanEnquiryService: LoanEnquiryService, private _boardApprovalService: SanctionService) {
+                public _loanEnquiryService: LoanEnquiryService, private _boardApprovalService: SanctionService,
+                private _location: Location) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
@@ -99,5 +101,6 @@ export class SanctionComponent implements OnInit, OnDestroy {
                     'OK', { duration: 7000 });
             });
         this.disableSendForApproval = true;
+        this._location.back();
     }    
 }

@@ -6,6 +6,7 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { BoardApprovalService } from './boardApproval.service';
 import { AppService } from 'app/app.service';
 import { MatSnackBar } from '@angular/material';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, public _appService: AppService, private _matSnackBar: MatSnackBar,
-                public _loanEnquiryService: LoanEnquiryService, private _boardApprovalService: BoardApprovalService) {
+                public _loanEnquiryService: LoanEnquiryService, private _boardApprovalService: BoardApprovalService,
+                private _location: Location) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
@@ -94,5 +96,6 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
                     'OK', { duration: 7000 });
             });
         this.disableSendForApproval = true;
+        this._location.back();
     }
 }

@@ -21,6 +21,8 @@ export class ProjectProposalUpdateComponent {
     projectProposalForm: FormGroup;
 
     documentTypes = LoanMonitoringConstants.documentTypes;
+
+    private _loanApplication: any;
     
     /**
      * constructor()
@@ -47,6 +49,9 @@ export class ProjectProposalUpdateComponent {
             documentVersion: [ this.projectProposal.documentVersion || '' ],
             additionalDetails: [ this.projectProposal.additionalDetails || '' ]
         });
+
+        this._loanApplication = _enquiryActionService._loanApplication;
+        console.log('***** loan application in project proposal update is', this._loanApplication);
     }
 
     /**
