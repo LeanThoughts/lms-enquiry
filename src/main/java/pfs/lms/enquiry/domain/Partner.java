@@ -79,6 +79,16 @@ public class Partner extends AggregateRoot<Partner>{
 
     private String industrySector;
 
+    @Size(max = 30)
+    private String cinNumber;
+    @Size(max = 30)
+    private String gstNumber;
+    @Size(max = 30)
+    private String msmeRegisterNumber;
+    @Size(max = 30)
+    private String mobileNumber;
+
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;
 
@@ -89,7 +99,7 @@ public class Partner extends AggregateRoot<Partner>{
     private List<PartnerContact> partnerContacts;
 
 
-    public Partner(Integer partyNumber, Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector) {
+    public Partner(Integer partyNumber, Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber) {
         this.partyNumber = partyNumber;
         this.partyCategory = partyCategory;
         this.partyRole = partyRole;
@@ -110,6 +120,10 @@ public class Partner extends AggregateRoot<Partner>{
         this.password = password;
         this.pan = pan;
         this.industrySector = industrySector;
+        this.msmeRegisterNumber = msmeRegisterNumber;
+        this.gstNumber = gstNumber;
+        this.cinNumber = cinNumber;
+        this.mobileNumber = mobileNumber;
         registerEvent(PartnerCreated.of(this));
     }
 
