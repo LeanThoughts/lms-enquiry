@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.furtherdetail;
+package pfs.lms.enquiry.iccapproval.furtherdetail;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

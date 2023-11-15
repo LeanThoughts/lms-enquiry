@@ -1,7 +1,7 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarModule } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { SiteVisitModel } from 'app/main/content/model/siteVisit.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';

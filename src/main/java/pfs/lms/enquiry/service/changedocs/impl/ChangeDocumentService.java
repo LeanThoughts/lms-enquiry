@@ -30,7 +30,7 @@ import pfs.lms.enquiry.action.rejectbypfs.RejectByPfs;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
-import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
+import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;

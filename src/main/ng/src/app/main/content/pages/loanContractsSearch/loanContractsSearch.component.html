@@ -16,8 +16,13 @@
                     [disabled]="_service.selectedLoanApplicationId === undefined">
                 Process Enquiry
             </button>
-            <button class="mr-8 btn" mat-raised-button color="accent" [disabled]="_service.selectedLoanApplicationId === undefined">
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToICCApprovalStage()"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
                 ICC Stage
+            </button>
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToApplicationFee()"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                Application Fee
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToLoanAppraisal()" *ngIf="appraisal"
                     [disabled]="_service.selectedLoanApplicationId === undefined &&

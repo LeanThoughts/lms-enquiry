@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
-import pfs.lms.enquiry.appraisal.furtherdetail.FurtherDetail;
+import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetail;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
 import java.io.Serializable;

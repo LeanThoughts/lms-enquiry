@@ -41,6 +41,8 @@ import { InboxComponent } from './main/content/pages/inbox/inbox.component';
 import { EnquiryActionModule } from './main/content/pages/enquiryAction/enquiryAction.module';
 import { BoardApprovalModule } from './main/content/pages/boardApproval/boardApproval.module';
 import { SanctionModule } from './main/content/pages/sanction/sanction.module';
+import { ICCApprovalModule } from './main/content/pages/iccApproval/iccApproval.module';
+import { ApplicationFeeModule } from './main/content/pages/applicationFee/applicationFee.module';
 
 const appRoutes: Routes = [
     {
@@ -106,6 +108,8 @@ const appRoutes: Routes = [
         EnquiryActionModule,
         BoardApprovalModule,
         SanctionModule,
+        ICCApprovalModule,
+        ApplicationFeeModule,
 
         // Workflow
         InboxModule,

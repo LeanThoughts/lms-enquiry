@@ -1,0 +1,70 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add Formal Request </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedFormalRequest"> 
+            Modify 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedFormalRequest"> 
+            Delete
+        </button>
+    </div>
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Serial Number</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- documentName Column -->
+            <ng-container matColumnDef="documentName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentName }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- uploadDate Column -->
+            <ng-container matColumnDef="uploadDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Upload Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.uploadDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentLetterDate Column -->
+            <ng-container matColumnDef="documentLetterDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document/Letter Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentLetterDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentReceivedDate Column -->
+            <ng-container matColumnDef="documentReceivedDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Received Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentReceivedDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- document Column -->
+            <ng-container matColumnDef="document">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.document }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+                [ngClass]="{'highlight':obj === selectedFormalRequest}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>
