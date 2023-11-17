@@ -24,6 +24,7 @@ import { FormalRequestComponent } from './formalRequest/formalRequest.component'
 import { FormalRequestUpdateDialogComponent } from './formalRequestUpdate/formalRequestUpdate.component';
 import { ApplicationFeeReceiptUpdateDialogComponent } from './applicationFeeReceiptUpdate/applicationFeeReceiptUpdate.component';
 import { ApplicationFeeReceiptComponent } from './applicationFeeReceipt/applicationFeeReceipt.component';
+import { InvoicingDetailsComponent } from './invoicingDetails/invoicingDetails.component';
 
 const routes = [
     {
@@ -78,7 +79,8 @@ const MY_FORMATS = {
         FormalRequestComponent,
         FormalRequestUpdateDialogComponent,
         ApplicationFeeReceiptComponent,
-        ApplicationFeeReceiptUpdateDialogComponent
+        ApplicationFeeReceiptUpdateDialogComponent,
+        InvoicingDetailsComponent
     ],
     providers: [
         ApplicationFeeService,
@@ -96,7 +98,8 @@ const MY_FORMATS = {
         FormalRequestComponent,
         FormalRequestUpdateDialogComponent,
         ApplicationFeeReceiptComponent,
-        ApplicationFeeReceiptUpdateDialogComponent
+        ApplicationFeeReceiptUpdateDialogComponent,
+        InvoicingDetailsComponent
     ],
     entryComponents: [
         TermSheetUpdateDialogComponent,
