@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.furtherdetail;
+package pfs.lms.enquiry.iccapproval.furtherdetail;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

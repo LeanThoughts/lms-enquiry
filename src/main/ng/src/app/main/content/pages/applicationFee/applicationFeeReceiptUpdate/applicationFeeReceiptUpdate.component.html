@@ -1,0 +1,71 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close({ 'refresh': false })" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
+        <form [formGroup]="applicationFeeForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Invoice Number" formControlName="invoiceNumber" maxlength="100">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Invoice Date" formControlName="invoiceDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Amount" formControlName="amount" maxlength="100">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Tax Amount" formControlName="taxAmount" maxlength="100">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Total Amount" formControlName="totalAmount" maxlength="100">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Amount Received" formControlName="amountReceived" maxlength="100">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker3" placeholder="Date of Transfer" formControlName="dateOfTransfer" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="RTGS/NEFT Number" formControlName="rtgsNumber" maxlength="100">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="100">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Reference Number" formControlName="referenceNumber" maxlength="100">
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row" class="mb-8">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({ 'refresh': false })">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

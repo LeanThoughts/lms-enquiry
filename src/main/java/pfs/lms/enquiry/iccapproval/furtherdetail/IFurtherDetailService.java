@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.appraisal.furtherdetail;
+package pfs.lms.enquiry.iccapproval.furtherdetail;
 
 public interface IFurtherDetailService {
 
