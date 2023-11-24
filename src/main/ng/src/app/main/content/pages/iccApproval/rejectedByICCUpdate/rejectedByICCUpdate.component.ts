@@ -31,15 +31,14 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedRejectedByICC = Object.assign({}, _dialogData.selectedRejectedByICC);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        if (_dialogData.selectedRejectedByICC !== undefined) {
-            if (_dialogData.operation === 'updateRejectedByICC') {
-                this.dialogTitle = 'Modify Rejected By ICC';
-            }
+        if (_dialogData.selectedRejectedByICC.id !== undefined) {
+            this.dialogTitle = 'Modify Rejected by ICC';
         }
+
         this.rejectedByICCForm = this._formBuilder.group({
             meetingNumber: [this.selectedRejectedByICC.meetingNumber || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             meetingDate: [this.selectedRejectedByICC.meetingDate || ''],
-            details: [this.selectedRejectedByICC.details || ''],
+            reasonForRejection: [this.selectedRejectedByICC.reasonForRejection || ''],
         });
     }
 
@@ -60,21 +59,27 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
             var dt = new Date(rejectedByICC.meetingDate);
             rejectedByICC.meetingDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addRejectedByICC') {
+            console.log('selected rejected by icc id', this.selectedRejectedByICC.id);
+            if (this.selectedRejectedByICC.id === undefined) {
+                console.log('adding reason for delay');
                 rejectedByICC.loanApplicationId = this.loanApplicationId;
-                // this._iccApprovalService.createRejectedByICC(rejectedByICC).subscribe(() => {
-                //     this._matSnackBar.open('Rejected by icc added successfully.', 'OK', { duration: 7000 });
-                //     this._dialogRef.close({ 'refresh': true });
-                // });
+                this._iccApprovalService.createRejectedByICC(rejectedByICC).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                        this._matSnackBar.open('Rejected by ICC details created successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
+                });
             }
             else {
+                console.log('updating rejected by ICC');
                 this.selectedRejectedByICC.meetingDate = rejectedByICC.meetingDate;
                 this.selectedRejectedByICC.meetingNumber = rejectedByICC.meetingNumber;
-                this.selectedRejectedByICC.details = rejectedByICC.details;
-                // this._iccApprovalService.updateRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
-                //     this._matSnackBar.open('Rejected by icc updated successfully.', 'OK', { duration: 7000 });
-                //     this._dialogRef.close({ 'refresh': true });
-                // });            
+                this.selectedRejectedByICC.reasonForRejection = rejectedByICC.reasonForRejection;
+                this._iccApprovalService.updateRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
+                    this._matSnackBar.open('Rejected by ICC details updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });            
             }
         }
     }

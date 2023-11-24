@@ -82,5 +82,33 @@ export class ICCApprovalService {
      */
     public updateReasonForDelay(reasonForDelay: any): Observable<any> {
         return this._http.put("enquiry/api/iCCReasonForDelays/update", reasonForDelay);
+    }
+
+    /**
+     * getRejectedByICC()
+     */
+    public getRejectedByICC(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/rejectedByICCs/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    }
+
+    /**
+     * deleteRejectedByICC()
+     */
+    public deleteRejectedByICC(rejectedByICCId: string): Observable<any> {
+        return this._http.delete("enquiry/api/rejectedByICCs/delete/" + rejectedByICCId);
+    }
+
+    /**
+     * createRejectedByICC()
+     */
+    public createRejectedByICC(rejectedByICC: any): Observable<any> {
+        return this._http.post("enquiry/api/rejectedByICCs/create", rejectedByICC);
+    }
+
+    /**
+     * updateReasonForDelay()
+     */
+    public updateRejectedByICC(rejectedByICC: any): Observable<any> {
+        return this._http.put("enquiry/api/rejectedByICCs/update", rejectedByICC);
     }    
 }

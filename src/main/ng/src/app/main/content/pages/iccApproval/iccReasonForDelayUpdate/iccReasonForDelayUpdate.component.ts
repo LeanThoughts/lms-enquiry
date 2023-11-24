@@ -34,6 +34,7 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
         if (this.selectedReasonForDelay.id !== undefined) {
             this.dialogTitle = 'Modify Reason For Delay';
         }
+        
         this.reasonForDelayForm = this._formBuilder.group({
             reasonForDelay: [this.selectedReasonForDelay.reasonForDelay || ''],
             date: [this.selectedReasonForDelay.date || '']
