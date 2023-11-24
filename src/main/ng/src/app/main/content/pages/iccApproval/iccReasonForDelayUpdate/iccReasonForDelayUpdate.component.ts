@@ -61,8 +61,11 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
                 console.log('adding reason for delay');
                 reasonForDelay.loanApplicationId = this.loanApplicationId;
                 this._iccApprovalService.createReasonForDelay(reasonForDelay).subscribe(() => {
-                    this._matSnackBar.open('Reason for Delay added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                        this._matSnackBar.open('Reason for Delay added successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
                 });
             }
             else {
