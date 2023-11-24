@@ -34,10 +34,10 @@ import { LoanEnhancementUpdateDialogComponent } from './loanEnhancementUpdate/lo
 const routes = [
     {
         path: 'iccApprovalStage',
-        component: ICCApprovalComponent
-        // resolve: {
-        //     routeResolvedData: ICCApprovalService
-        // }
+        component: ICCApprovalComponent,
+        resolve: {
+            routeResolvedData: ICCApprovalService
+        }
     }
 ];
 

@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 import { BoardApprovalService } from '../boardApproval/boardApproval.service';
 import { SanctionService } from '../sanction/sanction.service';
+import { ICCApprovalService } from '../iccApproval/iccApproval.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -56,7 +57,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
                 private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService, 
-                private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService) {
+                private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService, 
+                private _iccApprovalService: ICCApprovalService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -192,22 +194,22 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToICCApprovalStage()
      */
     redirectToICCApprovalStage(): void {
-        // if (this._service.selectedEnquiry.value.loanContractId === undefined) {
-        //     this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-        //         this._enquiryActionService._enquiryAction.next(response);
-        //         this.redirect('/enquiryAction');
-        //     }, (error: HttpErrorResponse) => {
-        //         if (error.status === 404) {
-        //             this._enquiryActionService._enquiryAction.next({ id: '' });
-        //             this.redirect('/enquiryAction');
-        //         }
-        //     })
-        // }
+        //if (this._service.selectedEnquiry.value.loanContractId === undefined) {
+            this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._iccApprovalService._iccApproval.next(response);
+                this.redirect('/iccApprovalStage');
+            }, (error: HttpErrorResponse) => {
+                if (error.status === 404) {
+                    this._iccApprovalService._iccApproval.next({ id: '' });
+                    this.redirect('/iccApprovalStage');
+                }
+            })
+        //}
         // else {
         //     this._matSnackBar.open('Loan has already completed the enquiry phase ! ',
         //         'OK', { duration: 7000 });
         // }
-        this.redirect('/iccApprovalStage');
+        // this.redirect('/iccApprovalStage');
     }
 
     /**

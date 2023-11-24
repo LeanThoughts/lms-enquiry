@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Data
 @Setter
 @Getter
@@ -20,7 +18,7 @@ public class SAPLoanAppraisalFurtherDetailResourceDetails {
     private String id;
 
     @JsonProperty(value = "AppraisalId")
-    private String appraisalId;
+    private String iccApprovalId;
 
     @JsonProperty(value = "Furtherdetails")
     private String furtherDetails;

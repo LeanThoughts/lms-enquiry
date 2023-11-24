@@ -1,8 +1,8 @@
-package pfs.lms.enquiry.iccapproval.furtherdetail;
+package pfs.lms.enquiry.iccapproval.iccreasonfordelay;
 
 import lombok.*;
-import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.domain.AggregateRoot;
+import pfs.lms.enquiry.iccapproval.ICCApproval;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,14 +16,14 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"loanAppraisal", "furtherDetails", "date"}, callSuper = false)
-public class FurtherDetail extends AggregateRoot<FurtherDetail> implements Cloneable {
+@EqualsAndHashCode(of = {"iccApproval", "reasonForDelay", "date"}, callSuper = false)
+public class ICCReasonForDelay extends AggregateRoot<ICCReasonForDelay> implements Cloneable {
 
     @NotNull
     @OneToOne(fetch = FetchType.EAGER)
-    private LoanAppraisal loanAppraisal;
+    private ICCApproval iccApproval;
 
-    private String furtherDetails;
+    private String reasonForDelay;
     private LocalDate date;
 
     public Object clone () throws CloneNotSupportedException {

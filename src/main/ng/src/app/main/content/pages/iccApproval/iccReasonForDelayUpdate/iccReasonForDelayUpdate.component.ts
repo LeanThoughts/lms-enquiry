@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { ICCApprovalService } from '../iccApproval.service';
+import { log } from 'console';
 
 @Component({
     selector: 'fuse-icc-reason-for-delay-update-dialog',
@@ -31,13 +31,11 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedReasonForDelay = Object.assign({}, _dialogData.selectedReasonForDelay);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        if (_dialogData.selectedReasonForDelay !== undefined) {
-            if (_dialogData.operation === 'updateReasonForDelay') {
-                this.dialogTitle = 'Modify Reason For Delay';
-            }
+        if (this.selectedReasonForDelay.id !== undefined) {
+            this.dialogTitle = 'Modify Reason For Delay';
         }
         this.reasonForDelayForm = this._formBuilder.group({
-            reasonForDelay: [this.selectedReasonForDelay.reasonForDelay || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
+            reasonForDelay: [this.selectedReasonForDelay.reasonForDelay || ''],
             date: [this.selectedReasonForDelay.date || '']
         });
     }
@@ -59,20 +57,22 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
             var dt = new Date(reasonForDelay.date);
             reasonForDelay.date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addReasonForDelay') {
+            if (this.selectedReasonForDelay.id === undefined) {
+                console.log('adding reason for delay');
                 reasonForDelay.loanApplicationId = this.loanApplicationId;
-                // this._iccApprovalService.createRejectedByICC(rejectedByICC).subscribe(() => {
-                //     this._matSnackBar.open('Rejected by icc added successfully.', 'OK', { duration: 7000 });
-                //     this._dialogRef.close({ 'refresh': true });
-                // });
+                this._iccApprovalService.createReasonForDelay(reasonForDelay).subscribe(() => {
+                    this._matSnackBar.open('Reason for Delay added successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });
             }
             else {
+                console.log('updating reason for delay');
                 this.selectedReasonForDelay.date = reasonForDelay.date;
                 this.selectedReasonForDelay.reasonForDelay = reasonForDelay.reasonForDelay;
-                // this._iccApprovalService.updateRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
-                //     this._matSnackBar.open('Rejected by icc updated successfully.', 'OK', { duration: 7000 });
-                //     this._dialogRef.close({ 'refresh': true });
-                // });            
+                this._iccApprovalService.updateReasonForDelay(this.selectedReasonForDelay).subscribe(() => {
+                    this._matSnackBar.open('Reason for Delay updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });            
             }
         }
     }

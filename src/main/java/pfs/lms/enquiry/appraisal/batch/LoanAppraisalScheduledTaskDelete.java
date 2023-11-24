@@ -10,8 +10,8 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejectionRepository;
-import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetail;
-import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetailRepository;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetailRepository;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletionRepository;
 import pfs.lms.enquiry.appraisal.projectdata.ProjectData;
@@ -63,7 +63,7 @@ public class LoanAppraisalScheduledTaskDelete {
 
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final CustomerRejectionRepository customerRejectionRepository;
-    private final FurtherDetailRepository furtherDetailRepository;
+    private final ICCFurtherDetailRepository ICCFurtherDetailRepository;
     private final ProjectAppraisalCompletionRepository projectAppraisalCompletionRepository;
     private final ProjectDataRepository projectDataRepository;
 
@@ -82,7 +82,7 @@ public class LoanAppraisalScheduledTaskDelete {
 
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         CustomerRejection customerRejection = new CustomerRejection();
-        FurtherDetail furtherDetail = new FurtherDetail();
+        ICCFurtherDetail ICCFurtherDetail = new ICCFurtherDetail();
         ProjectAppraisalCompletion projectAppraisalCompletion = new ProjectAppraisalCompletion();
         ProjectData projectData = new ProjectData();
         String objectId;

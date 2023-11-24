@@ -5,6 +5,7 @@ import { ICCFurtherDetailUpdateDialogComponent } from '../iccFurtherDetailUpdate
 import { ICCApprovalService } from '../iccApproval.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-icc-further-dtails',
@@ -28,12 +29,11 @@ export class ICCFurtherDetailsComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
+                _activatedRoute: ActivatedRoute) {
+
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        // _loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
-        //     this.dataSource = new MatTableDataSource(data);
-        //     this.dataSource.sort = this.sort;
-        // });
+        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[0]._embedded.iCCFurtherDetails);
     }
 
     /**
@@ -42,6 +42,16 @@ export class ICCFurtherDetailsComponent implements OnInit {
     ngOnInit(): void {
     }
 
+    /**
+     * refreshTable()
+     */
+    refreshTable(): void {
+        this._iccApprovalService.getICCFurtherDetails(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.iCCFurtherDetails);
+            this.dataSource.sort = this.sort;
+        });
+    }
+    
     /**
      * onSelect()
      */
@@ -59,7 +69,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
             'loanApplicationId': this.loanApplicationId,
             'selectedICCFurtherDetail': undefined
         };
-        if (operation === 'updateFurtherDetail') {
+        if (operation === 'updateICCFurtherDetail') {
             data.selectedICCFurtherDetail = this.selectedICCFurtherDetail;
         }
         const dialogRef = this._dialog.open(ICCFurtherDetailUpdateDialogComponent, {
@@ -70,32 +80,27 @@ export class ICCFurtherDetailsComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                // this._loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
-                //     this.dataSource.data = data;
-                // });
-                // this._loanMonitoringService.getLoanMonitor(this.loanApplicationId).subscribe(data => {
-                //     this._loanMonitoringService.loanMonitor.next(data);
-                // })
-            }
-        });    
-    }
-
-    /**
-     * deleteFurtherDetail()
-     */
-    deleteFurtherDetail(): void {
-        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
-        // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
-                // this._loanMonitoringService.deleteSiteVisit(this.selectedICCFurtherDetail, this._module).subscribe(() => {
-                //     this.selectedICCFurtherDetail = undefined;
-                //     this._loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
-                //         this.dataSource.data = data;
-                //     });
-                // });
+                this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                    this._iccApprovalService._iccApproval.next(data);
+                    this.refreshTable();
+                });
             }
         });
     }
 
+    /**
+     * deleteICCFurtherDetail()
+     */
+    deleteICCFurtherDetail(): void {
+        const dialogRef = this._dialog.open(ConfirmationDialogComponent);
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this._iccApprovalService.deleteFurtherDetail(this.selectedICCFurtherDetail.id).subscribe(() => {
+                    this.selectedICCFurtherDetail = undefined;
+                    this.refreshTable();
+                });
+            }
+        });
+    }
 }

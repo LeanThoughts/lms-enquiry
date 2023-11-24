@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.iccapproval.furtherdetail;
+package pfs.lms.enquiry.iccapproval.iccfurtherdetail;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -12,11 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class FurtherDetailResource {
+public class ICCFurtherDetailResource {
 
     private UUID id;
     private UUID loanApplicationId;
 
-    private String furtherDetails;
-    private LocalDate date;
+    private Integer serialNumber;
+    private String iccMeetingNumber;
+    private LocalDate iccMeetingDate;
+    private String detailsRequired;
 }

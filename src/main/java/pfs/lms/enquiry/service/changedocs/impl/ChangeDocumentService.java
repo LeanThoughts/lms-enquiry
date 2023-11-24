@@ -30,7 +30,7 @@ import pfs.lms.enquiry.action.rejectbypfs.RejectByPfs;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
-import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetail;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
@@ -618,10 +618,10 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
                     return result;
                 case "FurtherDetail":
-                    FurtherDetail furtherDetail = (FurtherDetail) object;
-                    result.put("id", furtherDetail.getDate().toString());
+                    ICCFurtherDetail ICCFurtherDetail = (ICCFurtherDetail) object;
+//                    result.put("id", ICCFurtherDetail.getDate().toString());
                     result.put("description", "Further details");//furtherDetail.getDate().toString());
-                    result.put("loanApplication",furtherDetail.getLoanAppraisal().getLoanApplication());
+//                    result.put("loanApplication", ICCFurtherDetail.getLoanAppraisal().getLoanApplication());
 
                     return result;
                 case "LoanPartner":

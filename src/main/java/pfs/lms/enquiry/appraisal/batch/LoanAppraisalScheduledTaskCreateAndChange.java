@@ -11,8 +11,8 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejectionRepository;
-import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetail;
-import pfs.lms.enquiry.iccapproval.furtherdetail.FurtherDetailRepository;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetailRepository;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomerRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
@@ -100,7 +100,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final CustomerRejectionRepository customerRejectionRepository;
-    private final FurtherDetailRepository furtherDetailRepository;
+    private final ICCFurtherDetailRepository ICCFurtherDetailRepository;
     private final ProjectAppraisalCompletionRepository projectAppraisalCompletionRepository;
     private final ProjectDataRepository projectDataRepository;
     private final LoanPartnerRepository loanPartnerRepository;
@@ -145,7 +145,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         CustomerRejection customerRejection = new CustomerRejection();
-        FurtherDetail furtherDetail = new FurtherDetail();
+        ICCFurtherDetail ICCFurtherDetail = new ICCFurtherDetail();
         SiteVisit siteVisit = new SiteVisit();
         ProjectAppraisalCompletion projectAppraisalCompletion = new ProjectAppraisalCompletion();
         ProjectData projectData = new ProjectData();
@@ -328,11 +328,11 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      break;
                  case "Further Detail":
 
-                     furtherDetail = furtherDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
-                     loanAppraisal = loanAppraisalRepository.getOne( furtherDetail.getLoanAppraisal().getId());
+                     ICCFurtherDetail = ICCFurtherDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
+                     loanAppraisal = loanAppraisalRepository.getOne( ICCFurtherDetail.getIccApproval().getId());
 
                      log.info("Attempting to Post Appraisal Further Detail to SAP AT :" + dateFormat.format(new Date())+ loanAppraisal.getLoanContractId().toString()
-                             + "Loan Contract: " + furtherDetail.getLoanAppraisal().getLoanApplication().getLoanContractId());
+                             + "Loan Contract: " + ICCFurtherDetail.getIccApproval().getLoanApplication().getLoanContractId());
 
 
                      //Set Status as in progress
@@ -340,7 +340,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      sapIntegrationRepository.save(sapIntegrationPointer);
 
                      SAPLoanAppraisalFurtherDetailResourceDetails sapLoanAppraisalFurtherDetailResourceDetails =
-                             sapLoanAppraisalFurtherDetailResource.mapFurtherDetailToSAP(furtherDetail);
+                             sapLoanAppraisalFurtherDetailResource.mapFurtherDetailToSAP(ICCFurtherDetail);
 
                      SAPLoanAppraisalFurtherDetailResource sapLoanAppraisalFurtherDetailResource = new SAPLoanAppraisalFurtherDetailResource();
                      sapLoanAppraisalFurtherDetailResource.setSapLoanAppraisalFurtherDetailResourceDetails(sapLoanAppraisalFurtherDetailResourceDetails);
