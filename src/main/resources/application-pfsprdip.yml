@@ -50,7 +50,7 @@ oauth:
   baseUrl: http://192.168.1.247:9999/auth
 sap:
   postUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V2_SRV/LoanApplicationSet?sap-client=300
-  sanctionUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V2_SRV/SanctionLetterSet?sap-client=300
+  sanctionLetterUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V2_SRV/SanctionLetterSet?sap-client=300
   sanctionDocumentUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V2_SRV/DocumentSet?sap-client=300
   baseUrl: http://192.168.1.207:8000
   serviceUri: /sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet
