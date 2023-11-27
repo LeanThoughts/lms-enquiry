@@ -31,7 +31,7 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedRejectedByICC = Object.assign({}, _dialogData.selectedRejectedByICC);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        if (_dialogData.selectedRejectedByICC.id !== undefined) {
+        if (this.selectedRejectedByICC.id !== undefined) {
             this.dialogTitle = 'Modify Rejected by ICC';
         }
 

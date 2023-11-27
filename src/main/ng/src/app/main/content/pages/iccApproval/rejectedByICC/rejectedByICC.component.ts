@@ -40,8 +40,8 @@ export class RejectedByICCComponent {
         this._iccApprovalService.getRejectedByICC(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
             this.selectedRejectedByICC = data;
             let tableData = [];
-            tableData.push({particulars: 'Details Required', value: this.selectedRejectedByICC.meetingNumber});
-            tableData.push({particulars: 'Date', value: this.selectedRejectedByICC.meetingNumber});
+            tableData.push({particulars: 'Meeting Number', value: this.selectedRejectedByICC.meetingNumber});
+            tableData.push({particulars: 'Date', value: this.selectedRejectedByICC.meetingDate});
             tableData.push({particulars: 'Reason For Rejection', value: this.selectedRejectedByICC.reasonForRejection});
             this.dataSource = new MatTableDataSource(tableData);
         });
