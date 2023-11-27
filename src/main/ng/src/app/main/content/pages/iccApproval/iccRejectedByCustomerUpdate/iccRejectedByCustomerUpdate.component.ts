@@ -3,6 +3,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { BoardApprovalService } from '../../boardApproval/boardApproval.service';
+import { ICCApprovalService } from '../iccApproval.service';
+import { ICCApprovalUpdateDialogComponent } from '../iccApprovalUpdate/iccApprovalUpdate.component';
 
 @Component({
     selector: 'fuse-icc-rejected-by-customer-update-dialog',
@@ -20,37 +22,28 @@ export class ICCRejectedByCustomerUpdateDialogComponent implements OnInit {
 
     rejectedByCustomerForm: FormGroup;
 
-    approvalByBoards: any;
-    customerRejectionReasons: any;
+    approvalByBoards = []
 
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, private _boardApprovalService: BoardApprovalService,
-        public _dialogRef: MatDialogRef<ICCRejectedByCustomerUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
+    constructor(private _formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
+        public _dialogRef: MatDialogRef<ICCApprovalUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
-
-        this._boardApprovalService.getApprovalByBoards().subscribe(data => {
-            this.approvalByBoards = data._embedded.approvalByBoards;
-        });
-
-        this._boardApprovalService.getCustomerRejectionReasons().subscribe(data => {
-            this.customerRejectionReasons = data._embedded.customerRejectionReasons;
-        });
 
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedRejectedByCustomer = Object.assign({}, _dialogData.selectedRejectedByCustomer);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        if (_dialogData.selectedRejectedByCustomer !== undefined) {
-            if (_dialogData.operation === 'updateRejectedByCustomer') {
-                this.dialogTitle = 'Modify Rejected By Customer';
-            }
+
+        if (this.selectedRejectedByCustomer.id !== undefined) {
+            this.dialogTitle = 'Modify Rejected By Customer';
         }
+
         this.rejectedByCustomerForm = this._formBuilder.group({
-            iccMeetingNumber: [this.selectedRejectedByCustomer.iccMeetingNumber || ''],
-            meetingDate: [this.selectedRejectedByCustomer.meetingDate || ''],
-            rejectionCategory: [this.selectedRejectedByCustomer.rejectionCategory || ''],
-            details: [this.selectedRejectedByCustomer.details || ''],
+            meetingNumber: [this.selectedRejectedByCustomer.meetingNumber],
+            dateOfRejection: [this.selectedRejectedByCustomer.dateOfRejection || ''],
+            remarks: [this.selectedRejectedByCustomer.remarks || ''],
+            rejectionCategory: [this.selectedRejectedByCustomer.rejectionCategory || '']
         });
     }
 
@@ -68,23 +61,25 @@ export class ICCRejectedByCustomerUpdateDialogComponent implements OnInit {
             var rejectedByCustomer = this.rejectedByCustomerForm.value;
                 
             // To solve the utc time zone issue
-            var dt = new Date(rejectedByCustomer.meetingDate);
-            rejectedByCustomer.meetingDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            var dt = new Date(rejectedByCustomer.dateOfRejection);
+            rejectedByCustomer.dateOfRejection = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addRejectedByCustomer') {
+            if (this.selectedRejectedByCustomer.id === undefined) {
                 rejectedByCustomer.loanApplicationId = this.loanApplicationId;
-                this._boardApprovalService.createRejectedByCustomer(rejectedByCustomer).subscribe(() => {
-                    this._matSnackBar.open('Rejected by customer added successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
+                this._iccApprovalService.createRejectedByCustomer(rejectedByCustomer).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                        this._matSnackBar.open('Rejected by Customer details created successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
                 });
             }
             else {
                 this.selectedRejectedByCustomer.meetingDate = rejectedByCustomer.meetingDate;
-                this.selectedRejectedByCustomer.iccMeetingNumber = rejectedByCustomer.iccMeetingNumber;
-                this.selectedRejectedByCustomer.rejectionCategory = rejectedByCustomer.rejectionCategory;
-                this.selectedRejectedByCustomer.details = rejectedByCustomer.details;
-                this._boardApprovalService.updateRejectedByCustomer(this.selectedRejectedByCustomer).subscribe(() => {
-                    this._matSnackBar.open('Rejected by customer updated successfully.', 'OK', { duration: 7000 });
+                this.selectedRejectedByCustomer.dateOfRejection = rejectedByCustomer.dateOfRejection;
+                this.selectedRejectedByCustomer.remarks = rejectedByCustomer.remarks;
+                this._iccApprovalService.updateRejectedByCustomer(this.selectedRejectedByCustomer).subscribe(() => {
+                    this._matSnackBar.open('Rejected by Customer details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            
             }

@@ -66,9 +66,9 @@ export class ICCApprovalService {
     /**
      * deleteReasonForDelay()
      */
-    public deleteReasonForDelay(reasonForDelayId: string): Observable<any> {
-        return this._http.delete("enquiry/api/iCCReasonForDelays/delete/" + reasonForDelayId);
-    }
+    // public deleteReasonForDelay(reasonForDelayId: string): Observable<any> {
+    //     return this._http.delete("enquiry/api/iCCReasonForDelays/delete/" + reasonForDelayId);
+    // }
 
     /**
      * createReasonForDelay()
@@ -94,9 +94,9 @@ export class ICCApprovalService {
     /**
      * deleteRejectedByICC()
      */
-    public deleteRejectedByICC(rejectedByICCId: string): Observable<any> {
-        return this._http.delete("enquiry/api/rejectedByICCs/delete/" + rejectedByICCId);
-    }
+    // public deleteRejectedByICC(rejectedByICCId: string): Observable<any> {
+    //     return this._http.delete("enquiry/api/rejectedByICCs/delete/" + rejectedByICCId);
+    // }
 
     /**
      * createRejectedByICC()
@@ -122,9 +122,9 @@ export class ICCApprovalService {
     /**
      * deleteRejectedByICC()
      */
-    public deleteApprovalByICC(approvalByICCId: string): Observable<any> {
-        return this._http.delete("enquiry/api/approvalByICCs/delete/" + approvalByICCId);
-    }
+    // public deleteApprovalByICC(approvalByICCId: string): Observable<any> {
+    //     return this._http.delete("enquiry/api/approvalByICCs/delete/" + approvalByICCId);
+    // }
 
     /**
      * createApprovalByICC()
@@ -138,5 +138,33 @@ export class ICCApprovalService {
      */
     public updateApprovalByICC(approvalByICC: any): Observable<any> {
         return this._http.put("enquiry/api/approvalByICCs/update", approvalByICC);
+    }
+
+    /**
+     * getRejectedByCustomer()
+     */
+    public getRejectedByCustomer(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/rejectedByCustomers/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    }
+
+    /**
+     * deleteRejectedByCustomer()
+     */
+    // public deleteRejectedByCustomer(rejectedByCustomerId: string): Observable<any> {
+    //     return this._http.delete("enquiry/api/rejectedByCustomers/delete/" + rejectedByCustomerId);
+    // }
+
+    /**
+     * createRejectedByCustomer()
+     */
+    public createRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this._http.post("enquiry/api/rejectedByCustomers/create", rejectedByCustomer);
+    }
+
+    /**
+     * updateRejectedByCustomer()
+     */
+    public updateRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this._http.put("enquiry/api/rejectedByCustomers/update", rejectedByCustomer);
     }
 }
