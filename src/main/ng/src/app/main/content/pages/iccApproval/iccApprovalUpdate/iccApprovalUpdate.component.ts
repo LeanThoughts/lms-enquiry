@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { ICCApprovalService } from '../iccApproval.service';
 
 @Component({
@@ -14,7 +13,7 @@ import { ICCApprovalService } from '../iccApproval.service';
 })
 export class ICCApprovalUpdateDialogComponent implements OnInit {
 
-    dialogTitle = 'Add Rejected By ICC';
+    dialogTitle = 'Add ICC Approval Details';
 
     loanApplicationId = '';
     selectedICCApproval: any;
@@ -29,17 +28,17 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
         private _matSnackBar: MatSnackBar) {
 
         // Fetch selected reason details from the dialog's data attribute.
-        this.selectedICCApproval = Object.assign({}, _dialogData.selectedRejectedByICC);
+        this.selectedICCApproval = Object.assign({}, _dialogData.selectedICCApproval);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        if (_dialogData.selectedRejectedByICC !== undefined) {
-            if (_dialogData.operation === 'updateICCApproval') {
-                this.dialogTitle = 'Modify ICC Approval Details';
-            }
+
+        if (this.selectedICCApproval.id !== undefined) {
+            this.dialogTitle = 'Modify ICC Approval Details';
         }
+
         this.iccApprovalForm = this._formBuilder.group({
-            meetingNumber: [this.selectedICCApproval.meetingNumber || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
-            dateOfICCClearance: [this.selectedICCApproval.dateOfICCClearance || ''],
-            remarks: [this.selectedICCApproval.remarks || ''],
+            meetingNumber: [this.selectedICCApproval.meetingNumber],
+            meetingDate: [this.selectedICCApproval.meetingDate || ''],
+            remarks: [this.selectedICCApproval.remarks || '']
         });
     }
 
@@ -57,24 +56,27 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             var iccApproval = this.iccApprovalForm.value;
                 
             // To solve the utc time zone issue
-            var dt = new Date(iccApproval.dateOfICCClearance);
-            iccApproval.dateOfICCClearance = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            var dt = new Date(iccApproval.meetingDate);
+            iccApproval.meetingDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-            if (this._dialogData.operation === 'addICCApproval') {
+            if (this.selectedICCApproval.id === undefined) {
                 iccApproval.loanApplicationId = this.loanApplicationId;
-                // this._iccApprovalService.createRejectedByICC(rejectedByICC).subscribe(() => {
-                //     this._matSnackBar.open('Rejected by icc added successfully.', 'OK', { duration: 7000 });
-                //     this._dialogRef.close({ 'refresh': true });
-                // });
+                this._iccApprovalService.createApprovalByICC(iccApproval).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                        this._matSnackBar.open('ICC Approval details created successfully.', 'OK', { duration: 7000 });
+                        this._dialogRef.close({ 'refresh': true });
+                    });
+                });
             }
             else {
-                this.selectedICCApproval.dateOfICCClearance = iccApproval.dateOfICCClearance;
+                this.selectedICCApproval.meetingDate = iccApproval.meetingDate;
                 this.selectedICCApproval.meetingNumber = iccApproval.meetingNumber;
                 this.selectedICCApproval.remarks = iccApproval.remarks;
-                // this._iccApprovalService.updateRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
-                //     this._matSnackBar.open('Rejected by icc updated successfully.', 'OK', { duration: 7000 });
-                //     this._dialogRef.close({ 'refresh': true });
-                // });            
+                this._iccApprovalService.updateRejectedByICC(this.selectedICCApproval).subscribe(() => {
+                    this._matSnackBar.open('ICC Approval details updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });            
             }
         }
     }
