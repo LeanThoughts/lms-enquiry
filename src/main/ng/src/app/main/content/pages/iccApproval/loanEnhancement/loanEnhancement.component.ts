@@ -5,6 +5,7 @@ import { ICCApprovalService } from '../iccApproval.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnhancementUpdateDialogComponent } from '../loanEnhancementUpdate/loanEnhancementUpdate.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-loan-enhancement',
@@ -29,12 +30,20 @@ export class LoanEnhancementComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
+            private _activatedRoute: ActivatedRoute) {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        // _loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
-        //     this.dataSource = new MatTableDataSource(data);
-        //     this.dataSource.sort = this.sort;
-        // });
+        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.loanEnhancements);
+    }
+
+    /**
+     * refreshTable()
+     */
+    refreshTable(): void {
+        this._iccApprovalService.getLoanEnhancements(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.loanEnhancements);
+            this.dataSource.sort = this.sort;
+        });
     }
 
     /**
@@ -71,12 +80,10 @@ export class LoanEnhancementComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                // this._loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
-                //     this.dataSource.data = data;
-                // });
-                // this._loanMonitoringService.getLoanMonitor(this.loanApplicationId).subscribe(data => {
-                //     this._loanMonitoringService.loanMonitor.next(data);
-                // })
+                this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                    this._iccApprovalService._iccApproval.next(data);
+                    this.refreshTable();
+                });
             }
         });    
     }
@@ -89,12 +96,10 @@ export class LoanEnhancementComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((response) => {
             if (response) {
-                // this._loanMonitoringService.deleteSiteVisit(this.selectedICCFurtherDetail, this._module).subscribe(() => {
-                //     this.selectedICCFurtherDetail = undefined;
-                //     this._loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
-                //         this.dataSource.data = data;
-                //     });
-                // });
+                this._iccApprovalService.deleteLoanEnhancement(this.selectedLoanEnhancement.id).subscribe(() => {
+                    this.selectedLoanEnhancement = undefined;
+                    this.refreshTable();
+                });
             }
         });
     }

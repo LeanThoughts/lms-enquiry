@@ -17,7 +17,8 @@ export class ICCApprovalService {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         console.log('in resolve :: iccApprovalId is ', this._iccApproval.value.id);
         return forkJoin([
-            this.getICCFurtherDetails(this._iccApproval.value.id)
+            this.getICCFurtherDetails(this._iccApproval.value.id),
+            this.getLoanEnhancements(this._iccApproval.value.id)
         ]);
     }
 
@@ -166,5 +167,33 @@ export class ICCApprovalService {
      */
     public updateRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
         return this._http.put("enquiry/api/rejectedByCustomers/update", rejectedByCustomer);
+    }
+
+    /**
+     * getLoanEnhancements()
+     */
+    public getLoanEnhancements(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    }
+
+    /**
+     * deleteLoanEnhancement()
+     */
+    public deleteLoanEnhancement(loanEnhancementId: string): Observable<any> {
+        return this._http.delete("enquiry/api/loanEnhancements/delete/" + loanEnhancementId);
+    }
+
+    /**
+     * createLoanEnhancement()
+     */
+    public createLoanEnhancement(loanEnhancement: any): Observable<any> {
+        return this._http.post("enquiry/api/loanEnhancements/create", loanEnhancement);
+    }
+
+    /**
+     * updateLoanEnhancement()
+     */
+    public updateLoanEnhancement(loanEnhancement: any): Observable<any> {
+        return this._http.put("enquiry/api/loanEnhancements/update", loanEnhancement);
     }
 }
