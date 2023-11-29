@@ -22,7 +22,8 @@ export class ICCRejectedByCustomerUpdateDialogComponent implements OnInit {
 
     rejectedByCustomerForm: FormGroup;
 
-    approvalByBoards = []
+    approvalByBoards = [];
+    customerRejectionReasons = [];
 
     /**
      * constructor()
