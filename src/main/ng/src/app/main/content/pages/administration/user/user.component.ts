@@ -31,7 +31,7 @@ export class UserComponent implements OnInit {
         // Open the dialog.
         const dialogRef = this._dialogRef.open(UserUpdateDialogComponent, {
             panelClass: 'fuse-user-update-dialog',
-            width: '650px',
+            width: '850px',
             data: {
                 operation: 'addUser'
             }
@@ -44,7 +44,7 @@ export class UserComponent implements OnInit {
         // Open the dialog.
         const dialogRef = this._dialogRef.open(UserUpdateDialogComponent, {
             panelClass: 'fuse-user-update-dialog',
-            width: '650px',
+            width: '850px',
             data: {
                 operation: 'updateUser',
                 selectedUser: this.selectedUser

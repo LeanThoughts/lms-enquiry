@@ -44,6 +44,13 @@
             </mat-cell>
         </ng-container>
 
+        <ng-container cdkColumnDef="riskPortalDisplayOnlyAccess">
+            <mat-header-cell *cdkHeaderCellDef mat-sort-header>Risk Portal (Readonly)</mat-header-cell>
+            <mat-cell *cdkCellDef="let user">
+                <p class="text-truncate">{{ user.riskPortalDisplayOnlyAccess }}</p>
+            </mat-cell>
+        </ng-container>
+
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
         <mat-row *cdkRowDef="let user; columns: displayedColumns;" class="user" matRipple (click)="onSelect(user)"

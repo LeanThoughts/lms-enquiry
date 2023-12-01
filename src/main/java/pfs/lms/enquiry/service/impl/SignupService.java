@@ -45,7 +45,7 @@ public class SignupService implements ISignupService {
         //partner = iPartnerService.save(partner);
 
         User user = new User(signupResource.getFirstName(), signupResource.getLastName(), signupResource.getEmail(),
-                "TR0100", true, signupResource.getEmail(), null, null, false);
+                "TR0100", true, signupResource.getEmail(), null, null, false, false);
         user = userRepository.save(user);
         log.info("{} created", user);
 
@@ -73,7 +73,7 @@ public class SignupService implements ISignupService {
     {
         // Create user in the LMS application
         User user = new User(userResource.getFirstName(), userResource.getLastName(), userResource.getEmail(),
-                userResource.getRole(), true, userResource.getEmail(), userResource.getSapBPNumber(), userResource.getRiskDepartment(), userResource.getDepartmentHead());
+                userResource.getRole(), true, userResource.getEmail(), userResource.getSapBPNumber(), userResource.getRiskDepartment(), userResource.getDepartmentHead(), userResource.getRiskPortalDisplayOnlyAccess());
         user = userRepository.save(user);
         log.info("{} created.", user);
 

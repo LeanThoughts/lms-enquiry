@@ -348,7 +348,7 @@ public class Initializer implements CommandLineRunner {
 
 
         if (userRepository.count() == 0) {
-            User user1 = new User("Admin", "- PFS", "admin@gmail.com", "ZLM023", true, "admin@gmail.com", "50000284", "02", false);
+            User user1 = new User("Admin", "- PFS", "admin@gmail.com", "ZLM023", true, "admin@gmail.com", "50000284", "02", false, false);
             userRepository.save(user1);
 
 //            User user2 = new User("Loan", "Officer - 1", "lo1@gmail.com", "ZLM013", true, "lo1@gmail.com", "50000284", "01");

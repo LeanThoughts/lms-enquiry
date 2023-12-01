@@ -42,7 +42,7 @@ export class UserMgmtComponent implements OnInit {
 
 
   displayedColumns = [
-    'firstName', 'lastName', 'email', 'role', 'sapBPNumber'
+    'firstName', 'lastName', 'email', 'role', 'sapBPNumber', 'riskPortalDisplayOnlyAccess'
   ];
 
   selectUser: UserModel;

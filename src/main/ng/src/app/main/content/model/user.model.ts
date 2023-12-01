@@ -12,6 +12,7 @@ export class UserModel
     riskDepartment: string;
     departmentHead: boolean;
     passwordReset: boolean;
+    riskPortalDisplayOnlyAccess: boolean;
     
     constructor(user: any)
     {
@@ -36,6 +37,7 @@ export class UserModel
         this.status = user.status;
         this.riskDepartment = user.riskDepartment;
         this.departmentHead = user.departmentHead;
+        this.riskPortalDisplayOnlyAccess = user.riskPortalDisplayOnlyAccess;
     }
 
 

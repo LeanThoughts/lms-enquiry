@@ -14,9 +14,10 @@ public class UserResource
     private String sapBPNumber;
     private String riskDepartment;
     private Boolean departmentHead;
+    private Boolean riskPortalDisplayOnlyAccess;
 
     public UserResource(String firstName, String lastName, String email, String mobile, String password, String role,
-                        String sapBPNumber, String riskDepartment, boolean departmentHead)
+                        String sapBPNumber, String riskDepartment, boolean departmentHead, boolean riskPortalDisplayOnlyAccess)
     {
         /*if(!isValidEmail(email))
             throw new LmsException(String.format("Invalid email address: %s", email), HttpStatus.PRECONDITION_FAILED);
@@ -33,6 +34,7 @@ public class UserResource
         this.sapBPNumber = sapBPNumber;
         this.riskDepartment = riskDepartment;
         this.departmentHead = departmentHead;
+        this.riskPortalDisplayOnlyAccess = riskPortalDisplayOnlyAccess;
     }
 
     private static final String emailRegex = "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +

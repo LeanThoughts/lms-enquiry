@@ -42,7 +42,7 @@ export class UserListComponent implements OnInit {
   pageSizeOptions: number[] = [10, 25, 50, 100];
 
   displayedColumns = [
-    'firstName', 'lastName', 'email', 'role', 'sapBPNumber'
+    'firstName', 'lastName', 'email', 'role', 'sapBPNumber', 'riskPortalDisplayOnlyAccess'
   ];
 
   constructor(private _service: UserService) {

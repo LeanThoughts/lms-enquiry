@@ -3,10 +3,8 @@ package pfs.lms.enquiry.domain;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
 @Setter
@@ -27,12 +25,13 @@ public class User extends AggregateRoot<User> {
     private String userName;
     private String sapBPNumber;
     private String riskDepartment;
+    private boolean riskPortalDisplayOnlyAccess;
 
     @Nullable
     private boolean departmentHead;
     private boolean passwordReset;
 
-    public User(String firstName, String lastName, String email, String role, boolean status, String userName, String sapBPNumber, String riskDepartment, boolean departmentHead) {
+    public User(String firstName, String lastName, String email, String role, boolean status, String userName, String sapBPNumber, String riskDepartment, boolean departmentHead, boolean riskPortalDisplayOnlyAccess) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -42,6 +41,7 @@ public class User extends AggregateRoot<User> {
         this.sapBPNumber = sapBPNumber;
         this.riskDepartment = riskDepartment;
         this.departmentHead = departmentHead;
+        this.riskPortalDisplayOnlyAccess = riskPortalDisplayOnlyAccess;
         registerEvent(UserCreated.of(this));
     }
 
@@ -123,6 +123,14 @@ public class User extends AggregateRoot<User> {
 
     public void setDepartmentHead(@Nullable boolean departmentHead) {
         this.departmentHead = departmentHead;
+    }
+
+    public void setRiskPortalDisplayOnlyAccess(boolean riskPortalDisplayOnlyAccess) {
+        this.riskPortalDisplayOnlyAccess = riskPortalDisplayOnlyAccess;
+    }
+
+    public boolean getRiskPortalDisplayOnlyAccess() {
+        return this.riskPortalDisplayOnlyAccess;
     }
 
     public boolean isPasswordReset() {

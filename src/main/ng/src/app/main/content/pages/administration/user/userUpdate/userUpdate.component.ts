@@ -40,7 +40,8 @@ export class UserUpdateDialogComponent implements OnInit {
             sapBPNumber: [this.selectedUser.sapBPNumber || ''],
             role: [this.selectedUser.role || 'ZLM013'],
             riskDepartment: [this.selectedUser.riskDepartment],
-            departmentHead: [this.selectedUser.departmentHead || false]
+            departmentHead: [this.selectedUser.departmentHead || false],
+            riskPortalDisplayOnlyAccess: [this.selectedUser.riskPortalDisplayOnlyAccess || false]
         });
     }
 

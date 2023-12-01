@@ -68,6 +68,7 @@ public class UserController {
         user.setRiskDepartment(userResource.getRiskDepartment());
         user.setRole(userResource.getRole());
         user.setDepartmentHead(userResource.getDepartmentHead());
+        user.setRiskPortalDisplayOnlyAccess(userResource.getRiskPortalDisplayOnlyAccess());
         userRepository.save(user);
 
         SignupResource signupResource = new SignupResource(userResource.getFirstName(), userResource.getLastName(),
