@@ -15,6 +15,7 @@ import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 import { BoardApprovalService } from '../boardApproval/boardApproval.service';
 import { SanctionService } from '../sanction/sanction.service';
 import { ICCApprovalService } from '../iccApproval/iccApproval.service';
+import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -58,7 +59,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
                 private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService, 
                 private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService, 
-                private _iccApprovalService: ICCApprovalService) {
+                private _iccApprovalService: ICCApprovalService, private _applicationFeeService: ApplicationFeeService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -216,22 +217,22 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToApplicationFee()
      */
     redirectToApplicationFee(): void {
-        // if (this._service.selectedEnquiry.value.loanContractId === undefined) {
-        //     this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-        //         this._enquiryActionService._enquiryAction.next(response);
-        //         this.redirect('/enquiryAction');
-        //     }, (error: HttpErrorResponse) => {
-        //         if (error.status === 404) {
-        //             this._enquiryActionService._enquiryAction.next({ id: '' });
-        //             this.redirect('/enquiryAction');
-        //         }
-        //     })
-        // }
+        //if (this._service.selectedEnquiry.value.loanContractId === undefined) {
+            this._applicationFeeService.getApplicationFee(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._applicationFeeService._applicationFee.next(response);
+                this.redirect('/applicationFee');
+            }, (error: HttpErrorResponse) => {
+                if (error.status === 404) {
+                    this._applicationFeeService._applicationFee.next({ id: '' });
+                    this.redirect('/applicationFee');
+                }
+            })
+        //}
         // else {
         //     this._matSnackBar.open('Loan has already completed the enquiry phase ! ',
         //         'OK', { duration: 7000 });
         // }
-        this.redirect('/applicationFee');
+        // this.redirect('/iccApprovalStage');
     }
 
     /**

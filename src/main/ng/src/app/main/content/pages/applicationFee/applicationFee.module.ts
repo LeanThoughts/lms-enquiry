@@ -31,7 +31,7 @@ const routes = [
         path: 'applicationFee',
         component: ApplicationFeeComponent
         // resolve: {
-        //     routeResolvedData: ICCApprovalService
+        //     routeResolvedData: ApplicationFeeService
         // }
     }
 ];

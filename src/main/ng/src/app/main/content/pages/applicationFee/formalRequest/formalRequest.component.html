@@ -1,6 +1,6 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add Formal Request </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add  </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedFormalRequest"> 
             Modify 
         </button>
@@ -51,11 +51,11 @@
                 </mat-cell>
             </ng-container>
 
-            <!-- document Column -->
-            <ng-container matColumnDef="document">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Document</mat-header-cell>
+            <!-- download Column -->
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.document }}</p>
+                    <a [href]="getFileURL(obj.fileReference)" *ngIf="obj.fileReference !== ''">Download</a>
                 </mat-cell>
             </ng-container>
 

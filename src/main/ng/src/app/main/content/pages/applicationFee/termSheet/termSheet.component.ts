@@ -18,7 +18,7 @@ export class TermSheetComponent {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'serialNumber', 'dateOfIssuance', 'status', 'acceptanceDate', 'document'
+        'serialNumber', 'status', 'issuanceDate', 'acceptanceDate', 'download'
     ];
 
     loanApplicationId: string;
@@ -28,8 +28,10 @@ export class TermSheetComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _applicationFeeService: ApplicationFeeService, private _matDialog: MatDialog,
-                    private _matSnackBar: MatSnackBar) {
+    constructor(_loanEnquiryService: LoanEnquiryService, 
+                private _applicationFeeService: ApplicationFeeService, 
+                private _matDialog: MatDialog,
+                private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
@@ -39,14 +41,10 @@ export class TermSheetComponent {
      * refreshTable()
      */
     refreshTable(): void {
-        // this._iccApprovalService.getRejectedByBoards().subscribe(data => {
-        //     if (data._embedded.rejectedByBoards.length === 0)
-        //         this.disableAdd = false;
-        //     else
-        //         this.disableAdd = true;
-        //     this.dataSource = new MatTableDataSource(data._embedded.rejectedByBoards);
-        //     this.dataSource.sort = this.sort;
-        // });
+        this._applicationFeeService.getTermSheets(this._applicationFeeService._applicationFee.value.id).subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.termSheets);
+            this.dataSource.sort = this.sort;
+        });
     }
 
     /**
@@ -57,15 +55,22 @@ export class TermSheetComponent {
     }
 
     /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
      * add()
      */
-    add(): void {
+    add(mode: string): void {
         // Open the dialog.
         const dialogRef = this._matDialog.open(TermSheetUpdateDialogComponent, {
             panelClass: 'fuse-term-sheet-update-dialog',
             width: '750px',
             data: {
-                operation: 'addICCApproval',
+                operation: mode,
                 loanApplicationId: this.loanApplicationId,
             }
         });
@@ -76,10 +81,10 @@ export class TermSheetComponent {
                     this.refreshTable();
                 }
                 else {
-                    // this._iccApprovalService.getBoardApproval(this.loanApplicationId).subscribe(data => {
-                    //     this._iccApprovalService._boardApproval.next(data);
-                    //     this.refreshTable(); 
-                    // });
+                    this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                        this._applicationFeeService._applicationFee.next(data);
+                        this.refreshTable(); 
+                    });
                 }
             }
         });    
@@ -89,14 +94,19 @@ export class TermSheetComponent {
      * update()
      */
     update(): void {
+        let mode = '';
+        if (this.selectedTermSheet.status === 'Draft')
+            mode = 'modifyDraft';
+        else
+            mode = 'modifyAcceptance';
         // Open the dialog.
         const dialogRef = this._matDialog.open(TermSheetUpdateDialogComponent, {
             panelClass: 'fuse-term-sheet-update-dialog',
             width: '750px',
             data: {
-                operation: 'updateICCApproval',
+                operation: mode,
                 loanApplicationId: this.loanApplicationId,
-                selectedICCApproval: this.selectedTermSheet
+                selectedFormalRequest: this.selectedTermSheet
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -114,15 +124,15 @@ export class TermSheetComponent {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((response) => {
-            // if (response) {
-            //     this._iccApprovalService.deleteRejectedByBoard(this.selectedICCApproval.id).subscribe(() => {
-            //         this.selectedICCApproval = undefined;
-            //         this.refreshTable();
-            //     },
-            //     (error) => {
-            //         this._matSnackBar.open('Unable to delete selected rejected by icc details.', 'OK', { duration: 7000 });
-            //     });
-            // }
+            if (response) {
+                this._applicationFeeService.deleteTermSheet(this.selectedTermSheet.id).subscribe(() => {
+                    this.selectedTermSheet = undefined;
+                    this.refreshTable();
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected term sheet details.', 'OK', { duration: 7000 });
+                });
+            }
         });
     }
 }

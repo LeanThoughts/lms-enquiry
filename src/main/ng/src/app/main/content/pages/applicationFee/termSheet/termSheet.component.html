@@ -1,7 +1,7 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Issue Draft Term Sheet </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Acceptance of Term Sheet </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add('newDraft')"> Issue Draft Term Sheet </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add('newAcceptance')"> Acceptance of Term Sheet </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedTermSheet"> 
             Modify 
         </button>
@@ -20,11 +20,11 @@
                 </mat-cell>
             </ng-container>
             
-            <!-- dateOfIssuance Column -->
-            <ng-container matColumnDef="dateOfIssuance">
+            <!-- issuanceDate Column -->
+            <ng-container matColumnDef="issuanceDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Date of Issuance</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.dateOfIssuance | date: 'dd/MM/yyyy' }}</p>
+                    <p class="text-truncate">{{ obj.issuanceDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -44,11 +44,11 @@
                 </mat-cell>
             </ng-container>
 
-            <!-- document Column -->
-            <ng-container matColumnDef="document">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Document</mat-header-cell>
+            <!-- download Column -->
+            <ng-container matColumnDef="download">
+                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.document }}</p>
+                    <a [href]="getFileURL(obj.fileReference)" *ngIf="obj.fileReference !== ''">Download</a>
                 </mat-cell>
             </ng-container>
 

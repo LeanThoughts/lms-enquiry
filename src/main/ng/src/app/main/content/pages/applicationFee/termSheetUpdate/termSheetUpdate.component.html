@@ -8,26 +8,36 @@
         </mat-toolbar-row>
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
-        <form [formGroup]="termSheetForm">
+        <form [formGroup]="issuanceForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
                     <input matInput placeholder="Status" formControlName="status" maxlength="10" readonly>
                 </mat-form-field>
             </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issuance" formControlName="dateOfIssuance" readonly>
+            <div fxLayout="row" *ngIf="_dialogData.operation === 'newDraft'">
+                <mat-form-field fxFlex="100">
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Issuance" formControlName="issuanceDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
             </div>
-            <div fxLayout="row">
+            <div fxLayout="row" *ngIf="_dialogData.operation === 'newAcceptance'">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Upload Document" formControlName="document" maxlength="200" required>
+                    <input matInput [matDatepicker]="picker3" placeholder="Acceptance Date" formControlName="acceptanceDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker> 
                 </mat-form-field>
             </div>
+            <div fxLayout="row">
+                <div fxFlex="100">
+                    <div fxLayout="column">
+                        <label for="document">Upload Document (PDF)</label>
+                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" required/>
+                    </div>
+                </div>
+            </div>
 
-            <div mat-dialog-actions fxLayout="row" class="mb-8">
+            <div mat-dialog-actions fxLayout="row" class="mb-8 mt-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>
