@@ -3,8 +3,12 @@
         <form [formGroup]="invoicingDetailForm">
 
             <div fxLayout="row">
+                <span><b>Company Details</b></span>
+            </div>
+
+            <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <mat-select placeholder="ICC Meeting Number" formControlName="iccMeetingNumber" required>
+                    <mat-select placeholder="ICC Meeting Number" formControlName="iccMeetingNumber">
                         <!-- <mat-option *ngFor="let obj of assetClasses" [value]="obj.code">
                             {{ obj.value }}
                         </mat-option> -->
@@ -34,6 +38,10 @@
             </div>
 
             <div fxLayout="row">
+                <span><b>Address & Contact Details</b></span>
+            </div>
+
+            <div fxLayout="row">
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="Door Number" formControlName="doorNumber" maxlength="20">
                 </mat-form-field>
@@ -47,10 +55,10 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="City" formControlName="doorNumber" maxlength="100">
+                    <input matInput placeholder="City" formControlName="city" maxlength="100">
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="State" formControlName="address" maxlength="100">
+                    <input matInput placeholder="State" formControlName="state" maxlength="100">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="10">
@@ -67,6 +75,10 @@
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="Email" formControlName="email" maxlength="100">
                 </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <span><b>Project Details</b></span>
             </div>
 
             <div fxLayout="row">

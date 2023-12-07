@@ -15,6 +15,15 @@ export class ApplicationFeeService {
     }
 
     /**
+     * resolve()
+     */
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return forkJoin([
+            this.getInvoicingDetails(this._applicationFee.value.id)
+        ]);
+    }
+
+    /**
      * getApplicationFee()
      */
     public getApplicationFee(loanApplicationId: string): Observable<any> {
@@ -32,7 +41,7 @@ export class ApplicationFeeService {
      * getFormalRequests()
      */
     public getFormalRequests(applicationFeeId: string): Observable<any> {
-        return this._http.get('enquiry/api/formalRequests/search/findByApplicationFeeId?applicationFeeId=' + applicationFeeId);
+        return this._http.get('enquiry/api/formalRequests/search/findByApplicationFeeIdOrderBySerialNumber?applicationFeeId=' + applicationFeeId);
     }
 
     /**
@@ -82,5 +91,37 @@ export class ApplicationFeeService {
      */
     public updateTermSheet(termSheet: any): Observable<any> {
         return this._http.put("enquiry/api/termSheets/update", termSheet);
+    }
+
+    /**
+     * getInvoicingDetails()
+     */
+    public getInvoicingDetails(applicationFeeId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/invoicingDetails/search/findByApplicationFeeId?applicationFeeId=' + applicationFeeId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createInvoicingDetail()
+     */
+    public createInvoicingDetail(invoicingDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/invoicingDetails/create", invoicingDetail);
+    }
+
+    /**
+     * updateInvoicingDetail()
+     */
+    public updateInvoicingDetail(invoicingDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/invoicingDetails/update", invoicingDetail);
     }
 }

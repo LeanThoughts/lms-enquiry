@@ -29,10 +29,10 @@ import { InvoicingDetailsComponent } from './invoicingDetails/invoicingDetails.c
 const routes = [
     {
         path: 'applicationFee',
-        component: ApplicationFeeComponent
-        // resolve: {
-        //     routeResolvedData: ApplicationFeeService
-        // }
+        component: ApplicationFeeComponent,
+        resolve: {
+            routeResolvedData: ApplicationFeeService
+        }
     }
 ];
 

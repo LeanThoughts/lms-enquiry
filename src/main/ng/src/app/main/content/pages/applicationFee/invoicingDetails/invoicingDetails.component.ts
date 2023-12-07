@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ApplicationFeeService } from '../applicationFee.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-invoicing-details',
@@ -22,18 +23,14 @@ export class InvoicingDetailsComponent implements OnInit {
 
     /**
      * constructor()
-     * @param _formBuilder
-     * @param _loanMonitoringService
-     * @param _dialogRef
-     * @param _dialogData
-     * @param _matSnackBar
      */
     constructor(private _formBuilder: FormBuilder, private _applicationFeeService: ApplicationFeeService,
-        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _matDialog: MatDialog) {
+        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _matDialog: MatDialog,
+        private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
-        this.selectedInvoicingDetail = {};
+        this.selectedInvoicingDetail =  _activatedRoute.snapshot.data.routeResolvedData[0];
         
         this.invoicingDetailForm = this._formBuilder.group({
             iccMeetingNumber: [this.selectedInvoicingDetail.iccMeetingNumber || ''],
@@ -69,30 +66,42 @@ export class InvoicingDetailsComponent implements OnInit {
      * submit()
      */
     submit(): void {
-        var npa = this.invoicingDetailForm.value;
-
-        if (this.selectedInvoicingDetail !== null) {
-            // this.selectedInvoicingDetail.assetClass = npa.assetClass;
-            // this.selectedInvoicingDetail.npaDeclarationDate = npa.npaDeclarationDate;
-            // this.selectedInvoicingDetail.totalLoanAsset = npa.totalLoanAsset;
-            // this.selectedInvoicingDetail.securedLoanAsset = npa.securedLoanAsset;
-            // this.selectedInvoicingDetail.unSecuredLoanAsset = npa.unSecuredLoanAsset;
-            // this.selectedInvoicingDetail.restructuringType = npa.restructuringType;
-            // this.selectedInvoicingDetail.smaCategory = npa.smaCategory;
-            // this.selectedInvoicingDetail.fraudDate = npa.fraudDate;
-            // this.selectedInvoicingDetail.impairmentReserve = npa.impairmentReserve;
-            // this.selectedInvoicingDetail.provisionAmount = npa.provisionAmount;
-            // this._loanMonitoringService.updateNPA(this.selectedInvoicingDetail).subscribe((data) => {
-            //     this._matSnackBar.open('NPA details updated successfully.', 'OK', { duration: 7000 });
-            //     this.selectedInvoicingDetail = data;
-            // });
-        }
-        else {
-            // this._loanMonitoringService.saveNPA(npa, this.loanApplicationId).subscribe((data) => {
-            //     this._matSnackBar.open('NPA details added successfully.', 'OK', { duration: 7000 });
-            //     this.selectedInvoicingDetail = data;
-            // });
+        if (this.invoicingDetailForm.valid) {
+            var invoicingDetail = this.invoicingDetailForm.value;
+            invoicingDetail.loanApplicationId = this.loanApplicationId;
+            if (this.selectedInvoicingDetail.id === undefined) {
+                    this._applicationFeeService.createInvoicingDetail(invoicingDetail).subscribe((data) => {
+                    this._matSnackBar.open('Customer/ Invoicing deails created successfully.', 'OK', { duration: 7000 });
+                    this.selectedInvoicingDetail = data;
+                });
+            }
+            else {
+                this.selectedInvoicingDetail.iccMeetingNumber = invoicingDetail.iccMeetingNumber;
+                this.selectedInvoicingDetail.companyName = invoicingDetail.companyName;
+                this.selectedInvoicingDetail.cinNumber = invoicingDetail.cinNumber;
+                this.selectedInvoicingDetail.gstNumber = invoicingDetail.gstNumber;
+                this.selectedInvoicingDetail.pan = invoicingDetail.pan;
+                this.selectedInvoicingDetail.msmeRegistrationNumber = invoicingDetail.msmeRegistrationNumber;
+                this.selectedInvoicingDetail.doorNumber = invoicingDetail.doorNumber;
+                this.selectedInvoicingDetail.address = invoicingDetail.address;
+                this.selectedInvoicingDetail.street = invoicingDetail.street;
+                this.selectedInvoicingDetail.city = invoicingDetail.city;
+                this.selectedInvoicingDetail.state = invoicingDetail.state;
+                this.selectedInvoicingDetail.postalCode = invoicingDetail.postalCode;
+                this.selectedInvoicingDetail.landline = invoicingDetail.landline;
+                this.selectedInvoicingDetail.mobile = invoicingDetail.mobile;
+                this.selectedInvoicingDetail.email = invoicingDetail.email;
+                this.selectedInvoicingDetail.projectType = invoicingDetail.projectType;
+                this.selectedInvoicingDetail.projectCapacity = invoicingDetail.projectCapacity;
+                this.selectedInvoicingDetail.projectCapacityUnit = invoicingDetail.projectCapacityUnit;
+                this.selectedInvoicingDetail.projectLocationState = invoicingDetail.projectLocationState;
+                this.selectedInvoicingDetail.pfsDebtAmount = invoicingDetail.pfsDebtAmount;
+                this._applicationFeeService.updateInvoicingDetail(this.selectedInvoicingDetail).subscribe((data) => {
+                    this._matSnackBar.open('Customer/ Invoicing details updated successfully.', 'OK', { duration: 7000 });
+                    this.selectedInvoicingDetail = data;
+                });
+            }
+    
         }
     }
-
 }
