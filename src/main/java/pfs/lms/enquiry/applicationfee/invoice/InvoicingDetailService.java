@@ -70,6 +70,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         invoicingDetail.setProjectCapacity(invoicingDetailResource.getProjectCapacity());
         invoicingDetail.setProjectCapacityUnit(invoicingDetailResource.getProjectCapacityUnit());
         invoicingDetail.setProjectLocationState(invoicingDetailResource.getProjectLocationState());
+        invoicingDetail.setFileReference(invoicingDetailResource.getFileReference());
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -114,6 +115,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         invoicingDetail.setProjectCapacity(invoicingDetailResource.getProjectCapacity());
         invoicingDetail.setProjectCapacityUnit(invoicingDetailResource.getProjectCapacityUnit());
         invoicingDetail.setProjectLocationState(invoicingDetailResource.getProjectLocationState());
+        invoicingDetail.setFileReference(invoicingDetailResource.getFileReference());
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 
         // Change Documents for  Loan Partner

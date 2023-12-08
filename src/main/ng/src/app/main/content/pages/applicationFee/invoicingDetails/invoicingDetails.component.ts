@@ -25,8 +25,7 @@ export class InvoicingDetailsComponent implements OnInit {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _applicationFeeService: ApplicationFeeService,
-        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _matDialog: MatDialog,
-        private _activatedRoute: ActivatedRoute) {
+        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
@@ -52,7 +51,8 @@ export class InvoicingDetailsComponent implements OnInit {
             pfsDebtAmount: [this.selectedInvoicingDetail.pfsDebtAmount || ''],
             projectCapacity: [this.selectedInvoicingDetail.projectCapacity || ''],
             projectCapacityUnit: [this.selectedInvoicingDetail.projectCapacityUnit || ''],
-            projectLocationState: [this.selectedInvoicingDetail.projectLocationState || '']
+            projectLocationState: [this.selectedInvoicingDetail.projectLocationState || ''],
+            file: ['']
         });
     }
 
@@ -63,12 +63,59 @@ export class InvoicingDetailsComponent implements OnInit {
     }
 
     /**
+     * onFileSelect()
+     */
+    onFileSelect(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.invoicingDetailForm.get('file').setValue(file);
+        }
+    }
+
+    /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
+    }
+
+    /**
      * submit()
      */
     submit(): void {
         if (this.invoicingDetailForm.valid) {
+            if (this.invoicingDetailForm.get('file').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.invoicingDetailForm.get('file').value);
+                this._applicationFeeService.uploadVaultDocument(formData).subscribe(
+                    (response) => {
+                        this.saveInvoicingDetails(response.fileReference);
+                    },
+                    (error) => {
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
+                            'OK', { duration: 7000 });
+                    }
+                );
+            }
+            else {
+                if (this.selectedInvoicingDetail.id === undefined) {
+                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                }
+                else {
+                    this.saveInvoicingDetails('');
+                }
+            }
+        }
+    }
+
+    /**
+     * saveInvoicingDetails()
+     */
+    saveInvoicingDetails(fileReference: string) {
+        if (this.invoicingDetailForm.valid) {
             var invoicingDetail = this.invoicingDetailForm.value;
             invoicingDetail.loanApplicationId = this.loanApplicationId;
+            invoicingDetail.fileReference = fileReference;
             if (this.selectedInvoicingDetail.id === undefined) {
                     this._applicationFeeService.createInvoicingDetail(invoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing deails created successfully.', 'OK', { duration: 7000 });
@@ -96,12 +143,14 @@ export class InvoicingDetailsComponent implements OnInit {
                 this.selectedInvoicingDetail.projectCapacityUnit = invoicingDetail.projectCapacityUnit;
                 this.selectedInvoicingDetail.projectLocationState = invoicingDetail.projectLocationState;
                 this.selectedInvoicingDetail.pfsDebtAmount = invoicingDetail.pfsDebtAmount;
+                if (this.selectedInvoicingDetail.fileReference !== '') {
+                    this.selectedInvoicingDetail.fileReference = fileReference;
+                }
                 this._applicationFeeService.updateInvoicingDetail(this.selectedInvoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing details updated successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;
                 });
             }
-    
         }
     }
 }

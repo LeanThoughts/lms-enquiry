@@ -32,9 +32,20 @@
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="GST Number" formControlName="gstNumber" maxlength="20">
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Upload GST Certificate" formControlName="gstNumber" maxlength="20">
-                </mat-form-field>
+                <div fxLayout="column" fxFlex="34">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex="85">
+                            <label for="document">Upload Document (PDF)</label>
+                            <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" #fileInput/>
+                        </div>
+                        <div fxLayout="column" fxFlex="15" class="mt-16">
+                            <a [href]="getFileURL(selectedInvoicingDetail.fileReference)" *ngIf="selectedInvoicingDetail.fileReference !== '' &&
+                                    selectedInvoicingDetail.fileReference !== undefined">
+                                <mat-icon>cloud_download</mat-icon>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div fxLayout="row">

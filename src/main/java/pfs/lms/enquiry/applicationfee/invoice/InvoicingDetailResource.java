@@ -34,6 +34,7 @@ public class InvoicingDetailResource {
     private String projectType;
     private String projectCapacityUnit;
     private String projectLocationState;
+    private String fileReference;
 
     private Double pfsDebtAmount;
     private Double projectCapacity;
