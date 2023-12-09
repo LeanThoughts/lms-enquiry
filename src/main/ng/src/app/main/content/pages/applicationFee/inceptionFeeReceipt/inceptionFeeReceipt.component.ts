@@ -4,15 +4,15 @@ import { fuseAnimations } from '@fuse/animations';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ApplicationFeeService } from '../applicationFee.service';
-import { ApplicationFeeReceiptUpdateDialogComponent } from '../applicationFeeReceiptUpdate/applicationFeeReceiptUpdate.component';
+import { InceptionFeeReceiptUpdateDialogComponent } from '../inceptionFeeReceiptUpdate/inceptionFeeReceiptUpdate.component';
 
 @Component({
-    selector: 'fuse-application-fee-receipt',
-    templateUrl: './applicationFeeReceipt.component.html',
-    styleUrls: ['./applicationFeeReceipt.component.scss'],
+    selector: 'fuse-inception-fee-receipt',
+    templateUrl: './inceptionFeeReceipt.component.html',
+    styleUrls: ['./inceptionFeeReceipt.component.scss'],
     animations: fuseAnimations
 })
-export class ApplicationFeeReceiptComponent {
+export class InceptionFeeReceiptComponent {
     
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
@@ -24,7 +24,7 @@ export class ApplicationFeeReceiptComponent {
 
     loanApplicationId: string;
 
-    selectedApplicationFee: any;
+    selectedInceptionFee: any;
 
     /**
      * constructor()
@@ -40,21 +40,17 @@ export class ApplicationFeeReceiptComponent {
      * refreshTable()
      */
     refreshTable(): void {
-        // this._iccApprovalService.getRejectedByBoards().subscribe(data => {
-        //     if (data._embedded.rejectedByBoards.length === 0)
-        //         this.disableAdd = false;
-        //     else
-        //         this.disableAdd = true;
-        //     this.dataSource = new MatTableDataSource(data._embedded.rejectedByBoards);
-        //     this.dataSource.sort = this.sort;
-        // });
+        this._applicationFeeService.getInceptionFees(this._applicationFeeService._applicationFee.value.id).subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.inceptionFees);
+            this.dataSource.sort = this.sort;
+        });
     }
 
     /**
      * onSelect()
      */
     onSelect(row: any): void {
-        this.selectedApplicationFee = row;
+        this.selectedInceptionFee = row;
     }
 
     /**
@@ -62,11 +58,11 @@ export class ApplicationFeeReceiptComponent {
      */
     add(): void {
         // Open the dialog.
-        const dialogRef = this._matDialog.open(ApplicationFeeReceiptUpdateDialogComponent, {
-            panelClass: 'fuse-application-fee-receipt-update-dialog',
+        const dialogRef = this._matDialog.open(InceptionFeeReceiptUpdateDialogComponent, {
+            panelClass: 'fuse-inception-fee-receipt-update-dialog',
             width: '850px',
             data: {
-                operation: 'addAplicationFee',
+                operation: 'addInceptionFee',
                 loanApplicationId: this.loanApplicationId,
             }
         });
@@ -77,10 +73,10 @@ export class ApplicationFeeReceiptComponent {
                     this.refreshTable();
                 }
                 else {
-                    // this._iccApprovalService.getBoardApproval(this.loanApplicationId).subscribe(data => {
-                    //     this._iccApprovalService._boardApproval.next(data);
-                    //     this.refreshTable(); 
-                    // });
+                    this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                        this._applicationFeeService._applicationFee.next(data);
+                        this.refreshTable(); 
+                    });
                 }
             }
         });    
@@ -91,13 +87,13 @@ export class ApplicationFeeReceiptComponent {
      */
     update(): void {
         // Open the dialog.
-        const dialogRef = this._matDialog.open(ApplicationFeeReceiptUpdateDialogComponent, {
-            panelClass: 'fuse-application-fee-receipt-update-dialog',
+        const dialogRef = this._matDialog.open(InceptionFeeReceiptUpdateDialogComponent, {
+            panelClass: 'fuse-inception-fee-receipt-update-dialog',
             width: '850px',
             data: {
-                operation: 'updateAplicationFee',
+                operation: 'updateInceptionFee',
                 loanApplicationId: this.loanApplicationId,
-                selectedApplicationFee: this.selectedApplicationFee
+                selectedInceptionFee: this.selectedInceptionFee
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -115,15 +111,15 @@ export class ApplicationFeeReceiptComponent {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((response) => {
-            // if (response) {
-            //     this._iccApprovalService.deleteRejectedByBoard(this.selectedICCApproval.id).subscribe(() => {
-            //         this.selectedICCApproval = undefined;
-            //         this.refreshTable();
-            //     },
-            //     (error) => {
-            //         this._matSnackBar.open('Unable to delete selected rejected by icc details.', 'OK', { duration: 7000 });
-            //     });
-            // }
+            if (response) {
+                this._applicationFeeService.deleteInceptionFee(this.selectedInceptionFee.id).subscribe(() => {
+                    this.selectedInceptionFee = undefined;
+                    this.refreshTable();
+                },
+                (error) => {
+                    this._matSnackBar.open('Unable to delete selected inception fee details.', 'OK', { duration: 7000 });
+                });
+            }
         });
     }
 }

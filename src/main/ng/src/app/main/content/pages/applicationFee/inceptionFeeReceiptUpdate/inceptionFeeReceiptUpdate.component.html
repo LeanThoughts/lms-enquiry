@@ -8,42 +8,42 @@
         </mat-toolbar-row>
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
-        <form [formGroup]="applicationFeeForm">
+        <form [formGroup]="inceptionFeeForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Invoice Number" formControlName="invoiceNumber" maxlength="100">
+                    <input matInput placeholder="Invoice Number" formControlName="invoiceNumber" maxlength="100" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Invoice Date" formControlName="invoiceDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
+                    <input matInput placeholder="Invoice Date" formControlName="invoiceDate" readonly>
+                    <!-- <mat-datepicker-toggle mat Suffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>  -->
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Amount" formControlName="amount" maxlength="100">
+                    <input matInput placeholder="Amount" formControlName="amount" maxlength="100" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Tax Amount" formControlName="taxAmount" maxlength="100">
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Total Amount" formControlName="totalAmount" maxlength="100">
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Amount Received" formControlName="amountReceived" maxlength="100">
+                    <input matInput placeholder="Tax Amount" formControlName="taxAmount" maxlength="100" readonly>
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Total Amount" formControlName="totalAmount" maxlength="100" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Amount Received" formControlName="amountReceived" maxlength="100" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <!-- <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker3" placeholder="Date of Transfer" formControlName="dateOfTransfer" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker> 
-                </mat-form-field>
+                </mat-form-field> -->
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="RTGS/NEFT Number" formControlName="rtgsNumber" maxlength="100">
                 </mat-form-field>
@@ -51,10 +51,10 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="100">
+                    <input matInput placeholder="Reference Number" formControlName="referenceNumber" maxlength="100">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Reference Number" formControlName="referenceNumber" maxlength="100">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="100">
                 </mat-form-field>
             </div>
 

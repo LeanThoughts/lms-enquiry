@@ -1,10 +1,10 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add Application Fee Request </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedApplicationFee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedInceptionFee"> 
             Modify 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedApplicationFee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedInceptionFee"> 
             Delete
         </button>
     </div>
@@ -84,7 +84,7 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
-                [ngClass]="{'highlight':obj === selectedApplicationFee}" [@animate]="{value:'*',params:{y:'100%'}}">
+                [ngClass]="{'highlight':obj === selectedInceptionFee}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>

@@ -124,4 +124,32 @@ export class ApplicationFeeService {
     public updateInvoicingDetail(invoicingDetail: any): Observable<any> {
         return this._http.put("enquiry/api/invoicingDetails/update", invoicingDetail);
     }
+
+    /**
+     * getInceptionFees()
+     */
+    public getInceptionFees(applicationFeeId: string): Observable<any> {
+        return this._http.get('enquiry/api/inceptionFees/search/findByApplicationFeeId?applicationFeeId=' + applicationFeeId);
+    }
+
+    /**
+     * deleteInceptionFee()
+     */
+    public deleteInceptionFee(inceptionFeeId: string): Observable<any> {
+        return this._http.delete("enquiry/api/inceptionFees/delete/" + inceptionFeeId);
+    }
+
+    /**
+     * createInceptionFee()
+     */
+    public createInceptionFee(inceptionFee: any): Observable<any> {
+        return this._http.post("enquiry/api/inceptionFees/create", inceptionFee);
+    }
+
+    /**
+     * updateInceptionFee()
+     */
+    public updateInceptionFee(inceptionFee: any): Observable<any> {
+        return this._http.put("enquiry/api/inceptionFees/update", inceptionFee);
+    }
 }

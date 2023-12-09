@@ -22,8 +22,8 @@ import { TermSheetComponent } from './termSheet/termSheet.component';
 import { TermSheetUpdateDialogComponent } from './termSheetUpdate/termSheetUpdate.component';
 import { FormalRequestComponent } from './formalRequest/formalRequest.component';
 import { FormalRequestUpdateDialogComponent } from './formalRequestUpdate/formalRequestUpdate.component';
-import { ApplicationFeeReceiptUpdateDialogComponent } from './applicationFeeReceiptUpdate/applicationFeeReceiptUpdate.component';
-import { ApplicationFeeReceiptComponent } from './applicationFeeReceipt/applicationFeeReceipt.component';
+import { InceptionFeeReceiptUpdateDialogComponent } from './inceptionFeeReceiptUpdate/inceptionFeeReceiptUpdate.component';
+import { InceptionFeeReceiptComponent } from './inceptionFeeReceipt/inceptionFeeReceipt.component';
 import { InvoicingDetailsComponent } from './invoicingDetails/invoicingDetails.component';
 
 const routes = [
@@ -78,8 +78,8 @@ const MY_FORMATS = {
         TermSheetUpdateDialogComponent,
         FormalRequestComponent,
         FormalRequestUpdateDialogComponent,
-        ApplicationFeeReceiptComponent,
-        ApplicationFeeReceiptUpdateDialogComponent,
+        InceptionFeeReceiptComponent,
+        InceptionFeeReceiptUpdateDialogComponent,
         InvoicingDetailsComponent
     ],
     providers: [
@@ -97,14 +97,14 @@ const MY_FORMATS = {
         TermSheetUpdateDialogComponent,
         FormalRequestComponent,
         FormalRequestUpdateDialogComponent,
-        ApplicationFeeReceiptComponent,
-        ApplicationFeeReceiptUpdateDialogComponent,
+        InceptionFeeReceiptComponent,
+        InceptionFeeReceiptUpdateDialogComponent,
         InvoicingDetailsComponent
     ],
     entryComponents: [
         TermSheetUpdateDialogComponent,
         FormalRequestUpdateDialogComponent,
-        ApplicationFeeReceiptUpdateDialogComponent
+        InceptionFeeReceiptUpdateDialogComponent
     ]
 })
 export class ApplicationFeeModule {
