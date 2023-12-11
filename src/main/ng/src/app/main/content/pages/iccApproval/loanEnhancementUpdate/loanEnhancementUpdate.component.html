@@ -11,7 +11,7 @@
         <form [formGroup]="loanEnhancementForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="ICC Meeting Number" formControlName="iccMeetingNumber" >          
+                    <input matInput placeholder="ICC Meeting Number" formControlName="iccMeetingNumber" maxlength="10">          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker3" placeholder="ICC Clearance Date" formControlName="iccClearanceDate">
@@ -50,7 +50,7 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Remarks" formControlName="remarks">          
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">          
                 </mat-form-field>
             </div>
             

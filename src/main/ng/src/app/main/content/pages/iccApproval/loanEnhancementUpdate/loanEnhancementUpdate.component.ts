@@ -1,8 +1,9 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-loan-enhancement-update-dialog',
@@ -39,9 +40,9 @@ export class LoanEnhancementUpdateDialogComponent {
             serialNumber: [this.selectedLoanEnhancement.serialNumber],
             iccMeetingNumber: [this.selectedLoanEnhancement.iccMeetingNumber],
             iccClearanceDate: [this.selectedLoanEnhancement.iccClearanceDate || ''],
-            revisedProjectCost: [this.selectedLoanEnhancement.revisedProjectCost || ''],
-            revisedEquity: [this.selectedLoanEnhancement.revisedEquity || ''],
-            revisedContractAmount: [this.selectedLoanEnhancement.revisedContractAmount || ''],
+            revisedProjectCost: [this.selectedLoanEnhancement.revisedProjectCost || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
+            revisedEquity: [this.selectedLoanEnhancement.revisedEquity || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
+            revisedContractAmount: [this.selectedLoanEnhancement.revisedContractAmount || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
             revisedCommercialOperationsDate: [this.selectedLoanEnhancement.revisedCommercialOperationsDate || ''],
             reviseRepaymentStartDate: [this.selectedLoanEnhancement.reviseRepaymentStartDate || ''],
             remarks: [this.selectedLoanEnhancement.remarks || '']
