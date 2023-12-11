@@ -42,11 +42,11 @@ export class SanctionRejectedByCustomerComponent {
      */
     refreshTable(): void {
         this._sanctionService.getRejectedByCustomers().subscribe(data => {
-            if (data._embedded.boardApprovalRejectedByCustomers.length === 0)
+            if (data._embedded.sanctionRejectedByCustomers.length === 0)
                 this.disableAdd = false;
             else
                 this.disableAdd = true;
-            this.dataSource = new MatTableDataSource(data._embedded.boardApprovalRejectedByCustomers);
+            this.dataSource = new MatTableDataSource(data._embedded.sanctionRejectedByCustomers);
             this.dataSource.sort = this.sort;
         });
     }

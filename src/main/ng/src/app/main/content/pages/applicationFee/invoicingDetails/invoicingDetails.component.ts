@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ApplicationFeeService } from '../applicationFee.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ActivatedRoute } from '@angular/router';
+import { StateModel } from 'app/main/content/model/state.model';
+import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 
 @Component({
     selector: 'fuse-invoicing-details',
@@ -21,6 +23,9 @@ export class InvoicingDetailsComponent implements OnInit {
 
     selectedInvoicingDetail: any;
 
+    states = StateModel.getStates();
+    projectTypes = [];
+
     /**
      * constructor()
      */
@@ -30,28 +35,32 @@ export class InvoicingDetailsComponent implements OnInit {
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
         this.selectedInvoicingDetail =  _activatedRoute.snapshot.data.routeResolvedData[0];
-        
+        let lnAppln = _activatedRoute.snapshot.data.routeResolvedData[1];
+        this.projectTypes = _activatedRoute.snapshot.data.routeResolvedData[2]._embedded.projectTypes;
+
         this.invoicingDetailForm = this._formBuilder.group({
             iccMeetingNumber: [this.selectedInvoicingDetail.iccMeetingNumber || ''],
-            companyName: [this.selectedInvoicingDetail.companyName || ''],
-            cinNumber: [this.selectedInvoicingDetail.cinNumber || ''],
-            gstNumber: [this.selectedInvoicingDetail.gstNumber || ''],
-            pan: [this.selectedInvoicingDetail.pan || ''],
-            msmeRegistrationNumber: [this.selectedInvoicingDetail.msmeRegistrationNumber || ''],
-            doorNumber: [this.selectedInvoicingDetail.doorNumber || ''],
-            address: [this.selectedInvoicingDetail.address || ''],
-            street: [this.selectedInvoicingDetail.street || ''],
-            city: [this.selectedInvoicingDetail.city || ''],
-            state: [this.selectedInvoicingDetail.state || ''],
-            postalCode: [this.selectedInvoicingDetail.postalCode || ''],
-            landline: [this.selectedInvoicingDetail.landline || ''],
-            mobile: [this.selectedInvoicingDetail.mobile || ''],
-            email: [this.selectedInvoicingDetail.email || ''],
-            projectType: [this.selectedInvoicingDetail.projectType || ''],
-            pfsDebtAmount: [this.selectedInvoicingDetail.pfsDebtAmount || ''],
-            projectCapacity: [this.selectedInvoicingDetail.projectCapacity || ''],
-            projectCapacityUnit: [this.selectedInvoicingDetail.projectCapacityUnit || ''],
-            projectLocationState: [this.selectedInvoicingDetail.projectLocationState || ''],
+            companyName: [this.selectedInvoicingDetail.companyName || lnAppln.loanApplication.projectName],
+            cinNumber: [this.selectedInvoicingDetail.cinNumber || lnAppln.partner.CINNumber],
+            gstNumber: [this.selectedInvoicingDetail.gstNumber || lnAppln.partner.gstNumber],
+            pan: [this.selectedInvoicingDetail.pan || lnAppln.partner.pan, [Validators.pattern(EnquiryApplicationRegEx.pan)]],
+            msmeRegistrationNumber: [this.selectedInvoicingDetail.msmeRegistrationNumber || lnAppln.partner.msmeRegistrationNumber],
+            doorNumber: [this.selectedInvoicingDetail.doorNumber || lnAppln.partner.addressLine1],
+            address: [this.selectedInvoicingDetail.address || lnAppln.partner.addressLine2],
+            street: [this.selectedInvoicingDetail.street || lnAppln.partner.street],
+            city: [this.selectedInvoicingDetail.city || lnAppln.partner.city],
+            state: [this.selectedInvoicingDetail.state || lnAppln.partner.state],
+            postalCode: [this.selectedInvoicingDetail.postalCode || lnAppln.partner.postalCode],
+            landline: [this.selectedInvoicingDetail.landline || lnAppln.partner.contactNumber],
+            mobile: [this.selectedInvoicingDetail.mobile || lnAppln.partner.mobile],
+            email: [this.selectedInvoicingDetail.email || lnAppln.partner.email, [Validators.pattern(EnquiryApplicationRegEx.email)]],
+            projectType: [this.selectedInvoicingDetail.projectType || lnAppln.loanApplication.projectType],
+            pfsDebtAmount: [this.selectedInvoicingDetail.pfsDebtAmount || lnAppln.loanApplication.pfsDebtAmount, 
+                [Validators.pattern(EnquiryApplicationRegEx.pfsDebtAmount)]],
+            projectCapacity: [this.selectedInvoicingDetail.projectCapacity || lnAppln.loanApplication.projectCapacity, 
+                [Validators.pattern(EnquiryApplicationRegEx.projectCapacity), Validators.min(1), Validators.max(999999.99)]],
+            projectCapacityUnit: [this.selectedInvoicingDetail.projectCapacityUnit || lnAppln.loanApplication.projectCapacityUnit],
+            projectLocationState: [this.selectedInvoicingDetail.projectLocationState || lnAppln.loanApplication.projectLocationState],
             file: ['']
         });
     }

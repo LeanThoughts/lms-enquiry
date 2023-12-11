@@ -33,7 +33,19 @@ export class ICCApprovalService {
      * getICCFurtherDetails()
      */
     public getICCFurtherDetails(iccApprovalId: string): Observable<any> {
-        return this._http.get("enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+        // return this._http.get("enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
     }
 
     /**
@@ -173,7 +185,20 @@ export class ICCApprovalService {
      * getLoanEnhancements()
      */
     public getLoanEnhancements(iccApprovalId: string): Observable<any> {
-        return this._http.get("enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+        // return this._http.get("enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+
     }
 
     /**
@@ -196,4 +221,17 @@ export class ICCApprovalService {
     public updateLoanEnhancement(loanEnhancement: any): Observable<any> {
         return this._http.put("enquiry/api/loanEnhancements/update", loanEnhancement);
     }
+
+    /**
+     * sendApplicationFeeForApproval()
+     */
+    public sendICCApprovalForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'ICCApproval'
+        }
+        return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }    
 }

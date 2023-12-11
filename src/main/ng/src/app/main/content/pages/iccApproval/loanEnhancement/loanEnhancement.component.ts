@@ -33,7 +33,7 @@ export class LoanEnhancementComponent implements OnInit {
     constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
             private _activatedRoute: ActivatedRoute) {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]._embedded.loanEnhancements);
+        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]);
     }
 
     /**
@@ -41,7 +41,7 @@ export class LoanEnhancementComponent implements OnInit {
      */
     refreshTable(): void {
         this._iccApprovalService.getLoanEnhancements(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.loanEnhancements);
+            this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
     }

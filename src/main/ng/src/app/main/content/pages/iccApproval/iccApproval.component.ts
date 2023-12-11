@@ -46,12 +46,11 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
             })
         );
 
-        // this.subscriptions.add(
-        //     _loanAppraisalService._loanAppraisalBS.subscribe(data => {
-        //         this.loanAppraisal = data;
-        //         console.log('loan appraisal in appraisal component subscription is', this.loanAppraisal);
-        //     })
-        // );
+        this.subscriptions.add(
+            _iccApprovalService._iccApproval.subscribe(data => {
+                this.iccApproval = data;
+            })
+        );
     }
 
     /**
@@ -84,21 +83,21 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
      * sendAppraisalForApproval()
      */
     sendForApproval(): void {
-        // let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-        // let email = this._appService.currentUser.email;
-        // this._matSnackBar.open('Please wait while attempting to send the board approval for approval.', 'OK', { duration: 25000 });
-        // this._iccApprovalService.sendBoardApprovalForWorkflowApproval(this.boardApproval.id, name, email).subscribe(
-        //     response => {
-        //         this.boardApproval = response;
-        //         this._matSnackBar.dismiss();
-        //         this._matSnackBar.open('Board approval is sent for approval.', 'OK', { duration: 7000 });
-        //     },
-        //     error => {
-        //         this.disableSendForApproval = false;
-        //         this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-        //             'OK', { duration: 7000 });
-        //     });
-        // this.disableSendForApproval = true;
-        // this._location.back();
+        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+        let email = this._appService.currentUser.email;
+        this._matSnackBar.open('Please wait while attempting to send the icc approval for approval.', 'OK', { duration: 25000 });
+        this._iccApprovalService.sendICCApprovalForApproval(this.iccApproval.id, name, email).subscribe(
+            response => {
+                this.iccApproval = response;
+                this._matSnackBar.dismiss();
+                this._matSnackBar.open('Board approval is sent for approval.', 'OK', { duration: 7000 });
+            },
+            error => {
+                this.disableSendForApproval = false;
+                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
+                    'OK', { duration: 7000 });
+            });
+        this.disableSendForApproval = true;
+        this._location.back();
     }
 }

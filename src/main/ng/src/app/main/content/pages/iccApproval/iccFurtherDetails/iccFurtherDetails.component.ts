@@ -33,7 +33,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
                 _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[0]._embedded.iCCFurtherDetails);
+        this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[0]);
     }
 
     /**
@@ -47,7 +47,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
      */
     refreshTable(): void {
         this._iccApprovalService.getICCFurtherDetails(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.iCCFurtherDetails);
+            this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
     }

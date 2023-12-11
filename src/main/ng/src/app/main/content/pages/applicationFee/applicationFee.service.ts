@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
+import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 
 @Injectable()
 export class ApplicationFeeService {
@@ -11,7 +12,7 @@ export class ApplicationFeeService {
     /**
      * constructor()
      */
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, private _loanEnquiryService: LoanEnquiryService) {
     }
 
     /**
@@ -19,7 +20,9 @@ export class ApplicationFeeService {
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return forkJoin([
-            this.getInvoicingDetails(this._applicationFee.value.id)
+            this.getInvoicingDetails(this._applicationFee.value.id),
+            this._loanEnquiryService.getLoanApplication(this._loanEnquiryService.selectedLoanApplicationId.value),
+            this._loanEnquiryService.getProjectTypes()
         ]);
     }
 
@@ -151,5 +154,18 @@ export class ApplicationFeeService {
      */
     public updateInceptionFee(inceptionFee: any): Observable<any> {
         return this._http.put("enquiry/api/inceptionFees/update", inceptionFee);
+    }
+
+    /**
+     * sendApplicationFeeForApproval()
+     */
+    public sendApplicationFeeForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'ApplicationFee'
+        }
+        return this._http.put<any>('enquiry/api/startprocess', requestObj);
     }
 }

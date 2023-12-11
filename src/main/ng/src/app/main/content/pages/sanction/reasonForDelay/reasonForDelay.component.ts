@@ -33,7 +33,7 @@ export class SanctionReasonForDelayComponent {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _sactionService.getReasonForDelays().subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
+            this.dataSource = new MatTableDataSource(data._embedded.sanctionReasonForDelays);
             this.dataSource.sort = this.sort;
         });
     }
@@ -64,7 +64,7 @@ export class SanctionReasonForDelayComponent {
             if (result.refresh) {
                 if (this._sactionService._sanction.value.id !== '') {
                     this._sactionService.getReasonForDelays().subscribe(data => {
-                        this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
+                        this.dataSource = new MatTableDataSource(data._embedded.sanctionReasonForDelays);
                         this.dataSource.sort = this.sort;
                     });    
                 }
@@ -72,7 +72,7 @@ export class SanctionReasonForDelayComponent {
                     this._sactionService.getSanction(this.loanApplicationId).subscribe(data => {
                         this._sactionService._sanction.next(data);
                         this._sactionService.getReasonForDelays().subscribe(data => {
-                            this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
+                            this.dataSource = new MatTableDataSource(data._embedded.sanctionReasonForDelays);
                             this.dataSource.sort = this.sort;
                         });  
                     });
@@ -99,7 +99,7 @@ export class SanctionReasonForDelayComponent {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this._sactionService.getReasonForDelays().subscribe(data => {
-                    this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
+                    this.dataSource = new MatTableDataSource(data._embedded.sanctionReasonForDelays);
                     this.dataSource.sort = this.sort;
                 });
             }
@@ -117,7 +117,7 @@ export class SanctionReasonForDelayComponent {
                 this._sactionService.deleteSanctionReasonForDelay(this.selectedReason.id).subscribe(() => {
                     this.selectedReason = undefined;
                     this._sactionService.getReasonForDelays().subscribe(data => {
-                        this.dataSource = new MatTableDataSource(data._embedded.boardApprovalReasonForDelays);
+                        this.dataSource = new MatTableDataSource(data._embedded.sanctionReasonForDelays);
                         this.dataSource.sort = this.sort;
                     });
                 },
