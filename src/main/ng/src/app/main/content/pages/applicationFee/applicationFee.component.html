@@ -8,13 +8,13 @@
             *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
             Loan Monitoring : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.borrowerName }}
             <br>
-            Status: {{ iccApproval?.workFlowStatusDescription }}
+            Status: {{ applicationFee?.workFlowStatusDescription }}
         </div>
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button mat-raised-button class="mr-8 mb-8" (click)="sendForApproval()" [disabled]="(iccApproval === undefined || iccApproval === null ||
-                    iccApproval.workFlowStatusCode === 2) || disableSendForApproval === true">
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendForApproval()" [disabled]="(applicationFee === undefined || applicationFee === null ||
+                    applicationFee.workFlowStatusCode === 2) || disableSendForApproval === true">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
             </button>
         </div>
