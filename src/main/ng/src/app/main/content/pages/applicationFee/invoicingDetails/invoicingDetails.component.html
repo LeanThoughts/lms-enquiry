@@ -9,9 +9,9 @@
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="ICC Meeting Number" formControlName="iccMeetingNumber">
-                        <!-- <mat-option *ngFor="let obj of assetClasses" [value]="obj.code">
-                            {{ obj.value }}
-                        </mat-option> -->
+                        <mat-option *ngFor="let obj of meetingNumbers" [value]="obj">
+                            {{ obj }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -21,7 +21,7 @@
                     <input matInput placeholder="Company Name" formControlName="companyName" maxlength="100" >
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="CIN Number" formControlName="cinNumber" maxlength="20" >
+                    <input matInput placeholder="CIN Number" formControlName="cinNumber" maxlength="21" >
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="MSME Registration Number" formControlName="msmeRegistrationNumber" maxlength="20" >
@@ -30,7 +30,7 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="GST Number" formControlName="gstNumber" maxlength="20">
+                    <input matInput placeholder="GST Number" formControlName="gstNumber" maxlength="15">
                 </mat-form-field>
                 <div fxLayout="column" fxFlex="34">
                     <div fxLayout="row">

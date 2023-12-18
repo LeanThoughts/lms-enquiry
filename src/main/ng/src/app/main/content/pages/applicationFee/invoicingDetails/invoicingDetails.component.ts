@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { ApplicationFeeService } from '../applicationFee.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +26,8 @@ export class InvoicingDetailsComponent implements OnInit {
     states = StateModel.getStates();
     projectTypes = [];
 
+    meetingNumbers = [];
+
     /**
      * constructor()
      */
@@ -37,6 +39,7 @@ export class InvoicingDetailsComponent implements OnInit {
         this.selectedInvoicingDetail =  _activatedRoute.snapshot.data.routeResolvedData[0];
         let lnAppln = _activatedRoute.snapshot.data.routeResolvedData[1];
         this.projectTypes = _activatedRoute.snapshot.data.routeResolvedData[2]._embedded.projectTypes;
+        this.meetingNumbers = _activatedRoute.snapshot.data.routeResolvedData[3];
 
         this.invoicingDetailForm = this._formBuilder.group({
             iccMeetingNumber: [this.selectedInvoicingDetail.iccMeetingNumber || ''],

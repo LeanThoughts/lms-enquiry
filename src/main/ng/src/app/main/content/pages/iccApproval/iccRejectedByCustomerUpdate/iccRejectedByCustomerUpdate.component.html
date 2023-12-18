@@ -9,7 +9,7 @@
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
         <form [formGroup]="rejectedByCustomerForm">
-            <div fxLayout="row">
+            <!-- <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="ICC Meeting Number" formControlName="approvalByBoardMeetingNumber">
                       <mat-option></mat-option>
@@ -17,6 +17,11 @@
                         {{ approvalByBoard.meetingNumber }}
                       </mat-option>
                     </mat-select>
+                </mat-form-field>
+            </div> -->
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Meeting Number" formControlName="meetingNumber" maxlength="50" readonly>
                 </mat-form-field>
             </div>
 
@@ -28,7 +33,7 @@
                 </mat-form-field>
             </div>
 
-            <div fxLayout="row">
+            <!-- <div fxLayout="row">
                 <mat-form-field fxFlex="100">
                     <mat-select placeholder="Rejection Category" formControlName="rejectionCategory">
                     <mat-option></mat-option>
@@ -36,6 +41,12 @@
                         {{ customerRejectionReason.value }}
                     </mat-option>
                     </mat-select>
+                </mat-form-field>
+            </div> -->
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Rejection Category" formControlName="rejectionCategory" maxlength="50" readonly>
                 </mat-form-field>
             </div>
 

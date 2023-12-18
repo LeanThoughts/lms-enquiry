@@ -36,8 +36,8 @@ export class ICCApprovalService {
         // return this._http.get("enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
         return new Observable((observer) => {
             this._http.get('enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
-                (response => {
-                    observer.next(response);
+                ((response: any) => {
+                    observer.next(response._embedded.iCCFurtherDetails);
                     observer.complete();
                 }),
                 (error => {
@@ -188,8 +188,8 @@ export class ICCApprovalService {
         // return this._http.get("enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
         return new Observable((observer) => {
             this._http.get('enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
-                (response => {
-                    observer.next(response);
+                ((response: any) => {
+                    observer.next(response._embedded.loanEnhancements);
                     observer.complete();
                 }),
                 (error => {

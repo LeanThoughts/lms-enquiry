@@ -22,10 +22,11 @@ export class ApplicationFeeService {
         return forkJoin([
             this.getInvoicingDetails(this._applicationFee.value.id),
             this._loanEnquiryService.getLoanApplication(this._loanEnquiryService.selectedLoanApplicationId.value),
-            this._loanEnquiryService.getProjectTypes()
+            this._loanEnquiryService.getProjectTypes(),
+            this.getMeetingNumbers(this._loanEnquiryService.selectedLoanApplicationId.value)
         ]);
     }
-
+    
     /**
      * getApplicationFee()
      */
@@ -126,6 +127,13 @@ export class ApplicationFeeService {
      */
     public updateInvoicingDetail(invoicingDetail: any): Observable<any> {
         return this._http.put("enquiry/api/invoicingDetails/update", invoicingDetail);
+    }
+
+    /**
+     * getMeetingNumbers()
+     */
+    public getMeetingNumbers(loanApplicationId: string): Observable<any> {
+        return this._http.get("enquiry/api/invoicingDetails/meetingNumbers/" + loanApplicationId);
     }
 
     /**

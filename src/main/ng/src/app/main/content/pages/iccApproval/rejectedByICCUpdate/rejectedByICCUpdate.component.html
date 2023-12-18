@@ -23,6 +23,11 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Rejection Category" formControlName="rejectionCategory" maxlength="50" readonly>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
                     <input matInput placeholder="Reason for Rejection" formControlName="reasonForRejection" maxlength="200" required>
                 </mat-form-field>
             </div>

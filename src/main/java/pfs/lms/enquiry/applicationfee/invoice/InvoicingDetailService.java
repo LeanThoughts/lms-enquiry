@@ -6,11 +6,26 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.iccapproval.ICCApproval;
+import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICC;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICCRepository;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetailRepository;
+import pfs.lms.enquiry.iccapproval.loanenhancement.LoanEnhancement;
+import pfs.lms.enquiry.iccapproval.loanenhancement.LoanEnhancementRepository;
+import pfs.lms.enquiry.iccapproval.rejectedbycustomer.RejectedByCustomer;
+import pfs.lms.enquiry.iccapproval.rejectedbycustomer.RejectedByCustomerRepository;
+import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICC;
+import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICCRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -21,6 +36,14 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final ApplicationFeeRepository applicationFeeRepository;
     private final InvoicingDetailRepository invoicingDetailRepository;
+
+    private final ICCApprovalRepository iccApprovalRepository;
+    private final ICCFurtherDetailRepository furtherDetailRepository;
+    private final RejectedByICCRepository rejectedByICCRepository;
+    private final ApprovalByICCRepository approvalByICCRepository;
+    private final LoanEnhancementRepository loanEnhancementRepository;
+    private final RejectedByCustomerRepository rejectedByCustomerRepository;
+
     private final IChangeDocumentService changeDocumentService;
 
     @Override
@@ -131,5 +154,36 @@ public class InvoicingDetailService implements IInvoicingDetailService {
 //                "Appraisal", "Loan Partner");
 
         return invoicingDetail;
+    }
+
+    @Override
+    public List<String> getICCMeetingNumbers(UUID loanApplicationId) {
+        ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplicationId);
+
+        List<String> meetingNumbers = new ArrayList<>();
+
+        List<ICCFurtherDetail> furtherDetails = furtherDetailRepository.findByIccApprovalId(iccApproval.getId());
+        furtherDetails.forEach(furtherDetail -> {
+            meetingNumbers.add(furtherDetail.getIccMeetingNumber());
+        });
+
+        RejectedByICC rejectedByICC = rejectedByICCRepository.findByIccApprovalId(iccApproval.getId());
+        if (rejectedByICC != null)
+            meetingNumbers.add(rejectedByICC.getMeetingNumber());
+
+        ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
+        if (approvalByICC != null)
+            meetingNumbers.add(approvalByICC.getMeetingNumber());
+
+        RejectedByCustomer rejectedByCustomer = rejectedByCustomerRepository.findByIccApprovalId(iccApproval.getId());
+        if (rejectedByCustomer != null)
+            meetingNumbers.add(rejectedByCustomer.getMeetingNumber());
+
+        List<LoanEnhancement> loanEnhancements = loanEnhancementRepository.findByIccApprovalId(iccApproval.getId());
+        loanEnhancements.forEach(loanEnhancement -> {
+            meetingNumbers.add(loanEnhancement.getIccMeetingNumber());
+        });
+
+        return meetingNumbers;
     }
 }

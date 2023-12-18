@@ -44,7 +44,7 @@ export class ICCRejectedByCustomerUpdateDialogComponent implements OnInit {
             meetingNumber: [this.selectedRejectedByCustomer.meetingNumber],
             dateOfRejection: [this.selectedRejectedByCustomer.dateOfRejection || ''],
             remarks: [this.selectedRejectedByCustomer.remarks || ''],
-            rejectionCategory: [this.selectedRejectedByCustomer.rejectionCategory || '']
+            rejectionCategory: [this.selectedRejectedByCustomer.rejectionCategory || 'Rejected By Customer']
         });
     }
 

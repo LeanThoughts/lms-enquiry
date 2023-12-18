@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
@@ -31,5 +31,12 @@ public class InvoicingDetailController {
 
         return ResponseEntity.ok(invoicingDetailService.update(invoicingDetailResource,
                 request.getUserPrincipal().getName()));
+    }
+
+    @GetMapping("/invoicingDetails/meetingNumbers/{loanApplicationId}")
+    public ResponseEntity<List<String>> getMeetingNumbers(@PathVariable UUID loanApplicationId,
+                                                         HttpServletRequest request) throws CloneNotSupportedException {
+
+        return ResponseEntity.ok(invoicingDetailService.getICCMeetingNumbers(loanApplicationId));
     }
 }

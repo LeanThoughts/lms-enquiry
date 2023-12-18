@@ -39,6 +39,8 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
             meetingNumber: [this.selectedRejectedByICC.meetingNumber || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             meetingDate: [this.selectedRejectedByICC.meetingDate || ''],
             reasonForRejection: [this.selectedRejectedByICC.reasonForRejection || ''],
+            rejectionCategory: [this.selectedRejectedByICC.rejectionCategory || 'Rejected By ICC']
+
         });
     }
 
