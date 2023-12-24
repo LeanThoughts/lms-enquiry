@@ -56,8 +56,8 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
 
         this._projectCostForm = this._formBuilder.group({
             projectCost: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
-            debt: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
-            equity: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            debt: new FormControl(0.00, [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            equity: new FormControl(0.00, [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             pfsDebtAmount: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             debtEquityRatio: new FormControl('')
         });
@@ -73,6 +73,18 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
      * ngOnDestroy()
      */
     ngOnDestroy(): void {
+    }
+
+    /**
+     * calculateRatio()
+     */
+    calculateRatio(): void {
+        var debt = this._projectCostForm.controls.debt.value;
+        var equity = this._projectCostForm.controls.equity.value;
+        if (equity > 0)
+            this._projectCostForm.controls.debtEquityRatio.setValue(debt/equity);
+        else if (equity == 0)
+            this._projectCostForm.controls.debtEquityRatio.setValue(0);
     }
 
     /**

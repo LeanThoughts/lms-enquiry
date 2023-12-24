@@ -16,12 +16,10 @@
                         formControlName="projectCost" maxlength="18" required>
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Debt (Crores)" 
-                        formControlName="debt" maxlength="18" >
+                <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="18" type="number" (focusout)="calculateRatio()">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Equity (Crores)" 
-                        formControlName="equity" maxlength="18" required>
+                <input matInput placeholder="Equity (Crores)" formControlName="equity" maxlength="18" type="number" (focusout)="calculateRatio()">
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <input matInput placeholder="PFS Debt Amount (Crores)" 

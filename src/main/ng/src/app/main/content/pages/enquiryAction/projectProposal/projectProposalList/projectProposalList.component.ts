@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../enquiryAction.service';
 import { ProjectProposalUpdateComponent } from '../projectProposalUpdate/projectProposalUpdate.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'fuse-project-proposal',
@@ -12,7 +13,7 @@ import { ProjectProposalUpdateComponent } from '../projectProposalUpdate/project
     styleUrls: ['./projectProposalList.component.scss'],
     animations: fuseAnimations
 })
-export class ProjectProposalListComponent {
+export class ProjectProposalListComponent implements OnDestroy {
 
     _loanApplicationId: string;
     _enquiryActionId: string;
@@ -25,6 +26,7 @@ export class ProjectProposalListComponent {
         'serialNumber', 'proposalFormSharingDate', 'proposalStatus'
     ];
 
+    subscriptions = new Subscription();
     /**
      * constructor()
      */
@@ -36,7 +38,20 @@ export class ProjectProposalListComponent {
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._enquiryActionId = _enquiryActionService._enquiryAction.value.id;
 
+        this.subscriptions.add(
+            _enquiryActionService._enquiryAction.subscribe(data => {
+                this._enquiryActionId = data.id;
+            })
+        );
+
         this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[5]._embedded.projectProposals);
+    }
+
+    /**
+     * ngOnDestroy()
+     */
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     /**

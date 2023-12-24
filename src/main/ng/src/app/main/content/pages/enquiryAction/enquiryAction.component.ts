@@ -100,26 +100,34 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
     sendEnquiryActionForApproval(): void {
         this._enquiryActionService.getEnquiryCompletion(this.enquiryAction.id).subscribe(data => {
             if (Object.keys(data).length > 0) {
-                let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-                let email = this._appService.currentUser.email;
-                this._matSnackBar.open('Please wait while attempting to send enquiry for approval.', 'OK', { duration: 25000 });
-                this._enquiryActionService.sendEnquiryActionForApproval(this.enquiryAction.id, name, email).subscribe(
-                    response => {
-                        this.enquiryAction = response;
-                        this._matSnackBar.dismiss();
-                        this._matSnackBar.open('Enquiry is sent for approval.', 'OK', { duration: 7000 });
-                    },
-                    error => {
-                        this.disableSendForApproval = false;
-                        this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-                            'OK', { duration: 7000 });
-                    });
-                this.disableSendForApproval = true;
-                this._location.back();
+                this._enquiryActionService.getProjectProposalByStatus(this.enquiryAction.id, 'Final').subscribe(pp => {
+                    if (pp._embedded.projectProposals.length > 0) {
+                        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+                        let email = this._appService.currentUser.email;
+                        this._matSnackBar.open('Please wait while attempting to send enquiry for approval.', 'OK', { duration: 25000 });
+                        this._enquiryActionService.sendEnquiryActionForApproval(this.enquiryAction.id, name, email).subscribe(
+                            response => {
+                                this.enquiryAction = response;
+                                this._matSnackBar.dismiss();
+                                this._matSnackBar.open('Enquiry is sent for approval.', 'OK', { duration: 7000 });
+                            },
+                            error => {
+                                this.disableSendForApproval = false;
+                                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
+                                    'OK', { duration: 7000 });
+                            });
+                        this.disableSendForApproval = true;
+                        this._location.back();
+                    }
+                    else {
+                        this._matSnackBar.open('Project Proposal with status Final not found. Cannot send enquiry for approval.',
+                        'OK', { duration: 7000 });
+                    }
+                });
             }
             else {
                 this._matSnackBar.open('Data for enquiry completion is missing. Cannot send enquiry for approval.',
-                    'OK', { duration: 7000 });
+                'OK', { duration: 7000 });
             }
         })
     }

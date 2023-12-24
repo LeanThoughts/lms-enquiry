@@ -275,6 +275,14 @@ export class EnquiryActionService implements Resolve<any> {
     }
 
     /**
+     * getProjectProposalByStatus()
+     */
+    public getProjectProposalByStatus(enquiryActionId: string, proposalStatus: string): Observable<any> {
+        return this._http.get("enquiry/api/projectProposals/search/findByEnquiryActionIdAndProposalStatus?enquiryActionId=" + enquiryActionId
+                + '&proposalStatus=' + proposalStatus);
+    }
+
+    /**
      * createProjectProposal()
      */
     public createProjectProposal(projectProposal: any): Observable<any> {

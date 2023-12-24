@@ -79,6 +79,9 @@ export class ProjectProposalUpdateComponent {
                     this.projectProposal = response;
                     this._matSnackBar.open('Project Proposal created successfully.', 'OK', { duration: 7000 });
                     this.displayTabs = true;
+                    this._enquiryActionService.getEnquiryAction(this._dialogData.loanApplicationId).subscribe((response) => {
+                        this._enquiryActionService._enquiryAction.next(response);
+                    });
                 },
                 (errorResponse => {
                     this._matSnackBar.open(errorResponse.error.message, 'OK', { duration: 7000 });

@@ -42,7 +42,7 @@ export class ICCReasonForDelayComponent {
             console.log('reason for delay in refresh table is', data);
             this.selectedReasonForDelay = data;
             let tableData = [];
-            tableData.push({particulars: 'Details Required', value: this.selectedReasonForDelay.reasonForDelay});
+            tableData.push({particulars: 'Reason For Delay', value: this.selectedReasonForDelay.reasonForDelay});
             tableData.push({particulars: 'Date', value: this.selectedReasonForDelay.date});
             console.log(tableData);
             this.dataSource = new MatTableDataSource(tableData);
