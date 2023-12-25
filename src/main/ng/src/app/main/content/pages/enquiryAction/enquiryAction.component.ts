@@ -31,7 +31,9 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
     expandPanel2 = false;
 
     enquiryAction: any;
-
+    loanContractId: any;
+    functionalStatus: string;
+    
     /**
      * constructor()
      * @param _formBuilder
@@ -50,6 +52,11 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
+            if (this.selectedEnquiry.loanContractId === null)
+                this.loanContractId = this.selectedEnquiry.enquiryNumber;
+            else
+                this.loanContractId = this.selectedEnquiry.loanContractId;
+            this.functionalStatus = _loanEnquiryService.getFunctionalStatusDescription(this.selectedEnquiry.functionalStatus);
         }));
 
         this.subscriptions.add(
