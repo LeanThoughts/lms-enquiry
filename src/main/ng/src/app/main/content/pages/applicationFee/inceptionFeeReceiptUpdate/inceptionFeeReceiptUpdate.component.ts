@@ -7,7 +7,6 @@ import { ApplicationFeeService } from '../applicationFee.service';
 @Component({
     selector: 'fuse-inception-fee-receipt-update-dialog',
     templateUrl: './InceptionFeeReceiptUpdate.component.html',
-    styleUrls: ['./InceptionFeeReceiptUpdate.component.scss'],
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
