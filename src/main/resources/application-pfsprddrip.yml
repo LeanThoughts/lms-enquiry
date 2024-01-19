@@ -27,23 +27,23 @@ spring:
     serialization:
       fail-on-empty-beans: false
   mail:
-    host: smtp.office365.com
+    host: us2.smtp.mailhostbox.com
     port: 587
-    username: pfs.sap@ptcfinancial.com
-    password: Sap$#!%*@admin&369!&*
+    username: us2.smtp.mailhostbox.com
+    password: Ess@hYYXIaN2#hYYXIaN2
     protocol: smtp
     tls: true
     properties.mail.smtp:
-        auth: true
-        starttls.enable: true
-        ssl.trust: smtp.office365.com
+      auth: true
+      starttls.enable: true
+      ssl.trust: us2.smtp.mailhostbox.com
   activiti:
     activiti5CompatibilityEnabled: true
-    mail-server-host: smtp.office365.com
+    mail-server-host: us2.smtp.mailhostbox.com
     mail-server-port: 587
-    mail-server-user-name: pfs.sap@ptcfinancial.com
-    mail-server-password: Sap$#!%*@admin&369!&*
-    mail-server-default-from: pfs.sap@ptcfinancial.com
+    mail-server-user-name: portal.admin@pfs-ess.com
+    mail-server-password: Ess@hYYXIaN2#hYYXIaN2
+    mail-server-default-from: portal.admin@pfs-ess.com
     mail-server-use-tls: true
     database-schema-update: true
 oauth:
