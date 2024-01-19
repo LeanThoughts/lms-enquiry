@@ -30,6 +30,8 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
     expandPanel2 = false;
 
     loanAppraisal: any;
+    loanContractId: any;
+    functionalStatus: string;
 
     /**
      * constructor()
@@ -53,6 +55,12 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
             console.log('this.selectedEnquiry', this.selectedEnquiry);
+            if (this.selectedEnquiry.loanContractId === null)
+                this.loanContractId = this.selectedEnquiry.enquiryNumber;
+            else
+                this.loanContractId = this.selectedEnquiry.loanContractId;
+            this.functionalStatus = _loanEnquiryService.getFunctionalStatusDescription(this.selectedEnquiry.functionalStatus);
+
         }));          
         
         this.subscriptions.add(

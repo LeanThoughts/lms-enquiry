@@ -87,6 +87,8 @@ export class EnquiryApplicationComponent implements OnInit {
   user: UserModel = new UserModel({});
   email: string;
 
+  disableFinishButton = false;
+
   /**
    * constructor()
    * @param _route
@@ -319,6 +321,8 @@ export class EnquiryApplicationComponent implements OnInit {
    */
   saveLoanApplication(stepper: MatStepper): void {
 
+    this.disableFinishButton = true;
+
     // Re-construct the partner object.
     var partner = this.loanEnquiryFormStep2.value;
     partner.partyNumber = this.partner.partyNumber;
@@ -351,15 +355,20 @@ export class EnquiryApplicationComponent implements OnInit {
     // Save the loan application to the database.
     this._loanEnquiryService.saveLoanApplication(loanApplication, partner).subscribe((response) => {
       // Display alert message and redirect to enquiry alerts page.
+      this.disableFinishButton = false;
       const dialogRef = this._dialogRef.open(MessageDialogComponent, {
         width: '400px',
         data: {
           message: 'Your Loan Enquiry ' + response.enquiryNo.id + ' is submitted to PFS Loan Officer.'
         }
       });
+      stepper.reset();
       dialogRef.afterClosed().subscribe((dresponse) => {
         this._router.navigate(['/enquiryAlerts']);
       });
+    },
+    (error) => {
+        this.disableFinishButton = false;
     });
   }
 

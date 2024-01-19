@@ -33,6 +33,9 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
     expandPanel1 = true;
     expandPanel2 = false;
 
+    loanContractId: string;
+    functionalStatus: string;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -58,7 +61,14 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
         }));
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
+            console.log('loan enquiry', data);
             this.selectedEnquiry = data;
+            if (this.selectedEnquiry.loanContractId === null)
+                this.loanContractId = this.selectedEnquiry.enquiryNumber;
+            else
+                this.loanContractId = this.selectedEnquiry.loanContractId;
+            this.functionalStatus = _loanEnquiryService.getFunctionalStatusDescription(this.selectedEnquiry.functionalStatus);
+
         }));          
         
         this.subscriptions.add(

@@ -331,7 +331,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
                            @JsonProperty("technicalStatus") Integer technicalStatus,
                            @JsonProperty("technicalStatusDescription") String technicalStatusDescription,
                            @JsonProperty("functionalStatus") Integer functionalStatus,
-                           @JsonProperty("functionalStatusDescription") Integer functionalStatusDescription,
+                           @JsonProperty("functionalStatusDescription") String functionalStatusDescription,
                            @JsonProperty("finalDecisionStatus") Integer finalDecisionStatus,
                            @JsonProperty("rejectionCategory") Integer rejectionCategory,
                            @JsonProperty("rejectionReason") String rejectionReason,

@@ -6,9 +6,9 @@
         <!-- BREADCRUMB -->
         <div class="breadcrumb text-truncate h4 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
             *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
-            Loan Monitoring : {{ selectedEnquiry.loanContractId }} / {{ selectedEnquiry.borrowerName }}
+            Application Fee : {{ loanContractId }} / {{ selectedEnquiry.projectName }}
             <br>
-            Status: {{ applicationFee?.workFlowStatusDescription }}
+            Loan Status: {{ functionalStatus }}
         </div>
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
