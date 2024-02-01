@@ -41,7 +41,7 @@
                 Sanction
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent"
-                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                    [disabled]="_service.selectedLoanApplicationId === undefined" (click)="redirectToDocumentation()">
                 Documentation
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToMonitorLoan()" *ngIf="monitoring"

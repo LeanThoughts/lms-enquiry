@@ -43,6 +43,7 @@ import { BoardApprovalModule } from './main/content/pages/boardApproval/boardApp
 import { SanctionModule } from './main/content/pages/sanction/sanction.module';
 import { ICCApprovalModule } from './main/content/pages/iccApproval/iccApproval.module';
 import { ApplicationFeeModule } from './main/content/pages/applicationFee/applicationFee.module';
+import { DocumentationModule } from './main/content/pages/documentation/documentation.module';
 
 const appRoutes: Routes = [
     {
@@ -110,6 +111,7 @@ const appRoutes: Routes = [
         SanctionModule,
         ICCApprovalModule,
         ApplicationFeeModule,
+        DocumentationModule,
 
         // Workflow
         InboxModule,

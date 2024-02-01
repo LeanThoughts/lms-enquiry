@@ -16,6 +16,7 @@ import { BoardApprovalService } from '../boardApproval/boardApproval.service';
 import { SanctionService } from '../sanction/sanction.service';
 import { ICCApprovalService } from '../iccApproval/iccApproval.service';
 import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
+import { DocumentationService } from '../documentation/documentation.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -59,7 +60,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
                 private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService, 
                 private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService, 
-                private _iccApprovalService: ICCApprovalService, private _applicationFeeService: ApplicationFeeService) {
+                private _iccApprovalService: ICCApprovalService, private _applicationFeeService: ApplicationFeeService,
+                private _documentationService: DocumentationService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -334,6 +336,22 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * redirectToDocumentation()
+     */
+    redirectToDocumentation(): void {
+        this._documentationService.getDocumentation(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+            this._documentationService._documentation.next(response);
+            this.redirect('/documentation');
+        }, 
+        (error: HttpErrorResponse) => {
+            if (error.status === 404) {
+                this._documentationService._documentation.next({ id: '' });
+                this.redirect('/documentation');
+            }
+        });
     }
 
     /**
