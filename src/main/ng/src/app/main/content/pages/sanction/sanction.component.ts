@@ -48,7 +48,7 @@ export class SanctionComponent implements OnInit, OnDestroy {
             this.functionalStatus = _loanEnquiryService.getFunctionalStatusDescription(this.selectedEnquiry.functionalStatus);
 
         }));
-        
+
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
@@ -101,14 +101,14 @@ export class SanctionComponent implements OnInit, OnDestroy {
             response => {
                 this.sanction = response;
                 this._matSnackBar.dismiss();
-                this._matSnackBar.open('Board approval is sent for approval.', 'OK', { duration: 7000 });
+                this._matSnackBar.open('Sanction is sent for approval.', 'OK', { duration: 7000 });
             },
             error => {
                 this.disableSendForApproval = false;
-                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
+                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
                     'OK', { duration: 7000 });
             });
         this.disableSendForApproval = true;
         this._location.back();
-    }    
+    }
 }

@@ -221,9 +221,10 @@ public class SAPLoanApplicationResource implements Serializable {
 
 
         detailsResource.setProjectName(loanApplication.getProjectName());
-
-        detailsResource.setTenorYear(loanApplication.getTenorYear().toString());
-        detailsResource.setTenorMonth(loanApplication.getTenorMonth().toString());
+        if (loanApplication.getTenorYear() != null)
+            detailsResource.setTenorYear(loanApplication.getTenorYear().toString());
+        if (loanApplication.getTenorMonth() != null)
+            detailsResource.setTenorMonth(loanApplication.getTenorMonth().toString());
 
         detailsResource.setLoanProduct(loanApplication.getProductCode());
         detailsResource.setProjectState(loanApplication.getProjectLocationState());
@@ -241,10 +242,11 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setContactFaxNumber(loanApplication.getContactFaxNumber());
         detailsResource.setContactLandLinePhone(loanApplication.getContactLandLinePhone());
         detailsResource.setContactTelePhone(loanApplication.getContactTelePhone());
-
-        detailsResource.setConstructionPeriod(loanApplication.getConstructionPeriod().toString());
+        if (loanApplication.getConstructionPeriod() != null)
+            detailsResource.setConstructionPeriod(loanApplication.getConstructionPeriod().toString());
         detailsResource.setConstructionPeriodUnit(loanApplication.getConstructionPeriodUnit());
-        detailsResource.setMoratoriumPeriod(loanApplication.getMoratoriumPeriod().toString());
+        if (loanApplication.getMoratoriumPeriod() != null)
+            detailsResource.setMoratoriumPeriod(loanApplication.getMoratoriumPeriod().toString());
         detailsResource.setMoratoriumPeriodUnit(loanApplication.getMoratoriumPeriodUnit());
 
         //Board Approval
@@ -278,7 +280,6 @@ public class SAPLoanApplicationResource implements Serializable {
         else
             detailsResource.setTermSheetAcceptance(null);
         detailsResource.setFeeRemarks(loanApplication.getFeeRemarks());
-
 
 
         detailsResource.setLoanContract(loanApplication.getLoanContractId());
