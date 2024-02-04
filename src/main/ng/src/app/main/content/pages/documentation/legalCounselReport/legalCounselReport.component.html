@@ -1,0 +1,92 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLegalCounselReport()" > Add </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLegalCounselReport()" [disabled]="!selectedLegalCounselReport"> Modify </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedLegalCounselReport"> 
+            Delete
+        </button>
+
+    </div>  
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- submissionDate Column -->
+            <ng-container matColumnDef="submissionDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >SubmissionDate</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.submissionDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- fiscalYear Column -->
+            <ng-container matColumnDef="fiscalYear">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Fiscal Year</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.fiscalYear }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- period Column -->
+            <ng-container matColumnDef="period">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Period</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.period | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentName Column -->
+            <ng-container matColumnDef="documentName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentName }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- documentType Column -->
+            <ng-container matColumnDef="documentType">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Document Type</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.documentType }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- fileReference Column -->
+            <ng-container matColumnDef="fileReference">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Download</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <a [href]="getFileURL(obj.fileReference)" *ngIf="obj !== undefined && obj.fileReference !== ''">
+                        <mat-icon>cloud_download</mat-icon>
+                    </a>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- remarks Column -->
+            <ng-container matColumnDef="remarks">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Remarks</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.remarks }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+                [ngClass]="{'highlight':obj === selectedLegalCounselReport}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <!-- <div class="content-card" fusePerfectScrollbar style="width: 100%" *ngIf="selectedCLA">
+        <fuse-cla-report-fee-list></fuse-cla-report-fee-list>
+    </div> -->
+</div>

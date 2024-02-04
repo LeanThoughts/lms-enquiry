@@ -8,6 +8,8 @@ export class DocumentationService {
 
     _documentation: BehaviorSubject<any> = new BehaviorSubject({});
 
+    _selectedLegalCounsel: BehaviorSubject<any> = new BehaviorSubject({});
+    
     /**
      * constructor()
      * @param _http
@@ -49,5 +51,70 @@ export class DocumentationService {
      */
     public deleteDocumentationReasonForDelay(documentationReasonForDelayId: string) {
         return this._http.delete("enquiry/api/documentationReasonForDelays/delete/" + documentationReasonForDelayId);
+    }
+
+    /**
+     * getLegalCounsels()
+     */
+    public getLegalCounsels(): Observable<any> {
+        return this._http.get("enquiry/api/legalCounsels/search/findByDocumentationIdAndDeleteFlag?documentationId=" + 
+            this._documentation.value.id + '&deleteFlag=false');
+    }
+
+    /**
+     * createLegalCounsel()
+     */
+    public createLegalCounsel(legalCounsel: any): Observable<any> {
+        return this._http.post("enquiry/api/legalCounsels/create", legalCounsel);
+    }
+
+    /**
+     * updateLegalCounsel()
+     */
+    public updateLegalCounsel(legalCounsel: any): Observable<any> {
+        return this._http.put("enquiry/api/legalCounsels/update", legalCounsel);
+    }
+
+    /**
+     * deleteLegalCounsel()
+     */
+    public deleteLegalCounsel(legalCounselId: string) {
+        return this._http.delete("enquiry/api/legalCounsels/delete/" + legalCounselId);
+    }
+
+    /**
+     * getLegalCounselReports()
+     */
+    public getLegalCounselReports(legalCounselId: string): Observable<any> {
+        return this._http.get("enquiry/api/legalCounselReports/search/findByLegalCounselIdAndDeleteFlag?legalCounselId=" + 
+                legalCounselId + '&deleteFlag=false');
+    }
+
+    /**
+     * createLegalCounselReport()
+     */
+    public createLegalCounselReport(legalCounselReport: any): Observable<any> {
+        return this._http.post("enquiry/api/legalCounselReports/create", legalCounselReport);
+    }
+
+    /**
+     * updateLegalCounselReport()
+     */
+    public updateLegalCounselReport(legalCounselReport: any): Observable<any> {
+        return this._http.put("enquiry/api/legalCounselReports/update", legalCounselReport);
+    }
+
+    /**
+     * deleteLegalCounselReport()
+     */
+    public deleteLegalCounselReport(legalCounselReportId: string) {
+        return this._http.delete("enquiry/api/legalCounselReports/delete/" + legalCounselReportId);
+    }
+
+    /**
+     * uploadVaultDocument()
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/upload', file);
     }
 }

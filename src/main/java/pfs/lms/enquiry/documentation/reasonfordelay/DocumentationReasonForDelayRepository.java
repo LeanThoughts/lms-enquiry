@@ -7,5 +7,7 @@ import java.util.UUID;
 
 public interface DocumentationReasonForDelayRepository extends JpaRepository<DocumentationReasonForDelay, UUID> {
 
+    List<DocumentationReasonForDelay> findByDocumentationId(UUID documentationId);
+
     List<DocumentationReasonForDelay> findByDocumentationIdAndDeleteFlag(UUID documentationId, Boolean deleteFlag);
 }

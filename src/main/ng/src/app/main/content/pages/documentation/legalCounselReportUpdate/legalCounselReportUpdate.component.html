@@ -1,0 +1,72 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ dialogTitle }}</span>
+            <button mat-button class="mat-icon-button" (click)="_dialogRef.close({ 'refresh': false })" aria-label="Close Dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important; height: 300px;">
+        <form [formGroup]="legalCounselReportForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Submission Date" formControlName="submissionDate" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Fiscal Year" formControlName="fiscalYear">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Period (Quarter)" formControlName="period">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Remarks" maxlength="200" formControlName="remarks">          
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Document Title" maxlength="20" formControlName="documentName">          
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Document Type" formControlName="documentType">
+                      <mat-option> </mat-option>
+                      <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
+                        {{ documentType.value }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <div fxFlex="50">
+                    <div fxLayout="column" fxFlex="100">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex="85">
+                                <label for="document">Upload Document (PDF)</label>
+                                <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" #fileInput/>
+                            </div>
+                            <div fxLayout="column" fxFlex="15" class="mt-16">
+                                <a [href]="getFileURL(selectedLegalCounselReport.fileReference)" *ngIf="selectedLegalCounselReport.fileReference !== '' &&
+                                        selectedLegalCounselReport.fileReference !== undefined">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({ 'refresh': false })">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

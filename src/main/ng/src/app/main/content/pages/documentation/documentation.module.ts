@@ -21,6 +21,10 @@ import { DocumentationService } from './documentation.service';
 import { DocumentationComponent } from './documentation.component';
 import { DocumentationReasonForDelayComponent } from './reasonForDelay/reasonForDelay.component';
 import { DocumentationReasonForDelayUpdateDialogComponent } from './reasonForDelayUpdate/reasonForDelayUpdate.component';
+import { LegalCounselComponent } from './legalCounsel/legalCounsel.component';
+import { LegalCounselUpdateDialogComponent } from './legalCounselUpdate/legalCounselUpdate.component';
+import { LegalCounselReportComponent } from './legalCounselReport/legalCounselReport.component';
+import { LegalCounselReportUpdateDialogComponent } from './legalCounselReportUpdate/legalCounselReportUpdate.component';
 
 const routes = [
     {
@@ -71,7 +75,11 @@ const MY_FORMATS = {
     declarations: [
         DocumentationComponent,
         DocumentationReasonForDelayComponent,
-        DocumentationReasonForDelayUpdateDialogComponent
+        DocumentationReasonForDelayUpdateDialogComponent,
+        LegalCounselComponent,
+        LegalCounselUpdateDialogComponent,
+        LegalCounselReportComponent,
+        LegalCounselReportUpdateDialogComponent
     ],
     providers: [
         DocumentationService,
@@ -85,10 +93,16 @@ const MY_FORMATS = {
     exports: [
         DocumentationComponent,
         DocumentationReasonForDelayComponent,
-        DocumentationReasonForDelayUpdateDialogComponent
+        DocumentationReasonForDelayUpdateDialogComponent,
+        LegalCounselComponent,
+        LegalCounselUpdateDialogComponent,
+        LegalCounselReportComponent,
+        LegalCounselReportUpdateDialogComponent
     ],
     entryComponents: [
-        DocumentationReasonForDelayUpdateDialogComponent
+        DocumentationReasonForDelayUpdateDialogComponent,
+        LegalCounselUpdateDialogComponent,
+        LegalCounselReportUpdateDialogComponent
     ]
 })
 export class DocumentationModule {
