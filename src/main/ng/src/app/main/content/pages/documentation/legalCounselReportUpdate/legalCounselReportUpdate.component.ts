@@ -149,5 +149,15 @@ export class LegalCounselReportUpdateDialogComponent implements OnInit {
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
     }
-    
+ 
+    /**
+     * validateFiscalYear()
+     */
+    validateFiscalYear(): void {
+        var year = this.legalCounselReportForm.get('fiscalYear').value;
+        if (year.length === 2) {
+            year = '20' + year;
+        }
+        this.legalCounselReportForm.controls.fiscalYear.setValue(year);
+    }
 }

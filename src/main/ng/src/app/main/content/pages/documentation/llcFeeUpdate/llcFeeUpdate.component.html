@@ -7,36 +7,45 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important; height: 300px;">
-        <form [formGroup]="legalCounselReportForm">
+    <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important; height: 350px;">
+        <form [formGroup]="llcFeeForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Submission Date" formControlName="submissionDate" readonly>
+                    <input matInput [matDatepicker]="picker2" placeholder="Invoice Date" formControlName="invoiceDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Fiscal Year" formControlName="fiscalYear" maxlength="4" (blur)="validateFiscalYear()">
+                    <input matInput placeholder="Invoice Number" formControlName="invoiceNumber" maxlength="20">
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Period" formControlName="period">
-                      <mat-option [value]="''"></mat-option>
-                      <mat-option [value]="'1'">First Quarter</mat-option>
-                      <mat-option [value]="'2'">Second Quarter</mat-option>
-                      <mat-option [value]="'3'">Third Quarter</mat-option>
-                      <mat-option [value]="'4'">Fourth Quarter</mat-option>
-                    </mat-select>
+                    <input matInput placeholder="Fee Name" formControlName="feeName" maxlength="50">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Fee Amount" formControlName="feeAmount" maxlength="19">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
                     <input matInput placeholder="Remarks" maxlength="200" formControlName="remarks">          
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Status of Fee Receipt" formControlName="statusOfFeeReceipt">
+                      <mat-option [value]="''"></mat-option>
+                      <mat-option [value]="'1'">Not Received</mat-option>
+                      <mat-option [value]="'2'">Partially Received</mat-option>
+                      <mat-option [value]="'3'">Fully Received</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
                     <input matInput placeholder="Document Title" maxlength="20" formControlName="documentName">          
                 </mat-form-field>
+            </div>
+            <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Document Type" formControlName="documentType">
                       <mat-option> </mat-option>
@@ -45,8 +54,6 @@
                       </mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div fxLayout="row">
                 <div fxFlex="50">
                     <div fxLayout="column" fxFlex="100">
                         <div fxLayout="row">
@@ -55,8 +62,8 @@
                                 <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" #fileInput/>
                             </div>
                             <div fxLayout="column" fxFlex="15" class="mt-16">
-                                <a [href]="getFileURL(selectedLegalCounselReport.fileReference)" *ngIf="selectedLegalCounselReport.fileReference !== '' &&
-                                        selectedLegalCounselReport.fileReference !== undefined">
+                                <a [href]="getFileURL(selectedLLCFee.fileReference)" *ngIf="selectedLLCFee.fileReference !== '' &&
+                                        selectedLLCFee.fileReference !== undefined">
                                     <mat-icon>cloud_download</mat-icon>
                                 </a>
                             </div>

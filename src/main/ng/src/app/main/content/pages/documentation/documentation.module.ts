@@ -25,6 +25,9 @@ import { LegalCounselComponent } from './legalCounsel/legalCounsel.component';
 import { LegalCounselUpdateDialogComponent } from './legalCounselUpdate/legalCounselUpdate.component';
 import { LegalCounselReportComponent } from './legalCounselReport/legalCounselReport.component';
 import { LegalCounselReportUpdateDialogComponent } from './legalCounselReportUpdate/legalCounselReportUpdate.component';
+import { LLCFeeAndLegalCounselFeeComponent } from './llcFeeAndLegalCounselFee/llcFeeAndLegalCounselFee.component';
+import { LLCFeeUpdateDialogComponent } from './llcFeeUpdate/llcFeeUpdate.component';
+import { LLCLegalCounselFeeUpdateDialogComponent } from './llcLegalCounselFeeUpdate/llcLegalCounselFeeUpdate.component';
 
 const routes = [
     {
@@ -79,7 +82,10 @@ const MY_FORMATS = {
         LegalCounselComponent,
         LegalCounselUpdateDialogComponent,
         LegalCounselReportComponent,
-        LegalCounselReportUpdateDialogComponent
+        LegalCounselReportUpdateDialogComponent,
+        LLCFeeAndLegalCounselFeeComponent,
+        LLCFeeUpdateDialogComponent,
+        LLCLegalCounselFeeUpdateDialogComponent
     ],
     providers: [
         DocumentationService,
@@ -97,12 +103,17 @@ const MY_FORMATS = {
         LegalCounselComponent,
         LegalCounselUpdateDialogComponent,
         LegalCounselReportComponent,
-        LegalCounselReportUpdateDialogComponent
+        LegalCounselReportUpdateDialogComponent,
+        LLCFeeAndLegalCounselFeeComponent,
+        LLCFeeUpdateDialogComponent,
+        LLCLegalCounselFeeUpdateDialogComponent
     ],
     entryComponents: [
         DocumentationReasonForDelayUpdateDialogComponent,
         LegalCounselUpdateDialogComponent,
-        LegalCounselReportUpdateDialogComponent
+        LegalCounselReportUpdateDialogComponent,
+        LLCFeeUpdateDialogComponent,
+        LLCLegalCounselFeeUpdateDialogComponent
     ]
 })
 export class DocumentationModule {

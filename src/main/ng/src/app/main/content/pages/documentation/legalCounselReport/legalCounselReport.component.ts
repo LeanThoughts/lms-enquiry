@@ -6,6 +6,7 @@ import { DocumentationService } from '../documentation.service';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { Subscription } from 'rxjs';
 import { LegalCounselReportUpdateDialogComponent } from '../legalCounselReportUpdate/legalCounselReportUpdate.component';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
     selector: 'fuse-legal-counsel-report',
@@ -139,4 +140,30 @@ export class LegalCounselReportComponent implements OnDestroy {
         return 'enquiry/api/download/' + fileReference;
     }
     
+    /**
+     * getDocumentTypeDescription()
+     */
+    getDocumentTypeDescription(documentType: string): string {
+        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        if (obj !== undefined)
+            return obj.value;
+        else
+            return '';
+    }
+
+    /**
+     * getPeriod()
+     */
+    getPeriod(period: string): string {
+        if (period === '')
+            return '';
+        else if (period ==='1')
+            return 'First Quarter';
+        else if (period ==='2')
+            return 'Second Quarter';
+        else if (period ==='4')
+            return 'Third Quarter';
+        else
+            return 'Fourth Quarter';
+    }
 }

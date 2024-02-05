@@ -86,7 +86,7 @@ export class DocumentationService {
      * getLegalCounselReports()
      */
     public getLegalCounselReports(legalCounselId: string): Observable<any> {
-        return this._http.get("enquiry/api/legalCounselReports/search/findByLegalCounselIdAndDeleteFlag?legalCounselId=" + 
+        return this._http.get("enquiry/api/legalCounselReports/search/findByDocumentationIdAndDeleteFlag?legalCounselId=" + 
                 legalCounselId + '&deleteFlag=false');
     }
 
@@ -109,6 +109,64 @@ export class DocumentationService {
      */
     public deleteLegalCounselReport(legalCounselReportId: string) {
         return this._http.delete("enquiry/api/legalCounselReports/delete/" + legalCounselReportId);
+    }
+
+    /**
+     * getLLCFees()
+     */
+    public getLLCFees(): Observable<any> {
+        return this._http.get("enquiry/api/lLCFees/search/findByDocumentationIdAndDeleteFlag?documentationId=" + 
+                this._documentation.value.id + '&deleteFlag=false');
+    }
+
+    /**
+     * createLLCFee()
+     */
+    public createLLCFee(llcFee: any): Observable<any> {
+        return this._http.post("enquiry/api/lLCFees/create", llcFee);
+    }
+
+    /**
+     * updateLLCFee()
+     */
+    public updateLLCFee(llcFee: any): Observable<any> {
+        return this._http.put("enquiry/api/lLCFees/update", llcFee);
+    }
+
+    /**
+     * deleteLLCFee()
+     */
+    public deleteLLCFee(llcFeeId: string) {
+        return this._http.delete("enquiry/api/lLCFees/delete/" + llcFeeId);
+    }
+
+    /**
+     * getLegalCounselFees()
+     */
+    public getLegalCounselFees(): Observable<any> {
+        return this._http.get("enquiry/api/legalCounselFees/search/findByDocumentationIdAndDeleteFlag?documentationId=" + 
+                this._documentation.value.id + '&deleteFlag=false');
+    }
+
+    /**
+     * createLegalCounselFee()
+     */
+    public createLegalCounselFee(legalCounselFee: any): Observable<any> {
+        return this._http.post("enquiry/api/legalCounselFees/create", legalCounselFee);
+    }
+
+    /**
+     * updateLegalCounselFee()
+     */
+    public updateLegalCounselFee(legalCounselFee: any): Observable<any> {
+        return this._http.put("enquiry/api/legalCounselFees/update", legalCounselFee);
+    }
+
+    /**
+     * deleteLegalCounselFee()
+     */
+    public deleteLegalCounselFee(legalCounselFeeId: string) {
+        return this._http.delete("enquiry/api/legalCounselFees/delete/" + legalCounselFeeId);
     }
 
     /**
