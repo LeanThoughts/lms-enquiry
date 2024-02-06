@@ -1,0 +1,62 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addNodalOfficer()" > Add </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateNodalOfficer()" [disabled]="!selectedNodalOfficer"> Modify </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedNodalOfficer"> 
+            Delete
+        </button>
+
+    </div>  
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- bpCode Column -->
+            <ng-container matColumnDef="bpCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Bus. Partner Id</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.bpCode }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- name Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.name }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- startDate Column -->
+            <ng-container matColumnDef="startDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Start Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.startDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- endDate Column -->
+            <ng-container matColumnDef="endDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >End Date</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.endDate | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
+                [ngClass]="{'highlight':obj === selectedNodalOfficer}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>

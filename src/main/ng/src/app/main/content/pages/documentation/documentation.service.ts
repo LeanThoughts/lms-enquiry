@@ -170,6 +170,35 @@ export class DocumentationService {
     }
 
     /**
+     * getNodalOfficers()
+     */
+    public getNodalOfficers(): Observable<any> {
+        return this._http.get("enquiry/api/nodalOfficers/search/findByDocumentationIdAndDeleteFlag?documentationId=" + 
+                this._documentation.value.id + '&deleteFlag=false');
+    }
+
+    /**
+     * createNodalOfficer()
+     */
+    public createNodalOfficer(nodalOfficer: any): Observable<any> {
+        return this._http.post("enquiry/api/nodalOfficers/create", nodalOfficer);
+    }
+
+    /**
+     * updateNodalOfficer()
+     */
+    public updateNodalOfficer(nodalOfficer: any): Observable<any> {
+        return this._http.put("enquiry/api/nodalOfficers/update", nodalOfficer);
+    }
+
+    /**
+     * deleteNodalOfficer()
+     */
+    public deleteNodalOfficer(nodalOfficerId: string) {
+        return this._http.delete("enquiry/api/nodalOfficers/delete/" + nodalOfficerId);
+    }
+
+    /**
      * uploadVaultDocument()
      */
     public uploadVaultDocument(file: FormData): Observable<any> {
