@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { PartnerModel } from 'app/main/content/model/partner.model';
 import { DocumentationService } from '../documentation.service';
-import { LoanMonitoringService } from '../../monitoring/loanMonitoring.service';
 
 @Component({
     selector: 'fuse-nodal-officer-update-dialog',
@@ -28,7 +27,7 @@ export class NodalOfficerUpdateDialogComponent implements OnInit {
      */
     constructor(private _formBuilder: FormBuilder, private _documentationService: DocumentationService,
         public _dialogRef: MatDialogRef<NodalOfficerUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar, private _loanMonitoringService: LoanMonitoringService) {
+        private _matSnackBar: MatSnackBar) {
 
         // Fetch selected nodal officer details from the dialog's data attribute.
         if (_dialogData.operation === 'addNodalOfficer') {
@@ -41,7 +40,7 @@ export class NodalOfficerUpdateDialogComponent implements OnInit {
         }
 
         // Fetch busines partners
-        _loanMonitoringService.getCLAs().subscribe(response => {
+        _documentationService.getPartnersByRoleType("ZLM018").subscribe(response => {
             response.forEach(element => {
                 this.partners.push(new PartnerModel(element));
             });

@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { PartnerModel } from 'app/main/content/model/partner.model';
 import { DocumentationService } from '../documentation.service';
-import { LoanMonitoringService } from '../../monitoring/loanMonitoring.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
@@ -30,7 +29,7 @@ export class LegalCounselUpdateDialogComponent implements OnInit {
      */
     constructor(private _formBuilder: FormBuilder, private _documentationService: DocumentationService,
         public _dialogRef: MatDialogRef<LegalCounselUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar, private _loanMonitoringService: LoanMonitoringService) {
+        private _matSnackBar: MatSnackBar) {
 
         // Fetch selected legal counsel details from the dialog's data attribute.
         if (_dialogData.selectedLegalCounsel !== undefined) {
@@ -45,7 +44,7 @@ export class LegalCounselUpdateDialogComponent implements OnInit {
         }
 
         // Fetch busines partners
-        _loanMonitoringService.getCLAs().subscribe(response => {
+        _documentationService.getPartnersByRoleType("ZLM006").subscribe(response => {
             response.forEach(element => {
                 this.partners.push(new PartnerModel(element));
             });

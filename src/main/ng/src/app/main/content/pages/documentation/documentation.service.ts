@@ -199,6 +199,13 @@ export class DocumentationService {
     }
 
     /**
+     * getPartnersByRoleType()
+     */
+    public getPartnersByRoleType(roleType: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/partners/role/' + roleType);
+    }
+
+    /**
      * uploadVaultDocument()
      */
     public uploadVaultDocument(file: FormData): Observable<any> {
