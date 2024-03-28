@@ -70,7 +70,7 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.add(
-            _loanAppraisalService._loanAppraisalBS.subscribe(data => {
+            _loanAppraisalService._loanAppraisalBehaviourSubject.subscribe(data => {
                 this.loanAppraisal = data;
                 console.log('loan appraisal in appraisal component subscription is', this.loanAppraisal);
             })

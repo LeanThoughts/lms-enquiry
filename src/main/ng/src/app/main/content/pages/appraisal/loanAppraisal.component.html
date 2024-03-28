@@ -129,6 +129,13 @@
                 </div>
             </mat-tab>
 
+            <!-- Security Trustee tab starts here -->
+            <mat-tab label="Security Trustee">
+                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+                    <fuse-securityTrustee-list [module]="'Appraisal'"></fuse-securityTrustee-list>
+                </div>
+            </mat-tab>
+
             <!-- Location Details tab starts here -->
             <mat-tab label="Location Details">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
@@ -164,8 +171,8 @@
                 </div>
             </mat-tab>
 
-            <!-- Internal risk rating tab starts here -->
-            <mat-tab label="External Risk Rating">
+            <!-- Internal risk grading tab starts here -->
+            <mat-tab label="Internal Risk Grading">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-internal-risk-rating></fuse-internal-risk-rating>
                 </div>

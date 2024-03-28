@@ -178,7 +178,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         if (this._service.selectedEnquiry.value.loanContractId !== undefined) {
             this._loanAppraisalService.getLaonAppraisal(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._loanAppraisalService._loanAppraisal = response;
-                this._loanAppraisalService._loanAppraisalBS.next(response);
+                this._loanAppraisalService._loanAppraisalBehaviourSubject.next(response);
                 this.redirect('/loanAppraisal');
             }, (error: HttpErrorResponse) => {
                 if (error.status === 404) {

@@ -8,7 +8,9 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 export class LoanAppraisalService implements Resolve<any> {
 
     _loanAppraisal: any;
-    _loanAppraisalBS: BehaviorSubject<any> = new BehaviorSubject({});
+    _loanAppraisalBehaviourSubject: BehaviorSubject<any> = new BehaviorSubject({});
+    
+    _selectedSecurityTrustee: BehaviorSubject<any> = new BehaviorSubject({});
 
     refreshKYCPartnerList: BehaviorSubject<any> = new BehaviorSubject({'refresh': false});
     
@@ -390,6 +392,45 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getExternalRatings()
+     */
+    public getExternalRatings(loanAppraisalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/externalRatings/search/findByLoanAppraisalIdOrderBySerialNumber?loanAppraisalId=' + loanAppraisalId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * createExternalRating()
+     */
+    public createExternalRating(externalRating: any): Observable<any> {
+        return this._http.post("enquiry/api/externalRatings/create", externalRating);
+    }
+    
+    /**
+     * updateExternalRating()
+     */
+    public updateExternalRating(externalRating: any): Observable<any> {
+        return this._http.put("enquiry/api/externalRatings/update", externalRating);
+    }
+
+    /**
+     * deleteCExternalRating()
+     */
+    public deleteCExternalRating(id: string): Observable<any> {
+        return this._http.delete("enquiry/api/externalRatings/delete/" + id);
+    }
+    
+    /**
      * getReasonForDelay()
      */
     public getReasonForDelay(loanAppraisalId: string): Observable<any> {
@@ -485,6 +526,48 @@ export class LoanAppraisalService implements Resolve<any> {
         return this._http.put("enquiry/api/projectDatas/update", projectData);
     }
 
+    // Security Trustee CRUD methods ...
+
+    public getSecurityTrustees(loanApplicationId: string): Observable<any> {
+        return this._http.get('enquiry/api/loanApplications/' + loanApplicationId + '/securityTrustees');
+    }
+
+    public saveSecurityTrustee(securityTrustee: any, loanApplicationId: any, module: string): Observable<any> {
+        const url = "enquiry/api/securityTrustees/create";
+        return this._http.post(url, { 'loanApplicationId':loanApplicationId, 'securityTrustee':securityTrustee, 'moduleName':module });
+    }
+
+    public updateSecurityTrustee(securityTrustee: any, module: string): Observable<any> {
+        const url = "enquiry/api/securityTrustees/update/" + securityTrustee.id;
+        return this._http.put(url, { 'loanApplicationId':'', 'securityTrustee':securityTrustee, 'moduleName':module });
+    }
+
+    public deleteSecurityTrustee(securityTrustee: any, module: string): Observable<any> {
+        const url = "enquiry/api/securityTrustees/" + securityTrustee.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+
+    // Security Trustee Report and Fee CRUD methods ...
+
+    public getSecurityTrusteeReportAndFees(securityTrusteeId: string): Observable<any> {
+        return this._http.get('enquiry/api/securityTrustees/' + securityTrusteeId + '/securityTrusteeReportAndFees');
+    }
+
+    public saveSecurityTrusteeReportAndFee(securityTrusteeReportAndFee: any, securityTrusteeId: string, module: string): Observable<any> {
+        const url = "enquiry/api/securityTrusteeReportAndFees/create";
+        return this._http.post(url, { 'securityTrusteeId': securityTrusteeId, 'securityTrusteeReportAndFee': securityTrusteeReportAndFee, 'moduleName':module });
+    }
+
+    public updateSecurityTrusteeReportAndFee(securityTrusteeReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/securityTrusteeReportAndFees/update/" + securityTrusteeReportAndFee.id;
+        return this._http.put(url, { 'securityTrusteeId': '', 'securityTrusteeReportAndFee': securityTrusteeReportAndFee, 'moduleName':module });
+    }
+
+    public deleteSecurityTrusteeReportAndFee(securityTrusteeReportAndFee: any, module: string): Observable<any> {
+        const url = "enquiry/api/securityTrusteeReportAndFees/" + securityTrusteeReportAndFee.id + "/moduleName/" + module;
+        return this._http.delete(url);
+    }
+    
     /**
      * getBusinessPartners()
      */

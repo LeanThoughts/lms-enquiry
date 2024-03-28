@@ -47,6 +47,10 @@ import { RiskEvaluationDetails } from './riskReport/risk-evaluation-details/risk
 import { LoanMonitoringModule } from '../monitoring/loanMonitoring.module';
 import { MainLocationUpdateComponent } from './location-details/mainLocationUpdate/mainLocationUpdate.component';
 import { SubLocationUpdateComponent } from './location-details/subLocationUpdate/subLocationUpdate.component';
+import { SecurityTrusteeListComponent } from './securityTrusteeList/securityTrusteeList.component';
+import { SecurityTrusteeUpdateDialogComponent } from './securityTrusteeUpdate/securityTrusteeUpdate.component';
+import { SecurityTrusteeReportAndFeeUpdateDialogComponent } from './securityTrusteeReportAndFeeUpdate/securityTrusteeReportAndFeeUpdate.component';
+import { SecurityTrusteeReportAndFeeListComponent } from './securityTrusteeReportAndFeeList/securityTrusteeReportAndFeeList.component';
 
 const routes = [
     {
@@ -125,7 +129,11 @@ const MY_FORMATS = {
         RiskEvaluationsOverviewComponent,
         RiskEvaluationDetails,
         MainLocationUpdateComponent,
-        SubLocationUpdateComponent
+        SubLocationUpdateComponent,
+        SecurityTrusteeListComponent,
+        SecurityTrusteeUpdateDialogComponent,
+        SecurityTrusteeReportAndFeeListComponent,
+        SecurityTrusteeReportAndFeeUpdateDialogComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -155,7 +163,9 @@ const MY_FORMATS = {
         CorporateLoanRiskRatingUpdateComponent,
         RiskEvaluationDetails,
         MainLocationUpdateComponent,
-        SubLocationUpdateComponent
+        SubLocationUpdateComponent,
+        SecurityTrusteeUpdateDialogComponent,
+        SecurityTrusteeReportAndFeeUpdateDialogComponent
     ]
 })
 export class LoanAppraisalModule {

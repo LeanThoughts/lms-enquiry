@@ -1,0 +1,111 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displaySecurityTrustee()" [disabled]="!selectedSecurityTrustee" 
+                *ngIf="_module === 'Monitoring'"> 
+            Display Details 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addSecurityTrustee()" *ngIf="_module !== 'Monitoring'"> Add </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSecurityTrustee()" [disabled]="!selectedSecurityTrustee" 
+                *ngIf="_module !== 'Monitoring'"> 
+            Modify  
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSecurityTrustee()" [disabled]="!selectedSecurityTrustee"> 
+            Delete 
+        </button>
+    </div>
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- serialNumber Column -->
+            <ng-container matColumnDef="serialNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.serialNumber }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- advisor Column -->
+            <ng-container matColumnDef="advisor">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Advisor</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.advisor }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- bpCode Column -->
+            <ng-container matColumnDef="bpCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Bus. Partner Id</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.bpCode }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- name Column -->
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Name</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.name }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- dateOfAppointment Column -->
+            <ng-container matColumnDef="dateOfAppointment">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Date Of Appointment</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.dateOfAppointment | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contractPeriodFrom Column -->
+            <ng-container matColumnDef="contractPeriodFrom">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contract Period From</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.contractPeriodFrom | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contractPeriodTo Column -->
+            <ng-container matColumnDef="contractPeriodTo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contract Period To</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.contractPeriodTo | date: 'dd/MM/yyyy' }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contactPerson Column -->
+            <ng-container matColumnDef="contactPerson">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contact Person</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.contactPerson }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- contactNumber Column -->
+            <ng-container matColumnDef="contactNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Contact No</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.contactNumber }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- email Column -->
+            <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Email</mat-header-cell>
+                <mat-cell *matCellDef="let obj" >
+                    <p class="text-truncate">{{ obj.securityTrustee.email }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj.securityTrustee)"
+                [ngClass]="{'highlight':obj.securityTrustee === selectedSecurityTrustee}" [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <div class="content-card" fusePerfectScrollbar style="width: 100%" *ngIf="selectedSecurityTrustee">
+        <fuse-securityTrustee-report-fee-list [module]="_module"></fuse-securityTrustee-report-fee-list>
+    </div>
+</div>
