@@ -7,8 +7,23 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 240px">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 315px">
         <form [formGroup]="_reasonForDelayForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Reason for Delay" formControlName="reasonForDelay" required>
+                        <mat-option *ngFor="let reason of reasonsForDelay" [value]="reason.code">
+                            {{ reason.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="100">
+                    <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200">
+                </mat-form-field>
+            </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
                     <input matInput placeholder="Status of Proposal/ Reason for Delay (if any)" formControlName="statusOfProposal" maxlength="200">

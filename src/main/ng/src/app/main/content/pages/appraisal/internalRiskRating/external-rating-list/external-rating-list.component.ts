@@ -4,7 +4,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { ConfirmationDialogComponent } from '../../confirmationDialog/confirmationDialog.component';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
-import { CorporateLoanRiskRatingUpdateComponent } from '../corporate-loan-risk-rating-update/corporate-loan-risk-rating-update.component';
+import { ExternalRatingUpdateComponent } from '../external-rating-update/external-rating-update.component';
+import { log } from 'console';
 
 @Component({
     selector: 'fuse-external-rating-list',
@@ -25,6 +26,8 @@ export class ExternalRatingListComponent {
         'serialNumber', 'validityDate', 'rating', 'ratingAgency', 'creditStanding', 'creditStandingInstruction', 'creditStandingText'
     ];
 
+    ratings: any;
+
     /**
      * constructor()
      * @param _dialogRef 
@@ -38,9 +41,12 @@ export class ExternalRatingListComponent {
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
 
-        this._loanAppraisalService.getCorporateLoanRiskRatings(this._loanAppraisalId).subscribe(response => {
-            this.dataSource = new MatTableDataSource(response._embedded.corporateLoanRiskRatings);
-        });
+        this._loanAppraisalService.getRatings().subscribe(response => {
+            this.ratings = response._embedded.ratings;
+            this._loanAppraisalService.getExternalRatings(this._loanAppraisalId).subscribe(response => {
+                this.dataSource = new MatTableDataSource(response._embedded.externalRatings);
+            });
+        })
     }
 
     /**
@@ -56,16 +62,16 @@ export class ExternalRatingListComponent {
         if (operation === 'modifyRating') {
             data.selectedRating = this.selectedRating;
         }
-        const dialogRef = this._matDialog.open(CorporateLoanRiskRatingUpdateComponent, {
-            panelClass: 'fuse-corporate-loan-risk-rating-update',
+        const dialogRef = this._matDialog.open(ExternalRatingUpdateComponent, {
+            panelClass: 'fuse-external-rating-update',
             width: '950px',
             data: data
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._loanAppraisalService.getCorporateLoanRiskRatings(this._loanAppraisalId).subscribe(response => {
-                    this.dataSource = new MatTableDataSource(response._embedded.corporateLoanRiskRatings);
+                this._loanAppraisalService.getExternalRatings(this._loanAppraisalId).subscribe(response => {
+                    this.dataSource = new MatTableDataSource(response._embedded.externalRatings);
                     this.selectedRating = undefined;
                 });
             };
@@ -82,16 +88,12 @@ export class ExternalRatingListComponent {
     /**
      * getValue()
      */
-    getValue(risk: any): string {
-        if (risk === '0') {
-            return 'Low';
-        }
-        else if (risk === '1') {
-            return 'Medium';
-        }
-        else {
-            return 'High';
-        }
+    getValue(rating: any): string {
+        const obj = this.ratings.filter(r => r.code === rating.code);
+        if (obj.length > 0)
+            return obj[0].value;
+        else
+            return '';
     }
 
     /**
@@ -101,9 +103,9 @@ export class ExternalRatingListComponent {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
-            this._loanAppraisalService.deleteCorporateLoanRiskRating(this.selectedRating.id).subscribe(() => {
-                this._loanAppraisalService.getCorporateLoanRiskRatings(this._loanAppraisalId).subscribe(response => {
-                    this.dataSource = new MatTableDataSource(response._embedded.corporateLoanRiskRatings);
+            this._loanAppraisalService.deleteExternalRating(this.selectedRating.id).subscribe(() => {
+                this._loanAppraisalService.getExternalRatings(this._loanAppraisalId).subscribe(response => {
+                    this.dataSource = new MatTableDataSource(response._embedded.externalRatings);
                     this.selectedRating = undefined;
                 });
             });

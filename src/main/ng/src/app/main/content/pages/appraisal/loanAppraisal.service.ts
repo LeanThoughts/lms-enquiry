@@ -392,6 +392,24 @@ export class LoanAppraisalService implements Resolve<any> {
     }
 
     /**
+     * getRatings()
+     */
+    public getRatings(): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/ratings').subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
      * getExternalRatings()
      */
     public getExternalRatings(loanAppraisalId: string): Observable<any> {
@@ -426,7 +444,7 @@ export class LoanAppraisalService implements Resolve<any> {
     /**
      * deleteCExternalRating()
      */
-    public deleteCExternalRating(id: string): Observable<any> {
+    public deleteExternalRating(id: string): Observable<any> {
         return this._http.delete("enquiry/api/externalRatings/delete/" + id);
     }
     

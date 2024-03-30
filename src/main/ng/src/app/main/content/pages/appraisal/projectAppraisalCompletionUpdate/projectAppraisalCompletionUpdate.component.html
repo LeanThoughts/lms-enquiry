@@ -7,7 +7,7 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar style="height: 420px">
+    <div mat-dialog-content fusePerfectScrollbar style="height: 480px">
         <form [formGroup]="_projectAppraisalCompletionForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
@@ -19,10 +19,18 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Director Name" formControlName="directorA" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker2" placeholder="Agenda Note Approval by DIR-A" 
                         formControlName="agendaNoteApprovalByDirA" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Director Name" formControlName="directorB" maxlength="50">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker3" placeholder="Agenda Note Approval by DIR-B" 
@@ -33,17 +41,20 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
+                    <input matInput placeholder="MD and CEO" formControlName="mdAndCEO" maxlength="50">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker4" placeholder="Agenda Note Approval by MD & CEO" 
                         formControlName="agendaNoteApprovalByMDAndCEO" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4></mat-datepicker> 
                 </mat-form-field>
-                <mat-form-field fxFlex="50">
+                <!-- <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker5" placeholder="Agenda Note Submission to Co Secy" 
                         formControlName="agendaNoteSubmissionToCoSecy" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
                     <mat-datepicker #picker5></mat-datepicker> 
-                </mat-form-field>
+                </mat-form-field> -->
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">

@@ -24,10 +24,16 @@ public class ProjectAppraisalCompletion extends AggregateRoot<ProjectAppraisalCo
     private LoanAppraisal loanAppraisal;
 
     private LocalDate dateOfProjectAppraisalCompletion;
+
     private LocalDate agendaNoteApprovalByDirA;
     private LocalDate agendaNoteApprovalByDirB;
     private LocalDate agendaNoteApprovalByMDAndCEO;
-    private LocalDate agendaNoteSubmissionToCoSecy;
+    //private LocalDate agendaNoteSubmissionToCoSecy;
+
+    private String directorA;
+    private String directorB;
+    private String mdAndCEO;
+
     private String remarks;
     private String fileReference;
     private String documentType;

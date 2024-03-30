@@ -21,4 +21,6 @@ public class ReasonForDelayResource {
     private LocalDate date;
     private String heldBy;
     private String status;
+    private String reasonForDelay;
+    private String remarks;
 }

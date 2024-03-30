@@ -41,7 +41,10 @@ export class ProjectAppraisalCompletionUpdateComponent {
             agendaNoteApprovalByDirA: [ this._projectAppraisalCompletion.agendaNoteApprovalByDirA || undefined ],
             agendaNoteApprovalByDirB: [ this._projectAppraisalCompletion.agendaNoteApprovalByDirB || undefined ],
             agendaNoteApprovalByMDAndCEO: [ this._projectAppraisalCompletion.agendaNoteApprovalByMDAndCEO || undefined ],
-            agendaNoteSubmissionToCoSecy: [ this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy || undefined ],
+            // agendaNoteSubmissionToCoSecy: [ this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy || undefined ],
+            directorA: [ this._projectAppraisalCompletion.directorA || '' ],
+            directorB: [ this._projectAppraisalCompletion.directorB || '' ],
+            mdAndCEO: [ this._projectAppraisalCompletion.mdAndCEO || '' ],
             remarks: [ this._projectAppraisalCompletion.remarks || '' ],
             documentTitle: [this._projectAppraisalCompletion.documentTitle],
             documentType: [this._projectAppraisalCompletion.documentType || ''],
@@ -118,10 +121,10 @@ export class ProjectAppraisalCompletionUpdateComponent {
                 formValues.agendaNoteApprovalByMDAndCEO = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             }
 
-            if (formValues.agendaNoteSubmissionToCoSecy) {
-                dt = new Date(formValues.agendaNoteSubmissionToCoSecy);
-                formValues.agendaNoteSubmissionToCoSecy = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-            }
+            // if (formValues.agendaNoteSubmissionToCoSecy) {
+            //     dt = new Date(formValues.agendaNoteSubmissionToCoSecy);
+            //     formValues.agendaNoteSubmissionToCoSecy = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            // }
 
             if (JSON.stringify(this._projectAppraisalCompletion) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
@@ -138,7 +141,10 @@ export class ProjectAppraisalCompletionUpdateComponent {
                 this._projectAppraisalCompletion.agendaNoteApprovalByDirA = formValues.agendaNoteApprovalByDirA;
                 this._projectAppraisalCompletion.agendaNoteApprovalByDirB = formValues.agendaNoteApprovalByDirB;
                 this._projectAppraisalCompletion.agendaNoteApprovalByMDAndCEO = formValues.agendaNoteApprovalByMDAndCEO;
-                this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy = formValues.agendaNoteSubmissionToCoSecy;
+                // this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy = formValues.agendaNoteSubmissionToCoSecy;
+                this._projectAppraisalCompletion.directorA = formValues.directorA;
+                this._projectAppraisalCompletion.directorB = formValues.directorB;
+                this._projectAppraisalCompletion.mdAndCEO = formValues.mdAndCEO;
                 this._projectAppraisalCompletion.remarks = formValues.remarks;
                 if (fileReference !== '') {
                     this._projectAppraisalCompletion.fileReference = fileReference;

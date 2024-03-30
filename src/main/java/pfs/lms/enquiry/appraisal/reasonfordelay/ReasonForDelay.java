@@ -27,6 +27,8 @@ public class ReasonForDelay extends AggregateRoot<ReasonForDelay> implements Clo
     private LocalDate date;
     private String heldBy;
     private String status;
+    private String reasonForDelay;
+    private String remarks;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

@@ -25,8 +25,8 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public ProjectAppraisalCompletion createProjectAppraisalCompletion(ProjectAppraisalCompletionResource projectAppraisalCompletionResource,   String username) {
-        LoanApplication loanApplication = loanApplicationRepository.getOne(projectAppraisalCompletionResource.getLoanApplicationId());
+    public ProjectAppraisalCompletion createProjectAppraisalCompletion(ProjectAppraisalCompletionResource resource,   String username) {
+        LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         LoanAppraisal loanAppraisal = loanAppraisalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
                     LoanAppraisal obj = new LoanAppraisal();
@@ -48,21 +48,19 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
                 });
         ProjectAppraisalCompletion projectAppraisalCompletion = new ProjectAppraisalCompletion();
         projectAppraisalCompletion.setLoanAppraisal(loanAppraisal);
-        projectAppraisalCompletion.setAgendaNoteApprovalByDirA(projectAppraisalCompletionResource.
-                getAgendaNoteApprovalByDirA());
-        projectAppraisalCompletion.setAgendaNoteApprovalByDirB(projectAppraisalCompletionResource.
-                getAgendaNoteApprovalByDirB());
-        projectAppraisalCompletion.setAgendaNoteApprovalByMDAndCEO(projectAppraisalCompletionResource.
-                getAgendaNoteApprovalByMDAndCEO());
-        projectAppraisalCompletion.setAgendaNoteSubmissionToCoSecy(projectAppraisalCompletionResource.
-                getAgendaNoteSubmissionToCoSecy());
-        projectAppraisalCompletion.setDateOfProjectAppraisalCompletion(projectAppraisalCompletionResource.
+        projectAppraisalCompletion.setAgendaNoteApprovalByDirA(resource.getAgendaNoteApprovalByDirA());
+        projectAppraisalCompletion.setAgendaNoteApprovalByDirB(resource.getAgendaNoteApprovalByDirB());
+        projectAppraisalCompletion.setAgendaNoteApprovalByMDAndCEO(resource.getAgendaNoteApprovalByMDAndCEO());
+        projectAppraisalCompletion.setDirectorA(resource.getDirectorA());
+        projectAppraisalCompletion.setDirectorB(resource.getDirectorB());
+        projectAppraisalCompletion.setMdAndCEO(resource.getMdAndCEO());
+        projectAppraisalCompletion.setDateOfProjectAppraisalCompletion(resource.
                 getDateOfProjectAppraisalCompletion());
-        projectAppraisalCompletion.setRemarks(projectAppraisalCompletionResource.getRemarks());
+        projectAppraisalCompletion.setRemarks(resource.getRemarks());
         projectAppraisalCompletion = projectAppraisalCompletionRepository.save(projectAppraisalCompletion);
-        projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
-        projectAppraisalCompletion.setDocumentTitle(projectAppraisalCompletionResource.getDocumentTitle());
-        projectAppraisalCompletion.setDocumentType(projectAppraisalCompletionResource.getDocumentType());
+        projectAppraisalCompletion.setFileReference(resource.getFileReference());
+        projectAppraisalCompletion.setDocumentTitle(resource.getDocumentTitle());
+        projectAppraisalCompletion.setDocumentType(resource.getDocumentType());
         // Change Documents for project Appraisal Completion
         changeDocumentService.createChangeDocument(
                 projectAppraisalCompletion.getLoanAppraisal().getId(),
@@ -78,33 +76,36 @@ public class ProjectAppraisalCompletionService implements IProjectAppraisalCompl
     }
 
     @Override
-    public ProjectAppraisalCompletion updateProjectAppraisalCompletion(ProjectAppraisalCompletionResource projectAppraisalCompletionResource, String username) throws CloneNotSupportedException {
+    public ProjectAppraisalCompletion updateProjectAppraisalCompletion(ProjectAppraisalCompletionResource resource, String username) throws CloneNotSupportedException {
         ProjectAppraisalCompletion projectAppraisalCompletion =
-                projectAppraisalCompletionRepository.findById(projectAppraisalCompletionResource.getId())
-                        .orElseThrow(() -> new EntityNotFoundException(projectAppraisalCompletionResource.getId().toString()));
+                projectAppraisalCompletionRepository.findById(resource.getId())
+                        .orElseThrow(() -> new EntityNotFoundException(resource.getId().toString()));
 
         Object oldprojectAppraisalCompletion =  projectAppraisalCompletion.clone();
 
-        projectAppraisalCompletion.setAgendaNoteApprovalByDirA(projectAppraisalCompletionResource.
+        projectAppraisalCompletion.setAgendaNoteApprovalByDirA(resource.
                 getAgendaNoteApprovalByDirA());
-        projectAppraisalCompletion.setAgendaNoteApprovalByDirB(projectAppraisalCompletionResource.
+        projectAppraisalCompletion.setAgendaNoteApprovalByDirB(resource.
                 getAgendaNoteApprovalByDirB());
-        projectAppraisalCompletion.setAgendaNoteApprovalByMDAndCEO(projectAppraisalCompletionResource.
+        projectAppraisalCompletion.setAgendaNoteApprovalByMDAndCEO(resource.
                 getAgendaNoteApprovalByMDAndCEO());
-        projectAppraisalCompletion.setAgendaNoteSubmissionToCoSecy(projectAppraisalCompletionResource.
-                getAgendaNoteSubmissionToCoSecy());
-        projectAppraisalCompletion.setDateOfProjectAppraisalCompletion(projectAppraisalCompletionResource.
-                getDateOfProjectAppraisalCompletion());
-        projectAppraisalCompletion.setRemarks(projectAppraisalCompletionResource.getRemarks());
 
-        if (projectAppraisalCompletionResource.getFileReference() != null) {
-            if (!projectAppraisalCompletionResource.getFileReference().equals(""))
-                projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
+        projectAppraisalCompletion.setDirectorA(resource.getDirectorA());
+        projectAppraisalCompletion.setDirectorB(resource.getDirectorB());
+        projectAppraisalCompletion.setMdAndCEO(resource.getMdAndCEO());
+
+        projectAppraisalCompletion.setDateOfProjectAppraisalCompletion(resource.
+                getDateOfProjectAppraisalCompletion());
+        projectAppraisalCompletion.setRemarks(resource.getRemarks());
+
+        if (resource.getFileReference() != null) {
+            if (!resource.getFileReference().equals(""))
+                projectAppraisalCompletion.setFileReference(resource.getFileReference());
         }
 
         // projectAppraisalCompletion.setFileReference(projectAppraisalCompletionResource.getFileReference());
-        projectAppraisalCompletion.setDocumentTitle(projectAppraisalCompletionResource.getDocumentTitle());
-        projectAppraisalCompletion.setDocumentType(projectAppraisalCompletionResource.getDocumentType());
+        projectAppraisalCompletion.setDocumentTitle(resource.getDocumentTitle());
+        projectAppraisalCompletion.setDocumentType(resource.getDocumentType());
         projectAppraisalCompletion = projectAppraisalCompletionRepository.save(projectAppraisalCompletion);
 
 

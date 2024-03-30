@@ -97,3 +97,15 @@ export const businessPartnerRoleTypes = [
     { code: "TR0997", value: "SCS Clerk"},
     { code: "TR0998", value: "Loans Administrator"}
 ]
+
+export const appraisalReasonsForDelay = [
+    { code: "1", value: "Offtake/ Concession Agreement not signed"},
+    { code: "2", value: "Promoter detail including financials not available"},
+    { code: "3", value: "Required statutory clearance is not available"},
+    { code: "4", value: "Lead Bank sanction not received"},
+    { code: "5", value: "Issue in project construction"},
+    { code: "6", value: "Cash flow is not sufficient or viability isssue"},
+    { code: "7", value: "Secuirty coverage issue"},
+    { code: "8", value: "Borrower not confirmed terms and conditions"},
+    { code: "9", value: "Other issues"}
+]

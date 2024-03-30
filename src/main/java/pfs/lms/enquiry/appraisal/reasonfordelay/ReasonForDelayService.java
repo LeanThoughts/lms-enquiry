@@ -49,6 +49,8 @@ public class ReasonForDelayService implements IReasonForDelayService {
         reasonForDelay.setHeldBy(reasonForDelayResource.getHeldBy());
         reasonForDelay.setStatus(reasonForDelayResource.getStatus());
         reasonForDelay.setStatusOfProposal(reasonForDelayResource.getStatusOfProposal());
+        reasonForDelay.setReasonForDelay(reasonForDelayResource.getReasonForDelay());
+        reasonForDelay.setRemarks(reasonForDelayResource.getRemarks());
         reasonForDelay = reasonForDelayRepository.save(reasonForDelay);
 
         // Change Documents for Reason Delay
@@ -79,6 +81,9 @@ public class ReasonForDelayService implements IReasonForDelayService {
         reasonForDelay.setHeldBy(reasonForDelayResource.getHeldBy());
         reasonForDelay.setStatus(reasonForDelayResource.getStatus());
         reasonForDelay.setStatusOfProposal(reasonForDelayResource.getStatusOfProposal());
+        reasonForDelay.setReasonForDelay(reasonForDelayResource.getReasonForDelay());
+        reasonForDelay.setRemarks(reasonForDelayResource.getRemarks());
+
         reasonForDelay = reasonForDelayRepository.save(reasonForDelay);
 
         // Change Documents for Reason Delay

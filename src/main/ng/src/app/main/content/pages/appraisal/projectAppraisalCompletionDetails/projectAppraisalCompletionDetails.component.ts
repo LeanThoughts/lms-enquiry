@@ -51,14 +51,21 @@ export class ProjectAppraisalCompletionDetails {
         this.dataSource = [];
         this.dataSource.push({particulars: 'Date of Project Appraisal Completion', 
             value: this.getFormattedDate(this._projectAppraisalCompletion.dateOfProjectAppraisalCompletion)});
+
+        this.dataSource.push({particulars: 'Director', value: this._projectAppraisalCompletion.directorA});
         this.dataSource.push({particulars: 'Agenda Note Approval by DIR-A', 
             value: this.getFormattedDate(this._projectAppraisalCompletion.agendaNoteApprovalByDirA)});
+        
+        this.dataSource.push({particulars: 'Director', value: this._projectAppraisalCompletion.directorB});
         this.dataSource.push({particulars: 'Agenda Note Approval by DIR-B', 
             value: this.getFormattedDate(this._projectAppraisalCompletion.agendaNoteApprovalByDirB)});
+
+        this.dataSource.push({particulars: 'MD and CEO', value: this._projectAppraisalCompletion.mdAndCEO});
         this.dataSource.push({particulars: 'Agenda Note Approval by MD & CEO', 
             value: this.getFormattedDate(this._projectAppraisalCompletion.agendaNoteApprovalByMDAndCEO)});
-        this.dataSource.push({particulars: 'Agenda Note Submission to Co Secy', 
-            value: this.getFormattedDate(this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy)});
+
+        // this.dataSource.push({particulars: 'Agenda Note Submission to Co Secy', 
+        //     value: this.getFormattedDate(this._projectAppraisalCompletion.agendaNoteSubmissionToCoSecy)});
         this.dataSource.push({particulars: 'Remarks', value: this._projectAppraisalCompletion.remarks});
     }
 

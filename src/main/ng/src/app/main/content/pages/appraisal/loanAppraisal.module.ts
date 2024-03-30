@@ -51,6 +51,8 @@ import { SecurityTrusteeListComponent } from './securityTrusteeList/securityTrus
 import { SecurityTrusteeUpdateDialogComponent } from './securityTrusteeUpdate/securityTrusteeUpdate.component';
 import { SecurityTrusteeReportAndFeeUpdateDialogComponent } from './securityTrusteeReportAndFeeUpdate/securityTrusteeReportAndFeeUpdate.component';
 import { SecurityTrusteeReportAndFeeListComponent } from './securityTrusteeReportAndFeeList/securityTrusteeReportAndFeeList.component';
+import { ExternalRatingListComponent } from './internalRiskRating/external-rating-list/external-rating-list.component';
+import { ExternalRatingUpdateComponent } from './internalRiskRating/external-rating-update/external-rating-update.component';
 
 const routes = [
     {
@@ -133,7 +135,9 @@ const MY_FORMATS = {
         SecurityTrusteeListComponent,
         SecurityTrusteeUpdateDialogComponent,
         SecurityTrusteeReportAndFeeListComponent,
-        SecurityTrusteeReportAndFeeUpdateDialogComponent
+        SecurityTrusteeReportAndFeeUpdateDialogComponent,
+        ExternalRatingListComponent,
+        ExternalRatingUpdateComponent
     ],
     providers: [
         LoanEnquiryService,
@@ -165,7 +169,8 @@ const MY_FORMATS = {
         MainLocationUpdateComponent,
         SubLocationUpdateComponent,
         SecurityTrusteeUpdateDialogComponent,
-        SecurityTrusteeReportAndFeeUpdateDialogComponent
+        SecurityTrusteeReportAndFeeUpdateDialogComponent,
+        ExternalRatingUpdateComponent
     ]
 })
 export class LoanAppraisalModule {

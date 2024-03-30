@@ -69,13 +69,21 @@ export class SiteVisitUpdateDialogComponent {
             file: ['']
         });
 
+        // ZLM024
         this._loanAppraisalService.getPartnersByRole('ZLM024').subscribe(response => {
             this.partners = response;
+            // ZLM028
             this._loanAppraisalService.getPartnersByRole('ZLM028').subscribe(response => {
                 response.map((partner) => {
                     this.partners.push(partner);
                 });
-                this.siteVisitUpdateForm.controls.displayBusinessPartnerId.setValue(this.selectedSiteVisit.businessPartnerId);
+                // BUP003
+                this._loanAppraisalService.getPartnersByRole('BUP003').subscribe(response => {
+                    response.map((partner) => {
+                        this.partners.push(partner);
+                    });
+                    this.siteVisitUpdateForm.controls.displayBusinessPartnerId.setValue(this.selectedSiteVisit.businessPartnerId);
+                });
             });
         });
     }

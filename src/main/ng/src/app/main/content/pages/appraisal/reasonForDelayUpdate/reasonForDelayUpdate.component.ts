@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { LoanAppraisalService } from '../loanAppraisal.service';
+import { appraisalReasonsForDelay } from '../loanAppraisal.constants';
 
 @Component({
   selector: 'fuse-reason-for-delay-update',
@@ -14,6 +15,7 @@ export class ReasonForDelayUpdateComponent {
 
     _reasonForDelay: any;
     _reasonForDelayForm: FormGroup;
+    reasonsForDelay = appraisalReasonsForDelay;
 
     /**
      * constructor()
@@ -36,6 +38,8 @@ export class ReasonForDelayUpdateComponent {
             statusOfProposal: [ this._reasonForDelay.statusOfProposal || '' ],
             date: [ this._reasonForDelay.date || undefined ],
             heldBy: [ this._reasonForDelay.heldBy || '' ],
+            reasonForDelay: [ this._reasonForDelay.reasonForDelay || '' ],
+            remarks: [ this._reasonForDelay.remarks || '' ]
         });
     }
 
@@ -62,6 +66,8 @@ export class ReasonForDelayUpdateComponent {
                 this._reasonForDelay.statusOfProposal = formValues.statusOfProposal;
                 this._reasonForDelay.date = formValues.date;
                 this._reasonForDelay.heldBy = formValues.heldBy;
+                this._reasonForDelay.reasonForDelay = formValues.reasonForDelay;
+                this._reasonForDelay.remarks = formValues.remarks;
                 this._loanAppraisalService.updateReasonForDelay(this._reasonForDelay).subscribe(response => {
                     this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'reasonForDelay': response });

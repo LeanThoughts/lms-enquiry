@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.projectappraisalcompletion.ProjectAppraisalCompletion;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
-import javax.activation.DataContentHandler;
 import java.io.Serializable;
 import java.text.ParseException;
 
@@ -57,10 +55,10 @@ public class SAPLoanAppraisalProjectAppraisalCompletionResource implements Seria
         else
             detailsResource.setAgendaNoteApprovalByDirB(null);
 
-        if (projectAppraisalCompletion.getAgendaNoteSubmissionToCoSecy() != null)
-            detailsResource.setAgendaNoteSubmissionToCoSecy(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteSubmissionToCoSecy()));
-        else
-            detailsResource.setAgendaNoteSubmissionToCoSecy(null);
+//        if (projectAppraisalCompletion.getAgendaNoteSubmissionToCoSecy() != null)
+//            detailsResource.setAgendaNoteSubmissionToCoSecy(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteSubmissionToCoSecy()));
+//        else
+//            detailsResource.setAgendaNoteSubmissionToCoSecy(null);
 
         if (projectAppraisalCompletion.getAgendaNoteApprovalByMDAndCEO() != null)
             detailsResource.setAgendaNoteApprovalByMDAndCEO(dataConversionUtility.convertDateToSAPFormat(projectAppraisalCompletion.getAgendaNoteApprovalByMDAndCEO()));
