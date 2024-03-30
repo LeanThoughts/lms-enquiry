@@ -75,7 +75,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             borrowerCodeFrom: [],
             borrowerCodeTo: [],
             loanNumberFrom: [],
-            loanNumberTo: []
+            loanNumberTo: [],
+            enquiryNumber: []
         });
 
         _service.selectedLoanApplicationId = undefined;
@@ -118,7 +119,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             this.loanContractsSearchForm.controls['borrowerCodeTo'].setValue(formValues.borrowerCodeTo);
             this.loanContractsSearchForm.controls['loanNumberFrom'].setValue(formValues.loanNumberFrom);
             this.loanContractsSearchForm.controls['loanNumberTo'].setValue(formValues.loanNumberTo);
-
+            this.loanContractsSearchForm.controls['enquiryNumber'].setValue(formValues.enquiryNumber);
         }
     }
 
@@ -142,7 +143,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             loanContractsSearchParameters.borrowerCodeFrom == undefined  &&
             loanContractsSearchParameters.borrowerCodeTo == undefined &&
             loanContractsSearchParameters.loanNumberFrom == undefined &&
-            loanContractsSearchParameters.loanNumberTo == undefined
+            loanContractsSearchParameters.loanNumberTo == undefined &&
+            loanContractsSearchParameters.enquiryNumber == undefined
         ) {
             this._matSnackBar.open('Error: Enter at least one search parameter', 'OK', { duration: 7000 });
         }

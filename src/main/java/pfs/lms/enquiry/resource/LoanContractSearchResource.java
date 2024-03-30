@@ -2,8 +2,6 @@ package pfs.lms.enquiry.resource;
 
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
 public class LoanContractSearchResource {
     //private LocalDate enquiryDateFrom;
@@ -20,5 +18,5 @@ public class LoanContractSearchResource {
     private String projectType;
     private String assistanceType;
     private String technicalStatus;
-    //private String rating;
+    private String enquiryNumber;
 }

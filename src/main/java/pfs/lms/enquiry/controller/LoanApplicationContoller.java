@@ -15,7 +15,6 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.action.teaser.ITeaserService;
 import pfs.lms.enquiry.domain.*;
-import pfs.lms.enquiry.repository.*;
 import pfs.lms.enquiry.mail.service.LoanNotificationService;
 import pfs.lms.enquiry.process.LoanApplicationEngine;
 import pfs.lms.enquiry.reports.EnquiryReportExcelV1;
@@ -36,7 +35,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -817,6 +819,13 @@ public class LoanApplicationContoller {
                     loanApplication.getFunctionalStatus() ==
                             Integer.parseInt(resource.getAccountStatus())).
                     collect(Collectors.toList());
+
+        if (resource.getEnquiryNumber() != null)
+        {
+            loanApplications = loanApplications.stream().filter(loanApplication ->
+                            loanApplication.getEnquiryNo().getId().toString().equals(resource.getEnquiryNumber())).
+                    collect(Collectors.toList());
+        }
 
         User user;
         if (request.getUserPrincipal().getName().equals("admin")) {
