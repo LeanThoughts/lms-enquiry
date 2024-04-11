@@ -609,7 +609,7 @@ public class Initializer implements CommandLineRunner {
         }
 
         if (stateRepository.count() == 0) {
-            State s1 = new State("01", "Andra Pradesh");
+            State s1 = new State("01", "Andhra Pradesh");
             State s2 = new State("02", "Arunachal Pradesh");
             State s3 = new State("03", "Assam");
             State s4 = new State("04", "Bihar");
@@ -617,13 +617,13 @@ public class Initializer implements CommandLineRunner {
             State s6 = new State("06", "Gujarat");
             State s7 = new State("07", "Haryana");
             State s8 = new State("08", "Himachal Pradesh");
-            State s9 = new State("09", "Jammu und Kashmir");
+            State s9 = new State("09", "Jammu and Kashmir");
             State s10 = new State("10", "Karnataka");
             State s11 = new State("11", "Kerala");
             State s12 = new State("12", "Madhya Pradesh");
             State s13 = new State("13", "Maharashtra");
             State s14 = new State("14", "Manipur");
-            State s15 = new State("15", "Megalaya");
+            State s15 = new State("15", "Meghalaya");
             State s16 = new State("16", "Mizoram");
             State s17 = new State("17", "Nagaland");
             State s18 = new State("18", "Orissa");
@@ -636,12 +636,12 @@ public class Initializer implements CommandLineRunner {
             State s25 = new State("25", "West Bengal");
             State s26 = new State("26", "Andaman and Nico.In.");
             State s27 = new State("27", "Chandigarh");
-            State s28 = new State("28", "Dadra und Nagar Hav.");
-            State s29 = new State("29", "Daman und Diu");
+            State s28 = new State("28", "Dadra and Nagar Hav.");
+            State s29 = new State("29", "Daman and Diu");
             State s30 = new State("30", "Delhi");
             State s31 = new State("31", "Lakshadweep");
             State s32 = new State("32", "Pondicherry");
-            State s33 = new State("33", "Chhaattisgarh");
+            State s33 = new State("33", "Chhattisgarh");
             State s34 = new State("34", "Jharkhand");
             State s35 = new State("35", "Uttaranchal");
             State s36 = new State("36", "Telangana");

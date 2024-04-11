@@ -87,7 +87,46 @@
 
         <mat-tab-group class="mt-16">
 
-            <!-- LIE Details tab starts here -->
+          <!-- Project data tab starts here -->
+          <mat-tab label="Project Data">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-project-data></fuse-project-data>
+            </div>
+          </mat-tab>
+          <!-- Proposal details tab starts here -->
+          <mat-tab label="Proposal Details">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-proposal-details></fuse-proposal-details>
+            </div>
+          </mat-tab>
+          <!-- Location Details tab starts here -->
+          <mat-tab label="Location Details">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-main-location-details></fuse-main-location-details>
+            </div>
+          </mat-tab>
+          <!-- Internal risk grading tab starts here -->
+          <mat-tab label="Internal Risk Grading">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-internal-risk-rating></fuse-internal-risk-rating>
+            </div>
+          </mat-tab>
+
+          <!-- Risk report tab starts here -->
+          <mat-tab label="Risk Grading">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-risk-evaluations-overview></fuse-risk-evaluations-overview>
+            </div>
+          </mat-tab>
+
+          <!-- Further details tab starts here -->
+          <mat-tab label="Site Visit & Further Details">
+            <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
+              <fuse-site-visit-list [module]="'Appraisal'"></fuse-site-visit-list>
+            </div>
+          </mat-tab>
+
+          <!-- LIE Details tab starts here -->
             <mat-tab label="LIE Details">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-lie-list [module]="'Appraisal'"></fuse-lie-list>
@@ -136,12 +175,7 @@
                 </div>
             </mat-tab>
 
-            <!-- Location Details tab starts here -->
-            <mat-tab label="Location Details">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-main-location-details></fuse-main-location-details>
-                </div>
-            </mat-tab>
+
 
             <!-- TRA Statement -->
             <mat-tab label="TRA Statement">
@@ -168,41 +202,6 @@
             <mat-tab label="Syndication">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
                     <fuse-syndicate-consortium-list></fuse-syndicate-consortium-list>
-                </div>
-            </mat-tab>
-
-            <!-- Internal risk grading tab starts here -->
-            <mat-tab label="Internal Risk Grading">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-internal-risk-rating></fuse-internal-risk-rating>
-                </div>
-            </mat-tab>
-
-            <!-- Risk report tab starts here -->
-            <mat-tab label="Risk Grading">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-risk-evaluations-overview></fuse-risk-evaluations-overview>
-                </div>
-            </mat-tab>
-
-            <!-- Project data tab starts here -->
-            <mat-tab label="Project Data">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-project-data></fuse-project-data>
-                </div>
-            </mat-tab>
-
-            <!-- Proposal details tab starts here -->
-            <mat-tab label="Proposal Details">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-proposal-details></fuse-proposal-details>
-                </div>
-            </mat-tab>
-
-            <!-- Further details tab starts here -->
-            <mat-tab label="Site Visit & Further Details">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-site-visit-list [module]="'Appraisal'"></fuse-site-visit-list>
                 </div>
             </mat-tab>
 

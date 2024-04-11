@@ -46,8 +46,8 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
                 this.loanContractId = this.selectedEnquiry.loanContractId;
             this.functionalStatus = _loanEnquiryService.getFunctionalStatusDescription(this.selectedEnquiry.functionalStatus);
 
-        }));          
-        
+        }));
+
         this.subscriptions.add(
             _loanEnquiryService.selectedLoanApplicationId.subscribe(data => {
                 this.loanApplicationId = data;
@@ -98,7 +98,7 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
             response => {
                 this.iccApproval = response;
                 this._matSnackBar.dismiss();
-                this._matSnackBar.open('Board approval is sent for approval.', 'OK', { duration: 7000 });
+                this._matSnackBar.open('ICC Stage is sent for approval.', 'OK', { duration: 7000 });
             },
             error => {
                 this.disableSendForApproval = false;

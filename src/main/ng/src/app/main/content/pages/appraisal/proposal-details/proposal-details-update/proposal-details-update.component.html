@@ -11,13 +11,13 @@
         <form [formGroup]="_proposalDetailsForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Rate of Interest (Pre COD)" formControlName="rateOfInterestPreCod" maxlength="6">
+                    <input matInput placeholder="Rate of Interest (Pre COD) %" formControlName="rateOfInterestPreCod" maxlength="6">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Rate of Interest (Post COD)" formControlName="rateOfInterestPostCod" maxlength="6">
+                    <input matInput placeholder="Rate of Interest (Post COD) %" formControlName="rateOfInterestPostCod" maxlength="6">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Spread Reset (From COD)" formControlName="spreadReset" maxlength="6">
+                    <input matInput placeholder="Spread Reset (From COD) " formControlName="spreadReset" maxlength="6">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
                     <mat-select placeholder="Spread Reset Unit" formControlName="spreadResetUnit" required>
@@ -31,7 +31,7 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Effective Rate of Interest" formControlName="effectiveRateOfInterest" maxlength="6">
+                    <input matInput placeholder="Effective Rate of Interest %" formControlName="effectiveRateOfInterest" maxlength="6">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
                     <input matInput placeholder="Construction Period" formControlName="constructionPeriod" maxlength="3">

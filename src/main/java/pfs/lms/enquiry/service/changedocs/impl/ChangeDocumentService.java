@@ -30,6 +30,9 @@ import pfs.lms.enquiry.action.rejectbypfs.RejectByPfs;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
+import pfs.lms.enquiry.appraisal.riskrating.ExternalRating;
+import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrustee;
+import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrusteeReportAndFee;
 import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
@@ -468,13 +471,26 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("description", lendersFinancialAdvisor.getName());
                     result.put("loanApplication",lendersFinancialAdvisor.getLoanAppraisal().getLoanApplication());
                     return result;
-
                 case "LFAReportAndFee":
                     LFAReportAndFee lfaReportAndFee = (LFAReportAndFee) object;
                     result.put("id", lfaReportAndFee.getLendersFinancialAdvisor().getSerialNumber().toString());
                     result.put("description", lfaReportAndFee.getReportType() + lfaReportAndFee.getReportType());
                     result.put("loanApplication",lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal().getLoanApplication());
                     return result;
+                case "SecurityTrustee":
+                    SecurityTrustee securityTrustee = (SecurityTrustee) object;
+                    result.put("id", securityTrustee.getSerialNumber().toString());
+                    result.put("description", securityTrustee.getName());
+                    result.put("loanApplication",securityTrustee.getLoanAppraisal().getLoanApplication());
+                    return result;
+                case "SecurityTrusteeReportAndFee":
+                    SecurityTrusteeReportAndFee securityTrusteeReportAndFee = (SecurityTrusteeReportAndFee) object;
+                    result.put("id", securityTrusteeReportAndFee.getSecurityTrustee().getSerialNumber().toString());
+                    result.put("description", securityTrusteeReportAndFee.getReportType() + securityTrusteeReportAndFee.getReportType());
+                    result.put("loanApplication",securityTrusteeReportAndFee.getSecurityTrustee().getLoanAppraisal().getLoanApplication());
+                    return result;
+
+
                 case "TrustRetentionAccount":
                     TrustRetentionAccount trustRetentionAccount = (TrustRetentionAccount) object;
                     result.put("id", trustRetentionAccount.getSerialNumber().toString());
@@ -692,6 +708,12 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", termLoanRiskRating.getId().toString());
                     result.put("description", termLoanRiskRating.getYear());
                     result.put("loanApplication",termLoanRiskRating.getLoanAppraisal().getLoanApplication());
+                    return result;
+                case "ExternalRating":
+                    ExternalRating externalRating = (ExternalRating) object;
+                    result.put("id", externalRating.getId().toString());
+                    result.put("description", externalRating.getSerialNumber());
+                    result.put("loanApplication",externalRating.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "MainLocationDetail":
                     MainLocationDetail mainLocationDetail = (MainLocationDetail) object;

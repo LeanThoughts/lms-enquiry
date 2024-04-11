@@ -7,6 +7,7 @@ import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.service.LoanAppraisalService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ public class SecurityTrusteeService implements ISecurityTrusteeService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanAppraisalService loanAppraisalService;
     private final SecurityTrusteeRepository securityTrusteeRepository;
+    private final IChangeDocumentService changeDocumentService;
 private final LoanAppraisalRepository loanAppraisalRepository;
 
     @Override
@@ -46,17 +48,17 @@ private final LoanAppraisalRepository loanAppraisalRepository;
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(securityTrustee.getLoanMonitor(),
 //                securityTrustee.getLoanAppraisal(),resource.getModuleName());
 //
-//        // Create Change Document for LIE
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                securityTrustee.getId(),
-//                null,
-//                loanApplication.getLoanContractId(),
-//                null,
-//                securityTrustee,
-//                "Created",
-//                username,
-//                resource.getModuleName() , "Lenders Independent Engineer" );
+        // Create Change Document for securityTrustee
+        changeDocumentService.createChangeDocument(
+                securityTrustee.getLoanAppraisal().getId(),
+                securityTrustee.getId(),
+                null,
+                loanApplication.getLoanContractId(),
+                null,
+                securityTrustee,
+                "Created",
+                username,
+                resource.getModuleName() , "Security Trustee" );
 
         return securityTrustee;
     }
@@ -67,8 +69,8 @@ private final LoanAppraisalRepository loanAppraisalRepository;
     {
         SecurityTrustee securityTrustee = securityTrusteeRepository.getOne(resource.getSecurityTrustee().getId());
 
-        //Clone the LIE Object for Change Document
-        Object oldLendersIndependentEngineer = securityTrustee.clone();
+        //Clone the securityTrustee Object for Change Document
+        Object oldsecurityTrustee = securityTrustee.clone();
 
         securityTrustee.setAdvisor(resource.getSecurityTrustee().getAdvisor());
         securityTrustee.setBpCode(resource.getSecurityTrustee().getBpCode());
@@ -84,17 +86,17 @@ private final LoanAppraisalRepository loanAppraisalRepository;
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(securityTrustee.getLoanMonitor(),
 //                securityTrustee.getLoanAppraisal(),resource.getModuleName());
 //
-//        //Create Change Document
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                securityTrustee.getId(),
-//                null,
-//                securityTrustee.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                oldLendersIndependentEngineer,
-//                securityTrustee,
-//                "Updated",
-//                username,
-//                resource.getModuleName(), "Lenders Independent Engineer" );
+        //Create Change Document
+        changeDocumentService.createChangeDocument(
+                securityTrustee.getLoanAppraisal().getId(),
+                securityTrustee.getId(),
+                null,
+                securityTrustee.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                oldsecurityTrustee,
+                securityTrustee,
+                "Updated",
+                username,
+                resource.getModuleName(), "Security Trustee" );
 
         return securityTrustee;
     }
@@ -108,17 +110,17 @@ private final LoanAppraisalRepository loanAppraisalRepository;
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(securityTrustee.getLoanMonitor(),
 //                securityTrustee.getLoanAppraisal(), moduleName);
 //
-//        // Create Change Document for LIE Delete
-//        changeDocumentService.createChangeDocument(
-//                loanBusinessProcessObjectId,
-//                securityTrustee.getId(),
-//                null,
-//                securityTrustee.getLoanMonitor().getLoanApplication().getLoanContractId(),
-//                null,
-//                securityTrustee,
-//                "Deleted",
-//                username,
-//                moduleName, "Lenders Independent Engineer" );
+        // Create Change Document for LIE Delete
+        changeDocumentService.createChangeDocument(
+                securityTrustee.getLoanAppraisal().getId(),
+                securityTrustee.getId(),
+                null,
+                securityTrustee.getLoanMonitor().getLoanApplication().getLoanContractId(),
+                null,
+                securityTrustee,
+                "Deleted",
+                username,
+                moduleName, "Security Trustee" );
 
         securityTrusteeRepository.delete(securityTrustee);
         updateSerialNumbers(loanAppraisal);

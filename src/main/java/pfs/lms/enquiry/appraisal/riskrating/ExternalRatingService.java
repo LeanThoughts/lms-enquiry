@@ -58,16 +58,16 @@ public class ExternalRatingService implements IExternalRatingService {
         externalRating = externalRatingRepository.save(externalRating);
 
         // Change Documents for External Rating Corporate Loan
-//        changeDocumentService.createChangeDocument(
-//                externalRating.getLoanAppraisal().getId(),
-//                externalRating.getId().toString(),
-//                externalRating.getLoanAppraisal().getId().toString(),
-//                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-//                null,
-//                externalRating,
-//                "Created",
-//                username,
-//                "Appraisal", "External Rating Corporate Loan" );
+        changeDocumentService.createChangeDocument(
+                externalRating.getLoanAppraisal().getId(),
+                externalRating.getId().toString(),
+                externalRating.getLoanAppraisal().getId().toString(),
+                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                externalRating,
+                "Created",
+                username,
+                "Appraisal", "External Rating" );
 
 
         return externalRating;
@@ -89,16 +89,16 @@ public class ExternalRatingService implements IExternalRatingService {
         externalRating = externalRatingRepository.save(externalRating);
 
         // Change Documents for External Rating Corporate Loan
-//        changeDocumentService.createChangeDocument(
-//                externalRating.getLoanAppraisal().getId(),
-//                externalRating.getId().toString(),
-//                externalRating.getLoanAppraisal().getId().toString(),
-//                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-//                oldExternalRating,
-//                externalRating,
-//                "Updated",
-//                username,
-//                "Appraisal", "External Rating Corporate Loan" );
+        changeDocumentService.createChangeDocument(
+                externalRating.getLoanAppraisal().getId(),
+                externalRating.getId().toString(),
+                externalRating.getLoanAppraisal().getId().toString(),
+                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                oldExternalRating,
+                externalRating,
+                "Updated",
+                username,
+                "Appraisal", "External Rating" );
 
 
         return externalRating;
@@ -111,16 +111,16 @@ public class ExternalRatingService implements IExternalRatingService {
         externalRatingRepository.deleteById(externalRatingId);
 
         // Change Documents for External Rating Corporate Loan
-//        changeDocumentService.createChangeDocument(
-//                externalRating.getLoanAppraisal().getId(),
-//                externalRating.getId().toString(),
-//                externalRating.getLoanAppraisal().getId().toString(),
-//                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-//                null,
-//                externalRating,
-//                "Deleted",
-//                username,
-//                "Appraisal", "External Rating Corporate Loan" );
+        changeDocumentService.createChangeDocument(
+                externalRating.getLoanAppraisal().getId(),
+                externalRating.getId().toString(),
+                externalRating.getLoanAppraisal().getId().toString(),
+                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+                null,
+                externalRating,
+                "Deleted",
+                username,
+                "Appraisal", "External Rating" );
 
         return externalRating;
     }
