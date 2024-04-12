@@ -33,7 +33,7 @@ export class ExternalRatingUpdateComponent {
         }
 
         this._loanAppraisalService.getRatings().subscribe(response => {
-            this.ratings = response._embedded.ratings;
+            this.ratings = response._embedded.externalRatingTypes;
         });
 
         this.ratingForm = this._formBuilder.group({

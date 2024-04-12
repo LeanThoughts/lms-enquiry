@@ -3,13 +3,21 @@
     <!-- <mat-table class="enquiries-table" #table [dataSource]="dataSource" *fuseIfOnDom [@animateStagger]="{value:'50'}" fusePerfectScrollbar> -->
     <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
-      <!-- Functional Status Column -->
-      <ng-container matColumnDef="functionalStatusDescription">
-        <mat-header-cell *matHeaderCellDef mat-sort-header >Status</mat-header-cell>
-        <mat-cell *matCellDef="let enquiry" >
-          <p class="text-truncate">{{ enquiry.functionalStatusDescription }}</p>
-        </mat-cell>
-      </ng-container>
+        <!-- Functional Status Column -->
+        <ng-container matColumnDef="functionalStatusDescription">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Status</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.functionalStatusDescription }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Enquiry Number Column -->
+        <ng-container matColumnDef="enquiryNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Enquiry Number</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.enquiryNumber }}</p>
+            </mat-cell>
+        </ng-container>
 
         <!-- busPartnerNumber Column -->
         <ng-container matColumnDef="busPartnerNumber">

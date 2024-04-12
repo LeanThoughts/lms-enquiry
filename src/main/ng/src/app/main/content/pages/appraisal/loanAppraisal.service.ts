@@ -396,7 +396,7 @@ export class LoanAppraisalService implements Resolve<any> {
      */
     public getRatings(): Observable<any> {
         return new Observable((observer) => {
-            this._http.get('enquiry/api/ratings').subscribe(
+            this._http.get('enquiry/api/externalRatingTypes').subscribe(
                 (response => {
                     observer.next(response);
                     observer.complete();

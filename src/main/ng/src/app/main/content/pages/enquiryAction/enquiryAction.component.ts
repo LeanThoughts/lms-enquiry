@@ -97,7 +97,8 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
             loanAmount: [this.selectedEnquiry.loanAmount || ''],
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
-            stage: [this.selectedEnquiry.stage || '']
+            stage: [this.selectedEnquiry.stage || ''],
+            enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
     }
 

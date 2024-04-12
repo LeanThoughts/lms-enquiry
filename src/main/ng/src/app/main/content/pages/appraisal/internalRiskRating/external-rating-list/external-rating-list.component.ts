@@ -42,11 +42,12 @@ export class ExternalRatingListComponent {
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
 
         this._loanAppraisalService.getRatings().subscribe(response => {
-            this.ratings = response._embedded.ratings;
+            this.ratings = response._embedded.externalRatingTypes;
             this._loanAppraisalService.getExternalRatings(this._loanAppraisalId).subscribe(response => {
                 this.dataSource = new MatTableDataSource(response._embedded.externalRatings);
             });
         })
+        
     }
 
     /**
@@ -89,7 +90,7 @@ export class ExternalRatingListComponent {
      * getValue()
      */
     getValue(rating: any): string {
-        const obj = this.ratings.filter(r => r.code === rating.code);
+        const obj = this.ratings.filter(r => r.code === rating);
         if (obj.length > 0)
             return obj[0].value;
         else

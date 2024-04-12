@@ -56,8 +56,6 @@ public class Initializer implements CommandLineRunner {
     private final FeeTypeRepository feeTypeRepository;
     private final SanctionTypeRepository sanctionTypeRepository;
 
-    private final RatingRepository ratingRepository;
-
     @Override
     public void run(String... strings) throws Exception {
 
@@ -878,14 +876,6 @@ public class Initializer implements CommandLineRunner {
         }
 
 
-        if (ratingRepository.count() == 0) {
-            ratingRepository.saveAll(Arrays.asList(
-                new Rating("44", "BWR A+"),
-                new Rating("1", "BWR A"),
-                new Rating("2", "BWR A-"),
-                new Rating("3", "BWR A- (CE)")
-            ));
-        }
     }
 
 

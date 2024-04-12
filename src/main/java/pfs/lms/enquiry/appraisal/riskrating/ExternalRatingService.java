@@ -89,16 +89,16 @@ public class ExternalRatingService implements IExternalRatingService {
         externalRating = externalRatingRepository.save(externalRating);
 
         // Change Documents for External Rating Corporate Loan
-        changeDocumentService.createChangeDocument(
-                externalRating.getLoanAppraisal().getId(),
-                externalRating.getId().toString(),
-                externalRating.getLoanAppraisal().getId().toString(),
-                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
-                oldExternalRating,
-                externalRating,
-                "Updated",
-                username,
-                "Appraisal", "External Rating" );
+//        changeDocumentService.createChangeDocument(
+//                externalRating.getLoanAppraisal().getId(),
+//                externalRating.getId().toString(),
+//                externalRating.getLoanAppraisal().getId().toString(),
+//                externalRating.getLoanAppraisal().getLoanApplication().getLoanContractId(),
+//                oldExternalRating,
+//                externalRating,
+//                "Updated",
+//                username,
+//                "Appraisal", "External Rating" );
 
 
         return externalRating;
