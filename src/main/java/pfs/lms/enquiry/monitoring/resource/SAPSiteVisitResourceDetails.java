@@ -50,7 +50,7 @@ public class SAPSiteVisitResourceDetails {
     private String  revisedSCOD1;
     @JsonProperty(value = "RevisedSCOD2")
     private String  revisedSCOD2;
-    @JsonProperty(value = "Businesspartnerid")
+    @JsonProperty(value = "BusinessPartnerId")
     private String  businesspartnerid;
     @JsonProperty(value = "Businesspartnername")
     private String  businesspartnername;

@@ -120,6 +120,9 @@ public class UserController {
     public String getAuthorizationBearer(Principal user) {
         OAuth2Authentication authentication = (OAuth2Authentication) user;
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
+        log.info("Inside Authorization Bearer:  User : ", user.toString());
+        log.info("OAuth2AuthenticationDetails : ", details.toString());
+
         OAuth2AccessToken token = defaultTokenServices.readAccessToken(details.getTokenValue());
         log.info("Access token  = {}", token.toString());
         return "Bearer " + token.toString();
