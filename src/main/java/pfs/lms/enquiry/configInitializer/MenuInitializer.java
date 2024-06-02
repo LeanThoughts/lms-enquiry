@@ -60,6 +60,12 @@ public class MenuInitializer  implements CommandLineRunner {
                 case "ZLM023" : //PFS IT Team
                     createITTeamMenu(userRole.getCode(),userRole.getValue());
                     break;
+                case "ZLM033" : //Business Development Head
+                    createBDHeadMenu(userRole.getCode(),userRole.getValue());
+                    break;
+                case "ZLM034" : //Business Development Officer
+                    createBDOfficerMenu(userRole.getCode(),userRole.getValue());
+                    break;
                 default:
                     createDefaultMenu(userRole.getCode(), userRole.getValue());
             }
@@ -96,6 +102,7 @@ public class MenuInitializer  implements CommandLineRunner {
         adminMenu = this.addReports(adminMenu);
         adminMenu = this.addLoanApplicationAll(adminMenu);
         adminMenu = this.addLoanServicing(adminMenu);
+        adminMenu  = this.addBusinessDevelopment(adminMenu);
 
         if (adminMenuExisting == null) {
             adminMenu = menuService.createMenu(adminMenu);
@@ -127,6 +134,7 @@ public class MenuInitializer  implements CommandLineRunner {
         adminMenu = this.addReports(adminMenu);
         adminMenu = this.addLoanApplicationAll(adminMenu);
         adminMenu = this.addLoanServicing(adminMenu);
+        adminMenu = this.addBusinessDevelopment(adminMenu);
 
         if (adminMenuExisting == null) {
             adminMenu = menuService.createMenu(adminMenu);
@@ -179,6 +187,7 @@ public class MenuInitializer  implements CommandLineRunner {
         userMenu = this.addReports(userMenu);
         userMenu = this.addLoanApplicationAll(userMenu);
         userMenu = this.addLoanServicing(userMenu);
+        userMenu = this.addBDHeadMenu(userMenu);
 
         if (userMenuExisting == null) {
             userMenu = menuService.createMenu(userMenu);
@@ -212,6 +221,57 @@ public class MenuInitializer  implements CommandLineRunner {
         }
     }
 
+    private void createBDHeadMenu(String userRole, String userRoleName) {
+
+        Menu userMenu = new Menu();
+        Menu userMenuExisting = new Menu();
+        userMenuExisting = menuService.findByUserRole(userRole);
+        if (userMenuExisting != null) {
+            userMenu = userMenuExisting;
+
+        }
+        userMenu.setMenuHeaders(null);
+        userMenu.setUserRole(userRole);
+        userMenu.setUserRoleName(userRoleName);
+
+
+//        userMenu = this.addMain(userMenu);
+//        userMenu = this.addReports(userMenu);
+        userMenu = this.addLoanApplicantMenu(userMenu);
+        userMenu = this.addBusinessDevelopment(userMenu);
+
+        if (userMenuExisting == null) {
+            userMenu = menuService.createMenu(userMenu);
+        } else {
+            userMenu = menuService.updateMenu(userMenu);
+        }
+    }
+
+    private void createBDOfficerMenu(String userRole, String userRoleName) {
+
+        Menu userMenu = new Menu();
+        Menu userMenuExisting = new Menu();
+        userMenuExisting = menuService.findByUserRole(userRole);
+        if (userMenuExisting != null) {
+            userMenu = userMenuExisting;
+
+        }
+        userMenu.setMenuHeaders(null);
+        userMenu.setUserRole(userRole);
+        userMenu.setUserRoleName(userRoleName);
+
+
+//        userMenu = this.addMain(userMenu);
+//        userMenu = this.addReports(userMenu);
+        userMenu = this.addLoanApplicantMenu(userMenu);
+        userMenu = this.addBusinessDevelopment(userMenu);
+
+        if (userMenuExisting == null) {
+            userMenu = menuService.createMenu(userMenu);
+        } else {
+            userMenu = menuService.updateMenu(userMenu);
+        }
+    }
 
 
     private void createLoanApplicantMenu(String userRole, String userRoleName) {
@@ -386,6 +446,7 @@ public class MenuInitializer  implements CommandLineRunner {
         return menu;
 
     }
+
     private Menu addLoanApplicantMenu(Menu menu){
 
              /*
@@ -437,6 +498,60 @@ public class MenuInitializer  implements CommandLineRunner {
         return menu;
 
     }
+
+    private Menu addBDHeadMenu(Menu menu){
+
+             /*
+                    APPLICATIONS
+             */
+        MenuHeader menuHeader = new MenuHeader();
+        if (menu.getMenuHeaders() == null) {
+            menuHeader.setSerialNumber(1);
+        } else {
+            menuHeader.setSerialNumber(menu.getMenuHeaders().size() + 1);
+        }
+        menuHeader.setId("applications");
+        menuHeader.setTitle("Applications");
+        menuHeader.setTranslate("NAV.APPLICATIONS");
+        menuHeader.setType("group");
+        menuHeader.setIcon("");
+
+
+        // Application items
+        Integer serialNo = 0;
+
+        MenuItem menuItem = new MenuItem();
+        serialNo += 1;
+        menuItem.setId("loan-enquiry");
+        menuItem.setTitle("New Loan Enquiry");
+        menuItem.setSerialNumber(serialNo);
+        menuItem.setTranslate("NAV.LOANENQUIRY");
+        menuItem.setType("item");
+        menuItem.setIcon("create");
+        menuItem.setUrl("/enquiryApplication");
+        menuHeader.addMenuitem(menuItem);
+
+
+
+        menuItem = new MenuItem();
+        serialNo += 1;
+        menuItem.setId("enquiry-alerts");
+        menuItem.setTitle("Enquiry Alerts");
+        menuItem.setSerialNumber(serialNo);
+        menuItem.setTranslate("NAV.ENQUIRYALERTS");
+        menuItem.setType("item");
+        menuItem.setIcon("rate_review");
+        menuItem.setUrl("/enquiryAlerts");
+        menuHeader.addMenuitem(menuItem);
+
+
+        menu.addMenuHeader(menuHeader);
+
+        return menu;
+
+    }
+
+
     private Menu addAdministration(Menu menu) {
 
 
@@ -516,6 +631,43 @@ public class MenuInitializer  implements CommandLineRunner {
         menuItem.setType("item");
         menuItem.setIcon("create");
         menuItem.setUrl("/loanContractsList");
+        menuHeader.addMenuitem(menuItem);
+
+        menu.addMenuHeader(menuHeader);
+
+        return menu;
+
+    }
+
+    private Menu addBusinessDevelopment(Menu menu) {
+              /*
+                    LOAN SERVICING
+             */
+        MenuHeader menuHeader = new MenuHeader();
+        if (menu.getMenuHeaders() == null) {
+            menuHeader.setSerialNumber(1);
+        } else {
+            menuHeader.setSerialNumber(menu.getMenuHeaders().size() + 1);
+        }
+        menuHeader.setId("Enquiry Upload");
+        menuHeader.setTitle("BUSINESS DEVELOPMENT");
+        menuHeader.setTranslate("NAV.BUSINESSDEVELOPMENT");
+        menuHeader.setType("group");
+        menuHeader.setIcon("");
+
+
+        // Report Items
+        Integer serialNo = 0;
+
+        MenuItem menuItem = new MenuItem();
+        serialNo += 1;
+        menuItem.setId("enquiry-upload");
+        menuItem.setTitle("Upload Loan Enquiries");
+        menuItem.setSerialNumber(serialNo);
+        menuItem.setTranslate("NAV.UPLOADENQUIRIES");
+        menuItem.setType("item");
+        menuItem.setIcon("upload");
+        menuItem.setUrl("/businessDeveUploadLoanEnquires");
         menuHeader.addMenuitem(menuItem);
 
         menu.addMenuHeader(menuHeader);
