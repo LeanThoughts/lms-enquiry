@@ -641,7 +641,7 @@ public class MenuInitializer  implements CommandLineRunner {
 
     private Menu addBusinessDevelopment(Menu menu) {
               /*
-                    LOAN SERVICING
+                    BUsiness DEvelopment
              */
         MenuHeader menuHeader = new MenuHeader();
         if (menu.getMenuHeaders() == null) {
