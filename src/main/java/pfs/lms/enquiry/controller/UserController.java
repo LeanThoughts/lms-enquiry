@@ -121,7 +121,9 @@ public class UserController {
         OAuth2Authentication authentication = (OAuth2Authentication) user;
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
         log.info("Inside Authorization Bearer:  User : ", user.toString());
+        log.info("User : ", ((OAuth2Authentication) user).getPrincipal() );
         log.info("OAuth2AuthenticationDetails : ", details.toString());
+        log.info("Details Token Value : " , details.getTokenValue() );
 
         OAuth2AccessToken token = defaultTokenServices.readAccessToken(details.getTokenValue());
         log.info("Access token  = {}", token.toString());
