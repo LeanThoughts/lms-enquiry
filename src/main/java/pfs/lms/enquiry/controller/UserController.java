@@ -73,6 +73,12 @@ public class UserController {
 
         SignupResource signupResource = new SignupResource(userResource.getFirstName(), userResource.getLastName(),
                 userResource.getEmail(), "", userResource.getPassword());
+        log.info("Signup resource : ", signupResource.getEmail());
+        log.info("Principal : ", principal.toString());
+        String name = principal.getName();
+        log.info("Principal name: ", name );
+
+
         modifyPassword(signupResource, principal);
 
         //Update Partner for the User
@@ -122,7 +128,15 @@ public class UserController {
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
         log.info("Inside Authorization Bearer:  User : ", user.toString());
         log.info("User : ", ((OAuth2Authentication) user).getPrincipal() );
+        log.info("OAuth2AuthenticationDetails Remote Address : ", details.getRemoteAddress());
+
+        log.info("OAuth2AuthenticationDetails :Session Id ", details.getSessionId());
+        log.info("OAuth2AuthenticationDetails :Decoded Details ", details.getDecodedDetails().toString());
+
+
         log.info("OAuth2AuthenticationDetails : ", details.toString());
+
+
         log.info("Details Token Value : " , details.getTokenValue() );
 
         OAuth2AccessToken token = defaultTokenServices.readAccessToken(details.getTokenValue());
