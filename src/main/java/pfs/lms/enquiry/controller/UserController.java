@@ -2,6 +2,7 @@ package pfs.lms.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -37,6 +38,7 @@ public class UserController {
 
     private final OAuthClient oAuthClient;
 
+    @Autowired
     private final ResourceServerTokenServices defaultTokenServices;
 
     private final UserRepository userRepository;
