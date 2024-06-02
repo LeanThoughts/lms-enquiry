@@ -125,13 +125,13 @@ public class UserController {
     public String getAuthorizationBearer(Principal user) {
         OAuth2Authentication authentication = (OAuth2Authentication) user;
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) authentication.getDetails();
-        log.info("Default Token Service Class Name", defaultTokenServices.getClass().getName());
-        log.info("Inside Authorization Bearer:  User : ", user.toString());
-        log.info("User : ", ((OAuth2Authentication) user).getPrincipal() );
-        log.info("OAuth2AuthenticationDetails Remote Address : ", details.getRemoteAddress());
+        log.info("Default Token Service Class Name :" + defaultTokenServices.getClass().getName());
+        log.info("Inside Authorization Bearer:  User : " + user.toString());
+        log.info("User : " + ((OAuth2Authentication) user).getPrincipal() );
+        log.info("OAuth2AuthenticationDetails Remote Address : " + details.getRemoteAddress());
 
-        log.info("OAuth2AuthenticationDetails :Session Id ", details.getSessionId());
-        log.info("OAuth2AuthenticationDetails :Decoded Details ", details.getDecodedDetails().toString());
+        log.info("OAuth2AuthenticationDetails :Session Id : " + details.getSessionId());
+        //log.info("OAuth2AuthenticationDetails :Decoded Details " + details.getDecodedDetails().toString());
 
 
         log.info("OAuth2AuthenticationDetails : ", details.toString());
