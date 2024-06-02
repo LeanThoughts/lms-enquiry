@@ -6,3 +6,6 @@ spring:
 server:
   servlet:
     context-path: /enquiry
+logging:
+  level:
+    root: debug
