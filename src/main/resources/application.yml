@@ -6,6 +6,9 @@ spring:
 server:
   servlet:
     context-path: /enquiry
-logging:
-  level:
-    root: debug
+#logging:
+#  file:
+#    max-size: 1000 MB
+#  level:
+#    root: debug
+#  path: C:\Users\admin\log\log.txt
