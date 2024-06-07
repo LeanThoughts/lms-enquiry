@@ -3,6 +3,8 @@ spring:
     allow-bean-definition-overriding: true
     allow-circular-references: true
   profiles: pfsprdip
+  rest:
+    basePath: /api
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -17,6 +19,7 @@ spring:
     hikari:
       connection-timeout: 60000
       maximum-pool-size: 20
+      validation-timeout: 5000000
   jpa:
     database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
     generate-ddl: true
