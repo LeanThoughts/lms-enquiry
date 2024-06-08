@@ -3,6 +3,7 @@ import {MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar} from 
 import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiryApplication.service';
 import { EnquiryApplicationModel } from 'app/main/content/model/enquiryApplication.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'fuse-enquiry-upload-list',
@@ -37,6 +38,8 @@ export class EnquiriesUploadListComponent implements OnInit {
      * constructor()
      */
     constructor(private _service: LoanEnquiryService, private _dialogRef: MatDialog, private _matSnackBar: MatSnackBar) {
+        console.log('setting datasource to undefined', this.dataSource);
+        this.dataSource = undefined;
     }
 
     /**
@@ -63,33 +66,23 @@ export class EnquiriesUploadListComponent implements OnInit {
      * createEnquiries()
      */
     createEnquiries(): void {
-        this._service.createExcelEnquiries().subscribe();
+        if (this.dataSource === undefined)
+            this._matSnackBar.open('Upload the excel file with enquiries first.', 'OK', {panelClass: ['success-snackbar']});
+        else
+            this._service.createExcelEnquiries().subscribe(
+                (response) => {
+                    this._matSnackBar.open('Created enquiries successfully', 'OK', {panelClass: ['success-snackbar']});
+                },
+                (error: HttpErrorResponse) => {
+                    this._matSnackBar.open(error.error.message, 'OK', {panelClass: ['success-snackbar']});
+                }
+            );
     }
 
     /**
      * viewRejectedReasons()
      */
     viewRejectedReasons(comments: string): void {
-        // Open the dialog.
-        // const arr = [];
-        // comments.split(';').forEach(comment => arr.push({'comment': comment}))
-        // var data = {
-        //     'comments': arr
-        // };
-        // this._dialogRef.open(EnquiriesUploadReasonsDialogComponent, {
-        //     width: '750px',
-        //     data: data
-        // });
-
-        // // Subscribe to the dialog close event to intercept the action taken.
-        // dialogRef.afterClosed().subscribe(result => {
-        //     if (result && result.refresh === true) {
-        //         this._projectAppraisalCompletion = result.projectAppraisalCompletion;
-        //         this.populateDisplayTables();
-        //     }
-        // });
-
-        // this._matSnackBar.open(comments, 'OK', { duration: 15000 });
         this._matSnackBar.open(comments, 'OK', {panelClass: ['success-snackbar']});
     }
 }

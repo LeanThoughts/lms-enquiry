@@ -52,42 +52,56 @@ public class EnquiriesExcelUploadController {
 
                     ExcelEnquiry enquiry = new ExcelEnquiry();
                     String comments = "";
+
                     enquiry.setSerialNumber(new Double(row.getCell(0).getNumericCellValue()).longValue());
+                    if(enquiry.getSerialNumber() == null || enquiry.getSerialNumber() == 0)
+                        comments += "Serial Number is missing.\n";
 
-                    enquiry.setBorrowerName(row.getCell(1).getStringCellValue().trim());
-                    if(enquiry.getBorrowerName().trim().equals(""))
-                        comments += "Borrower Name is empty\n";
+                    enquiry.setBorrowerName(row.getCell(1).getStringCellValue());
+                    if(enquiry.getBorrowerName() == null || enquiry.getBorrowerName().trim().equals(""))
+                        comments += "Borrower Name is missing.\n";
 
-                    enquiry.setGroupName(row.getCell(2).getStringCellValue().trim());
-                    if(enquiry.getGroupName().trim().equals(""))
-                        comments += "Group Name is empty\n";
+                    enquiry.setGroupName(row.getCell(2).getStringCellValue());
+                    if(enquiry.getGroupName() == null || enquiry.getGroupName().trim().equals(""))
+                        comments += "Group Name is missing.\n";
 
                     enquiry.setProjectType(row.getCell(3).getStringCellValue().trim());
                     if(enquiry.getProjectType().trim().equals(""))
-                        comments += "Project Type is empty\n";
+                        comments += "Project Type is missing.\n";
+                    else if(projectTypeRepository.findByValue(enquiry.getProjectType()) == null)
+                        comments += "Project Type is invalid. Provide valid input for Project Type.\n";
 
                     enquiry.setTypeOfAssistance(row.getCell(4).getStringCellValue().trim());
                     if(enquiry.getTypeOfAssistance().trim().equals(""))
-                        comments += "Type of Assistance is empty\n";
+                        comments += "Type of Assistance is missing.\n";
+                    else if(assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance()) == null)
+                        comments += "Assistance Type is invalid. Provide valid input for Assistance Type.\n";
 
                     enquiry.setProposalType(row.getCell(5).getStringCellValue().trim());
                     if(enquiry.getProposalType().trim().equals(""))
-                        comments += "Reason for ICC Status is empty\n";
+                        comments += "Proposal Type is missing.\n";
+                    else if(proposalTypeRepository.findByValue(enquiry.getProposalType()) == null)
+                        comments += "Proposal Type is invalid. Provide valid input for Proposal Type.\n";
 
                     enquiry.setIccReadinessStatus(row.getCell(9).getStringCellValue().trim());
-                    if(enquiry.getIccReadinessStatus().trim().equals(""))
-                        comments += "ICC Readiness Status is empty\n";
+                    if(!enquiry.getIccReadinessStatus().trim().equals("") &&
+                            iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus()) == null)
+                        comments += "Provide valid input for ICC Readiness Status.\n";
+
+                    enquiry.setAmountRequested(row.getCell(7).getNumericCellValue());
+                    if(enquiry.getAmountRequested() == null || enquiry.getAmountRequested() == 0)
+                        comments += "Provide valid input for Requested Amount..\n";
+
+                    enquiry.setIccStatus(row.getCell(12).getStringCellValue().trim());
+                    if(!enquiry.getIccStatus().trim().equals("") &&
+                            iccStatusRepository.findByValue(enquiry.getIccStatus()) == null)
+                        comments += "Provide valid input for ICC Status.\n";
 
                     enquiry.setReasonForIccStatus(row.getCell(13).getStringCellValue().trim());
-                    if(enquiry.getReasonForIccStatus().trim().equals(""))
-                        comments += "Reason for ICC Status is empty\n";
-
                     //enquiry.setDateOfLeadGeneration(row.getCell(6).getDateCellValue());
-                    enquiry.setAmountRequested(row.getCell(7).getNumericCellValue());
                     enquiry.setBorrowerRequestedROI(row.getCell(8).getNumericCellValue());
                     enquiry.setRemarksOnIccReadiness(row.getCell(10).getStringCellValue().trim());
                     enquiry.setPresentedInIcc(row.getCell(11).getStringCellValue().trim());
-                    enquiry.setIccStatus(row.getCell(12).getStringCellValue().trim());
                     //enquiry.setIccClearanceDate(row.getCell(14).getDateCellValue());
                     enquiry.setIccMeetingNumber(row.getCell(15).getStringCellValue().trim());
                     enquiry.setAmountApproved(row.getCell(16).getNumericCellValue());
@@ -99,7 +113,7 @@ public class EnquiriesExcelUploadController {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Errors occurred on row, ignoring");
+            e.printStackTrace();
         }
 
         // Save all enquiries
@@ -112,12 +126,20 @@ public class EnquiriesExcelUploadController {
     public ResponseEntity<List<ExcelEnquiry>> createEnquiries() throws Exception {
 
         List<ExcelEnquiry> enquiries = excelEnquiryRepository.findAll();
+
+        final boolean[] errors = {false};
+        enquiries.forEach((enquiry) -> {
+            if (!enquiry.getComments().trim().equals(""))
+                errors[0] = true;
+        });
+        if (errors[0])
+            throw new Exception("Found errors in the excel sheet. Cannot proceed unless they are fixed.");
+
         enquiries.forEach((enquiry) -> {
             LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
             List<Partner> partners = partnerRepository.findBySearchString(enquiry.getBorrowerName());
             if (loanApplication == null) {
                 loanApplication = new LoanApplication();
-                // loanApplication.setEnquiryNo(enquiryNo); // TODO
                 loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
 
                 ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());

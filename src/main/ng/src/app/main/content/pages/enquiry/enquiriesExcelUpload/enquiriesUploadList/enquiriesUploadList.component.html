@@ -4,7 +4,7 @@
     <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
 
         <ng-container matColumnDef="comments">
-            <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
                 <div *ngIf="enquiry.comments !== ''">
                     <button mat-raised-button type="button" color="accent" (click)="viewRejectedReasons(enquiry.comments)">
@@ -162,8 +162,8 @@
   </mat-paginator> -->
 </div>
 
-<div fxLayout="row" *ngIf="dataSource !== undefined">
-    <div fxFlex="100" class="mt-12 mb-12" style="margin-left: 26px !important;">
+<div fxLayout="row">
+    <div fxFlex="100" class="mt-12 mb-12" style="margin-left: 24px !important;">
         <button mat-raised-button type="button" color="accent" (click)="createEnquiries()">
             Create Enquiries
         </button>    

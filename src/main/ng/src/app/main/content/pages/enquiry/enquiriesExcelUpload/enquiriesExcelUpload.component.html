@@ -58,7 +58,7 @@
 
 
   <!-- CONTENT -->
-  <div class="content p-16">
+  <div class="content p-16" *ngIf="enquiryList.length > 0">
     <div class="content-card mat-white-bg mat-elevation-z4" fusePerfectScrollbar style="width: 125%">
       <fuse-enquiry-upload-list [enquiryList]="enquiryList"></fuse-enquiry-upload-list>
     </div>
