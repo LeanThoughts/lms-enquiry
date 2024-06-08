@@ -44,6 +44,7 @@ import { SanctionModule } from './main/content/pages/sanction/sanction.module';
 import { ICCApprovalModule } from './main/content/pages/iccApproval/iccApproval.module';
 import { ApplicationFeeModule } from './main/content/pages/applicationFee/applicationFee.module';
 import { DocumentationModule } from './main/content/pages/documentation/documentation.module';
+import { EnquiriesExcelUploadModule } from './main/content/pages/enquiry/enquiriesExcelUpload/enquiriesExcelUpload.module';
 
 const appRoutes: Routes = [
     {
@@ -94,6 +95,7 @@ const appRoutes: Routes = [
         EnquiryApplicationModule,
         EnquiryAlertsModule,
         EnquiryListModule,
+        EnquiriesExcelUploadModule,
         MessageDialogModule,
         UserModule,
         Register2Module,

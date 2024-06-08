@@ -43,5 +43,4 @@ public class LoanPartner extends AggregateRoot<LoanPartner> implements Cloneable
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

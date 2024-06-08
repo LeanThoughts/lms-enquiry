@@ -8,10 +8,10 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-public class AssistanceType extends AggregateRoot<AssistanceType> {
+public class ICCStatus extends AggregateRoot<ICCStatus> {
 
     private String code;
 

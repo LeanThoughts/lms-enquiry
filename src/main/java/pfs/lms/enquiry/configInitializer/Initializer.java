@@ -58,12 +58,52 @@ public class Initializer implements CommandLineRunner {
     private final FeeTypeRepository feeTypeRepository;
     private final SanctionTypeRepository sanctionTypeRepository;
 
+    private final ProposalTypeRepository proposalTypeRepository;
+    private final ICCReadinessStatusRepository iccReadinessStatusRepository;
+    private final PresentedInICCRepository presentedInICCRepository;
+    private final ICCStatusRepository iccStatusRepository;
+
     @Override
     public void run(String... strings) throws Exception {
 
+        proposalTypeRepository.deleteAll();
+        if (proposalTypeRepository.count() == 0) {
+            ProposalType pt1 = new ProposalType("1", "Lead");
+            ProposalType pt2 = new ProposalType("2", "Sole");
+            ProposalType pt3 = new ProposalType("3", "Consortium");
+            proposalTypeRepository.saveAll(Arrays.asList(pt1, pt2, pt3));
+            log.info("Added proposal type data");
+        }
+
+        iccReadinessStatusRepository.deleteAll();
+        if (iccReadinessStatusRepository.count() == 0) {
+            ICCReadinessStatus irs1 = new ICCReadinessStatus("1", "Ready for ICC");
+            ICCReadinessStatus irs2 = new ICCReadinessStatus("2", "Under Process");
+            iccReadinessStatusRepository.saveAll(Arrays.asList(irs1, irs2));
+            log.info("Added icc readiness status data");
+        }
+
+        presentedInICCRepository.deleteAll();
+        if (presentedInICCRepository.count() == 0) {
+            PresentedInICC pii1 = new PresentedInICC("1", "Yes");
+            PresentedInICC pii2 = new PresentedInICC("2", "No");
+            PresentedInICC pii3 = new PresentedInICC("3", "NA");
+            presentedInICCRepository.saveAll(Arrays.asList(pii1, pii2, pii3));
+            log.info("Added presented in icc data");
+        }
+
+        iccStatusRepository.deleteAll();
+        if (iccStatusRepository.count() == 0) {
+            ICCStatus is1 = new ICCStatus("1", "Cleared");
+            ICCStatus is2 = new ICCStatus("2", "Dropped");
+            ICCStatus is3 = new ICCStatus("3", "To be Represented");
+            ICCStatus is4 = new ICCStatus("4", "Deferred / On Hold");
+            ICCStatus is5 = new ICCStatus("5", "Further DD");
+            iccStatusRepository.saveAll(Arrays.asList(is1, is2, is3, is4, is5));
+            log.info("Added icc status data");
+        }
 
         loanClassRepository.deleteAll();
-
         if (loanClassRepository.count() == 0) {
             LoanClass lc1 = new LoanClass("1", "PowerGen-Convl");
             LoanClass lc2 = new LoanClass("2", "PowerGen-Renew");
@@ -323,6 +363,7 @@ public class Initializer implements CommandLineRunner {
             documentationStatusRepository.save(documentationStatus);
         }
 
+        assistanceTypeRepository.deleteAll();
         AssistanceType at1 = assistanceTypeRepository.getAssistanceTypeByCode("D");
         if (at1 == null) {
             at1 = new AssistanceType("D", "Debt");
@@ -343,6 +384,9 @@ public class Initializer implements CommandLineRunner {
             at4 = new AssistanceType("C", "CCD");
             assistanceTypeRepository.save(at4);
         }
+        assistanceTypeRepository.save(new AssistanceType("PL", "Project Loan"));
+        assistanceTypeRepository.save(new AssistanceType("TL", "Term Loan"));
+        assistanceTypeRepository.save(new AssistanceType("CL", "Corporate Loan"));
 
 
 

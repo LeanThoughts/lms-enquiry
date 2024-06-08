@@ -321,4 +321,17 @@ export class LoanEnquiryService implements Resolve<any> {
     return queryParams;
   }
 
+    /**
+     * uploadExcelDocument()
+     */
+    public uploadExcelDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/enquiriesExcelUpload', file);
+    }
+
+    /**
+     * createExcelEqnuiries()
+     */
+    createExcelEnquiries() {
+        return this._http.post('enquiry/api/createExcelEnquiries', {});
+    }
 }

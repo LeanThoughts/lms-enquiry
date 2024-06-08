@@ -17,6 +17,7 @@ import java.util.UUID;
 
 @Entity
 @Setter
+@Getter
 @ToString
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -272,6 +273,15 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     private String iCCMeetNumber;
     private String iCCStatus;
     private String iCCRemarks;
+
+    private String iccReadinessStatus;
+    private String remarksOnIccReadiness;
+    private String presentedInIcc;
+    private String reasonForIccStatus;
+
+    private Double iccApprovedRoi;
+
+    private String proposalType;
 
     @JsonCreator
     public LoanApplication(@JsonProperty("id") UUID id,

@@ -1,6 +1,8 @@
 package pfs.lms.enquiry.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.PartnerRoleType;
 
@@ -20,4 +22,8 @@ public interface PartnerRepository extends JpaRepository<Partner, UUID> {
 
     List<Partner> findByPartyRole(String partyRole);
     List <Partner> findByPartnerRoleTypes(PartnerRoleType partnerRoleType);
+
+    @Query("select e from Partner e where trim(concat(trim(COALESCE(partyName1, '')), ' ', trim(COALESCE(partyName2, '')))) " +
+            "like %:searchString%")
+    List<Partner> findBySearchString(@Param("searchString") String searchString);
 }

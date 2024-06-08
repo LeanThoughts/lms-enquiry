@@ -42,3 +42,7 @@ $yellow-theme: mat-light-theme($yellow-theme-primary, $yellow-theme-accent, $yel
 .mat-tab-group{
   font-family: "Helvetica Neue",sans-serif !important;
 }
+
+.success-snackbar {
+    white-space: pre-wrap
+}

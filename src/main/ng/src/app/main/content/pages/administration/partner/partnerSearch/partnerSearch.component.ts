@@ -148,6 +148,12 @@ export class PartnerComponent implements OnInit {
     // this._router.navigate(['/enquiryReview']);
   }
 
+    /**
+     * importEnquiries()
+     */
+    importEnquiries(): void {
+        this._router.navigate(['importEnquiries'])
+    }
 }
 
 export interface partnerElement {

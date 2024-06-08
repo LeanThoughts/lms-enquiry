@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MenuInitializer  implements CommandLineRunner {
+public class    MenuInitializer  implements CommandLineRunner {
 
 
     @Autowired
@@ -649,7 +649,7 @@ public class MenuInitializer  implements CommandLineRunner {
         } else {
             menuHeader.setSerialNumber(menu.getMenuHeaders().size() + 1);
         }
-        menuHeader.setId("Enquiry Upload");
+        menuHeader.setId("EnquiryUpload");
         menuHeader.setTitle("BUSINESS DEVELOPMENT");
         menuHeader.setTranslate("NAV.BUSINESSDEVELOPMENT");
         menuHeader.setType("group");
@@ -667,7 +667,7 @@ public class MenuInitializer  implements CommandLineRunner {
         menuItem.setTranslate("NAV.UPLOADENQUIRIES");
         menuItem.setType("item");
         menuItem.setIcon("upload");
-        menuItem.setUrl("/businessDeveUploadLoanEnquires");
+        menuItem.setUrl("/importEnquiries");
         menuHeader.addMenuitem(menuItem);
 
         menu.addMenuHeader(menuHeader);

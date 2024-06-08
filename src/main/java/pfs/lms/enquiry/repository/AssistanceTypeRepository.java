@@ -8,4 +8,8 @@ import java.util.UUID;
 public interface AssistanceTypeRepository extends JpaRepository<AssistanceType, UUID> {
 
     AssistanceType getAssistanceTypeByCode(String code);
+
+    AssistanceType findByCode(String code);
+
+    AssistanceType findByValue(String value);
 }

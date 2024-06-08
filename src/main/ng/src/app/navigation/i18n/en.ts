@@ -14,6 +14,8 @@ export const locale = {
             'PROCESSLOANS'  : 'Process Loans Service',
             'INBOX'         : 'Inbox',
             'LOANCONTRACTSLIST': 'Loan Contracts List',
+            'BUSINESSDEVELOPMENT': 'Business Development',
+            'UPLOADENQUIRIES': 'Upload Loan Enquiries',
             'REPORTS'       : 'Reports',
             'CHANGEHISTORY' : 'Change History',
             'SAMPLE'        : {

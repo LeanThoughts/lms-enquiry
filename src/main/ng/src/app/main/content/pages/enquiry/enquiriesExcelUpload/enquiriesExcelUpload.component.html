@@ -1,0 +1,70 @@
+<div id="tickers" class="page-layout simple" fusePerfectScrollbar>
+
+  <!-- HEADER -->
+  <div class="sub-header p-6 blue-grey-200-bg" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb text-truncate h1 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
+         *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
+      Upload Enquiries
+    </div>
+    <!-- / BREADCRUMB -->
+
+    <!-- TOOLBAR -->
+    <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
+      <!-- <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToEnquiryReview()"
+              [disabled]="_service.selectedLoanApplicationId == undefined">
+        Enquiry Review
+      </button> -->
+    </div>
+    <!-- / TOOLBAR -->
+
+  </div>
+  <!-- / HEADER -->
+
+  <!-- SEARCH PANEL -->
+  <div id="loan-enquiry" class="w-100-p p-16" fxLayout="column" fusePerfectScrollbar>
+    <mat-expansion-panel [expanded]="expandPanel" hideToggle="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Upload Enquiries
+        </mat-panel-title>
+        <!--mat-panel-description>
+            Use the search form to filter data.
+        </mat-panel-description-->
+      </mat-expansion-panel-header>
+      <form [formGroup]="excelUploadForm">
+        <div fxLayout="row">
+            <div fxFlex="100" class="mt-16">
+                <div fxLayout="column">
+                    <label for="document">Upload Enquiries Document (Excel)</label>
+                    <input type="file" name="file" (change)="onFileSelect($event)" accept="application/excel" id="document" required/>
+                </div>
+            </div>
+        </div>
+
+        <div fxLayout="row">
+            <div fxFlex="100" class="mt-16">
+                <button mat-raised-button type="button" color="accent" (click)="uploadEnquiries()">
+                    Upload Enquiries
+                </button>    
+            </div>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </div>
+
+  <!-- / SEARCH PANEL -->
+
+
+  <!-- CONTENT -->
+  <div class="content p-16">
+    <div class="content-card mat-white-bg mat-elevation-z4" fusePerfectScrollbar style="width: 125%">
+      <fuse-enquiry-upload-list [enquiryList]="enquiryList"></fuse-enquiry-upload-list>
+    </div>
+
+
+  </div>
+
+  <!-- / CONTENT -->
+</div>

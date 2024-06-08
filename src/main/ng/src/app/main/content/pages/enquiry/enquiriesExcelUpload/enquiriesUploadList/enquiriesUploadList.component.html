@@ -1,0 +1,171 @@
+<div class="mat-table-container" style="width: 160%">
+
+    <!-- <mat-table class="enquiries-table" #table [dataSource]="dataSource" *fuseIfOnDom [@animateStagger]="{value:'50'}" fusePerfectScrollbar> -->
+    <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+        <ng-container matColumnDef="comments">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+                <div *ngIf="enquiry.comments !== ''">
+                    <button mat-raised-button type="button" color="accent" (click)="viewRejectedReasons(enquiry.comments)">
+                        View Reasons
+                    </button>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="serialNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+                <p class="text-truncate">{{ enquiry.serialNumber }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="borrowerName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Borrower Name</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.borrowerName }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="groupName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Group Name</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.groupName }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="projectType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Project Type</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.projectType }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="typeOfAssistance">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >type of Assistance</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.typeOfAssistance }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proposalType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Proposal Type</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.proposalType }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="iccReadinessStatus">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Readiness Status</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.iccReadinessStatus }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="remarksOnIccReadiness">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Remarks on ICC Readiness</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.remarksOnIccReadiness }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="presentedInIcc">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Presented In ICC</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.presentedInIcc }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="iccStatus">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Status</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.iccStatus }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="reasonForIccStatus">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Reason for ICC Status</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.reasonForIccStatus }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="iccMeetingNumber">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Meeting Number</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.iccMeetingNumber }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="remarksForIccApproval">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Remarks for ICC Approval</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.remarksForIccApproval }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateOfLeadGeneration">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Enquiry Date</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+                <p class="text-truncate">{{ enquiry.dateOfLeadGeneration | date: 'dd/MM/yyyy' }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="iccClearanceDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Clearance Date</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+                <p class="text-truncate">{{ enquiry.iccClearanceDate | date: 'dd/MM/yyyy' }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="amountRequested">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Amount Requested</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.amountRequested }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="borrowerRequestedROI">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Borrower Requested ROI</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.borrowerRequestedROI }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="amountApproved">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Amount Approved</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.amountApproved }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="iccApprovedRoi">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Approved ROI</mat-header-cell>
+            <mat-cell *matCellDef="let enquiry" >
+            <p class="text-truncate">{{ enquiry.iccApprovedRoi }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *matRowDef="let enquiry; columns: displayedColumns;" class="enquiry" matRipple (click)="onSelect(enquiry)"
+            [ngClass]="{'highlight':enquiry == selectedEnquiry}" [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+
+    </mat-table>
+
+  <!-- <mat-paginator
+            class="paginator--centered"
+            [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+
+  </mat-paginator> -->
+</div>
+
+<div fxLayout="row" *ngIf="dataSource !== undefined">
+    <div fxFlex="100" class="mt-12 mb-12" style="margin-left: 26px !important;">
+        <button mat-raised-button type="button" color="accent" (click)="createEnquiries()">
+            Create Enquiries
+        </button>    
+    </div>
+</div>
