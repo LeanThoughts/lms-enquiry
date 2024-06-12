@@ -107,6 +107,19 @@ public class EnquiriesExcelUploadController {
                     enquiry.setAmountApproved(row.getCell(16).getNumericCellValue());
                     enquiry.setIccApprovedRoi(row.getCell(17).getNumericCellValue());
                     enquiry.setRemarksForIccApproval(row.getCell(18).getStringCellValue().trim());
+
+                    System.out.println(enquiry.getSerialNumber() + " " + enquiry.getProjectType() + " " + enquiry.getTypeOfAssistance()
+                            + " " + enquiry.getProposalType() + " " + enquiry.getAmountRequested().toString());
+                    List<LoanApplication> loanApplications = loanApplicationRepository.
+                            findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmount(
+                                    projectTypeRepository.findByValue(enquiry.getProjectType()).getCode(),
+                                    assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance()).getCode(),
+                                    proposalTypeRepository.findByValue(enquiry.getProposalType()).getCode(),
+                                    enquiry.getAmountRequested());
+                    if(loanApplications.size() > 0)
+                        comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
+                                " and Requested amount.\n";
+
                     enquiry.setComments(comments);
                     enquiries.add(enquiry);
                     System.out.println(enquiry.getBorrowerName());
@@ -138,52 +151,52 @@ public class EnquiriesExcelUploadController {
         enquiries.forEach((enquiry) -> {
             LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
             List<Partner> partners = partnerRepository.findBySearchString(enquiry.getBorrowerName());
-            if (loanApplication == null) {
+            if (loanApplication == null) { // Create new enquiry if loanApplication is null
                 loanApplication = new LoanApplication();
-                loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
-
-                ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
-                loanApplication.setProjectType(pt == null? null: pt.getCode());
-
-                AssistanceType at = assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance());
-                loanApplication.setAssistanceType(at == null? null: at.getCode());
-
-                ProposalType prt = proposalTypeRepository.findByValue(enquiry.getProposalType());
-                loanApplication.setProposalType(prt == null? null: prt.getCode());
-
-                ICCReadinessStatus irs = iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus());
-                loanApplication.setIccReadinessStatus(irs == null? null: irs.getCode());
-
-                loanApplication.setRemarksOnIccReadiness(enquiry.getRemarksOnIccReadiness());
-
-                PresentedInICC pi = presentedInICCRepository.findByValue(enquiry.getPresentedInIcc());
-                loanApplication.setPresentedInIcc(pi == null? null: pi.getCode());
-
-                ICCStatus is = iccStatusRepository.findByValue(enquiry.getIccStatus());
-                loanApplication.setICCStatus(is == null? null: is.getCode());
-
-                loanApplication.setReasonForIccStatus(enquiry.getReasonForIccStatus());
-                loanApplication.setICCMeetNumber(enquiry.getIccMeetingNumber());
-                loanApplication.setICCRemarks(enquiry.getRemarksForIccApproval());
-                loanApplication.setLoanEnquiryDate(enquiry.getDateOfLeadGeneration());
-                loanApplication.setICCClearanceDate(enquiry.getIccClearanceDate());
-                loanApplication.setLoanContractAmount(enquiry.getAmountRequested());
-                // loanApplication.setBorrowerRequestedROI(); // TODO
-                // loanApplication.setAmountApproved() // TODO
-                loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi());
-
-                if (partners.size() == 0) {
-                    Partner partner = new Partner();
-                    partner.setPartyName1(enquiry.getBorrowerName());
-                    partner.setGroupCompany(enquiry.getGroupName());
-                    partner = partnerRepository.save(partner);
-                    loanApplication = loanApplication.applicant(partner);
-                }
-                else if (partners.size() > 0) {
-                    loanApplication = loanApplication.applicant(partners.get(0));
-                }
-                loanApplicationRepository.save(loanApplication);
             }
+            loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
+
+            ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
+            loanApplication.setProjectType(pt == null? null: pt.getCode());
+
+            AssistanceType at = assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance());
+            loanApplication.setAssistanceType(at == null? null: at.getCode());
+
+            ProposalType prt = proposalTypeRepository.findByValue(enquiry.getProposalType());
+            loanApplication.setProposalType(prt == null? null: prt.getCode());
+
+            ICCReadinessStatus irs = iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus());
+            loanApplication.setIccReadinessStatus(irs == null? null: irs.getCode());
+
+            PresentedInICC pi = presentedInICCRepository.findByValue(enquiry.getPresentedInIcc());
+            loanApplication.setPresentedInIcc(pi == null? null: pi.getCode());
+
+            ICCStatus is = iccStatusRepository.findByValue(enquiry.getIccStatus());
+            loanApplication.setICCStatus(is == null? null: is.getCode());
+
+            loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
+            loanApplication.setRemarksOnIccReadiness(enquiry.getRemarksOnIccReadiness());
+            loanApplication.setReasonForIccStatus(enquiry.getReasonForIccStatus());
+            loanApplication.setICCMeetNumber(enquiry.getIccMeetingNumber());
+            loanApplication.setICCRemarks(enquiry.getRemarksForIccApproval());
+            loanApplication.setLoanEnquiryDate(enquiry.getDateOfLeadGeneration());
+            loanApplication.setICCClearanceDate(enquiry.getIccClearanceDate());
+            loanApplication.setLoanContractAmount(enquiry.getAmountRequested());
+            // loanApplication.setBorrowerRequestedROI(); // TODO
+            // loanApplication.setAmountApproved() // TODO
+            loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi());
+
+            if (partners.size() == 0) {
+                Partner partner = new Partner();
+                partner.setPartyName1(enquiry.getBorrowerName());
+                partner.setGroupCompany(enquiry.getGroupName());
+                partner = partnerRepository.save(partner);
+                loanApplication = loanApplication.applicant(partner);
+            }
+            else {
+                loanApplication = loanApplication.applicant(partners.get(0));
+            }
+            loanApplicationRepository.save(loanApplication);
         });
 
         return ResponseEntity.ok(enquiries);

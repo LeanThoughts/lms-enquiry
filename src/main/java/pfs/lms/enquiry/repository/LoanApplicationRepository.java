@@ -27,4 +27,6 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
     List<LoanApplication> findByTechnicalStatusAndPostedInSAPLessThan(Integer technicalStatus, Integer postedInSAP);
 
+    List<LoanApplication> findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmount(String projectType,
+            String assistanceType, String proposalType, Double loanContractAmount);
 }
