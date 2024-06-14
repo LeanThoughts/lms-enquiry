@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -212,6 +213,7 @@ public class PartnerService implements IPartnerService {
         List<Partner> partners = partnerRepository.findAll();
       //  Collections.sort(partners, Collections.reverseOrder());
 
+        partners = partners.stream().filter(partner -> partner.getEmail() != null).collect(Collectors.toList());
         partners.sort(Comparator.comparing(Partner::getEmail));
 
         for (Partner partner:partners) {
