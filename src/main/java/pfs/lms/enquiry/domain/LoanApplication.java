@@ -283,6 +283,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
 
     private String proposalType;
 
+    private Double borrowerRequestedROI;
+
     @JsonCreator
     public LoanApplication(@JsonProperty("id") UUID id,
                            @JsonProperty("version") Long version,
