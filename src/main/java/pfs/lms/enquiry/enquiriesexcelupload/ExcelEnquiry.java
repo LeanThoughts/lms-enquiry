@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class ExcelEnquiry extends AggregateRoot<ExcelEnquiry> {
 
     private Long serialNumber;
+    private Long sapEnquiryId;
 
     private String borrowerName;
     private String groupName;

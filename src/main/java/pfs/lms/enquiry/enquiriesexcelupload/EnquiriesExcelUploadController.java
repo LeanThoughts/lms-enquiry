@@ -13,8 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.repository.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -57,59 +60,59 @@ public class EnquiriesExcelUploadController {
                     if(enquiry.getSerialNumber() == null || enquiry.getSerialNumber() == 0)
                         comments += "Serial Number is missing.\n";
 
-                    enquiry.setBorrowerName(row.getCell(1).getStringCellValue());
+                    enquiry.setSapEnquiryId(new Double(row.getCell(1).getNumericCellValue()).longValue());
+                    if(enquiry.getSapEnquiryId() == null || enquiry.getSapEnquiryId() == 0)
+                        comments += "SAP Enquiry ID is missing.\n";
+
+                    enquiry.setBorrowerName(row.getCell(2).getStringCellValue());
                     if(enquiry.getBorrowerName() == null || enquiry.getBorrowerName().trim().equals(""))
                         comments += "Borrower Name is missing.\n";
 
-                    enquiry.setGroupName(row.getCell(2).getStringCellValue());
+                    enquiry.setGroupName(row.getCell(3).getStringCellValue());
                     if(enquiry.getGroupName() == null || enquiry.getGroupName().trim().equals(""))
                         comments += "Group Name is missing.\n";
 
-                    enquiry.setProjectType(row.getCell(3).getStringCellValue().trim());
+                    enquiry.setProjectType(row.getCell(4).getStringCellValue().trim());
                     if(enquiry.getProjectType().trim().equals(""))
                         comments += "Project Type is missing.\n";
                     else if(projectTypeRepository.findByValue(enquiry.getProjectType()) == null)
                         comments += "Project Type is invalid. Provide valid input for Project Type.\n";
 
-                    enquiry.setTypeOfAssistance(row.getCell(4).getStringCellValue().trim());
+                    enquiry.setTypeOfAssistance(row.getCell(5).getStringCellValue().trim());
                     if(enquiry.getTypeOfAssistance().trim().equals(""))
                         comments += "Type of Assistance is missing.\n";
                     else if(assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance()) == null)
                         comments += "Assistance Type is invalid. Provide valid input for Assistance Type.\n";
 
-                    enquiry.setProposalType(row.getCell(5).getStringCellValue().trim());
+                    enquiry.setProposalType(row.getCell(6).getStringCellValue().trim());
                     if(enquiry.getProposalType().trim().equals(""))
                         comments += "Proposal Type is missing.\n";
                     else if(proposalTypeRepository.findByValue(enquiry.getProposalType()) == null)
                         comments += "Proposal Type is invalid. Provide valid input for Proposal Type.\n";
 
-                    enquiry.setIccReadinessStatus(row.getCell(9).getStringCellValue().trim());
+                    enquiry.setIccReadinessStatus(row.getCell(10).getStringCellValue().trim());
                     if(!enquiry.getIccReadinessStatus().trim().equals("") &&
                             iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus()) == null)
                         comments += "Provide valid input for ICC Readiness Status.\n";
 
-                    enquiry.setAmountRequested(row.getCell(7).getNumericCellValue());
+                    enquiry.setAmountRequested(row.getCell(8).getNumericCellValue());
                     if(enquiry.getAmountRequested() == null || enquiry.getAmountRequested() == 0)
                         comments += "Provide valid input for Requested Amount..\n";
 
-                    enquiry.setIccStatus(row.getCell(12).getStringCellValue().trim());
+                    enquiry.setIccStatus(row.getCell(13).getStringCellValue().trim());
                     if(!enquiry.getIccStatus().trim().equals("") &&
                             iccStatusRepository.findByValue(enquiry.getIccStatus()) == null)
                         comments += "Provide valid input for ICC Status.\n";
 
-                    enquiry.setReasonForIccStatus(row.getCell(13).getStringCellValue().trim());
-                    //enquiry.setDateOfLeadGeneration(row.getCell(6).getDateCellValue());
-                    enquiry.setBorrowerRequestedROI(row.getCell(8).getNumericCellValue());
-                    enquiry.setRemarksOnIccReadiness(row.getCell(10).getStringCellValue().trim());
-                    enquiry.setPresentedInIcc(row.getCell(11).getStringCellValue().trim());
-                    //enquiry.setIccClearanceDate(row.getCell(14).getDateCellValue());
-                    enquiry.setIccMeetingNumber(row.getCell(15).getStringCellValue().trim());
-                    enquiry.setAmountApproved(row.getCell(16).getNumericCellValue());
-                    enquiry.setIccApprovedRoi(row.getCell(17).getNumericCellValue());
-                    enquiry.setRemarksForIccApproval(row.getCell(18).getStringCellValue().trim());
+                    String enquiryDate = row.getCell(7).getStringCellValue();
+                    if(enquiryDate.equals(""))
+                        comments += "Provide valid input for Date of Lead Generation.\n";
+                    else {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                        formatter = formatter.withLocale(Locale.UK);
+                        enquiry.setDateOfLeadGeneration(LocalDate.parse(enquiryDate, formatter));
+                    }
 
-                    System.out.println(enquiry.getSerialNumber() + " " + enquiry.getProjectType() + " " + enquiry.getTypeOfAssistance()
-                            + " " + enquiry.getProposalType() + " " + enquiry.getAmountRequested().toString());
                     List<LoanApplication> loanApplications = loanApplicationRepository.
                             findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmount(
                                     projectTypeRepository.findByValue(enquiry.getProjectType()).getCode(),
@@ -119,6 +122,23 @@ public class EnquiriesExcelUploadController {
                     if(loanApplications.size() > 0)
                         comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
                                 " and Requested amount.\n";
+
+                    enquiry.setReasonForIccStatus(row.getCell(14).getStringCellValue().trim());
+                    enquiry.setBorrowerRequestedROI(row.getCell(9).getNumericCellValue());
+                    enquiry.setRemarksOnIccReadiness(row.getCell(11).getStringCellValue().trim());
+                    enquiry.setPresentedInIcc(row.getCell(12).getStringCellValue().trim());
+
+                    String clearanceDate = row.getCell(15).getStringCellValue();
+                    if(!clearanceDate.equals("")) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                        formatter = formatter.withLocale(Locale.UK);
+                        enquiry.setIccClearanceDate(LocalDate.parse(clearanceDate, formatter));
+                    }
+
+                    enquiry.setIccMeetingNumber(row.getCell(16).getStringCellValue().trim());
+                    enquiry.setAmountApproved(row.getCell(17).getNumericCellValue());
+                    enquiry.setIccApprovedRoi(row.getCell(18).getNumericCellValue());
+                    enquiry.setRemarksForIccApproval(row.getCell(19).getStringCellValue().trim());
 
                     enquiry.setComments(comments);
                     enquiries.add(enquiry);
