@@ -27,9 +27,10 @@ export class EnquiriesUploadListComponent implements OnInit {
     // pageSizeOptions: number[] = [10, 25, 50, 100];
 
     displayedColumns = [
-        'comments', 'serialNumber', 'sapEnquiryId', 'borrowerName', 'groupName', 'projectType', 'typeOfAssistance', 'proposalType', 'dateOfLeadGeneration',
-            'amountRequested', 'borrowerRequestedROI', 'iccReadinessStatus', 'remarksOnIccReadiness', 'presentedInIcc', 'iccStatus',
-            'reasonForIccStatus', 'iccClearanceDate', 'iccMeetingNumber', 'amountApproved', 'iccApprovedRoi', 'remarksForIccApproval'
+        'comments', 'serialNumber', 'sapEnquiryId', 'borrowerName', 'groupName', 'projectType', 'typeOfAssistance', 'proposalType', 
+            'dateOfLeadGeneration', 'amountRequested', 'borrowerRequestedROI', 'iccReadinessStatus', 'remarksOnIccReadiness', 'presentedInIcc', 
+            'iccStatus', 'reasonForIccStatus', 'iccClearanceDate', 'iccMeetingNumber', 'amountApproved', 'iccApprovedRoi', 
+            'remarksForIccApproval'
     ];
 
     selectedEnquiry: any;

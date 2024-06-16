@@ -16,25 +16,29 @@ mat-paginator.mat-paginator.paginator--centered {
 }
 
 .mat-column-amountApproved {
-    justify-content: end;
-    margin-right: 2px;
+    justify-content: flex-end;
 }
 
 .mat-column-iccApprovedRoi {
-    justify-content: end;
-    margin-right: 2px;
+    justify-content: flex-end;
 }
 
 .mat-column-amountRequested {
-    justify-content: end;
-    margin-right: 2px;
+    justify-content: flex-end;
 }
 
 .mat-column-borrowerRequestedROI {
-    justify-content: end;
-    margin-right: 2px;
+    justify-content: flex-end;
 }
 
 ::ng-deep .success-snackbar {
     white-space: pre-wrap
+}
+
+.mat-column-borrowerName {
+    flex: 0 0 10%;
+}
+
+.mat-column-groupName {
+    flex: 0 0 10%;
 }

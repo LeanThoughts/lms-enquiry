@@ -284,6 +284,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     private String proposalType;
 
     private Double borrowerRequestedROI;
+    private Double amountApproved;
 
     @JsonCreator
     public LoanApplication(@JsonProperty("id") UUID id,

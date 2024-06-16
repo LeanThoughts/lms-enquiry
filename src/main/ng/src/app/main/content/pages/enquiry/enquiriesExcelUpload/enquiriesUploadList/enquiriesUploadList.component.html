@@ -129,28 +129,28 @@
         <ng-container matColumnDef="amountRequested">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Amount Requested</mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
-            <p class="text-truncate">{{ enquiry.amountRequested }}</p>
+            <p class="text-truncate">{{ enquiry.amountRequested | number: '1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="borrowerRequestedROI">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Borrower Requested ROI</mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
-            <p class="text-truncate">{{ enquiry.borrowerRequestedROI }}</p>
+            <p class="text-truncate">{{ enquiry.borrowerRequestedROI | number: '1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="amountApproved">
             <mat-header-cell *matHeaderCellDef mat-sort-header >Amount Approved</mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
-            <p class="text-truncate">{{ enquiry.amountApproved }}</p>
+            <p class="text-truncate">{{ enquiry.amountApproved | number: '1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="iccApprovedRoi">
             <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Approved ROI</mat-header-cell>
             <mat-cell *matCellDef="let enquiry" >
-            <p class="text-truncate">{{ enquiry.iccApprovedRoi }}</p>
+            <p class="text-truncate">{{ enquiry.iccApprovedRoi | number: '1.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </mat-cell>
         </ng-container>
 

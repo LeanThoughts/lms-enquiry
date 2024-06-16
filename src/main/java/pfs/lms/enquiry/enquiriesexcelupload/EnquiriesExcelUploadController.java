@@ -50,8 +50,8 @@ public class EnquiriesExcelUploadController {
             // Add all rows to the enquiries list
             for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
                 XSSFRow row = worksheet.getRow(i);
-                if (row.getCell(0) != null && !row.getCell(0).toString().equals("")
-                        && row.getCell(1) != null && !row.getCell(1).toString().equals("")) {
+                if (row.getCell(0) != null && !row.getCell(0).toString().equals("")) {
+//                        && row.getCell(1) != null && !row.getCell(1).toString().equals("")) {
 
                     ExcelEnquiry enquiry = new ExcelEnquiry();
                     String comments = "";
@@ -61,8 +61,8 @@ public class EnquiriesExcelUploadController {
                         comments += "Serial Number is missing.\n";
 
                     enquiry.setSapEnquiryId(new Double(row.getCell(1).getNumericCellValue()).longValue());
-                    if(enquiry.getSapEnquiryId() == null || enquiry.getSapEnquiryId() == 0)
-                        comments += "SAP Enquiry ID is missing.\n";
+//                    if(enquiry.getSapEnquiryId() == null || enquiry.getSapEnquiryId() == 0)
+//                        comments += "SAP Enquiry ID is missing.\n";
 
                     enquiry.setBorrowerName(row.getCell(2).getStringCellValue());
                     if(enquiry.getBorrowerName() == null || enquiry.getBorrowerName().trim().equals(""))
@@ -114,14 +114,17 @@ public class EnquiriesExcelUploadController {
                     }
 
                     List<LoanApplication> loanApplications = loanApplicationRepository.
-                            findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmount(
+                            findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate(
                                     projectTypeRepository.findByValue(enquiry.getProjectType()).getCode(),
                                     assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance()).getCode(),
                                     proposalTypeRepository.findByValue(enquiry.getProposalType()).getCode(),
-                                    enquiry.getAmountRequested());
-                    if(loanApplications.size() > 0)
+                                    enquiry.getAmountRequested(),
+                                    enquiry.getDateOfLeadGeneration());
+                    if(loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(enquiry
+                            .getSapEnquiryId())) {
                         comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
-                                " and Requested amount.\n";
+                                " and Requested amount and Date of lead generation.\n";
+                    }
 
                     enquiry.setReasonForIccStatus(row.getCell(14).getStringCellValue().trim());
                     enquiry.setBorrowerRequestedROI(row.getCell(9).getNumericCellValue());
@@ -169,11 +172,16 @@ public class EnquiriesExcelUploadController {
             throw new Exception("Found errors in the excel sheet. Cannot proceed unless they are fixed.");
 
         enquiries.forEach((enquiry) -> {
-            LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
+            // LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
+            LoanApplication loanApplication = loanApplicationRepository
+                    .findByEnquiryNo(new EnquiryNo(enquiry.getSapEnquiryId()));
             List<Partner> partners = partnerRepository.findBySearchString(enquiry.getBorrowerName());
-            if (loanApplication == null) { // Create new enquiry if loanApplication is null
+            // Create new enquiry if loanApplication is null
+            if (loanApplication == null) {
                 loanApplication = new LoanApplication();
+                loanApplication.setEnquiryNo(new EnquiryNo());
             }
+
             loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
 
             ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
@@ -202,8 +210,8 @@ public class EnquiriesExcelUploadController {
             loanApplication.setLoanEnquiryDate(enquiry.getDateOfLeadGeneration());
             loanApplication.setICCClearanceDate(enquiry.getIccClearanceDate());
             loanApplication.setLoanContractAmount(enquiry.getAmountRequested());
-            // loanApplication.setBorrowerRequestedROI(); // TODO
-            // loanApplication.setAmountApproved() // TODO
+            loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
+            loanApplication.setAmountApproved(enquiry.getAmountApproved());
             loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi());
 
             if (partners.size() == 0) {

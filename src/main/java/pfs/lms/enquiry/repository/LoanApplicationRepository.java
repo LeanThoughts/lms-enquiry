@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import pfs.lms.enquiry.domain.EnquiryNo;
 import pfs.lms.enquiry.domain.LoanApplication;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,6 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
     List<LoanApplication> findByTechnicalStatusAndPostedInSAPLessThan(Integer technicalStatus, Integer postedInSAP);
 
-    List<LoanApplication> findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmount(String projectType,
-            String assistanceType, String proposalType, Double loanContractAmount);
+    List<LoanApplication> findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate
+            (String projectType, String assistanceType, String proposalType, Double loanContractAmount, LocalDate enquiryDate);
 }
