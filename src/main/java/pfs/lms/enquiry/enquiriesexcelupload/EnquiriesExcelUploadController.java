@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.repository.*;
+import pfs.lms.enquiry.service.impl.LoanApplicationService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class EnquiriesExcelUploadController {
     private final ICCReadinessStatusRepository iccReadinessStatusRepository;
     private final ICCStatusRepository iccStatusRepository;
     private final PresentedInICCRepository presentedInICCRepository;
+
+    private final LoanApplicationService loanApplicationService;
 
     @PostMapping("/api/enquiriesExcelUpload")
     public ResponseEntity<List<ExcelEnquiry>> processExcelFile(@RequestParam(value = "file") MultipartFile file)
@@ -148,7 +152,8 @@ public class EnquiriesExcelUploadController {
                     System.out.println(enquiry.getBorrowerName());
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -159,7 +164,7 @@ public class EnquiriesExcelUploadController {
     }
 
     @PostMapping("/api/createExcelEnquiries")
-    public ResponseEntity<List<ExcelEnquiry>> createEnquiries() throws Exception {
+    public ResponseEntity<List<ExcelEnquiry>> createEnquiries(HttpServletRequest request) throws Exception {
 
         List<ExcelEnquiry> enquiries = excelEnquiryRepository.findAll();
 
@@ -180,6 +185,18 @@ public class EnquiriesExcelUploadController {
             if (loanApplication == null) {
                 loanApplication = new LoanApplication();
                 loanApplication.setEnquiryNo(new EnquiryNo());
+                loanApplication.setTechnicalStatus(1);
+                loanApplication.setTechnicalStatusDescription("Created");
+                loanApplication.setFunctionalStatus(1);
+                loanApplication.setFunctionalStatusDescription("Enquiry Stage");
+                loanApplication.setProjectCapacity(0.00);
+                loanApplication.setProjectCapacityUnit("MW");
+                loanApplication.created(null, request.getUserPrincipal().getName());
+            }
+            else {
+                loanApplication.setTechnicalStatus(2);
+                loanApplication.setTechnicalStatusDescription("Changed");
+                loanApplication.modified(null, request.getUserPrincipal().getName());
             }
 
             loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
@@ -214,6 +231,8 @@ public class EnquiriesExcelUploadController {
             loanApplication.setAmountApproved(enquiry.getAmountApproved());
             loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi());
 
+            loanApplication.setProjectName(enquiry.getBorrowerName());
+
             if (partners.size() == 0) {
                 Partner partner = new Partner();
                 partner.setPartyName1(enquiry.getBorrowerName());
@@ -224,7 +243,13 @@ public class EnquiriesExcelUploadController {
             else {
                 loanApplication = loanApplication.applicant(partners.get(0));
             }
+
             loanApplicationRepository.save(loanApplication);
+
+            if (enquiry.getSapEnquiryId() == 0) {
+                enquiry.setSapEnquiryId(loanApplication.getEnquiryNo().getId());
+                excelEnquiryRepository.save(enquiry);
+            }
         });
 
         return ResponseEntity.ok(enquiries);

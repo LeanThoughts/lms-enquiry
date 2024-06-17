@@ -18,7 +18,7 @@ export class EnquiriesUploadListComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     @Input()
-    set enquiryList(enquiryList: EnquiryApplicationModel[]) {
+    set enquiryList(enquiryList: any[]) {
         this.dataSource = new MatTableDataSource(enquiryList);
         this.dataSource.sort = this.sort
         // this.dataSource.paginator = this.paginator;
@@ -71,8 +71,10 @@ export class EnquiriesUploadListComponent implements OnInit {
             this._matSnackBar.open('Upload the excel file with enquiries first.', 'OK', {panelClass: ['success-snackbar']});
         else
             this._service.createExcelEnquiries().subscribe(
-                (response) => {
+                (response: any) => {
                     this._matSnackBar.open('Created enquiries successfully', 'OK', {panelClass: ['success-snackbar']});
+                    this.dataSource = new MatTableDataSource(response);
+                    this.dataSource.sort = this.sort
                 },
                 (error: HttpErrorResponse) => {
                     this._matSnackBar.open(error.error.message, 'OK', {panelClass: ['success-snackbar']});
