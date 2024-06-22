@@ -56,7 +56,7 @@
               <div fxLayout="row">
                 <mat-form-field fxFlex="60">
                   <mat-hint > {{projectNameLength}} /60</mat-hint>
-                  <input matInput type="text" placeholder="Project Name" formControlName="projectName" required
+                  <input matInput type="text" placeholder="Project Name" formControlName="projectName" [readonly]="readonlyFields"
                          maxlength="60" [readonly]="readonlyFields"
                          (change)="onProjectNameChange()"
                          (keyup)="onProjectNameChange()" >
@@ -68,7 +68,7 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="40">
-                  <mat-select placeholder="Project Type" formControlName="projectType" required [disabled]="readonlyFields">
+                  <mat-select placeholder="Project Type" formControlName="projectType" [disabled]="readonlyFields">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let projectType of projectTypes" [value]="projectType.code">
                       {{ projectType.value }}
@@ -82,7 +82,7 @@
 
               <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                  <mat-select placeholder="Loan Class" formControlName="loanClass" required [disabled]="readonlyFields">
+                  <mat-select placeholder="Loan Class" formControlName="loanClass" [disabled]="readonlyFields">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let loanClass of loanClasses" [value]="loanClass.code">
                       {{ loanClass.value }}
@@ -94,7 +94,7 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="33">
-                  <mat-select placeholder="Financing Type" formControlName="financingType" required [disabled]="readonlyFields">
+                  <mat-select placeholder="Financing Type" formControlName="financingType" [disabled]="readonlyFields">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let financingType of financingTypes" [value]="financingType.code">
                       {{ financingType.value }}
@@ -139,7 +139,7 @@
                 <mat-form-field fxFlex="33">
                   <input matInput type="number" placeholder="Tenor of Loan (Years)" formControlName="tenorYear"
                          maxlength="2"
-                         required [readonly]="readonlyFields">
+                         [readonly]="readonlyFields">
                   <mat-error>
                     Provide numeric input b/w 1 and 99
                   </mat-error>
@@ -147,7 +147,7 @@
 
                 <mat-form-field fxFlex="34">
                   <input matInput type="number" placeholder="(Months)" formControlName="tenorMonth" maxlength="2"
-                         required [readonly]="readonlyFields">
+                         [readonly]="readonlyFields">
                   <mat-error>
                     Provide numeric input b/w 1 and 11
                   </mat-error>
@@ -156,7 +156,7 @@
 
               <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Project Location - State" formControlName="projectLocationState" required [disabled]="readonlyFields">
+                  <mat-select placeholder="Project Location - State" formControlName="projectLocationState" [disabled]="readonlyFields">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let state of states" [value]="state.code">
                       {{ state.value }}
@@ -165,7 +165,7 @@
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50">
-                  <input matInput placeholder="Project District" formControlName="projectDistrict" required
+                  <input matInput placeholder="Project District" formControlName="projectDistrict" 
                          maxlength="60" [readonly]="readonlyFields">
                 </mat-form-field>
 
@@ -204,7 +204,7 @@
                   <input matInput type="number" placeholder="Loan Application Amt./PFS Debt Amount (in Crores)"
                          maxlength="10"
                          formControlName="pfsDebtAmount"
-                         required [readonly]="readonlyFields">
+                         [readonly]="readonlyFields">
                   <mat-error>
                     Provide numeric input b/w 1 and 9999.99
                   </mat-error>
@@ -232,7 +232,7 @@
                   <mat-hint > {{loanPurposeLength}} /60</mat-hint>
                   <input matInput placeholder="Purpose of Loan"
                          formControlName="loanPurpose"
-                         required maxlength="60"
+                         maxlength="60"
                          [readonly]="readonlyFields"
                          (change)="onLoanPurposeChange()"
                          (keyup)="onLoanPurposeChange()">
@@ -358,7 +358,7 @@
                        type="email" readonly
                        placeholder="Applicant's Registered Email"
                        formControlName="email"
-                       required [readonly]="readonlyFields">
+                       [readonly]="readonlyFields">
 
                 <!-- <mat-error>
                   Email id is not registered as user of the portal. Enter a valid user of a customer or create a portal
@@ -373,7 +373,7 @@
             <div fxLayout="row">
               <mat-form-field fxFlex="33">
                 <input matInput placeholder="Organization Name/ First Name" formControlName="partyName1" maxlength="60"
-                       required [readonly]="readonlyFields">
+                       [readonly]="readonlyFields">
                 <mat-error>
                   Provide valid input
                 </mat-error>
@@ -385,7 +385,7 @@
 
               <mat-form-field fxFlex="33">
                 <input matInput placeholder="Contact Person" formControlName="contactPersonName" maxlength="60"
-                       required [readonly]="readonlyFields">
+                       [readonly]="readonlyFields">
                 <mat-error>
                   Provide valid input
                 </mat-error>
@@ -414,14 +414,14 @@
 
             <div fxLayout="row">
               <mat-form-field fxFlex="33">
-                <input matInput placeholder="City" formControlName="city" required maxlength="40" [readonly]="readonlyFields">
+                <input matInput placeholder="City" formControlName="city" maxlength="40" [readonly]="readonlyFields">
                 <mat-error>
                   Provide valid input
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="34">
-                <mat-select placeholder="State" formControlName="state" required [disabled]="readonlyFields">
+                <mat-select placeholder="State" formControlName="state" [disabled]="readonlyFields">
                   <mat-option></mat-option>
                   <mat-option *ngFor="let state of states" [value]="state.code">
                     {{ state.value }}
@@ -431,7 +431,7 @@
 
               <mat-form-field fxFlex="33">
                 <input matInput placeholder="Postal Code" formControlName="postalCode" minlength="6" maxlength="6"
-                       required [readonly]="readonlyFields">
+                       [readonly]="readonlyFields">
                 <mat-error>
                   Provide valid input
                 </mat-error>
@@ -442,14 +442,14 @@
 
 
               <mat-form-field fxFlex="34">
-                <input matInput placeholder="Contact Number" formControlName="contactNumber" required maxlength="12" [readonly]="readonlyFields">
+                <input matInput placeholder="Contact Number" formControlName="contactNumber" maxlength="12" [readonly]="readonlyFields">
                 <mat-error>
                   Provide valid input
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="33">
-                <input matInput placeholder="PAN Number" formControlName="pan" maxlength="10" required maxlength="10" [readonly]="readonlyFields">
+                <input matInput placeholder="PAN Number" formControlName="pan" maxlength="10" maxlength="10" [readonly]="readonlyFields">
                 <mat-error>
                   Provide valid input (Uppercase text and numeric only)
                 </mat-error>
@@ -462,7 +462,7 @@
               </mat-form-field>
 
               <mat-form-field fxFlex="33">
-                <mat-select placeholder="Industry Sector" formControlName="industrySector" required [disabled]="readonlyFields">
+                <mat-select placeholder="Industry Sector" formControlName="industrySector" [disabled]="readonlyFields">
                   <mat-option></mat-option>
                   <mat-option *ngFor="let industrySector of industrySectors" [value]="industrySector.code">
                     {{ industrySector.value }}
@@ -619,7 +619,7 @@
         <mat-step>
           <form [formGroup]="loanEnquiryFormStep4">
 
-            <ng-template matStepLabel>Done</ng-template>
+            <ng-template matStepLabel>ICC Details</ng-template>
 
             <div>
               <mat-form-field fxFlex="33">
@@ -632,6 +632,55 @@
               <mat-form-field fxFlex="34">
                 <input matInput placeholder="Business Partner Id." formControlName="partyNumber" type="text" readonly [readonly]="readonlyFields">
               </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field fxFlex="33">
+                  <input matInput placeholder="ICC Readiness Status" formControlName="iccReadinessStatus" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+  
+                <mat-form-field fxFlex="33">
+                  <input matInput placeholder="Remarks On ICC Readiness" formControlName="remarksOnIccReadiness" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                  <input matInput placeholder="Presented In ICC" formControlName="presentedInIcc" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field fxFlex="33">
+                  <input matInput placeholder="ICC Status" formControlName="iCCStatus" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+  
+                <mat-form-field fxFlex="33">
+                  <input matInput placeholder="Reason For ICC Status" formControlName="reasonForIccStatus" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                  <input matInput placeholder="ICC Clearance Date" formControlName="iCCClearanceDate" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field fxFlex="33">
+                  <input matInput placeholder="ICC Meeting Number" formControlName="iCCMeetNumber" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+  
+                <mat-form-field fxFlex="33">
+                  <input matInput placeholder="Amount Approved (Cr)" formControlName="amountApproved" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                  <input matInput placeholder="ICC Approved ROI" formControlName="iccApprovedRoi" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field fxFlex="66">
+                  <input matInput placeholder="Remarks For ICC Approval/ Rejection" formControlName="iCCRemarks" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
+  
+                <mat-form-field fxFlex="34">
+                  <input matInput placeholder="Dealing Nodal Office BD" formControlName="dealingNodalOfficer" type="text" readonly [readonly]="readonlyFields">
+                </mat-form-field>
             </div>
 
             <div class="h2 m-16" fxLayout="row" fxLayoutAlign="center center"

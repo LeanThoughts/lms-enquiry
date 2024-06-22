@@ -18,8 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -64,9 +66,12 @@ public class EnquiriesExcelUploadController {
                     if(enquiry.getSerialNumber() == null || enquiry.getSerialNumber() == 0)
                         comments += "Serial Number is missing.\n";
 
-                    enquiry.setSapEnquiryId(new Double(row.getCell(1).getNumericCellValue()).longValue());
-//                    if(enquiry.getSapEnquiryId() == null || enquiry.getSapEnquiryId() == 0)
-//                        comments += "SAP Enquiry ID is missing.\n";
+                    try {
+                        enquiry.setSapEnquiryId(new Double(row.getCell(1).getNumericCellValue()).longValue());
+                    }
+                    catch (IllegalStateException ex) {
+                        enquiry.setSapEnquiryId(0L);
+                    }
 
                     enquiry.setBorrowerName(row.getCell(2).getStringCellValue());
                     if(enquiry.getBorrowerName() == null || enquiry.getBorrowerName().trim().equals(""))
@@ -154,7 +159,7 @@ public class EnquiriesExcelUploadController {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("Upload failed due to file format errors !!");
         }
 
         // Save all enquiries
@@ -166,7 +171,8 @@ public class EnquiriesExcelUploadController {
     @PostMapping("/api/createExcelEnquiries")
     public ResponseEntity<List<ExcelEnquiry>> createEnquiries(HttpServletRequest request) throws Exception {
 
-        List<ExcelEnquiry> enquiries = excelEnquiryRepository.findAll();
+        List<ExcelEnquiry> enquiries = excelEnquiryRepository.findAll().stream()
+                .sorted(Comparator.comparing(ExcelEnquiry::getSerialNumber)).collect(Collectors.toList());
 
         final boolean[] errors = {false};
         enquiries.forEach((enquiry) -> {

@@ -144,7 +144,8 @@ public class LoanApplicationContoller {
 
                     } else {
                         //log.info("Loan Applicant is not NULL:" + partnerRepository.findById(loanApplication.getLoanApplicant()));
-                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
+                        Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).orElse(null);
+//                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
                         LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
@@ -954,7 +955,7 @@ public class LoanApplicationContoller {
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null)
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
                     loanApplicationResource.getLoanApplication().setProjectLocationState(
-                            stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
+                        stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState()).getName());
                 }
         }
 

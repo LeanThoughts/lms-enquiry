@@ -60,6 +60,17 @@ export class LoanApplicationModel {
 
     industrySector: string;
 
+    iccReadinessStatus: string;
+    remarksOnIccReadiness: string;
+    presentedInIcc: string;
+    iCCStatus: string;
+    reasonForIccStatus: string;
+    iCCClearanceDate: Date;
+    iCCMeetNumber: string;
+    amountApproved: number;
+    iccApprovedRoi: number;
+    iCCRemarks: string;
+    dealingNodalOfficer: string;
 
   _links: Object;
 
@@ -119,6 +130,18 @@ export class LoanApplicationModel {
         this.contactFaxNumber = _loanApplication.contactFaxNumber || '';
 
        this.industrySector = _loanApplication.industrySector || '';
+
+       this.iccReadinessStatus = _loanApplication.iccReadinessStatus || '';
+       this.remarksOnIccReadiness = _loanApplication.remarksOnIccReadiness || '';
+       this.presentedInIcc = _loanApplication.presentedInIcc || '';
+       this.iCCStatus = _loanApplication.iCCStatus || '';
+       this.reasonForIccStatus = _loanApplication.reasonForIccStatus || '';
+       this.iCCClearanceDate = _loanApplication.iCCClearanceDate || '';
+       this.iCCMeetNumber = _loanApplication.iCCMeetNumber || '';
+       this.amountApproved = _loanApplication.amountApproved || '';
+       this.iccApprovedRoi = _loanApplication.iccApprovedRoi || '';
+       this.iCCRemarks = _loanApplication.iCCRemarks || '';
+       this.dealingNodalOfficer = _loanApplication.dealingNodalOfficer || '';
 
         this._links = _loanApplication._links;
     }

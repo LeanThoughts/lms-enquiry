@@ -236,7 +236,13 @@ export class EnquirySearchComponent {
     redirectToEnquiryReview(): void {
         if (this._enquiryAlertsService.selectedLoanApplicationId !== undefined) {
             this._enquiryAlertsService.selectedLoanApplicationId.next(this._service.selectedLoanApplicationId.value);
-            this._enquiryAlertsService.selectedLoanApplicationPartyNumber.next(this._service.selectedLoanApplicationPartyNumber.value);
+            if (!this._enquiryAlertsService.selectedLoanApplicationPartyNumber) {
+                this._enquiryAlertsService.selectedLoanApplicationPartyNumber = 
+                    new BehaviorSubject(this._service.selectedLoanApplicationPartyNumber.value)
+            }
+            else {
+                this._enquiryAlertsService.selectedLoanApplicationPartyNumber.next(this._service.selectedLoanApplicationPartyNumber.value);
+            }
         }
         else {
             this._enquiryAlertsService.selectedLoanApplicationId = new BehaviorSubject(this._service.selectedLoanApplicationId.value);

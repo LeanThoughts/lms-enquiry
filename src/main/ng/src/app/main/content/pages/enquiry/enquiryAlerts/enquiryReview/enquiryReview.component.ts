@@ -79,7 +79,7 @@ export class EnquiryReviewComponent implements OnInit {
   user: UserModel = new UserModel({});
   email: string;
 
-  readonlyFields: boolean;
+  readonlyFields = true;
     selectionMethod: string;
 
    /**
@@ -107,13 +107,13 @@ export class EnquiryReviewComponent implements OnInit {
     //this.partner = _route.snapshot.data.routeResolvedData[8];
 
     // Disable the Form
-    if (this.loanApplication.technicalStatus == '4' || this.loanApplication.technicalStatus == '5' || this.loanApplication.technicalStatus == '6') {
-        this.readonlyFields = true;
-    }
-    else {
-        this.readonlyFields = false;
-    }
-    console.log('readonlyFields', this.readonlyFields);
+    // if (this.loanApplication.technicalStatus == '4' || this.loanApplication.technicalStatus == '5' || this.loanApplication.technicalStatus == '6') {
+    //     this.readonlyFields = true;
+    // }
+    // else {
+    //     this.readonlyFields = false;
+    // }
+    // console.log('readonlyFields', this.readonlyFields);
 
     // Initialize partner.
     this.partner = new PartnerModel({});
@@ -278,9 +278,18 @@ export class EnquiryReviewComponent implements OnInit {
     this.loanEnquiryFormStep4 = this._formBuilder.group({
       enquiryNo: [getEnquiryNo(this.loanApplication)],
       loanContractId: [this.loanApplication.loanContractId],
-      partyNumber: [this.loanApplication.busPartnerNumber]
-
-
+      partyNumber: [this.loanApplication.busPartnerNumber],
+      iccReadinessStatus: [this.loanApplication.iccReadinessStatus],
+      remarksOnIccReadiness: [this.loanApplication.remarksOnIccReadiness],
+      presentedInIcc: [this.loanApplication.presentedInIcc],
+      iCCStatus: [this.loanApplication.iCCStatus],
+      reasonForIccStatus: [this.loanApplication.reasonForIccStatus],
+      iCCClearanceDate: [this.loanApplication.iCCClearanceDate],
+      iCCMeetNumber: [this.loanApplication.iCCMeetNumber],
+      amountApproved: [this.loanApplication.amountApproved],
+      iccApprovedRoi: [this.loanApplication.iccApprovedRoi],
+      iCCRemarks: [this.loanApplication.iCCRemarks],
+      dealingNodalOfficer: [this.loanApplication.dealingNodalOfficer]
     });
   }
 
