@@ -608,10 +608,11 @@ public class LoanApplicationContoller {
         }
 
         if (resource.getEnquiryNoFrom() != null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo() != null).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() != null).collect(Collectors.toList());
 
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() >=
-                    resource.getEnquiryNoFrom() && loanApplication.getEnquiryNo().getId() <= resource.getEnquiryNoTo()).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() != null &&
+                    ( loanApplication.getEnquiryNo().getId() >= resource.getEnquiryNoFrom()
+                            && loanApplication.getEnquiryNo().getId() <= resource.getEnquiryNoTo())).collect(Collectors.toList());
         }
 
         if (resource.getEnquiryNoTo() != null) {
