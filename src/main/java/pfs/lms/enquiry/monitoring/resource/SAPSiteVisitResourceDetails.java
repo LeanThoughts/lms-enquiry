@@ -52,7 +52,7 @@ public class SAPSiteVisitResourceDetails {
     private String  revisedSCOD2;
     @JsonProperty(value = "BusinessPartnerId")
     private String  businesspartnerid;
-    @JsonProperty(value = "Businesspartnername")
+    @JsonProperty(value = "BusinessPartnerName")
     private String  businesspartnername;
 
 
