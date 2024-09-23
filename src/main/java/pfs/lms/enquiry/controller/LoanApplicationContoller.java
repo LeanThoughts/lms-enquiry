@@ -813,19 +813,19 @@ public class LoanApplicationContoller {
         }
 
         if (resource.getPartyName() != null)
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getProjectName().toLowerCase().contains(resource.getPartyName().toLowerCase())).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getProjectName()!= null && loanApplication.getProjectName().toLowerCase().contains(resource.getPartyName().toLowerCase())).collect(Collectors.toList());
 
         if (resource.getLoanClass() != null)
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanClass().equals(resource.getLoanClass())).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanClass() != null && loanApplication.getLoanClass().equals(resource.getLoanClass())).collect(Collectors.toList());
 
         if (resource.getFinancingType() != null)
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getFinancingType().equals(resource.getFinancingType())).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getFinancingType() != null && loanApplication.getFinancingType().equals(resource.getFinancingType())).collect(Collectors.toList());
 
         if (resource.getProjectLocationState() != null)
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getProjectLocationState().equals(resource.getProjectLocationState())).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter( loanApplication -> loanApplication.getProjectLocationState() != null &&  loanApplication.getProjectLocationState().equals(resource.getProjectLocationState())).collect(Collectors.toList());
 
         if (resource.getProjectType() != null)
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getProjectType().equals(resource.getProjectType())).collect(Collectors.toList());
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getProjectType() != null && loanApplication.getProjectType().equals(resource.getProjectType())).collect(Collectors.toList());
 
         if (resource.getAssistanceType() != null)
             loanApplications = loanApplications.stream().filter(loanApplication ->
