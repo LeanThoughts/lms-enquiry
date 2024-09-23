@@ -834,6 +834,7 @@ public class LoanApplicationContoller {
                     .collect(Collectors.toList());
 
 
+
         if (resource.getTechnicalStatus() != null)
             loanApplications = loanApplications
                     .stream()
