@@ -165,7 +165,16 @@ public class WorkflowService implements IWorkflowService {
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "ICC Stage";
                 break;
-            case "ApplicationFee" :
+            case "ICCApproval" :
+                //Fetch the Entity
+                iccApproval = iccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                iccApproval.setWorkFlowStatusCode(02); iccApproval.setWorkFlowStatusDescription("Sent for Approval");
+                loanApplication = iccApproval.getLoanApplication();
+                objectId = loanApplication.getEnquiryNo().getId().toString();
+             processDescription = "ICC Stage";
+                break;
+                case "ApplicationFee" :
                 //Fetch the Entity
                 applicationFee = applicationFeeRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "02" - Sent for Approval
@@ -259,6 +268,11 @@ public class WorkflowService implements IWorkflowService {
                 iccApproval.setProcessInstanceId(processInstanceId);
                 iccApproval = iccApprovalRepository.save(iccApproval);
                 return iccApproval;
+            case "ICCApproval" :
+                //Save entity with the Process Instance and workflow status code
+                iccApproval.setProcessInstanceId(processInstanceId);
+                iccApproval = iccApprovalRepository.save(iccApproval);
+                return iccApproval;
             case "ApplicationFee" :
                 //Save entity with the Process Instance and workflow status code
                 applicationFee.setProcessInstanceId(processInstanceId);
@@ -321,6 +335,14 @@ public class WorkflowService implements IWorkflowService {
                 processInstanceId = enquiryAction.getProcessInstanceId();
                 break;
             case "ICC Stage" :
+                //Fetch the Entity
+                iccApproval = iccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                iccApproval.setWorkFlowStatusCode(03); iccApproval.setWorkFlowStatusDescription("Approved");
+                loanEnquiryId =  iccApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = iccApproval.getProcessInstanceId();
+                break;
+            case "ICCApproval" :
                 //Fetch the Entity
                 iccApproval = iccApprovalRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "03" - Approved
@@ -403,7 +425,15 @@ public class WorkflowService implements IWorkflowService {
                 iccApprovalRepository.save(iccApproval); iccApprovalRepository.flush();
                 //projectProposalService.processApprovedEnquiry(enquiryAction,username);
                 return enquiryAction;
-            case "Application Fee" :
+            case "ICCApproval" :
+                //Save entity with the new workflow status code
+                iccApproval.setWorkFlowStatusDescription("Approved");
+                iccApproval.setWorkFlowStatusCode(3);
+                iccApproval.setProcessInstanceId(processInstanceId);
+                iccApprovalRepository.save(iccApproval); iccApprovalRepository.flush();
+                //projectProposalService.processApprovedEnquiry(enquiryAction,username);
+                return enquiryAction;
+                case "Application Fee" :
                 //Save entity with the new workflow status code
                 applicationFee.setWorkFlowStatusDescription("Approved");
                 applicationFee.setWorkFlowStatusCode(3);
@@ -645,6 +675,7 @@ public class WorkflowService implements IWorkflowService {
         if (variables.get("projectName") != null)
         workflowTaskDTO.setProjectName(variables.get("projectName").toString());
         workflowTaskDTO.setApproverEmail(variables.get("approverEmail").toString());
+        if (variables.get("approverName") !=null)
         workflowTaskDTO.setApproverName(variables.get("approverName").toString());
         workflowTaskDTO.setRequestDate(variables.get("requestDate").toString());
         workflowTaskDTO.setRequestorEmail(variables.get("requestorName").toString());
