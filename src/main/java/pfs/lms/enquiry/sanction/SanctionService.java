@@ -20,6 +20,7 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.sanction.sanctionletter.SanctionLetter;
 import pfs.lms.enquiry.sanction.sanctionletter.SanctionLetterRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,12 +45,28 @@ public class SanctionService implements ISanctionService {
     private final BoardApprovalRejectedByCustomerRepository boardApprovalRejectedByCustomerRepository;
     @Autowired
     private final SanctionLetterRepository sanctionLetterRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BoardApproval processApprovedSanction(Sanction sanction, String username) {
+    public BoardApproval processApprovedSanction(Sanction sanction, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = sanction.getLoanApplication();
+        Object oldLoanApplication = loanApplication.clone();
         loanApplication.setFunctionalStatus(5); //Sanction Stage
+        loanApplication.setFunctionalStatusDescription("Sanction Stage");
+
+        // Change Documents for Loan Application
+        changeDocumentService.createChangeDocument(
+                loanApplication.getId(),
+                loanApplication.getId().toString(),
+                loanApplication.getId().toString(),
+                loanApplication.getEnquiryNo().getId().toString(),
+                loanApplication,
+                oldLoanApplication,
+                "Updated",
+                username,
+                "LoanApplication", "LoanApplication" );
+
         loanApplicationRepository.save(loanApplication);
 
         List<SanctionLetter> sanctionLetterList = sanctionLetterRepository.findBySanctionId(sanction.getId());

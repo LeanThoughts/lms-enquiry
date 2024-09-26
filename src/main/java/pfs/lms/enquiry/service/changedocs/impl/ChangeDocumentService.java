@@ -411,8 +411,17 @@ public class ChangeDocumentService implements IChangeDocumentService {
         try {
 
             switch (className) {
-                case "LoanMonitor":
-                    LoanMonitor loanMonitor = (LoanMonitor) object;
+                case "LoanApplication":
+                    LoanApplication loanApplication = (LoanApplication) object;
+                    if (loanApplication.getLoanContractId() == null)
+                        result.put("id", loanApplication.getEnquiryNo().getId().toString());
+                    else
+                        result.put("id", loanApplication.getLoanContractId().toString());
+                    result.put("description", loanApplication.getProjectName());
+                    result.put("loanApplication",loanApplication );
+                    return result;
+                    case "LoanMonitor":
+                        LoanMonitor loanMonitor = (LoanMonitor) object;
                     result.put("id", loanMonitor.getLoanApplication().getLoanContractId().toString());
                     result.put("description", loanMonitor.getLoanApplication().getProjectName());
                     result.put("loanApplication",loanMonitor.getLoanApplication());

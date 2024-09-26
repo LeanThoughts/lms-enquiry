@@ -22,7 +22,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class LoanApplication extends AggregateRoot<LoanApplication> {
+public class LoanApplication extends AggregateRoot<LoanApplication>  implements Cloneable{
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private EnquiryNo enquiryNo;
@@ -162,7 +162,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
 
     /**
      * 01-Enquiry Stage
-     * 02-ICC ApprovalStage
+     * 02-ICC In-Principle Approved
      * 03-Appraisal Stage
      * 04-Board Approval Stage
      * 05-Sanction Stage
@@ -1042,5 +1042,9 @@ public class LoanApplication extends AggregateRoot<LoanApplication> {
     public static class LoanApplicationRejected {
 
         final LoanApplication loanApplication;
+    }
+
+    public Object clone () throws CloneNotSupportedException {
+        return super.clone();
     }
 }

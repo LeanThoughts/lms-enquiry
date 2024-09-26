@@ -17,6 +17,7 @@ import pfs.lms.enquiry.boardapproval.rejectedbycustomer.BoardApprovalRejectedByC
 import pfs.lms.enquiry.boardapproval.rejectedbycustomer.BoardApprovalRejectedByCustomerRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
 import java.util.Collections;
@@ -40,20 +41,37 @@ public class BoardApprovalService implements IBoardApprovalService {
     private final RejectedByBoardRepository rejectedByBoardRepository;
     @Autowired
     private final BoardApprovalRejectedByCustomerRepository boardApprovalRejectedByCustomerRepository;
+    private final IChangeDocumentService changeDocumentService;
 
 
     @Override
-    public BoardApproval processApprovedBoardApproval(BoardApproval boardApproval, String username) {
+    public BoardApproval processApprovedBoardApproval(BoardApproval boardApproval, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = boardApproval.getLoanApplication();
+        Object oldLoanApplication;
+        oldLoanApplication = loanApplication.clone();
+
         loanApplication.setChangedByUserName(username);
 
         loanApplication = mapBoardApprovalToLoanApplication(boardApproval, loanApplication);
 
-        loanApplication.setFunctionalStatus(4); //Enquiry Stage
+        loanApplication.setFunctionalStatus(4); // Baord Approval
+        loanApplication.setFunctionalStatusDescription("Board Approval Stage");
         loanApplication.setTechnicalStatus(4);  // Approved/Taken Up for processing
         loanApplication.setPostedInSAP(0);
         loanApplication.setFinalDecisionStatus(0); //
+
+        // Change Documents for Loan Application
+        changeDocumentService.createChangeDocument(
+                loanApplication.getId(),
+                loanApplication.getId().toString(),
+                loanApplication.getId().toString(),
+                loanApplication.getEnquiryNo().getId().toString(),
+                loanApplication,
+                oldLoanApplication,
+                "Updated",
+                username,
+                "LoanApplication", "LoanApplication" );
 
         loanApplicationRepository.save(loanApplication);
         return boardApproval;

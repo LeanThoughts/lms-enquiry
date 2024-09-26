@@ -18,6 +18,8 @@ import pfs.lms.enquiry.action.EnquiryActionRepository;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposalService;
 import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
+import pfs.lms.enquiry.applicationfee.ApplicationFeeService;
+import pfs.lms.enquiry.applicationfee.IApplicationFeeService;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.boardapproval.BoardApproval;
@@ -27,6 +29,8 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.exception.HandledException;
 import pfs.lms.enquiry.iccapproval.ICCApproval;
 import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
+import pfs.lms.enquiry.iccapproval.ICCApprovalService;
+import pfs.lms.enquiry.iccapproval.ICCApprovalServiceImpl;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.domain.WorkflowApprover;
@@ -42,6 +46,7 @@ import pfs.lms.enquiry.service.workflow.IWorkflowService;
 import pfs.lms.enquiry.vault.FileSystemStorage;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -91,6 +96,11 @@ public class WorkflowService implements IWorkflowService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    private final ICCApprovalServiceImpl iccApprovalService;
+
+    private final ApplicationFeeService applicationFeeService;
 
     private static final Logger log = LoggerFactory.getLogger(FileSystemStorage.class);
 
@@ -415,7 +425,7 @@ public class WorkflowService implements IWorkflowService {
                 enquiryAction.setWorkFlowStatusCode(3);
                 enquiryAction.setProcessInstanceId(processInstanceId);
                 enquiryActionRepository.save(enquiryAction); enquiryActionRepository.flush();
-                //projectProposalService.processApprovedEnquiry(enquiryAction,username);
+                projectProposalService.processApprovedEnquiry(enquiryAction,username);
                 return enquiryAction;
             case "ICC Stage" :
                  //Save entity with the new workflow status code
@@ -423,23 +433,23 @@ public class WorkflowService implements IWorkflowService {
                 iccApproval.setWorkFlowStatusCode(3);
                 iccApproval.setProcessInstanceId(processInstanceId);
                 iccApprovalRepository.save(iccApproval); iccApprovalRepository.flush();
-                //projectProposalService.processApprovedEnquiry(enquiryAction,username);
-                return enquiryAction;
+                iccApprovalService.processApprovedICC(iccApproval,username);
+                return iccApproval;
             case "ICCApproval" :
                 //Save entity with the new workflow status code
                 iccApproval.setWorkFlowStatusDescription("Approved");
                 iccApproval.setWorkFlowStatusCode(3);
                 iccApproval.setProcessInstanceId(processInstanceId);
                 iccApprovalRepository.save(iccApproval); iccApprovalRepository.flush();
-                //projectProposalService.processApprovedEnquiry(enquiryAction,username);
-                return enquiryAction;
-                case "Application Fee" :
+                iccApprovalService.processApprovedICC(iccApproval,username);
+                return iccApproval;
+            case "Application Fee" :
                 //Save entity with the new workflow status code
                 applicationFee.setWorkFlowStatusDescription("Approved");
                 applicationFee.setWorkFlowStatusCode(3);
                 applicationFee.setProcessInstanceId(processInstanceId);
                 applicationFeeRepository.save(applicationFee); applicationFeeRepository.flush();
-                //projectProposalService.processApprovedEnquiry(enquiryAction,username);
+                 applicationFeeService.processApprovedApplicationFee(applicationFee,username);
                 return enquiryAction;
             case "Board Approval" :
                 //Save entity with the new workflow status code

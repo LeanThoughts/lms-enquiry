@@ -918,12 +918,12 @@ public class LoanApplicationContoller {
                  * 08-Rejected
                  */
                 if (loanApplication.getFunctionalStatus() != null) {
-                    switch (loanApplication.getTechnicalStatus()) {
+                    switch (loanApplication.getFunctionalStatus()) {
                         case 1:
                             loanApplication.setFunctionalStatusDescription("Enquiry Stage");
                             break;
                         case 2:
-                            loanApplication.setFunctionalStatusDescription("ICC ApprovalStage");
+                            loanApplication.setFunctionalStatusDescription("ICC In-Principle Approval Stage");
                             break;
                         case 3:
                             loanApplication.setFunctionalStatusDescription("Appraisal Stage");

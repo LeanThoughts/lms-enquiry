@@ -528,7 +528,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      loanPartner =  loanPartnerRepository.getOne(UUID.fromString(knowYourCustomer.getLoanPartnerId())) ;
                      loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
 
-                     log.info("Attempting to Post Appraisal Know Your Customer to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString()
+                     log.info("Attempting to Post Appraisal Know Your Customer to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanApplication().getLoanContractId().toString()
                              + "Loan Contract: " + loanAppraisal.getLoanApplication().getLoanContractId());
 
 

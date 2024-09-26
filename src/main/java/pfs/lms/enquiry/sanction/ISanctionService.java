@@ -4,5 +4,5 @@ import pfs.lms.enquiry.boardapproval.BoardApproval;
 
 public interface ISanctionService {
 
-     BoardApproval processApprovedSanction(Sanction sanction, String username);
+     BoardApproval processApprovedSanction(Sanction sanction, String username) throws CloneNotSupportedException;
 }

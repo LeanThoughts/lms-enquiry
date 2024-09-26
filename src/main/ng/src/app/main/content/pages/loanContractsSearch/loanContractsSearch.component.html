@@ -12,22 +12,28 @@
 
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToEnquiryAction()" 
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToEnquiryAction()"
                     [disabled]="_service.selectedLoanApplicationId === undefined">
                 Process Enquiry
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToICCApprovalStage()"
                     [disabled]="_service.selectedLoanApplicationId === undefined">
-                ICC Stage
+                ICC In-Principle Approval
             </button>
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToApplicationFee()"
+
+          <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToPrelimRiskAssessment()"
+                  [disabled]="_service.selectedLoanApplicationId === undefined">
+            Prelim Risk Assessment
+          </button>
+
+          <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToApplicationFee()"
                     [disabled]="_service.selectedLoanApplicationId === undefined">
                 Application Fee
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToLoanAppraisal()" *ngIf="appraisal"
                     [disabled]="_service.selectedLoanApplicationId === undefined &&
                     (
-                        _appService.currentUser.role.localeCompare('ZLM024') !== 0 || 
+                        _appService.currentUser.role.localeCompare('ZLM024') !== 0 ||
                         _appService.currentUser.role.localeCompare('ZLM040') !== 0
                     )">
                 Appraisal
@@ -45,9 +51,9 @@
                 Documentation
             </button>
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToMonitorLoan()" *ngIf="monitoring"
-                    [disabled]="_service.selectedLoanApplicationId == undefined && 
-                    (_appService.currentUser.role.localeCompare('ZLM024') != 0 || 
-                    _appService.currentUser.role.localeCompare('ZLM040') != 0 || 
+                    [disabled]="_service.selectedLoanApplicationId == undefined &&
+                    (_appService.currentUser.role.localeCompare('ZLM024') != 0 ||
+                    _appService.currentUser.role.localeCompare('ZLM040') != 0 ||
                     _appService.currentUser.role.localeCompare('ZLM023') != 0)">
                 Loan Monitoring
             </button>
@@ -148,7 +154,7 @@
                     <mat-form-field fxFlex="25">
                         <input matInput placeholder="Borrower Code From" formControlName="borrowerCodeFrom">
                     </mat-form-field>
-                    
+
                     <mat-form-field fxFlex="25">
                         <input matInput placeholder="Borrower Code To" formControlName="borrowerCodeTo">
                     </mat-form-field>
@@ -156,7 +162,7 @@
                     <mat-form-field fxFlex="25">
                         <input matInput placeholder="Loan Number From" formControlName="loanNumberFrom">
                     </mat-form-field>
-                    
+
                     <mat-form-field fxFlex="25">
                         <input matInput placeholder="Loan Number To" formControlName="loanNumberTo">
                     </mat-form-field>

@@ -180,11 +180,13 @@ public class ProjectProposalService implements IProjectProposalService {
     }
 
 
-    private LoanApplication updateLoanApplicationFromProposal( ProjectProposal projectProposal, String username){
+    private LoanApplication updateLoanApplicationFromProposal( ProjectProposal projectProposal, String username) throws CloneNotSupportedException {
 
         loanApplicationRepository.flush();
 
         LoanApplication loanApplication = projectProposal.getEnquiryAction().getLoanApplication();
+
+        Object oldLoanApplication = loanApplication.clone();
 
         ProjectDetail projectDetail = projectDetailRepository.findByProjectProposalId(projectProposal.getId());
         ProjectCost projectCost     = projectCostRepository.findByProjectProposalId(projectProposal.getId());
@@ -248,8 +250,12 @@ public class ProjectProposalService implements IProjectProposalService {
         }
 
         loanApplication.getbusPartnerNumber();
-        Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber()));
-        partner.setPartyName1(projectDetail.getBorrowerName());
+        Partner partner = new Partner();
+        if (loanApplication.getbusPartnerNumber() != null) {
+            partner = partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber()));
+            partner.setPartyName1(projectDetail.getBorrowerName());
+        }
+
 
         loanApplication.setChangedByUserName(projectProposal.getLastChangedByUser());
 
@@ -257,6 +263,16 @@ public class ProjectProposalService implements IProjectProposalService {
         loanApplication.setTechnicalStatus(3);  // Submitted
         loanApplication.setPostedInSAP(0);
         loanApplication.setFinalDecisionStatus(0); //
+
+        changeDocumentService.createChangeDocument(
+                loanApplication.getId(),loanApplication.getId().toString(),loanApplication.getId().toString(),
+                loanApplication.getEnquiryNo().getId().toString(),
+                oldLoanApplication,
+                loanApplication,
+                "Updated",
+                username,
+                "LoanApplication", "LoanApplication");
+
 
         loanApplicationRepository.save(loanApplication);
         partnerRepository.save(partner);

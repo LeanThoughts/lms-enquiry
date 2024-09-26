@@ -142,7 +142,16 @@ public class LoanApplicationService implements ILoanApplicationService {
 
         // Check if loan application is existing
         if (loanApplication.getId() != null) {
+
             loanApplicationExisting = loanApplicationRepository.getOne(loanApplication.getId());
+            changeDocumentService.createChangeDocument(
+                    loanApplication.getId(),loanApplication.getId().toString(),loanApplication.getId().toString(),
+                    loanApplication.getEnquiryNo().getId().toString(),
+                    loanApplicationExisting,
+                    loanApplication,
+                    "Updated",
+                    username,
+                    "LoanApplication", "LoanApplication");
         }
 
         if (loanApplicationExisting.getId() != null) {
@@ -276,6 +285,16 @@ public class LoanApplicationService implements ILoanApplicationService {
 
             //Create and return the Loan Application
             loanApplication = loanApplicationRepository.save(loanApplication);
+
+            changeDocumentService.createChangeDocument(
+                    loanApplication.getId(),loanApplication.getId().toString(),loanApplication.getId().toString(),
+                    loanApplication.getEnquiryNo().getId().toString(),
+                    null,
+                    loanApplication,
+                    "Created",
+                    username,
+                    "LoanApplication", "LoanApplication");
+
         }
 
         // Check if the LoanPartner entry is present for the main loan partner - If else, create it

@@ -58,8 +58,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     constructor(_route: ActivatedRoute, _formBuilder: FormBuilder, public _appService: AppService,
                 public _service: LoanEnquiryService, private _router: Router, private _loanAppraisalService: LoanAppraisalService,
                 private _enquiryAlertsService: EnquiryAlertsService, private _loanEnquiryService: LoanEnquiryService,
-                private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService, 
-                private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService, 
+                private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService,
+                private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService,
                 private _iccApprovalService: ICCApprovalService, private _applicationFeeService: ApplicationFeeService,
                 private _documentationService: DocumentationService) {
 
@@ -217,6 +217,21 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         // this.redirect('/iccApprovalStage');
     }
 
+  /**
+   * redirectToPrelimRiskAssessment()
+   */
+  redirectToPrelimRiskAssessment(): void {
+    //if (this._service.selectedEnquiry.value.loanContractId === undefined) {
+    this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+      this._iccApprovalService._iccApproval.next(response);
+      this.redirect('/prelimRiskAssessment');
+    }, (error: HttpErrorResponse) => {
+      if (error.status === 404) {
+        this._iccApprovalService._iccApproval.next({ id: '' });
+        this.redirect('/prelimRiskAssessment');
+      }
+    })
+  }
     /**
      * redirectToApplicationFee()
      */
@@ -267,7 +282,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this._boardApprovalService.getBoardApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
             this._boardApprovalService._boardApproval.next(response);
             this.redirect('/boardApproval');
-        }, 
+        },
         (error: HttpErrorResponse) => {
             if (error.status === 404) {
                 this._boardApprovalService._boardApproval.next({ id: '' });
@@ -288,7 +303,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._sanctionService._sanction.next(response);
                 this.redirect('/sanction');
-            }, 
+            },
             (error: HttpErrorResponse) => {
                 if (error.status === 404) {
                     this._sanctionService._sanction.next({ id: '' });
@@ -304,7 +319,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                     this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                         this._sanctionService._sanction.next(response);
                         this.redirect('/sanction');
-                    }, 
+                    },
                     (error: HttpErrorResponse) => {
                         if (error.status === 404) {
                             this._sanctionService._sanction.next({ id: '' });
@@ -326,11 +341,11 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         else if (functionalStatus >= 1 && functionalStatus <= 3) {
             // this._matSnackBar.open('Loan is still in 01-Enquiry Stage /02-ICC Approval Stage/ 03-Appraisal Stage. Sanction not Possible.',
             //     'OK', { duration: 7000 });
-            
+
             this._sanctionService.getSanction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._sanctionService._sanction.next(response);
                 this.redirect('/sanction');
-            }, 
+            },
             (error: HttpErrorResponse) => {
                 if (error.status === 404) {
                     this._sanctionService._sanction.next({ id: '' });
@@ -347,7 +362,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this._documentationService.getDocumentation(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
             this._documentationService._documentation.next(response);
             this.redirect('/documentation');
-        }, 
+        },
         (error: HttpErrorResponse) => {
             if (error.status === 404) {
                 this._documentationService._documentation.next({ id: '' });

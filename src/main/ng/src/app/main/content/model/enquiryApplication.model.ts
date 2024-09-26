@@ -5,9 +5,10 @@ export class EnquiryApplicationModel {
     assistanceType: string;
     busPartnerNumber: string;
     createdOn: Date;
-    createdByUserName:string;
+    createdByUserName: string;
     enquiryNumber: string;
     functionalStatus: number;
+    functionalStatusDescription: string;
     loanAmount: number;
     loanClass: string;
     loanContractId: string;
@@ -17,7 +18,7 @@ export class EnquiryApplicationModel {
     projectLocationState: string;
     projectName: string;
     projectType: string;
-    technicalStatusDescription:string;
+    technicalStatusDescription: string;
     rating: string;
     borrowerName: string;
 
@@ -35,6 +36,7 @@ export class EnquiryApplicationModel {
         this.createdByUserName = _enquiryApplication.loanApplication.createdByUserName;
         this.enquiryNumber = _enquiryApplication.loanApplication.enquiryNo.id;
         this.functionalStatus = _enquiryApplication.loanApplication.functionalStatus;
+        this.functionalStatusDescription = _enquiryApplication.loanApplication.functionalStatusDescription;
         this.loanAmount = _enquiryApplication.loanApplication.pfsDebtAmount;
         this.loanClass = _enquiryApplication.loanApplication.loanClass;
         this.loanContractId = _enquiryApplication.loanApplication.loanContractId;
