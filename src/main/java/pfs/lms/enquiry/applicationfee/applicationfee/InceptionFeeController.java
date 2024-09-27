@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Slf4j
 @RepositoryRestController
+//@RestController
 @RequiredArgsConstructor
 public class InceptionFeeController {
     private final LoanApplicationRepository loanApplicationRepository;
@@ -27,9 +29,30 @@ public class InceptionFeeController {
                 request.getUserPrincipal().getName()));
     }
 
-    @PostMapping("/sapInceptionFees/create")
+    //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
+    @PostMapping("/inceptionFees/sapInceptionFees/create")
     public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeSAPResource inceptionFeeSAPResource,
                                                HttpServletRequest request) {
+        InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
+
+        log.info("Invoice Number : ", inceptionFeeSAPResource.getInvoiceNumber());
+        log.info("Invoice Date : ", inceptionFeeSAPResource.getInvoiceDate());
+        log.info("Amount : ", inceptionFeeSAPResource.getAmount());
+
+
+        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeSAPResource.getLoanContractId());
+        inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
+
+
+
+        return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
+                request.getUserPrincipal().getName()));
+    }
+
+    @RequestMapping(value = "/inceptionFees/sapInceptionFees/update", method = RequestMethod.PUT, produces = "application/json")
+    //@PostMapping("/sapInceptionFees/create")
+    public ResponseEntity<InceptionFee> updateFromSAP(@RequestBody InceptionFeeSAPResource inceptionFeeSAPResource,
+                                                      HttpServletRequest request) {
         InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
 
         log.info("Invoice Number : ", inceptionFeeSAPResource.getInvoiceNumber());
