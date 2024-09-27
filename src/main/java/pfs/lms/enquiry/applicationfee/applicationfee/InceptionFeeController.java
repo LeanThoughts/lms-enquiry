@@ -41,12 +41,13 @@ public class InceptionFeeController {
 
 
         LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeSAPResource.getLoanContractId());
-        inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
+        if (loanApplication != null){
+            inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
-
-
-        return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
+            return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
                 request.getUserPrincipal().getName()));
+        }
+        return  null;
     }
 
     @RequestMapping(value = "/inceptionFees/sapInceptionFees/update", method = RequestMethod.PUT, produces = "application/json")
