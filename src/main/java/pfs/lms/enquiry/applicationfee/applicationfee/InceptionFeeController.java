@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
@@ -13,12 +15,32 @@ import java.util.UUID;
 @RepositoryRestController
 @RequiredArgsConstructor
 public class InceptionFeeController {
+    private final LoanApplicationRepository loanApplicationRepository;
 
     private final IInceptionFeeService inceptionFeeService;
 
     @PostMapping("/inceptionFees/create")
     public ResponseEntity<InceptionFee> create(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                HttpServletRequest request) {
+
+        return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
+                request.getUserPrincipal().getName()));
+    }
+
+    @PostMapping("/sapInceptionFees/create")
+    public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeSAPResource inceptionFeeSAPResource,
+                                               HttpServletRequest request) {
+        InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
+
+        log.info("Invoice Number : ", inceptionFeeSAPResource.getInvoiceNumber());
+        log.info("Invoice Date : ", inceptionFeeSAPResource.getInvoiceDate());
+        log.info("Amount : ", inceptionFeeSAPResource.getAmount());
+
+
+        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeSAPResource.getLoanContractId());
+        inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
+
+
 
         return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
                 request.getUserPrincipal().getName()));
@@ -38,4 +60,6 @@ public class InceptionFeeController {
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(inceptionFee);
     }
+
+
 }

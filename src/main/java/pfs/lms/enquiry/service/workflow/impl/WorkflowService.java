@@ -173,7 +173,7 @@ public class WorkflowService implements IWorkflowService {
                 iccApproval.setWorkFlowStatusCode(02); iccApproval.setWorkFlowStatusDescription("Sent for Approval");
                 loanApplication = iccApproval.getLoanApplication();
                 objectId = loanApplication.getEnquiryNo().getId().toString();
-                processDescription = "ICC Stage";
+                processDescription = "ICC In-Principal Approval";
                 break;
             case "ICCApproval" :
                 //Fetch the Entity
@@ -182,7 +182,7 @@ public class WorkflowService implements IWorkflowService {
                 iccApproval.setWorkFlowStatusCode(02); iccApproval.setWorkFlowStatusDescription("Sent for Approval");
                 loanApplication = iccApproval.getLoanApplication();
                 objectId = loanApplication.getEnquiryNo().getId().toString();
-             processDescription = "ICC Stage";
+                processDescription = "ICC In-Principal Approval";
                 break;
                 case "ApplicationFee" :
                 //Fetch the Entity
