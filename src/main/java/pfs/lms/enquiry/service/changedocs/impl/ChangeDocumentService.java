@@ -27,6 +27,7 @@ import pfs.lms.enquiry.action.projectproposal.projectproposalotherdetail.Project
 import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
 import pfs.lms.enquiry.action.rejectbycustomer.RejectByCustomer;
 import pfs.lms.enquiry.action.rejectbypfs.RejectByPfs;
+import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
@@ -934,6 +935,16 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", sanctionLetter.getId().toString());
                     result.put("description", sanctionLetter.getSerialNumber().toString());
                     result.put("loanApplication",sanctionLetter.getSanction().getLoanApplication());
+                    return result;
+                 case "ApplicationFee":
+                     ApplicationFee applicationFee = (ApplicationFee) object;
+                    result.put("id", applicationFee.getId().toString());
+                    if (applicationFee.getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", applicationFee.getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", applicationFee.getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",applicationFee.getLoanApplication());
                     return result;
             }
 
