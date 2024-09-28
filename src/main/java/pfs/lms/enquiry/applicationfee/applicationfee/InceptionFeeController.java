@@ -31,16 +31,23 @@ public class InceptionFeeController {
 
     //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
     @PostMapping("/inceptionFees/sapInceptionFees/create")
-    public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeSAPResource inceptionFeeSAPResource,
+    public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                HttpServletRequest request) {
-        InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
+//        InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
+//
+//        log.info("Loan Number : " + inceptionFeeSAPResource.getLoanContractId());
+//        log.info("Invoice Number : " + inceptionFeeSAPResource.getInvoiceNumber());
+//        log.info("Invoice Date : " + inceptionFeeSAPResource.getInvoiceDate());
+//        log.info("Amount : " + inceptionFeeSAPResource.getAmount());
+//        inceptionFeeResource.setAmount(inceptionFeeSAPResource.getAmount());
+//        inceptionFeeResource.setInvoiceNumber(inceptionFeeSAPResource.getInvoiceNumber());
+//        inceptionFeeResource.setInvoiceDate(inceptionFeeSAPResource.getInvoiceDate());
+//        inceptionFeeResource.setAmountReceived(inceptionFeeSAPResource.getAmountReceived());
+//        inceptionFeeResource.setTaxAmount(inceptionFeeSAPResource.getTaxAmount());
+//        inceptionFeeResource.setTotalAmount(inceptionFeeSAPResource.getTotalAmount());
 
-        log.info("Invoice Number : ", inceptionFeeSAPResource.getInvoiceNumber());
-        log.info("Invoice Date : ", inceptionFeeSAPResource.getInvoiceDate());
-        log.info("Amount : ", inceptionFeeSAPResource.getAmount());
 
-
-        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeSAPResource.getLoanContractId());
+        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
         if (loanApplication != null){
             inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
@@ -52,16 +59,16 @@ public class InceptionFeeController {
 
     @RequestMapping(value = "/inceptionFees/sapInceptionFees/update", method = RequestMethod.PUT, produces = "application/json")
     //@PostMapping("/sapInceptionFees/create")
-    public ResponseEntity<InceptionFee> updateFromSAP(@RequestBody InceptionFeeSAPResource inceptionFeeSAPResource,
+    public ResponseEntity<InceptionFee> updateFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                       HttpServletRequest request) {
-        InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
-
-        log.info("Invoice Number : ", inceptionFeeSAPResource.getInvoiceNumber());
-        log.info("Invoice Date : ", inceptionFeeSAPResource.getInvoiceDate());
-        log.info("Amount : ", inceptionFeeSAPResource.getAmount());
 
 
-        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeSAPResource.getLoanContractId());
+        log.info("Invoice Number : ", inceptionFeeResource.getInvoiceNumber());
+        log.info("Invoice Date : ", inceptionFeeResource.getInvoiceDate());
+        log.info("Amount : ", inceptionFeeResource.getAmount());
+
+
+        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
         inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
 

@@ -22,7 +22,7 @@ public class InceptionFee extends AggregateRoot<InceptionFee> implements Cloneab
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private ApplicationFee applicationFee;
-
+    private String loanContractId;
     private String invoiceNumber;
     private LocalDate invoiceDate;
     private Double amount;
@@ -32,6 +32,19 @@ public class InceptionFee extends AggregateRoot<InceptionFee> implements Cloneab
     private String rtgsNumber;
     private String referenceNumber;
     private String remarks;
+
+    private String headerDocumentNumber;
+
+    //0	New
+    //1	Entered
+    //2	Activated
+    //3	Deleted
+    //4	Posted
+    //5	Reversed
+    //6	Completed
+    //7	Reset
+    private String statusCode;
+    private String statusDescription;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

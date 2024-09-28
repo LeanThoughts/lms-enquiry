@@ -16,6 +16,7 @@ public class InceptionFeeResource {
 
     private UUID id;
     private UUID loanApplicationId;
+    private String loanContractId;
 
     private String invoiceNumber;
     private LocalDate invoiceDate;
@@ -26,4 +27,18 @@ public class InceptionFeeResource {
     private String rtgsNumber;
     private String referenceNumber;
     private String remarks;
+
+
+    private String headerDocumentNumber;
+
+    //0	New
+    //1	Entered
+    //2	Activated
+    //3	Deleted
+    //4	Posted
+    //5	Reversed
+    //6	Completed
+    //7	Reset
+    private String statusCode;
+    private String statusDescription;
 }
