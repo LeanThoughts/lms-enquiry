@@ -9,6 +9,18 @@
     </mat-toolbar>
     <div mat-dialog-content fusePerfectScrollbar style="padding: 16px !important;">
         <form [formGroup]="inceptionFeeForm">
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50">
+              <input matInput placeholder="Fee Type" formControlName="description" maxlength="100" readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex="50">
+              <input matInput placeholder="Status" formControlName="statusDescription" readonly>
+              <!-- <mat-datepicker-toggle mat Suffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>  -->
+            </mat-form-field>
+          </div>
+
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Invoice Number" formControlName="invoiceNumber" maxlength="100" readonly>
@@ -33,17 +45,21 @@
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Total Amount" formControlName="totalAmount" maxlength="100" readonly>
                 </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Amount Received" formControlName="amountReceived" maxlength="100" readonly>
-                </mat-form-field>
+<!--                <mat-form-field fxFlex="50">-->
+<!--                    <input matInput placeholder="Amount Received" formControlName="amountReceived" maxlength="100" readonly>-->
+<!--                </mat-form-field>-->
             </div>
 
             <div fxLayout="row">
                 <!-- <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker3" placeholder="Date of Transfer" formControlName="dateOfTransfer" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker> 
+                    <mat-datepicker #picker3></mat-datepicker>
                 </mat-form-field> -->
+              <mat-form-field fxFlex="50">
+                <input matInput placeholder="Amount Received" formControlName="amountReceived" maxlength="100" >
+              </mat-form-field>
+
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="RTGS/NEFT Number" formControlName="rtgsNumber" maxlength="80">
                 </mat-form-field>

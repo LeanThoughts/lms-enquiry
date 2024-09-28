@@ -160,6 +160,9 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     public List<String> getICCMeetingNumbers(UUID loanApplicationId) {
         ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplicationId);
 
+        if (iccApproval == null)
+            return null;
+
         List<String> meetingNumbers = new ArrayList<>();
 
         List<ICCFurtherDetail> furtherDetails = furtherDetailRepository.findByIccApprovalId(iccApproval.getId());

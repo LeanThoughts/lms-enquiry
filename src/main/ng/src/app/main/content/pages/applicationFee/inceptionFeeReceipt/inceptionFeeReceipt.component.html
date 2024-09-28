@@ -1,15 +1,29 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add Application Fee Request </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedInceptionFee"> 
-            Modify 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedInceptionFee">
+            Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedInceptionFee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedInceptionFee">
             Delete
         </button>
     </div>
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
         <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Fee Type</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.description }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="statusDescription">
+            <mat-header-cell *matHeaderCellDef mat-sort-header >Status</mat-header-cell>
+            <mat-cell *matCellDef="let obj" >
+              <p class="text-truncate">{{ obj.statusDescription }}</p>
+            </mat-cell>
+          </ng-container>
 
             <ng-container matColumnDef="invoiceNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Invoice Number</mat-header-cell>
@@ -17,7 +31,7 @@
                     <p class="text-truncate">{{ obj.invoiceNumber }}</p>
                 </mat-cell>
             </ng-container>
-            
+
             <ng-container matColumnDef="invoiceDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Invoice Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >

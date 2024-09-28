@@ -10,6 +10,7 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -20,6 +21,7 @@ public class InceptionFeeController {
     private final LoanApplicationRepository loanApplicationRepository;
 
     private final IInceptionFeeService inceptionFeeService;
+    private final InceptionFeeRepository inceptionFeeRepository;
 
     @PostMapping("/inceptionFees/create")
     public ResponseEntity<InceptionFee> create(@RequestBody InceptionFeeResource inceptionFeeResource,
@@ -32,50 +34,62 @@ public class InceptionFeeController {
     //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
     @PostMapping("/inceptionFees/sapInceptionFees/create")
     public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
-                                               HttpServletRequest request) {
-//        InceptionFeeResource inceptionFeeResource = new InceptionFeeResource();
-//
-//        log.info("Loan Number : " + inceptionFeeSAPResource.getLoanContractId());
-//        log.info("Invoice Number : " + inceptionFeeSAPResource.getInvoiceNumber());
-//        log.info("Invoice Date : " + inceptionFeeSAPResource.getInvoiceDate());
-//        log.info("Amount : " + inceptionFeeSAPResource.getAmount());
-//        inceptionFeeResource.setAmount(inceptionFeeSAPResource.getAmount());
-//        inceptionFeeResource.setInvoiceNumber(inceptionFeeSAPResource.getInvoiceNumber());
-//        inceptionFeeResource.setInvoiceDate(inceptionFeeSAPResource.getInvoiceDate());
-//        inceptionFeeResource.setAmountReceived(inceptionFeeSAPResource.getAmountReceived());
-//        inceptionFeeResource.setTaxAmount(inceptionFeeSAPResource.getTaxAmount());
-//        inceptionFeeResource.setTotalAmount(inceptionFeeSAPResource.getTotalAmount());
+                                               HttpServletRequest request) throws CloneNotSupportedException {
 
+//
+        log.info("Loan Number : " + inceptionFeeResource.getLoanContractId());
+        log.info("Invoice Number : " + inceptionFeeResource.getInvoiceNumber());
+        log.info("Invoice Date : " + inceptionFeeResource.getInvoiceDate());
+        log.info("Amount : " + inceptionFeeResource.getAmount());
 
         LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
         if (loanApplication != null){
             inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
+        List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByInvoiceNumber(inceptionFeeResource.getInvoiceNumber());
+        if (inceptionFeeList.size() > 0 ) {
+            InceptionFee inceptionFee = inceptionFeeList.get(0);
+            inceptionFeeResource.setId(inceptionFee.getId());
+            return ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
+                    request.getUserPrincipal().getName()));
+        }else {
             return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
-                request.getUserPrincipal().getName()));
+                    request.getUserPrincipal().getName()));
+
+        }
+
         }
         return  null;
     }
 
-    @RequestMapping(value = "/inceptionFees/sapInceptionFees/update", method = RequestMethod.PUT, produces = "application/json")
-    //@PostMapping("/sapInceptionFees/create")
-    public ResponseEntity<InceptionFee> updateFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
-                                                      HttpServletRequest request) {
+    //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
+    @PostMapping("/inceptionFees/sapInceptionFees/reverse")
+    public ResponseEntity<InceptionFee> reverseFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
+                                                      HttpServletRequest request) throws CloneNotSupportedException {
 
-
-        log.info("Invoice Number : ", inceptionFeeResource.getInvoiceNumber());
-        log.info("Invoice Date : ", inceptionFeeResource.getInvoiceDate());
-        log.info("Amount : ", inceptionFeeResource.getAmount());
-
+//
+        log.info("Loan Number : " + inceptionFeeResource.getLoanContractId());
+        log.info("Invoice Number : " + inceptionFeeResource.getInvoiceNumber());
+        log.info("Invoice Date : " + inceptionFeeResource.getInvoiceDate());
+        log.info("Amount : " + inceptionFeeResource.getAmount());
 
         LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
-        inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
+        if (loanApplication != null){
+            inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
-
-
-        return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
-                request.getUserPrincipal().getName()));
+            List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByInvoiceNumber(inceptionFeeResource.getInvoiceNumber());
+            if (inceptionFeeList.size() > 0 ) {
+                InceptionFee inceptionFee = inceptionFeeList.get(0);
+                inceptionFeeResource.setId(inceptionFee.getId());
+                inceptionFeeResource.setStatusCode("5");
+                inceptionFeeResource.setStatusDescription("Reversed");
+                return ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
+                        request.getUserPrincipal().getName()));
+            }
+        }
+        return  null;
     }
+
 
     @PutMapping("/inceptionFees/update")
     public ResponseEntity<InceptionFee> update(@RequestBody InceptionFeeResource inceptionFeeResource,

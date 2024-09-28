@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface InceptionFeeRepository extends JpaRepository<InceptionFee, UUID> {
 
     List<InceptionFee> findByApplicationFeeId(UUID applicationFeeId);
+    List<InceptionFee> findByInvoiceNumber(String invoiceNumber);
 }

@@ -13,12 +13,12 @@ import { InceptionFeeReceiptUpdateDialogComponent } from '../inceptionFeeReceipt
     animations: fuseAnimations
 })
 export class InceptionFeeReceiptComponent {
-    
+
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'invoiceNumber', 'invoiceDate', 'amount', 'taxAmount', 'totalAmount', 'amountReceived', 'dateOfTransfer', 'rtgsNumber', 
+      'description', 'statusDescription' , 'invoiceNumber', 'invoiceDate', 'amount', 'taxAmount', 'totalAmount', 'amountReceived', 'dateOfTransfer', 'rtgsNumber',
                 'remarks', 'referenceNumber'
     ];
 
@@ -67,7 +67,7 @@ export class InceptionFeeReceiptComponent {
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 if (this._applicationFeeService._applicationFee.value.id !== '') {
                     this.refreshTable();
@@ -75,11 +75,11 @@ export class InceptionFeeReceiptComponent {
                 else {
                     this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
                         this._applicationFeeService._applicationFee.next(data);
-                        this.refreshTable(); 
+                        this.refreshTable();
                     });
                 }
             }
-        });    
+        });
     }
 
     /**
@@ -97,7 +97,7 @@ export class InceptionFeeReceiptComponent {
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (result.refresh) {
                 this.refreshTable();
             }

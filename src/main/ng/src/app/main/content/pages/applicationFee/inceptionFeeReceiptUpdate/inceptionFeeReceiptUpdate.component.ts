@@ -36,6 +36,8 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
         }
 
         this.inceptionFeeForm = this._formBuilder.group({
+            description: [this.selectedInceptionFee.description || ''],
+            statusDescription: [this.selectedInceptionFee.statusDescription || ''],
             invoiceNumber: [this.selectedInceptionFee.invoiceNumber || ''],
             invoiceDate: [this.selectedInceptionFee.invoiceDate || ''],
             amount: [this.selectedInceptionFee.amount || ''],
@@ -61,7 +63,7 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
     submit(): void {
         if (this.inceptionFeeForm.valid) {
             var inceptionFee = this.inceptionFeeForm.value;
-                
+
             // To solve the utc time zone issue
             // var dt = new Date(inceptionFee.invoiceDate);
             // inceptionFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
@@ -74,13 +76,14 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
                 });
             }
             else {
-                this.selectedInceptionFee.rtgsNumber = inceptionFee.rtgsNumber;
-                this.selectedInceptionFee.referenceNumber = inceptionFee.referenceNumber;
+              this.selectedInceptionFee.rtgsNumber = inceptionFee.rtgsNumber;
+              this.selectedInceptionFee.referenceNumber = inceptionFee.referenceNumber;
                 this.selectedInceptionFee.remarks = inceptionFee.remarks;
+                this.selectedInceptionFee.amountReceived = inceptionFee.amountReceived;
                 this._applicationFeeService.updateInceptionFee(this.selectedInceptionFee).subscribe(() => {
                     this._matSnackBar.open('Inception fee details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
-                });            
+                });
             }
         }
     }
