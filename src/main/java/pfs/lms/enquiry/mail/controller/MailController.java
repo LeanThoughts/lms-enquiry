@@ -15,7 +15,7 @@ import pfs.lms.enquiry.mail.domain.MailObject;
 import pfs.lms.enquiry.mail.repository.MailObjectRepository;
 import pfs.lms.enquiry.mail.resource.MailSearchResource;
 import pfs.lms.enquiry.mail.service.EmailQueryService;
-import pfs.lms.enquiry.mail.service.RiskNotificationService;
+import pfs.lms.enquiry.mail.service.RiskNotificationEmailService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 
@@ -39,7 +39,7 @@ public class MailController {
     EmailQueryService emailQueryService;
 
     @Autowired
-    RiskNotificationService riskNotificationService;
+    RiskNotificationEmailService riskNotificationEmailService;
 
     @GetMapping("/mailObjects/queryParams")
     public ResponseEntity getMailsByQueryParamas(@RequestParam("query") String[] queryParams, HttpServletRequest httpServletRequest) {

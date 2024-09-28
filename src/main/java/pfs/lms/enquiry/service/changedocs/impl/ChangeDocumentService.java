@@ -54,6 +54,7 @@ import pfs.lms.enquiry.boardapproval.reasonfordelay.BoardApprovalReasonForDelay;
 import pfs.lms.enquiry.boardapproval.rejectedbyboard.RejectedByBoard;
 import pfs.lms.enquiry.boardapproval.rejectedbycustomer.BoardApprovalRejectedByCustomer;
 import pfs.lms.enquiry.domain.*;
+import pfs.lms.enquiry.iccapproval.risknotification.RiskNotification;
 import pfs.lms.enquiry.monitoring.borrowerfinancials.BorrowerFinancials;
 import pfs.lms.enquiry.monitoring.domain.*;
 import pfs.lms.enquiry.monitoring.endusecertificate.EndUseCertificate;
@@ -956,7 +957,19 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         result.put("description", inceptionFee.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
                     result.put("loanApplication",inceptionFee.getApplicationFee().getLoanApplication());
-                    return result;           }
+                    return result;
+                case "RiskNotification":
+                    RiskNotification riskNotification = (RiskNotification) object;
+                    result.put("id", riskNotification.getId().toString());
+                    if (riskNotification.getIccApproval().getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", riskNotification.getIccApproval().getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", riskNotification.getIccApproval().getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",riskNotification.getIccApproval().getLoanApplication());
+                    return result;
+
+            }
 
         } catch (Exception ex) {
 

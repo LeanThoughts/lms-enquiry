@@ -360,6 +360,14 @@ public class WorkflowService implements IWorkflowService {
                 loanEnquiryId =  iccApproval.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = iccApproval.getProcessInstanceId();
                 break;
+            case "ICC In-Principal Approval" :
+                //Fetch the Entity
+                iccApproval = iccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                iccApproval.setWorkFlowStatusCode(03); iccApproval.setWorkFlowStatusDescription("Approved");
+                loanEnquiryId =  iccApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = iccApproval.getProcessInstanceId();
+                break;
             case "Application Fee" :
                 //Fetch the Entity
                 applicationFee = applicationFeeRepository.getOne(businessProcessId);
@@ -436,6 +444,14 @@ public class WorkflowService implements IWorkflowService {
                 iccApprovalService.processApprovedICC(iccApproval,username);
                 return iccApproval;
             case "ICCApproval" :
+                //Save entity with the new workflow status code
+                iccApproval.setWorkFlowStatusDescription("Approved");
+                iccApproval.setWorkFlowStatusCode(3);
+                iccApproval.setProcessInstanceId(processInstanceId);
+                iccApprovalRepository.save(iccApproval); iccApprovalRepository.flush();
+                iccApprovalService.processApprovedICC(iccApproval,username);
+                return iccApproval;
+            case "ICC In-Principal Approval" :
                 //Save entity with the new workflow status code
                 iccApproval.setWorkFlowStatusDescription("Approved");
                 iccApproval.setWorkFlowStatusCode(3);
@@ -525,6 +541,14 @@ public class WorkflowService implements IWorkflowService {
                 loanEnquiryId =  iccApproval.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = iccApproval.getProcessInstanceId();
                 break;
+            case "ICC In-Principal Approval" :
+                //Fetch the Entity
+                iccApproval = iccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                iccApproval.setWorkFlowStatusCode(4); iccApproval.setWorkFlowStatusDescription("Rejected");
+                loanEnquiryId =  iccApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = iccApproval.getProcessInstanceId();
+                break;
             case "Application Fee" :
                 //Fetch the Entity
                 applicationFee = applicationFeeRepository.getOne(businessProcessId);
@@ -598,6 +622,14 @@ public class WorkflowService implements IWorkflowService {
                 processInstanceId = enquiryAction.getProcessInstanceId();
                 break;
             case "ICC Stage" :
+                //Fetch the Entity
+                iccApproval = iccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                iccApproval.setWorkFlowStatusCode(4); iccApproval.setWorkFlowStatusDescription("Rejected");
+                loanEnquiryId =  iccApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = iccApproval.getProcessInstanceId();
+                break;
+            case "ICC In-Principal Approval" :
                 //Fetch the Entity
                 iccApproval = iccApprovalRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "04" - Rejected

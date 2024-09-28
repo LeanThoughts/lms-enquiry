@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.User;
-import pfs.lms.enquiry.mail.service.RiskNotificationService;
+import pfs.lms.enquiry.mail.service.RiskNotificationEmailService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.ProcessorResource;
@@ -26,7 +26,7 @@ public class Controller {
     UserRepository userRepository;
 
     @Autowired
-    RiskNotificationService riskNotificationService;
+    RiskNotificationEmailService riskNotificationEmailService;
 
     @PutMapping("/loanEnquiry/assignProcessors")
     public ResponseEntity updateProcessors(@RequestBody ProcessorResource processorResource) {
@@ -89,19 +89,19 @@ public class Controller {
 
         // Send Notification to Project Officer
         if (sendNotificationToProjectOfficer == true) {
-            riskNotificationService.sendOfficerAssignmentNotification(projectOfficer,loanApplication,"Project Officer");
+            riskNotificationEmailService.sendOfficerAssignmentNotification(projectOfficer,loanApplication,"Project Officer");
         }
         // Send Notification to Risk Officer
         if (sendNotificationToRiskOfficer == true) {
-            riskNotificationService.sendOfficerAssignmentNotification(riskOfficer,loanApplication,"Risk Officer");
+            riskNotificationEmailService.sendOfficerAssignmentNotification(riskOfficer,loanApplication,"Risk Officer");
         }
         // Send Notification to Monitoring Officer
         if (sendNotificationToMonitoringOfficer == true) {
-            riskNotificationService.sendOfficerAssignmentNotification(monitoringOfficer,loanApplication,"Monitoring Officer");
+            riskNotificationEmailService.sendOfficerAssignmentNotification(monitoringOfficer,loanApplication,"Monitoring Officer");
         }
         // Send Notification to Risk Department Head if Risk Officer is not assigned yet
         if (loanApplication.getRiskDepartmentInitiator() == null ||loanApplication.getRiskDepartmentInitiator().equals("")) {
-            riskNotificationService.sendRiskOfficerAssignmentNotification(riskDeptHeadUser, loanApplication);
+            riskNotificationEmailService.sendRiskOfficerAssignmentNotification(riskDeptHeadUser, loanApplication);
         }
 
         return ResponseEntity.ok(loanApplication);

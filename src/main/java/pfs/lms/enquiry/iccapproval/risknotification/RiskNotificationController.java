@@ -38,4 +38,14 @@ public class RiskNotificationController {
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(riskNotification);
     }
+
+    @PutMapping("/riskNotifications/send")
+    public ResponseEntity<RiskNotification> sendNotification(@RequestBody RiskNotificationResource riskNotificationResource, HttpServletRequest request) throws Exception {
+
+        RiskNotification riskNotification = iRiskNotificationService.sendNotification(riskNotificationResource,
+                request.getUserPrincipal().getName());
+
+        return ResponseEntity.ok(riskNotification);
+    }
+
 }
