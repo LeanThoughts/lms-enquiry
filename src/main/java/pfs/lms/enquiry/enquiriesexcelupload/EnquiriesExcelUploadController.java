@@ -233,9 +233,11 @@ public class EnquiriesExcelUploadController {
             loanApplication.setLoanEnquiryDate(enquiry.getDateOfLeadGeneration());
             loanApplication.setICCClearanceDate(enquiry.getIccClearanceDate());
             loanApplication.setLoanContractAmount(enquiry.getAmountRequested());
-            loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
+            loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI() * 100);
             loanApplication.setAmountApproved(enquiry.getAmountApproved());
-            loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi());
+            loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi() * 100);
+            loanApplication.setExpectedInterestRate(enquiry.getBorrowerRequestedROI());
+            loanApplication.setPfsDebtAmount(enquiry.getAmountRequested());
 
             loanApplication.setProjectName(enquiry.getBorrowerName());
 

@@ -12,13 +12,13 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Document Type" formControlName="documentType" required>
+                    <mat-select placeholder="Document Type" formControlName="documentType" >
                       <mat-option> </mat-option>
                       <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
                         {{ documentType.value }}
                       </mat-option>
                     </mat-select>
-                </mat-form-field>     
+                </mat-form-field>
             </div>
 
             <div fxLayout="row">
@@ -31,7 +31,7 @@
                 <div fxFlex="100">
                     <div fxLayout="column">
                         <label for="document">Upload Document (PDF)</label>
-                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" required/>
+                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/pdf" id="document" />
                     </div>
                 </div>
             </div>
