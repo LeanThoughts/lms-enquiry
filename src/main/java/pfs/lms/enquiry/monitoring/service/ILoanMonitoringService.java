@@ -28,6 +28,8 @@ import java.util.UUID;
 
 public interface ILoanMonitoringService {
 
+    LoanMonitor processRejection(LoanMonitor loanMonitor, String username) throws CloneNotSupportedException;
+
     //Lenders Independent Engineer
     LendersIndependentEngineer saveLIE(LIEResource resource, String username) throws CloneNotSupportedException;
     LendersIndependentEngineer updateLIE(LIEResource resource, String username) throws CloneNotSupportedException;

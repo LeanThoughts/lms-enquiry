@@ -96,11 +96,12 @@ public class RiskNotificationEmailServiceImpl implements RiskNotificationEmailSe
         String line5 = "    Loan Enquiry Id  : " +loanApplication.getEnquiryNo().getId() + System.lineSeparator() ;
         String line6 = "    Project Name     : " +loanApplication.getProjectName() + System.lineSeparator();
         String line7 = "    Remarks from ICC In-Princple Approval : " + remarks;
-        String line8 = "    You are requested to conduct a Preliminary Risk assessment for the above loan enquiry" + System.lineSeparator();
-        String line9 = "    " + System.lineSeparator();
-        String line10 = "Regards," + System.lineSeparator() + "PTC Loans Portal";
+        String line8 = "    " + System.lineSeparator();
+        String line9 = "You are requested to conduct a Preliminary Risk assessment for the above loan enquiry" + System.lineSeparator();
+        String line10 = "    " + System.lineSeparator();
+        String line11 = "Regards," + System.lineSeparator() + "PFS Loans Portal";
 
-        String content = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10;
+        String content = line1 + line2 + line3 + line4 + line5 + line6 + line7 + line8 + line9 + line10 + line10 +line11;
 
         MailObject mailObject = new MailObject();
         mailObject.setSendingApp("PFS Loan Processing Appliction");

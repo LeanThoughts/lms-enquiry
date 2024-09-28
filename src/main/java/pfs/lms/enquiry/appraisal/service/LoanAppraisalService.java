@@ -8,6 +8,7 @@ import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.transaction.Transactional;
@@ -21,6 +22,26 @@ public class LoanAppraisalService implements ILoanAppraisalService {
     @Autowired
     LoanAppraisalRepository loanAppraisalRepository;
     IChangeDocumentService changeDocumentService;
+
+    @Override
+    public LoanAppraisal processRejection(LoanAppraisal loanAppraisal, String username) throws CloneNotSupportedException {
+        Object OldloanAppraisal = loanAppraisal.clone();
+        loanAppraisal.setWorkFlowStatusCode(04);
+        loanAppraisal.setWorkFlowStatusDescription("Rejected");
+
+        // Change Documents for Monitoring Header
+        changeDocumentService.createChangeDocument(
+                loanAppraisal.getId(), loanAppraisal.getId().toString(), null,
+                loanAppraisal.getLoanApplication().getLoanContractId(),
+                OldloanAppraisal,
+                loanAppraisal,
+                "Updated",
+                username,
+                "Appraisal", "Header");
+        loanAppraisalRepository.save(loanAppraisal);
+
+        return loanAppraisal;
+    }
 
     @Override
     public LoanAppraisal createLoanAppraisal(LoanApplication loanApplication, String username) {

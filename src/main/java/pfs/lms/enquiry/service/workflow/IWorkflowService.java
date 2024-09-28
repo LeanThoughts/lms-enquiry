@@ -18,9 +18,9 @@ public interface IWorkflowService {
                                                      String processName) throws HandledException;
 
 
-    public Object approveTask(String processInstanceId, UUID businessProcessId, String processName, String userName) throws CloneNotSupportedException;
+    public Object approveTask(String processInstanceId, UUID businessProcessId, String processName, String userName) throws Exception;
 
-    public Object rejectTask(String processInstanceId, UUID businessProcessId, String processName, String rejectionReason,String requestorEmail);
+    public Object rejectTask(String processInstanceId, UUID businessProcessId, String processName, String rejectionReason,String requestorEmail) throws CloneNotSupportedException;
 
 
     // Workflow Tasks for an User

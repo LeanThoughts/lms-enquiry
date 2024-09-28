@@ -73,31 +73,26 @@ public class LoanMonitoringService implements ILoanMonitoringService {
     @Autowired
     private ILoanAppraisalService loanAppraisalService;
 
+    public LoanMonitor processRejection(LoanMonitor loanMonitor, String username) throws CloneNotSupportedException {
 
-//    private LoanAppraisal createLoanAppraisal(LoanApplication loanApplication, String username) {
-//
-//        LoanAppraisal loanAppraisal  = loanAppraisalRepository.findByLoanApplication(loanApplication).get();
-//
-//        if (loanAppraisal == null) {
-//            loanAppraisal = new LoanAppraisal();
-//            loanAppraisal.setLoanApplication(loanApplication);
-//            loanAppraisal.setWorkFlowStatusCode(01); loanAppraisal.setWorkFlowStatusDescription("Created");
-//            loanAppraisal = loanAppraisalRepository.save(loanAppraisal);
-//
-//            // Change Documents for Monitoring Header
-//            changeDocumentService.createChangeDocument(
-//                    loanAppraisal.getId(), loanAppraisal.getId().toString(), null,
-//                    loanApplication.getLoanContractId(),
-//                    null,
-//                    loanAppraisal,
-//                    "Created",
-//                    username,
-//                    "Appraisal", "Header");
-//        }
-//
-//        return loanAppraisal;
-//    }
+        Object loanMonitorOld = loanMonitor.clone();
+        loanMonitor.setWorkFlowStatusCode(04);
+        loanMonitor.setWorkFlowStatusDescription("Rejected");
 
+            // Change Documents for Monitoring Header
+            changeDocumentService.createChangeDocument(
+                    loanMonitor.getId(), loanMonitor.getId().toString(), null,
+                    loanMonitor.getLoanApplication().getLoanContractId(),
+                    loanMonitorOld,
+                    loanMonitor,
+                    "Updated",
+                    username,
+                    "Monitoring", "Header");
+        loanMonitorRepository.save(loanMonitor);
+
+        return loanMonitor;
+
+    }
 
     public LoanMonitor createLoanMonitor(LoanApplication loanApplication, String username) {
 

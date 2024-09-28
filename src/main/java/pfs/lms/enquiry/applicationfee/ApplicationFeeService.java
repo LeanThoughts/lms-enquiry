@@ -16,7 +16,27 @@ public class ApplicationFeeService implements IApplicationFeeService {
 
     private  final LoanApplicationRepository loanApplicationRepository;
     private final IChangeDocumentService changeDocumentService;
+    private final ApplicationFeeRepository applicationFeeRepository;
 
+    @Override
+    public ApplicationFee processRejection(ApplicationFee applicationFee, String username) throws CloneNotSupportedException {
+        Object oldEnquiryAction = applicationFee.clone();
+        applicationFee.setWorkFlowStatusCode(04);
+        applicationFee.setWorkFlowStatusDescription("Rejected");
+
+        // Change Documents for Monitoring Header
+        changeDocumentService.createChangeDocument(
+                applicationFee.getId(), applicationFee.getId().toString(), null,
+                applicationFee.getLoanApplication().getLoanContractId(),
+                oldEnquiryAction,
+                applicationFee,
+                "Updated",
+                username,
+                "Application Fee", "Header");
+        applicationFeeRepository.save(applicationFee);
+
+        return applicationFee;
+    }
 
     @Override
     public ApplicationFee processApprovedApplicationFee(ApplicationFee applicationFee, String username) throws CloneNotSupportedException {

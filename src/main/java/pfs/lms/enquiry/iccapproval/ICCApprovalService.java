@@ -13,4 +13,7 @@ public interface ICCApprovalService {
     ICCApproval update(ICCApproval iccApproval, String username) throws Exception;
 
     ICCApproval processApprovedICC(ICCApproval iccApproval,String username) throws CloneNotSupportedException;
+
+    ICCApproval processRejection(ICCApproval iccApproval,String username) throws CloneNotSupportedException;
+
 }

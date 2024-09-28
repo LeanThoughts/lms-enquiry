@@ -89,7 +89,7 @@ public class WorkflowController {
     // Approve Workflow
     @PutMapping("/approvetask")
     public ResponseEntity<Object> approveTask(@RequestBody WorkflowProcessRequestResource workflowProcessRequestResource,
-                                              HttpServletRequest httpServletRequest) throws CloneNotSupportedException {
+                                              HttpServletRequest httpServletRequest) throws Exception {
 
 
 
@@ -105,7 +105,7 @@ public class WorkflowController {
     //Reject Workflow
     @PutMapping("/rejecttask")
     public ResponseEntity<Object> rejectTask(@RequestBody WorkflowProcessRequestResource workflowProcessRequestResource,
-                                             HttpServletRequest httpServletRequest) {
+                                             HttpServletRequest httpServletRequest) throws CloneNotSupportedException {
 
 
 

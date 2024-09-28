@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface IBoardApprovalService {
 
      BoardApproval processApprovedBoardApproval(BoardApproval boardApproval, String username) throws CloneNotSupportedException;
+     BoardApproval processRejection(BoardApproval boardApproval, String username) throws CloneNotSupportedException;
+
 }
