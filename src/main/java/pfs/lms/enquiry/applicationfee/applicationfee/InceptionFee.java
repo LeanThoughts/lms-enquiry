@@ -33,6 +33,7 @@ public class InceptionFee extends AggregateRoot<InceptionFee> implements Cloneab
     private String referenceNumber;
     private String remarks;
 
+    private  String description;
     private String headerDocumentNumber;
 
     //0	New

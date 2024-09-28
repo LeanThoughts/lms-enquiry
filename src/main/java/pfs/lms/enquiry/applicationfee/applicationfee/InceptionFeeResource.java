@@ -30,6 +30,7 @@ public class InceptionFeeResource {
 
 
     private String headerDocumentNumber;
+    private String description;
 
     //0	New
     //1	Entered

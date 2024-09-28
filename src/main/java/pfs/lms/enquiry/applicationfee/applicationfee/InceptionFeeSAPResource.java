@@ -27,6 +27,7 @@ public class InceptionFeeSAPResource {
     private String rtgsNumber;
     private String referenceNumber;
     private String remarks;
+    private  String description;
 
     private String headerDocumentNumber;
 

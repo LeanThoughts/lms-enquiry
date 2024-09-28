@@ -35,7 +35,7 @@ public class InceptionFeeService implements IInceptionFeeService {
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = applicationFeeRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
+                    // Change Documents for Application Fee Header
                     changeDocumentService.createChangeDocument(
                             obj.getId(),obj.getId().toString(),obj.getId().toString(),
                             loanApplication.getLoanContractId(),
@@ -59,17 +59,24 @@ public class InceptionFeeService implements IInceptionFeeService {
         inceptionFee.setRtgsNumber(inceptionFeeResource.getRtgsNumber());
         inceptionFee.setReferenceNumber(inceptionFeeResource.getReferenceNumber());
         inceptionFee.setRemarks(inceptionFeeResource.getRemarks());
+
+        inceptionFee.setHeaderDocumentNumber(inceptionFeeResource.getHeaderDocumentNumber());
+        inceptionFee.setStatusCode(inceptionFeeResource.getStatusCode());
+        inceptionFee.setStatusDescription(inceptionFeeResource.getStatusDescription());
+        inceptionFee.setDescription(inceptionFeeResource.getDescription());
+        inceptionFee.setLoanContractId(inceptionFeeResource.getLoanContractId());
+
         inceptionFee = inceptionFeeRepository.save(inceptionFee);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                inceptionFee.getId(),
+                inceptionFee.getId().toString(),
+                inceptionFee.getId().toString(),
+                loanApplication.getLoanContractId(),
+                null,
+                inceptionFee,
+                "Created",
+                username,
+                "Application Fee", "Application Fee");
 
         return inceptionFee;
     }
@@ -81,7 +88,7 @@ public class InceptionFeeService implements IInceptionFeeService {
         InceptionFee inceptionFee = inceptionFeeRepository.findById(inceptionFeeResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(inceptionFeeResource.getId().toString()));
 
-        Object oldFormalRequest = inceptionFee.clone();
+        Object oldInceptionFee = inceptionFee.clone();
 
         inceptionFee.setInvoiceNumber(inceptionFeeResource.getInvoiceNumber());
         inceptionFee.setInvoiceDate(inceptionFeeResource.getInvoiceDate());
@@ -92,19 +99,25 @@ public class InceptionFeeService implements IInceptionFeeService {
         inceptionFee.setRtgsNumber(inceptionFeeResource.getRtgsNumber());
         inceptionFee.setReferenceNumber(inceptionFeeResource.getReferenceNumber());
         inceptionFee.setRemarks(inceptionFeeResource.getRemarks());
+        inceptionFee.setHeaderDocumentNumber(inceptionFeeResource.getHeaderDocumentNumber());
+        inceptionFee.setStatusCode(inceptionFeeResource.getStatusCode());
+        inceptionFee.setStatusDescription(inceptionFeeResource.getStatusDescription());
+        inceptionFee.setDescription(inceptionFeeResource.getDescription());
+        inceptionFee.setLoanContractId(inceptionFeeResource.getLoanContractId());
+
         inceptionFee = inceptionFeeRepository.save(inceptionFee);
 
         // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                inceptionFee.getId(),
+                inceptionFee.getId().toString(),
+                inceptionFee.getId().toString(),
+                inceptionFee.getLoanContractId(),
+                oldInceptionFee,
+                inceptionFee,
+                "Created",
+                username,
+                "Application Fee", "Application Fee");
 
         return inceptionFee;
     }
