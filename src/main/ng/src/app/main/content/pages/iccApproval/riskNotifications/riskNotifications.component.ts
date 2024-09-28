@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { ICCFurtherDetailUpdateDialogComponent } from '../iccFurtherDetailUpdate/iccFurtherDetailUpdate.component';
 import { ICCApprovalService } from '../iccApproval.service';
@@ -31,7 +31,7 @@ export class RiskNotificationComponent implements OnInit {
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
-                _activatedRoute: ActivatedRoute) {
+                _activatedRoute: ActivatedRoute, private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[2]);
@@ -102,6 +102,14 @@ export class RiskNotificationComponent implements OnInit {
                     this.refreshTable();
                 });
             }
+        });
+    }
+
+    sendNotification(): void {
+        var obj = Object.assign({}, this.selectedRiskNotification);
+        obj.loanApplicationId = this.loanApplicationId;
+        this._iccApprovalService.sendNotification(obj).subscribe(() => {
+            this._matSnackBar.open('Notification was sent successfully.', 'OK', { duration: 7000 });
         });
     }
 }

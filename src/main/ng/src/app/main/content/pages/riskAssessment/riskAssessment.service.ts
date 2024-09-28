@@ -56,7 +56,7 @@ export class RiskAssessmentService implements Resolve<any> {
             'businessProcessId': businessProcessId,
             'requestorName': requestorName,
             'requestorEmail': requestorEmail,
-            'processName': 'Appraisal'
+            'processName': 'Prelim Risk Assessment'
         }
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
     }

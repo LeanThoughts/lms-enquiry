@@ -68,6 +68,10 @@ export class ICCApprovalService {
         return this._http.put("enquiry/api/riskNotifications/update", riskNotification);
     }
     
+    public sendNotification(riskNotification: any): Observable<any> {
+        return this._http.put("enquiry/api/riskNotifications/send", riskNotification);
+    }
+
     /**
      * getICCFurtherDetails()
      */
