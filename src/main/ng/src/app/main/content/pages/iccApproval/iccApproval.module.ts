@@ -30,6 +30,8 @@ import { ICCRejectedByCustomerComponent } from './iccRejectedByCustomer/iccRejec
 import { ICCRejectedByCustomerUpdateDialogComponent } from './iccRejectedByCustomerUpdate/iccRejectedByCustomerUpdate.component';
 import { LoanEnhancementComponent } from './loanEnhancement/loanEnhancement.component';
 import { LoanEnhancementUpdateDialogComponent } from './loanEnhancementUpdate/loanEnhancementUpdate.component';
+import { RiskNotificationComponent } from './riskNotifications/riskNotifications.component';
+import { RiskNotificationUpdateDialogComponent } from './riskNotificationUpdate/riskNotificationUpdate.component';
 
 const routes = [
     {
@@ -78,6 +80,8 @@ const MY_FORMATS = {
       MatCardModule,
     ],
     declarations: [
+        RiskNotificationComponent,
+        RiskNotificationUpdateDialogComponent,
         ICCApprovalComponent,
         ICCFurtherDetailsComponent,
         ICCFurtherDetailUpdateDialogComponent,
@@ -117,6 +121,7 @@ const MY_FORMATS = {
         LoanEnhancementUpdateDialogComponent
     ],
     entryComponents: [
+        RiskNotificationUpdateDialogComponent,
         ICCFurtherDetailUpdateDialogComponent,
         RejectedByICCUpdateDialogComponent,
         ICCApprovalUpdateDialogComponent,

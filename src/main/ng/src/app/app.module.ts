@@ -45,6 +45,7 @@ import { ICCApprovalModule } from './main/content/pages/iccApproval/iccApproval.
 import { ApplicationFeeModule } from './main/content/pages/applicationFee/applicationFee.module';
 import { DocumentationModule } from './main/content/pages/documentation/documentation.module';
 import { EnquiriesExcelUploadModule } from './main/content/pages/enquiry/enquiriesExcelUpload/enquiriesExcelUpload.module';
+import { RiskAssessmentModule } from './main/content/pages/riskAssessment/riskAssessment.module';
 
 const appRoutes: Routes = [
     {
@@ -114,6 +115,7 @@ const appRoutes: Routes = [
         ICCApprovalModule,
         ApplicationFeeModule,
         DocumentationModule,
+        RiskAssessmentModule,
 
         // Workflow
         InboxModule,

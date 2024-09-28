@@ -17,6 +17,7 @@ import { SanctionService } from '../sanction/sanction.service';
 import { ICCApprovalService } from '../iccApproval/iccApproval.service';
 import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
 import { DocumentationService } from '../documentation/documentation.service';
+import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -61,7 +62,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 private _matSnackBar: MatSnackBar, private _enquiryActionService: EnquiryActionService,
                 private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService,
                 private _iccApprovalService: ICCApprovalService, private _applicationFeeService: ApplicationFeeService,
-                private _documentationService: DocumentationService) {
+                private _documentationService: DocumentationService,
+                private _riskAssessmentService: RiskAssessmentService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -217,21 +219,43 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         // this.redirect('/iccApprovalStage');
     }
 
-  /**
-   * redirectToPrelimRiskAssessment()
-   */
-  redirectToPrelimRiskAssessment(): void {
-    //if (this._service.selectedEnquiry.value.loanContractId === undefined) {
-    this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-      this._iccApprovalService._iccApproval.next(response);
-      this.redirect('/prelimRiskAssessment');
-    }, (error: HttpErrorResponse) => {
-      if (error.status === 404) {
-        this._iccApprovalService._iccApproval.next({ id: '' });
-        this.redirect('/prelimRiskAssessment');
-      }
-    })
-  }
+    /**
+     * redirectToPrelimRiskAssessment()
+     */
+    redirectToPrelimRiskAssessment(): void {
+        this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(iccApproval => {
+            this._iccApprovalService.getApprovalByICC(iccApproval.id).subscribe(data => {
+                if (data.edApprovalDate && data.cfoApprovalDate) {
+                    this._riskAssessmentService.getRiskAssessment(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(risk => {
+                        this._riskAssessmentService._riskAssessment.next(risk);
+                        this.redirect('/riskAssessment');
+                    }, 
+                    (error: HttpErrorResponse) => {
+                        if (error.status === 404) {
+                            this._riskAssessmentService._riskAssessment.next({ id: '' });
+                            this.redirect('/riskAssessment');
+                        }
+                    });
+                } else {
+                    this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment', 
+                        'OK', { duration: 7000 });
+                }
+            },
+            (error: HttpErrorResponse) => {
+                this.showApprovalDateError(error);
+            })
+        },
+        (error: HttpErrorResponse) => {
+            this.showApprovalDateError(error);
+        })
+    }
+
+    private showApprovalDateError(error: HttpErrorResponse): void {
+        if (error.status === 404) {
+            this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment', 
+                'OK', { duration: 7000 });
+        }
+    }
     /**
      * redirectToApplicationFee()
      */

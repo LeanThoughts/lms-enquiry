@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.iccapproval.approvalbyicc;
+package pfs.lms.enquiry.riskassessment.preliminaryriskassessment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -12,15 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class ApprovalByICCResource {
+public class PreliminaryRiskAssessmentResource {
 
     private UUID id;
     private UUID loanApplicationId;
 
-    private String meetingNumber;
+    private LocalDate dateOfAssessment;
+    private String remarksByRiskDepartment;
+    private LocalDate mdApprovalDate;
     private String remarks;
-    private LocalDate meetingDate;
-    private LocalDate edApprovalDate;
-    private LocalDate cfoApprovalDate;
-
 }

@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.iccapproval.approvalbyicc;
+package pfs.lms.enquiry.iccapproval.risknotification;
 
 import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
@@ -6,7 +6,7 @@ import pfs.lms.enquiry.iccapproval.ICCApproval;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -16,18 +16,16 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"iccApproval", "meetingNumber", "meetingDate"}, callSuper = false)
-public class ApprovalByICC extends AggregateRoot<ApprovalByICC> implements Cloneable {
+@EqualsAndHashCode(of = {"serialNumber", "notificationDate", "remarks"}, callSuper = false)
+public class RiskNotification extends AggregateRoot<RiskNotification> implements Cloneable {
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ICCApproval iccApproval;
 
-    private String meetingNumber;
+    private Integer serialNumber;
+    private LocalDate notificationDate;
     private String remarks;
-    private LocalDate meetingDate;
-    private LocalDate edApprovalDate;
-    private LocalDate cfoApprovalDate;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

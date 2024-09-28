@@ -38,7 +38,9 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
         this.iccApprovalForm = this._formBuilder.group({
             meetingNumber: [this.selectedICCApproval.meetingNumber],
             meetingDate: [this.selectedICCApproval.meetingDate || ''],
-            remarks: [this.selectedICCApproval.remarks || '']
+            remarks: [this.selectedICCApproval.remarks || ''],
+            edApprovalDate: [this.selectedICCApproval.edApprovalDate || ''],
+            cfoApprovalDate: [this.selectedICCApproval.cfoApprovalDate || '']
         });
     }
 
@@ -59,6 +61,18 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             var dt = new Date(iccApproval.meetingDate);
             iccApproval.meetingDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
+            // Convert edApprovalDate to UTC
+            if (iccApproval.edApprovalDate) {
+                dt = new Date(iccApproval.edApprovalDate);
+                iccApproval.edApprovalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
+
+            // Convert cfoApprovalDate to UTC
+            if (iccApproval.cfoApprovalDate) {
+                dt = new Date(iccApproval.cfoApprovalDate);
+                iccApproval.cfoApprovalDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
+
             if (this.selectedICCApproval.id === undefined) {
                 iccApproval.loanApplicationId = this.loanApplicationId;
                 this._iccApprovalService.createApprovalByICC(iccApproval).subscribe(() => {
@@ -73,7 +87,9 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
                 this.selectedICCApproval.meetingDate = iccApproval.meetingDate;
                 this.selectedICCApproval.meetingNumber = iccApproval.meetingNumber;
                 this.selectedICCApproval.remarks = iccApproval.remarks;
-                this._iccApprovalService.updateRejectedByICC(this.selectedICCApproval).subscribe(() => {
+                this.selectedICCApproval.edApprovalDate = iccApproval.edApprovalDate;
+                this.selectedICCApproval.cfoApprovalDate = iccApproval.cfoApprovalDate;
+                this._iccApprovalService.updateApprovalByICC(this.selectedICCApproval).subscribe(() => {
                     this._matSnackBar.open('ICC Approval details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

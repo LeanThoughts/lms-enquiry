@@ -54,8 +54,9 @@ export class EnquiriesExcelUploadComponent {
                     this.enquiryList = response;
                 },
                 (error) => {
-                    this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
-                        'OK', { duration: 7000 });
+                    console.log(error);
+                    this._matSnackBar.open(error.error.message + ' Unable to upload the file. Pls try again after sometime or contact your'
+                            + ' system administrator', 'OK', { duration: 7000 });
                 }
             );
         }

@@ -42,7 +42,7 @@ public class EnquiriesExcelUploadController {
     private final LoanApplicationService loanApplicationService;
 
     @PostMapping("/api/enquiriesExcelUpload")
-    public ResponseEntity<List<ExcelEnquiry>> processExcelFile(@RequestParam(value = "file") MultipartFile file)
+        public ResponseEntity<List<ExcelEnquiry>> processExcelFile(@RequestParam(value = "file") MultipartFile file)
             throws Exception {
 
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());

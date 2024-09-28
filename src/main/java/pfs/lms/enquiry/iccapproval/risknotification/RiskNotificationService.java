@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.iccapproval.approvalbyicc;
+package pfs.lms.enquiry.iccapproval.risknotification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +17,17 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ApprovalByICCService implements IApprovalByICCService {
+public class RiskNotificationService implements IRiskNotificationService {
 
     private final LoanApplicationRepository loanApplicationRepository;
     private final ICCApprovalRepository iccApprovalRepository;
-    private final ApprovalByICCRepository approvalByIccRepository;
+    private final RiskNotificationRepository riskNotificationRepository;
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public ApprovalByICC create(ApprovalByICCResource approvalByIccResource, String username) {
+    public RiskNotification create(RiskNotificationResource riskNotificationResource, String username) {
 
-        LoanApplication loanApplication = loanApplicationRepository.getOne(approvalByIccResource.getLoanApplicationId());
+        LoanApplication loanApplication = loanApplicationRepository.getOne(riskNotificationResource.getLoanApplicationId());
 
         ICCApproval iccApproval = iccApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
@@ -49,14 +49,12 @@ public class ApprovalByICCService implements IApprovalByICCService {
                     return obj;
                 });
 
-        ApprovalByICC approvalByIcc = new ApprovalByICC();
-        approvalByIcc.setIccApproval(iccApproval);
-        approvalByIcc.setMeetingDate(approvalByIccResource.getMeetingDate());
-        approvalByIcc.setMeetingNumber(approvalByIccResource.getMeetingNumber());
-        approvalByIcc.setEdApprovalDate(approvalByIccResource.getEdApprovalDate());
-        approvalByIcc.setCfoApprovalDate(approvalByIccResource.getCfoApprovalDate());
-        approvalByIcc.setRemarks(approvalByIccResource.getRemarks());
-        approvalByIcc = approvalByIccRepository.save(approvalByIcc);
+        RiskNotification riskNotification = new RiskNotification();
+        riskNotification.setIccApproval(iccApproval);
+        riskNotification.setSerialNumber(riskNotificationRepository.findByIccApprovalId(iccApproval.getId()).size() + 1);
+        riskNotification.setNotificationDate(riskNotificationResource.getNotificationDate());
+        riskNotification.setRemarks(riskNotificationResource.getRemarks());
+        riskNotification = riskNotificationRepository.save(riskNotification);
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),
@@ -68,25 +66,21 @@ public class ApprovalByICCService implements IApprovalByICCService {
 //                username,
 //                "Appraisal", "Loan Partner");
 
-        return approvalByIcc;
+        return riskNotification;
     }
 
     @Override
-    public ApprovalByICC update(ApprovalByICCResource approvalByIccResource, String username)
+    public RiskNotification update(RiskNotificationResource riskNotificationResource, String username)
             throws CloneNotSupportedException {
 
-        ApprovalByICC approvalByIcc = approvalByIccRepository.findById(approvalByIccResource.getId())
-                .orElseThrow(() -> new EntityNotFoundException(approvalByIccResource.getId().toString()));
+        RiskNotification riskNotification = riskNotificationRepository.findById(riskNotificationResource.getId())
+                .orElseThrow(() -> new EntityNotFoundException(riskNotificationResource.getId().toString()));
 
-        Object oldICCFurtherDetail = approvalByIcc.clone();
+        Object oldICCFurtherDetail = riskNotification.clone();
 
-        approvalByIcc.setMeetingDate(approvalByIccResource.getMeetingDate());
-        approvalByIcc.setMeetingNumber(approvalByIccResource.getMeetingNumber());
-        approvalByIcc.setRemarks(approvalByIccResource.getRemarks());
-        approvalByIcc.setEdApprovalDate(approvalByIccResource.getEdApprovalDate());
-        approvalByIcc.setCfoApprovalDate(approvalByIccResource.getCfoApprovalDate());
-
-        approvalByIcc = approvalByIccRepository.save(approvalByIcc);
+        riskNotification.setNotificationDate(riskNotificationResource.getNotificationDate());
+        riskNotification.setRemarks(riskNotificationResource.getRemarks());
+        riskNotification = riskNotificationRepository.save(riskNotification);
 
         // Change Documents for  Loan Partner
 //        changeDocumentService.createChangeDocument(
@@ -100,14 +94,14 @@ public class ApprovalByICCService implements IApprovalByICCService {
 //                username,
 //                "Appraisal", "Loan Partner");
 
-        return approvalByIcc;
+        return riskNotification;
     }
 
     @Override
-    public ApprovalByICC delete(UUID approvalByICCId, String username) {
-        ApprovalByICC approvalByIcc = approvalByIccRepository.findById(approvalByICCId)
-                .orElseThrow(() -> new EntityNotFoundException(approvalByICCId.toString()));
-        approvalByIccRepository.delete(approvalByIcc);
-        return approvalByIcc;
+    public RiskNotification delete(UUID riskNotificationId, String username) {
+        RiskNotification riskNotification = riskNotificationRepository.findById(riskNotificationId)
+                .orElseThrow(() -> new EntityNotFoundException(riskNotificationId.toString()));
+        riskNotificationRepository.delete(riskNotification);
+        return riskNotification;
     }
 }

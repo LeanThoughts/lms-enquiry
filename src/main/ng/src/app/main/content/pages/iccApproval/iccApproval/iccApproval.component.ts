@@ -44,8 +44,10 @@ export class ICCApprovalMeetingComponent {
             this.selectedICCApproval = data;
             let tableData = [];
             tableData.push({particulars: 'Meeting Number', value: this.selectedICCApproval.meetingNumber});
-            tableData.push({particulars: 'Date', value: this.selectedICCApproval.meetingDate});
             tableData.push({particulars: 'Remarks', value: this.selectedICCApproval.remarks});
+            tableData.push({particulars: 'Meeting Date', value: this.selectedICCApproval.meetingDate});
+            tableData.push({particulars: 'ED Approval Date', value: this.selectedICCApproval.meetingDate});
+            tableData.push({particulars: 'CFO Approval Date', value: this.selectedICCApproval.meetingDate});
             this.dataSource = new MatTableDataSource(tableData);
         });
     }

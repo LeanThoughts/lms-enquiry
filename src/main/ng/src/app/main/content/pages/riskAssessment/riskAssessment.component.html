@@ -6,15 +6,16 @@
         <!-- BREADCRUMB -->
         <div class="breadcrumb text-truncate h4 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
             *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
-            ICC Stage : {{ loanContractId }} / {{ selectedEnquiry.projectName }}
+            Appraisal : {{ loanContractId }} / {{ selectedEnquiry.projectName }}
             <br>
             Loan Status: {{ functionalStatus }}
         </div>
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button mat-raised-button class="mr-8 mb-8" (click)="sendForApproval()" [disabled]="(iccApproval === undefined || iccApproval === null ||
-                    iccApproval.workFlowStatusCode === 2) || disableSendForApproval === true">
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendAppraisalForApproval()"
+                [disabled]="(riskAssessment == {} ||
+                    riskAssessment.workFlowStatusCode === 2) || disableSendForApproval === true">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
             </button>
         </div>
@@ -32,7 +33,7 @@
                         Enquiry Details
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <!-- <form [formGroup]="selectedEnquiryForm">
+                <form [formGroup]="selectedEnquiryForm">
                     <div fxLayout="row">
                         <mat-form-field fxFlex="25">
                             <input matInput placeholder="BP Code" formControlName="busPartnerNumber" readonly>
@@ -72,54 +73,26 @@
                             <input matInput placeholder="Stage" formControlName="stage" readonly>
                         </mat-form-field>
                     </div>
-                </form> -->
+                </form>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="expandPanel2" hideToggle="false" class="mt-16">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Other Details
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
             </mat-expansion-panel>
         </div>
 
         <mat-tab-group class="mt-16">
-            <mat-tab label="Further Details">
+            <mat-tab label="Preliminary Risk Assessment">
                 <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-icc-further-dtails></fuse-icc-further-dtails>
+                    <fuse-preliminary-risk-assessment></fuse-preliminary-risk-assessment>
                 </div>
             </mat-tab>
 
-            <mat-tab label="Reason For Delay">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-icc-reason-for-delay></fuse-icc-reason-for-delay>
-                </div>
-            </mat-tab>
-
-            <mat-tab label="Rejected by ICC">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-rejected-by-icc></fuse-rejected-by-icc>
-                </div>
-            </mat-tab>
-            
-            <mat-tab label="ICC Approval">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-icc-approval-meeting></fuse-icc-approval-meeting>
-                </div>
-            </mat-tab>
-            
-            <mat-tab label="Rejected By Customer">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-icc-rejected-by-customer></fuse-icc-rejected-by-customer>
-                </div>
-            </mat-tab>
-
-            <mat-tab label="Loan Enhancement">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-loan-enhancement></fuse-loan-enhancement>
-                </div>
-            </mat-tab>
-
-            <mat-tab label="Risk Department Notifications">
-                <div class="content-card mat-elevation-z4" fusePerfectScrollbar style="width: 100%">
-                    <fuse-risk-notifications></fuse-risk-notifications>
-                </div>
-            </mat-tab>
-            
         </mat-tab-group>
+        <!-- / CONTENT -->
     </div>
-    <!-- / CONTENT -->
 </div>

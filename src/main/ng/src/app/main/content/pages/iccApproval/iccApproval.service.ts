@@ -15,10 +15,10 @@ export class ICCApprovalService {
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        console.log('in resolve :: iccApprovalId is ', this._iccApproval.value.id);
         return forkJoin([
             this.getICCFurtherDetails(this._iccApproval.value.id),
-            this.getLoanEnhancements(this._iccApproval.value.id)
+            this.getLoanEnhancements(this._iccApproval.value.id),
+            this.getRiskNotifications(this._iccApproval.value.id)
         ]);
     }
 
@@ -29,6 +29,45 @@ export class ICCApprovalService {
         return this._http.get("enquiry/api/iCCApprovals/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
     }
 
+    /**
+     * getRiskNotifications()
+     */
+    public getRiskNotifications(iccApprovalId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/riskNotifications/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
+                ((response: any) => {
+                    observer.next(response._embedded.riskNotifications);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    /**
+     * deleteRiskNotification()
+     */
+    public deleteRiskNotification(riskNotificationId: string): Observable<any> {
+        return this._http.delete("enquiry/api/riskNotifications/delete/" + riskNotificationId);
+    }
+
+    /**
+     * createRiskNotification()
+     */
+    public createRiskNotification(riskNotification: any): Observable<any> {
+        return this._http.post("enquiry/api/riskNotifications/create", riskNotification);
+    }
+
+    /**
+     * updateRiskNotification()
+     */
+    public updateRiskNotification(riskNotification: any): Observable<any> {
+        return this._http.put("enquiry/api/riskNotifications/update", riskNotification);
+    }
+    
     /**
      * getICCFurtherDetails()
      */
@@ -70,7 +109,7 @@ export class ICCApprovalService {
     }
 
     /**
-     * getICCFurtherDetails()
+     * getReasonForDelay()
      */
     public getReasonForDelay(iccApprovalId: string): Observable<any> {
         return this._http.get("enquiry/api/iCCReasonForDelays/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
