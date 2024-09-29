@@ -148,10 +148,12 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setName2(partner.getPartyName2() == null ? "" : partner.getPartyName2());
         if (partner.getPartyCategory() != null)
             detailsResource.setPartnerCategory(partner.getPartyCategory().toString());
-
-        if (partner.getEmail().contains("@") == false) {
-            partner.setEmail(partner.getEmail() + "@dummy.co.in");
+        if (partner.getEmail() != null) {
+            if (partner.getEmail().contains("@") == false) {
+                partner.setEmail(partner.getEmail() + "@dummy.co.in");
+            }
         }
+
 
         detailsResource.setEmail(partner.getEmail());
         detailsResource.setCity(partner.getCity());
