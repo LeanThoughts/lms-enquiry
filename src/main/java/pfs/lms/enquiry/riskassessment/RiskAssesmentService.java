@@ -33,13 +33,15 @@ public class RiskAssesmentService implements IRiskAssessmentService {
 
         // Change Documents for Monitoring Header
         changeDocumentService.createChangeDocument(
-                riskAssessment.getId(), riskAssessment.getId().toString(), null,
+                riskAssessment.getId(),
+                riskAssessment.getId().toString(),
+                null,
                 riskAssessment.getLoanApplication().getLoanContractId(),
                 OldRiskAssessment,
                 riskAssessment,
                 "Updated",
                 username,
-                "Prelim Risk Assessment", "Header");
+                "Risk Assessment", "Header");
         riskAssessmentRepository.save(riskAssessment);
 
         return riskAssessment;
@@ -58,12 +60,14 @@ public class RiskAssesmentService implements IRiskAssessmentService {
         loanApplication.setFunctionalStatus(10);
         loanApplication.setFunctionalStatusDescription("Preliminary Risk Assessment Completed");
 
+        loanApplication.setPostedInSAP(0);
+        loanApplication.setTechnicalStatus(4);
 
         // Change Documents for Enquiry Completion
         changeDocumentService.createChangeDocument(
                 loanApplication.getId(),
-                loanApplication.toString(),
-                loanApplication.getEnquiryNo().getId().toString(),
+                loanApplication.getId().toString(),
+                loanApplication.getId().toString(),
                 loanApplication.getEnquiryNo().getId().toString(),
                 oldLoanApplication,
                 loanApplication,
@@ -71,7 +75,8 @@ public class RiskAssesmentService implements IRiskAssessmentService {
                 username,
                 "LoanApplication", "Loan Application");
 
-        loanApplication.setPostedInSAP(0);
+
+        loanApplicationRepository.save(loanApplication);
         return riskAssessment;
     }
 }

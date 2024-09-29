@@ -34,6 +34,19 @@ public class InceptionFee extends AggregateRoot<InceptionFee> implements Cloneab
     private String remarks;
 
     private  String description;
+
+    private String feeAmount;
+    private String cGstAmount;
+    private String iGstAmount;
+    private String sGstAmount;
+
+
+    private String sapFIDocumentNumberFee;
+//    private String sapFIDocumentNumberCGST;
+//    private String sapFIDocumentNumberIGST;
+//    private String sapFIDocumentNumberSGST;
+
+
     private String headerDocumentNumber;
 
     //0	New

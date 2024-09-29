@@ -28,6 +28,16 @@ public class InceptionFeeResource {
     private String referenceNumber;
     private String remarks;
 
+    private String feeAmount;
+    private String cGstAmount;
+    private String iGstAmount;
+    private String sGstAmount;
+
+
+    private String sapFIDocumentNumberFee;
+//    private String sapFIDocumentNumberCGST;
+//    private String sapFIDocumentNumberIGST;
+//    private String sapFIDocumentNumberSGST;
 
     private String headerDocumentNumber;
     private String description;

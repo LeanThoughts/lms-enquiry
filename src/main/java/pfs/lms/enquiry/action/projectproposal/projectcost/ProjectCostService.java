@@ -31,7 +31,7 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setPfsDebtAmount(resource.getPfsDebtAmount());
         if (resource.getDebt() > 0 && resource.getEquity() > 0) {
             double d = resource.getDebt() / resource.getEquity();
-            d = new BigDecimal(d).setScale(2).doubleValue();
+            //d = new BigDecimal(d).setScale(2).doubleValue();
             projectCost.setDebtEquityRatio(d);
         }
         projectCost = projectCostRepository.save(projectCost);

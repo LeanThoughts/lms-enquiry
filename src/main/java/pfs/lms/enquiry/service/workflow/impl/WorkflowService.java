@@ -201,7 +201,7 @@ public class WorkflowService implements IWorkflowService {
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "ICC In-Principal Approval";
                 break;
-            case "Prelim Risk Assessment":
+            case "Prelim Risk Assessment":
                 //Fetch the Entity
                  riskAssessment = riskAssessmentRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "02" - Sent for Approval
@@ -318,12 +318,17 @@ public class WorkflowService implements IWorkflowService {
                 iccApproval.setProcessInstanceId(processInstanceId);
                 iccApproval = iccApprovalRepository.save(iccApproval);
                 return iccApproval;
+            case "Prelim Risk Assessment":
+                //Save entity with the Process Instance and workflow status code
+                riskAssessment.setProcessInstanceId(processInstanceId);
+                riskAssessment = riskAssessmentRepository.save(riskAssessment);
+                return riskAssessment;
             case "Prelim Risk Assessment":
                 //Save entity with the Process Instance and workflow status code
                 riskAssessment.setProcessInstanceId(processInstanceId);
                 riskAssessment = riskAssessmentRepository.save(riskAssessment);
                 return riskAssessment;
-                case "ApplicationFee":
+            case "ApplicationFee":
                 //Save entity with the Process Instance and workflow status code
                 applicationFee.setProcessInstanceId(processInstanceId);
                 applicationFee = applicationFeeRepository.save(applicationFee);
@@ -466,7 +471,7 @@ public class WorkflowService implements IWorkflowService {
         try {
             taskService.complete(task.getId(), variables);
         } catch (Exception ex) {
-            log.info("WorkFlow Approval Exception : " + ex.getMessage());
+            log.info("WorkFlow Approval Exception : " + ex.getMessage()  + " :" + processName);
             return null;
         }
         System.out.println("--------------- Workflow APPROVAL Task Execution Finished @ : " + DateTime.now());
