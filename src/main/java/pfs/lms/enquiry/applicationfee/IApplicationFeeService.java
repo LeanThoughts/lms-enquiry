@@ -9,4 +9,5 @@ public interface IApplicationFeeService {
     ApplicationFee update(ApplicationFee applicationFee, String username) throws Exception;
 
     ApplicationFee processApprovedApplicationFee(ApplicationFee applicationFee,String username) throws CloneNotSupportedException;
+    ApplicationFee processRejection(ApplicationFee applicationFee, String username) throws CloneNotSupportedException;
 }

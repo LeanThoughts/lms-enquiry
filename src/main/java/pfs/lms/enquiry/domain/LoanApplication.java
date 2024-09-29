@@ -170,6 +170,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
      * 07-Loan Disbursement Stage -
      * 08-Monitoring
      * 09-Recovery
+     * 10-Preliminary Risk Assessment Completed
      * 90- Planned Completed
      * 99- Actual Completed
      */

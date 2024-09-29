@@ -30,6 +30,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SanctionService implements ISanctionService {
+    @Autowired
+    private SanctionRepository sanctionRepository;
 
     @Autowired
     private final LoanApplicationRepository loanApplicationRepository;
@@ -48,7 +50,27 @@ public class SanctionService implements ISanctionService {
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BoardApproval processApprovedSanction(Sanction sanction, String username) throws CloneNotSupportedException {
+    public Sanction processRejection(Sanction sanction, String username) throws CloneNotSupportedException {
+        Object oldBoardApproval = sanction.clone();
+        sanction.setWorkFlowStatusCode(04);
+        sanction.setWorkFlowStatusDescription("Rejected");
+
+        // Change Documents for Monitoring Header
+        changeDocumentService.createChangeDocument(
+                sanction.getId(), sanction.getId().toString(), null,
+                sanction.getLoanApplication().getLoanContractId(),
+                oldBoardApproval,
+                sanction,
+                "Updated",
+                username,
+                "Board Approval", "Header");
+        sanctionRepository.save(sanction);
+
+        return sanction;
+    }
+
+    @Override
+    public Sanction processApprovedSanction(Sanction sanction, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = sanction.getLoanApplication();
         Object oldLoanApplication = loanApplication.clone();

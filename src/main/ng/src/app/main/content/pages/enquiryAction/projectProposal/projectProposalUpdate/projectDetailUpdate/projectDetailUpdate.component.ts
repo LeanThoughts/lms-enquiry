@@ -59,10 +59,10 @@ export class ProjectDetailUpdateComponent {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder,
-                private _dialogRef: MatDialog, 
+                private _dialogRef: MatDialog,
                 private _matSnackBar: MatSnackBar,
                 public _enquiryActionService: EnquiryActionService,
-                public _enquiryApplicationService: LoanEnquiryService, _loanEnquiryService: LoanEnquiryService) { 
+                public _enquiryApplicationService: LoanEnquiryService, _loanEnquiryService: LoanEnquiryService) {
 
         // Initialize dropdown values
         this._enquiryApplicationService.getUnitOfMeasures().subscribe(response => {
@@ -97,7 +97,7 @@ export class ProjectDetailUpdateComponent {
             borrowerName: new FormControl(this.getBorrowerName()),
             promoterName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.promoterName),
             loanPurpose: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanPurpose),
-            projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity, 
+            projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity,
                 [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
             projectCapacityUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacityUnit),
             state: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectLocationState),
@@ -107,17 +107,17 @@ export class ProjectDetailUpdateComponent {
             assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
             financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
             endUseOfFunds: new FormControl(this._enquiryActionService._loanApplication.loanApplication.endUseOfFunds),
-            roi: new FormControl(''),
+            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.expectedInterestRate),
             fees: new FormControl(this._enquiryActionService._loanApplication.loanApplication.fees,
                 [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
-            tenorYear: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorYear, 
+            tenorYear: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorYear,
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
-            tenorMonths: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorMonth, 
+            tenorMonths: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorMonth,
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
-            moratoriumPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.moratoriumPeriod, 
+            moratoriumPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.moratoriumPeriod,
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             moratoriumPeriodUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.moratoriumPeriodUnit),
-            constructionPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriod, 
+            constructionPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriod,
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             constructionPeriodUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriodUnit),
             status: new FormControl('Draft'),
@@ -126,7 +126,7 @@ export class ProjectDetailUpdateComponent {
             purposeOfLoan: new FormControl(this._enquiryActionService._loanApplication.loanApplication.purposeOfLoan),
             projectType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectType),
         });
-        
+
         if (JSON.stringify(this._projectDetail) !== JSON.stringify({})) // update mode, initialize for values ...
             this.initializeFormValues();
     }
@@ -135,7 +135,7 @@ export class ProjectDetailUpdateComponent {
      * getBorrowerName()
      */
     getBorrowerName(): string {
-        let name = this._enquiryActionService._loanApplication.partner.partyName1 + ' ' + 
+        let name = this._enquiryActionService._loanApplication.partner.partyName1 + ' ' +
             this._enquiryActionService._loanApplication.partner.partyName2;
         console.log('borrower name is', name);
         return name.trim();
@@ -144,7 +144,7 @@ export class ProjectDetailUpdateComponent {
     /**
      * submit()
      */
-    submit(): void {        
+    submit(): void {
         console.log(this._projectDetailForm.value);
         if (this._projectDetailForm.valid) {
             var formValues = this._projectDetailForm.value;
@@ -254,7 +254,7 @@ export class ProjectDetailUpdateComponent {
                     this.dataSource.data = response._embedded.creditRatings;
                 });
             }
-        });    
+        });
     }
 
     /**
@@ -272,6 +272,6 @@ export class ProjectDetailUpdateComponent {
                     this._selectedCreditRating = undefined;
                 });
             }
-        });     
+        });
     }
 }

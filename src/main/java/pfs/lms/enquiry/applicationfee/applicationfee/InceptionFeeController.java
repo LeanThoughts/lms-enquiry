@@ -34,37 +34,6 @@ public class InceptionFeeController {
     //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
     @PostMapping("/inceptionFees/sapInceptionFees/create")
     public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
-                                               HttpServletRequest request) throws CloneNotSupportedException {
-
-//
-        log.info("Loan Number : " + inceptionFeeResource.getLoanContractId());
-        log.info("Invoice Number : " + inceptionFeeResource.getInvoiceNumber());
-        log.info("Invoice Date : " + inceptionFeeResource.getInvoiceDate());
-        log.info("Amount : " + inceptionFeeResource.getAmount());
-
-        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
-        if (loanApplication != null){
-            inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
-
-        List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByInvoiceNumber(inceptionFeeResource.getInvoiceNumber());
-        if (inceptionFeeList.size() > 0 ) {
-            InceptionFee inceptionFee = inceptionFeeList.get(0);
-            inceptionFeeResource.setId(inceptionFee.getId());
-            return ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
-                    request.getUserPrincipal().getName()));
-        }else {
-            return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
-                    request.getUserPrincipal().getName()));
-
-        }
-
-        }
-        return  null;
-    }
-
-    //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
-    @PostMapping("/inceptionFees/sapInceptionFees/reverse")
-    public ResponseEntity<InceptionFee> reverseFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                       HttpServletRequest request) throws CloneNotSupportedException {
 
 //
@@ -74,20 +43,47 @@ public class InceptionFeeController {
         log.info("Amount : " + inceptionFeeResource.getAmount());
 
         LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
-        if (loanApplication != null){
+        if (loanApplication != null) {
             inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
             List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByInvoiceNumber(inceptionFeeResource.getInvoiceNumber());
-            if (inceptionFeeList.size() > 0 ) {
+            if (inceptionFeeList.size() > 0) {
                 InceptionFee inceptionFee = inceptionFeeList.get(0);
+                inceptionFeeResource.setId(inceptionFee.getId());
+                return ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
+                        request.getUserPrincipal().getName()));
+            } else {
+                return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
+                        request.getUserPrincipal().getName()));
+
+            }
+
+        }
+        return null;
+    }
+
+    //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
+    @PostMapping("/inceptionFees/sapInceptionFees/reverse")
+    public ResponseEntity<InceptionFee> reverseFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
+                                                       HttpServletRequest request) throws CloneNotSupportedException {
+
+//
+        log.info("Loan Number : " + inceptionFeeResource.getLoanContractId());
+        log.info("Invoice Number : " + inceptionFeeResource.getInvoiceNumber());
+        log.info("Invoice Date : " + inceptionFeeResource.getInvoiceDate());
+        log.info("Amount : " + inceptionFeeResource.getAmount());
+
+            List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findBySapFIDocumentNumberFee(inceptionFeeResource.getSapFIDocumentNumberFee());
+            for (InceptionFee inceptionFee : inceptionFeeList) {
                 inceptionFeeResource.setId(inceptionFee.getId());
                 inceptionFeeResource.setStatusCode("5");
                 inceptionFeeResource.setStatusDescription("Reversed");
                 return ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
                         request.getUserPrincipal().getName()));
             }
-        }
-        return  null;
+
+
+        return null;
     }
 
 

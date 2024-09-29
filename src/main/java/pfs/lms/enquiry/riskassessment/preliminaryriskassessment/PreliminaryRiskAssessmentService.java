@@ -37,14 +37,14 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
                     obj = riskAssessmentRepository.save(obj);
 
                     // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Risk Assessment", "Header");
 
                     return obj;
                 });
@@ -56,16 +56,16 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
         preliminaryRiskAssessment.setRemarksByRiskDepartment(preliminaryRiskAssessmentResource.getRemarksByRiskDepartment());
         preliminaryRiskAssessment.setRemarks(preliminaryRiskAssessmentResource.getRemarks());
         preliminaryRiskAssessment = preliminaryRiskAssessmentRepository.save(preliminaryRiskAssessment);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                preliminaryRiskAssessment.getId(),
+                preliminaryRiskAssessment.getRiskAssessment().getId().toString(),
+                preliminaryRiskAssessment.getId().toString(),
+                preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                preliminaryRiskAssessment,
+                "Created",
+                username,
+                "Risk Assessment", "Prelim Risk Assessment");
 
         return preliminaryRiskAssessment;
     }
@@ -77,7 +77,7 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
         PreliminaryRiskAssessment preliminaryRiskAssessment = preliminaryRiskAssessmentRepository.findById(preliminaryRiskAssessmentResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(preliminaryRiskAssessmentResource.getId().toString()));
 
-//        Object oldICCFurtherDetail = preliminaryRiskAssessment.clone();
+        Object oldPreliminaryRiskAssessment = preliminaryRiskAssessment.clone();
 
         preliminaryRiskAssessment.setDateOfAssessment(preliminaryRiskAssessmentResource.getDateOfAssessment());
         preliminaryRiskAssessment.setMdApprovalDate(preliminaryRiskAssessmentResource.getMdApprovalDate());
@@ -86,16 +86,16 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
         preliminaryRiskAssessment = preliminaryRiskAssessmentRepository.save(preliminaryRiskAssessment);
 
         // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                preliminaryRiskAssessment.getId(),
+                preliminaryRiskAssessment.getId().toString(),
+                preliminaryRiskAssessment.getId().toString(),
+                preliminaryRiskAssessment.getRiskAssessment().getLoanContractId(),
+                oldPreliminaryRiskAssessment,
+                preliminaryRiskAssessment,
+                "Updated",
+                username,
+                "Appraisal", "Loan Partner");
 
         return preliminaryRiskAssessment;
     }

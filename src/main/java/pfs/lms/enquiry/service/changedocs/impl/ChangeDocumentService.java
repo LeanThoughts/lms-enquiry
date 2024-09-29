@@ -81,6 +81,8 @@ import pfs.lms.enquiry.monitoring.valuer.Valuer;
 import pfs.lms.enquiry.monitoring.valuer.ValuerReportAndFee;
 import pfs.lms.enquiry.repository.ChangeDocumentRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.riskassessment.RiskAssessment;
+import pfs.lms.enquiry.riskassessment.preliminaryriskassessment.PreliminaryRiskAssessment;
 import pfs.lms.enquiry.sanction.Sanction;
 import pfs.lms.enquiry.sanction.paymentreceiptpostsanction.PaymentReceiptPostSanction;
 import pfs.lms.enquiry.sanction.paymentreceiptpresanction.PaymentReceiptPreSanction;
@@ -968,7 +970,27 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     }
                     result.put("loanApplication",riskNotification.getIccApproval().getLoanApplication());
                     return result;
+                case "RiskAssessment":
+                    RiskAssessment riskAssessment = (RiskAssessment) object;
+                    result.put("id", riskAssessment.getId().toString());
+                    if (riskAssessment.getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", riskAssessment.getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", riskAssessment.getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",riskAssessment.getLoanApplication());
+                    return result;
 
+                case "PreliminaryRiskAssessment":
+                    PreliminaryRiskAssessment preliminaryRiskAssessment = (PreliminaryRiskAssessment) object;
+                    result.put("id", preliminaryRiskAssessment.getId().toString());
+                    if (preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",preliminaryRiskAssessment.getRiskAssessment().getLoanApplication());
+                    return result;
             }
 
         } catch (Exception ex) {
@@ -998,7 +1020,9 @@ public class ChangeDocumentService implements IChangeDocumentService {
         if (loanContractId != null) {
             loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
             if (loanApplication == null) {
-                loanApplication = loanApplicationRepository.findByEnquiryNo(new EnquiryNo(Long.parseLong(loanContractId)));
+                EnquiryNo enquiryNo = new EnquiryNo();
+                enquiryNo.setId( Long.parseLong( loanContractId.toString()));
+                loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
             }
         }
             else{

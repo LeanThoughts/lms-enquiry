@@ -12,8 +12,8 @@
     <form [formGroup]="_projectCostForm">
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Project Cost (Crores)" 
-                        formControlName="projectCost" maxlength="18" required>
+                <input matInput placeholder="Project Cost (Crores)"
+                        formControlName="projectCost" maxlength="18" >
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="18" type="number" (focusout)="calculateRatio()">
@@ -22,7 +22,7 @@
                 <input matInput placeholder="Promoter Contribution (Crores)" formControlName="equity" maxlength="18" type="number" (focusout)="calculateRatio()">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="PFS Debt Amount (Crores)" 
+                <input matInput placeholder="PFS Debt Amount (Crores)"
                         formControlName="pfsDebtAmount" maxlength="18" >
             </mat-form-field>
         </div>
@@ -44,14 +44,14 @@
     </div>
 
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addShareHolder')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addShareHolder')">
             Add
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyShareHolder')" 
-                [disabled]="!_selectedShareHolder"> Modify 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyShareHolder')"
+                [disabled]="!_selectedShareHolder"> Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" 
-                [disabled]="!_selectedShareHolder"> Delete 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()"
+                [disabled]="!_selectedShareHolder"> Delete
         </button>
     </div>
 
@@ -59,7 +59,7 @@
         <div class="mat-table-container mat-white-bg mr-8" style="width: 50%">
 
             <mat-table class="enquiries-table" [dataSource]="dataSource" matSort >
-    
+
                 <!-- companyName Column -->
                 <ng-container matColumnDef="companyName">
                     <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
@@ -67,7 +67,7 @@
                         <p class="text-truncate">{{ obj.companyName }}</p>
                     </mat-cell>
                 </ng-container>
-      
+
                 <!-- equityCapital Column -->
                 <ng-container matColumnDef="equityCapital">
                     <mat-header-cell *matHeaderCellDef>Capital</mat-header-cell>
@@ -85,11 +85,11 @@
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    
+
                 <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
                             [ngClass]="{'highlight':obj.id === _selectedShareHolder?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
                  </mat-row>
-    
+
             </mat-table>
         </div>
     </div>

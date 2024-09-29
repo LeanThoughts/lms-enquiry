@@ -94,7 +94,7 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Financing Type" formControlName="financingType" required>
+                <mat-select placeholder="Financing Type" formControlName="financingType" >
                     <mat-option> </mat-option>
                     <mat-option *ngFor="let financingType of financingTypes" [value]="financingType.code">
                         {{ financingType.value }}
@@ -178,16 +178,16 @@
     <div>
         <p ><b>Rating</b></p>
     </div>
-    
+
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addCreditRating')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addCreditRating')">
             Add
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')" 
-                [disabled]="!_selectedCreditRating"> Modify 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyCreditRating')"
+                [disabled]="!_selectedCreditRating"> Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" 
-                [disabled]="!_selectedCreditRating"> Delete 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()"
+                [disabled]="!_selectedCreditRating"> Delete
         </button>
     </div>
 
@@ -195,7 +195,7 @@
         <div class="mat-table-container mat-white-bg mr-8" style="width: 100%">
 
             <mat-table class="enquiries-table" [dataSource]="dataSource" matSort>
-    
+
                 <!-- creditRating Column -->
                 <ng-container matColumnDef="creditRating">
                     <mat-header-cell *matHeaderCellDef>Credit Rating</mat-header-cell>
@@ -203,7 +203,7 @@
                         <p class="text-truncate">{{ obj.creditRating }}</p>
                     </mat-cell>
                 </ng-container>
-      
+
                 <!-- creditRatingAgency Column -->
                 <ng-container matColumnDef="creditRatingAgency">
                     <mat-header-cell *matHeaderCellDef>Credit Rating Agency</mat-header-cell>
@@ -229,11 +229,11 @@
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    
+
                 <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
                             [ngClass]="{'highlight':obj.id === _selectedCreditRating?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
                  </mat-row>
-    
+
             </mat-table>
         </div>
     </div>

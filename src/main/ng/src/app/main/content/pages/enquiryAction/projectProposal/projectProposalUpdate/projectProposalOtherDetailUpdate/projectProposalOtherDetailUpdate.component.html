@@ -12,9 +12,9 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="100">
-                <input matInput placeholder="Source and cash flow of repayment of loan and Interest 
-                        (Pls also share the excel calculations of both DSCR and Cash DSCR separately.)" 
-                        formControlName="sourceAndCashFlow" maxlength="2000" required>
+                <input matInput placeholder="Source and cash flow of repayment of loan and Interest
+                        (Pls also share the excel calculations of both DSCR and Cash DSCR separately.)"
+                        formControlName="sourceAndCashFlow" maxlength="2000" >
             </mat-form-field>
         </div>
 
@@ -26,7 +26,7 @@
             <mat-form-field fxFlex="25">
                 <input matInput [matDatepicker]="picker2" placeholder="Optimum date by which loan is required?" formControlName="optimumDateOfLoan" readonly>
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker> 
+                <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <input matInput placeholder="Consolidated Group Leverage" formControlName="consolidatedGroupLeverage" maxlength="30" >
@@ -46,7 +46,7 @@
                 <input matInput placeholder="TOL/TNW %age" formControlName="tolTNWPercentage" maxlength="6" >
             </mat-form-field>
             <mat-form-field fxFlex="50">
-                <input matInput placeholder="Delays in Debt Servicing/Status of SMA etc. with various lenders" 
+                <input matInput placeholder="Delays in Debt Servicing/Status of SMA etc. with various lenders"
                         formControlName="delayInDebtServicing" maxlength="60" >
             </mat-form-field>
         </div>
@@ -56,16 +56,16 @@
     <div fxLayout="row">
         <p fxFlex="100"><b>Documents</b></p>
     </div>
-    
+
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('addDocument')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('addDocument')">
             Add
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('modifyDocument')" 
-                [disabled]="!_selectedDocument"> Modify 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUploadDialog('modifyDocument')"
+                [disabled]="!_selectedDocument"> Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" 
-                [disabled]="!_selectedDocument"> Delete 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()"
+                [disabled]="!_selectedDocument"> Delete
         </button>
     </div>
 
@@ -73,7 +73,7 @@
         <div class="mat-table-container mat-white-bg mr-8" style="width: 100%">
 
             <mat-table class="enquiries-table" [dataSource]="dataSource" matSort>
-    
+
                 <!-- documentType Column -->
                 <ng-container matColumnDef="documentType">
                     <mat-header-cell *matHeaderCellDef>Document Type</mat-header-cell>
@@ -81,12 +81,12 @@
                         <p class="text-truncate">{{ getDocumentTypeDescription(obj.documentType) }}</p>
                     </mat-cell>
                 </ng-container>
-      
+
                 <!-- documentName Column -->
                 <ng-container matColumnDef="documentName">
                     <mat-header-cell *matHeaderCellDef>Document Name</mat-header-cell>
                     <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.documentName }}</p> 
+                        <p class="text-truncate">{{ obj.documentName }}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -99,11 +99,11 @@
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    
+
                 <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onRowSelect(obj)"
                             [ngClass]="{'highlight':obj.id === _selectedDocument?.id}" [@animate]="{value:'*',params:{y:'100%'}}">
                 </mat-row>
-    
+
             </mat-table>
         </div>
     </div>

@@ -28,6 +28,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BoardApprovalService implements IBoardApprovalService {
+    @Autowired
+    private BoardApprovalRepository boardApprovalRepository;
 
     @Autowired
     private final LoanApplicationRepository loanApplicationRepository;
@@ -43,6 +45,25 @@ public class BoardApprovalService implements IBoardApprovalService {
     private final BoardApprovalRejectedByCustomerRepository boardApprovalRejectedByCustomerRepository;
     private final IChangeDocumentService changeDocumentService;
 
+    @Override
+    public BoardApproval processRejection(BoardApproval boardApproval, String username) throws CloneNotSupportedException {
+        Object oldBoardApproval = boardApproval.clone();
+        boardApproval.setWorkFlowStatusCode(04);
+        boardApproval.setWorkFlowStatusDescription("Rejected");
+
+        // Change Documents for Monitoring Header
+        changeDocumentService.createChangeDocument(
+                boardApproval.getId(), boardApproval.getId().toString(), null,
+                boardApproval.getLoanApplication().getLoanContractId(),
+                oldBoardApproval,
+                boardApproval,
+                "Updated",
+                username,
+                "Board Approval", "Header");
+        boardApprovalRepository.save(boardApproval);
+
+        return boardApproval;
+    }
 
     @Override
     public BoardApproval processApprovedBoardApproval(BoardApproval boardApproval, String username) throws CloneNotSupportedException {

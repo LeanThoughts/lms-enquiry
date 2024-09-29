@@ -34,6 +34,7 @@ import pfs.lms.enquiry.action.projectproposal.projectproposalotherdetail.Project
 import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
 import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolderRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.AssistanceTypeRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
@@ -77,7 +78,12 @@ public class TeaserService implements ITeaserService {
 
         TeaserResource teaserResource = new TeaserResource();
         teaserResource.setLoanApplication(loanApplication);
-        teaserResource.setPartner(partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber())));
+        if (loanApplication.getbusPartnerNumber() != null) {
+            teaserResource.setPartner(partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber())));
+        }else {
+            Partner partner = partnerRepository.getOne(loanApplication.getLoanApplicant());
+            teaserResource.setPartner(partner);
+        }
 
         List<CollateralDetail> collateralDetails = collateralDetailRepository.findByProjectProposalId(projectProposal.getId());
         List<ShareHolder> shareHolders = shareHolderRepository.findByProjectProposalId(projectProposal.getId());
