@@ -29,6 +29,8 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebt(resource.getDebt());
         projectCost.setEquity(resource.getEquity());
         projectCost.setPfsDebtAmount(resource.getPfsDebtAmount());
+        projectCost.setGrantAmount(resource.getGrantAmount());
+        projectCost.setDebtEquityRatioWithGrant(resource.getDebtEquityRatioWithGrant());
         if (resource.getDebt() > 0 && resource.getEquity() > 0) {
             double d = resource.getDebt() / resource.getEquity();
             d = new BigDecimal(d).setScale(2).doubleValue();
@@ -65,6 +67,8 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebt(resource.getDebt());
         projectCost.setEquity(resource.getEquity());
         projectCost.setPfsDebtAmount(resource.getPfsDebtAmount());
+        projectCost.setGrantAmount(resource.getGrantAmount());
+        projectCost.setDebtEquityRatioWithGrant(resource.getDebtEquityRatioWithGrant());
         if (resource.getDebt() > 0 && resource.getEquity() > 0) {
             double d = resource.getDebt() / resource.getEquity();
             d = new BigDecimal(d).setScale(2).doubleValue();

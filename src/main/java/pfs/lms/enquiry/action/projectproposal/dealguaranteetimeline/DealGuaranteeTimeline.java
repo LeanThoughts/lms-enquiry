@@ -33,6 +33,7 @@ public class DealGuaranteeTimeline extends AggregateRoot<DealGuaranteeTimeline> 
     private String deviations;
     private String esmsCategorization;
     private String otherProjectDetails;
+    private String environmentalSystemCategory;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

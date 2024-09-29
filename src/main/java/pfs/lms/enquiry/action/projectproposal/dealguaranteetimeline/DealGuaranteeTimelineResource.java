@@ -27,4 +27,5 @@ public class DealGuaranteeTimelineResource {
     private String deviations;
     private String esmsCategorization;
     private String otherProjectDetails;
+    private String environmentalSystemCategory;
 }

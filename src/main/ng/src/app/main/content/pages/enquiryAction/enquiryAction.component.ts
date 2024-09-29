@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { ActivatedRoute, Router} from '@angular/router';
 import { Subscription } from 'rxjs';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 import { AppService } from 'app/app.service';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from './enquiryAction.service';
@@ -34,6 +34,9 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
     loanContractId: any;
     functionalStatus: string;
     
+    // Declare and initialize tabGroup
+    @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
     /**
      * constructor()
      * @param _formBuilder
@@ -134,6 +137,10 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 });
             }
             else {
+                // Activate the 5th tab (index 4) before showing the snackbar
+                if (this.tabGroup) {
+                    this.tabGroup.selectedIndex = 4;
+                }
                 this._matSnackBar.open('Data for enquiry completion is missing. Cannot send enquiry for approval.',
                 'OK', { duration: 7000 });
             }

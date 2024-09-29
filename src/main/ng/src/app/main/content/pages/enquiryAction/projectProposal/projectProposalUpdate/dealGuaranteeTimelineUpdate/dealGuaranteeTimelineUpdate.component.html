@@ -14,7 +14,7 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="100">
-                <input matInput placeholder="Status of PBG and MABG if applicable" 
+                <input matInput placeholder="Status of Performance Bank Guarantee and MABG, if applicable" 
                         formControlName="statusOfPBGAndMABG" maxlength="500" >
             </mat-form-field>
         </div>
@@ -62,7 +62,17 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="100">
-                <input matInput placeholder="ESMS Categorization and Associated Risks" 
+                <mat-label>Environmental System Category</mat-label>
+                <mat-select formControlName="environmentalSystemCategory">
+                    <mat-option value="Category A">Category A</mat-option>
+                    <mat-option value="Category B">Category B</mat-option>
+                    <mat-option value="Category C">Category C</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlex="100">
+                <input matInput placeholder="Environmental and Social Management System Categorization Remarks" 
                         formControlName="esmsCategorization" maxlength="500" >
             </mat-form-field>
         </div>

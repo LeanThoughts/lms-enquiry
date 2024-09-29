@@ -27,6 +27,8 @@ public class ProjectCost extends AggregateRoot<ProjectCost> implements Cloneable
     private Double equity;
     private Double pfsDebtAmount;
     private Double debtEquityRatio;
+    private Double grantAmount;
+    private Double debtEquityRatioWithGrant;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

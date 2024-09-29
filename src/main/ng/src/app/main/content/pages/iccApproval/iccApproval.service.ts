@@ -275,6 +275,6 @@ export class ICCApprovalService {
             'requestorEmail': requestorEmail,
             'processName': 'ICCApproval'
         }
-        return this._http.put<any>('enquiry/api/startprocess', requestObj);
+        return this._http.put<any>('enquiry/api/iccApprovals/sendForApproval', requestObj);
     }    
 }

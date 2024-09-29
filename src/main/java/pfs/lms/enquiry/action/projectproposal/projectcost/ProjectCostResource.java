@@ -21,4 +21,6 @@ public class ProjectCostResource {
     private Double equity;
     private Double pfsDebtAmount;
     private Double debtEquityRatio;
+    private Double grantAmount;
+    private Double debtEquityRatioWithGrant;
 }

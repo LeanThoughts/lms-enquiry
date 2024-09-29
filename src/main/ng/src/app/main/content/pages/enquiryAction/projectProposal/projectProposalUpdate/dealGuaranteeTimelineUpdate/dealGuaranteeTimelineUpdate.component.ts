@@ -45,7 +45,8 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
             existingRelationsPFSPTC: new FormControl(''),
             deviations: new FormControl(''),
             esmsCategorization: new FormControl(''),
-            otherProjectDetails: new FormControl('')
+            otherProjectDetails: new FormControl(''),
+            environmentalSystemCategory: new FormControl('')
         });
         
         this.initializeFormValues();
@@ -108,7 +109,8 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
             'existingRelationsPFSPTC': this._dealGuaranteeTimeline.existingRelationsPFSPTC || '',
             'esmsCategorization': this._dealGuaranteeTimeline.esmsCategorization || '',
             'deviations': this._dealGuaranteeTimeline.deviations || '',
-            'otherProjectDetails': this._dealGuaranteeTimeline.otherProjectDetails || ''
+            'otherProjectDetails': this._dealGuaranteeTimeline.otherProjectDetails || '',
+            'environmentalSystemCategory': this._dealGuaranteeTimeline.environmentalSystemCategory || ''
         });
     }
 }

@@ -19,7 +19,7 @@
                 <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="18" type="number" (focusout)="calculateRatio()">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Equity (Crores)" formControlName="equity" maxlength="18" type="number" (focusout)="calculateRatio()">
+                <input matInput placeholder="Promoter Contribution (Crores)" formControlName="equity" maxlength="18" type="number" (focusout)="calculateRatio()">
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <input matInput placeholder="PFS Debt Amount (Crores)" 
@@ -28,7 +28,13 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Debt Equity Ratio" formControlName="debtEquityRatio" maxlength="8" readonly>
+                <input matInput placeholder="Debt/Equity Ratio without Grant" formControlName="debtEquityRatio" maxlength="18" readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Grant/Subsidy Amount" formControlName="grantAmount" maxlength="18" (focusout)="calculateRatio()>
+            </mat-form-field>
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Debt/Equity Ratio with Grant" formControlName="debtEquityRatioWithGrant" maxlength="18" readonly>
             </mat-form-field>
         </div>
     </form>

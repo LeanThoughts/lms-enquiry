@@ -35,6 +35,7 @@ public class DealGuaranteeTimelineService implements IDealGuaranteeTimelineServi
         dealGuaranteeTimeline.setStatusOfPBGAndMABG(resource.getStatusOfPBGAndMABG());
         dealGuaranteeTimeline.setStrengths(resource.getStrengths());
         dealGuaranteeTimeline.setTimelinesMilestones(resource.getTimelinesMilestones());
+        dealGuaranteeTimeline.setEnvironmentalSystemCategory(resource.getEnvironmentalSystemCategory());
         dealGuaranteeTimeline = dealGuaranteeTimelineRepository.save(dealGuaranteeTimeline);
 
         // Change Documents for Project Proposal
@@ -73,6 +74,7 @@ public class DealGuaranteeTimelineService implements IDealGuaranteeTimelineServi
         dealGuaranteeTimeline.setStatusOfPBGAndMABG(resource.getStatusOfPBGAndMABG());
         dealGuaranteeTimeline.setStrengths(resource.getStrengths());
         dealGuaranteeTimeline.setTimelinesMilestones(resource.getTimelinesMilestones());
+        dealGuaranteeTimeline.setEnvironmentalSystemCategory(resource.getEnvironmentalSystemCategory());
         dealGuaranteeTimeline = dealGuaranteeTimelineRepository.save(dealGuaranteeTimeline);
 
         // Change Documents for Project Proposal

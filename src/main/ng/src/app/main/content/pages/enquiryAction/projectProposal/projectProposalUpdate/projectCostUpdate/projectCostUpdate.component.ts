@@ -59,7 +59,10 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
             debt: new FormControl(0.00, [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             equity: new FormControl(0.00, [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             pfsDebtAmount: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
-            debtEquityRatio: new FormControl('')
+            debtEquityRatio: new FormControl(''),
+            grantAmount: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
+            shareHolders: new FormControl('', Validators.pattern(MonitoringRegEx.fifteenCommaTwo)),
+            debtEquityRatioWithGrant: new FormControl('')
         });
         
         console.log('loan application in constructor is', this._loanApplication);
@@ -85,6 +88,16 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
             this._projectCostForm.controls.debtEquityRatio.setValue(debt/equity);
         else if (equity == 0)
             this._projectCostForm.controls.debtEquityRatio.setValue(0);
+
+        // Calculate debt equity ratio with grant
+        const grantAmount = this._projectCostForm.get('grantAmount').value;
+
+        if (debt && equity && grantAmount && equity > 0) {
+            const ratioWithGrant = (Number(grantAmount) + Number(debt)) / Number(equity);
+            this._projectCostForm.get('debtEquityRatioWithGrant').setValue(ratioWithGrant.toFixed(2));
+        } else {
+            this._projectCostForm.get('debtEquityRatioWithGrant').setValue('');
+        }
     }
 
     /**
@@ -109,6 +122,7 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
                 this._projectCost.equity = formValues.equity;
                 this._projectCost.pfsDebtAmount = formValues.pfsDebtAmount;
                 this._projectCost.debtEquityRatio = formValues.debtEquityRatio;
+                this._projectCost.grantAmount = formValues.grantAmount;
                 this._enquiryActionService.updateProjectCost(this._projectCost).subscribe(response => {
                     this._projectCost = response;
                     this.initializeFormValues();
@@ -136,6 +150,7 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
             this._projectCostForm.get('equity').setValue(this._projectCost.equity);
             this._projectCostForm.get('pfsDebtAmount').setValue(this._projectCost.pfsDebtAmount);
             this._projectCostForm.get('debtEquityRatio').setValue(this._projectCost.debtEquityRatio);
+            this._projectCostForm.get('grantAmount').setValue(this._projectCost.grantAmount);
         }
     }
 
