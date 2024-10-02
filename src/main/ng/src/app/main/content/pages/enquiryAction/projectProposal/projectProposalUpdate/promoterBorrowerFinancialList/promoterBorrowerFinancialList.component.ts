@@ -67,14 +67,15 @@ export class PromoterBorrowerFinancialListComponent {
         const dialogRef = this._dialogRef.open(PromoterBorrowerFinancialUpdateComponent, {
             data: data,
             width: '90%',
-            height: '85%'
+            height: '80%'
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((data) => {
             if (data.refresh === true) {
                 this._enquiryActionService.getFinancials(this._projectProposal.id).subscribe(response => {
-                    this.dataSource.data = response._embedded.promoterBorrowerFinancials;
+                    this.dataSource = new MatTableDataSource(response._embedded.promoterBorrowerFinancials);
                     this._financials = response._embedded.promoterBorrowerFinancials;
+                    this._selectedFinancial = undefined;
                 });
             }
         });    
