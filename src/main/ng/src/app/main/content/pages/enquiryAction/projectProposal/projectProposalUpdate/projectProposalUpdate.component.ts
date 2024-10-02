@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTabChangeEvent } from '@angular/material';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../enquiryAction.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
@@ -108,5 +108,9 @@ export class ProjectProposalUpdateComponent {
 
     onFileSelect(event: any): void {
         
+    }
+
+    onTabChange(event: MatTabChangeEvent): void {
+        console.log('tab change event is', event);
     }
 }

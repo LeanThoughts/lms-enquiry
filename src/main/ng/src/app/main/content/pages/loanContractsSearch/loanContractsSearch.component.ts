@@ -18,6 +18,7 @@ import { ICCApprovalService } from '../iccApproval/iccApproval.service';
 import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
 import { DocumentationService } from '../documentation/documentation.service';
 import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
+import { log } from 'console';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -223,31 +224,40 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToPrelimRiskAssessment()
      */
     redirectToPrelimRiskAssessment(): void {
-        this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(iccApproval => {
-            this._iccApprovalService.getApprovalByICC(iccApproval.id).subscribe(data => {
-                if (data.edApprovalDate && data.cfoApprovalDate) {
-                    this._riskAssessmentService.getRiskAssessment(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(risk => {
-                        this._riskAssessmentService._riskAssessment.next(risk);
-                        this.redirect('/riskAssessment');
-                    }, 
-                    (error: HttpErrorResponse) => {
-                        if (error.status === 404) {
-                            this._riskAssessmentService._riskAssessment.next({ id: '' });
+        const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
+        console.log('functional status', functionalStatus);
+        console.log('this._iccApprovalService._iccApproval.value.workFlowStatusCode', this._iccApprovalService._iccApproval.value.workFlowStatusCode);
+        if (functionalStatus == 2 && this._iccApprovalService._iccApproval.value.workFlowStatusCode === '03') {
+                this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(iccApproval => {
+                this._iccApprovalService.getApprovalByICC(iccApproval.id).subscribe(data => {
+                    if (data.edApprovalDate && data.cfoApprovalDate) {
+                        this._riskAssessmentService.getRiskAssessment(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(risk => {
+                            this._riskAssessmentService._riskAssessment.next(risk);
                             this.redirect('/riskAssessment');
-                        }
-                    });
-                } else {
-                    this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment', 
-                        'OK', { duration: 7000 });
-                }
+                        }, 
+                        (error: HttpErrorResponse) => {
+                            if (error.status === 404) {
+                                this._riskAssessmentService._riskAssessment.next({ id: '' });
+                                this.redirect('/riskAssessment');
+                            }
+                        });
+                    } else {
+                        this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment', 
+                            'OK', { duration: 7000 });
+                    }
+                },
+                (error: HttpErrorResponse) => {
+                    this.showApprovalDateError(error);
+                })
             },
             (error: HttpErrorResponse) => {
                 this.showApprovalDateError(error);
             })
-        },
-        (error: HttpErrorResponse) => {
-            this.showApprovalDateError(error);
-        })
+        }
+        else {
+            this._matSnackBar.open('Please complete ICC In-pinciple approval before staarting Prelim Risk Assessment', 
+                'OK', { duration: 7000 });
+        }
     }
 
     private showApprovalDateError(error: HttpErrorResponse): void {
@@ -260,7 +270,10 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToApplicationFee()
      */
     redirectToApplicationFee(): void {
-        //if (this._service.selectedEnquiry.value.loanContractId === undefined) {
+        const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
+        console.log('functional status', functionalStatus);
+        console.log('this._iccApprovalService._iccApproval.value.workFlowStatusCode', this._riskAssessmentService._riskAssessment.value.workFlowStatusCode);
+        if (functionalStatus == 10 && this._riskAssessmentService._riskAssessment.value.workFlowStatusCode === '03') {
             this._applicationFeeService.getApplicationFee(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._applicationFeeService._applicationFee.next(response);
                 this.redirect('/applicationFee');
@@ -270,12 +283,11 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                     this.redirect('/applicationFee');
                 }
             })
-        //}
-        // else {
-        //     this._matSnackBar.open('Loan has already completed the enquiry phase ! ',
-        //         'OK', { duration: 7000 });
-        // }
-        // this.redirect('/iccApprovalStage');
+        }
+        else {
+            this._matSnackBar.open('Please complete Prelim Risk Assessment approval before starting Application Fee ',
+                'OK', { duration: 7000 });
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ import { AppService } from 'app/app.service';
 import { MatSnackBar } from '@angular/material';
 import { Location } from '@angular/common';
 import { ICCApprovalService } from './iccApproval.service';
+import { log } from 'console';
 
 
 @Component({
@@ -101,11 +102,17 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
                 this._matSnackBar.open('ICC Stage is sent for approval.', 'OK', { duration: 7000 });
             },
             error => {
+                console.log(error);
                 this.disableSendForApproval = false;
-                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-                    'OK', { duration: 7000 });
+                if (error.status === 500) {
+                    this._matSnackBar.open(error.error.message, 'OK', { duration: 9000 });
+                }
+                else {
+                    this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
+                        'OK', { duration: 7000 });    
+                }
             });
         this.disableSendForApproval = true;
-        this._location.back();
+        // this._location.back();
     }
 }

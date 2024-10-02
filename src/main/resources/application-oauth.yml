@@ -98,3 +98,8 @@ batch:
   loanAppraisalScheduledTaskUpdateLoanContractId: 5000000
   updateMainLoanPartner: 5000000
   initialDelay: 10000
+logging:
+  level:
+    org:
+      springframework:
+        web=DEBUG:
