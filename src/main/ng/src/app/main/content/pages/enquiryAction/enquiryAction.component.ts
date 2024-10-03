@@ -142,7 +142,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                     this.tabGroup.selectedIndex = 4;
                 }
                 this._matSnackBar.open('Data for enquiry completion is missing. Cannot send enquiry for approval.',
-                'OK', { duration: 7000 });
+                    'OK', { duration: 7000 });
             }
         })
     }

@@ -91,6 +91,7 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
                     this._matSnackBar.open('Deal, Guarantee, Timelines updated successfully.', 'OK', { duration: 7000 });
                 });
             }
+            this._dealGuaranteeTimelineForm.markAsPristine();
         }
     }
 
@@ -112,5 +113,6 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
             'otherProjectDetails': this._dealGuaranteeTimeline.otherProjectDetails || '',
             'environmentalSystemCategory': this._dealGuaranteeTimeline.environmentalSystemCategory || ''
         });
+        this._dealGuaranteeTimelineForm.markAsPristine();
     }
 }

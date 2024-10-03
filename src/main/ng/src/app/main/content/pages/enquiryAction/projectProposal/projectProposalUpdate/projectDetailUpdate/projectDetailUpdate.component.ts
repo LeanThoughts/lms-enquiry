@@ -188,6 +188,8 @@ export class ProjectDetailUpdateComponent {
                     this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
                 });
             }
+            // Set _projectDetailForm.dirty to false
+            this._projectDetailForm.markAsPristine();            
         }
     }
 
@@ -222,6 +224,8 @@ export class ProjectDetailUpdateComponent {
             'purposeOfLoan': this._projectDetail.purposeOfLoan || '',
             'projectType': this._projectDetail.projectType || ''
         });
+        // Set _projectDetailForm.dirty to false
+        this._projectDetailForm.markAsPristine();
     }
 
     /**

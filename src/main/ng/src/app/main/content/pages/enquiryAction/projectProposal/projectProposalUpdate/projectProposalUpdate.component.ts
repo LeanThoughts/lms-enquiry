@@ -1,9 +1,13 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTabChangeEvent } from '@angular/material';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../../enquiryAction.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { ProjectDetailUpdateComponent } from './projectDetailUpdate/projectDetailUpdate.component';
+import { ProjectCostUpdateComponent } from './projectCostUpdate/projectCostUpdate.component';
+import { ProjectProposalOtherDetailUpdateComponent } from './projectProposalOtherDetailUpdate/projectProposalOtherDetailUpdate.component';
+import { DealGuaranteeTimelineUpdateComponent } from './dealGuaranteeTimelineUpdate/dealGuaranteeTimelineUpdate.component';
 
 @Component({
   selector: 'fuse-project-proposal-update',
@@ -24,6 +28,11 @@ export class ProjectProposalUpdateComponent {
 
     private _loanApplication: any;
     
+    @ViewChild(ProjectDetailUpdateComponent) projectDetailUpdateComponent: ProjectDetailUpdateComponent;
+    @ViewChild(ProjectCostUpdateComponent) projectCostUpdateComponent: ProjectCostUpdateComponent;
+    @ViewChild(ProjectProposalOtherDetailUpdateComponent) projectProposalOtherDetailUpdateComponent: ProjectProposalOtherDetailUpdateComponent;
+    @ViewChild(DealGuaranteeTimelineUpdateComponent) dealGuaranteeTimelineUpdateComponent: DealGuaranteeTimelineUpdateComponent;
+
     /**
      * constructor()
      */
@@ -106,11 +115,74 @@ export class ProjectProposalUpdateComponent {
         }
     }
 
-    onFileSelect(event: any): void {
-        
-    }
-
+    /**
+     * onTabChange()
+     */
     onTabChange(event: MatTabChangeEvent): void {
-        console.log('tab change event is', event);
+        // Check if the project detail form has changes
+        if (this.projectDetailUpdateComponent._projectDetailForm.dirty && this.projectDetailUpdateComponent._projectDetailForm.touched) {
+
+            const currentFormValue = this.projectDetailUpdateComponent._projectDetailForm.value;
+            const initialFormValue = this.projectDetailUpdateComponent._projectDetail;
+            
+            const hasChanges = Object.keys(currentFormValue).some(key => 
+                JSON.stringify(currentFormValue[key]) !== JSON.stringify(initialFormValue[key])
+            );
+
+            if (hasChanges) {
+                console.warn('Project detail form has changes, submitting');
+                this.projectDetailUpdateComponent.submit();
+            } else {
+                console.log('No actual changes in the form');
+            }
+        }
+        
+        // Check if the project cost form has changes
+        if (this.projectCostUpdateComponent._projectCostForm.dirty && this.projectCostUpdateComponent._projectCostForm.touched) {
+            const currentFormValue = this.projectCostUpdateComponent._projectCostForm.value;
+            const initialFormValue = this.projectCostUpdateComponent._projectCost;
+            
+            const hasChanges = Object.keys(currentFormValue).some(key => 
+                JSON.stringify(currentFormValue[key]) !== JSON.stringify(initialFormValue[key])
+            );
+            if (hasChanges) {
+                console.warn('Project cost form has changes, submitting');
+                this.projectCostUpdateComponent.submit();
+            } else {
+                console.log('No actual changes in the form');
+            }
+        }
+
+        // Check if the project other detail form has changes
+        if (this.projectProposalOtherDetailUpdateComponent._otherDetailForm.dirty && this.projectProposalOtherDetailUpdateComponent._otherDetailForm.touched) {
+            const currentFormValue = this.projectProposalOtherDetailUpdateComponent._otherDetailForm.value;
+            const initialFormValue = this.projectProposalOtherDetailUpdateComponent._otherDetail;
+            
+            const hasChanges = Object.keys(currentFormValue).some(key => 
+                JSON.stringify(currentFormValue[key]) !== JSON.stringify(initialFormValue[key])
+            );
+            if (hasChanges) {
+                console.warn('Project other detail form has changes, submitting');
+                this.projectProposalOtherDetailUpdateComponent.submit();
+            } else {
+                console.log('No actual changes in the form');
+            }
+        }
+
+        // Check if the deal, guarantee, timeline form has changes
+        if (this.dealGuaranteeTimelineUpdateComponent._dealGuaranteeTimelineForm.dirty && this.dealGuaranteeTimelineUpdateComponent._dealGuaranteeTimelineForm.touched) {
+            const currentFormValue = this.dealGuaranteeTimelineUpdateComponent._dealGuaranteeTimelineForm.value;
+            const initialFormValue = this.dealGuaranteeTimelineUpdateComponent._dealGuaranteeTimeline;
+            
+            const hasChanges = Object.keys(currentFormValue).some(key => 
+                JSON.stringify(currentFormValue[key]) !== JSON.stringify(initialFormValue[key])
+            );
+            if (hasChanges) {
+                console.warn('Deal, guarantee, timeline form has changes, submitting');
+                this.dealGuaranteeTimelineUpdateComponent.submit();
+            } else {
+                console.log('No actual changes in the form');
+            }
+        }
     }
 }

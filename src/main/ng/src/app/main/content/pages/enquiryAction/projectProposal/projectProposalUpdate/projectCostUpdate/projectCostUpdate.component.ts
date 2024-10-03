@@ -113,6 +113,7 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
                 this._enquiryActionService.createProjectCost(formValues).subscribe(response => {
                     this._projectCost = response;
                     this._matSnackBar.open('Project cost created successfully.', 'OK', { duration: 7000 });
+                    this._projectCostForm.markAsPristine();
                 });
             }
             else {
@@ -152,6 +153,8 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
             this._projectCostForm.get('debtEquityRatio').setValue(this._projectCost.debtEquityRatio);
             this._projectCostForm.get('grantAmount').setValue(this._projectCost.grantAmount);
         }
+        this._projectCostForm.markAsPristine();
+
     }
 
     /**

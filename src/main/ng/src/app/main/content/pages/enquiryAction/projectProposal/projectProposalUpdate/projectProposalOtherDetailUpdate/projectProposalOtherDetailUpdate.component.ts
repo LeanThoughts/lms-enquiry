@@ -100,6 +100,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
                     this._matSnackBar.open('Other details updated successfully.', 'OK', { duration: 7000 });
                 });
             }
+            this._otherDetailForm.markAsPristine();
         }
     }
 
@@ -117,6 +118,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
             'tolTNWPercentage': this._otherDetail.tolTNWPercentage || '',
             'delayInDebtServicing': this._otherDetail.delayInDebtServicing || ''
         });
+        this._otherDetailForm.markAsPristine();
     }
 
     /**
