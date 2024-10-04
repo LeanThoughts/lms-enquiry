@@ -11,7 +11,7 @@
         <form [formGroup]="_collateralDetailUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <mat-select placeholder="Collateral Type" formControlName="collateralType" required>
+                    <mat-select placeholder="Collateral Type" formControlName="collateralType" >
                         <mat-option *ngFor="let type of collateralTypes" [value]="type.Code">
                             {{ type.Value }}
                         </mat-option>
@@ -20,7 +20,7 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Collateral Details" formControlName="details" maxlength="200" required>
+                    <input matInput placeholder="Collateral Details" formControlName="details" maxlength="200" >
                 </mat-form-field>
             </div>
 

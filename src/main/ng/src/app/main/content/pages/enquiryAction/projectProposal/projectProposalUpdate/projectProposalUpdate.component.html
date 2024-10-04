@@ -26,7 +26,7 @@
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
                     <mat-form-field fxFlex="25">
-                        <mat-select placeholder="Status" formControlName="proposalStatus">
+                        <mat-select placeholder="Status" formControlName="proposalStatus" required>
                             <mat-option [value]="'Final'">Final</mat-option>
                             <mat-option [value]="'Draft'">Draft</mat-option>
                         </mat-select>
