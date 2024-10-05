@@ -116,6 +116,13 @@ export class ProjectProposalUpdateComponent {
     }
 
     /**
+     * onFileSelect()
+     * Retain this method for future and to avoid production build issues
+     */
+    onFileSelect(event: any): void {
+    }
+
+    /**
      * onTabChange()
      */
     onTabChange(event: MatTabChangeEvent): void {
