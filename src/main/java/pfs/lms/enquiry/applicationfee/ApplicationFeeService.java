@@ -46,8 +46,10 @@ public class ApplicationFeeService implements IApplicationFeeService {
         oldLoanApplication = loanApplication.clone();
 
 
-        loanApplication.setFunctionalStatus(2);
-        loanApplication.setFunctionalStatusDescription("ICC In-Principle Approved");
+        loanApplication.setFunctionalStatus(11);
+        loanApplication.setFunctionalStatusDescription("Application Fee Stage");
+
+        loanApplicationRepository.save(loanApplication);
 
         // Change Documents for Loan Application
         changeDocumentService.createChangeDocument(
@@ -55,14 +57,11 @@ public class ApplicationFeeService implements IApplicationFeeService {
                 loanApplication.getId().toString(),
                 loanApplication.getId().toString(),
                 loanApplication.getEnquiryNo().getId().toString(),
-                loanApplication,
                 oldLoanApplication,
+                loanApplication,
                 "Updated",
                 username,
                 "LoanApplication", "LoanApplication" );
-
-        loanApplicationRepository.save(loanApplication);
-
         return applicationFee;
     }
 

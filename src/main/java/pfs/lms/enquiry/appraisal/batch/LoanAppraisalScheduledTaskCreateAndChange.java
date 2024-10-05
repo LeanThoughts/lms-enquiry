@@ -424,7 +424,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      projectData = projectDataRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
                      loanAppraisal = loanAppraisalRepository.getOne( projectData.getLoanAppraisal().getId());
 
-                     log.info("Attempting to Post Appraisal Project Data Completion to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString()
+                     log.info("Attempting to Post Appraisal Project Data Completion to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanApplication().getLoanContractId().toString()
                              + "Loan Contract: " + projectData.getLoanAppraisal().getLoanApplication().getLoanContractId());
 
 
