@@ -543,7 +543,7 @@ public class WorkflowService implements IWorkflowService {
                 applicationFeeRepository.save(applicationFee);
                 applicationFeeRepository.flush();
                 applicationFeeService.processApprovedApplicationFee(applicationFee, username);
-                return enquiryAction;
+                return applicationFee;
             case "Board Approval":
                 //Save entity with the new workflow status code
                 boardApproval.setWorkFlowStatusDescription("Approved");

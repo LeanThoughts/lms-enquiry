@@ -114,7 +114,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
     ChangeDocument changeDocument;
 
     @Autowired
-    LoanApplicationRepository loanApplicationRepository;
+    private  final LoanApplicationRepository loanApplicationRepository;
     @Autowired
     LoanAppraisalRepository loanAppraisalRepository;
 
@@ -828,8 +828,8 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
                 case "ProjectCost":
                     ProjectCost projectCost = (ProjectCost) object;
-                    result.put("id", projectCost.getProjectCost().toString());
-                    result.put("description", projectCost.getProjectCost().toString());
+                    result.put("id", projectCost.getId().toString());
+                    result.put("description", projectCost.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString());
                     result.put("loanApplication",projectCost.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "ShareHolder":
@@ -1011,7 +1011,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                          String businessProcessName, String subProcessName) {
 
         Map<String, Object> result = getObjectDetails(changedObject.getClass().getSimpleName(), changedObject);
-
+        loanApplicationRepository.flush();
 
         //ChangeDocument changeDocument = new ChangeDocument();
         changeDocument.setLoanBusinessProcessObjectId(loanBusinessProcessObjectId);
@@ -1038,7 +1038,8 @@ public class ChangeDocumentService implements IChangeDocumentService {
         changeDocument.setEnitityId(entityId);
         changeDocument.setMainEntityId(mainEntityId);
         changeDocument.setUserName(userName);
-
+        log.info("businessProcessName: " + businessProcessName);
+        log.info("subProcessName     : " + subProcessName);
         changeDocument.setTableKey((String)result.get("description"));
 
         return changeDocument;
