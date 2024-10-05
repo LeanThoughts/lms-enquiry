@@ -227,14 +227,14 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
         console.log('functional status', functionalStatus);
         console.log('this._iccApprovalService._iccApproval.value.workFlowStatusCode', this._iccApprovalService._iccApproval.value.workFlowStatusCode);
-        if (functionalStatus == 2 && this._iccApprovalService._iccApproval.value.workFlowStatusCode === '03') {
+        if (functionalStatus === 2 && this._iccApprovalService._iccApproval.value.workFlowStatusCode === 3 ) {
                 this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(iccApproval => {
                 this._iccApprovalService.getApprovalByICC(iccApproval.id).subscribe(data => {
                     if (data.edApprovalDate && data.cfoApprovalDate) {
                         this._riskAssessmentService.getRiskAssessment(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(risk => {
                             this._riskAssessmentService._riskAssessment.next(risk);
                             this.redirect('/riskAssessment');
-                        }, 
+                        },
                         (error: HttpErrorResponse) => {
                             if (error.status === 404) {
                                 this._riskAssessmentService._riskAssessment.next({ id: '' });
@@ -242,7 +242,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
-                        this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment', 
+                        this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment',
                             'OK', { duration: 7000 });
                     }
                 },
@@ -255,14 +255,14 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             })
         }
         else {
-            this._matSnackBar.open('Please complete ICC In-pinciple approval before staarting Prelim Risk Assessment', 
+            this._matSnackBar.open('Please complete ICC In-pinciple approval before staarting Prelim Risk Assessment',
                 'OK', { duration: 7000 });
         }
     }
 
     private showApprovalDateError(error: HttpErrorResponse): void {
         if (error.status === 404) {
-            this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment', 
+            this._matSnackBar.open('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment',
                 'OK', { duration: 7000 });
         }
     }
@@ -273,7 +273,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
         console.log('functional status', functionalStatus);
         console.log('this._iccApprovalService._iccApproval.value.workFlowStatusCode', this._riskAssessmentService._riskAssessment.value.workFlowStatusCode);
-        if (functionalStatus == 10 && this._riskAssessmentService._riskAssessment.value.workFlowStatusCode === '03') {
+        if (functionalStatus === 10 && this._riskAssessmentService._riskAssessment.value.workFlowStatusCode === 3) {
             this._applicationFeeService.getApplicationFee(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._applicationFeeService._applicationFee.next(response);
                 this.redirect('/applicationFee');

@@ -193,10 +193,35 @@ public class ProjectProposalService implements IProjectProposalService {
         ProjectProposalOtherDetail projectProposalOtherDetail     = projectProposalOtherDetailRepository.findByProjectProposalId(projectProposal.getId());
         EnquiryCompletion enquiryCompletion = enquiryCompletionRepository.findByEnquiryActionId(projectProposal.getEnquiryAction().getId());
 
-        loanApplication.setProjectName(projectDetail.getProjectName());
-        loanApplication.setPromoterName(projectDetail.getPromoterName());
-        loanApplication.setProjectLocationState(projectDetail.getState());
-        loanApplication.setProjectDistrict(projectDetail.getDistrict());
+        if (projectDetail != null) {
+            loanApplication.setProjectName(projectDetail.getProjectName());
+            loanApplication.setPromoterName(projectDetail.getPromoterName());
+            loanApplication.setProjectLocationState(projectDetail.getState());
+            loanApplication.setProjectDistrict(projectDetail.getDistrict());
+            loanApplication.setLoanType(projectDetail.getLoanType());
+            loanApplication.setLoanClass(projectDetail.getLoanClass());
+            loanApplication.setFinancingType(projectDetail.getFinancingType());
+            loanApplication.setAssistanceType(projectDetail.getAssistanceType());
+            loanApplication.setProjectType(projectDetail.getProjectType());
+            loanApplication.setProjectCoreSector(projectDetail.getProjectTypeCoreSector());
+            loanApplication.setLoanPurpose(projectDetail.getLoanPurpose()); // Demand Letter Text
+            loanApplication.setPurposeOfLoan(projectDetail.getPurposeOfLoan());
+            loanApplication.setRenewableFlag(projectDetail.getRenewableFlag());
+            loanApplication.setPolicyExposure(projectDetail.getPolicyExposure());
+
+            loanApplication.setProjectCapacity(projectDetail.getProjectCapacity());
+            loanApplication.setProjectCapacityUnit(projectDetail.getProjectCapacityUnit());
+
+            loanApplication.setEndUseOfFunds(projectDetail.getEndUseOfFunds());
+            loanApplication.setFees(projectDetail.getFees());
+            loanApplication.setExpectedInterestRate(projectDetail.getRoi());
+            loanApplication.setTenorYear(projectDetail.getTenorYear());
+            loanApplication.setTenorMonth(projectDetail.getTenorMonths());
+            loanApplication.setMoratoriumPeriod(projectDetail.getMoratoriumPeriod());
+            loanApplication.setMoratoriumPeriodUnit(projectDetail.getMoratoriumPeriodUnit());
+            loanApplication.setConstructionPeriod(projectDetail.getConstructionPeriod());
+            loanApplication.setConstructionPeriodUnit(projectDetail.getConstructionPeriodUnit()); }
+
 
         if (enquiryCompletion!= null) {
             loanApplication.setProductCode(enquiryCompletion.getProductType());
@@ -206,30 +231,9 @@ public class ProjectProposalService implements IProjectProposalService {
             loanApplication.setEnquiryRemarks(enquiryCompletion.getRemarks());
         }
 
-        loanApplication.setLoanType(projectDetail.getLoanType());
-        loanApplication.setLoanClass(projectDetail.getLoanClass());
-        loanApplication.setFinancingType(projectDetail.getFinancingType());
-        loanApplication.setAssistanceType(projectDetail.getAssistanceType());
-        loanApplication.setProjectType(projectDetail.getProjectType());
-        loanApplication.setProjectCoreSector(projectDetail.getProjectTypeCoreSector());
-        loanApplication.setLoanPurpose(projectDetail.getLoanPurpose()); // Demand Letter Text
-        loanApplication.setPurposeOfLoan(projectDetail.getPurposeOfLoan());
 
-        loanApplication.setRenewableFlag(projectDetail.getRenewableFlag());
-        loanApplication.setPolicyExposure(projectDetail.getPolicyExposure());
 
-        loanApplication.setProjectCapacity(projectDetail.getProjectCapacity());
-        loanApplication.setProjectCapacityUnit(projectDetail.getProjectCapacityUnit());
 
-        loanApplication.setEndUseOfFunds(projectDetail.getEndUseOfFunds());
-        loanApplication.setFees(projectDetail.getFees());
-        loanApplication.setExpectedInterestRate(projectDetail.getRoi());
-        loanApplication.setTenorYear(projectDetail.getTenorYear());
-        loanApplication.setTenorMonth(projectDetail.getTenorMonths());
-        loanApplication.setMoratoriumPeriod(projectDetail.getMoratoriumPeriod());
-        loanApplication.setMoratoriumPeriodUnit(projectDetail.getMoratoriumPeriodUnit());
-        loanApplication.setConstructionPeriod(projectDetail.getConstructionPeriod());
-        loanApplication.setConstructionPeriodUnit(projectDetail.getConstructionPeriodUnit());
 
         if (projectCost != null) {
             loanApplication.setProjectCost(projectCost.getProjectCost());
