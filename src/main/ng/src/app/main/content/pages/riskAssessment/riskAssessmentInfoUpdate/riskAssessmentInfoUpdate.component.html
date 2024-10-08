@@ -11,7 +11,8 @@
         <form [formGroup]="riskAssessmentForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date of Assessment" formControlName="dateOfAssessment" readonly>
+                    <input matInput [matDatepicker]="picker2" [min]="approvalByIcc.meetingDate" placeholder="Date of Assessment" 
+                            formControlName="dateOfAssessment" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
@@ -23,7 +24,8 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker3" placeholder="MD Approval Date" formControlName="mdApprovalDate" readonly>
+                    <input matInput [matDatepicker]="picker3" [min]="riskAssessmentForm.get('dateOfAssessment').value" placeholder="MD Approval Date" 
+                            formControlName="mdApprovalDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker> 
                 </mat-form-field>

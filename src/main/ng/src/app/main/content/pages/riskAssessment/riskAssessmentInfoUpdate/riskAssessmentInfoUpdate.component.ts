@@ -3,6 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { RiskAssessmentService } from '../riskAssessment.service';
+import { ICCApprovalService } from '../../iccApproval/iccApproval.service';
 
 @Component({
     selector: 'fuse-preliminary-risk-assessment-update-dialog',
@@ -20,12 +21,14 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
     preliminaryRiskAssessment: any;
     riskAssessmentForm: FormGroup;
 
+    approvalByIcc: any;
+
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _riskAssessmentService: RiskAssessmentService,
         public _dialogRef: MatDialogRef<PreliminaryRiskAssessmentUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _iccApprovalService: ICCApprovalService) {
 
         // Fetch selected reason details from the dialog's data attribute.
         this.preliminaryRiskAssessment = Object.assign({}, _dialogData.preliminaryRiskAssessment);
@@ -34,6 +37,13 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
         if (this.preliminaryRiskAssessment.id !== undefined) {
             this.dialogTitle = 'Modify Preliminary Risk Assessment Details';
         }
+
+        _iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(response => {
+            _iccApprovalService.getApprovalByICC(response.id).subscribe(data => {
+                this.approvalByIcc = data;
+                console.log('approval by icc is', this.approvalByIcc);
+            })
+        });
 
         this.riskAssessmentForm = this._formBuilder.group({
             dateOfAssessment: [this.preliminaryRiskAssessment.dateOfAssessment],
