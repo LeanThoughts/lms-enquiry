@@ -21,4 +21,8 @@ public class PreliminaryRiskAssessmentResource {
     private String remarksByRiskDepartment;
     private LocalDate mdApprovalDate;
     private String remarks;
+
+    private String documentTitle;
+    private String documentType;
+    private String fileReference;
 }

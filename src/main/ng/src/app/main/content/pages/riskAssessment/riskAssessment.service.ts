@@ -49,6 +49,13 @@ export class RiskAssessmentService implements Resolve<any> {
     }
 
     /**
+     * uploadVaultDocument()
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/upload', file);
+    }    
+    
+    /**
      * sendAppraisalForApproval()
      */
     public sendRiskAssessmentForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {

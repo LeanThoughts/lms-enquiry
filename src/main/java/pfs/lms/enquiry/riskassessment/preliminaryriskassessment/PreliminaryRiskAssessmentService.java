@@ -55,6 +55,9 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
         preliminaryRiskAssessment.setMdApprovalDate(preliminaryRiskAssessmentResource.getMdApprovalDate());
         preliminaryRiskAssessment.setRemarksByRiskDepartment(preliminaryRiskAssessmentResource.getRemarksByRiskDepartment());
         preliminaryRiskAssessment.setRemarks(preliminaryRiskAssessmentResource.getRemarks());
+        preliminaryRiskAssessment.setDocumentTitle(preliminaryRiskAssessmentResource.getDocumentTitle());
+        preliminaryRiskAssessment.setDocumentType(preliminaryRiskAssessmentResource.getDocumentType());
+        preliminaryRiskAssessment.setFileReference(preliminaryRiskAssessmentResource.getFileReference());
         preliminaryRiskAssessment = preliminaryRiskAssessmentRepository.save(preliminaryRiskAssessment);
         changeDocumentService.createChangeDocument(
                 preliminaryRiskAssessment.getId(),
@@ -83,6 +86,10 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
         preliminaryRiskAssessment.setMdApprovalDate(preliminaryRiskAssessmentResource.getMdApprovalDate());
         preliminaryRiskAssessment.setRemarksByRiskDepartment(preliminaryRiskAssessmentResource.getRemarksByRiskDepartment());
         preliminaryRiskAssessment.setRemarks(preliminaryRiskAssessmentResource.getRemarks());
+        preliminaryRiskAssessment.setDocumentTitle(preliminaryRiskAssessmentResource.getDocumentTitle());
+        preliminaryRiskAssessment.setDocumentType(preliminaryRiskAssessmentResource.getDocumentType());
+        preliminaryRiskAssessment.setFileReference(preliminaryRiskAssessmentResource.getFileReference());
+
         preliminaryRiskAssessment = preliminaryRiskAssessmentRepository.save(preliminaryRiskAssessment);
 
         // Change Documents for  Loan Partner

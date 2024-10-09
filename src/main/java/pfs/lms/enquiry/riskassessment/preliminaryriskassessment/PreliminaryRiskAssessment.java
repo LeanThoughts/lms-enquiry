@@ -28,6 +28,10 @@ public class PreliminaryRiskAssessment extends AggregateRoot<PreliminaryRiskAsse
     private LocalDate mdApprovalDate;
     private String remarks;
 
+    private String documentTitle;
+    private String documentType;
+    private String fileReference;
+
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }
