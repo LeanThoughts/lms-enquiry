@@ -17,7 +17,8 @@
             <ng-container matColumnDef="value">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Value</mat-header-cell>
                 <mat-cell *matCellDef="let obj">
-                    <p class="text-truncate">{{ obj.value }}</p>
+                    <a *ngIf="obj.particulars === 'Document'" [href]="getFileURL(obj.fileReference)">Download</a>
+                    <p *ngIf="obj.particulars !== 'Document'" class="text-truncate">{{ obj.value }}</p>
                 </mat-cell>
             </ng-container>
 

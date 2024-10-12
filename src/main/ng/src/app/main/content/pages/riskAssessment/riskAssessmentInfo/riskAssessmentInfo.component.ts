@@ -45,10 +45,18 @@ export class PreliminaryRiskAssessmentComponent {
             tableData.push({particulars: 'Remarks By Risk Department', value: this.preliminaryRiskAssessment.remarksByRiskDepartment});
             tableData.push({particulars: 'MD Approval Date', value: this.preliminaryRiskAssessment.mdApprovalDate});
             tableData.push({particulars: 'Remarks', value: this.preliminaryRiskAssessment.remarks});
+            tableData.push({particulars: 'Document', value: this.preliminaryRiskAssessment.fileReference});
             this.dataSource = new MatTableDataSource(tableData);
         });
     }
 
+    /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string) {
+        return 'enquiry/api/download/' + fileReference;
+    }    
+    
     /**
      * update()
      */

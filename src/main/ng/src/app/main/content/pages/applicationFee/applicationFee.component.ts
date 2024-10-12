@@ -91,21 +91,28 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
      * sendAppraisalForApproval()
      */
     sendForApproval(): void {
-        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-        let email = this._appService.currentUser.email;
-        this._matSnackBar.open('Please wait while attempting to send application fee details for approval.', 'OK', { duration: 25000 });
-        this._applicationFeeService.sendApplicationFeeForApproval(this.applicationFee.id, name, email).subscribe(
-            response => {
-                this.applicationFee = response;
-                this._matSnackBar.dismiss();
-                this._matSnackBar.open('Application Fee is sent for approval.', 'OK', { duration: 7000 });
+        if (this.applicationFee.id) {
+            this._applicationFeeService.getInvoicingDetails(this.applicationFee.id).subscribe(response => {
+                let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+                let email = this._appService.currentUser.email;
+                this._matSnackBar.open('Please wait while attempting to send application fee details for approval.', 'OK', { duration: 25000 });
+                this._applicationFeeService.sendApplicationFeeForApproval(this.applicationFee.id, name, email).subscribe(
+                response => {
+                    this.applicationFee = response;
+                    this._matSnackBar.dismiss();
+                    this._matSnackBar.open('Application Fee is sent for approval.', 'OK', { duration: 7000 });
+                },
+                error => {
+                    this.disableSendForApproval = false;
+                    this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
+                        'OK', { duration: 7000 });
+                });
+                this.disableSendForApproval = true;
+                this._location.back();
             },
             error => {
-                this.disableSendForApproval = false;
-                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-                    'OK', { duration: 7000 });
+                this._matSnackBar.open('Please complete Customer and Invoicing details before sending for approval', 'OK', { duration: 7000 });
             });
-        this.disableSendForApproval = true;
-        this._location.back();
+        }
     }
 }

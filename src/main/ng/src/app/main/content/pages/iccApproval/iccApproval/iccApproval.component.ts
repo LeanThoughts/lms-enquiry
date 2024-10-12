@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ICCApprovalService } from '../iccApproval.service';
 import { ICCApprovalUpdateDialogComponent } from '../iccApprovalUpdate/iccApprovalUpdate.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'fuse-icc-approval-meeting',
@@ -30,7 +31,7 @@ export class ICCApprovalMeetingComponent {
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
-                    private _matSnackBar: MatSnackBar) {
+                    private _matSnackBar: MatSnackBar, private _datePipe: DatePipe) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
@@ -43,11 +44,15 @@ export class ICCApprovalMeetingComponent {
         this._iccApprovalService.getApprovalByICC(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
             this.selectedICCApproval = data;
             let tableData = [];
+
             tableData.push({particulars: 'Meeting Number', value: this.selectedICCApproval.meetingNumber});
             tableData.push({particulars: 'Remarks', value: this.selectedICCApproval.remarks});
-            tableData.push({particulars: 'Meeting Date', value: this.selectedICCApproval.meetingDate});
-            tableData.push({particulars: 'ED Approval Date', value: this.selectedICCApproval.meetingDate});
-            tableData.push({particulars: 'CFO Approval Date', value: this.selectedICCApproval.meetingDate});
+            tableData.push({particulars: 'Meeting Date', value: 
+                this._datePipe.transform(this.selectedICCApproval.meetingDate, 'dd/MM/yyyy')});
+            tableData.push({particulars: 'ED Approval Date', value: 
+                this._datePipe.transform(this.selectedICCApproval.edApprovalDate, 'dd/MM/yyyy')});
+            tableData.push({particulars: 'CFO Approval Date', value: 
+                this._datePipe.transform(this.selectedICCApproval.cfoApprovalDate, 'dd/MM/yyyy')});
             this.dataSource = new MatTableDataSource(tableData);
         });
     }

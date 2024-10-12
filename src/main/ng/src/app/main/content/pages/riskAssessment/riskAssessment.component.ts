@@ -104,12 +104,12 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * sendAppraisalForApproval()
+     * sendPrelimRiskAssessmentForApproval()
      */
-     sendAppraisalForApproval(): void {
+     sendPrelimRiskAssessmentForApproval(): void {
         let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
         let email = this._appService.currentUser.email;
-        this._matSnackBar.open('Please wait while attempting to send the appraisal for approval.', 'OK', { duration: 25000 });
+        this._matSnackBar.open('Please wait while attempting to send the Prelim Risk Assessment for approval.', 'OK', { duration: 25000 });
         this._riskAssessmentService.sendRiskAssessmentForApproval(this.riskAssessment.id, name, email).subscribe(
             response => {
                 this.riskAssessment = response;
