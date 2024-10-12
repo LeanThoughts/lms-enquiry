@@ -114,5 +114,8 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
                 this._matSnackBar.open('Please complete Customer and Invoicing details before sending for approval', 'OK', { duration: 7000 });
             });
         }
+        else {
+            this._matSnackBar.open('Please complete Customer and Invoicing details before sending for approval', 'OK', { duration: 7000 });
+        }
     }
 }

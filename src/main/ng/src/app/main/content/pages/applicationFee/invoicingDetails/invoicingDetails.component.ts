@@ -132,6 +132,9 @@ export class InvoicingDetailsComponent implements OnInit {
                     this._applicationFeeService.createInvoicingDetail(invoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing deails created successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;
+                    this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                        this._applicationFeeService._applicationFee.next(data);
+                    });
                 });
             }
             else {
