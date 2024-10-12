@@ -577,63 +577,69 @@ public class LoanApplicationContoller {
 
         List<LoanApplication> loanApplications = new ArrayList<>(loanApplicationService.searchLoans(request, pageable));
 
-        if (resource.getEnquiryDateTo() == null) {
-            if (resource.getEnquiryDateFrom() != null) {
-                resource.setEnquiryDateTo(resource.getEnquiryDateFrom().plusDays(1));
+        try {
 
+            if (resource.getEnquiryDateTo() == null) {
+                if (resource.getEnquiryDateFrom() != null) {
+                    resource.setEnquiryDateTo(resource.getEnquiryDateFrom().plusDays(1));
+
+                }
             }
-        }
 
-        if (resource.getEnquiryDateFrom() != null && resource.getEnquiryDateTo() != null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanEnquiryDate() !=null).collect(Collectors.toList());
-            loanApplications = loanApplications.stream()
-                    .filter(loanApplication -> (
-                            loanApplication.getLoanEnquiryDate().isAfter(resource.getEnquiryDateFrom()) || loanApplication.getLoanEnquiryDate().equals(resource.getEnquiryDateFrom())) &&
-                            (loanApplication.getLoanEnquiryDate().isBefore(resource.getEnquiryDateTo()) || loanApplication.getLoanEnquiryDate().equals(resource.getEnquiryDateTo())))
-                    .collect(Collectors
-                            .toList());
-        }
+            if (resource.getEnquiryDateFrom() != null && resource.getEnquiryDateTo() != null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanEnquiryDate() != null).collect(Collectors.toList());
+                loanApplications = loanApplications.stream()
+                        .filter(loanApplication -> (
+                                loanApplication.getLoanEnquiryDate().isAfter(resource.getEnquiryDateFrom()) || loanApplication.getLoanEnquiryDate().equals(resource.getEnquiryDateFrom())) &&
+                                (loanApplication.getLoanEnquiryDate().isBefore(resource.getEnquiryDateTo()) || loanApplication.getLoanEnquiryDate().equals(resource.getEnquiryDateTo())))
+                        .collect(Collectors
+                                .toList());
+            }
 
-        if (resource.getEnquiryDateFrom() != null && resource.getEnquiryDateTo() == null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanEnquiryDate() !=null).collect(Collectors.toList());
+            if (resource.getEnquiryDateFrom() != null && resource.getEnquiryDateTo() == null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanEnquiryDate() != null).collect(Collectors.toList());
 
-            loanApplications = loanApplications.stream()
-                    .filter(loanApplication -> (
-                            loanApplication.getLoanEnquiryDate().isEqual(resource.getEnquiryDateFrom())))
-                    .collect(Collectors
-                            .toList());
-        }
-        if (resource.getEnquiryNoTo() == null) {
-           resource.setEnquiryNoTo(resource.getEnquiryNoFrom());
-        }
+                loanApplications = loanApplications.stream()
+                        .filter(loanApplication -> (
+                                loanApplication.getLoanEnquiryDate().isEqual(resource.getEnquiryDateFrom())))
+                        .collect(Collectors
+                                .toList());
+            }
+            if (resource.getEnquiryNoTo() == null) {
+                resource.setEnquiryNoTo(resource.getEnquiryNoFrom());
+            }
 
-        if (resource.getEnquiryNoFrom() != null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() != null).collect(Collectors.toList());
+            if (resource.getEnquiryNoFrom() != null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() != null).collect(Collectors.toList());
 
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() != null &&
-                    ( loanApplication.getEnquiryNo().getId() >= resource.getEnquiryNoFrom()
-                            && loanApplication.getEnquiryNo().getId() <= resource.getEnquiryNoTo())).collect(Collectors.toList());
-        }
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() != null &&
+                        (loanApplication.getEnquiryNo().getId() >= resource.getEnquiryNoFrom()
+                                && loanApplication.getEnquiryNo().getId() <= resource.getEnquiryNoTo())).collect(Collectors.toList());
+            }
 
-        if (resource.getEnquiryNoTo() != null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo() != null).collect(Collectors.toList());
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() <=
-                    resource.getEnquiryNoTo()).collect(Collectors.toList());
-        }
+            if (resource.getEnquiryNoTo() != null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo() != null).collect(Collectors.toList());
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getEnquiryNo().getId() <=
+                        resource.getEnquiryNoTo()).collect(Collectors.toList());
+            }
 
-        if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() == null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
-                    && !loanApplication.getLoanContractId().isEmpty())
-                    .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberFrom() + "")).collect(Collectors.toList());
-        } else if (resource.getLoanNumberFrom() == null && resource.getLoanNumberTo() != null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
-                    && !loanApplication.getLoanContractId().isEmpty())
-                    .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberTo() + "")).collect(Collectors.toList());
-        } else if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() != null) {
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) >=
-                    resource.getLoanNumberFrom()).collect(Collectors.toList());
-            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) <=
-                    resource.getLoanNumberTo()).collect(Collectors.toList());
+            if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() == null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
+                                && !loanApplication.getLoanContractId().isEmpty())
+                        .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberFrom() + "")).collect(Collectors.toList());
+            } else if (resource.getLoanNumberFrom() == null && resource.getLoanNumberTo() != null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null
+                                && !loanApplication.getLoanContractId().isEmpty())
+                        .filter(loanApplication -> loanApplication.getLoanContractId().contains(resource.getLoanNumberTo() + "")).collect(Collectors.toList());
+            } else if (resource.getLoanNumberFrom() != null && resource.getLoanNumberTo() != null) {
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) >=
+                        resource.getLoanNumberFrom()).collect(Collectors.toList());
+                loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanContractId() != null && !loanApplication.getLoanContractId().isEmpty()).filter(loanApplication -> new Integer(loanApplication.getLoanContractId()) <=
+                        resource.getLoanNumberTo()).collect(Collectors.toList());
+            }
+        }catch ( Exception ex){
+            log.error(ex.getMessage());
+            log.error(ex.getStackTrace().toString());
         }
 
         if (resource.getPartyName() != null) {
@@ -709,6 +715,8 @@ public class LoanApplicationContoller {
 
         List<LoanApplicationResource> resources = new ArrayList<>(0);
 
+        log.info("Search Loan Applications - No. of loans found : " + loanApplications.size());
+
 
         loanApplications.forEach(loanApplication -> {
             Partner partner = new Partner();
@@ -748,6 +756,7 @@ public class LoanApplicationContoller {
                 }
                 LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
+
 
                 resources.add(loanApplicationResource);
 
