@@ -59,14 +59,14 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                     obj = applicationFeeRepository.save(obj);
 
                     // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Appraisal", "Header");
 
                     return obj;
                 });

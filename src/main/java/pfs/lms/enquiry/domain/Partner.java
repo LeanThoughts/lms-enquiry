@@ -1,7 +1,6 @@
 package pfs.lms.enquiry.domain;
 
 import lombok.*;
-import org.hibernate.annotations.IndexColumn;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -14,7 +13,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class Partner extends AggregateRoot<Partner>{
+public class Partner extends AggregateRoot<Partner> implements Cloneable{
 
     private Integer partyNumber;
 
@@ -156,4 +155,7 @@ public class Partner extends AggregateRoot<Partner>{
         this.getPartnerContacts().add(partnerContact);
     }
 
+    public Object clone () throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

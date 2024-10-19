@@ -425,7 +425,16 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("description", loanApplication.getProjectName());
                     result.put("loanApplication",loanApplication );
                     return result;
-                    case "LoanMonitor":
+                case "Partner":
+                    Partner partner = (Partner) object;
+                    if (partner.getPartyNumber() == null)
+                        result.put("id", partner.getPartyNumber().toString());
+                    else
+                        result.put("id", partner.getId().toString());
+                    result.put("description", partner.getPartyName1());
+                    result.put("loanApplication",partner );
+                    return result;
+                case "LoanMonitor":
                         LoanMonitor loanMonitor = (LoanMonitor) object;
                     result.put("id", loanMonitor.getLoanApplication().getLoanContractId().toString());
                     result.put("description", loanMonitor.getLoanApplication().getProjectName());

@@ -449,7 +449,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      proposalDetail = proposalDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
                      loanAppraisal = loanAppraisalRepository.getOne( proposalDetail.getLoanAppraisal().getId());
 
-                     log.info("Attempting to Post Appraisal Proposal Details to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanContractId().toString()
+                     log.info("Attempting to Post Appraisal Proposal Details to SAP AT :" + dateFormat.format(new Date()) + loanAppraisal.getLoanApplication().getEnquiryNo().getId().toString()
                              + "Loan Contract: " + proposalDetail.getLoanAppraisal().getLoanApplication().getLoanContractId());
 
 
@@ -474,7 +474,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      try {
                          loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
                      } catch (Exception ex) {
-                         log.error("Error Replicating Loan Partner to SAP : " + loanPartner.getBusinessPartnerId() + " Contract Id :" + loanAppraisal.getLoanContractId());
+                         log.error("Error Replicating Loan Partner to SAP : " + loanPartner.getBusinessPartnerName()
+                                 + " Enquiry Id :" + loanAppraisal.getLoanApplication().getEnquiryNo().getId().toString());
                      }
                      if (loanAppraisal.getLoanContractId() == null)
                          continue;

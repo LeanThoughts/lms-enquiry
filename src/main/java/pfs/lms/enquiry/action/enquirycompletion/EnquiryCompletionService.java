@@ -48,6 +48,11 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
         enquiryCompletion.setDate(resource.getDate());
         enquiryCompletion = enquiryCompletionRepository.save(enquiryCompletion);
 
+        loanApplication.setEnquiryCompletionDate(enquiryCompletion.getDate());
+        loanApplication.setTerm(enquiryCompletion.getTerm());
+        loanApplication.setProductCode(enquiryCompletion.getProductType());
+        loanApplicationRepository.save(loanApplication);
+
         // Change Documents for Enquiry Completion
         changeDocumentService.createChangeDocument(
                 enquiryCompletion.getEnquiryAction().getId(),

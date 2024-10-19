@@ -15,7 +15,7 @@ public interface IWorkflowService {
     public Object startWorkflowProcessInstance (UUID businessProcessId,
                                                      String requestorName,
                                                      String requestorEmail,
-                                                     String processName) throws HandledException;
+                                                     String processName) throws HandledException, CloneNotSupportedException;
 
 
     public Object approveTask(String processInstanceId, UUID businessProcessId, String processName, String userName) throws Exception;

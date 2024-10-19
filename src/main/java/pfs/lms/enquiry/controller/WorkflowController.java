@@ -60,7 +60,7 @@ public class WorkflowController {
     // Start Workflow Process
     @PutMapping("/startprocess")
     public ResponseEntity<Object> startProcess(@RequestBody WorkflowRequestResource workflowRequestResource,
-                                               HttpServletRequest httpServletRequest) throws HandledException {
+                                               HttpServletRequest httpServletRequest) throws HandledException, CloneNotSupportedException {
 
 
         Object processObject = workflowService.startWorkflowProcessInstance(

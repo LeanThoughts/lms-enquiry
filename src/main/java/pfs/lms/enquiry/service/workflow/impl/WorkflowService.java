@@ -128,7 +128,7 @@ public class WorkflowService implements IWorkflowService {
     public Object startWorkflowProcessInstance(UUID businessProcessId,
                                                String requestorName,
                                                String requestorEmail,
-                                               String processName) throws HandledException {
+                                               String processName) throws HandledException, CloneNotSupportedException {
 
 
         Map<String, Object> variables = new HashMap<>();
@@ -331,6 +331,7 @@ public class WorkflowService implements IWorkflowService {
             case "ApplicationFee":
                 //Save entity with the Process Instance and workflow status code
                 applicationFee.setProcessInstanceId(processInstanceId);
+                applicationFeeService.processApprovedApplicationFee(applicationFee, username);
                 applicationFee = applicationFeeRepository.save(applicationFee);
                 return applicationFee;
             case "BoardApproval":
