@@ -384,9 +384,9 @@ public class Initializer implements CommandLineRunner {
             at4 = new AssistanceType("C", "CCD");
             assistanceTypeRepository.save(at4);
         }
-        assistanceTypeRepository.save(new AssistanceType("PL", "Project Loan"));
-        assistanceTypeRepository.save(new AssistanceType("TL", "Term Loan"));
-        assistanceTypeRepository.save(new AssistanceType("CL", "Corporate Loan"));
+//        assistanceTypeRepository.save(new AssistanceType("PL", "Project Loan"));
+//        assistanceTypeRepository.save(new AssistanceType("TL", "Term Loan"));
+//        assistanceTypeRepository.save(new AssistanceType("CL", "Corporate Loan"));
 
 
 

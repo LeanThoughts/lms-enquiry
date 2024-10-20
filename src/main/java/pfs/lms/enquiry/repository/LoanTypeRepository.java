@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface LoanTypeRepository extends JpaRepository<LoanType, UUID> {
 
     LoanType getLoanTypeByCode(String code);
+    LoanType getLoanTypeByValue(String code);
 }

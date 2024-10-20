@@ -21,7 +21,7 @@ public class ExcelEnquiry extends AggregateRoot<ExcelEnquiry> {
     private String borrowerName;
     private String groupName;
     private String projectType;
-    private String typeOfAssistance;
+    private String loanType;
     private String proposalType;
     private String iccReadinessStatus;
     private String remarksOnIccReadiness;

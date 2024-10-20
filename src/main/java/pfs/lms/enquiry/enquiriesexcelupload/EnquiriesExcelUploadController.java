@@ -33,12 +33,11 @@ public class EnquiriesExcelUploadController {
     private final PartnerRepository partnerRepository;
 
     private final ProjectTypeRepository projectTypeRepository;
-    private final AssistanceTypeRepository assistanceTypeRepository;
     private final ProposalTypeRepository proposalTypeRepository;
     private final ICCReadinessStatusRepository iccReadinessStatusRepository;
     private final ICCStatusRepository iccStatusRepository;
     private final PresentedInICCRepository presentedInICCRepository;
-
+    private final LoanTypeRepository loanTypeRepository;
     private final LoanApplicationService loanApplicationService;
 
     @PostMapping("/api/enquiriesExcelUpload")
@@ -87,10 +86,10 @@ public class EnquiriesExcelUploadController {
                     else if(projectTypeRepository.findByValue(enquiry.getProjectType()) == null)
                         comments += "Project Type is invalid. Provide valid input for Project Type.\n";
 
-                    enquiry.setTypeOfAssistance(row.getCell(5).getStringCellValue().trim());
-                    if(enquiry.getTypeOfAssistance().trim().equals(""))
+                    enquiry.setLoanType(row.getCell(5).getStringCellValue().trim());
+                    if(enquiry.getLoanType().trim().equals(""))
                         comments += "Type of Assistance is missing.\n";
-                    else if(assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance()) == null)
+                    else if(loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()) == null)
                         comments += "Assistance Type is invalid. Provide valid input for Assistance Type.\n";
 
                     enquiry.setProposalType(row.getCell(6).getStringCellValue().trim());
@@ -123,9 +122,9 @@ public class EnquiriesExcelUploadController {
                     }
 
                     List<LoanApplication> loanApplications = loanApplicationRepository.
-                            findByProjectTypeAndAssistanceTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate(
+                            findByProjectTypeAndLoanTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate(
                                     projectTypeRepository.findByValue(enquiry.getProjectType()).getCode(),
-                                    assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance()).getCode(),
+                                    loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()).getCode(),
                                     proposalTypeRepository.findByValue(enquiry.getProposalType()).getCode(),
                                     enquiry.getAmountRequested(),
                                     enquiry.getDateOfLeadGeneration());
@@ -159,7 +158,7 @@ public class EnquiriesExcelUploadController {
             }
         }
         catch (Exception e) {
-            throw new Exception("Upload failed due to file format errors !!");
+            throw new Exception(e.getMessage() + "Upload failed due to file format errors !!");
         }
 
         // Save all enquiries
@@ -210,8 +209,8 @@ public class EnquiriesExcelUploadController {
             ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
             loanApplication.setProjectType(pt == null? null: pt.getCode());
 
-            AssistanceType at = assistanceTypeRepository.findByValue(enquiry.getTypeOfAssistance());
-            loanApplication.setAssistanceType(at == null? null: at.getCode());
+            LoanType lt = loanTypeRepository.getLoanTypeByCode(enquiry.getLoanType());
+            loanApplication.setLoanType(lt == null? null: lt.getCode());
 
             ProposalType prt = proposalTypeRepository.findByValue(enquiry.getProposalType());
             loanApplication.setProposalType(prt == null? null: prt.getCode());
