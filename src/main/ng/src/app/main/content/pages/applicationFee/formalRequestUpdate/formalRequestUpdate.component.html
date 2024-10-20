@@ -14,21 +14,24 @@
                     <input matInput placeholder="Document Name" formControlName="documentName" maxlength="100">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Upload Date" formControlName="uploadDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker> 
+                    <input matInput [matDatepicker]="picker3" placeholder="Document/Letter Date" formControlName="documentLetterDate" readonly
+                            [max]="today">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker> 
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker3" placeholder="Document/Letter Date" formControlName="documentLetterDate" readonly>
-                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker> 
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker4" placeholder="Document Received Date" formControlName="documentReceivedDate" readonly>
+                    <input matInput [matDatepicker]="picker4" placeholder="Document Received Date" formControlName="documentReceivedDate" readonly 
+                            [min]="formalRequestForm.get('documentLetterDate').value" [max]="today">
                     <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
                     <mat-datepicker #picker4></mat-datepicker> 
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput [matDatepicker]="picker2" placeholder="Upload Date" formControlName="uploadDate" readonly
+                            [min]="formalRequestForm.get('documentReceivedDate').value" [max]="today">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
             </div>
             <div fxLayout="row">

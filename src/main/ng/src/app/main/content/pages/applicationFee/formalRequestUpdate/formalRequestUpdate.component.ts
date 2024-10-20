@@ -20,6 +20,8 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
 
     formalRequestForm: FormGroup;
 
+    today = new Date();
+    
     /**
      * constructor()
      */

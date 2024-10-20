@@ -18,12 +18,21 @@ export class LoanEnquiryService implements Resolve<any> {
 
   loanContractSearchValues = undefined;
   
-  /**
-   *
-   * @param _http
-   */
-  constructor(private _http: HttpClient, private _appService: AppService) {
-  }
+  projectTypes: any[] = [];
+  financingTypes: any[] = [];
+  
+    /**
+     *
+     */
+    constructor(private _http: HttpClient, private _appService: AppService) {
+        this.getProjectTypes().subscribe(data => {
+            this.projectTypes = data._embedded.projectTypes;
+        });
+
+        this.getFinancingTypes().subscribe(data => {
+            this.financingTypes = data._embedded.financingTypes;
+        });
+    }
 
     /**
      * functionalStatusDescription()

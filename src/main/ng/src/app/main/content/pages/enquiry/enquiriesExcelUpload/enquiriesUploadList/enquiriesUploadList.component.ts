@@ -21,6 +21,7 @@ export class EnquiriesUploadListComponent implements OnInit {
     set enquiryList(enquiryList: any[]) {
         this.dataSource = new MatTableDataSource(enquiryList);
         this.dataSource.sort = this.sort
+        this.disableUploadButton = false;
         // this.dataSource.paginator = this.paginator;
     }
 
@@ -34,6 +35,8 @@ export class EnquiriesUploadListComponent implements OnInit {
     ];
 
     selectedEnquiry: any;
+
+    disableUploadButton = false;
 
     /**
      * constructor()
@@ -69,17 +72,19 @@ export class EnquiriesUploadListComponent implements OnInit {
     createEnquiries(): void {
         if (this.dataSource === undefined)
             this._matSnackBar.open('Upload the excel file with enquiries first.', 'OK', {panelClass: ['success-snackbar']});
-        else
+        else {
             this._service.createExcelEnquiries().subscribe(
                 (response: any) => {
                     this._matSnackBar.open('Created enquiries successfully', 'OK', {panelClass: ['success-snackbar']});
                     this.dataSource = new MatTableDataSource(response);
                     this.dataSource.sort = this.sort
+                    this.disableUploadButton = true;
                 },
                 (error: HttpErrorResponse) => {
                     this._matSnackBar.open(error.error.message, 'OK', {panelClass: ['success-snackbar']});
                 }
             );
+        }
     }
 
     /**

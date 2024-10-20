@@ -21,7 +21,9 @@ export class EnquiryApplicationModel {
     technicalStatusDescription: string;
     rating: string;
     borrowerName: string;
-
+    proposalType: string;
+    financingType: string;
+    
     /**
      * constructor()
      * Initialize the object.
@@ -46,6 +48,8 @@ export class EnquiryApplicationModel {
         this.projectLocationState = _enquiryApplication.loanApplication.projectLocationState;
         this.projectName = _enquiryApplication.loanApplication.projectName;
         this.projectType = _enquiryApplication.loanApplication.projectType;
+        this.proposalType = _enquiryApplication.loanApplication.proposalType;
+        this.financingType = _enquiryApplication.loanApplication.financingType;
         this.technicalStatusDescription = _enquiryApplication.loanApplication.technicalStatusDescription;
         this.rating = _enquiryApplication.loanApplication.rating;
         if (_enquiryApplication.partner)

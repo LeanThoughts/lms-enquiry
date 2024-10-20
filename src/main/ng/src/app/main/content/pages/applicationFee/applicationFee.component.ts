@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { Subscription } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
@@ -7,6 +7,7 @@ import { AppService } from 'app/app.service';
 import { MatSnackBar } from '@angular/material';
 import { Location } from '@angular/common';
 import { ApplicationFeeService } from './applicationFee.service';
+import { log } from 'console';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
 
     loanApplicationId: string;
     selectedEnquiry: any;
-    // selectedEnquiryForm: FormGroup;
+    selectedEnquiryForm: FormGroup;
 
     subscriptions = new Subscription()
 
@@ -72,19 +73,25 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
      * ngOnInit()
      */
     ngOnInit(): void {
-        // this.selectedEnquiryForm = this._formBuilder.group({
-        //     busPartnerNumber: [this.selectedEnquiry.busPartnerNumber || ''],
-        //     projectLocationState: [this.selectedEnquiry.projectLocationState || ''],
-        //     projectType: [this.selectedEnquiry.projectType || ''],
-        //     loanClassDescription: [this.selectedEnquiry.loanClassDescription || ''],
-        //     projectCapacity: [this.selectedEnquiry.projectCapacity || ''],
-        //     assistanceTypeDescription: [this.selectedEnquiry.assistanceTypeDescription || ''],
-        //     projectCost: [this.selectedEnquiry.projectCost || ''],
-        //     loanAmount: [this.selectedEnquiry.loanAmount || ''],
-        //     financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
-        //     leadFI: [this.selectedEnquiry.leadFI || ''],
-        //     stage: [this.selectedEnquiry.stage || '']
-        // });
+        this.selectedEnquiryForm = this._formBuilder.group({
+            busPartnerNumber: [this.selectedEnquiry.busPartnerNumber || ''],
+            projectLocationState: [this.selectedEnquiry.projectLocationState || ''],
+            projectType: [this.selectedEnquiry.projectType || ''],
+            loanClassDescription: [this.selectedEnquiry.loanClassDescription || ''],
+            projectCapacity: [this.selectedEnquiry.projectCapacity || ''],
+            assistanceTypeDescription: [this.selectedEnquiry.assistanceTypeDescription || ''],
+            projectCost: [this.selectedEnquiry.projectCost || ''],
+            loanAmount: [this.selectedEnquiry.loanAmount || ''],
+            financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
+            leadFI: [this.selectedEnquiry.leadFI || ''],
+            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription]
+        });
+
+        this.selectedEnquiryForm.get('projectType')
+            .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);
+
+        this.selectedEnquiryForm.get('financingTypeDescription')
+            .setValue(this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0].value);
     }
 
     /**
@@ -92,27 +99,39 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
      */
     sendForApproval(): void {
         if (this.applicationFee.id) {
-            this._applicationFeeService.getInvoicingDetails(this.applicationFee.id).subscribe(response => {
-                let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-                let email = this._appService.currentUser.email;
-                this._matSnackBar.open('Please wait while attempting to send application fee details for approval.', 'OK', { duration: 25000 });
-                this._applicationFeeService.sendApplicationFeeForApproval(this.applicationFee.id, name, email).subscribe(
-                response => {
-                    this.applicationFee = response;
-                    this._matSnackBar.dismiss();
-                    this._matSnackBar.open('Application Fee is sent for approval.', 'OK', { duration: 7000 });
+            this._applicationFeeService.getInvoicingDetails(this.applicationFee.id).subscribe(
+                (response) => {
+                    console.log('response is unbelievable', response);
+                    if (Object.keys(response).length === 0) {
+                        this._matSnackBar.open('Invoicing details not found. Please complete Customer and Invoicing details before sending for approval.', 'OK', { duration: 7000 });
+                        return;
+                    }
+                    const name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+                    let email = this._appService.currentUser.email;
+                    this._matSnackBar.open('Please wait while attempting to send application fee details for approval.', 'OK', { duration: 25000 });
+                    this._applicationFeeService.sendApplicationFeeForApproval(this.applicationFee.id, name, email).subscribe(
+                        (response) => {
+                            this.applicationFee = response;
+                            this._matSnackBar.dismiss();
+                            this._matSnackBar.open('Application Fee is sent for approval.', 'OK', { duration: 7000 });
+                            this.disableSendForApproval = true;
+                            this._location.back();
+                        },
+                        (error) => {
+                            this.disableSendForApproval = false;
+                            this._matSnackBar.open('Errors occurred while sending for approval. Please try again later or contact your system administrator.',
+                                'OK', { duration: 7000 });
+                        }
+                    );
                 },
-                error => {
-                    this.disableSendForApproval = false;
-                    this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-                        'OK', { duration: 7000 });
-                });
-                this.disableSendForApproval = true;
-                this._location.back();
-            },
-            error => {
-                this._matSnackBar.open('Please complete Customer and Invoicing details before sending for approval', 'OK', { duration: 7000 });
-            });
+                (error) => {
+                    if (error.status === 404) {
+                        this._matSnackBar.open('Invoicing details not found. Please complete Customer and Invoicing details before sending for approval.', 'OK', { duration: 7000 });
+                    } else {
+                        this._matSnackBar.open('An error occurred while fetching invoicing details. Please try again later or contact your system administrator.', 'OK', { duration: 7000 });
+                    }
+                }
+            );
         }
         else {
             this._matSnackBar.open('Please complete Customer and Invoicing details before sending for approval', 'OK', { duration: 7000 });

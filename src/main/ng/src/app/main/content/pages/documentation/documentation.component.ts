@@ -75,19 +75,25 @@ export class DocumentationComponent implements OnInit, OnDestroy {
      * ngOnInit()
      */
     ngOnInit(): void {
-        // this.selectedEnquiryForm = this._formBuilder.group({
-        //     busPartnerNumber: [this.selectedEnquiry.busPartnerNumber || ''],
-        //     projectLocationState: [this.selectedEnquiry.projectLocationState || ''],
-        //     projectType: [this.selectedEnquiry.projectType || ''],
-        //     loanClassDescription: [this.selectedEnquiry.loanClassDescription || ''],
-        //     projectCapacity: [this.selectedEnquiry.projectCapacity || ''],
-        //     assistanceTypeDescription: [this.selectedEnquiry.assistanceTypeDescription || ''],
-        //     projectCost: [this.selectedEnquiry.projectCost || ''],
-        //     loanAmount: [this.selectedEnquiry.loanAmount || ''],
-        //     financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
-        //     leadFI: [this.selectedEnquiry.leadFI || ''],
-        //     stage: [this.selectedEnquiry.stage || '']
-        // });
+        this.selectedEnquiryForm = this._formBuilder.group({
+            busPartnerNumber: [this.selectedEnquiry.busPartnerNumber || ''],
+            projectLocationState: [this.selectedEnquiry.projectLocationState || ''],
+            projectType: [this.selectedEnquiry.projectType || ''],
+            loanClassDescription: [this.selectedEnquiry.loanClassDescription || ''],
+            projectCapacity: [this.selectedEnquiry.projectCapacity || ''],
+            assistanceTypeDescription: [this.selectedEnquiry.assistanceTypeDescription || ''],
+            projectCost: [this.selectedEnquiry.projectCost || ''],
+            loanAmount: [this.selectedEnquiry.loanAmount || ''],
+            financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
+            leadFI: [this.selectedEnquiry.leadFI || ''],
+            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription]
+        });
+
+        this.selectedEnquiryForm.get('projectType')
+            .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);
+
+        this.selectedEnquiryForm.get('financingTypeDescription')
+            .setValue(this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0].value);
     }
 
     /**

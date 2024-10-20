@@ -1,11 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { LoanEnquiryService } from '../enquiryApplication.service';
 import { fuseAnimations } from '@fuse/animations';
 import {ActivatedRoute, Router} from '@angular/router';
-import { EnquiryAlertsService } from '../enquiryAlerts/enquiryAlerts.service';
 import {MatSnackBar} from "@angular/material";
-import { log } from 'console';
+import { EnquiriesUploadListComponent } from './enquiriesUploadList/enquiriesUploadList.component';
 
 @Component({
     selector: 'fuse-enquiry-excel-upload',

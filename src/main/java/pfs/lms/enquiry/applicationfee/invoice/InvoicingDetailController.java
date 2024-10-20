@@ -34,7 +34,7 @@ public class InvoicingDetailController {
     }
 
     @GetMapping("/invoicingDetails/meetingNumbers/{loanApplicationId}")
-    public ResponseEntity<List<String>> getMeetingNumbers(@PathVariable UUID loanApplicationId,
+    public ResponseEntity<List<MeetingNumber>> getMeetingNumbers(@PathVariable UUID loanApplicationId,
                                                          HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(invoicingDetailService.getICCMeetingNumbers(loanApplicationId));

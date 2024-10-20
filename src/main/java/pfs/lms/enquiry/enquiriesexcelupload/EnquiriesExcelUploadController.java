@@ -88,9 +88,9 @@ public class EnquiriesExcelUploadController {
 
                     enquiry.setLoanType(row.getCell(5).getStringCellValue().trim());
                     if(enquiry.getLoanType().trim().equals(""))
-                        comments += "Type of Assistance is missing.\n";
+                        comments += "Type of Loan is missing.\n";
                     else if(loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()) == null)
-                        comments += "Assistance Type is invalid. Provide valid input for Assistance Type.\n";
+                        comments += "Loan Type is invalid. Provide valid input for Loan Type.\n";
 
                     enquiry.setProposalType(row.getCell(6).getStringCellValue().trim());
                     if(enquiry.getProposalType().trim().equals(""))
@@ -205,15 +205,17 @@ public class EnquiriesExcelUploadController {
             }
 
             loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
+            loanApplication.setGroupCompany(enquiry.getGroupName());
 
             ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
             loanApplication.setProjectType(pt == null? null: pt.getCode());
 
-            LoanType lt = loanTypeRepository.getLoanTypeByCode(enquiry.getLoanType());
+            LoanType lt = loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType());
             loanApplication.setLoanType(lt == null? null: lt.getCode());
 
             ProposalType prt = proposalTypeRepository.findByValue(enquiry.getProposalType());
             loanApplication.setProposalType(prt == null? null: prt.getCode());
+            loanApplication.setFinancingType(prt == null? null: prt.getCode());
 
             ICCReadinessStatus irs = iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus());
             loanApplication.setIccReadinessStatus(irs == null? null: irs.getCode());

@@ -105,7 +105,7 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
             loanAmount: [this.selectedEnquiry.loanAmount || ''],
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
-            stage: [this.selectedEnquiry.stage || '']
+            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription]
         });
 
         this.boardApprovalDetailsForm = this._formBuilder.group({
@@ -119,6 +119,13 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
             discributionStatus: [this.loanContractExtension.disbursementStatus || ''],
             scheduledCOD: [this.loanContractExtension.scheduledCOD || '']
         });
+
+        this.selectedEnquiryForm.get('projectType')
+            .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);
+
+        this.selectedEnquiryForm.get('financingTypeDescription')
+            .setValue(this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0].value);
+
     }
 
     /**

@@ -95,7 +95,7 @@ export class ProjectDetailUpdateComponent {
         this._projectDetailForm = this._formBuilder.group({
             projectName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectName),
             borrowerName: new FormControl(this.getBorrowerName()),
-            promoterName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.promoterName),
+            promoterName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.groupCompany),
             loanPurpose: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanPurpose),
             projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity,
                 [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
@@ -125,6 +125,7 @@ export class ProjectDetailUpdateComponent {
             projectTypeCoreSector: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectTypeCoreSector),
             purposeOfLoan: new FormControl(this._enquiryActionService._loanApplication.loanApplication.purposeOfLoan),
             projectType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectType),
+            loanEnquiryDate: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanEnquiryDate),
         });
 
         if (JSON.stringify(this._projectDetail) !== JSON.stringify({})) // update mode, initialize for values ...
@@ -135,8 +136,10 @@ export class ProjectDetailUpdateComponent {
      * getBorrowerName()
      */
     getBorrowerName(): string {
-        let name = this._enquiryActionService._loanApplication.partner.partyName1 + ' ' +
-            this._enquiryActionService._loanApplication.partner.partyName2;
+        let name = this._enquiryActionService._loanApplication.partner.partyName1 + ' ';
+        if (this._enquiryActionService._loanApplication.partner.partyName2) {
+            name += this._enquiryActionService._loanApplication.partner.partyName2;
+        }
         console.log('borrower name is', name);
         return name.trim();
     }

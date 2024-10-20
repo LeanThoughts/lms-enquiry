@@ -9,5 +9,5 @@ public interface IInvoicingDetailService {
 
     InvoicingDetail update(InvoicingDetailResource invoicingDetailResource, String username) throws CloneNotSupportedException;
 
-    List<String> getICCMeetingNumbers(UUID loanApplicationId);
+    List<MeetingNumber> getICCMeetingNumbers(UUID loanApplicationId);
 }

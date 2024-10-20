@@ -171,7 +171,7 @@
 
 <div fxLayout="row">
     <div fxFlex="100" class="mt-12 mb-12" style="margin-left: 24px !important;">
-        <button mat-raised-button type="button" color="accent" (click)="createEnquiries()">
+        <button mat-raised-button type="button" color="accent" (click)="createEnquiries()" [disabled]="disableUploadButton">
             Upload Enquiries
         </button>
     </div>

@@ -8,6 +8,7 @@ import { AppService } from 'app/app.service';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from './enquiryAction.service';
 import { Location } from '@angular/common';
+import { log } from 'console';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 private _location: Location) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
+            console.debug('selectedEnquiry', data);
             this.selectedEnquiry = data;
             if (this.selectedEnquiry.loanContractId === null)
                 this.loanContractId = this.selectedEnquiry.enquiryNumber;
@@ -100,9 +102,17 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
             loanAmount: [this.selectedEnquiry.loanAmount || ''],
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
-            stage: [this.selectedEnquiry.stage || ''],
+            stage: [this.selectedEnquiry.functionalStatusDescription || ''],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        console.debug('projectTypes', this._loanEnquiryService.projectTypes);
+        this.selectedEnquiryForm.get('projectType')
+                .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);
+
+        console.debug('financingTypes', this._loanEnquiryService.financingTypes);
+        this.selectedEnquiryForm.get('financingTypeDescription')
+            .setValue(this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0].value);
     }
 
     /**

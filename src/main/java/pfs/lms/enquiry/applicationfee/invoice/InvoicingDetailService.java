@@ -157,34 +157,57 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     }
 
     @Override
-    public List<String> getICCMeetingNumbers(UUID loanApplicationId) {
+    public List<MeetingNumber> getICCMeetingNumbers(UUID loanApplicationId) {
         ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplicationId);
 
         if (iccApproval == null)
             return null;
 
-        List<String> meetingNumbers = new ArrayList<>();
+        List<MeetingNumber> meetingNumbers = new ArrayList<>();
 
         List<ICCFurtherDetail> furtherDetails = furtherDetailRepository.findByIccApprovalId(iccApproval.getId());
         furtherDetails.forEach(furtherDetail -> {
-            meetingNumbers.add(furtherDetail.getIccMeetingNumber());
+            MeetingNumber meetingNumber = new MeetingNumber();
+            meetingNumber.setMeetingNumber(furtherDetail.getIccMeetingNumber());
+            meetingNumber.setModuleName("Further Details");
+            meetingNumber.setSelected(false);
+            meetingNumbers.add(meetingNumber);
         });
 
         RejectedByICC rejectedByICC = rejectedByICCRepository.findByIccApprovalId(iccApproval.getId());
-        if (rejectedByICC != null)
-            meetingNumbers.add(rejectedByICC.getMeetingNumber());
-
+        if (rejectedByICC != null) {
+            MeetingNumber meetingNumber = new MeetingNumber();
+            meetingNumber.setMeetingNumber(rejectedByICC.getMeetingNumber());
+            meetingNumber.setModuleName("Rejected By ICC");
+            meetingNumber.setSelected(false);
+            meetingNumbers.add(meetingNumber);
+        }
+    
         ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
-        if (approvalByICC != null)
-            meetingNumbers.add(approvalByICC.getMeetingNumber());
+        if (approvalByICC != null) {
+            MeetingNumber meetingNumber = new MeetingNumber();
+            meetingNumber.setMeetingNumber(approvalByICC.getMeetingNumber());
+            meetingNumber.setModuleName("Approval By ICC");
+            meetingNumber.setSelected(true);
+            meetingNumbers.add(meetingNumber);
+        }
 
         RejectedByCustomer rejectedByCustomer = rejectedByCustomerRepository.findByIccApprovalId(iccApproval.getId());
-        if (rejectedByCustomer != null)
-            meetingNumbers.add(rejectedByCustomer.getMeetingNumber());
+        if (rejectedByCustomer != null) {
+            MeetingNumber meetingNumber = new MeetingNumber();
+            meetingNumber.setMeetingNumber(rejectedByCustomer.getMeetingNumber());
+            meetingNumber.setModuleName("Rejected By Customer");
+            meetingNumber.setSelected(false);
+            meetingNumbers.add(meetingNumber);
+        }
 
         List<LoanEnhancement> loanEnhancements = loanEnhancementRepository.findByIccApprovalId(iccApproval.getId());
         loanEnhancements.forEach(loanEnhancement -> {
-            meetingNumbers.add(loanEnhancement.getIccMeetingNumber());
+            MeetingNumber meetingNumber = new MeetingNumber();
+            meetingNumber.setMeetingNumber(loanEnhancement.getIccMeetingNumber());
+            meetingNumber.setModuleName("Loan Enhancement");
+            meetingNumber.setSelected(false);
+            meetingNumbers.add(meetingNumber);
         });
 
         return meetingNumbers;

@@ -66,6 +66,16 @@ export class InvoicingDetailsComponent implements OnInit {
             projectLocationState: [this.selectedInvoicingDetail.projectLocationState || lnAppln.loanApplication.projectLocationState],
             file: ['']
         });
+
+        this.setIccMeetingNumber();
+    }
+
+    /**
+     * setIccMeetingNumber()
+     */
+    setIccMeetingNumber() {
+        let iccMeetingNumber = this.meetingNumbers.filter(obj => obj.moduleName === 'Approval By ICC')[0].meetingNumber;
+        this.invoicingDetailForm.get('iccMeetingNumber').setValue(iccMeetingNumber);
     }
 
     /**

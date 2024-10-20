@@ -34,10 +34,15 @@ export class LoanContractListComponent implements OnInit {
 
     selectedEnquiry: EnquiryApplicationModel;
 
+    projectTypes: any[] = [];
+
     /**
      * constructor()
      */
     constructor(private _service: LoanEnquiryService) {
+        this._service.getProjectTypes().subscribe(response => {
+            this.projectTypes = response._embedded.projectTypes;
+        });
     }
 
     /**
@@ -62,5 +67,15 @@ export class LoanContractListComponent implements OnInit {
         this._service.selectedLoanApplicationId = new BehaviorSubject(enquiry.id);
         this._service.selectedLoanApplicationPartyNumber = new BehaviorSubject(enquiry.busPartnerNumber);
         this._service.selectedEnquiry.next(enquiry);
+    }
+
+    /**
+     * getProjectTypeDescription()
+    */
+    getProjectTypeDescription(projectType: string): string {
+        if (projectType) {
+            return this.projectTypes.filter(pt => pt.code === projectType)[0].value;
+        }
+        return '';
     }
 }

@@ -20,6 +20,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
 
     iccApprovalForm: FormGroup;
 
+    today = new Date();
+
     /**
      * constructor()
      */
