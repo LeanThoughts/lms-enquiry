@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface TermSheetRepository extends JpaRepository<TermSheet, UUID> {
 
     List<TermSheet> findByApplicationFeeIdOrderBySerialNumber(UUID applicationFeeId);
+
+    List<TermSheet> findByApplicationFeeIdAndStatus(UUID applicationFeeId, String status);
 }

@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material';
 import { Location } from '@angular/common';
 import { ApplicationFeeService } from './applicationFee.service';
 import { log } from 'console';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -31,12 +32,16 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
     loanContractId: any;
     functionalStatus: string;
 
+    meetingNumbers = [];
+
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, public _appService: AppService, private _matSnackBar: MatSnackBar,
                 public _loanEnquiryService: LoanEnquiryService, private _applicationFeeService: ApplicationFeeService,
-                private _location: Location) {
+                private _location: Location, private _activatedRoute: ActivatedRoute) {
+
+        this.meetingNumbers = _activatedRoute.snapshot.data.routeResolvedData[3];
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
@@ -84,16 +89,23 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
             loanAmount: [this.selectedEnquiry.loanAmount || ''],
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
-            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription]
+            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
+            enquiryNumber: [this.selectedEnquiry.enquiryNumber || ''],
+            iccMeetingNumber: [''],
         });
 
-        this.selectedEnquiryForm.get('projectType')
-            .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);
+        const projectType = this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0];
+        this.selectedEnquiryForm.get('projectType').setValue(projectType ? projectType.value : '');
 
-        this.selectedEnquiryForm.get('financingTypeDescription')
-            .setValue(this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0].value);
+        const financingType = this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0];
+        this.selectedEnquiryForm.get('financingTypeDescription').setValue(financingType ? financingType.value : '');
+
+        let iccMeetingNumber = this.meetingNumbers.filter(obj => obj.moduleName === 'Approval By ICC')[0];
+        console.log('iccMeetingNumber', iccMeetingNumber);
+        this.selectedEnquiryForm.get('iccMeetingNumber').setValue(iccMeetingNumber ? iccMeetingNumber.meetingNumber : '');
     }
 
+    
     /**
      * sendAppraisalForApproval()
      */

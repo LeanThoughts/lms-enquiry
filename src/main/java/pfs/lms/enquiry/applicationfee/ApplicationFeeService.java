@@ -7,8 +7,6 @@ import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetail;
 import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetailRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
-import pfs.lms.enquiry.iccapproval.ICCApproval;
-import pfs.lms.enquiry.iccapproval.ICCApprovalService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
@@ -62,22 +60,22 @@ public class ApplicationFeeService implements IApplicationFeeService {
 
         InvoicingDetail invoicingDetail = invoicingDetailRepository.findByApplicationFeeId(applicationFee.getId());
         if (invoicingDetail != null){
-            partner.setPartyName1(invoicingDetail.getCompanyName());
-
-            partner.setEmail(invoicingDetail.getEmail());
-            partner.setMobileNumber(invoicingDetail.getMobile());
-            partner.setContactNumber(invoicingDetail.getCinNumber());
-
-            partner.setCity(invoicingDetail.getCity());
-            partner.setStreet(invoicingDetail.getStreet());
-            partner.setState(invoicingDetail.getState());
-            partner.setPostalCode(invoicingDetail.getPostalCode());
-            partner.setAddressLine1(invoicingDetail.getDoorNumber());
-            partner.setAddressLine2(invoicingDetail.getAddress());
-
-            partner.setGstNumber(invoicingDetail.getGstNumber());
-            partner.setMsmeRegisterNumber(invoicingDetail.getMsmeRegistrationNumber());
-            partner.setCinNumber(invoicingDetail.getCinNumber());
+//            partner.setPartyName1(invoicingDetail.getCompanyName());
+//
+//            partner.setEmail(invoicingDetail.getEmail());
+//            partner.setMobileNumber(invoicingDetail.getMobile());
+//            partner.setContactNumber(invoicingDetail.getCinNumber());
+//
+//            partner.setCity(invoicingDetail.getCity());
+//            partner.setStreet(invoicingDetail.getStreet());
+//            partner.setState(invoicingDetail.getState());
+//            partner.setPostalCode(invoicingDetail.getPostalCode());
+//            partner.setAddressLine1(invoicingDetail.getDoorNumber());
+//            partner.setAddressLine2(invoicingDetail.getAddress());
+//
+//            partner.setGstNumber(invoicingDetail.getGstNumber());
+//            partner.setMsmeRegisterNumber(invoicingDetail.getMsmeRegistrationNumber());
+//            partner.setCinNumber(invoicingDetail.getCinNumber());
         }
 
 

@@ -23,8 +23,16 @@ export class ApplicationFeeService {
             this.getInvoicingDetails(this._applicationFee.value.id),
             this._loanEnquiryService.getLoanApplication(this._loanEnquiryService.selectedLoanApplicationId.value),
             this._loanEnquiryService.getProjectTypes(),
-            this.getMeetingNumbers(this._loanEnquiryService.selectedLoanApplicationId.value)
+            this.getMeetingNumbers(this._loanEnquiryService.selectedLoanApplicationId.value),
+            this.getAllPartners()
         ]);
+    }
+
+    /**
+     * getAllPartners()
+     */
+    public getAllPartners(): Observable<any> {
+        return this._http.get('enquiry/api/partners/all');
     }
     
     /**
@@ -175,5 +183,12 @@ export class ApplicationFeeService {
             'processName': 'ApplicationFee'
         }
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }
+
+    /**
+     * getPartner()
+     */
+    public getPartner(href: string): Observable<any> {
+        return this._http.get(href);
     }
 }

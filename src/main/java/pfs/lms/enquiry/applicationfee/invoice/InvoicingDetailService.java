@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.iccapproval.ICCApproval;
 import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
 import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICC;
@@ -19,6 +20,7 @@ import pfs.lms.enquiry.iccapproval.rejectedbycustomer.RejectedByCustomerReposito
 import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICC;
 import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICCRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
+import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
@@ -36,6 +38,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final ApplicationFeeRepository applicationFeeRepository;
     private final InvoicingDetailRepository invoicingDetailRepository;
+    private final PartnerRepository partnerRepository;
 
     private final ICCApprovalRepository iccApprovalRepository;
     private final ICCFurtherDetailRepository furtherDetailRepository;
@@ -71,29 +74,10 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                     return obj;
                 });
 
+        Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());
         InvoicingDetail invoicingDetail = new InvoicingDetail();
         invoicingDetail.setApplicationFee(applicationFee);
-        invoicingDetail.setIccMeetingNumber(invoicingDetailResource.getIccMeetingNumber());
-        invoicingDetail.setCompanyName(invoicingDetailResource.getCompanyName());
-        invoicingDetail.setCinNumber(invoicingDetailResource.getCinNumber());
-        invoicingDetail.setGstNumber(invoicingDetailResource.getGstNumber());
-        invoicingDetail.setPan(invoicingDetailResource.getPan());
-        invoicingDetail.setMsmeRegistrationNumber(invoicingDetailResource.getMsmeRegistrationNumber());
-        invoicingDetail.setDoorNumber(invoicingDetailResource.getDoorNumber());
-        invoicingDetail.setAddress(invoicingDetailResource.getAddress());
-        invoicingDetail.setStreet(invoicingDetailResource.getStreet());
-        invoicingDetail.setCity(invoicingDetailResource.getCity());
-        invoicingDetail.setState(invoicingDetailResource.getState());
-        invoicingDetail.setPostalCode(invoicingDetailResource.getPostalCode());
-        invoicingDetail.setLandline(invoicingDetailResource.getLandline());
-        invoicingDetail.setMobile(invoicingDetailResource.getMobile());
-        invoicingDetail.setEmail(invoicingDetailResource.getEmail());
-        invoicingDetail.setProjectType(invoicingDetailResource.getProjectType());
-        invoicingDetail.setPfsDebtAmount(invoicingDetailResource.getPfsDebtAmount());
-        invoicingDetail.setProjectCapacity(invoicingDetailResource.getProjectCapacity());
-        invoicingDetail.setProjectCapacityUnit(invoicingDetailResource.getProjectCapacityUnit());
-        invoicingDetail.setProjectLocationState(invoicingDetailResource.getProjectLocationState());
-        invoicingDetail.setFileReference(invoicingDetailResource.getFileReference());
+        invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -115,30 +99,10 @@ public class InvoicingDetailService implements IInvoicingDetailService {
 
         InvoicingDetail invoicingDetail = invoicingDetailRepository.findById(invoicingDetailResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(invoicingDetailResource.getId().toString()));
-
         Object oldFormalRequest = invoicingDetail.clone();
 
-        invoicingDetail.setIccMeetingNumber(invoicingDetailResource.getIccMeetingNumber());
-        invoicingDetail.setCompanyName(invoicingDetailResource.getCompanyName());
-        invoicingDetail.setCinNumber(invoicingDetailResource.getCinNumber());
-        invoicingDetail.setGstNumber(invoicingDetailResource.getGstNumber());
-        invoicingDetail.setPan(invoicingDetailResource.getPan());
-        invoicingDetail.setMsmeRegistrationNumber(invoicingDetailResource.getMsmeRegistrationNumber());
-        invoicingDetail.setDoorNumber(invoicingDetailResource.getDoorNumber());
-        invoicingDetail.setAddress(invoicingDetailResource.getAddress());
-        invoicingDetail.setStreet(invoicingDetailResource.getStreet());
-        invoicingDetail.setCity(invoicingDetailResource.getCity());
-        invoicingDetail.setState(invoicingDetailResource.getState());
-        invoicingDetail.setPostalCode(invoicingDetailResource.getPostalCode());
-        invoicingDetail.setLandline(invoicingDetailResource.getLandline());
-        invoicingDetail.setMobile(invoicingDetailResource.getMobile());
-        invoicingDetail.setEmail(invoicingDetailResource.getEmail());
-        invoicingDetail.setProjectType(invoicingDetailResource.getProjectType());
-        invoicingDetail.setPfsDebtAmount(invoicingDetailResource.getPfsDebtAmount());
-        invoicingDetail.setProjectCapacity(invoicingDetailResource.getProjectCapacity());
-        invoicingDetail.setProjectCapacityUnit(invoicingDetailResource.getProjectCapacityUnit());
-        invoicingDetail.setProjectLocationState(invoicingDetailResource.getProjectLocationState());
-        invoicingDetail.setFileReference(invoicingDetailResource.getFileReference());
+        Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());
+        invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 
         // Change Documents for  Loan Partner

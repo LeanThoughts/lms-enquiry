@@ -117,7 +117,11 @@ export class TermSheetUpdateDialogComponent implements OnInit {
                 this._applicationFeeService.createTermSheet(termSheet).subscribe(() => {
                     this._matSnackBar.open('Term Sheet details added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
-                });
+                },
+                    (error) => {
+                        this._matSnackBar.open(error.error.message, 'OK', { duration: 7000 });
+                    }
+                );
             }
             else {
                 this.selectedTermSheet.issuanceDate = termSheet.issuanceDate;

@@ -84,7 +84,8 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
             loanAmount: [this.selectedEnquiry.loanAmount || ''],
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
-            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription]
+            stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
+            enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
 
         this.selectedEnquiryForm.get('projectType')

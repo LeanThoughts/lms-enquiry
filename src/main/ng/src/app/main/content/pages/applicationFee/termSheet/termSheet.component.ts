@@ -106,7 +106,7 @@ export class TermSheetComponent {
             data: {
                 operation: mode,
                 loanApplicationId: this.loanApplicationId,
-                selectedFormalRequest: this.selectedTermSheet
+                selectedTermSheet: this.selectedTermSheet
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

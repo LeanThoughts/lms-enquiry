@@ -3,36 +3,65 @@
         <form [formGroup]="invoicingDetailForm">
 
             <div fxLayout="row">
+                <span><b>Search Partner</b></span>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="34">
+                    <input matInput
+                           (blur)="validatePartnerByName($event)"
+                           placeholder="Select Partner by Name"
+                           aria-label="Select Partner by Name"
+                           [matAutocomplete]="auto2"
+                           [formControl]="partnerNameFormControl">
+                    <mat-autocomplete #auto2="matAutocomplete">
+                      <mat-option *ngFor="let partner of partnerNameFilteredOptions | async" [value]="partner.partyName1">
+                        <span>{{partner.partyName1}}</span>
+                        <small> : {{partner.partyNumber}} : {{getPartyAddress(partner)}}</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+    
+                  <mat-form-field fxFlex="34">
+                    <input matInput
+                           (blur)="validatePartnerById($event)"
+                           placeholder="Select Partner by Id"
+                           aria-label="Select Partner by Id"
+                           [matAutocomplete]="auto3"
+                           [formControl]="partnerIdFormControl">
+                    <mat-autocomplete #auto3="matAutocomplete">
+                      <mat-option *ngFor="let partner of partnerIdFilteredOptions | async" [value]="partner.partyNumber">
+                        <span>{{partner.partyNumber}}</span>
+                        <small> : {{partner.partyName}} : {{getPartyAddress(partner)}}</small>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
                 <span><b>Company Details</b></span>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <mat-select placeholder="ICC Meeting Number" formControlName="iccMeetingNumber">
-                        <mat-option *ngFor="let obj of meetingNumbers" [value]="obj.meetingNumber">
-                            {{ obj.meetingNumber }}
-                        </mat-option>
-                    </mat-select>
+                    <input matInput placeholder="Partner Name" formControlName="companyName" maxlength="100" [readonly]="readonlyFields">
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="CIN Number" formControlName="cinNumber" maxlength="21" [readonly]="readonlyFields">
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="MSME Registration Number" formControlName="msmeRegistrationNumber" maxlength="20" [readonly]="readonlyFields">
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Company Name" formControlName="companyName" maxlength="100" >
+                    <input matInput placeholder="PAN Number" formControlName="pan" maxlength="15" [readonly]="readonlyFields">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="CIN Number" formControlName="cinNumber" maxlength="21" >
+                    <input matInput placeholder="GST Number" formControlName="gstNumber" maxlength="15" [readonly]="readonlyFields">
                 </mat-form-field>
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="MSME Registration Number" formControlName="msmeRegistrationNumber" maxlength="20" >
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="GST Number" formControlName="gstNumber" maxlength="15" required>
-                </mat-form-field>
-                <div fxLayout="column" fxFlex="34">
+                <!-- <div fxLayout="column" fxFlex="34">
                     <div fxLayout="row">
                         <div fxLayout="column" fxFlex="85">
                             <label for="document">Upload GST Certificate File (PDF)</label>
@@ -45,7 +74,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div fxLayout="row">
@@ -54,86 +83,45 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Door Number" formControlName="doorNumber" maxlength="100">
+                    <input matInput placeholder="Door Number" formControlName="doorNumber" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Address" formControlName="address" maxlength="100">
+                    <input matInput placeholder="Address" formControlName="address" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Street" formControlName="street" maxlength="100">
+                    <input matInput placeholder="Street" formControlName="street" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="City" formControlName="city" maxlength="100">
+                    <input matInput placeholder="City" formControlName="city" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
 
                 <mat-form-field fxFlex="34">
-                    <mat-select placeholder="State" formControlName="state" required>
+                    <!-- <mat-select placeholder="State" formControlName="state" required>
                         <mat-option> </mat-option>
                         <mat-option *ngFor="let state of states" [value]="state.code">
                             {{ state.value }}
                         </mat-option>
-                    </mat-select>
+                    </mat-select> -->
+                    <input matInput placeholder="State" formControlName="state" maxlength="100" [readonly]="readonlyFields">
                   </mat-form-field>
 
                   <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="10">
+                    <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="10" [readonly]="readonlyFields">
                 </mat-form-field>
             </div>
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Contact Number (Landline)" formControlName="landline" maxlength="15">
+                    <input matInput placeholder="Contact Number (Landline)" formControlName="landline" maxlength="15" [readonly]="readonlyFields">
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Contact Number (Mobile)" formControlName="mobile" maxlength="14">
+                    <input matInput placeholder="Contact Number (Mobile)" formControlName="mobile" maxlength="14" [readonly]="readonlyFields">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Email" formControlName="email" maxlength="100" required>
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row">
-                <span><b>Project Details</b></span>
-            </div>
-
-            <div fxLayout="row">
-                <!-- <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Project Type" formControlName="projectType" maxlength="15">
-                </mat-form-field> -->
-                <mat-form-field fxFlex="33">
-                    <mat-select placeholder="Project Type" formControlName="projectType">
-                        <mat-option> </mat-option>
-                        <mat-option *ngFor="let projectType of projectTypes" [value]="projectType.code">
-                            {{ projectType.value }}
-                        </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-      
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="PFS Debt Amount (Crores)" formControlName="pfsDebtAmount" maxlength="10">
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Project Capacity" formControlName="projectCapacity" maxlength="10">
-                </mat-form-field>
-                <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Project Capacity Unit" formControlName="projectCapacityUnit" maxlength="15">
-                </mat-form-field>
-                <!-- <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Project Location - State" formControlName="projectLocationState" maxlength="100">
-                </mat-form-field> -->
-                <mat-form-field fxFlex="33">
-                    <mat-select placeholder="Project Location - State" formControlName="projectLocationState">
-                        <mat-option> </mat-option>
-                        <mat-option *ngFor="let state of states" [value]="state.code">
-                            {{ state.value }}
-                        </mat-option>
-                    </mat-select>
+                    <input matInput placeholder="Email" formControlName="email" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
             </div>
 

@@ -13,7 +13,8 @@ import {
     MatCheckboxModule,
     MatDialogModule,
     DateAdapter,
-    MAT_DATE_FORMATS
+    MAT_DATE_FORMATS,
+    MatOptionModule
 } from '@angular/material';
 import { ApplicationFeeService } from './applicationFee.service';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -71,6 +72,8 @@ const MY_FORMATS = {
       MatRadioModule,
       MatCheckboxModule,
       MatCardModule,
+      MatAutocompleteModule,
+      MatOptionModule
     ],
     declarations: [
         ApplicationFeeComponent,

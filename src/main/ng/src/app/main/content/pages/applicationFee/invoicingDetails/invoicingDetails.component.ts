@@ -1,12 +1,16 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { ApplicationFeeService } from '../applicationFee.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ActivatedRoute } from '@angular/router';
 import { StateModel } from 'app/main/content/model/state.model';
 import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
+import { Observable } from 'rxjs';
+import { PartnerModel } from 'app/main/content/model/partner.model';
+import { map, startWith } from 'rxjs/operators';
+import { PartnerService } from '../../administration/partner/partner.service';
 
 @Component({
     selector: 'fuse-invoicing-details',
@@ -26,79 +30,174 @@ export class InvoicingDetailsComponent implements OnInit {
     states = StateModel.getStates();
     projectTypes = [];
 
-    meetingNumbers = [];
+    partnerNameFilteredOptions: Observable<PartnerModel[]>;
+    partnerIdFilteredOptions: Observable<PartnerModel[]>;
+  
+    partners: Array<PartnerModel>;
+    selectedPartnerId = '';
+
+    partnerNameFormControl = new FormControl();
+    partnerIdFormControl = new FormControl();
+
+    readonlyFields = true;
 
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _applicationFeeService: ApplicationFeeService,
-        private _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _activatedRoute: ActivatedRoute) {
+        _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
         this.selectedInvoicingDetail =  _activatedRoute.snapshot.data.routeResolvedData[0];
-        let lnAppln = _activatedRoute.snapshot.data.routeResolvedData[1];
+        // let lnAppln = _activatedRoute.snapshot.data.routeResolvedData[1];
         this.projectTypes = _activatedRoute.snapshot.data.routeResolvedData[2]._embedded.projectTypes;
-        this.meetingNumbers = _activatedRoute.snapshot.data.routeResolvedData[3];
+        // this.meetingNumbers = _activatedRoute.snapshot.data.routeResolvedData[3];
 
         this.invoicingDetailForm = this._formBuilder.group({
-            iccMeetingNumber: [this.selectedInvoicingDetail.iccMeetingNumber || ''],
-            companyName: [this.selectedInvoicingDetail.companyName || lnAppln.loanApplication.projectName],
-            cinNumber: [this.selectedInvoicingDetail.cinNumber || lnAppln.partner.CINNumber],
-            gstNumber: [this.selectedInvoicingDetail.gstNumber || lnAppln.partner.gstNumber],
-            pan: [this.selectedInvoicingDetail.pan || lnAppln.partner.pan, [Validators.pattern(EnquiryApplicationRegEx.pan)]],
-            msmeRegistrationNumber: [this.selectedInvoicingDetail.msmeRegistrationNumber || lnAppln.partner.msmeRegistrationNumber],
-            doorNumber: [this.selectedInvoicingDetail.doorNumber || lnAppln.partner.addressLine1],
-            address: [this.selectedInvoicingDetail.address || lnAppln.partner.addressLine2],
-            street: [this.selectedInvoicingDetail.street || lnAppln.partner.street],
-            city: [this.selectedInvoicingDetail.city || lnAppln.partner.city],
-            state: [this.selectedInvoicingDetail.state || lnAppln.partner.state],
-            postalCode: [this.selectedInvoicingDetail.postalCode || lnAppln.partner.postalCode],
-            landline: [this.selectedInvoicingDetail.landline || lnAppln.partner.contactNumber],
-            mobile: [this.selectedInvoicingDetail.mobile || lnAppln.partner.mobile],
-            email: [this.selectedInvoicingDetail.email || lnAppln.partner.email, [Validators.pattern(EnquiryApplicationRegEx.email)]],
-            projectType: [this.selectedInvoicingDetail.projectType || lnAppln.loanApplication.projectType],
-            pfsDebtAmount: [this.selectedInvoicingDetail.pfsDebtAmount || lnAppln.loanApplication.pfsDebtAmount, 
-                [Validators.pattern(EnquiryApplicationRegEx.pfsDebtAmount)]],
-            projectCapacity: [this.selectedInvoicingDetail.projectCapacity || lnAppln.loanApplication.projectCapacity, 
-                [Validators.pattern(EnquiryApplicationRegEx.projectCapacity), Validators.min(1), Validators.max(999999.99)]],
-            projectCapacityUnit: [this.selectedInvoicingDetail.projectCapacityUnit || lnAppln.loanApplication.projectCapacityUnit],
-            projectLocationState: [this.selectedInvoicingDetail.projectLocationState || lnAppln.loanApplication.projectLocationState],
-            file: ['']
+            companyName: [''],
+            cinNumber: [''],
+            gstNumber: [''],
+            pan: [''],
+            msmeRegistrationNumber: [''],
+            doorNumber: [''],
+            address: [''],
+            street: [''],
+            city: [''],
+            state: [''],
+            postalCode: [''],
+            landline: [''],
+            mobile: [''],
+            email: ['']
         });
 
-        this.setIccMeetingNumber();
-    }
+        if (this.selectedInvoicingDetail.id !== undefined) {
+            console.log(this.selectedInvoicingDetail._links.partner.href);
+            _applicationFeeService.getPartner(this.selectedInvoicingDetail._links.partner.href).subscribe(data => {
+                this.partnerNameFormControl.setValue(data.partyName1);
+                this.partnerIdFormControl.setValue(data.partyNumber);
+                this.selectedPartnerId = data.id;
+                this.loadPartnerForm(data);
+            });
+        }
 
-    /**
-     * setIccMeetingNumber()
-     */
-    setIccMeetingNumber() {
-        let iccMeetingNumber = this.meetingNumbers.filter(obj => obj.moduleName === 'Approval By ICC')[0].meetingNumber;
-        this.invoicingDetailForm.get('iccMeetingNumber').setValue(iccMeetingNumber);
+        this.partners = _activatedRoute.snapshot.data.routeResolvedData[4];
+        // Check for nulls and convert partynumber to string
+        this.partners.map(x => {
+            if (!x.partyNumber)
+                x.partyNumber = '';
+            else
+                x.partyNumber = x.partyNumber.toString();
+            if (!x.addressLine1) x.addressLine1 = '';
+            if (!x.addressLine2) x.addressLine2 = '';
+            if (!x.street) x.street = '';
+            if (!x.city) x.city = '';
+        })
     }
 
     /**
      * ngOnInit()
      */
     ngOnInit(): void {
+        this.partnerNameFilteredOptions = this.partnerNameFormControl.valueChanges
+            .pipe(
+                startWith(''),
+                map(name => name ? this._filterPartnersByName(name) : this.partners.slice())
+            );
+
+        this.partnerIdFilteredOptions = this.partnerIdFormControl.valueChanges
+            .pipe(
+                startWith(''),
+                map(name => name ? this._filterPartnersById(name) : this.partners.slice())
+            );
     }
 
     /**
-     * onFileSelect()
+     * validatePartnerByName()
      */
-    onFileSelect(event) {
-        if (event.target.files.length > 0) {
-            const file = event.target.files[0];
-            this.invoicingDetailForm.get('file').setValue(file);
+    validatePartnerByName($event) {
+        let partner: PartnerModel;
+        if ($event.target.value.trim() !== '') {
+            const filteredPartners = this.partners.filter(partner => partner.partyName1.toLowerCase().localeCompare(
+                $event.target.value.toLowerCase()) === 0);
+            if (filteredPartners.length > 0) {
+                partner = filteredPartners[0];
+                this.partnerIdFormControl.setValue(partner.partyNumber);
+                this.selectedPartnerId = partner.id;
+                this.loadPartnerForm(partner);
+            }
         }
     }
 
     /**
-     * getFileURL()
+     * validatePartnerById()
      */
-    getFileURL(fileReference: string): string {
-        return 'enquiry/api/download/' + fileReference;
+    validatePartnerById($event) {
+        let partner: PartnerModel;
+        if ($event.target.value.trim() !== '') {
+            const filteredPartners = this.partners.filter(partner => partner.partyNumber.localeCompare($event.target.value) === 0);
+            if (filteredPartners.length > 0) {
+                partner = filteredPartners[0];
+                this.partnerNameFormControl.setValue(partner.partyName1);
+                this.selectedPartnerId = partner.id;
+                this.loadPartnerForm(partner);
+            }
+        }
+    }
+
+    /**
+     * _filterPartnersByName()
+     */
+    private _filterPartnersByName(value: string): PartnerModel[] {
+        const filterValue = value.toLowerCase();
+        return this.partners.filter(partner => partner.partyName1.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    /**
+     * _filterPartnersById()
+     */
+    private _filterPartnersById(value: string): PartnerModel[] {
+        const filterValue = value.toLowerCase();
+        return this.partners.filter(partner => {
+            if (partner.partyNumber.trim() !== '') {
+                return partner.partyNumber.toLowerCase().indexOf(filterValue) === 0
+            }
+            else
+                return false;
+        });
+    }
+
+    /**
+     * getPartyAddress()
+     */
+    getPartyAddress(partner: PartnerModel): string {
+        let str = partner.addressLine1.trim();
+        str = str + ' ' + partner.addressLine2;
+        str = str.trim() + ' ' + partner.street;
+        str = str.trim() + ' ' + partner.city;
+        return str.trim();;
+    }
+
+    /**
+     * loadPartnerForm()
+     */
+    loadPartnerForm(partner: any): void {
+        this.invoicingDetailForm.patchValue({
+            companyName: partner.partyName1,
+            cinNumber: partner.CINNumber,
+            gstNumber: partner.gstNumber,
+            pan: partner.pan,
+            msmeRegistrationNumber: partner.msmeRegistrationNumber,
+            doorNumber: partner.addressLine1,
+            address: partner.addressLine2,
+            street: partner.street,
+            city: partner.city,
+            state: partner.state,
+            postalCode: partner.postalCode,
+            landline: partner.contactNumber,
+            mobile: partner.mobile,
+            email: partner.email
+        });
     }
 
     /**
@@ -106,41 +205,24 @@ export class InvoicingDetailsComponent implements OnInit {
      */
     submit(): void {
         if (this.invoicingDetailForm.valid) {
-            if (this.invoicingDetailForm.get('file').value !== '') {
-                var formData = new FormData();
-                formData.append('file', this.invoicingDetailForm.get('file').value);
-                this._applicationFeeService.uploadVaultDocument(formData).subscribe(
-                    (response) => {
-                        this.saveInvoicingDetails(response.fileReference);
-                    },
-                    (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
-                            'OK', { duration: 7000 });
-                    }
-                );
-            }
-            else {
-                if (this.selectedInvoicingDetail.id === undefined) {
-                    this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
-                }
-                else {
-                    this.saveInvoicingDetails('');
-                }
-            }
+            this.saveInvoicingDetails();
         }
     }
 
     /**
      * saveInvoicingDetails()
      */
-    saveInvoicingDetails(fileReference: string) {
-        if (this.invoicingDetailForm.valid) {
+    saveInvoicingDetails() {
+        if (this.selectedPartnerId === '') {
+            this._matSnackBar.open('Please select a partner.', 'OK', { duration: 7000 });
+        }
+        else {
             var invoicingDetail = this.invoicingDetailForm.value;
             invoicingDetail.loanApplicationId = this.loanApplicationId;
-            invoicingDetail.fileReference = fileReference;
+            invoicingDetail.partnerId = this.selectedPartnerId;
             if (this.selectedInvoicingDetail.id === undefined) {
                     this._applicationFeeService.createInvoicingDetail(invoicingDetail).subscribe((data) => {
-                    this._matSnackBar.open('Customer/ Invoicing deails created successfully.', 'OK', { duration: 7000 });
+                    this._matSnackBar.open('Customer/ Invoicing deails saved successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;
                     this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
                         this._applicationFeeService._applicationFee.next(data);
@@ -148,29 +230,7 @@ export class InvoicingDetailsComponent implements OnInit {
                 });
             }
             else {
-                this.selectedInvoicingDetail.iccMeetingNumber = invoicingDetail.iccMeetingNumber;
-                this.selectedInvoicingDetail.companyName = invoicingDetail.companyName;
-                this.selectedInvoicingDetail.cinNumber = invoicingDetail.cinNumber;
-                this.selectedInvoicingDetail.gstNumber = invoicingDetail.gstNumber;
-                this.selectedInvoicingDetail.pan = invoicingDetail.pan;
-                this.selectedInvoicingDetail.msmeRegistrationNumber = invoicingDetail.msmeRegistrationNumber;
-                this.selectedInvoicingDetail.doorNumber = invoicingDetail.doorNumber;
-                this.selectedInvoicingDetail.address = invoicingDetail.address;
-                this.selectedInvoicingDetail.street = invoicingDetail.street;
-                this.selectedInvoicingDetail.city = invoicingDetail.city;
-                this.selectedInvoicingDetail.state = invoicingDetail.state;
-                this.selectedInvoicingDetail.postalCode = invoicingDetail.postalCode;
-                this.selectedInvoicingDetail.landline = invoicingDetail.landline;
-                this.selectedInvoicingDetail.mobile = invoicingDetail.mobile;
-                this.selectedInvoicingDetail.email = invoicingDetail.email;
-                this.selectedInvoicingDetail.projectType = invoicingDetail.projectType;
-                this.selectedInvoicingDetail.projectCapacity = invoicingDetail.projectCapacity;
-                this.selectedInvoicingDetail.projectCapacityUnit = invoicingDetail.projectCapacityUnit;
-                this.selectedInvoicingDetail.projectLocationState = invoicingDetail.projectLocationState;
-                this.selectedInvoicingDetail.pfsDebtAmount = invoicingDetail.pfsDebtAmount;
-                if (this.selectedInvoicingDetail.fileReference !== '') {
-                    this.selectedInvoicingDetail.fileReference = fileReference;
-                }
+                this.selectedInvoicingDetail.partnerId = this.selectedPartnerId;
                 this._applicationFeeService.updateInvoicingDetail(this.selectedInvoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing details updated successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;

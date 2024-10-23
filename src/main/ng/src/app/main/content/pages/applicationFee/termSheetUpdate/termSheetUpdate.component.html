@@ -14,14 +14,14 @@
                     <input matInput placeholder="Status" formControlName="status" maxlength="10" readonly>
                 </mat-form-field>
             </div>
-            <div fxLayout="row" *ngIf="_dialogData.operation === 'newDraft'">
+            <div fxLayout="row" *ngIf="_dialogData.operation === 'newDraft' || this.selectedTermSheet.status === 'Draft'">
                 <mat-form-field fxFlex="100">
                     <input matInput [matDatepicker]="picker2" placeholder="Date of Issuance" formControlName="issuanceDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
             </div>
-            <div fxLayout="row" *ngIf="_dialogData.operation === 'newAcceptance'">
+            <div fxLayout="row" *ngIf="_dialogData.operation === 'newAcceptance' || this.selectedTermSheet.status === 'Final'">
                 <mat-form-field fxFlex="100">
                     <input matInput [matDatepicker]="picker3" placeholder="Acceptance Date" formControlName="acceptanceDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>

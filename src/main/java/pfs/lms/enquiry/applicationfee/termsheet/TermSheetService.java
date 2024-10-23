@@ -11,6 +11,7 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -49,14 +50,22 @@ public class TermSheetService implements ITermSheetService {
                     return obj;
                 });
 
-        TermSheet termSheet = new TermSheet();
-        termSheet.setApplicationFee(applicationFee);
-        termSheet.setSerialNumber(termSheetRepository.findByApplicationFeeIdOrderBySerialNumber(applicationFee.getId()).size() + 1);
-        termSheet.setStatus(termSheetResource.getStatus());
-        termSheet.setIssuanceDate(termSheetResource.getIssuanceDate());
-        termSheet.setAcceptanceDate(termSheetResource.getAcceptanceDate());
-        termSheet.setFileReference(termSheetResource.getFileReference());
-        termSheet = termSheetRepository.save(termSheet);
+        List<TermSheet> termSheets = termSheetRepository.findByApplicationFeeIdAndStatus(applicationFee.getId(),
+                termSheetResource.getStatus());
+        TermSheet termSheet;
+        if (termSheets.size() == 0) {
+            termSheet = new TermSheet();
+            termSheet.setApplicationFee(applicationFee);
+            termSheet.setSerialNumber(1);
+            termSheet.setStatus(termSheetResource.getStatus());
+            termSheet.setIssuanceDate(termSheetResource.getIssuanceDate());
+            termSheet.setAcceptanceDate(termSheetResource.getAcceptanceDate());
+            termSheet.setFileReference(termSheetResource.getFileReference());
+            termSheet = termSheetRepository.save(termSheet);
+        }
+        else {
+            throw new RuntimeException("Term-sheet with status already exists");
+        }
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),
@@ -80,7 +89,7 @@ public class TermSheetService implements ITermSheetService {
 
         Object oldFormalRequest = termSheet.clone();
 
-        termSheet.setStatus(termSheetResource.getStatus());
+//        termSheet.setStatus(termSheetResource.getStatus());
         termSheet.setIssuanceDate(termSheetResource.getIssuanceDate());
         termSheet.setAcceptanceDate(termSheetResource.getAcceptanceDate());
         termSheet.setFileReference(termSheetResource.getFileReference());
