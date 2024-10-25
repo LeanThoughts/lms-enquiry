@@ -166,6 +166,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
     saveProjectDetails() {
         if (Object.keys(this.projectDetails).length === 0) {
             var projectDetails = this.projectDetailForm.value;
+            var dt = new Date(projectDetails.enquiryCompletionDate);
+            projectDetails.enquiryCompletionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             console.log('projectDetails', projectDetails);
             projectDetails.loanApplicationId = this.loanApplicationId;
             this._applicationFeeService.createProjectDetails(this.projectDetailForm.value).subscribe((data) => {
@@ -177,6 +179,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             Object.keys(this.projectDetailForm.value).forEach(key => {
                 projectDetails[key] = this.projectDetailForm.value[key];
             });
+            var dt = new Date(projectDetails.enquiryCompletionDate);
+            projectDetails.enquiryCompletionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             console.log('projectDetails', projectDetails);
             this._applicationFeeService.updateProjectDetails(projectDetails).subscribe((data) => {
                 this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });

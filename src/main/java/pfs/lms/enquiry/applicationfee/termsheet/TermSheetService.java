@@ -50,21 +50,36 @@ public class TermSheetService implements ITermSheetService {
                     return obj;
                 });
 
-        List<TermSheet> termSheets = termSheetRepository.findByApplicationFeeIdAndStatus(applicationFee.getId(),
-                termSheetResource.getStatus());
-        TermSheet termSheet;
-        if (termSheets.size() == 0) {
+        List<TermSheet> draftTermSheets = termSheetRepository.findByApplicationFeeIdAndStatus(applicationFee.getId(), 
+        "Draft");
+        List<TermSheet> finalTermSheets = termSheetRepository.findByApplicationFeeIdAndStatus(applicationFee.getId(), 
+        "Final");
+        TermSheet termSheet = null;
+        String status = termSheetResource.getStatus();
+        boolean isDraft = "Draft".equals(status);
+        boolean isFinal = "Final".equals(status);
+
+        if ((isDraft && !draftTermSheets.isEmpty()) || (isFinal && !finalTermSheets.isEmpty())) {
+            throw new RuntimeException("Term-sheet with status " + status + " already exists.");
+        }
+
+        if (isDraft && draftTermSheets.isEmpty() || isFinal && finalTermSheets.isEmpty()) {
             termSheet = new TermSheet();
             termSheet.setApplicationFee(applicationFee);
             termSheet.setSerialNumber(1);
-            termSheet.setStatus(termSheetResource.getStatus());
             termSheet.setIssuanceDate(termSheetResource.getIssuanceDate());
             termSheet.setAcceptanceDate(termSheetResource.getAcceptanceDate());
             termSheet.setFileReference(termSheetResource.getFileReference());
+            termSheet.setStatus(status);
+
+            if (isFinal) {
+                TermSheet draftTermSheet = draftTermSheets.get(0);
+                if (termSheetResource.getAcceptanceDate().isBefore(draftTermSheet.getIssuanceDate())) {
+                    throw new RuntimeException("Final term-sheet date cannot be before the date of the existing draft term-sheet.");
+                }
+            }
+
             termSheet = termSheetRepository.save(termSheet);
-        }
-        else {
-            throw new RuntimeException("Term-sheet with status already exists");
         }
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
