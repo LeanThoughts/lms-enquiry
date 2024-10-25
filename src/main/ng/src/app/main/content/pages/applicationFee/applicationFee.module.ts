@@ -26,6 +26,7 @@ import { FormalRequestUpdateDialogComponent } from './formalRequestUpdate/formal
 import { InceptionFeeReceiptUpdateDialogComponent } from './inceptionFeeReceiptUpdate/inceptionFeeReceiptUpdate.component';
 import { InceptionFeeReceiptComponent } from './inceptionFeeReceipt/inceptionFeeReceipt.component';
 import { InvoicingDetailsComponent } from './invoicingDetails/invoicingDetails.component';
+import { ApplicationFeeProjectDetailsComponent } from './projectDetails/projectDetails.component';
 
 const routes = [
     {
@@ -83,7 +84,8 @@ const MY_FORMATS = {
         FormalRequestUpdateDialogComponent,
         InceptionFeeReceiptComponent,
         InceptionFeeReceiptUpdateDialogComponent,
-        InvoicingDetailsComponent
+        InvoicingDetailsComponent,
+        ApplicationFeeProjectDetailsComponent
     ],
     providers: [
         ApplicationFeeService,
@@ -102,7 +104,8 @@ const MY_FORMATS = {
         FormalRequestUpdateDialogComponent,
         InceptionFeeReceiptComponent,
         InceptionFeeReceiptUpdateDialogComponent,
-        InvoicingDetailsComponent
+        InvoicingDetailsComponent,
+        ApplicationFeeProjectDetailsComponent
     ],
     entryComponents: [
         TermSheetUpdateDialogComponent,

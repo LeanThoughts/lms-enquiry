@@ -24,7 +24,16 @@ export class ApplicationFeeService {
             this._loanEnquiryService.getLoanApplication(this._loanEnquiryService.selectedLoanApplicationId.value),
             this._loanEnquiryService.getProjectTypes(),
             this.getMeetingNumbers(this._loanEnquiryService.selectedLoanApplicationId.value),
-            this.getAllPartners()
+            this.getAllPartners(),
+            this._loanEnquiryService.getStates(),
+            this._loanEnquiryService.getLoanTypes(),
+            this._loanEnquiryService.getLoanClasses(),
+            this._loanEnquiryService.getAssistanceTypes(),
+            this._loanEnquiryService.getFinancingTypes(),
+            this._loanEnquiryService.getProjectTypeCoreSectors(),
+            this._loanEnquiryService.getPurposeOfLoans(),
+            this._loanEnquiryService.getUnitOfMeasures(),
+            this.getProjectDetails(this._applicationFee.value.id)
         ]);
     }
 
@@ -190,5 +199,28 @@ export class ApplicationFeeService {
      */
     public getPartner(href: string): Observable<any> {
         return this._http.get(href);
+    }
+
+    public getProjectDetails(applicationFeeId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._http.get('enquiry/api/applicationFeeProjectDetails/search/findByApplicationFeeId?applicationFeeId=' + applicationFeeId).subscribe(
+                (response => {
+                    observer.next(response);
+                    observer.complete();
+                }),
+                (error => {
+                    observer.next({});
+                    observer.complete();
+                })
+            )
+        });
+    }
+
+    public createProjectDetails(projectDetails: any): Observable<any> {
+        return this._http.post('enquiry/api/applicationFeeProjectDetails/create', projectDetails);
+    }
+
+    public updateProjectDetails(projectDetails: any): Observable<any> {
+        return this._http.put('enquiry/api/applicationFeeProjectDetails/update', projectDetails);
     }
 }
