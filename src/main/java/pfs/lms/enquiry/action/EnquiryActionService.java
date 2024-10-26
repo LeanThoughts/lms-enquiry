@@ -28,7 +28,7 @@ public class EnquiryActionService implements  IEnquiryActionService{
                 enquiryAction,
                 "Updated",
                 username,
-                "Process Enquiry", "Header");
+                "EnquiryAction", "EnquiryActionHeader");
         enquiryActionRepository.save(enquiryAction);
 
         return enquiryAction;

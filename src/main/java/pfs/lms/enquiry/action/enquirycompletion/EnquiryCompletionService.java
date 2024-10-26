@@ -31,13 +31,15 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
                     obj = enquiryActionRepository.save(obj);
                     // Change Documents for EnquiryAction Header
                     changeDocumentService.createChangeDocument(
-                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            obj.getId(),
+                            obj.getId().toString(),
+                            obj.getId().toString(),
                             loanApplication.getLoanContractId(),
                             null,
                             obj,
                             "Created",
                             username,
-                            "EnquiryAction", "Header");
+                            "EnquiryAction", "EnquiryActionHeader");
                     return obj;
                 });
         EnquiryCompletion enquiryCompletion = new EnquiryCompletion();

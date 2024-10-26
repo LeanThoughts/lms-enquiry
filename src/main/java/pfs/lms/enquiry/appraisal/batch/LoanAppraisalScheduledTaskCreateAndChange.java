@@ -635,6 +635,8 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
                      updateSAPIntegrationPointer(response, sapIntegrationPointer);
                      break;
+                 case "EnquiryActionHeader":
+                     log.info("Entity : -- " + sapIntegrationPointer.getSubBusinessProcessName() + " -- No Implementation DONE for upload to SAP" );
                  default:
                      log.info("Entity : -- " + sapIntegrationPointer.getSubBusinessProcessName() + " -- Not found for upload to SAP" );
              }

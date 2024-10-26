@@ -35,16 +35,14 @@ import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolder;
 import pfs.lms.enquiry.action.projectproposal.shareholder.ShareHolderRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
-import pfs.lms.enquiry.repository.AssistanceTypeRepository;
-import pfs.lms.enquiry.repository.LoanApplicationRepository;
-import pfs.lms.enquiry.repository.PartnerRepository;
-import pfs.lms.enquiry.repository.ProjectTypeRepository;
+import pfs.lms.enquiry.repository.*;
 
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeaserService implements ITeaserService {
+    private final LoanTypeRepository loanTypeRepository;
     private TeaserResource teaserResource;
     private SXSSFWorkbook sxssfWorkbook;
     private SXSSFSheet sxssfSheet;
@@ -80,7 +78,7 @@ public class TeaserService implements ITeaserService {
         teaserResource.setLoanApplication(loanApplication);
         if (loanApplication.getbusPartnerNumber() != null) {
             teaserResource.setPartner(partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber())));
-        }else {
+        } else {
             Partner partner = partnerRepository.getOne(loanApplication.getLoanApplicant());
             teaserResource.setPartner(partner);
         }
@@ -148,24 +146,38 @@ public class TeaserService implements ITeaserService {
 
     private TeaserContent getTeaserContent(TeaserResource teaserResource) {
         teaserContent = new TeaserContent();
-        teaserContent.setProjectName(teaserResource.getProjectDetail().getProjectName());
-        teaserContent.setPromoterName(teaserResource.getProjectDetail().getPromoterName());
-        teaserContent.setProjectType(projectTypeRepository.findByCode(teaserResource.getLoanApplication().getProjectType()).getValue());
-        //teaserExcel.setAssistanceType(assistanceTypeRepository.getAssistanceTypeByCode(teaserResource.getProjectDetail().getAssistanceType()).getValue());
+
         teaserContent.setGroupRating("");
         teaserContent.setProjectRating("");
-        teaserContent.setTypeAndPurposeOfLoan(assistanceTypeRepository.getAssistanceTypeByCode(teaserResource.getProjectDetail().getAssistanceType()).getValue());
-        teaserContent.setTotalFundsRequired(formatAmount(teaserResource.getProjectCost().getProjectCost()));
-        teaserContent.setTotalDebtRequired(formatAmount(teaserResource.getProjectCost().getDebt()));
-        teaserContent.setProposedShareOfPFS(formatAmount(teaserResource.getProjectCost().getPfsDebtAmount()));
+
         teaserContent.setTotalCorporateStructuredLoanRequirement("");
-        teaserContent.setEndUseOFundsFromPFS(teaserResource.projectDetail.getEndUseOfFunds());
         //teaserContent.setRateOfInterest(teaserResource.getProjectDetail());
 
+        if (teaserResource.getLoanApplication() != null) {
+            if (teaserResource.getLoanApplication().getProjectType() != null)
+                    teaserContent.setProjectType(projectTypeRepository.findByCode(teaserResource.getLoanApplication().getProjectType()).getValue());
+        }
+
         if (teaserResource.getProjectDetail() != null) {
+            if (teaserResource.getProjectDetail().getProjectName() != null)
+                teaserContent.setProjectName(teaserResource.getProjectDetail().getProjectName());
+            if (teaserResource.getProjectDetail().getPromoterName() != null)
+                teaserContent.setPromoterName(teaserResource.getProjectDetail().getPromoterName());
+
+            String typeAndPurposeOfLoan = "";
+            if (teaserResource.getProjectDetail().getLoanType() != null) {
+                //teaserContent.setTypeAndPurposeOfLoan(loanTypeRepository.getLoanTypeByCode(teaserResource.getProjectDetail().getLoanType()).getValue());
+                typeAndPurposeOfLoan = typeAndPurposeOfLoan + loanTypeRepository.getLoanTypeByCode(teaserResource.getProjectDetail().getLoanType()).getValue();
+            }
+            if (teaserResource.getProjectDetail().getAssistanceType() != null) {
+                //teaserContent.setTypeAndPurposeOfLoan(assistanceTypeRepository.getAssistanceTypeByCode(teaserResource.getProjectDetail().getAssistanceType()).getValue());
+                typeAndPurposeOfLoan = typeAndPurposeOfLoan + " " + assistanceTypeRepository.getAssistanceTypeByCode(teaserResource.getProjectDetail().getAssistanceType()).getValue();
+            }
+            teaserContent.setTypeAndPurposeOfLoan(typeAndPurposeOfLoan);
+
             if (teaserResource.getProjectDetail().getTenorYear() != null)
                 teaserContent.setTenure(teaserResource.getProjectDetail().getTenorYear() + " Years");
-            if (teaserResource.getProjectDetail().getTenorMonths() != null)
+            if (teaserResource.getProjectDetail().getTenorMonths() != null && teaserContent.getTenure() != null)
                 teaserContent.setTenure(teaserContent.getTenure() + " " + teaserResource.getProjectDetail().getTenorMonths() + " Months");
             if (teaserResource.getProjectDetail().getMoratoriumPeriod() != null)
                 teaserContent.setMoratoriumPeriod(teaserResource.getProjectDetail().getMoratoriumPeriod().toString());
@@ -173,23 +185,31 @@ public class TeaserService implements ITeaserService {
                 teaserContent.setMoratoriumPeriod(teaserContent.getMoratoriumPeriod() + getPeriodUnit(teaserResource.getProjectDetail().getMoratoriumPeriodUnit()));
             if (teaserResource.getProjectDetail().getFees() != null)
                 teaserContent.setFee(formatAmount(teaserResource.getProjectDetail().getFees()));
+            if (teaserResource.getProjectDetail().getEndUseOfFunds() != null)
+                teaserContent.setEndUseOFundsFromPFS(teaserResource.projectDetail.getEndUseOfFunds());
         }
 
+
         if (teaserResource.getProjectProposalOtherDetail() != null) {
-            teaserContent.setSourceAndCashFlow(teaserResource.getProjectProposalOtherDetail().getSourceAndCashFlow());
+            if (teaserResource.getProjectProposalOtherDetail().getSourceAndCashFlow() != null)
+                teaserContent.setSourceAndCashFlow(teaserResource.getProjectProposalOtherDetail().getSourceAndCashFlow());
             teaserContent.setQuantificationOfSecurity("");
-            teaserContent.setConsolidatedGroupLeverage(teaserResource.getProjectProposalOtherDetail().getConsolidatedGroupLeverage());
+            if (teaserResource.getProjectProposalOtherDetail().getConsolidatedGroupLeverage() != null)
+                teaserContent.setConsolidatedGroupLeverage(teaserResource.getProjectProposalOtherDetail().getConsolidatedGroupLeverage());
 
             if (teaserResource.getProjectProposalOtherDetail().getTotalDebtTNW() != null)
                 teaserContent.setTotalDebitTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTotalDebtTNW()));
 
             if (teaserResource.getProjectProposalOtherDetail().getTolTNW() != null)
                 teaserContent.setTotalTOLTNW(formatAmount(teaserResource.getProjectProposalOtherDetail().getTolTNW()));
-
-            teaserContent.setDelaysInDebtServicing(teaserResource.getProjectProposalOtherDetail().getDelayInDebtServicing());
+            if (teaserResource.getProjectProposalOtherDetail().getDelayInDebtServicing() != null)
+                teaserContent.setDelaysInDebtServicing(teaserResource.getProjectProposalOtherDetail().getDelayInDebtServicing());
         }
 
         if (teaserResource.getProjectCost() != null) {
+            if (teaserResource.getProjectCost().getPfsDebtAmount() != null){
+                teaserContent.setProposedShareOfPFS(teaserResource.getProjectCost().getPfsDebtAmount().toString());
+            }
 
             if (teaserResource.getProjectCost().getProjectCost() != null)
                 teaserContent.setProjectCost(formatAmount(teaserResource.getProjectCost().getProjectCost()));
@@ -199,8 +219,8 @@ public class TeaserService implements ITeaserService {
 
             if (teaserResource.getProjectCost().getEquity() != null)
                 teaserContent.setEquity(formatAmount(teaserResource.getProjectCost().getEquity()));
-
-            teaserContent.setDebtEquityRatio(teaserResource.getProjectCost().getDebtEquityRatio().toString());
+            if (teaserResource.getProjectCost().getDebtEquityRatio() != null)
+                teaserContent.setDebtEquityRatio(teaserResource.getProjectCost().getDebtEquityRatio().toString());
         }
 
         return teaserContent;

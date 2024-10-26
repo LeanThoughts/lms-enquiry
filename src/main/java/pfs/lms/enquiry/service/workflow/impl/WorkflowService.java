@@ -285,6 +285,7 @@ public class WorkflowService implements IWorkflowService {
         } catch (Exception ex) {
             log.info("Exception starting workflow process ------------------------------");
             log.info(ex.toString());
+            return null;
         }
 
         switch (processName) {
@@ -685,6 +686,7 @@ public class WorkflowService implements IWorkflowService {
             taskService.complete(task.getId(), variables);
         } catch (Exception ex) {
             log.info("WorkFlow REJECTION Exception : " + ex.getMessage());
+            return null;
         }
         System.out.println("--------------- Workflow REJECTION Task Execution Finished @ : " + DateTime.now());
 

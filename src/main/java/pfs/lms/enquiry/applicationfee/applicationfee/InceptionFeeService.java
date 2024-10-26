@@ -76,7 +76,7 @@ public class InceptionFeeService implements IInceptionFeeService {
                 inceptionFee,
                 "Created",
                 username,
-                "Application Fee", "Application Fee");
+                "Application Fee", "Inception Fee");
 
         return inceptionFee;
     }
@@ -107,8 +107,7 @@ public class InceptionFeeService implements IInceptionFeeService {
 
         inceptionFee = inceptionFeeRepository.save(inceptionFee);
 
-        // Change Documents for  Loan Partner
-        changeDocumentService.createChangeDocument(
+         changeDocumentService.createChangeDocument(
                 inceptionFee.getId(),
                 inceptionFee.getId().toString(),
                 inceptionFee.getId().toString(),
@@ -117,7 +116,7 @@ public class InceptionFeeService implements IInceptionFeeService {
                 inceptionFee,
                 "Created",
                 username,
-                "Application Fee", "Application Fee");
+                "Application Fee", "Inception Fee");
 
         return inceptionFee;
     }
@@ -127,6 +126,17 @@ public class InceptionFeeService implements IInceptionFeeService {
         InceptionFee inceptionFee = inceptionFeeRepository.findById(inceptionFeeId)
                 .orElseThrow(() -> new EntityNotFoundException(inceptionFeeId.toString()));
         inceptionFeeRepository.delete(inceptionFee);
+
+        changeDocumentService.createChangeDocument(
+                inceptionFee.getId(),
+                inceptionFee.getId().toString(),
+                inceptionFee.getId().toString(),
+                inceptionFee.getLoanContractId(),
+                null,
+                inceptionFee,
+                "Deleted",
+                username,
+                "Application Fee", "Inception Fee");
         return inceptionFee;
     }
 }

@@ -37,15 +37,16 @@ public class TermSheetService implements ITermSheetService {
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = applicationFeeRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for ApplicationFee Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "ApplicationFee", "Header");
+
 
                     return obj;
                 });
@@ -81,16 +82,16 @@ public class TermSheetService implements ITermSheetService {
 
             termSheet = termSheetRepository.save(termSheet);
         }
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                termSheet.getId(),
+                termSheet.getId().toString(),
+                termSheet.getApplicationFee().getId().toString(),
+                loanApplication.getEnquiryNo().getId().toString(),
+                null,
+                termSheet,
+                "Created",
+                username,
+                "Application Fee", "TermSheet");
 
         return termSheet;
     }
@@ -102,7 +103,7 @@ public class TermSheetService implements ITermSheetService {
         TermSheet termSheet = termSheetRepository.findById(termSheetResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(termSheetResource.getId().toString()));
 
-        Object oldFormalRequest = termSheet.clone();
+        Object oldTermSheet = termSheet.clone();
 
 //        termSheet.setStatus(termSheetResource.getStatus());
         termSheet.setIssuanceDate(termSheetResource.getIssuanceDate());
@@ -110,17 +111,16 @@ public class TermSheetService implements ITermSheetService {
         termSheet.setFileReference(termSheetResource.getFileReference());
         termSheet = termSheetRepository.save(termSheet);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+         changeDocumentService.createChangeDocument(
+                 termSheet.getId(),
+                 termSheet.getId().toString(),
+                 termSheet.getApplicationFee().getId().toString(),
+                 termSheet.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+                 oldTermSheet,
+                 termSheet,
+                "Updated",
+                username,
+                 "Application Fee", "TermSheet");
 
         return termSheet;
     }
@@ -130,6 +130,18 @@ public class TermSheetService implements ITermSheetService {
         TermSheet termSheet = termSheetRepository.findById(termSheetId)
                 .orElseThrow(() -> new EntityNotFoundException(termSheetId.toString()));
         termSheetRepository.delete(termSheet);
+
+        changeDocumentService.createChangeDocument(
+                termSheet.getId(),
+                termSheet.getId().toString(),
+                termSheet.getApplicationFee().getId().toString(),
+                termSheet.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                termSheet,
+                "Deleted",
+                username,
+                "Application Fee", "TermSheet");
+
         return termSheet;
     }
 }

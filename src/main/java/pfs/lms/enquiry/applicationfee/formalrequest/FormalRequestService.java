@@ -36,15 +36,17 @@ public class FormalRequestService implements IFormalRequestService {
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = applicationFeeRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    // Change Documents for Application Fee - Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),
+                            obj.getId().toString(),
+                            obj.getId().toString(),
+                            loanApplication.getEnquiryNo().getId().toString(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Application Fee", "Header");
 
                     return obj;
                 });
@@ -58,16 +60,17 @@ public class FormalRequestService implements IFormalRequestService {
         formalRequest.setDocumentReceivedDate(formalRequestResource.getDocumentReceivedDate());
         formalRequest.setFileReference(formalRequestResource.getFileReference());
         formalRequest = formalRequestRepository.save(formalRequest);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+
+        changeDocumentService.createChangeDocument(
+                formalRequest.getId(),
+                formalRequest.getId().toString(),
+                formalRequest.getApplicationFee().getId().toString(),
+                loanApplication.getEnquiryNo().getId().toString(),
+                null,
+                formalRequest,
+                "Created",
+                username,
+                "Application Fee", "FormalRequest");
 
         return formalRequest;
     }
@@ -88,17 +91,18 @@ public class FormalRequestService implements IFormalRequestService {
         formalRequest.setFileReference(formalRequestResource.getFileReference());
         formalRequest = formalRequestRepository.save(formalRequest);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        // Change Documents
+        changeDocumentService.createChangeDocument(
+                formalRequest.getId(),
+                formalRequest.getId().toString(),
+                formalRequest.getApplicationFee().getId().toString(),
+                formalRequest.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldFormalRequest,
+                formalRequest,
+                "Updated",
+                username,
+                "Application Fee", "FormalRequest");
+
 
         return formalRequest;
     }
@@ -108,6 +112,18 @@ public class FormalRequestService implements IFormalRequestService {
         FormalRequest formalRequest = formalRequestRepository.findById(formalRequestId)
                 .orElseThrow(() -> new EntityNotFoundException(formalRequestId.toString()));
         formalRequestRepository.delete(formalRequest);
+
+        changeDocumentService.createChangeDocument(
+                formalRequest.getId(),
+                formalRequest.getId().toString(),
+                formalRequest.getApplicationFee().getId().toString(),
+                formalRequest.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                formalRequest,
+                "Deleted",
+                username,
+                "Application Fee", "FormalRequest");
+
         return formalRequest;
     }
 }

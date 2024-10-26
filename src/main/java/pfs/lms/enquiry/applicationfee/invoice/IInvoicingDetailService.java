@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface IInvoicingDetailService {
 
-    InvoicingDetail create(InvoicingDetailResource invoicingDetailResource, String username);
+    InvoicingDetail create(InvoicingDetailResource invoicingDetailResource, String username) throws CloneNotSupportedException;
 
     InvoicingDetail update(InvoicingDetailResource invoicingDetailResource, String username) throws CloneNotSupportedException;
 

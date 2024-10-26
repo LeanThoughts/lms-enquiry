@@ -19,7 +19,7 @@ public class InvoicingDetailController {
 
     @PostMapping("/invoicingDetails/create")
     public ResponseEntity<InvoicingDetail> create(@RequestBody InvoicingDetailResource invoicingDetailResource,
-                                                  HttpServletRequest request) {
+                                                  HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(invoicingDetailService.create(invoicingDetailResource,
                 request.getUserPrincipal().getName()));

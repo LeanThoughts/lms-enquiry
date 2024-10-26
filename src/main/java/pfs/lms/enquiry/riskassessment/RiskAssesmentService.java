@@ -60,7 +60,7 @@ public class RiskAssesmentService implements IRiskAssessmentService {
         loanApplication.setFunctionalStatus(10);
         loanApplication.setFunctionalStatusDescription("Preliminary Risk Assessment Completed");
 
-        loanApplication.setPostedInSAP(0);
+        //loanApplication.setPostedInSAP(0);
         loanApplication.setTechnicalStatus(4);
 
         // Change Documents for Enquiry Completion

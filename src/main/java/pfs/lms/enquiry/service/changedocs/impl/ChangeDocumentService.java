@@ -29,6 +29,10 @@ import pfs.lms.enquiry.action.rejectbycustomer.RejectByCustomer;
 import pfs.lms.enquiry.action.rejectbypfs.RejectByPfs;
 import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.applicationfee.InceptionFee;
+import pfs.lms.enquiry.applicationfee.applicationfeeprojectdetails.ApplicationFeeProjectDetail;
+import pfs.lms.enquiry.applicationfee.formalrequest.FormalRequest;
+import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetail;
+import pfs.lms.enquiry.applicationfee.termsheet.TermSheet;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
@@ -1000,6 +1004,49 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     }
                     result.put("loanApplication",preliminaryRiskAssessment.getRiskAssessment().getLoanApplication());
                     return result;
+                case "FormalRequest":
+                    FormalRequest formalRequest = (FormalRequest) object;
+                    result.put("id", formalRequest.getId().toString());
+                    if (formalRequest.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", formalRequest.getApplicationFee().getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", formalRequest.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",formalRequest.getApplicationFee().getLoanApplication());
+                    return result;
+                case "TermSheet":
+                    TermSheet termSheet = (TermSheet) object;
+                    result.put("id", termSheet.getId().toString());
+                    if (termSheet.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", termSheet.getApplicationFee().getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", termSheet.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",termSheet.getApplicationFee().getLoanApplication());
+                    return result;
+                case "InvoicingDetail":
+                    InvoicingDetail invoicingDetail = (InvoicingDetail) object;
+                    result.put("id", invoicingDetail.getId().toString());
+                    if (invoicingDetail.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", invoicingDetail.getApplicationFee().getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", invoicingDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",invoicingDetail.getApplicationFee().getLoanApplication());
+                    return result;
+
+                case "ApplicationFeeProjectDetail":
+                    ApplicationFeeProjectDetail applicationFeeProjectDetail = (ApplicationFeeProjectDetail) object;
+                    result.put("id", applicationFeeProjectDetail.getId().toString());
+                    if (applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
+                        result.put("description", applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getLoanContractId().toString());
+                    } else{
+                        result.put("description", applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
+                    }
+                    result.put("loanApplication",applicationFeeProjectDetail.getApplicationFee().getLoanApplication());
+                    return result;
+
+
             }
 
         } catch (Exception ex) {
@@ -1020,7 +1067,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                                          String businessProcessName, String subProcessName) {
 
         Map<String, Object> result = getObjectDetails(changedObject.getClass().getSimpleName(), changedObject);
-        loanApplicationRepository.flush();
+        //loanApplicationRepository.flush();
 
         //ChangeDocument changeDocument = new ChangeDocument();
         changeDocument.setLoanBusinessProcessObjectId(loanBusinessProcessObjectId);

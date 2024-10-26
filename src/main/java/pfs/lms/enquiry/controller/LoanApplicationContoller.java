@@ -337,7 +337,8 @@ public class LoanApplicationContoller {
     public ResponseEntity cancel(@PathVariable("id") LoanApplication loanApplication, HttpServletRequest request) {
         Partner partner = partnerRepository.findByUserName(request.getUserPrincipal().getName());
         // Set functional status to 9 (cancelled).
-        loanApplication.setFunctionalStatus(9);
+        loanApplication.setFunctionalStatus(80);
+        loanApplication.setFunctionalStatusDescription("Cancelled");
         loanApplication.setTechnicalStatus(5);
 
         loanApplication = loanApplicationRepository.save(loanApplication);
@@ -916,15 +917,22 @@ public class LoanApplicationContoller {
                             break;
                     }
                 }
+
                 /**
                  * 01-Enquiry Stage
-                 * 02-ICC ApprovalStage
+                 * 02-ICC In-Principle Approved
                  * 03-Appraisal Stage
                  * 04-Board Approval Stage
-                 * 05-Loan Documentation Stage
-                 * 06-Loan Disbursement Stage
-                 * 07-Approved
-                 * 08-Rejected
+                 * 05-Sanction Stage
+                 * 06-Loan Documentation Stage
+                 * 07-Loan Disbursement Stage -
+                 * 08-Monitoring
+                 * 09-Recovery
+                 * 10-Preliminary Risk Assessment Completed
+                 * 11-Application Fee
+                 * 80 - Cancelled
+                 * 90- Planned Completed
+                 * 99- Actual Completed
                  */
                 if (loanApplication.getFunctionalStatus() != null) {
                     switch (loanApplication.getFunctionalStatus()) {
@@ -938,21 +946,35 @@ public class LoanApplicationContoller {
                             loanApplication.setFunctionalStatusDescription("Appraisal Stage");
                             break;
                         case 4:
-                            loanApplication.setFunctionalStatusDescription("Board Approval Stage");
+                            loanApplication.setFunctionalStatusDescription("Sanction Stage");
                             break;
                         case 5:
-                            loanApplication.setFunctionalStatusDescription("Loan Documentation Stage");
+                            loanApplication.setFunctionalStatusDescription("Board Approval Stage");
                             break;
                         case 6:
-                            loanApplication.setFunctionalStatusDescription("Loan Disbursement Stage");
+                            loanApplication.setFunctionalStatusDescription("Loan Documentation Stage");
                             break;
                         case 7:
-                            loanApplication.setFunctionalStatusDescription("Approved");
+                            loanApplication.setFunctionalStatusDescription("Disbursement Stage");
                             break;
                         case 8:
-                            loanApplication.setFunctionalStatusDescription("Rejected");
+                            loanApplication.setFunctionalStatusDescription("Monitoring Stage");
                             break;
-
+                        case 9:
+                            loanApplication.setFunctionalStatusDescription("Recovery Stage");
+                            break;
+                        case 10:
+                            loanApplication.setFunctionalStatusDescription("Preliminary Risk Assessment Completed Stage");
+                            break;
+                        case 11:
+                            loanApplication.setFunctionalStatusDescription("Application Fee Stage");
+                            break;
+                        case 80:
+                            loanApplication.setFunctionalStatusDescription("Cancelled");
+                        case 90:
+                            loanApplication.setFunctionalStatusDescription("Planned Completed");
+                        case 99:
+                            loanApplication.setFunctionalStatusDescription("Actual Completed");
                     }
                 }
 

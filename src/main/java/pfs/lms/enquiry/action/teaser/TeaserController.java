@@ -41,7 +41,7 @@ public class TeaserController {
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=LoanEnquiryTeaser_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=LoanEnquiryTeaser_" + currentDateTime + ".xls";
         response.setHeader(headerKey, headerValue);
 
         SXSSFWorkbook sxssfWorkbook =  teaserService.generateTeaserExcelForProposal(response, UUID.fromString(projectProposalId));

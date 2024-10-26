@@ -117,7 +117,7 @@ public class TeaserExcel {
         content = new TeaserLineContent(++serialNo, contentStyle,"Name of the Sponsor/ Group", titleStyle,  teaserContent.getPromoterName(), null, null, null, null, null, null, null, null, null,null, null,null, null);
         writeDataLinesSXSSFirstPage(++currentContentRow,content, true, 2,8);
 
-        content = new TeaserLineContent(++serialNo, contentStyle, "Type of Project (Very brief project/proposal synopsis)", titleStyle, teaserContent.getProjectName(), contentStyle, null, null, null, null, null, null, null, null, null, null,null, null);
+        content = new TeaserLineContent(++serialNo, contentStyle, "Type of Project (Very brief project/proposal synopsis)", titleStyle, teaserContent.getProjectType(), contentStyle, null, null, null, null, null, null, null, null, null, null,null, null);
         writeDataLinesSXSSFirstPage(++currentContentRow, content, true, 2,8);
 
         content = new TeaserLineContent(++serialNo, contentStyle,"Rating of the Group", titleStyle, teaserContent.getGroupRating(), contentStyle, "Rating of the Project", titleStyle, teaserContent.getProjectRating(), contentStyle, null, null, null, null, null, null,null, null);

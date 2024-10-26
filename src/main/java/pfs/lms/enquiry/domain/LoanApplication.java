@@ -101,7 +101,9 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
     // Loan Disbursed Amount
     private Double loanDisbursedAmount;
 
-
+    private Double grantSubsidyAmount;
+    private Double debtEquityRatioWithGrant;
+    private Double debtEquityRatio;
 
 
     private Double equity;
@@ -172,6 +174,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
      * 09-Recovery
      * 10-Preliminary Risk Assessment Completed
      * 11-Application Fee
+     * 80 - Cancelled
      * 90- Planned Completed
      * 99- Actual Completed
      */
@@ -399,7 +402,10 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
                            @JsonProperty("iCCClearanceDate") LocalDate iCCClearanceDate  ,
                            @JsonProperty("iCCMeetNumber") String  iCCMeetNumber,
                            @JsonProperty("iCCStatus") String  iCCStatus,
-                           @JsonProperty("iCCRemarks") String  iCCRemarks
+                           @JsonProperty("iCCRemarks") String  iCCRemarks,
+                           @JsonProperty("grantSubsidyAmount") Double grantSubsidyAmount,
+                           @JsonProperty("debtEquityRatioWithGrant") Double debtEquityRatioWithGrant,
+                           @JsonProperty("debtEquityRatio") Double debtEquityRatio
 
                            ) {
 
@@ -521,6 +527,10 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
        this.termSheetAcceptance = termSheetAcceptance;
        this.feeRemarks = feeRemarks;
 
+       this.grantSubsidyAmount = grantSubsidyAmount;
+       this.debtEquityRatioWithGrant = debtEquityRatioWithGrant;
+       this.debtEquityRatio = debtEquityRatio;
+
 
     }
 
@@ -556,7 +566,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
     }
 
     public LoanApplication responseFromSAP(SAPLoanApplicationResource sapLoanApplicationResource){
-        this.functionalStatus = 2;
+        //this.functionalStatus = 2;
         this.loanContractId = sapLoanApplicationResource.getSapLoanApplicationDetailsResource().getLoanContract();
         this.busPartnerNumber = sapLoanApplicationResource.getSapLoanApplicationDetailsResource().getBusPartnerNumber();
         return this;

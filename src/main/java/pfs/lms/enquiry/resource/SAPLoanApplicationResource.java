@@ -165,6 +165,8 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setPanNumber(partner.getPan());
         detailsResource.setContactPerName(partner.getContactPersonName());
         detailsResource.setIndustrySector(partner.getIndustrySector());
+        detailsResource.setContactNumber(partner.getMobileNumber());
+        detailsResource.setContactTelePhone(partner.getContactNumber());
         if (partner.getPartyNumber() != null)
             detailsResource.setBusPartnerNumber(partner.getPartyNumber().toString());
 

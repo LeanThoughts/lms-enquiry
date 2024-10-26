@@ -50,7 +50,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public InvoicingDetail create(InvoicingDetailResource invoicingDetailResource, String username) {
+    public InvoicingDetail create(InvoicingDetailResource invoicingDetailResource, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(invoicingDetailResource.getLoanApplicationId());
 
@@ -61,7 +61,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = applicationFeeRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
+                    // Change Documents for ApplicationFee Header
                     changeDocumentService.createChangeDocument(
                             obj.getId(),obj.getId().toString(),obj.getId().toString(),
                             loanApplication.getLoanContractId(),
@@ -69,7 +69,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                             obj,
                             "Created",
                             username,
-                            "Appraisal", "Header");
+                            "ApplicationFee", "Header");
 
                     return obj;
                 });
@@ -79,16 +79,19 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         invoicingDetail.setApplicationFee(applicationFee);
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                invoicingDetail.getId(),
+                invoicingDetail.getId().toString(),
+                invoicingDetail.getApplicationFee().getId().toString(),
+                invoicingDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+                null,
+                invoicingDetail,
+                "Created",
+                username,
+                "ApplicationFee", "InvoicingDetail");
+
+        saveLoanApplication(invoicingDetail.getApplicationFee().getLoanApplication(), partner, username);
+
 
         return invoicingDetail;
     }
@@ -99,25 +102,47 @@ public class InvoicingDetailService implements IInvoicingDetailService {
 
         InvoicingDetail invoicingDetail = invoicingDetailRepository.findById(invoicingDetailResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(invoicingDetailResource.getId().toString()));
-        Object oldFormalRequest = invoicingDetail.clone();
+        Object oldInvoicingDetail = invoicingDetail.clone();
 
         Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                invoicingDetail.getId(),
+                invoicingDetail.getId().toString(),
+                invoicingDetail.getApplicationFee().getId().toString(),
+                invoicingDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+                oldInvoicingDetail,
+                invoicingDetail,
+                "Updated",
+                username,
+                "ApplicationFee", "InvoicingDetail");
+
+        saveLoanApplication(invoicingDetail.getApplicationFee().getLoanApplication(), partner, username);
 
         return invoicingDetail;
+    }
+
+    private LoanApplication saveLoanApplication(LoanApplication loanApplication, Partner partner, String username) throws CloneNotSupportedException {
+
+        Object oldLoanApplication = loanApplication.clone();
+
+        loanApplication.setLoanApplicant(partner.getId());
+        loanApplication.setBusPartnerNumber(partner.getPartyNumber().toString());
+        loanApplicationRepository.save(loanApplication);
+//        changeDocumentService.createChangeDocument(
+//                loanApplication.getId(),
+//                loanApplication.getId().toString(),
+//                loanApplication.getId().toString(),
+//                loanApplication.getEnquiryNo().getId().toString(),
+//                oldLoanApplication,
+//                loanApplication,
+//                "Updated",
+//                username,
+//                "LoanApplication", "LoanApplication");
+
+        return loanApplication;
     }
 
     @Override
