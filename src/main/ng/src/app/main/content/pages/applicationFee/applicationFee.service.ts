@@ -33,7 +33,8 @@ export class ApplicationFeeService {
             this._loanEnquiryService.getProjectTypeCoreSectors(),
             this._loanEnquiryService.getPurposeOfLoans(),
             this._loanEnquiryService.getUnitOfMeasures(),
-            this.getProjectDetails(this._applicationFee.value.id)
+            this.getProjectDetails(this._applicationFee.value.id),
+            this._loanEnquiryService.getProductTypes()
         ]);
     }
 
