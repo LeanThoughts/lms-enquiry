@@ -30,7 +30,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
     assistanceTypes: any;
     financingTypes: any;
     projectTypeCoreSectors: any;
-
+    productTypes: any;
+    
     projectDetails: any;
 
     /**
@@ -50,7 +51,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
         this.projectTypeCoreSectors = _activatedRoute.snapshot.data.routeResolvedData[10]._embedded.projectTypeCoreSectors;
         this.purposeOfLoans = _activatedRoute.snapshot.data.routeResolvedData[11]._embedded.purposeOfLoans;
         this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[12]._embedded.unitOfMeasures;
-
+        this.productTypes = _activatedRoute.snapshot.data.routeResolvedData[14]._embedded.products;
+        
         this.projectDetails = _activatedRoute.snapshot.data.routeResolvedData[13];
 
         console.log('projectDetails', this.projectDetails);

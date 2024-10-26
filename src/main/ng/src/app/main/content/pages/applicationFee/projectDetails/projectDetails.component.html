@@ -47,7 +47,12 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Product Type" formControlName="productTypeCode" maxlength="100" required>
+                    <mat-select placeholder="Product Type" formControlName="productTypeCode" required>
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let productType of productTypes" [value]="productType.code">
+                            {{ productType.name }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
                     <input matInput placeholder="Term" formControlName="term" maxlength="3" required type="number">
