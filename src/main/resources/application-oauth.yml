@@ -49,11 +49,11 @@ spring:
         ssl.trust: us2.smtp.mailhostbox.com
   activiti:
     activiti5CompatibilityEnabled: true
-    mail-server-host: smtp.gmail.com
+    mail-server-host: us2.smtp.mailhostbox.com
     mail-server-port: 587
-    mail-server-user-name: pfsriskmodel@gmail.com
-    mail-server-password: ameofolzdhbmiorr
-    mail-server-default-from: pfsriskmodel@gmail.com
+    mail-server-user-name: portal.admin@pfs-ess.com
+    mail-server-password: Ess@hYYXIaN2#hYYXIaN2
+    mail-server-default-from: portal.admin@pfs-ess.com
     mail-server-use-tls: true
     database-schema-update: true
 oauth:
@@ -66,8 +66,10 @@ sap:
   baseUrl: http://192.168.1.205:8000
   serviceUri: /sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet
   monitorServiceUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/
-  appraisalDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/DocumentSet
   appraisalServiceUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/
+  appraisalDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/DocumentSet
+  businessPartnerServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/
+  businessPartnerDocumentServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/DocumentSet
   lieUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LendersIndependentEngineerSet
   lieReportAndFeeUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LIEReportAndFeeSet
   monitorDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/DocumentSet
