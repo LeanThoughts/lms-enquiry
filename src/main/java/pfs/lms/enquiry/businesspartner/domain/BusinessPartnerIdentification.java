@@ -34,6 +34,9 @@ public class BusinessPartnerIdentification extends AggregateRoot<BusinessPartner
     private String country;
     private String countryIso;
     private String region;
+    private String fileReference;
+    private String documentName;
+    private String documentType;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

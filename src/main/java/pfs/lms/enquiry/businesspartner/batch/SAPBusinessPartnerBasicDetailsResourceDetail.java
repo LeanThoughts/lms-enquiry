@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.batch;
+package pfs.lms.enquiry.businesspartner.batch;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
-public class SAPBusinessPartnerBasicDetailsResourceDetails {
+public class SAPBusinessPartnerBasicDetailsResourceDetail {
 
     @JsonProperty(value = "BusPartnerNumber")
     private String busPartnerNumber;

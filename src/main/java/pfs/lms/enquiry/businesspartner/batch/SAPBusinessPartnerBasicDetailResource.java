@@ -1,12 +1,10 @@
-package pfs.lms.enquiry.batch;
+package pfs.lms.enquiry.businesspartner.batch;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
-import pfs.lms.enquiry.appraisal.resource.SAPLoanAppraisalCustomerRejectionResourceDetails;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
@@ -17,25 +15,25 @@ import java.text.ParseException;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties (ignoreUnknown = true)
 
-public class SAPBusinessPartnerBasicDetailsResource implements Serializable {
+public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
-    public SAPBusinessPartnerBasicDetailsResource() {
-        sapBusinessPartnerBasicDetailsResourceDetails = new SAPBusinessPartnerBasicDetailsResourceDetails();
+    public SAPBusinessPartnerBasicDetailResource() {
+        sapBusinessPartnerBasicDetailsResourceDetail = new SAPBusinessPartnerBasicDetailsResourceDetail();
     }
 
     @JsonProperty(value = "d")
-    private SAPBusinessPartnerBasicDetailsResourceDetails sapBusinessPartnerBasicDetailsResourceDetails;
+    private SAPBusinessPartnerBasicDetailsResourceDetail sapBusinessPartnerBasicDetailsResourceDetail;
     DataConversionUtility dataConversionUtility =  new DataConversionUtility();
 
 
-    public void setSAPBusinessPartnerBasicDetailsResourceDetails(SAPBusinessPartnerBasicDetailsResourceDetails sapBusinessPartnerBasicDetailsResourceDetails) {
-        this.sapBusinessPartnerBasicDetailsResourceDetails = sapBusinessPartnerBasicDetailsResourceDetails;
+    public void setSAPBusinessPartnerBasicDetailsResourceDetails(SAPBusinessPartnerBasicDetailsResourceDetail sapBusinessPartnerBasicDetailsResourceDetail) {
+        this.sapBusinessPartnerBasicDetailsResourceDetail = sapBusinessPartnerBasicDetailsResourceDetail;
     }
 
-    public SAPBusinessPartnerBasicDetailsResourceDetails
+    public SAPBusinessPartnerBasicDetailsResourceDetail
                                 mapBupaBasicDetails(Partner partner) throws ParseException {
 
-        SAPBusinessPartnerBasicDetailsResourceDetails detailsResource = new SAPBusinessPartnerBasicDetailsResourceDetails();
+        SAPBusinessPartnerBasicDetailsResourceDetail detailsResource = new SAPBusinessPartnerBasicDetailsResourceDetail();
         if (partner.getPartyNumber() != null)
             detailsResource.setBusPartnerNumber(partner.getPartyNumber().toString());
         else

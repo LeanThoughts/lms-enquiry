@@ -31,6 +31,7 @@ public class BusinessPartnerBankDetail extends AggregateRoot<BusinessPartnerIndu
     private String referenceNumber;
     private String accountHolderName;
     private String collectionAuthorization;
+    private String externalBankId;
     private String bankAccountName;
     private String iBan;
     private LocalDate iBanFromDate;

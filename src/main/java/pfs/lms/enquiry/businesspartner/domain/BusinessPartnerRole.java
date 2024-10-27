@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class BusinessPartnerRole extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
+public class BusinessPartnerRole extends AggregateRoot<BusinessPartnerRole> implements Cloneable{
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
@@ -24,7 +24,7 @@ public class BusinessPartnerRole extends AggregateRoot<BusinessPartnerIndustry> 
 
     @OneToOne
     @JoinColumn(name = "role_type_id")
-    private BusinessPartnerRole roleType ;
+    private BusinessPartnerRoleType roleType ;
 
     private String differentiationType;
     private String allPartnerRoles;

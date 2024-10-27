@@ -1,12 +1,10 @@
 package pfs.lms.enquiry.businesspartner.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRole;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRoleType;
 
-import java.util.UUID;
+public interface BusinessPartnerRoleTypeRepository extends JpaRepository<BusinessPartnerRoleType, Long> {
 
-public interface BusinessPartnerRoleRepository extends JpaRepository<BusinessPartnerRole, UUID> {
-
+    BusinessPartnerRoleType findBusinessPartnerRoleByCode(String code);
 
 }
