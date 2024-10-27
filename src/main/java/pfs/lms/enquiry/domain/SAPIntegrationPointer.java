@@ -53,7 +53,7 @@ public class SAPIntegrationPointer {
     // U - Update
     // D - Delete
     @NotNull
-    private char mode;
+    private String mode;
 
 
 }

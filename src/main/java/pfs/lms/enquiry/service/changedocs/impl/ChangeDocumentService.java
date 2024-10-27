@@ -129,7 +129,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
     // C - Create
     // U - Update
     // D - Delete
-    private char mode;
+    private String mode;
 
 
     @Override
@@ -155,7 +155,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         action,
                         userName,
                         businessProcessName, subProcessName);
-                this.mode = 'C';
+                this.mode = "C";
 
                 break;
             case "Updated":
@@ -168,7 +168,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         userName,
                         businessProcessName, subProcessName);
 
-                this.mode = 'U';
+                this.mode = "U";
                 break;
             case "Deleted":
                 changeDocument.setAction("Deleted");
@@ -178,7 +178,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         action,
                         userName,
                         businessProcessName, subProcessName);
-                this.mode = 'D';
+                this.mode = "D";
                 break;
             case "Sent for Approval":
                 changeDocument.setAction("Rejected");
@@ -189,7 +189,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         action,
                         userName,
                         businessProcessName, subProcessName);
-                this.mode = 'U';
+                this.mode = "U";
                 break;
             case "Approved":
                 changeDocument.setAction("Approved");
@@ -200,7 +200,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         action,
                         userName,
                         businessProcessName, subProcessName);
-                this.mode = 'U';
+                this.mode = "U";
                 break;
 
             case "Rejected":
@@ -212,7 +212,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         action,
                         userName,
                         businessProcessName, subProcessName);
-                this.mode = 'U';
+                this.mode = "U";
                 break;
         }
 

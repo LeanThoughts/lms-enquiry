@@ -18,10 +18,15 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     private Integer partyNumber;
 
     /**
-     * 001 - Person
-     * 002 - Organization
+     * 1 - Person
+     * 2 - Organization
+     * 3 - Group
      */
     private Integer partyCategory;
+
+    private String partnerType;
+    private String partnerGroup;
+    private String partnerExternalNumber;
 
     /**
      * TR0110 - Prospect
@@ -87,6 +92,12 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     @Size(max = 30)
     private String mobileNumber;
 
+    @Size(max = 10)
+    private String searchTerm1;
+
+    @Size(max = 10)
+    private String searchTerm2;
+
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;
@@ -98,9 +109,12 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     private List<PartnerContact> partnerContacts;
 
 
-    public Partner(Integer partyNumber, Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber) {
+    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber) {
         this.partyNumber = partyNumber;
         this.partyCategory = partyCategory;
+        this.partnerGroup = partnerGroup;
+        this.partnerType  = partnerType;
+        this.partnerExternalNumber = partnerExternalNumber;
         this.partyRole = partyRole;
         this.partyName1 = partyName1;
         this.partyName2 = partyName2;

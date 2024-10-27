@@ -674,7 +674,7 @@ public class Initializer implements CommandLineRunner {
             userRoleList.add(r28);
         }
         if (userRoleRepository.findByCode("ZLM024") == null ) {
-            UserRole r29 = new UserRole("ZLM024", "Nodal Officer-Monitorin");
+            UserRole r29 = new UserRole("ZLM024", "Nodal Officer-Monitoring");
             userRoleList.add(r29);
         }
         if (userRoleRepository.findByCode("ZLM033") == null ) {

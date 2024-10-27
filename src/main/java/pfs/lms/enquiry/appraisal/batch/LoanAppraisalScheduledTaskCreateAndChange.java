@@ -165,10 +165,10 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
          //Collect SAPIntegrationPointer with the following  Posting Status = 0
          List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
 
-//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,'C'));
-//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,'C'));
-//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,'U'));
-//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,'U'));
+//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,"C"));
+//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,"C"));
+//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0,"U"));
+//         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2,"U"));
 
         sapIntegrationPointers = fetchSAPIntegrationPointers();
 
@@ -761,90 +761,90 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
     private List<SAPIntegrationPointer> fetchSAPIntegrationPointers() {
         List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Header",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Corporate Loan",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","External Rating Term Loan",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Site Visit",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Customer Rejection",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Further Detail",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Appraisal Completion",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Project Data",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Proposal Detail",2,"U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",2,'U'));
-
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",2,'U'));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",2,'U'));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",2,'U'));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Loan Partner",2,"U"));
 
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",0,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",2,'C'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",0,'U'));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Syndicate Consortium",2,"U"));
 
-//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","",0,'C'));
-//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","",2,'U'));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Know Your Customer",2,"U"));
+
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Reason For Delay",2,"U"));
+
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Main Location Detail",2,"U"));
+
+
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",0,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",2,"C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",0,"U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","Sub Location Detail",2,"U"));
+
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","",0,"C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","",2,"U"));
 
         return sapIntegrationPointers;
 
