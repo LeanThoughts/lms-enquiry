@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRole;
 import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
-import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerRoleRepository;
 import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
 
 @Slf4j

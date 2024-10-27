@@ -16,22 +16,22 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class BusinessPartnerRole extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
+public class BusinessPartnerIndustry extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
     Partner partner;
 
     @OneToOne
-    @JoinColumn(name = "role_type_id")
-    private BusinessPartnerRole roleType ;
-
-    private String differentiationType;
-    private String allPartnerRoles;
-    private LocalDate validFromDate;
-    private LocalDate validToDate;
+    @JoinColumn(name = "industry_system_id")
+    IndustrySystem industrySystem;
+    
+    @OneToOne
+    @JoinColumn(name = "industry_type_id")
+    IndustryType industryType;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

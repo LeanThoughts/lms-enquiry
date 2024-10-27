@@ -2,9 +2,11 @@ package pfs.lms.enquiry.businesspartner.domain;
 
 import lombok.*;
 import pfs.lms.enquiry.domain.AggregateRoot;
+import pfs.lms.enquiry.domain.Partner;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
@@ -14,7 +16,11 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class Identification extends AggregateRoot<Identification> implements Cloneable{
+public class BusinessPartnerIdentification extends AggregateRoot<BusinessPartnerIdentification> implements Cloneable{
+
+    @ManyToOne
+    @JoinColumn(name = "partner_id")
+    Partner partner;
 
     @OneToOne
     @JoinColumn(name = "identification_category_id")

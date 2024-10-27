@@ -7,8 +7,6 @@ import pfs.lms.enquiry.domain.Partner;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -16,20 +14,23 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class BusinessPartnerRole extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
+public class BusinessPartnerLoanContact extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
     Partner partner;
 
-    @OneToOne
-    @JoinColumn(name = "role_type_id")
-    private BusinessPartnerRole roleType ;
-
-    private String differentiationType;
-    private String allPartnerRoles;
-    private LocalDate validFromDate;
-    private LocalDate validToDate;
+    private Integer serialNumber;
+    private String selection;
+    private String loanNumber;
+    private String name;
+    private String BranchAddress;
+    private String designation;
+    private String department;
+    private String telephoneNumber;
+    private String landLineNumber;
+    private String email;
+    private String faxNumber;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
