@@ -21,6 +21,7 @@ public class BusinessPartnerLoanContact extends AggregateRoot<BusinessPartnerInd
     Partner partner;
 
     private Integer serialNumber;
+    
     private String selection;
     private String loanNumber;
     private String name;

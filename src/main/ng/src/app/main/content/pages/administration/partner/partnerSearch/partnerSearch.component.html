@@ -9,49 +9,85 @@
        Business Partners
     </div>
     <!-- / BREADCRUMB -->
-
-
-
+    <!-- TOOLBAR -->
+    <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
+        <button mat-raised-button class="mr-8 mb-8" (click)="updateBusinessPartner()" [disabled]="!selectedPartner">
+            Update Business Partner
+        </button>
+    </div>
+    <!-- / TOOLBAR -->
   </div>
 
 
   <!-- SEARCH PANEL -->
-  <div id="bp-search" class="w-100-p p-16" fxLayout="column" fusePerfectScrollbar>
+    <div id="bp-search" class="w-100-p p-16" fxLayout="column" fusePerfectScrollbar>
 
-    <mat-expansion-panel [expanded]="expandPanel" hideToggle="false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Search Business Partners
-        </mat-panel-title>
-        <!--mat-panel-description>
-            Use the search form to filter data.
-        </mat-panel-description-->
-      </mat-expansion-panel-header>
+        <mat-expansion-panel [expanded]="expandPanel" hideToggle="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+            Search Business Partners
+            </mat-panel-title>
+            <!--mat-panel-description>
+                Use the search form to filter data.
+            </mat-panel-description-->
+        </mat-expansion-panel-header>
 
-      <form [formGroup]="partnerSearchForm">
-        <div fxLayout="row">
-          <mat-form-field fxFlex="25">
-            <input matInput placeholder="Bus. Partner Name" formControlName="partnerName">
-          </mat-form-field>
-          <mat-form-field fxFlex="25">
-            <input matInput placeholder="Registered Email Id" formControlName="email">
-          </mat-form-field>
-          <mat-form-field fxFlex="25">
-            <input matInput placeholder="Bus. Partner Number From" formControlName="partnerNumberFrom">
-          </mat-form-field>
-          <mat-form-field fxFlex="25">
-            <input matInput placeholder="Bus. Partner Number To" formControlName="partnerNumberTo">
-          </mat-form-field>
-        </div>
+        <form [formGroup]="partnerSearchForm">
+                <div fxLayout="row">
+                    <mat-form-field fxFlex="23">
+                        <input matInput placeholder="Bus. Partner Name" formControlName="partnerName">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="23">
+                        <input matInput placeholder="Registered Email Id" formControlName="email">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="22">
+                        <input matInput placeholder="Bus. Partner Number From" formControlName="partnerNumberFrom">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="22">
+                        <input matInput placeholder="Bus. Partner Number To" formControlName="partnerNumberTo">
+                    </mat-form-field>
+                    <button mat-raised-button type="submit" color="accent" (click)="searchPartners()" style="margin: 12px; height: fit-content;">
+                        Search
+                    </button>
+                </div>
+        </form>
+        </mat-expansion-panel>
+    </div>
 
-        <div class="pt-12" fxLayout="row" fxLayoutAlign="left center">
-          <button class="mr-8" mat-raised-button type="button" color="accent" (click)="searchPartners()">
-            Search
-          </button>
-        </div>
-      </form>
-    </mat-expansion-panel>
-  </div>
+    <div id="bp-search" class="w-100-p p-16" fxLayout="column" fusePerfectScrollbar>
+
+        <mat-expansion-panel [expanded]="expandPanel2" hideToggle="false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Add New Business Partner
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="partnerUpdateForm">
+            <div fxLayout="row">
+                <mat-form-field fxFlex="25">
+                    <mat-select placeholder="Partner Category" formControlName="partnerCategory" required>
+                        <mat-option></mat-option>
+                        <mat-option [value]="1">Person</mat-option>
+                        <mat-option [value]="2">Organization</mat-option>
+                        <mat-option [value]="3">Group</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="25">
+                    <mat-select placeholder="Select Default Partner Role" formControlName="defaultPartnerRole" required>
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let businessPartnerRole of businessPartnerRoles" [value]="businessPartnerRole">
+                            {{ businessPartnerRole.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button (click)="newBusinessPartner()" style="margin: 12px; height: fit-content;" type="submit">
+                    Create Business Partner
+                </button>        
+            </div>
+        </form>
+        </mat-expansion-panel>
+    </div>
 
   <!-- / SEARCH PANEL -->
 

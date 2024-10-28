@@ -131,6 +131,14 @@ export class LoanEnquiryService implements Resolve<any> {
     return this._http.get('enquiry/api/loanClasses?sort=code&size=100');
   }
 
+    /**=
+     * getProductTypes()
+     * returns a list of product types.
+     */
+    public getProductTypes(): Observable<any> {
+        return this._http.get('enquiry/api/products?sort=name&size=100');
+    }
+
   /**
    * getFinancingTypes()
    * returns a list of financing types.

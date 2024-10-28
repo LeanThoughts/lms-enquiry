@@ -46,6 +46,7 @@ import { ApplicationFeeModule } from './main/content/pages/applicationFee/applic
 import { DocumentationModule } from './main/content/pages/documentation/documentation.module';
 import { EnquiriesExcelUploadModule } from './main/content/pages/enquiry/enquiriesExcelUpload/enquiriesExcelUpload.module';
 import { RiskAssessmentModule } from './main/content/pages/riskAssessment/riskAssessment.module';
+import { BusinessPartnerModule } from './main/content/pages/businessPartner/businessPartner.module';
 
 const appRoutes: Routes = [
     {
@@ -116,7 +117,8 @@ const appRoutes: Routes = [
         ApplicationFeeModule,
         DocumentationModule,
         RiskAssessmentModule,
-
+        BusinessPartnerModule,
+        
         // Workflow
         InboxModule,
         ChangeDocumentModule,

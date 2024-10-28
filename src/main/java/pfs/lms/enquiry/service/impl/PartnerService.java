@@ -42,7 +42,7 @@ public class PartnerService implements IPartnerService {
     @Override
     public Partner save(Partner partner) {
 
-        //Check if rhe partner already exist
+        //Check if the partner already exist
         Partner existing = null;
         List<Partner> partnerList = partnerRepository.findByEmail(partner.getEmail());
         for (Partner partnerItem : partnerList ) {
@@ -77,6 +77,11 @@ public class PartnerService implements IPartnerService {
             existing.setStreet(partner.getStreet());
             existing.setEmail(partner.getEmail());
             existing.setIndustrySector(partner.getIndustrySector());
+            existing.setMobileNumber(partner.getMobileNumber());
+            existing.setSearchTerm1(partner.getSearchTerm1());
+            existing.setSearchTerm2(partner.getSearchTerm2());
+            existing.setFaxNumber(partner.getFaxNumber());
+
             existing = partnerRepository.saveAndFlush(existing);
             
              return existing;
@@ -137,8 +142,24 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
-    public Partner update(Partner partner) {
-        return null;
+    public Partner update(Partner partnerResource) {
+
+        Partner partner = partnerRepository.findById(partnerResource.getId()).orElseThrow(() -> new RuntimeException("Partner not found"));
+        partner.setPartyName1(partnerResource.getPartyName1());
+        partner.setPartyName2(partnerResource.getPartyName2());
+        partner.setSearchTerm1(partnerResource.getSearchTerm1());
+        partner.setSearchTerm2(partnerResource.getSearchTerm2());
+        partner.setEmail(partnerResource.getEmail());
+        partner.setAddressLine1(partnerResource.getAddressLine1());
+        partner.setCity(partnerResource.getCity());
+        partner.setCountry(partnerResource.getCountry());
+        partner.setState(partnerResource.getState());
+        partner.setPostalCode(partnerResource.getPostalCode());
+        partner.setFaxNumber(partnerResource.getFaxNumber());
+        partner.setMobileNumber(partnerResource.getMobileNumber());
+        partner.setContactNumber(partnerResource.getContactNumber());
+        partner.setStreet(partnerResource.getStreet());
+        return partnerRepository.save(partner);
     }
 
     @Override

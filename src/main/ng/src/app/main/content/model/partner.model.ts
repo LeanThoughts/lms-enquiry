@@ -21,6 +21,11 @@ export class PartnerModel {
     industrySector: string;
 
     _links: Object;
+    mobileNumber: null;
+    faxNumber: null;
+    searchTerm1: null;
+    searchTerm2: null;
+    title: null;
 
     /**
      * constructor()
@@ -48,6 +53,8 @@ export class PartnerModel {
         this.street = _partner && _partner.street || '';
         this.userName = _partner && _partner.userName || '';
         this.industrySector = _partner && _partner.industrySector || '';
+        this.mobileNumber = _partner && _partner.mobileNumber || null;
+        this.faxNumber = _partner && _partner.faxNumber || null;
 
         this._links = _partner && _partner._links || '';
     }

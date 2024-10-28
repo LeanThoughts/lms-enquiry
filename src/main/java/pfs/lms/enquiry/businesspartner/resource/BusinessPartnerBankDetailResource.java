@@ -1,23 +1,18 @@
-package pfs.lms.enquiry.businesspartner.domain;
+package pfs.lms.enquiry.businesspartner.resource;
 
 import lombok.*;
-import pfs.lms.enquiry.domain.AggregateRoot;
-import pfs.lms.enquiry.domain.Partner;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.util.UUID;
 
-@Entity
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
-public class BusinessPartnerBankDetail extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
+@AllArgsConstructor
+public class BusinessPartnerBankDetailResource {
 
-    @ManyToOne
-    Partner partner;
+    private UUID id;
+
+    private UUID partnerId;
 
     private Integer bankDetailId;
     private String externalBankDetailId;
@@ -38,9 +33,4 @@ public class BusinessPartnerBankDetail extends AggregateRoot<BusinessPartnerIndu
     private LocalDate moveDate;
     private String moveId;
     private String accountType;
-
-
-    public Object clone () throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

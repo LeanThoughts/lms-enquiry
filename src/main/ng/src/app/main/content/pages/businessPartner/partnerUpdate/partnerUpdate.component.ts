@@ -1,0 +1,88 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { fuseAnimations } from '@fuse/animations';
+import { PartnerModel } from 'app/main/content/model/partner.model';
+import { PartnerService } from '../../administration/partner/partner.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { BusinessPartnerService } from '../businessPartner.service';
+import { MatSnackBar } from '@angular/material';
+
+@Component({
+    selector: 'fuse-partner-update',
+    templateUrl: './partnerUpdate.component.html',
+    styleUrls: ['./partnerUpdate.component.scss'],
+    animations: fuseAnimations
+})
+export class PartnerUpdateComponent implements OnInit, OnDestroy {
+
+    title: string = 'Create Business Partner';
+
+    partnerDetailsForm: FormGroup;
+
+    selectedPartner: PartnerModel;
+    states: any;
+
+    /**
+     * constructor()
+     */
+    constructor(public _partnerService: PartnerService, 
+                private _formBuilder: FormBuilder, 
+                private _activatedRoute: ActivatedRoute,
+                private _businessPartnerService: BusinessPartnerService, 
+                private _matSnackBar: MatSnackBar) {
+
+        this.selectedPartner = this._partnerService.selectedPartner.value;
+        this.states = this._activatedRoute.snapshot.data['routeResolvedData'][1];
+
+        this.partnerDetailsForm = this._formBuilder.group({
+            title: [this.selectedPartner.title || null],
+            partyName1: [this.selectedPartner.partyName1 || null, Validators.required],
+            partyName2: [this.selectedPartner.partyName2 || null, Validators.required],
+            searchTerm1: [this.selectedPartner.searchTerm1 || null],
+            searchTerm2: [this.selectedPartner.searchTerm2 || null],
+            addressLine1: [this.selectedPartner.addressLine1 || null],
+            street: [this.selectedPartner.street || null],
+            postalCode: [this.selectedPartner.postalCode || null],
+            state: [this.selectedPartner.state || null],
+            country: [this.selectedPartner.country || null],
+            city: [this.selectedPartner.city || null],
+            contactNumber: [this.selectedPartner.contactNumber || null],
+            email: [this.selectedPartner.email || null],
+            mobileNumber: [this.selectedPartner.mobileNumber || null],
+            faxNumber: [this.selectedPartner.faxNumber || null],
+        });
+    }
+
+    /**
+     * ngOnDestroy()
+     */
+    ngOnDestroy(): void {
+    }
+
+    /**
+     * ngOnInit()
+     */
+    ngOnInit(): void {
+    }
+
+    /**
+     * submit()
+     */
+    submit(): void {
+        console.log(this.selectedPartner);
+        if (Object.keys(this.selectedPartner).length === 0) {
+            this._businessPartnerService.createPartner(this.partnerDetailsForm.value).subscribe((response: any) => {
+                this.selectedPartner = response;
+                this._partnerService.selectedPartner.next(response);
+                this._matSnackBar.open('Partner created successfully', 'Close', {duration: 7000});
+            });
+        }
+        else {
+            this._businessPartnerService.updatePartner(this.partnerDetailsForm.value).subscribe((response: any) => {
+                this.selectedPartner = response;
+                this._partnerService.selectedPartner.next(response);
+                this._matSnackBar.open('Partner updated successfully', 'Close', {duration: 7000});
+            });
+        }
+    }
+}

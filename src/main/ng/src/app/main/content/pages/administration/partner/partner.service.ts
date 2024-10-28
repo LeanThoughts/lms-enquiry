@@ -34,19 +34,9 @@ export class PartnerService {
    * @param state
    */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    if (route.routeConfig.path === 'partner') {
-      // if (this.selectedLoanApplicationId !== undefined) {
-      //   return forkJoin([
-      //
-      //
-      //   ]);
-      // }
-    }
-    else {
-      return forkJoin([
-       //this.getEnquiryApplications(1)
-      ]);
-    }
+    return forkJoin([
+      this.getBusinessPartnerRoleTypes()
+    ]);
   }
 
   /**
@@ -91,5 +81,11 @@ export class PartnerService {
     });
   }
 
-
+    /**
+     * getBusinessPartnerRoles()
+     * Fetches a list of business partner roles.
+     */
+    getBusinessPartnerRoleTypes(): Observable<any> {
+      return this._http.get<any>('enquiry/api/businessPartnerRoleTypes');
+    }
 }

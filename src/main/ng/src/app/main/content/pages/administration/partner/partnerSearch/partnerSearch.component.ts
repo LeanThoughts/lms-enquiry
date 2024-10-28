@@ -7,7 +7,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import {PartnerService} from "../partner.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import { BusinessPartnerService } from '../../../businessPartner/businessPartner.service';
 
 @Component({
   selector: 'app-partner',
@@ -48,13 +49,23 @@ export class PartnerComponent implements OnInit {
   selectedPartner: PartnerModel;
 
   partnerSearchForm: FormGroup;
+  partnerUpdateForm: FormGroup;
+
+  businessPartnerRoles: any[];
+
   //partnerList: PartnerModel[];
   expandPanel = true;
+  expandPanel2 = true;
 
   pageSizeOptions: number[] = [10, 25, 50, 100];
 
 
-  constructor(private _service: PartnerService,_formBuilder: FormBuilder, private _router: Router,private _matSnackBar: MatSnackBar) {
+  constructor(private _service: PartnerService,_formBuilder: FormBuilder, private _router: Router, private _matSnackBar: MatSnackBar,
+                private _activatedRoute: ActivatedRoute, private _businessPartnerService: BusinessPartnerService
+  ) {
+
+    this.businessPartnerRoles = this._activatedRoute.snapshot.data.routeResolvedData[0]._embedded.businessPartnerRoleTypes;
+
     this.partnerSearchForm = _formBuilder.group({
       partnerName: [],
       email: [],
@@ -62,6 +73,12 @@ export class PartnerComponent implements OnInit {
       partnerNumberTo: []
 
     });
+
+    this.partnerUpdateForm = _formBuilder.group({
+      partnerCategory: [],
+      defaultPartnerRole: []
+    });
+
     _service.selectedPartnerId = undefined;
 
   }
@@ -133,20 +150,39 @@ export class PartnerComponent implements OnInit {
 
   }
 
-  /**
-   * Redirect to Partner Details
-   */
-  redirectToPartnerDetails(): void {
-    if (this._service.selectedPartnerId !== undefined) {
-      this._service.selectedPartnerId.next(this._service.selectedPartnerId.value);
-     }
-    else {
-      this._service.selectedPartnerId= new BehaviorSubject(this._service.selectedPartnerId.value);
+//   /**
+//    * Redirect to Partner Details
+//    */
+//   redirectToPartnerDetails(): void {
+//     if (this._service.selectedPartnerId !== undefined) {
+//       this._service.selectedPartnerId.next(this._service.selectedPartnerId.value);
+//      }
+//     else {
+//       this._service.selectedPartnerId= new BehaviorSubject(this._service.selectedPartnerId.value);
 
+//     }
+//    //TODO
+//     // this._router.navigate(['/enquiryReview']);
+//   }
+
+    /**
+     * newBusinessPartner()
+     */
+    newBusinessPartner(): void {
+        if (this.partnerUpdateForm.valid) {
+        this._businessPartnerService.businessPartnerCategoryAndRole.next(this.partnerUpdateForm.value);
+        this._service.selectedPartner.next(new PartnerModel({}));
+            this._router.navigate(['/createBusinessPartner']);
+        }
     }
-   //TODO
-    // this._router.navigate(['/enquiryReview']);
-  }
+
+    /**
+     * updateBusinessPartner()
+     */
+    updateBusinessPartner(): void {
+        this._router.navigate(['/partnerDetails']);
+    }
+
 }
 
 export interface partnerElement {

@@ -91,6 +91,8 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     private String msmeRegisterNumber;
     @Size(max = 30)
     private String mobileNumber;
+    @Size(max = 30)
+    private String faxNumber;
 
     @Size(max = 10)
     private String searchTerm1;

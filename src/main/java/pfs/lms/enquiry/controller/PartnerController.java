@@ -28,6 +28,16 @@ public class PartnerController {
 
     private final PartnerService partnerService;
 
+    @PostMapping("/partners/create")
+    public ResponseEntity<Partner> createPartner(@RequestBody Partner partner) {
+        return ResponseEntity.ok(partnerService.save(partner));
+    }
+
+    @PutMapping("/partners/update")
+    public ResponseEntity<Partner> updatePartner(@RequestBody Partner partner) {
+        return ResponseEntity.ok(partnerService.update(partner));
+    }
+
     @GetMapping("/me")
     public ResponseEntity getLoggedinPartner(HttpServletRequest request) {
 

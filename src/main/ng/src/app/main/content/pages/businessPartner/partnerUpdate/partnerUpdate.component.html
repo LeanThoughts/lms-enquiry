@@ -1,0 +1,88 @@
+<div class="content mt-16">
+    <div class="content-card mat-white-bg mat-elevation-z4 p-16" fusePerfectScrollbar style="width: 100%">
+        <form [formGroup]="partnerDetailsForm">
+
+            <div fxLayout="row">
+                <span><b>Identification</b></span>
+            </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Title" formControlName="title" maxlength="60">
+                </mat-form-field>    
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Name 1" formControlName="partyName1" maxlength="60" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Name 2" formControlName="partyName2" maxlength="60" required>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Search Term 1" formControlName="searchTerm1" maxlength="60" >
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Search Term 2" formControlName="searchTerm2" maxlength="60" >
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <span><b>Address</b></span>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Door No." formControlName="addressLine1" maxlength="60">
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Street" formControlName="street" maxlength="60">
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="60">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="City" formControlName="city" maxlength="60">
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Country" formControlName="country" maxlength="60">
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="State/ Region" formControlName="state" required>
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let state of states" [value]="state.code">
+                            {{ state.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row">
+                <span><b>Communication Details</b></span>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Telephone" formControlName="contactNumber" maxlength="60" >
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Email" formControlName="email" maxlength="60" required>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Mobile Phone" formControlName="mobileNumber" maxlength="60" >
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput placeholder="Fax" formControlName="faxNumber" maxlength="60" >
+                </mat-form-field>
+            </div>
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
