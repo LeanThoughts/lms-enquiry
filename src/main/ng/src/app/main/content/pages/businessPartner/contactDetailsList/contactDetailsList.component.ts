@@ -1,9 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
 import { BusinessPartnerContactDetailsUpdateDialogComponent } from '../contactDetailsUpdate/contactDetailsUpdate.component';
 import { BusinessPartnerService } from '../businessPartner.service';
 import { PartnerService } from '../../administration/partner/partner.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'fuse-business-partner-contact-details-list',
@@ -11,7 +12,7 @@ import { PartnerService } from '../../administration/partner/partner.service';
     styleUrls: ['./contactDetailsList.component.scss'],
     animations: fuseAnimations
 })
-export class BusinessPartnerContactDetailsListComponent {
+export class BusinessPartnerContactDetailsListComponent implements OnDestroy {
 
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
@@ -25,6 +26,8 @@ export class BusinessPartnerContactDetailsListComponent {
 
     selectedContactDetails: any;
 
+    subscription: Subscription;
+    
     /**
      * constructor()
      */
@@ -32,9 +35,14 @@ export class BusinessPartnerContactDetailsListComponent {
                 private _partnerService: PartnerService,
                 private _dialog: MatDialog, 
                 private _snackBar: MatSnackBar) {
-                    
-        this.businessPartnerId = _partnerService.selectedPartner.value ? _partnerService.selectedPartner.value.id : null;
-        console.log('this.businessPartnerId', this.businessPartnerId);
+
+        this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
+            this.businessPartnerId = partner ? partner.id : null;
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     /**
@@ -56,16 +64,16 @@ export class BusinessPartnerContactDetailsListComponent {
             // Open the dialog.
             const dialogRef = this._dialog.open(BusinessPartnerContactDetailsUpdateDialogComponent, {
                 panelClass: 'fuse-business-partner-contact-details-update-dialog',
-                width: '750px',
+                width: '900px',
                 data: {
-                operation: 'addContactDetails',
-                loanApplicationId: this.businessPartnerId,
+                    operation: 'addContactDetails',
+                    businessPartnerId: this.businessPartnerId,
                 }
             });
             // Subscribe to the dialog close event to intercept the action taken.
             dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._businessPartnerService.getContactDetails(this.businessPartnerId).subscribe(data => {
+                this._businessPartnerService.getBusinessPartnerContactDetails(this.businessPartnerId).subscribe(data => {
                         this.dataSource.data = data;
                     });
                 }
@@ -80,7 +88,7 @@ export class BusinessPartnerContactDetailsListComponent {
         // Open the dialog.
         const dialogRef = this._dialog.open(BusinessPartnerContactDetailsUpdateDialogComponent, {
             panelClass: 'fuse-business-partner-contact-details-update-dialog',
-            width: '750px',
+            width: '900px',
             data: {
                 operation: 'updateContactDetails',
                 businessPartnerId: this.businessPartnerId,
@@ -90,7 +98,7 @@ export class BusinessPartnerContactDetailsListComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._businessPartnerService.getContactDetails(this.businessPartnerId).subscribe(data => {
+                this._businessPartnerService.getBusinessPartnerContactDetails(this.businessPartnerId).subscribe(data => {
                     this.dataSource.data = data;
                 });
             }

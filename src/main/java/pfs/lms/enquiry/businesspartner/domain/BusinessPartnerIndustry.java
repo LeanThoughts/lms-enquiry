@@ -5,10 +5,8 @@ import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.domain.Partner;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,19 +17,14 @@ import java.time.LocalDate;
 public class BusinessPartnerIndustry extends AggregateRoot<BusinessPartnerIndustry> implements Cloneable{
 
     @ManyToOne
-    @JoinColumn(name = "partner_id")
     Partner partner;
 
-    @OneToOne
-    @JoinColumn(name = "industry_system_id")
-    IndustrySystem industrySystem;
-    
-    @OneToOne
-    @JoinColumn(name = "industry_type_id")
-    IndustryType industryType;
+    private Integer serialNumber;
+
+    private UUID industrySystemId;    
+    private UUID industryTypeId;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

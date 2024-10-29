@@ -70,7 +70,7 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
      */
     submit(): void {
         console.log(this.selectedPartner);
-        if (Object.keys(this.selectedPartner).length === 0) {
+        if (this.selectedPartner.id === '') {
             this._businessPartnerService.createPartner(this.partnerDetailsForm.value).subscribe((response: any) => {
                 this.selectedPartner = response;
                 this._partnerService.selectedPartner.next(response);

@@ -54,4 +54,11 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     addRoleToBusinessPartner(): void {
         this.selectedRoles.push(this.businessPartnerRole.value);
     }
+
+    /**
+     * getSelectedRoles()
+     */
+    getSelectedRoles(): string {
+        return this.selectedRoles.map(role => role.value).join(', ');
+    }
 }

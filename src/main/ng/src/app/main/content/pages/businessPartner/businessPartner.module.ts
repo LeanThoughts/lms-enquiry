@@ -25,6 +25,8 @@ import { BusinessPartnerContactDetailsListComponent } from "./contactDetailsList
 import { BusinessPartnerContactDetailsUpdateDialogComponent } from "./contactDetailsUpdate/contactDetailsUpdate.component";
 import { BusinessPartnerBankDetailsListComponent } from "./bankDetailsList/bankDetailsList.component";
 import { BusinessPartnerBankDetailsUpdateComponent } from "./bankDetailsUpdate/bankDetailsUpdate.component";
+import { BusinessPartnerIndustryListComponent } from "./businessPartnerIndustryList/businessPartnerIndustryList.component";
+import { BusinessPartnerIndustryUpdateComponent } from "./businessPartnerIndustryUpdate/businessPartnerIndustryUpdate.component";
 
 
 
@@ -45,7 +47,9 @@ const routes = [
         BusinessPartnerContactDetailsListComponent,
         BusinessPartnerContactDetailsUpdateDialogComponent,
         BusinessPartnerBankDetailsListComponent,
-        BusinessPartnerBankDetailsUpdateComponent
+        BusinessPartnerBankDetailsUpdateComponent,
+        BusinessPartnerIndustryListComponent,
+        BusinessPartnerIndustryUpdateComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -77,14 +81,17 @@ const routes = [
         BusinessPartnerContactDetailsListComponent,
         BusinessPartnerContactDetailsUpdateDialogComponent,
         BusinessPartnerBankDetailsListComponent,
-        BusinessPartnerBankDetailsUpdateComponent
+        BusinessPartnerBankDetailsUpdateComponent,
+        BusinessPartnerIndustryListComponent,
+        BusinessPartnerIndustryUpdateComponent
     ],
     providers   : [
         BusinessPartnerService
     ],
     entryComponents: [
         BusinessPartnerContactDetailsUpdateDialogComponent,
-        BusinessPartnerBankDetailsUpdateComponent
+        BusinessPartnerBankDetailsUpdateComponent,
+        BusinessPartnerIndustryUpdateComponent
     ]
 })
 export class BusinessPartnerModule

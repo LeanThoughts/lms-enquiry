@@ -8,7 +8,13 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Title" formControlName="title" maxlength="60">
+                    <mat-select placeholder="Title" formControlName="title">
+                        <mat-option></mat-option>
+                        <mat-option value="Mrs.">Mrs.</mat-option>
+                        <mat-option value="Mr.">Mr.</mat-option>
+                        <mat-option value="Company">Company</mat-option>
+                        <mat-option value="Mr. and Mrs.">Mr. and Mrs.</mat-option>
+                    </mat-select>
                 </mat-form-field>    
             </div>
             <div fxLayout="row">

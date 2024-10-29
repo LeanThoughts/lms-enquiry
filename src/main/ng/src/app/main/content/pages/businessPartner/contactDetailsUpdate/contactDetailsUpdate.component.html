@@ -18,14 +18,17 @@
                 </mat-form-field>
             </div>
             <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Selection" formControlName="selection">
-                </mat-form-field>
+                <!-- <mat-form-field fxFlex="50">
+                    <mat-checkbox [formControl]="selection">Print in Demand Letter</mat-checkbox>
+                </mat-form-field> -->
+                <mat-checkbox formControlName="selection">
+                    Month End Ind. Due Date
+                </mat-checkbox>
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Contact Person Name" formControlName="name" maxlength="40">
                 </mat-form-field>
             </div>
-            <div fxLayout="row" class="mt-16">
+            <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Branch Address" formControlName="branchAddress" maxlength="80">
                 </mat-form-field>

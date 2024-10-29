@@ -1,7 +1,7 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addContactDetails()"> New </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateContactDetails()" [disabled]="!selectedContactDetails"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addBankDetails()"> New </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateBankDetails()" [disabled]="!selectedBankDetails"> 
             Modify 
         </button>
     </div>  
@@ -13,94 +13,62 @@
             <ng-container matColumnDef="serialNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.serialNumber }}</p>
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
                 </mat-cell>
             </ng-container>
 
-            <!-- selection Column -->
-            <ng-container matColumnDef="selection">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Selection</mat-header-cell>
+            <!-- bankKey Column -->
+            <ng-container matColumnDef="bankKey">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Bank Key</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ getSelection(obj.selection) }}</p>
+                    <p class="text-truncate">{{ obj.bankKey }}</p>
                 </mat-cell>
             </ng-container>
 
-            <!-- loanNumber Column -->
-            <ng-container matColumnDef="loanNumber">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Loan Number</mat-header-cell>
+            <!-- ifscCode Column -->
+            <ng-container matColumnDef="ifscCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >IFSC Code</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.loanNumber }}</p>
+                    <p class="text-truncate">{{ obj.ifscCode }}</p>
                 </mat-cell>
             </ng-container>
 
-            <!-- name Column -->
-            <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Name</mat-header-cell>
+            <!-- accountNumber Column -->
+            <ng-container matColumnDef="accountNumber">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Account Number</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.name }}</p>
+                    <p class="text-truncate">{{ obj.accountNumber }}</p>
                 </mat-cell>
             </ng-container>
             
-            <!-- branchAddress Column -->
-            <ng-container matColumnDef="branchAddress">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Branch Address</mat-header-cell>
+            <!-- entryDate Column -->
+            <ng-container matColumnDef="entryDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Entry Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.branchAddress }}</p>
+                    <p class="text-truncate">{{ obj.entryDate }}</p>
                 </mat-cell>
             </ng-container>
 
-            <!-- designation Column -->
-            <ng-container matColumnDef="designation">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Designation</mat-header-cell>
+            <!-- validFrom Column -->
+            <ng-container matColumnDef="validFrom">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Valid From</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.designation }}</p>
+                    <p class="text-truncate">{{ obj.validFrom }}</p>
                 </mat-cell>
             </ng-container>
 
-            <!-- department Column -->
-            <ng-container matColumnDef="department">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Department</mat-header-cell>
+            <!-- validTo Column -->
+            <ng-container matColumnDef="validTo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Valid To</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.department }}</p>
-                </mat-cell>
-            </ng-container>
-
-            <!-- telephoneNumber Column -->
-            <ng-container matColumnDef="telephoneNumber">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Mobile No</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.telephoneNumber }}</p>
-                </mat-cell>
-            </ng-container>
-
-            <!-- landLineNumber Column -->
-            <ng-container matColumnDef="landLineNumber">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Landline No</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.landLineNumber }}</p>
-                </mat-cell>
-            </ng-container>
-
-            <!-- faxNumber Column -->
-            <ng-container matColumnDef="faxNumber">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Fax No</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.faxNumber }}</p>
-                </mat-cell>
-            </ng-container>
-
-            <!-- email Column -->
-            <ng-container matColumnDef="email">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Email</mat-header-cell>
-                <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.email }}</p>
+                    <p class="text-truncate">{{ obj.validTo }}</p>
                 </mat-cell>
             </ng-container>
             
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple (click)="onSelect(obj)"
-                [ngClass]="{'highlight':obj === selectedContactDetails}" [@animate]="{value:'*',params:{y:'100%'}}">
+                [ngClass]="{'highlight':obj === selectedBankDetails}" [@animate]="{value:'*',params:{y:'100%'}}">
             </mat-row>
 
         </mat-table>

@@ -6,6 +6,7 @@ import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 import { PartnerService } from '../administration/partner/partner.service';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { PartnerModel } from '../../model/partner.model';
+import { LoanMonitoringService } from '../monitoring/loanMonitoring.service';
 
 @Injectable()
 export class BusinessPartnerService {
@@ -17,7 +18,9 @@ export class BusinessPartnerService {
      */
     constructor(private _http: HttpClient, 
         private _partnerService: PartnerService,
-        private _loanEnquiryService: LoanEnquiryService) { }
+        private _loanEnquiryService: LoanEnquiryService,
+        private _loanMonitoringService: LoanMonitoringService
+    ) { }
 
     /**
      * resolve()
@@ -25,7 +28,9 @@ export class BusinessPartnerService {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return forkJoin([
             this._partnerService.getBusinessPartnerRoleTypes(),
-            this._loanEnquiryService.getStates()
+            this._loanEnquiryService.getStates(),
+            this._loanMonitoringService.getBanks(),
+            this.getIndustrySystems()
         ]);
     }
 
@@ -44,44 +49,72 @@ export class BusinessPartnerService {
     }
 
     /**
-     * getContactDetails()
+     * getBusinessPartnerContactDetails()
      */
-    getContactDetails(partnerId: string): Observable<any> {
-        return this._http.get<any>('enquiry/api/businessPartnerLoanContacts/search/findByPartnerId', { params: { partnerId } });
+    getBusinessPartnerContactDetails(partnerId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/businessPartnerLoanContacts/search/findByPartnerIdOrderBySerialNumberDesc', { params: { partnerId } });
     }
 
     /**
-     * createContactDetails()
+     * createBusinessPartnerContactDetails()
      */
-    createContactDetails(contactDetails: any, businessPartnerId: string): Observable<any> {
+    createBusinessPartnerContactDetails(contactDetails: any, businessPartnerId: string): Observable<any> {
         return this._http.post<any>('enquiry/api/businessPartnerLoanContacts/create', contactDetails, { params: { businessPartnerId } });
     }
 
     /**
-     * updateContactDetails()
+     * updateBusinessPartnerContactDetails()
      */
-    updateContactDetails(contactDetails: any): Observable<any> {
+    updateBusinessPartnerContactDetails(contactDetails: any): Observable<any> {
         return this._http.put<any>('enquiry/api/businessPartnerLoanContacts/update', contactDetails);
     }
 
     /**
      * getBankDetails()
      */
-    getBankDetails(partnerId: string): Observable<any> {
-        return this._http.get<any>('enquiry/api/businessPartnerBankDetails/search/findByPartnerId', { params: { partnerId } });
+    getBusinessPartnerBankDetails(partnerId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/businessPartnerBankDetails/search/findByPartnerIdOrderBySerialNumberDesc', { params: { partnerId } });
     }
 
     /**
      * createBankDetails()
      */
-    createBankDetails(bankDetails: any, businessPartnerId: string): Observable<any> {
+    createBusinessPartnerBankDetails(bankDetails: any, businessPartnerId: string): Observable<any> {
         return this._http.post<any>('enquiry/api/businessPartnerBankDetails/create', bankDetails, { params: { businessPartnerId } });
     }
 
     /**
      * updateBankDetails()
      */
-    updateBankDetails(bankDetails: any): Observable<any> {
+    updateBusinessPartnerBankDetails(bankDetails: any): Observable<any> {
         return this._http.put<any>('enquiry/api/businessPartnerBankDetails/update', bankDetails);
+    }
+
+    /**
+     * getIndustrySystems()
+     */
+    getIndustrySystems(): Observable<any> {
+        return this._http.get<any>('enquiry/api/industrySystems');
+    }
+
+    /**
+     * getIndustries()
+     */
+    getBusinessPartnerIndustries(partnerId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/businessPartnerIndustries/search/findByPartnerIdOrderBySerialNumberDesc', { params: { partnerId } });
+    }
+
+    /**
+     * createIndustry()
+     */
+    createBusinessPartnerIndustry(industry: any, businessPartnerId: string): Observable<any> {
+        return this._http.post<any>('enquiry/api/businessPartnerIndustries/create', industry, { params: { businessPartnerId } });
+    }
+
+    /**
+     * updateIndustry()
+     */
+    updateBusinessPartnerIndustry(industry: any): Observable<any> {
+        return this._http.put<any>('enquiry/api/businessPartnerIndustries/update', industry);
     }
 }

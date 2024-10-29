@@ -19,12 +19,20 @@ public class BusinessPartnerBankDetail extends AggregateRoot<BusinessPartnerIndu
     @ManyToOne
     Partner partner;
 
-    private Integer bankDetailId;
+    private Integer serialNumber;
+
+    private String bankKey;
+    private String bankName;
+    private String ifscCode;
+    private String accountNumber;
+    private LocalDate validFromDate;
+    private LocalDate validToDate;
+    private LocalDate entryDate;
+
+    private String bankDetailId;
     private String externalBankDetailId;
     private String bankCountry;
-    private String bankKey;
     private String bankCountryIso;
-    private String bankAccountNumber;
     private String controlKey;
     private String referenceNumber;
     private String accountHolderName;
@@ -33,8 +41,6 @@ public class BusinessPartnerBankDetail extends AggregateRoot<BusinessPartnerIndu
     private String bankAccountName;
     private String iBan;
     private LocalDate iBanFromDate;
-    private LocalDate validFromDate;
-    private LocalDate validToDate;
     private LocalDate moveDate;
     private String moveId;
     private String accountType;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 import { BusinessPartnerService } from '../businessPartner.service';
@@ -20,6 +20,8 @@ export class BusinessPartnerContactDetailsUpdateDialogComponent implements OnIni
 
     contactDetailsUpdateForm: FormGroup;
 
+    selection = new FormControl(false);
+    
     /**
      * constructor()
      */
@@ -45,7 +47,7 @@ export class BusinessPartnerContactDetailsUpdateDialogComponent implements OnIni
     ngOnInit(): void {
         this.contactDetailsUpdateForm = this._formBuilder.group({
             serialNumber: [this.selectedContactDetails.serialNumber || null],
-            selection: [this.selectedContactDetails.selection || null],
+            selection: [this.selectedContactDetails.selection || false],
             loanNumber: [this.selectedContactDetails.loanNumber || null],
             name: [this.selectedContactDetails.name || null],
             branchAddress: [this.selectedContactDetails.branchAddress || null],
@@ -64,7 +66,7 @@ export class BusinessPartnerContactDetailsUpdateDialogComponent implements OnIni
     submit(): void {
         if (this.contactDetailsUpdateForm.valid) {
             if (this._dialogData.operation === 'addContactDetails') {
-                this._businessPartnerService.createContactDetails(this.selectedContactDetails, this._dialogData.businessPartnerId).
+                this._businessPartnerService.createBusinessPartnerContactDetails(this.selectedContactDetails, this._dialogData.businessPartnerId).
                         subscribe(() => {
                     this._matSnackBar.open('Contact details added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
@@ -81,7 +83,7 @@ export class BusinessPartnerContactDetailsUpdateDialogComponent implements OnIni
                 this.selectedContactDetails.faxNumber = this.contactDetailsUpdateForm.value.faxNumber;
                 this.selectedContactDetails.email = this.contactDetailsUpdateForm.value.email;
 
-                this._businessPartnerService.updateContactDetails(this.selectedContactDetails).subscribe(() => {
+                this._businessPartnerService.updateBusinessPartnerContactDetails(this.selectedContactDetails).subscribe(() => {
                     this._matSnackBar.open('Contact details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

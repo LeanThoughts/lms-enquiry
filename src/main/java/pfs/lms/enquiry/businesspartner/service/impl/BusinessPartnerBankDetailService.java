@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerLoanContact;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerBankDetailRepository;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerBankDetailResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerBankDetailService;
@@ -26,22 +27,17 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
                 + " : Partner not found"));
         BusinessPartnerBankDetail businessPartnerBankDetail = new BusinessPartnerBankDetail();
         businessPartnerBankDetail.setPartner(partner);
+        Integer lastSerialNumber = businessPartnerBankDetailRepository.findFirstByPartnerOrderBySerialNumberDesc(partner)
+                .map(BusinessPartnerBankDetail::getSerialNumber)
+                .orElse(0);
+        businessPartnerBankDetail.setSerialNumber(lastSerialNumber + 1);
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
-        businessPartnerBankDetail.setBankCountry(businessPartnerBankDetailResource.getBankCountry());
-        businessPartnerBankDetail.setBankCountryIso(businessPartnerBankDetailResource.getBankCountryIso());
-        businessPartnerBankDetail.setBankAccountNumber(businessPartnerBankDetailResource.getBankAccountNumber());
-        businessPartnerBankDetail.setControlKey(businessPartnerBankDetailResource.getControlKey());
-        businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
-        businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
-        businessPartnerBankDetail.setCollectionAuthorization(businessPartnerBankDetailResource.getCollectionAuthorization());
-        businessPartnerBankDetail.setExternalBankId(businessPartnerBankDetailResource.getExternalBankId());
-        businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
-        businessPartnerBankDetail.setIBan(businessPartnerBankDetailResource.getIBan());
-        businessPartnerBankDetail.setIBanFromDate(businessPartnerBankDetailResource.getIBanFromDate());
+        businessPartnerBankDetail.setBankName(businessPartnerBankDetailResource.getBankCountry());
+        businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());
+        businessPartnerBankDetail.setAccountNumber(businessPartnerBankDetailResource.getAccountNumber());
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
-        businessPartnerBankDetail.setMoveDate(businessPartnerBankDetailResource.getMoveDate());
-        businessPartnerBankDetail.setMoveId(businessPartnerBankDetailResource.getMoveId());
+        businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
         return businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
     }
 
@@ -51,21 +47,12 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerBankDetailResource.getId().toString() 
                 + " : Business Partner Bank Detail not found"));
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
-        businessPartnerBankDetail.setBankCountry(businessPartnerBankDetailResource.getBankCountry());
-        businessPartnerBankDetail.setBankCountryIso(businessPartnerBankDetailResource.getBankCountryIso());
-        businessPartnerBankDetail.setBankAccountNumber(businessPartnerBankDetailResource.getBankAccountNumber());
-        businessPartnerBankDetail.setControlKey(businessPartnerBankDetailResource.getControlKey());
-        businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
-        businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
-        businessPartnerBankDetail.setCollectionAuthorization(businessPartnerBankDetailResource.getCollectionAuthorization());
-        businessPartnerBankDetail.setExternalBankId(businessPartnerBankDetailResource.getExternalBankId());
-        businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
-        businessPartnerBankDetail.setIBan(businessPartnerBankDetailResource.getIBan());
-        businessPartnerBankDetail.setIBanFromDate(businessPartnerBankDetailResource.getIBanFromDate());
+        businessPartnerBankDetail.setBankName(businessPartnerBankDetailResource.getBankCountry());
+        businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());
+        businessPartnerBankDetail.setAccountNumber(businessPartnerBankDetailResource.getAccountNumber());
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
-        businessPartnerBankDetail.setMoveDate(businessPartnerBankDetailResource.getMoveDate());
-        businessPartnerBankDetail.setMoveId(businessPartnerBankDetailResource.getMoveId());
+        businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
         return businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
     }
     

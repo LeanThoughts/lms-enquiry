@@ -11,47 +11,52 @@
         <form [formGroup]="bankDetailsUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Serial Number" formControlName="serialNumber" readonly>
+                    <input matInput
+                           (blur)="validateBank($event)"
+                           (keyup.enter)="validateBank($event)"
+                           (keyup.tab)="validateBank($event)"
+                           placeholder="Select Bank"
+                           aria-label="Select Bank"
+                           [matAutocomplete]="auto"
+                           [formControl]="bankKeyFormControl" required>
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let bank of bankFilteredOptions | async" [value]="bank.bankKey">
+                            <span>{{bank.bankName}}</span> | <small> Key : {{bank.bankKey}} </small> | <small>Branch : {{bank.bankBranch}} </small>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <!-- <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Bank Key" formControlName="bankKey" maxlength="10">
+                </mat-form-field> -->
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Bank Name" formControlName="bankName" maxlength="40">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Loan Number" formControlName="loanNumber" maxlength="10">
+                    <input matInput placeholder="IFSC Code" formControlName="ifscCode" maxlength="15">
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Selection" formControlName="selection">
+                    <input matInput placeholder="Account Number" formControlName="accountNumber" maxlength="40">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Contact Person Name" formControlName="name" maxlength="40">
-                </mat-form-field>
-            </div>
-            <div fxLayout="row" class="mt-16">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Branch Address" formControlName="branchAddress" maxlength="80">
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Designation" formControlName="designation" maxlength="40">
+                    <input matInput [matDatepicker]="entryDatePicker" placeholder="Entry Date" formControlName="entryDate">
+                    <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #entryDatePicker></mat-datepicker>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Department" formControlName="department" maxlength="40">
+                    <input matInput [matDatepicker]="validFromPicker" placeholder="Valid From" formControlName="validFrom">
+                    <mat-datepicker-toggle matSuffix [for]="validFromPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #validFromPicker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput type="email" placeholder="Mobile Number" maxlength="20" formControlName="telephoneNumber">      
-                </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Land Line Number" maxlength="20" formControlName="landLineNumber">      
-                </mat-form-field>
-                <mat-form-field fxFlex="50">
-                    <input matInput type="email" placeholder="Fax Number" maxlength="20" formControlName="faxNumber">
-                </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="50">
-                    <input matInput type="email" placeholder="Email" maxlength="240" formControlName="email">
+                    <input matInput [matDatepicker]="validToPicker" placeholder="Valid To" formControlName="validTo">
+                    <mat-datepicker-toggle matSuffix [for]="validToPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #validToPicker></mat-datepicker>
                 </mat-form-field>
             </div>
             <div mat-dialog-actions fxLayout="row">
