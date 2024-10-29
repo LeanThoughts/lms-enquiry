@@ -63,4 +63,25 @@ export class BusinessPartnerService {
     updateContactDetails(contactDetails: any): Observable<any> {
         return this._http.put<any>('enquiry/api/businessPartnerLoanContacts/update', contactDetails);
     }
+
+    /**
+     * getBankDetails()
+     */
+    getBankDetails(partnerId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/businessPartnerBankDetails/search/findByPartnerId', { params: { partnerId } });
+    }
+
+    /**
+     * createBankDetails()
+     */
+    createBankDetails(bankDetails: any, businessPartnerId: string): Observable<any> {
+        return this._http.post<any>('enquiry/api/businessPartnerBankDetails/create', bankDetails, { params: { businessPartnerId } });
+    }
+
+    /**
+     * updateBankDetails()
+     */
+    updateBankDetails(bankDetails: any): Observable<any> {
+        return this._http.put<any>('enquiry/api/businessPartnerBankDetails/update', bankDetails);
+    }
 }

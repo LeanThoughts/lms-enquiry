@@ -23,6 +23,8 @@ import { FuseSharedModule } from "@fuse/shared.module";
 import { PartnerUpdateComponent } from "./partnerUpdate/partnerUpdate.component";
 import { BusinessPartnerContactDetailsListComponent } from "./contactDetailsList/contactDetailsList.component";
 import { BusinessPartnerContactDetailsUpdateDialogComponent } from "./contactDetailsUpdate/contactDetailsUpdate.component";
+import { BusinessPartnerBankDetailsListComponent } from "./bankDetailsList/bankDetailsList.component";
+import { BusinessPartnerBankDetailsUpdateComponent } from "./bankDetailsUpdate/bankDetailsUpdate.component";
 
 
 
@@ -41,7 +43,9 @@ const routes = [
         BusinessPartnerComponent,
         PartnerUpdateComponent,
         BusinessPartnerContactDetailsListComponent,
-        BusinessPartnerContactDetailsUpdateDialogComponent
+        BusinessPartnerContactDetailsUpdateDialogComponent,
+        BusinessPartnerBankDetailsListComponent,
+        BusinessPartnerBankDetailsUpdateComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -71,13 +75,16 @@ const routes = [
         BusinessPartnerComponent,
         PartnerUpdateComponent,
         BusinessPartnerContactDetailsListComponent,
-        BusinessPartnerContactDetailsUpdateDialogComponent
+        BusinessPartnerContactDetailsUpdateDialogComponent,
+        BusinessPartnerBankDetailsListComponent,
+        BusinessPartnerBankDetailsUpdateComponent
     ],
     providers   : [
         BusinessPartnerService
     ],
     entryComponents: [
-        BusinessPartnerContactDetailsUpdateDialogComponent
+        BusinessPartnerContactDetailsUpdateDialogComponent,
+        BusinessPartnerBankDetailsUpdateComponent
     ]
 })
 export class BusinessPartnerModule

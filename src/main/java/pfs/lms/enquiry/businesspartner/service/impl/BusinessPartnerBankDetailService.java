@@ -15,7 +15,7 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 
 @Service
 @RequiredArgsConstructor
-public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDetailService {@Override
+public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDetailService {
 
     private final BusinessPartnerBankDetailRepository businessPartnerBankDetailRepository;
     private final PartnerRepository partnerRepository;

@@ -1,17 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
-import { BusinessPartnerContactDetailsUpdateDialogComponent } from '../contactDetailsUpdate/contactDetailsUpdate.component';
 import { BusinessPartnerService } from '../businessPartner.service';
 import { PartnerService } from '../../administration/partner/partner.service';
+import { BusinessPartnerBankDetailsUpdateComponent } from '../bankDetailsUpdate/bankDetailsUpdate.component';
 
 @Component({
-    selector: 'fuse-business-partner-contact-details-list',
-    templateUrl: './contactDetailsList.component.html',
-    styleUrls: ['./contactDetailsList.component.scss'],
+    selector: 'fuse-business-partner-bank-details-list',
+    templateUrl: './bankDetailsList.component.html',
+    styleUrls: ['./bankDetailsList.component.scss'],
     animations: fuseAnimations
 })
-export class BusinessPartnerContactDetailsListComponent {
+export class BusinessPartnerBankDetailsListComponent {
 
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
@@ -54,11 +54,11 @@ export class BusinessPartnerContactDetailsListComponent {
         }
         else {
             // Open the dialog.
-            const dialogRef = this._dialog.open(BusinessPartnerContactDetailsUpdateDialogComponent, {
-                panelClass: 'fuse-business-partner-contact-details-update-dialog',
+            const dialogRef = this._dialog.open(BusinessPartnerBankDetailsUpdateComponent, {
+                panelClass: 'fuse-business-partner-bank-details-update-dialog',
                 width: '750px',
                 data: {
-                operation: 'addContactDetails',
+                operation: 'addBankDetails',
                 loanApplicationId: this.businessPartnerId,
                 }
             });
@@ -78,8 +78,8 @@ export class BusinessPartnerContactDetailsListComponent {
      */
     updateContactDetails(): void {
         // Open the dialog.
-        const dialogRef = this._dialog.open(BusinessPartnerContactDetailsUpdateDialogComponent, {
-            panelClass: 'fuse-business-partner-contact-details-update-dialog',
+        const dialogRef = this._dialog.open(BusinessPartnerBankDetailsUpdateComponent, {
+            panelClass: 'fuse-business-partner-bank-details-update-dialog',
             width: '750px',
             data: {
                 operation: 'updateContactDetails',

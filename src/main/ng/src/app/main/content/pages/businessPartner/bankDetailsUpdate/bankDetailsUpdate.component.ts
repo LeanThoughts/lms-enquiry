@@ -12,7 +12,7 @@ import { BusinessPartnerService } from '../businessPartner.service';
     animations: fuseAnimations,
     encapsulation: ViewEncapsulation.None
 })
-export class BankDetailsUpdateComponent implements OnInit {
+export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
 
     dialogTitle = 'Add Bank Details';
 
@@ -25,7 +25,7 @@ export class BankDetailsUpdateComponent implements OnInit {
      */
     constructor(private _formBuilder: FormBuilder, 
                 private _businessPartnerService: BusinessPartnerService,
-                public _dialogRef: MatDialogRef<BankDetailsUpdateComponent>, 
+                public _dialogRef: MatDialogRef<BusinessPartnerBankDetailsUpdateComponent>, 
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
                 private _matSnackBar: MatSnackBar) {
 
