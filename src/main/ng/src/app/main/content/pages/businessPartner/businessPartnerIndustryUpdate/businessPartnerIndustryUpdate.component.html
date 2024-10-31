@@ -15,20 +15,20 @@
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Industry System" formControlName="industrySystemId" (selectionChange)="fetchIndustryTypes($event)" required>
                         <mat-option *ngFor="let industrySystem of industrySystems" [value]="industrySystem.id">
-                            {{industrySystem.name}}
+                            {{industrySystem.value}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Industry Type" formControlName="industryTypeId" required>
                         <mat-option *ngFor="let industryType of industryTypes" [value]="industryType.id">
-                            {{industryType.name}}
+                            {{industryType.value}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row">
+            <div mat-dialog-actions fxLayout="row" class="mb-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

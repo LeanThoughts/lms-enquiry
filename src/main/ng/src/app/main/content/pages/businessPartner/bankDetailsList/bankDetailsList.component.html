@@ -45,7 +45,7 @@
             <ng-container matColumnDef="entryDate">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Entry Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.entryDate }}</p>
+                    <p class="text-truncate">{{ obj.entryDate | date: 'dd-MMM-yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -53,7 +53,7 @@
             <ng-container matColumnDef="validFrom">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Valid From</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.validFrom }}</p>
+                    <p class="text-truncate">{{ obj.validFromDate | date: 'dd-MMM-yyyy' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -61,7 +61,7 @@
             <ng-container matColumnDef="validTo">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Valid To</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.validTo }}</p>
+                    <p class="text-truncate">{{ obj.validToDate | date: 'dd-MMM-yyyy' }}</p>
                 </mat-cell>
             </ng-container>
             

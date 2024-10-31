@@ -32,7 +32,7 @@
             </mat-panel-description-->
         </mat-expansion-panel-header>
 
-        <form [formGroup]="partnerSearchForm">
+        <form [formGroup]="partnerSearchForm" class="mt-8">
                 <div fxLayout="row">
                     <mat-form-field fxFlex="23">
                         <input matInput placeholder="Bus. Partner Name" formControlName="partnerName">
@@ -63,7 +63,7 @@
             </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <form [formGroup]="partnerUpdateForm">
+        <form [formGroup]="partnerUpdateForm" class="mt-8">
             <div fxLayout="row">
                 <mat-form-field fxFlex="25">
                     <mat-select placeholder="Partner Category" formControlName="partnerCategory" required>

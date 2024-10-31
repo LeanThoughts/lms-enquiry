@@ -13,7 +13,7 @@
             <ng-container matColumnDef="serialNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Sl No.</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.serialNumber }}</p>
+                    <p class="text-truncate">{{ obj.serialNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -21,7 +21,7 @@
             <ng-container matColumnDef="selection">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Selection</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ getSelection(obj.selection) }}</p>
+                    <p class="text-truncate">{{ obj.selection === true ? 'Yes' : 'No' }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -29,7 +29,7 @@
             <ng-container matColumnDef="loanNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Loan Number</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.loanNumber }}</p>
+                    <p class="text-truncate">{{ obj.loanNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -37,7 +37,7 @@
             <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Name</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.name }}</p>
+                    <p class="text-truncate">{{ obj.name }}</p>
                 </mat-cell>
             </ng-container>
             
@@ -45,7 +45,7 @@
             <ng-container matColumnDef="branchAddress">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Branch Address</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.branchAddress }}</p>
+                    <p class="text-truncate">{{ obj.branchAddress }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -53,7 +53,7 @@
             <ng-container matColumnDef="designation">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Designation</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.designation }}</p>
+                    <p class="text-truncate">{{ obj.designation }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -61,7 +61,7 @@
             <ng-container matColumnDef="department">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Department</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.department }}</p>
+                    <p class="text-truncate">{{ obj.department }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -69,7 +69,7 @@
             <ng-container matColumnDef="telephoneNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Mobile No</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.telephoneNumber }}</p>
+                    <p class="text-truncate">{{ obj.telephoneNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -77,7 +77,7 @@
             <ng-container matColumnDef="landLineNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Landline No</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.landLineNumber }}</p>
+                    <p class="text-truncate">{{ obj.landLineNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -85,7 +85,7 @@
             <ng-container matColumnDef="faxNumber">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Fax No</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.faxNumber }}</p>
+                    <p class="text-truncate">{{ obj.faxNumber }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -93,7 +93,7 @@
             <ng-container matColumnDef="email">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Email</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.commonLoanAgreement.email }}</p>
+                    <p class="text-truncate">{{ obj.email }}</p>
                 </mat-cell>
             </ng-container>
             

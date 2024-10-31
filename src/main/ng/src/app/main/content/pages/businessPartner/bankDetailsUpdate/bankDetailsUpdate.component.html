@@ -49,17 +49,17 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="validFromPicker" placeholder="Valid From" formControlName="validFrom">
+                    <input matInput [matDatepicker]="validFromPicker" placeholder="Valid From" formControlName="validFromDate">
                     <mat-datepicker-toggle matSuffix [for]="validFromPicker"></mat-datepicker-toggle>
                     <mat-datepicker #validFromPicker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="validToPicker" placeholder="Valid To" formControlName="validTo">
+                    <input matInput [matDatepicker]="validToPicker" placeholder="Valid To" formControlName="validToDate">
                     <mat-datepicker-toggle matSuffix [for]="validToPicker"></mat-datepicker-toggle>
                     <mat-datepicker #validToPicker></mat-datepicker>
                 </mat-form-field>
             </div>
-            <div mat-dialog-actions fxLayout="row">
+            <div mat-dialog-actions fxLayout="row" class="mb-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>
