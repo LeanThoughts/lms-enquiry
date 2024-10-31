@@ -7,7 +7,6 @@ import pfs.lms.enquiry.domain.Partner;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -22,10 +21,10 @@ public class BusinessPartnerIdentification extends AggregateRoot<BusinessPartner
     @JoinColumn(name = "partner_id")
     Partner partner;
 
-    @OneToOne
-    @JoinColumn(name = "identification_category_id")
-    private  IdentificationCategory identificationCategory;
+    private Long identificationCategoryId;
 
+    private Integer serialNumber;
+    
     private String identificationNumber;
     private String idInstitute;
     private LocalDate idEntryDate;

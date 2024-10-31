@@ -147,7 +147,6 @@ export class PartnerComponent implements OnInit {
   onSelect(partner: PartnerModel): void {
     this.selectedPartner = partner;
     this._service.selectedPartnerId = new BehaviorSubject(partner.partyNumber);
-
   }
 
 //   /**
@@ -180,7 +179,9 @@ export class PartnerComponent implements OnInit {
      * updateBusinessPartner()
      */
     updateBusinessPartner(): void {
-        this._router.navigate(['/partnerDetails']);
+        this._service.selectedPartner.next(this.selectedPartner);
+        this._router.navigate(['/updateBusinessPartner']);
+        // this._router.navigate(['/partnerDetails']);
     }
 
 }

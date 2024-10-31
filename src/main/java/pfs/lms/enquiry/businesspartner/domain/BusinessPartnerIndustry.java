@@ -6,7 +6,6 @@ import pfs.lms.enquiry.domain.Partner;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -21,8 +20,8 @@ public class BusinessPartnerIndustry extends AggregateRoot<BusinessPartnerIndust
 
     private Integer serialNumber;
 
-    private UUID industrySystemId;    
-    private UUID industryTypeId;
+    private Long industrySystemId;
+    private Long industryTypeId;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

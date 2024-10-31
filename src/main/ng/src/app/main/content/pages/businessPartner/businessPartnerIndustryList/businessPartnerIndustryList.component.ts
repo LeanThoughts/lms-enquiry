@@ -41,8 +41,11 @@ export class BusinessPartnerIndustryListComponent implements OnDestroy {
                 private _snackBar: MatSnackBar,
                 private _activatedRoute: ActivatedRoute) {
                     
-        this.industrySystems = this._activatedRoute.snapshot.data['routeResolvedData'][3];
-
+        this.industrySystems = this._activatedRoute.snapshot.data['routeResolvedData'][3]._embedded.industrySystems;
+        if (this._activatedRoute.snapshot.data['routeResolvedData'][6]) {
+            this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][6].
+                _embedded.businessPartnerIndustries);
+        }
         this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartnerId = partner ? partner.id : null;
         });
@@ -83,9 +86,9 @@ export class BusinessPartnerIndustryListComponent implements OnDestroy {
             });
             // Subscribe to the dialog close event to intercept the action taken.
             dialogRef.afterClosed().subscribe((result) => { 
-            if (result.refresh) {
-                this._businessPartnerService.getBusinessPartnerIndustries(this.businessPartnerId).subscribe(data => {
-                        this.dataSource.data = data;
+                if (result.refresh) {
+                    this._businessPartnerService.getBusinessPartnerIndustries(this.businessPartnerId).subscribe(data => {
+                        this.dataSource = new MatTableDataSource(data._embedded.businessPartnerIndustries);
                     });
                 }
             });    
@@ -111,7 +114,7 @@ export class BusinessPartnerIndustryListComponent implements OnDestroy {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this._businessPartnerService.getBusinessPartnerIndustries(this.businessPartnerId).subscribe(data => {
-                    this.dataSource.data = data;
+                    this.dataSource = new MatTableDataSource(data._embedded.businessPartnerIndustries);
                 });
             }
         });    

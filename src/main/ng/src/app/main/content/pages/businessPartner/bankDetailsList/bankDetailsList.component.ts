@@ -39,7 +39,10 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
                 private _activatedRoute: ActivatedRoute) {
                     
         this.banks = this._activatedRoute.snapshot.data['routeResolvedData'][2];
-
+        if (this._activatedRoute.snapshot.data['routeResolvedData'][8]) {
+            this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][8].
+                _embedded.businessPartnerBankDetails);
+        }
         this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartnerId = partner ? partner.id : null;
         });
@@ -80,9 +83,9 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
             });
             // Subscribe to the dialog close event to intercept the action taken.
             dialogRef.afterClosed().subscribe((result) => { 
-            if (result.refresh) {
-                this._businessPartnerService.getBusinessPartnerBankDetails(this.businessPartnerId).subscribe(data => {
-                        this.dataSource.data = data;
+                if (result.refresh) {
+                    this._businessPartnerService.getBusinessPartnerBankDetails(this.businessPartnerId).subscribe(response => {
+                        this.dataSource = new MatTableDataSource(response._embedded.businessPartnerBankDetails);
                     });
                 }
             });    
@@ -107,8 +110,8 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._businessPartnerService.getBusinessPartnerBankDetails(this.businessPartnerId).subscribe(data => {
-                    this.dataSource.data = data;
+                this._businessPartnerService.getBusinessPartnerBankDetails(this.businessPartnerId).subscribe(response => {
+                    this.dataSource = new MatTableDataSource(response._embedded.businessPartnerBankDetails);
                 });
             }
         });    

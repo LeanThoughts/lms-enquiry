@@ -21,7 +21,7 @@
                 <!-- <mat-form-field fxFlex="50">
                     <mat-checkbox [formControl]="selection">Print in Demand Letter</mat-checkbox>
                 </mat-form-field> -->
-                <mat-checkbox formControlName="selection">
+                <mat-checkbox formControlName="selection" fxFlex="50" class="mt-8">
                     Month End Ind. Due Date
                 </mat-checkbox>
                 <mat-form-field fxFlex="50">
@@ -57,7 +57,7 @@
                     <input matInput type="email" placeholder="Email" maxlength="240" formControlName="email">
                 </mat-form-field>
             </div>
-            <div mat-dialog-actions fxLayout="row">
+            <div mat-dialog-actions fxLayout="row" class="mb-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit
                 </button>

@@ -81,7 +81,7 @@ public class PartnerService implements IPartnerService {
             existing.setSearchTerm1(partner.getSearchTerm1());
             existing.setSearchTerm2(partner.getSearchTerm2());
             existing.setFaxNumber(partner.getFaxNumber());
-
+            existing.setTitle(partner.getTitle());
             existing = partnerRepository.saveAndFlush(existing);
             
              return existing;
@@ -144,7 +144,8 @@ public class PartnerService implements IPartnerService {
     @Override
     public Partner update(Partner partnerResource) {
 
-        Partner partner = partnerRepository.findById(partnerResource.getId()).orElseThrow(() -> new RuntimeException("Partner not found"));
+        Partner partner = partnerRepository.findById(partnerResource.getId()).orElseThrow(() ->
+                new RuntimeException("Partner not found"));
         partner.setPartyName1(partnerResource.getPartyName1());
         partner.setPartyName2(partnerResource.getPartyName2());
         partner.setSearchTerm1(partnerResource.getSearchTerm1());
@@ -159,7 +160,9 @@ public class PartnerService implements IPartnerService {
         partner.setMobileNumber(partnerResource.getMobileNumber());
         partner.setContactNumber(partnerResource.getContactNumber());
         partner.setStreet(partnerResource.getStreet());
-        return partnerRepository.save(partner);
+        partner.setTitle(partnerResource.getTitle());
+        partner = partnerRepository.save(partner);
+        return partner;
     }
 
     @Override

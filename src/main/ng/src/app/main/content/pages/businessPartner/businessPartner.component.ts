@@ -27,7 +27,12 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     constructor(private _activatedRoute: ActivatedRoute, private _businessPartnerService: BusinessPartnerService) {
         console.log(this._activatedRoute.routeConfig.path);
         this.businessPartnerRoles = this._activatedRoute.snapshot.data['routeResolvedData'][0]._embedded.businessPartnerRoleTypes;
-        this.selectedRoles.push(this._businessPartnerService.businessPartnerCategoryAndRole.value.defaultPartnerRole);
+        if (this._activatedRoute.routeConfig.path === 'createBusinessPartner') {
+            this.selectedRoles.push(this._businessPartnerService.businessPartnerCategoryAndRole.value.defaultPartnerRole);
+        }
+        else {
+            // this.selectedRoles = this._businessPartnerService.selectedPartner.value.roles;
+        }
     }
 
     /**
@@ -59,6 +64,9 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
      * getSelectedRoles()
      */
     getSelectedRoles(): string {
-        return this.selectedRoles.map(role => role.value).join(', ');
+        if (this.selectedRoles.length > 0) {
+            return this.selectedRoles.map(role => role.value).join(', ');
+        }
+        return '';
     }
 }

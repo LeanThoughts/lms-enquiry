@@ -100,6 +100,7 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     @Size(max = 10)
     private String searchTerm2;
 
+    private String title;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;

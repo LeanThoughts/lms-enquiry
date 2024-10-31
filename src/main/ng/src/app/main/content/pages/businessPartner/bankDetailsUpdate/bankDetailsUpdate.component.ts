@@ -59,8 +59,8 @@ export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
             ifscCode: [this.selectedBankDetails.ifscCode || null],
             accountNumber: [this.selectedBankDetails.accountNumber || null],
             entryDate: [this.selectedBankDetails.entryDate || null],
-            validFrom: [this.selectedBankDetails.validFrom || null],
-            validTo: [this.selectedBankDetails.validTo || null],
+            validFromDate: [this.selectedBankDetails.validFromDate || null],
+            validToDate: [this.selectedBankDetails.validToDate || null],
         });
         
         this.bankFilteredOptions = this.bankKeyFormControl.valueChanges.pipe(
@@ -105,22 +105,32 @@ export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this.bankDetailsUpdateForm.valid) {
+            // solve the utc time zone issue
+            var bankDetails = this.bankDetailsUpdateForm.value;
+            const convertToUTCDate = (date) => {
+                if (!date) return null;
+                const dt = new Date(date);
+                return new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            };
+            bankDetails.entryDate = convertToUTCDate(bankDetails.entryDate);
+            bankDetails.validFromDate = convertToUTCDate(bankDetails.validFromDate);
+            bankDetails.validToDate = convertToUTCDate(bankDetails.validToDate);
+
             if (this._dialogData.operation === 'addBankDetails') {
-                this._businessPartnerService.createBusinessPartnerBankDetails(this.selectedBankDetails, this._dialogData.businessPartnerId).
+                this._businessPartnerService.createBusinessPartnerBankDetails(bankDetails, this._dialogData.businessPartnerId).
                         subscribe(() => {
                     this._matSnackBar.open('Bank details added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
             }
             else {
-                this.selectedBankDetails.bankKey = this.bankDetailsUpdateForm.value.bankKey;
-                this.selectedBankDetails.bankName = this.bankDetailsUpdateForm.value.bankName;
-                this.selectedBankDetails.ifscCode = this.bankDetailsUpdateForm.value.ifscCode;
-                this.selectedBankDetails.accountNumber = this.bankDetailsUpdateForm.value.accountNumber;
-                this.selectedBankDetails.entryDate = this.bankDetailsUpdateForm.value.entryDate;
-                this.selectedBankDetails.validFrom = this.bankDetailsUpdateForm.value.validFrom;
-                this.selectedBankDetails.validTo = this.bankDetailsUpdateForm.value.validTo;
-
+                this.selectedBankDetails.bankKey = bankDetails.bankKey;
+                this.selectedBankDetails.bankName = bankDetails.bankName;
+                this.selectedBankDetails.ifscCode = bankDetails.ifscCode;
+                this.selectedBankDetails.accountNumber = bankDetails.accountNumber;
+                this.selectedBankDetails.entryDate = bankDetails.entryDate;
+                this.selectedBankDetails.validFromDate = bankDetails.validFromDate;
+                this.selectedBankDetails.validToDate = bankDetails.validToDate;
                 this._businessPartnerService.updateBusinessPartnerBankDetails(this.selectedBankDetails).subscribe(() => {
                     this._matSnackBar.open('Bank details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

@@ -32,6 +32,7 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                 private _matSnackBar: MatSnackBar) {
 
         this.selectedPartner = this._partnerService.selectedPartner.value;
+        console.log('selected partner ####', this.selectedPartner);
         this.states = this._activatedRoute.snapshot.data['routeResolvedData'][1];
 
         this.partnerDetailsForm = this._formBuilder.group({
@@ -44,7 +45,7 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
             street: [this.selectedPartner.street || null],
             postalCode: [this.selectedPartner.postalCode || null],
             state: [this.selectedPartner.state || null],
-            country: [this.selectedPartner.country || null],
+            country: [this.selectedPartner.country || 'India'],
             city: [this.selectedPartner.city || null],
             contactNumber: [this.selectedPartner.contactNumber || null],
             email: [this.selectedPartner.email || null],
@@ -69,20 +70,25 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
      * submit()
      */
     submit(): void {
-        console.log(this.selectedPartner);
-        if (this.selectedPartner.id === '') {
-            this._businessPartnerService.createPartner(this.partnerDetailsForm.value).subscribe((response: any) => {
-                this.selectedPartner = response;
-                this._partnerService.selectedPartner.next(response);
-                this._matSnackBar.open('Partner created successfully', 'Close', {duration: 7000});
-            });
-        }
-        else {
-            this._businessPartnerService.updatePartner(this.partnerDetailsForm.value).subscribe((response: any) => {
-                this.selectedPartner = response;
-                this._partnerService.selectedPartner.next(response);
-                this._matSnackBar.open('Partner updated successfully', 'Close', {duration: 7000});
-            });
+        if (this.partnerDetailsForm.valid) {
+            this.partnerDetailsForm.value.country = '';
+            if (this.selectedPartner.id === '') {            
+                this._businessPartnerService.createPartner(this.partnerDetailsForm.value).subscribe((response: any) => {
+                    this.selectedPartner = response;
+                    this._partnerService.selectedPartner.next(response);
+                    this._matSnackBar.open('Partner created successfully', 'Close', {duration: 7000});
+                });
+            }
+            else {
+                Object.keys(this.partnerDetailsForm.value).forEach(key => {
+                    this.selectedPartner[key] = this.partnerDetailsForm.value[key];
+                });
+                this._businessPartnerService.updatePartner(this.selectedPartner).subscribe((response: any) => {
+                    this.selectedPartner = response;
+                    this._partnerService.selectedPartner.next(response);
+                    this._matSnackBar.open('Partner updated successfully', 'Close', {duration: 7000});
+                });
+            }
         }
     }
 }

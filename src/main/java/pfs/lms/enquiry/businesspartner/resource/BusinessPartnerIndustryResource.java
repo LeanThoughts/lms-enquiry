@@ -15,6 +15,6 @@ public class BusinessPartnerIndustryResource {
 
     private Integer serialNumber;
 
-    private UUID industrySystemId;    
-    private UUID industryTypeId;
+    private Long industrySystemId;    
+    private Long industryTypeId;
 }

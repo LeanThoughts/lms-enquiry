@@ -5,6 +5,7 @@ import { BusinessPartnerContactDetailsUpdateDialogComponent } from '../contactDe
 import { BusinessPartnerService } from '../businessPartner.service';
 import { PartnerService } from '../../administration/partner/partner.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-business-partner-contact-details-list',
@@ -34,8 +35,13 @@ export class BusinessPartnerContactDetailsListComponent implements OnDestroy {
     constructor(private _businessPartnerService: BusinessPartnerService,
                 private _partnerService: PartnerService,
                 private _dialog: MatDialog, 
-                private _snackBar: MatSnackBar) {
+                private _snackBar: MatSnackBar,
+                private _activatedRoute: ActivatedRoute) {
 
+        if (this._activatedRoute.snapshot.data.routeResolvedData[5]) {
+            this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][5].
+                _embedded.businessPartnerLoanContacts);
+        }
         this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartnerId = partner ? partner.id : null;
         });
@@ -73,8 +79,8 @@ export class BusinessPartnerContactDetailsListComponent implements OnDestroy {
             // Subscribe to the dialog close event to intercept the action taken.
             dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._businessPartnerService.getBusinessPartnerContactDetails(this.businessPartnerId).subscribe(data => {
-                        this.dataSource.data = data;
+                    this._businessPartnerService.getBusinessPartnerContactDetails(this.businessPartnerId).subscribe(data => {
+                        this.dataSource = new MatTableDataSource(data._embedded.businessPartnerLoanContacts);
                     });
                 }
             });    
@@ -99,7 +105,7 @@ export class BusinessPartnerContactDetailsListComponent implements OnDestroy {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this._businessPartnerService.getBusinessPartnerContactDetails(this.businessPartnerId).subscribe(data => {
-                    this.dataSource.data = data;
+                    this.dataSource = new MatTableDataSource(data._embedded.businessPartnerLoanContacts);
                 });
             }
         });    

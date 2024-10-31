@@ -27,12 +27,19 @@ import { BusinessPartnerBankDetailsListComponent } from "./bankDetailsList/bankD
 import { BusinessPartnerBankDetailsUpdateComponent } from "./bankDetailsUpdate/bankDetailsUpdate.component";
 import { BusinessPartnerIndustryListComponent } from "./businessPartnerIndustryList/businessPartnerIndustryList.component";
 import { BusinessPartnerIndustryUpdateComponent } from "./businessPartnerIndustryUpdate/businessPartnerIndustryUpdate.component";
-
-
+import { BusinessPartnerIdentificationListComponent } from "./identificationList/identificationList.component";
+import { BusinessPartnerIdentificationUpdateComponent } from "./identificationUpdate/identificationUpdate.component";
 
 const routes = [
   {
     path      : 'createBusinessPartner',
+    component : BusinessPartnerComponent,
+    resolve   : {
+      routeResolvedData: BusinessPartnerService
+    }
+  },
+  {
+    path      : 'updateBusinessPartner',
     component : BusinessPartnerComponent,
     resolve   : {
       routeResolvedData: BusinessPartnerService
@@ -49,7 +56,9 @@ const routes = [
         BusinessPartnerBankDetailsListComponent,
         BusinessPartnerBankDetailsUpdateComponent,
         BusinessPartnerIndustryListComponent,
-        BusinessPartnerIndustryUpdateComponent
+        BusinessPartnerIndustryUpdateComponent,
+        BusinessPartnerIdentificationListComponent,
+        BusinessPartnerIdentificationUpdateComponent
     ],
     imports     : [
         RouterModule.forChild(routes),
@@ -83,7 +92,9 @@ const routes = [
         BusinessPartnerBankDetailsListComponent,
         BusinessPartnerBankDetailsUpdateComponent,
         BusinessPartnerIndustryListComponent,
-        BusinessPartnerIndustryUpdateComponent
+        BusinessPartnerIndustryUpdateComponent,
+        BusinessPartnerIdentificationListComponent,
+        BusinessPartnerIdentificationUpdateComponent
     ],
     providers   : [
         BusinessPartnerService
@@ -91,7 +102,8 @@ const routes = [
     entryComponents: [
         BusinessPartnerContactDetailsUpdateDialogComponent,
         BusinessPartnerBankDetailsUpdateComponent,
-        BusinessPartnerIndustryUpdateComponent
+        BusinessPartnerIndustryUpdateComponent,
+        BusinessPartnerIdentificationUpdateComponent
     ]
 })
 export class BusinessPartnerModule

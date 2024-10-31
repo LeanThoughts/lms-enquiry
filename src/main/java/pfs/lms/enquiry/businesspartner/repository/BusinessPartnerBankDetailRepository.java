@@ -12,5 +12,7 @@ public interface BusinessPartnerBankDetailRepository extends JpaRepository<Busin
 
     List<BusinessPartnerBankDetail> findByPartnerIdOrderByEntryDateDesc(UUID partnerId);
 
+    List<BusinessPartnerBankDetail> findByPartnerIdOrderBySerialNumberDesc(UUID partnerId);
+    
     Optional<BusinessPartnerBankDetail> findFirstByPartnerOrderBySerialNumberDesc(Partner partner);
 }

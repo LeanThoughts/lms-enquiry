@@ -26,12 +26,28 @@ export class BusinessPartnerService {
      * resolve()
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return forkJoin([
-            this._partnerService.getBusinessPartnerRoleTypes(),
-            this._loanEnquiryService.getStates(),
-            this._loanMonitoringService.getBanks(),
-            this.getIndustrySystems()
-        ]);
+        if (this._partnerService.selectedPartner.value.id) {
+            return forkJoin([
+                this._partnerService.getBusinessPartnerRoleTypes(),
+                this._loanEnquiryService.getStates(),
+                this._loanMonitoringService.getBanks(),
+                this.getIndustrySystems(),
+                this.getIdentificationCategories(),
+                this.getBusinessPartnerContactDetails(this._partnerService.selectedPartner.value.id),
+                this.getBusinessPartnerIndustries(this._partnerService.selectedPartner.value.id),
+                this.getBusinessPartnerIdentificationDetails(this._partnerService.selectedPartner.value.id),
+                this.getBusinessPartnerBankDetails(this._partnerService.selectedPartner.value.id)
+            ]);
+        }
+        else {
+            return forkJoin([
+                this._partnerService.getBusinessPartnerRoleTypes(),
+                this._loanEnquiryService.getStates(),
+                this._loanMonitoringService.getBanks(),
+                this.getIndustrySystems(),
+                this.getIdentificationCategories()
+            ]);
+        }
     }
 
     /**
@@ -70,7 +86,7 @@ export class BusinessPartnerService {
     }
 
     /**
-     * getBankDetails()
+     * getBusinessPartnerBankDetails()
      */
     getBusinessPartnerBankDetails(partnerId: string): Observable<any> {
         return this._http.get<any>('enquiry/api/businessPartnerBankDetails/search/findByPartnerIdOrderBySerialNumberDesc', { params: { partnerId } });
@@ -84,7 +100,7 @@ export class BusinessPartnerService {
     }
 
     /**
-     * updateBankDetails()
+     * updateBusinessPartnerBankDetails()
      */
     updateBusinessPartnerBankDetails(bankDetails: any): Observable<any> {
         return this._http.put<any>('enquiry/api/businessPartnerBankDetails/update', bankDetails);
@@ -98,23 +114,65 @@ export class BusinessPartnerService {
     }
 
     /**
-     * getIndustries()
+     * getIndustryTypes()
+     */
+    getIndustryTypes(industrySystemId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/industryTypes/search/findByIndustrySystemId', { params: { industrySystemId } });
+    }
+
+    /**
+     * getBusinessPartnerIndustries()
      */
     getBusinessPartnerIndustries(partnerId: string): Observable<any> {
         return this._http.get<any>('enquiry/api/businessPartnerIndustries/search/findByPartnerIdOrderBySerialNumberDesc', { params: { partnerId } });
     }
 
     /**
-     * createIndustry()
+     * createBusinessPartnerIndustry()
      */
     createBusinessPartnerIndustry(industry: any, businessPartnerId: string): Observable<any> {
         return this._http.post<any>('enquiry/api/businessPartnerIndustries/create', industry, { params: { businessPartnerId } });
     }
 
     /**
-     * updateIndustry()
+     * updateBusinessPartnerIndustry()
      */
     updateBusinessPartnerIndustry(industry: any): Observable<any> {
         return this._http.put<any>('enquiry/api/businessPartnerIndustries/update', industry);
+    }
+
+    /**
+     * getIdentificationCategories()
+     */
+    getIdentificationCategories(): Observable<any> {
+        return this._http.get<any>('enquiry/api/identificationCategories');
+    }
+
+    /**
+     * getBusinessPartnerIdentificationDetails()
+     */
+    getBusinessPartnerIdentificationDetails(partnerId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/businessPartnerIdentifications/search/findByPartnerIdOrderBySerialNumberDesc', { params: { partnerId } });
+    }
+
+    /**
+     * createBusinessPartnerIdentificationDetails()
+     */
+    createBusinessPartnerIdentificationDetails(identification: any, businessPartnerId: string): Observable<any> {
+        return this._http.post<any>('enquiry/api/businessPartnerIdentifications/create', identification, { params: { businessPartnerId } });
+    }
+
+    /**
+     * updateBusinessPartnerIdentificationDetails()
+     */
+    updateBusinessPartnerIdentificationDetails(identification: any): Observable<any> {
+        return this._http.put<any>('enquiry/api/businessPartnerIdentifications/update', identification);
+    }
+
+    /**
+     * uploadVaultDocument()
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/upload', file);
     }
 }

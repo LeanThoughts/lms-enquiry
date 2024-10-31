@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
-import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
 import java.io.Serializable;
@@ -40,9 +39,9 @@ public class SAPBusinessPartnerIdentificationResource implements Serializable {
         else
             detailsResource.setBusPartnerNumber("");
 
-        if(businessPartnerIdentification.getIdentificationCategory() != null)
-            detailsResource.setIdentificationCategory(businessPartnerIdentification.getIdentificationCategory().getValue());
-        else detailsResource.setIdentificationCategory("");
+//        if(businessPartnerIdentification.getIdentificationCategory() != null)
+//            detailsResource.setIdentificationCategory(businessPartnerIdentification.getIdentificationCategory().);
+//        else detailsResource.setIdentificationCategory("");
 
         if(businessPartnerIdentification.getIdentificationNumber() != null)
             detailsResource.setIdentificationNumber(businessPartnerIdentification.getIdentificationNumber());

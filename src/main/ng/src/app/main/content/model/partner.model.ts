@@ -33,7 +33,7 @@ export class PartnerModel {
      * @param _partner
      */
     constructor(_partner: any) {
-        this.partyNumber = _partner.partyNumber + '' || '';
+        this.partyNumber = _partner.partyNumber || '';
         this.addressLine1 = _partner && _partner.addressLine1 || '';
         this.addressLine2 = _partner && _partner.addressLine2 || '';
         this.city = _partner && _partner.city || '';
@@ -56,6 +56,9 @@ export class PartnerModel {
         this.mobileNumber = _partner && _partner.mobileNumber || null;
         this.faxNumber = _partner && _partner.faxNumber || null;
 
+        this.searchTerm1 = _partner && _partner.searchTerm1 || null;
+        this.searchTerm2 = _partner && _partner.searchTerm2 || null;
+        this.title = _partner && _partner.title || null;
         this._links = _partner && _partner._links || '';
     }
 

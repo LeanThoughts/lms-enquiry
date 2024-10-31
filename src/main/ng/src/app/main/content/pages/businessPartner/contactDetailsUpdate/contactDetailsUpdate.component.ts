@@ -53,9 +53,9 @@ export class BusinessPartnerContactDetailsUpdateDialogComponent implements OnIni
             branchAddress: [this.selectedContactDetails.branchAddress || null],
             designation: [this.selectedContactDetails.designation || null],
             department: [this.selectedContactDetails.department || null],
-            telephoneNumber: [this.selectedContactDetails.telephoneNumber || null],
-            landLineNumber: [this.selectedContactDetails.landLineNumber || null],
-            faxNumber: [this.selectedContactDetails.faxNumber || null],
+            telephoneNumber: [this.selectedContactDetails.telephoneNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            landLineNumber: [this.selectedContactDetails.landLineNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            faxNumber: [this.selectedContactDetails.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
             email: [this.selectedContactDetails.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]]
         }); 
     }

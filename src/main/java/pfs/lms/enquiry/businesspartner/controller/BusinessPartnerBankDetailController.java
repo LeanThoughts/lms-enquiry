@@ -23,9 +23,9 @@ public class BusinessPartnerBankDetailController {
     @PostMapping("/businessPartnerBankDetails/create")
     public ResponseEntity<BusinessPartnerBankDetail> create(
             @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource, 
-            @RequestParam UUID partnerId) {
+            @RequestParam UUID businessPartnerId) {
 
-        businessPartnerBankDetailResource.setPartnerId(partnerId);
+        businessPartnerBankDetailResource.setPartnerId(businessPartnerId);
         return ResponseEntity.ok(businessPartnerBankDetailService.create(businessPartnerBankDetailResource));
     }
 

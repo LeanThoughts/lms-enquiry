@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface BusinessPartnerLoanContactRepository extends JpaRepository<BusinessPartnerLoanContact, UUID> {
 
-    List<BusinessPartnerLoanContact> findByPartnerId(UUID partnerId);
-
+    List<BusinessPartnerLoanContact> findByPartnerIdOrderBySerialNumberDesc(UUID partnerId);
+    
     Optional<BusinessPartnerLoanContact> findFirstByPartnerOrderBySerialNumberDesc(Partner partner);
 }
