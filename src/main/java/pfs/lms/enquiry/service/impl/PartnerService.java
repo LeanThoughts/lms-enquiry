@@ -47,6 +47,9 @@ public class PartnerService implements IPartnerService {
         //Check if the partner already exist
         Partner existing = null;
         List<Partner> partnerList = partnerRepository.findByEmail(partner.getEmail());
+        if (partnerList != null && partnerList.size() > 0) {
+            throw new RuntimeException("Email address is already assigned to another business partner (" + partnerList.get(0).getPartyName() + ")");
+        }
         for (Partner partnerItem : partnerList ) {
             if (partnerItem.getPartyNumber() != null && partner.getPartyNumber() != null) {
                 if (partnerItem.getPartyNumber().intValue() == partner.getPartyNumber().intValue()) {

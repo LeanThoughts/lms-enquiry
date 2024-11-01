@@ -3,7 +3,9 @@ package pfs.lms.enquiry.businesspartner.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
+import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
+import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 import pfs.lms.enquiry.domain.Partner;
@@ -19,11 +21,24 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
     private final BusinessPartnerIdentificationRepository businessPartnerIdentificationRepository;
     private final PartnerRepository partnerRepository;
     private final IChangeDocumentService changeDocumentService;
+    private final IdentificationCategoryRepository identificationCategoryRepository;
 
     public BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) {
         Partner partner = partnerRepository.findById(businessPartnerIdentificationResource.getPartnerId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getPartnerId().toString() 
                 + " : Business partner not found"));
+
+        IdentificationCategory identificationCategory = identificationCategoryRepository.findById(businessPartnerIdentificationResource.getIdentificationCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryId().toString() 
+                + " : Identification category not found"));
+        
+        if (identificationCategory.isDuplicateCheckRequired()) {
+            BusinessPartnerIdentification existingIdentification = businessPartnerIdentificationRepository
+                .findByIdentificationCategoryId(businessPartnerIdentificationResource.getIdentificationCategoryId());
+            if (existingIdentification != null) {
+                throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partner.getPartyName() + ")");
+            }
+        }
 
         BusinessPartnerIdentification businessPartnerIdentification = new BusinessPartnerIdentification();
         businessPartnerIdentification.setPartner(partner);

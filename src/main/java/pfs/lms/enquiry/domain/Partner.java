@@ -175,4 +175,8 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }
+
+    public String getPartyName() {
+        return this.partyName1 + (this.partyName2 != null ? " " + this.partyName2 : "");
+    }
 }

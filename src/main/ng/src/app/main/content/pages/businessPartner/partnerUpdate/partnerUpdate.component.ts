@@ -77,6 +77,8 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                     this.selectedPartner = response;
                     this._partnerService.selectedPartner.next(response);
                     this._matSnackBar.open('Partner created successfully', 'Close', {duration: 7000});
+                }, error => {
+                    this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
                 });
             }
             else {
@@ -87,6 +89,8 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                     this.selectedPartner = response;
                     this._partnerService.selectedPartner.next(response);
                     this._matSnackBar.open('Partner updated successfully', 'Close', {duration: 7000});
+                }, error => {
+                    this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
                 });
             }
         }

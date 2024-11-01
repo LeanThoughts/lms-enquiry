@@ -121,6 +121,8 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
                         subscribe(() => {
                     this._matSnackBar.open('Identification details added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                }, error => {
+                    this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
                 });
             }
             else {
@@ -134,6 +136,8 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
                 this._businessPartnerService.updateBusinessPartnerIdentificationDetails(this.selectedIdentificationDetails).subscribe(() => {
                     this._matSnackBar.open('Identification details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                }, error => {
+                    this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
                 });            
             }
         }

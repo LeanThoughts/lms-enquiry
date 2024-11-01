@@ -66,7 +66,7 @@ export class BusinessPartnerContactDetailsUpdateDialogComponent implements OnIni
     submit(): void {
         if (this.contactDetailsUpdateForm.valid) {
             if (this._dialogData.operation === 'addContactDetails') {
-                this._businessPartnerService.createBusinessPartnerContactDetails(this.selectedContactDetails, this._dialogData.businessPartnerId).
+                this._businessPartnerService.createBusinessPartnerContactDetails(this.contactDetailsUpdateForm.value, this._dialogData.businessPartnerId).
                         subscribe(() => {
                     this._matSnackBar.open('Contact details added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
