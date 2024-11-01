@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Component
-@Transactional
+//@Transactional
 public class PartnerService implements IPartnerService {
 
     private final PartnerRepository partnerRepository;
@@ -101,7 +101,7 @@ public class PartnerService implements IPartnerService {
         else {
             try {
                 partner.setUserName(partner.getEmail());
-                partner = partnerRepository.saveAndFlush(partner);
+                partner = partnerRepository.save(partner);
 
                 changeDocumentService.createChangeDocument(
                         partner.getId(), partner.getId().toString(), null,
@@ -111,7 +111,7 @@ public class PartnerService implements IPartnerService {
                         "Created",
                         username,
                         "Partner", "Partner");
-                return existing;
+                return partner;
             }
             catch (Exception ex) {
                 System.out.println("------------------Exception Saving Partner -----------------------------------:" + partner.getPartyNumber());
