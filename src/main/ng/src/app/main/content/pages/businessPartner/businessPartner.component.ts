@@ -7,6 +7,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationDialogComponent } from '../appraisal/confirmationDialog/confirmationDialog.component';
 import { Subscription } from 'rxjs';
 import { PartnerService } from '../administration/partner/partner.service';
+import { AppService } from 'app/app.service';
 
 @Component({
     selector: 'fuse-business-partner',
@@ -29,6 +30,8 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
     
+    disableSendForApproval: boolean;
+    
     /**
      * constructor()
      */
@@ -36,7 +39,8 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
         private _businessPartnerService: BusinessPartnerService, 
         private _matDialog: MatDialog,
         private _partnerService: PartnerService, 
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, 
+        private _appService: AppService) {
 
         this.businessPartnerRoleTypes = this._activatedRoute.snapshot.data['routeResolvedData'][0]._embedded.businessPartnerRoleTypes;
         
@@ -78,12 +82,6 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * sendAppraisalForApproval()
-     */
-    sendForApproval(): void {
-    }
-
-    /**
      * addRoleToBusinessPartner()
      */
     addRoleToBusinessPartner(): void {
@@ -120,5 +118,27 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             return this.selectedRoleTypes.map(role => role.value).join(',  ');
         }
         return '';
+    }
+
+    /**
+     * sendForApproval()
+     */
+    sendForApproval(): void {
+        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+        let email = this._appService.currentUser.email;
+        this._matSnackBar.open('Please wait while attempting to send the business partner for approval.', 'OK', { duration: 25000 });
+        this._businessPartnerService.sendBusinessPartnerForWorkflowApproval(this.businessPartnerId, name, email).subscribe(
+            response => {
+                this._partnerService.selectedPartner.next(response);
+                // this._matSnackBar.dismiss();
+                this._matSnackBar.open('Business partner is sent for approval.', 'OK', { duration: 7000 });
+            },
+            error => {
+                this.disableSendForApproval = false;
+                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
+                    'OK', { duration: 7000 });
+            });
+        this.disableSendForApproval = true;
+        // this._location.back();
     }
 }

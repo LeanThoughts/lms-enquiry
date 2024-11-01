@@ -193,4 +193,18 @@ export class BusinessPartnerService {
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);
     }
+
+    
+    /**
+     * sendBusinessPartnerForWorkflowApproval()
+     */
+    public sendBusinessPartnerForWorkflowApproval(partnerId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': partnerId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'BusinessPartner'
+        }
+        return this._http.put<any>('enquiry/api/startprocess', requestObj);
+    }
 }
