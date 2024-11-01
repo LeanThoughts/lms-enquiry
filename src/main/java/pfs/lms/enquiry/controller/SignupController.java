@@ -23,7 +23,7 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody SignupResource signupResource){
+    public ResponseEntity signup(@RequestBody SignupResource signupResource) throws CloneNotSupportedException {
         iSignupService.signup(signupResource);
         return ResponseEntity.ok().build();
     }

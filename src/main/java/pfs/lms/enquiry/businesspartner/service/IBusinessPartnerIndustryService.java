@@ -5,7 +5,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryResource;
 
 public interface IBusinessPartnerIndustryService {
 
-    BusinessPartnerIndustry create(BusinessPartnerIndustryResource businessPartnerIndustryResource);
+    BusinessPartnerIndustry create(BusinessPartnerIndustryResource businessPartnerIndustryResource, String username);
 
-    BusinessPartnerIndustry update(BusinessPartnerIndustryResource businessPartnerIndustryResource);
+    BusinessPartnerIndustry update(BusinessPartnerIndustryResource businessPartnerIndustryResource, String username) throws CloneNotSupportedException;
 }

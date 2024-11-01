@@ -21,6 +21,8 @@ public class IdentificationCategory {
 
     private String value;
 
+    private boolean duplicateCheckRequired;
+
     public IdentificationCategory() {
     }
 }

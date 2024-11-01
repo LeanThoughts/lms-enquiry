@@ -5,7 +5,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationRes
 
 public interface IBusinessPartnerIdentificationService {
 
-    BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource);
+    BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username);
 
-    BusinessPartnerIdentification update(BusinessPartnerIdentificationResource businessPartnerIdentificationResource);
+    BusinessPartnerIdentification update(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException;
 }

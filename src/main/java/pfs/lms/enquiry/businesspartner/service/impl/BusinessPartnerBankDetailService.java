@@ -13,6 +13,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerBankDetailResourc
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerBankDetailService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +21,9 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
 
     private final BusinessPartnerBankDetailRepository businessPartnerBankDetailRepository;
     private final PartnerRepository partnerRepository;
+    private final IChangeDocumentService changeDocumentService;
 
-    public BusinessPartnerBankDetail create(BusinessPartnerBankDetailResource businessPartnerBankDetailResource) {
+    public BusinessPartnerBankDetail create(BusinessPartnerBankDetailResource businessPartnerBankDetailResource , String username) {
         Partner partner = partnerRepository.findById(businessPartnerBankDetailResource.getPartnerId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerBankDetailResource.getPartnerId().toString() 
                 + " : Partner not found"));
@@ -38,14 +40,33 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
         businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
-        return businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
+        businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
+
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerBankDetail.getId(),
+                businessPartnerBankDetail.getId().toString(),
+                partner.getId().toString(),
+                partner.getId().toString(),
+                null,
+                businessPartnerBankDetail,
+                "Created",
+                username,
+                "Partner", "BusinessPartnerBankDetail");
+
+        return businessPartnerBankDetail;
     }
 
     @Override
-    public BusinessPartnerBankDetail update(BusinessPartnerBankDetailResource businessPartnerBankDetailResource) {
-        BusinessPartnerBankDetail businessPartnerBankDetail = businessPartnerBankDetailRepository.findById(businessPartnerBankDetailResource.getId())
+    public BusinessPartnerBankDetail update(BusinessPartnerBankDetailResource businessPartnerBankDetailResource, String username) throws CloneNotSupportedException {
+
+        BusinessPartnerBankDetail businessPartnerBankDetail =
+                businessPartnerBankDetailRepository.findById(businessPartnerBankDetailResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerBankDetailResource.getId().toString() 
                 + " : Business Partner Bank Detail not found"));
+
+        Object oldObject = businessPartnerBankDetail.clone();
+
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
         businessPartnerBankDetail.setBankName(businessPartnerBankDetailResource.getBankCountry());
         businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());
@@ -53,7 +74,20 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
         businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
-        return businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
+        businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerBankDetail.getId(),
+                businessPartnerBankDetail.getId().toString(),
+                businessPartnerBankDetail.getPartner().getId().toString(),
+                businessPartnerBankDetail.getPartner().getId().toString(),
+                oldObject,
+                businessPartnerBankDetail,
+                "Updated",
+                username,
+                "Partner", "BusinessPartnerBankDetail");
+
+        return businessPartnerBankDetail;
     }
     
 }

@@ -196,7 +196,7 @@ public class LoanApplicationContoller {
     }
 
     @PostMapping("/loanApplications")
-    public ResponseEntity add(@RequestBody LoanApplicationResource resource, HttpServletRequest request) throws InterruptedException {
+    public ResponseEntity add(@RequestBody LoanApplicationResource resource, HttpServletRequest request) throws InterruptedException, CloneNotSupportedException {
 
 
         if (resource.getPartner().getPartyNumber() != null)
@@ -278,7 +278,7 @@ public class LoanApplicationContoller {
 
 
     @PutMapping("/loanApplications/{id}")
-    public ResponseEntity update(@PathVariable("id") String loanApplicationId, @RequestBody LoanApplicationResource resource, HttpServletRequest request) throws InterruptedException {
+    public ResponseEntity update(@PathVariable("id") String loanApplicationId, @RequestBody LoanApplicationResource resource, HttpServletRequest request) throws InterruptedException, CloneNotSupportedException {
 
         if (resource.getPartner().getPartyNumber() != null)
             resource.getLoanApplication().setBusPartnerNumber(resource.getPartner().getPartyNumber().toString());

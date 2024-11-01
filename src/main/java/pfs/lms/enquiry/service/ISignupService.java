@@ -9,12 +9,12 @@ import java.util.concurrent.CompletableFuture;
 
 public interface ISignupService {
 
-    void signup(SignupResource signupResource);
+    void signup(SignupResource signupResource) throws CloneNotSupportedException;
 
     /*
      *  Creates a new user.
      */
-    void signup(UserResource userResource);
+    void signup(UserResource userResource, String username) throws CloneNotSupportedException;
 
     ResponseEntity verify(String activation);
 

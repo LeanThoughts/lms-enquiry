@@ -8,6 +8,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerLoanContactResour
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerLoanContactService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -17,9 +18,10 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
 
     private final BusinessPartnerLoanContactRepository businessPartnerLoanContactRepository;
     private final PartnerRepository partnerRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BusinessPartnerLoanContact create(BusinessPartnerLoanContactResource businessPartnerLoanContactResource) {
+    public BusinessPartnerLoanContact create(BusinessPartnerLoanContactResource businessPartnerLoanContactResource, String username) {
         
         Partner partner = partnerRepository.findById(businessPartnerLoanContactResource.getPartnerId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerLoanContactResource.getPartnerId().toString() + " : Partner not found"));
@@ -40,13 +42,29 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setLandLineNumber(businessPartnerLoanContactResource.getLandLineNumber());
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
-        return businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
+        businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerLoanContact.getId(),
+                businessPartnerLoanContact.getId().toString(),
+                businessPartnerLoanContact.getPartner().getId().toString(),
+                businessPartnerLoanContact.getPartner().getId().toString(),
+                null,
+                businessPartnerLoanContact,
+                "Created",
+                username,
+                "Partner", "BusinessPartnerLoanContact");
+
+        return businessPartnerLoanContact;
     }
 
     @Override
-    public BusinessPartnerLoanContact update(BusinessPartnerLoanContactResource businessPartnerLoanContactResource) {
+    public BusinessPartnerLoanContact update(BusinessPartnerLoanContactResource businessPartnerLoanContactResource, String username) throws CloneNotSupportedException {
         BusinessPartnerLoanContact businessPartnerLoanContact = businessPartnerLoanContactRepository.findById(businessPartnerLoanContactResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerLoanContactResource.getId().toString() + " : Business Partner Loan Contact not found"));
+
+        Object oldObject = businessPartnerLoanContact.clone();
+
         businessPartnerLoanContact.setSelection(businessPartnerLoanContactResource.getSelection());
         businessPartnerLoanContact.setLoanNumber(businessPartnerLoanContactResource.getLoanNumber());
         businessPartnerLoanContact.setName(businessPartnerLoanContactResource.getName());
@@ -57,7 +75,19 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setLandLineNumber(businessPartnerLoanContactResource.getLandLineNumber());
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
-        return businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerLoanContact.getId(),
+                businessPartnerLoanContact.getId().toString(),
+                businessPartnerLoanContact.getPartner().getId().toString(),
+                businessPartnerLoanContact.getPartner().getId().toString(),
+                oldObject,
+                businessPartnerLoanContact,
+                "Updated",
+                username,
+                "Partner", "BusinessPartnerLoanContact");
+
+        return businessPartnerLoanContact;
     }
     
 }

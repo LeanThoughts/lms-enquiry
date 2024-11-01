@@ -12,6 +12,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIndustryService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
 
     private final BusinessPartnerIndustryRepository businessPartnerIndustryRepository;
     private final PartnerRepository partnerRepository;
+    private final IChangeDocumentService changeDocumentService;
 
-    public BusinessPartnerIndustry create(BusinessPartnerIndustryResource businessPartnerIndustryResource) {
+    public BusinessPartnerIndustry create(BusinessPartnerIndustryResource businessPartnerIndustryResource,String username) {
         Partner partner = partnerRepository.findById(businessPartnerIndustryResource.getPartnerId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIndustryResource.getPartnerId().toString() 
                 + " : Business partner not found"));
@@ -32,16 +34,46 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setSerialNumber(lastSerialNumber + 1);
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
-        return businessPartnerIndustryRepository.save(businessPartnerIndustry);
+        businessPartnerIndustry = businessPartnerIndustryRepository.save(businessPartnerIndustry);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerIndustry.getId(),
+                businessPartnerIndustry.getId().toString(),
+                businessPartnerIndustry.getPartner().getId().toString(),
+                businessPartnerIndustry.getPartner().getId().toString(),
+                null,
+                businessPartnerIndustry,
+                "Created",
+                username,
+                "Partner", "BusinessPartnerIndustry");
+
+        return businessPartnerIndustry;
     }
 
     @Override
-    public BusinessPartnerIndustry update(BusinessPartnerIndustryResource businessPartnerIndustryResource) {
+    public BusinessPartnerIndustry update(BusinessPartnerIndustryResource businessPartnerIndustryResource, String username) throws CloneNotSupportedException {
         BusinessPartnerIndustry businessPartnerIndustry = businessPartnerIndustryRepository.findById(businessPartnerIndustryResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIndustryResource.getId().toString() 
                 + " : Business partner Industry not found"));
+
+        Object oldObject = businessPartnerIndustry.clone();
+
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
-        return businessPartnerIndustryRepository.save(businessPartnerIndustry);
+        businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
+
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerIndustry.getId(),
+                businessPartnerIndustry.getId().toString(),
+                businessPartnerIndustry.getPartner().getId().toString(),
+                businessPartnerIndustry.getPartner().getId().toString(),
+                oldObject,
+                businessPartnerIndustry,
+                "Updated",
+                username,
+                "Partner", "BusinessPartnerIndustry");
+
+        return  businessPartnerIndustry;
     }
 }

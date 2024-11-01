@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ILoanApplicationService {
 
-    LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException;
+    LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException;
 
 
     LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException;

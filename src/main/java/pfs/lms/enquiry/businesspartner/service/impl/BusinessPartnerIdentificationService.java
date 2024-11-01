@@ -8,6 +8,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationRes
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -17,11 +18,13 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
     private final BusinessPartnerIdentificationRepository businessPartnerIdentificationRepository;
     private final PartnerRepository partnerRepository;
+    private final IChangeDocumentService changeDocumentService;
 
-    public BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource) {
+    public BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) {
         Partner partner = partnerRepository.findById(businessPartnerIdentificationResource.getPartnerId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getPartnerId().toString() 
                 + " : Business partner not found"));
+
         BusinessPartnerIdentification businessPartnerIdentification = new BusinessPartnerIdentification();
         businessPartnerIdentification.setPartner(partner);
         Integer lastSerialNumber = businessPartnerIdentificationRepository.findFirstByPartnerOrderBySerialNumberDesc(partner)
@@ -38,14 +41,32 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
-        return businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerIdentification.getId(),
+                businessPartnerIdentification.getId().toString(),
+                businessPartnerIdentification.getPartner().getId().toString(),
+                businessPartnerIdentification.getPartner().getId().toString(),
+                null,
+                businessPartnerIdentification,
+                "Created",
+                username,
+                "Partner", "BusinessPartnerIdentification");
+
+
+        return businessPartnerIdentification;
     }
 
     @Override
-    public BusinessPartnerIdentification update(BusinessPartnerIdentificationResource businessPartnerIdentificationResource) {
+    public BusinessPartnerIdentification update(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException {
         BusinessPartnerIdentification businessPartnerIdentification = businessPartnerIdentificationRepository.findById(businessPartnerIdentificationResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getId().toString() 
                 + " : Business partner Industry not found"));
+
+        Object oldObject = businessPartnerIdentification.clone();
+
         businessPartnerIdentification.setIdentificationCategoryId(businessPartnerIdentificationResource.
                 getIdentificationCategoryId());
         businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
@@ -56,6 +77,20 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
-        return businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerIdentification.getId(),
+                businessPartnerIdentification.getId().toString(),
+                businessPartnerIdentification.getPartner().getId().toString(),
+                businessPartnerIdentification.getPartner().getId().toString(),
+                oldObject,
+                businessPartnerIdentification,
+                "Updated",
+                username,
+                "Partner", "BusinessPartnerIdentification");
+
+        return businessPartnerIdentification;
     }
 }

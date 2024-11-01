@@ -39,6 +39,7 @@ import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.riskrating.ExternalRating;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrustee;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrusteeReportAndFee;
+import pfs.lms.enquiry.businesspartner.domain.*;
 import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
@@ -145,81 +146,86 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
         changeDocument = new ChangeDocument();
 
-        switch (action) {
-            case "Created":
+        try {
+
+            switch (action) {
+                case "Created":
 //                if (objectId == null) {
 //                    changeDocument.setAction("Created");
-                changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
-                        loanContractId,
-                        changedObject,
-                        action,
-                        userName,
-                        businessProcessName, subProcessName);
-                this.mode = "C";
+                    changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                            loanContractId,
+                            changedObject,
+                            action,
+                            userName,
+                            businessProcessName, subProcessName);
+                    this.mode = "C";
 
-                break;
-            case "Updated":
+                    break;
+                case "Updated":
 //                changeDocument.setAction("Sent for Approval");
-                changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
-                        loanContractId,
-                        oldObject,
-                        changedObject,
-                        action,
-                        userName,
-                        businessProcessName, subProcessName);
+                    changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                            loanContractId,
+                            oldObject,
+                            changedObject,
+                            action,
+                            userName,
+                            businessProcessName, subProcessName);
 
-                this.mode = "U";
-                break;
-            case "Deleted":
-                changeDocument.setAction("Deleted");
-                changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
-                        loanContractId,
-                        changedObject,
-                        action,
-                        userName,
-                        businessProcessName, subProcessName);
-                this.mode = "D";
-                break;
-            case "Sent for Approval":
-                changeDocument.setAction("Rejected");
-                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
-                        loanContractId,
-                        oldObject,
-                        changedObject,
-                        action,
-                        userName,
-                        businessProcessName, subProcessName);
-                this.mode = "U";
-                break;
-            case "Approved":
-                changeDocument.setAction("Approved");
-                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
-                        loanContractId,
-                        oldObject,
-                        changedObject,
-                        action,
-                        userName,
-                        businessProcessName, subProcessName);
-                this.mode = "U";
-                break;
+                    this.mode = "U";
+                    break;
+                case "Deleted":
+                    changeDocument.setAction("Deleted");
+                    changeDocument = prepareCreateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                            loanContractId,
+                            changedObject,
+                            action,
+                            userName,
+                            businessProcessName, subProcessName);
+                    this.mode = "D";
+                    break;
+                case "Sent for Approval":
+                    changeDocument.setAction("Rejected");
+                    changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                            loanContractId,
+                            oldObject,
+                            changedObject,
+                            action,
+                            userName,
+                            businessProcessName, subProcessName);
+                    this.mode = "U";
+                    break;
+                case "Approved":
+                    changeDocument.setAction("Approved");
+                    changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                            loanContractId,
+                            oldObject,
+                            changedObject,
+                            action,
+                            userName,
+                            businessProcessName, subProcessName);
+                    this.mode = "U";
+                    break;
 
-            case "Rejected":
-                changeDocument.setAction("Rejected");
-                changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
-                        loanContractId,
-                        oldObject,
-                        changedObject,
-                        action,
-                        userName,
-                        businessProcessName, subProcessName);
-                this.mode = "U";
-                break;
+                case "Rejected":
+                    changeDocument.setAction("Rejected");
+                    changeDocument = changeDocument = prepareUpdateChangeDocument(loanBusinessProcessObjectId, entityId, mainEntityId,
+                            loanContractId,
+                            oldObject,
+                            changedObject,
+                            action,
+                            userName,
+                            businessProcessName, subProcessName);
+                    this.mode = "U";
+                    break;
+            }
+
+            changeDocument = this.saveChangeDocument(changeDocument);
+
+
+            sapIntegrationPointerService.saveForObject(businessProcessName, subProcessName, entityId, mainEntityId, mode);
+        } catch (Exception ex){
+            log.error("Error during change document create: " + businessProcessName + "-" + subProcessName + ":" + ex.getMessage() );
         }
-
-        changeDocument = this.saveChangeDocument(changeDocument);
-
-
-        sapIntegrationPointerService.saveForObject(businessProcessName, subProcessName, entityId, mainEntityId, mode);
 
         return changeDocument;
     }
@@ -431,12 +437,41 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
                 case "Partner":
                     Partner partner = (Partner) object;
-                    if (partner.getPartyNumber() == null)
+                    if (partner.getPartyNumber() != null)
                         result.put("id", partner.getPartyNumber().toString());
                     else
-                        result.put("id", partner.getId().toString());
+                        result.put("id",  partner.getId().toString());
                     result.put("description", partner.getPartyName1());
                     result.put("loanApplication",partner );
+                    return result;
+                case "BusinessPartnerRole":
+                    BusinessPartnerRole businessPartnerRole = (BusinessPartnerRole) object;
+                    result.put("id",businessPartnerRole.getId());
+                    result.put("description", businessPartnerRole.getRoleType().getValue());
+                    return result;
+                case "BusinessPartnerBankDetail":
+                    BusinessPartnerBankDetail businessPartnerBankDetail = (BusinessPartnerBankDetail) object;
+                    result.put("id",businessPartnerBankDetail.getId());
+                    if (businessPartnerBankDetail.getBankKey()!= null)
+                    result.put("description", businessPartnerBankDetail.getBankKey());
+                    else result.put("description", "");
+                    return result;
+                case "BusinessPartnerLoanContact":
+                    BusinessPartnerLoanContact businessPartnerLoanContact = (BusinessPartnerLoanContact) object;
+                    result.put("id",businessPartnerLoanContact.getId());
+                    if (businessPartnerLoanContact.getLoanNumber() != null)
+                    result.put("description", businessPartnerLoanContact.getLoanNumber());
+                    else result.put("description", "");
+                    return result;
+                case "BusinessPartnerIdentification":
+                    BusinessPartnerIdentification businessPartnerIdentification = (BusinessPartnerIdentification) object;
+                    result.put("id",businessPartnerIdentification.getId());
+                    result.put("description",businessPartnerIdentification.getIdentificationCategoryId());
+                    return result;
+                case "BusinessPartnerIndustry":
+                    BusinessPartnerIndustry businessPartnerIndustry = (BusinessPartnerIndustry) object;
+                    result.put("id",businessPartnerIndustry.getId());
+                    result.put("description",businessPartnerIndustry.getIndustrySystemId());
                     return result;
                 case "LoanMonitor":
                         LoanMonitor loanMonitor = (LoanMonitor) object;
@@ -1051,7 +1086,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
         } catch (Exception ex) {
 
-            //System.out.println(className);
+            log.error("Exception Creating Change Document: " + ex.getMessage());
         }
         return null;
     }
@@ -1072,21 +1107,23 @@ public class ChangeDocumentService implements IChangeDocumentService {
         //ChangeDocument changeDocument = new ChangeDocument();
         changeDocument.setLoanBusinessProcessObjectId(loanBusinessProcessObjectId);
         changeDocument.setDate(new Date());
-        LoanApplication loanApplication = new LoanApplication();
+
+        if (businessProcessName != "Partner"){
+            LoanApplication loanApplication = new LoanApplication();
         if (loanContractId != null) {
             loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
             if (loanApplication == null) {
                 EnquiryNo enquiryNo = new EnquiryNo();
-                enquiryNo.setId( Long.parseLong( loanContractId.toString()));
+                enquiryNo.setId(Long.parseLong(loanContractId.toString()));
                 loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
             }
+        } else {
+            loanApplication = (LoanApplication) result.get("loanApplication");
         }
-            else{
-                loanApplication = (LoanApplication) result.get("loanApplication");
-            }
 
         changeDocument.setLoanApplication(loanApplication);
         changeDocument.setLoanContractId(loanContractId);
+        }
 
         changeDocument.setAction(action);
         changeDocument.setBusinessProcessName(businessProcessName);

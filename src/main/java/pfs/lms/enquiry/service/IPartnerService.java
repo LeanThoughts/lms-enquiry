@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IPartnerService {
     Partner getOne(String username);
-    Partner save(Partner partner);
+    Partner save(Partner partner, String username) throws CloneNotSupportedException;
     Partner migrate(Partner partner);
     Partner update(Partner partner);
     List<Partner> searchPartners(String[] searchParameters);

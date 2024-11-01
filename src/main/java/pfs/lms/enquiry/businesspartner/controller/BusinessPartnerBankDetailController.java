@@ -14,6 +14,8 @@ import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerBankDetailResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerBankDetailService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RepositoryRestController
 @RequiredArgsConstructor
 public class BusinessPartnerBankDetailController {
@@ -22,17 +24,19 @@ public class BusinessPartnerBankDetailController {
 
     @PostMapping("/businessPartnerBankDetails/create")
     public ResponseEntity<BusinessPartnerBankDetail> create(
-            @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource, 
-            @RequestParam UUID businessPartnerId) {
+            @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource,
+            @RequestParam UUID businessPartnerId,
+            HttpServletRequest request) {
 
         businessPartnerBankDetailResource.setPartnerId(businessPartnerId);
-        return ResponseEntity.ok(businessPartnerBankDetailService.create(businessPartnerBankDetailResource));
+        return ResponseEntity.ok(businessPartnerBankDetailService.create(businessPartnerBankDetailResource, request.getUserPrincipal().getName()));
     }
 
     @PutMapping("/businessPartnerBankDetails/update")
     public ResponseEntity<BusinessPartnerBankDetail> update(
-            @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource) {
+            @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource,
+            HttpServletRequest request) throws CloneNotSupportedException {
                 
-        return ResponseEntity.ok(businessPartnerBankDetailService.update(businessPartnerBankDetailResource));
+        return ResponseEntity.ok(businessPartnerBankDetailService.update(businessPartnerBankDetailResource,request.getUserPrincipal().getName()));
     }
 }

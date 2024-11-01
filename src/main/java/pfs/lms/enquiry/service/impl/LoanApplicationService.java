@@ -52,16 +52,16 @@ public class LoanApplicationService implements ILoanApplicationService {
     private final LoanPartnerRepository loanPartnerRepository;
     private final ILoanPartnerService loanPartnerService;
 
-    private final IChangeDocumentService changeDocumentService;
-    private final LoanMonitorRepository loanMonitorRepository;
+     private final LoanMonitorRepository loanMonitorRepository;
     private final LoanAppraisalRepository loanAppraisalRepository;
     private final MainLocationDetailRepository mainLocationDetailRepository;
     private final SubLocationDetailRepository subLocationDetailRepository;
     private final NPARepository npaRepository;
     private final NPADetailRepository npaDetailRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException {
+    public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException {
 
         //Set PostedInSAP to "Not Posted" - "0"
         if (resource.getLoanApplication().getPostedInSAP() == null)
@@ -83,6 +83,7 @@ public class LoanApplicationService implements ILoanApplicationService {
 
 
         if (existingPartner != null) {
+            Object oldPartner = existingPartner.clone();
             existingPartner.setAddressLine1(resource.getPartner().getAddressLine1());
             existingPartner.setAddressLine2(resource.getPartner().getAddressLine2());
             existingPartner.setCity(resource.getPartner().getCity());
@@ -107,8 +108,16 @@ public class LoanApplicationService implements ILoanApplicationService {
             existingPartner.setChangedAt(LocalTime.now());
             existingPartner.setChangedByUserName(username);
 
+            changeDocumentService.createChangeDocument(
+                    existingPartner.getId(), existingPartner.getId().toString(), null,
+                    existingPartner.getId().toString(),
+                    oldPartner,
+                    existingPartner,
+                    "Updated",
+                    username,
+                    "Partner", "Partner");
 
-            applicant = partnerService.save(existingPartner);
+            applicant = partnerService.save(existingPartner, username);
 
         } else {
             // Create new Partner with the role TR0100
@@ -132,7 +141,17 @@ public class LoanApplicationService implements ILoanApplicationService {
             applicant.setStreet(resource.getPartner().getStreet());
             applicant.setEmail(resource.getPartner().getEmail());
             applicant.setIndustrySector(resource.getPartner().getIndustrySector());
-            applicant = partnerService.save(applicant);
+            applicant = partnerService.save(applicant, username);
+
+            changeDocumentService.createChangeDocument(
+                    applicant.getId(), applicant.getId().toString(), null,
+                    applicant.getId().toString(),
+                    null,
+                    applicant,
+                    "Created",
+                    username,
+                    "Partner", "Partner");
+
         }
 
         //Set it to the Loan Application

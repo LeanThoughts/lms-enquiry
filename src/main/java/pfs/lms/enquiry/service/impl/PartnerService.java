@@ -15,6 +15,7 @@ import pfs.lms.enquiry.resource.PartnerResourceByAlphabet;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
 import pfs.lms.enquiry.service.IPartnerService;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -33,6 +34,7 @@ public class PartnerService implements IPartnerService {
     private final PartnerRepository partnerRepository;
     private final PartnerRoleTypeRepository partnerRoleTypeRepository;
     private final UserRepository userRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
     public Partner getOne(String username) {
@@ -40,7 +42,7 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
-    public Partner save(Partner partner) {
+    public Partner save(Partner partner, String username) throws CloneNotSupportedException {
 
         //Check if the partner already exist
         Partner existing = null;
@@ -60,6 +62,7 @@ public class PartnerService implements IPartnerService {
 
         //If exists return the existing partner
         if (existing != null) {
+            Object oldPartner = existing.clone();
             existing.setAddressLine1(partner.getAddressLine1());
             existing.setAddressLine2(partner.getAddressLine2());
             existing.setCity(partner.getCity());
@@ -83,7 +86,15 @@ public class PartnerService implements IPartnerService {
             existing.setFaxNumber(partner.getFaxNumber());
             existing.setTitle(partner.getTitle());
             existing = partnerRepository.saveAndFlush(existing);
-            
+
+            changeDocumentService.createChangeDocument(
+                    existing.getId(), existing.getId().toString(), null,
+                    existing.getId().toString(),
+                    oldPartner,
+                    existing,
+                    "Updated",
+                    username,
+                    "Partner", "Partner");
              return existing;
         }
         //If not create a new partner and return
@@ -91,6 +102,16 @@ public class PartnerService implements IPartnerService {
             try {
                 partner.setUserName(partner.getEmail());
                 partner = partnerRepository.saveAndFlush(partner);
+
+                changeDocumentService.createChangeDocument(
+                        partner.getId(), partner.getId().toString(), null,
+                        partner.getId().toString(),
+                        null,
+                        partner,
+                        "Created",
+                        username,
+                        "Partner", "Partner");
+                return existing;
             }
             catch (Exception ex) {
                 System.out.println("------------------Exception Saving Partner -----------------------------------:" + partner.getPartyNumber());

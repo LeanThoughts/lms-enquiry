@@ -39,7 +39,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void signup(SignupResource signupResource) {
+    public void signup(SignupResource signupResource) throws CloneNotSupportedException {
 
         //Partner partner = new Partner("TR0110", signupResource.getFirstName(), signupResource.getLastName(), signupResource.getEmail(), signupResource.getMobile(), signupResource.getPassword());
         //partner = iPartnerService.save(partner);
@@ -61,7 +61,7 @@ public class SignupService implements ISignupService {
         partner.setPartyName1(signupResource.getFirstName());
         partner.setPartyName2(signupResource.getLastName());
         partner.setPartyRole("TR0100");
-        iPartnerService.save(partner);
+        iPartnerService.save(partner,"");
 
         this.sendSignUpNotificationMail(signupResource.getEmail(),signupResource.getFirstName(),signupResource.getLastName());
 
@@ -69,8 +69,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void signup(UserResource userResource)
-    {
+    public void signup(UserResource userResource, String username) throws CloneNotSupportedException {
         // Create user in the LMS application
         User user = new User(userResource.getFirstName(), userResource.getLastName(), userResource.getEmail(),
                 userResource.getRole(), true, userResource.getEmail(), userResource.getSapBPNumber(), userResource.getRiskDepartment(), userResource.getDepartmentHead(), userResource.getRiskPortalDisplayOnlyAccess());
@@ -92,7 +91,7 @@ public class SignupService implements ISignupService {
         partner.setPartyName2(userResource.getLastName());
         partner.setContactNumber(userResource.getMobile());
         partner.setPartyRole(user.getRole());
-        iPartnerService.save(partner);
+        iPartnerService.save(partner,username);
 
     }
 

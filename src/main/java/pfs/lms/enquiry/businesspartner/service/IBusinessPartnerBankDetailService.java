@@ -5,7 +5,7 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerBankDetailResourc
 
 public interface IBusinessPartnerBankDetailService {
 
-    BusinessPartnerBankDetail create(BusinessPartnerBankDetailResource businessPartnerBankDetailResource);
+    BusinessPartnerBankDetail create(BusinessPartnerBankDetailResource businessPartnerBankDetailResource, String username);
 
-    BusinessPartnerBankDetail update(BusinessPartnerBankDetailResource businessPartnerBankDetailResource);
+    BusinessPartnerBankDetail update(BusinessPartnerBankDetailResource businessPartnerBankDetailResource, String username) throws CloneNotSupportedException;
 }

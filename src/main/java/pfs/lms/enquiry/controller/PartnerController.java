@@ -29,8 +29,8 @@ public class PartnerController {
     private final PartnerService partnerService;
 
     @PostMapping("/partners/create")
-    public ResponseEntity<Partner> createPartner(@RequestBody Partner partner) {
-        return ResponseEntity.ok(partnerService.save(partner));
+    public ResponseEntity<Partner> createPartner(@RequestBody Partner partner,HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(partnerService.save(partner,request.getUserPrincipal().getName()));
     }
 
     @PutMapping("/partners/update")

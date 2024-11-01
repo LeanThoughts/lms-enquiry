@@ -52,15 +52,15 @@ public class UserController {
     private final IPartnerService partnerService;
 
     @PostMapping("/user")
-    public ResponseEntity signup(@RequestBody UserResource userResource) {
+    public ResponseEntity signup(@RequestBody UserResource userResource,HttpServletRequest request) throws CloneNotSupportedException {
         // Create the user.
-        iSignupService.signup(userResource);
+        iSignupService.signup(userResource,request.getUserPrincipal().getName());
         return ResponseEntity.ok().build();
     }
 
 
     @PutMapping("/user")
-    public ResponseEntity update(@RequestBody UserResource userResource, Principal principal) {
+    public ResponseEntity update(@RequestBody UserResource userResource, Principal principal) throws CloneNotSupportedException {
         // Update the user.
         User user = userRepository.findByEmail(userResource.getEmail());
         user.setFirstName(userResource.getFirstName());
@@ -89,7 +89,7 @@ public class UserController {
         partner.setPartyName2(userResource.getLastName());
         partner.setContactNumber(userResource.getMobile());
         partner.setPartyRole(user.getRole());
-        partnerService.save(partner);
+        partnerService.save(partner, principal.getName());
 
         return ResponseEntity.ok().build();
     }
