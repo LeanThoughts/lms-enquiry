@@ -62,7 +62,10 @@ export class PartnerModel {
         this._links = _partner && _partner._links || '';
     }
 
-
+    get partyName(): string {
+        return this.partyName1 + (this.partyName2 ? ' ' + this.partyName2 : '');
+    }
+    
   /*
    Industry Sector Codes
    * Returns the string value of the Industry Sector code.

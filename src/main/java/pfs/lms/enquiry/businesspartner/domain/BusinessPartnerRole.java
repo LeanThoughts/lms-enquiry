@@ -5,9 +5,7 @@ import pfs.lms.enquiry.domain.AggregateRoot;
 import pfs.lms.enquiry.domain.Partner;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -19,11 +17,9 @@ import java.time.LocalDate;
 public class BusinessPartnerRole extends AggregateRoot<BusinessPartnerRole> implements Cloneable{
 
     @ManyToOne
-    @JoinColumn(name = "partner_id")
     Partner partner;
 
-    @OneToOne
-    @JoinColumn(name = "role_type_id")
+    @ManyToOne
     private BusinessPartnerRoleType roleType ;
 
     private String differentiationType;

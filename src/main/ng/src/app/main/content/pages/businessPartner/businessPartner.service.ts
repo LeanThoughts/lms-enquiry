@@ -36,7 +36,8 @@ export class BusinessPartnerService {
                 this.getBusinessPartnerContactDetails(this._partnerService.selectedPartner.value.id),
                 this.getBusinessPartnerIndustries(this._partnerService.selectedPartner.value.id),
                 this.getBusinessPartnerIdentificationDetails(this._partnerService.selectedPartner.value.id),
-                this.getBusinessPartnerBankDetails(this._partnerService.selectedPartner.value.id)
+                this.getBusinessPartnerBankDetails(this._partnerService.selectedPartner.value.id),
+                this.getBusinessPartnerRoles(this._partnerService.selectedPartner.value.id)
             ]);
         }
         else {
@@ -48,6 +49,23 @@ export class BusinessPartnerService {
                 this.getIdentificationCategories()
             ]);
         }
+    }
+
+    /**
+     * getBusinessPartnerRoles()
+     */
+    getBusinessPartnerRoles(partnerId: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/businessPartnerRoles/search/findByPartnerId', { params: { partnerId } });
+    }
+
+    /**
+     * createBusinessPartnerRole()
+     */
+    createBusinessPartnerRole(businessPartnerId: string, roleTypeId: string): Observable<any> {
+        return this._http.post<any>('enquiry/api/businessPartnerRoles/create', {
+            'businessPartnerId': businessPartnerId,
+            'roleTypeId': roleTypeId
+        });
     }
 
     /**

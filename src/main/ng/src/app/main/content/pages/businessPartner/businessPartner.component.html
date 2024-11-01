@@ -33,10 +33,10 @@
                 </mat-expansion-panel-header>
                 <div fxLayout="row">
                     <mat-form-field fxFlex="25">
-                        <mat-select placeholder="Select Business Partner Role" [formControl]="businessPartnerRole" required>
+                        <mat-select placeholder="Select Business Partner Role" [formControl]="businessPartnerRoleType" required>
                             <mat-option value="">Select Role</mat-option>
-                            <mat-option *ngFor="let businessPartnerRole of businessPartnerRoles" [value]="businessPartnerRole">
-                                {{ businessPartnerRole.value }}
+                            <mat-option *ngFor="let bpt of businessPartnerRoleTypes" [value]="bpt">
+                                {{ bpt.value }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -47,7 +47,7 @@
 
                 <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
                     <div fxLayout="row">
-                        <div class="ml-4"><p>Selected Roles: {{ getSelectedRoles() }}</p></div>
+                        <div class="ml-4"><p style="font-size: medium;">Selected Roles:  {{ getSelectedRoles() }}</p></div>
                     </div>
                 </div>
             </mat-expansion-panel>
