@@ -61,10 +61,11 @@ export class BusinessPartnerService {
     /**
      * createBusinessPartnerRole()
      */
-    createBusinessPartnerRole(businessPartnerId: string, roleTypeId: string): Observable<any> {
+    createBusinessPartnerRole(businessPartnerId: string, roleTypeId: string, defaultRole: boolean): Observable<any> {
         return this._http.post<any>('enquiry/api/businessPartnerRoles/create', {
             'businessPartnerId': businessPartnerId,
-            'roleTypeId': roleTypeId
+            'roleTypeId': roleTypeId,
+            'defaultRole': defaultRole
         });
     }
 

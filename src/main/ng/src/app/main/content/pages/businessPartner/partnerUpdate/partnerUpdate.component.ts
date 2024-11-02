@@ -72,7 +72,7 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
     submit(): void {
         if (this.partnerDetailsForm.valid) {
             this.partnerDetailsForm.value.country = '';
-            if (this.selectedPartner.id === '') {            
+            if (this.selectedPartner.id === '') {     
                 this._businessPartnerService.createPartner(this.partnerDetailsForm.value).subscribe((response: any) => {
                     this.selectedPartner = response;
                     this._partnerService.selectedPartner.next(response);

@@ -20,6 +20,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     expandPanel1: boolean = true;
 
     businessPartnerId: string;
+    businessPartner: any;
 
     businessPartnerRoleType: FormControl = new FormControl('');
     businessPartnerRoleTypes: any[] = [];
@@ -29,7 +30,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     workflowStatus: string = '';
 
     subscription: Subscription;
-    
+
     disableSendForApproval: boolean;
     
     /**
@@ -57,13 +58,14 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
         }
 
         this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
+            this.businessPartner = partner;
             this.businessPartnerId = partner ? partner.id : null;
             if (partner && this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
                 this.title = 'Update Business Partner :' + partner.partyName;
             }
             if (this.businessPartnerId && this._activatedRoute.routeConfig.path === 'createBusinessPartner') {
                 this._businessPartnerService.createBusinessPartnerRole(this.businessPartnerId, 
-                    this.selectedRoleTypes[0].id).subscribe(response => {
+                    this.selectedRoleTypes[0].id, true).subscribe(response => {
                 });
             }
         });
@@ -95,7 +97,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed().subscribe((result) => {
                 if (result.response) {
                     if (this.businessPartnerId) {
-                        this._businessPartnerService.createBusinessPartnerRole(this.businessPartnerId, this.businessPartnerRoleType.value.id).
+                        this._businessPartnerService.createBusinessPartnerRole(this.businessPartnerId, this.businessPartnerRoleType.value.id, false).
                             subscribe(response => {
                                 this._matSnackBar.open('Role added to business partner', 'Close', { duration: 7000 });
                                 this.selectedRoleTypes.push(this.businessPartnerRoleType.value);
@@ -106,7 +108,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             });
         }
         else {
-            this._matSnackBar.open('Please save the business partner detailsbefore adding a role', 'Close', { duration: 7000 });
+            this._matSnackBar.open('Please save the business partner details before adding a role', 'Close', { duration: 7000 });
         }
     }
 
@@ -124,10 +126,11 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
-        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-        let email = this._appService.currentUser.email;
-        this._matSnackBar.open('Please wait while attempting to send the business partner for approval.', 'OK', { duration: 25000 });
-        this._businessPartnerService.sendBusinessPartnerForWorkflowApproval(this.businessPartnerId, name, email).subscribe(
+        if (this.businessPartner) {
+            let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+            let email = this._appService.currentUser.email;
+            this._matSnackBar.open('Please wait while attempting to send the business partner for approval.', 'OK', { duration: 25000 });
+            this._businessPartnerService.sendBusinessPartnerForWorkflowApproval(this.businessPartnerId, name, email).subscribe(
             response => {
                 this._partnerService.selectedPartner.next(response);
                 // this._matSnackBar.dismiss();
@@ -138,7 +141,11 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                 this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
                     'OK', { duration: 7000 });
             });
-        this.disableSendForApproval = true;
-        // this._location.back();
+            this.disableSendForApproval = true;
+            // this._location.back();
+        }
+        else {
+            this._matSnackBar.open('Please save the business partner details before sending for approval', 'OK', { duration: 7000 });
+        }
     }
 }

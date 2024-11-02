@@ -4,10 +4,12 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRole;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRoleType;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerRoleRepository;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerRoleTypeRepository;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerRoleResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerRoleService;
+import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
@@ -29,14 +31,24 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
         }
 
         BusinessPartnerRole businessPartnerRole = new BusinessPartnerRole();
-        businessPartnerRole.setPartner(partnerRepository.findById(businessPartnerRoleResource.getBusinessPartnerId()).
-            orElseThrow(() -> new RuntimeException("Partner not found")));
-        businessPartnerRole.setRoleType(businessPartnerRoleTypeRepository.findById(businessPartnerRoleResource.getRoleTypeId()).
-            orElseThrow(() -> new RuntimeException("Role type not found")));
+
+        Partner partner = partnerRepository.findById(businessPartnerRoleResource.getBusinessPartnerId()).
+            orElseThrow(() -> new RuntimeException("Partner not found"));
+        businessPartnerRole.setPartner(partner);
+        
+        BusinessPartnerRoleType roleType = businessPartnerRoleTypeRepository.findById(businessPartnerRoleResource.getRoleTypeId()).
+            orElseThrow(() -> new RuntimeException("Role type not found"));
+        businessPartnerRole.setRoleType(roleType);
+        
         businessPartnerRole.setDifferentiationType(businessPartnerRoleResource.getDifferentiationType());
         businessPartnerRole.setAllPartnerRoles(businessPartnerRoleResource.getAllPartnerRoles());
         businessPartnerRole.setValidFromDate(businessPartnerRoleResource.getValidFromDate());
         businessPartnerRole =  businessPartnerRoleRepository.save(businessPartnerRole);
+
+        if (businessPartnerRoleResource.isDefaultRole()) {
+            partner.setPartyRole(roleType.getCode());
+            partner = partnerRepository.save(partner);
+        }
 
         changeDocumentService.createChangeDocument(
                 businessPartnerRole.getId(),

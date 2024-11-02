@@ -25,4 +25,6 @@ public class BusinessPartnerRoleResource {
 
     UUID businessPartnerId;
     Long roleTypeId;
+    
+    boolean defaultRole;
 }

@@ -13,7 +13,8 @@
         <!-- / BREADCRUMB -->
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button mat-raised-button class="mr-8 mb-8" (click)="sendForApproval()" [disabled]="disableSendForApproval">
+            <button mat-raised-button class="mr-8 mb-8" (click)="sendForApproval()" [disabled]="(businessPartner === undefined || businessPartner === null ||
+                    businessPartner.workFlowStatusCode === 2) || disableSendForApproval">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Send for Approval
             </button>
         </div>
