@@ -5,5 +5,5 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerRoleResource;
 
 public interface IBusinessPartnerRoleService {
 
-    BusinessPartnerRole create(BusinessPartnerRoleResource businessPartnerRoleResource);
+    BusinessPartnerRole create(BusinessPartnerRoleResource businessPartnerRoleResource,String username);
 }

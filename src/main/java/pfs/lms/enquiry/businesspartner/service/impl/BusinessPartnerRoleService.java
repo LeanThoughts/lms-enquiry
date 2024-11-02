@@ -9,6 +9,7 @@ import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerRoleTypeReposit
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerRoleResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerRoleService;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +18,10 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
     private final BusinessPartnerRoleRepository businessPartnerRoleRepository;
     private final PartnerRepository partnerRepository;
     private final BusinessPartnerRoleTypeRepository businessPartnerRoleTypeRepository;
+    private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BusinessPartnerRole create(BusinessPartnerRoleResource businessPartnerRoleResource) {
+    public BusinessPartnerRole create(BusinessPartnerRoleResource businessPartnerRoleResource, String username) {
         if (businessPartnerRoleRepository.findByPartnerIdAndRoleTypeId(businessPartnerRoleResource.getBusinessPartnerId(), 
             businessPartnerRoleResource.getRoleTypeId()) != null) {
                 
@@ -34,6 +36,19 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
         businessPartnerRole.setDifferentiationType(businessPartnerRoleResource.getDifferentiationType());
         businessPartnerRole.setAllPartnerRoles(businessPartnerRoleResource.getAllPartnerRoles());
         businessPartnerRole.setValidFromDate(businessPartnerRoleResource.getValidFromDate());
-        return businessPartnerRoleRepository.save(businessPartnerRole);
+        businessPartnerRole =  businessPartnerRoleRepository.save(businessPartnerRole);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerRole.getId(),
+                businessPartnerRole.getId().toString(),
+                businessPartnerRole.getPartner().getId().toString(),
+                businessPartnerRole.getPartner().getId().toString(),
+                null,
+                businessPartnerRole,
+                "Created",
+                username,
+                "Partner", "BusinessPartnerRole");
+
+        return businessPartnerRole;
     }
 }

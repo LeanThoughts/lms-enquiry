@@ -447,8 +447,12 @@ public class PartnerScheduledTaskCreateAndChange {
         List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
         for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
             Partner partner1 = partnerRepository.findById(UUID.fromString(sapIntegrationPointer.getMainEntityId())).get();
-            if (partner1.getWorkFlowStatusCode().equals("03")) {
-                sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+            try {
+                if (partner1.getWorkFlowStatusCode().equals("03")) {
+                    sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                }
+            } catch (Exception ex){
+                log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
             }
 
         }

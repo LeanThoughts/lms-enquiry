@@ -9,6 +9,8 @@ import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRole;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerRoleResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerRoleService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RepositoryRestController
 @RequiredArgsConstructor
 public class BusinessPartnerRoleController {
@@ -16,8 +18,8 @@ public class BusinessPartnerRoleController {
     private final IBusinessPartnerRoleService businessPartnerRoleService;
 
     @PostMapping("/businessPartnerRoles/create")
-    public ResponseEntity<BusinessPartnerRole> create(@RequestBody BusinessPartnerRoleResource businessPartnerRoleResource) {
+    public ResponseEntity<BusinessPartnerRole> create(@RequestBody BusinessPartnerRoleResource businessPartnerRoleResource, HttpServletRequest request) {
 
-        return ResponseEntity.ok(businessPartnerRoleService.create(businessPartnerRoleResource));
+        return ResponseEntity.ok(businessPartnerRoleService.create(businessPartnerRoleResource, request.getUserPrincipal().getName()));
     }
 }
