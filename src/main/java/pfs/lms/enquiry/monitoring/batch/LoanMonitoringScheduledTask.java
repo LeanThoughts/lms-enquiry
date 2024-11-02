@@ -196,17 +196,7 @@ public class LoanMonitoringScheduledTask {
     private final EndUseCertificateRepository endUseCertificateRepository;
     private final SAPEndUseCertificateResource sapEndUseCertificateResource;
 
-    @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}", initialDelayString = "${batch.initialDelay}")
-    public void syncLoanApplicationsToBackend() throws Exception {
-
-        LendersIndependentEngineer lendersIndependentEngineer = new LendersIndependentEngineer();
-
-        User lastChangedByUser = new User();
-        lastChangedByUser = userRepository.findByEmail(lendersIndependentEngineer.getChangedByUserName());
-
-        Object response = new Object();
-        Object resource;
-
+    private List<SAPIntegrationPointer> fetchSAPIntegrationPointers(){
         //Collect SAPIntegrationPointer with the following  Posting Status = 0
         List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Monitoring", 0, "C"));
@@ -219,6 +209,39 @@ public class LoanMonitoringScheduledTask {
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 0, "U"));
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndStatusAndMode("Appraisal", 2, "U"));
 
+        List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
+        for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
+
+            switch (sapIntegrationPointer.getBusinessProcessName()){
+                case "Appraisal":
+                    LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanAppraisal.getWorkFlowStatusCode().equals("03")) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
+                    break;
+                case "Monitoring":
+                    LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanMonitor.getWorkFlowStatusCode().equals("03")) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
+                    break;
+            }
+        }
+        return sapIntegrationPointerListFilteredByWorkflowStatus;
+    }
+
+    @Scheduled(fixedRateString = "${batch.loanMonitoringScheduledTask}", initialDelayString = "${batch.initialDelay}")
+    public void syncLoanApplicationsToBackend() throws Exception {
+
+        LendersIndependentEngineer lendersIndependentEngineer = new LendersIndependentEngineer();
+
+        User lastChangedByUser = new User();
+        lastChangedByUser = userRepository.findByEmail(lendersIndependentEngineer.getChangedByUserName());
+
+        Object response = new Object();
+        Object resource;
+
+        List<SAPIntegrationPointer> sapIntegrationPointers = fetchSAPIntegrationPointers();
 
         Collections.sort(sapIntegrationPointers, new Comparator<SAPIntegrationPointer>() {
             public int compare(SAPIntegrationPointer o1, SAPIntegrationPointer o2) {

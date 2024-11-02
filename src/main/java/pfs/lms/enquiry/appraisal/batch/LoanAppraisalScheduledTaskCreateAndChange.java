@@ -34,13 +34,16 @@ import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRating;
 import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRatingRepository;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortiumRepository;
+import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
 import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetailRepository;
+import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.domain.SiteVisit;
 import pfs.lms.enquiry.monitoring.lie.LIEReportAndFee;
 import pfs.lms.enquiry.monitoring.lie.LIEReportAndFeeRepository;
+import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.monitoring.repository.SiteVisitRepository;
 import pfs.lms.enquiry.monitoring.resource.*;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
@@ -65,6 +68,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class LoanAppraisalScheduledTaskCreateAndChange {
+    private final LoanMonitorRepository loanMonitorRepository;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -846,7 +850,28 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 //        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","",0,"C"));
 //        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Appraisal","",2,"U"));
 
-        return sapIntegrationPointers;
+        List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
+        for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
+
+            switch (sapIntegrationPointer.getBusinessProcessName()){
+                case "Appraisal":
+                    LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanAppraisal.getWorkFlowStatusCode().equals("03")) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
+                    break;
+                case "Monitoring":
+                    LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanMonitor.getWorkFlowStatusCode().equals("03")) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
+                    break;
+            }
+
+
+        }
+        return sapIntegrationPointerListFilteredByWorkflowStatus;
+
 
     }
 
