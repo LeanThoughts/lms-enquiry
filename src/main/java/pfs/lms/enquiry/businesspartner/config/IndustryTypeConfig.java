@@ -86,6 +86,16 @@ public class IndustryTypeConfig implements CommandLineRunner {
         industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("45011",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"45011","Construction/Erection of Power Lines etc",industrySystem); industryTypeRepository.save(industryType); }
         industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("45013",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"45013","Construction/Maintenance of Roads",industrySystem); industryTypeRepository.save(industryType); }
 
+        industrySystem = industrySystemRepository.findIndustrySystemByCode("11");
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("10001",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"10001","Mining & Agglomeration of Hard Coal, Lignite",industrySystem); industryTypeRepository.save(industryType); }
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("40101",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"40101","Generation of Electricity",industrySystem); industryTypeRepository.save(industryType); }
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("40103",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"40103","Collection and Distn of Electricity",industrySystem); industryTypeRepository.save(industryType); }
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("40105",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"40105","Generation & Distribution of Solar Energy etc",industrySystem); industryTypeRepository.save(industryType); }
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("41001",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"41001","Collection, Purification & Distn of Water",industrySystem); industryTypeRepository.save(industryType); }
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("45011",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"45011","Construction/Erection of Power Lines etc",industrySystem); industryTypeRepository.save(industryType); }
+        industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("45013",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"45013","Construction/Maintenance of Roads",industrySystem); industryTypeRepository.save(industryType); }
+
+
 
         industrySystem = industrySystemRepository.findIndustrySystemByCode("12");
         industryType = industryTypeRepository.findIndustryTypeByCodeAndIndustrySystem("10001",industrySystem);if (industryType == null){ industryType = new IndustryType(null,"10001","Mining & Agglomeration of Hard Coal, Lignite",industrySystem); industryTypeRepository.save(industryType); }

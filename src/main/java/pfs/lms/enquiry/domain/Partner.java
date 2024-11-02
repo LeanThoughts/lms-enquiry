@@ -14,7 +14,15 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class Partner extends AggregateRoot<Partner> implements Cloneable{
+    //Workflow Status
+    // 01 - Created //11 Updated
+    // 02 - Sent for Approval
+    // 03 - Approved
+    // 04 - Rejected
+    private Integer workFlowStatusCode;
 
+    private String workFlowStatusDescription;
+    private String processInstanceId;
     private Integer partyNumber;
 
     /**

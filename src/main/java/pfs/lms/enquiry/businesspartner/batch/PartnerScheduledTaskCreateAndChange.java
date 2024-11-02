@@ -96,7 +96,7 @@ public class PartnerScheduledTaskCreateAndChange {
         for (SAPIntegrationPointer sapIntegrationPointer : sapIntegrationPointers) {
 
             switch (sapIntegrationPointer.getSubBusinessProcessName()) {
-                case "BasicDetail":
+                case "Partner":
                     partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     log.info("---------------Sync. Business Partner Master Data: BASIC DATA  to SAP : " + partner.getPartyNumber() );
 
@@ -414,6 +414,11 @@ public class PartnerScheduledTaskCreateAndChange {
     private List<SAPIntegrationPointer> fetchSAPIntegrationPointers() {
         List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
 
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 0, "C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 2, "C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 0, "U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 2, "U"));
+
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 0, "C"));
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 2, "C"));
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 0, "U"));
@@ -439,6 +444,11 @@ public class PartnerScheduledTaskCreateAndChange {
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Industry", 0, "U"));
         sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Industry", 2, "U"));
 
+        List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
+        for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
+            Partner partner1 = partnerRepository.findById(UUID.fromString(sapIntegrationPointer.getMainEntityId())).get();
+
+        }
         return sapIntegrationPointers;
     }
 

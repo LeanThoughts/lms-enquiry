@@ -27,7 +27,10 @@ import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
 import pfs.lms.enquiry.boardapproval.BoardApproval;
 import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
 import pfs.lms.enquiry.boardapproval.BoardApprovalService;
+import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerService;
+import pfs.lms.enquiry.businesspartner.service.impl.BusinessPartnerService;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.exception.HandledException;
 import pfs.lms.enquiry.iccapproval.ICCApproval;
 import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
@@ -42,6 +45,7 @@ import pfs.lms.enquiry.dto.WorkflowTaskDTO;
 import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
+import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.repository.WorkflowApproverRepository;
 import pfs.lms.enquiry.riskassessment.IRiskAssessmentService;
@@ -101,6 +105,10 @@ public class WorkflowService implements IWorkflowService {
     private ICCApprovalRepository iccApprovalRepository;
     @Autowired
     private ApplicationFeeRepository applicationFeeRepository;
+    @Autowired
+    private PartnerRepository partnerRepository;
+
+
 
     @Autowired
     private UserRepository userRepository;
@@ -121,7 +129,7 @@ public class WorkflowService implements IWorkflowService {
     private final ICCApprovalService iccApprovalService;
     private final ApplicationFeeService applicationFeeService;
     private final IEnquiryActionService enquiryActionService;
-
+    private final IBusinessPartnerService businessPartnerService;
 
 
     @Override
@@ -142,6 +150,7 @@ public class WorkflowService implements IWorkflowService {
         Sanction sanction = new Sanction();
         LoanApplication loanApplication = new LoanApplication();
         RiskAssessment riskAssessment = new RiskAssessment();
+        Partner partner = new Partner();
         String loanContractId = null;
         String loanEnquiryId = null;
         String objectId = null;
@@ -241,7 +250,15 @@ public class WorkflowService implements IWorkflowService {
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "Sanction";
                 break;
-
+            case "BusinessPartner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                partner.setWorkFlowStatusCode(02);
+                partner.setWorkFlowStatusDescription("Sent for Approval");
+                objectId = partner.getPartyName1() + partner.getPartyName2();
+                processDescription = "BusinessPartner";
+                break;
         }
 
 
@@ -345,6 +362,11 @@ public class WorkflowService implements IWorkflowService {
                 sanction.setProcessInstanceId(processInstanceId);
                 sanction = sanctionRepository.save(sanction);
                 return sanction;
+            case "BusinessPartner":
+                //Save entity with the Process Instance and workflow status code
+                partner.setProcessInstanceId(processInstanceId);
+                partner = partnerRepository.save(partner);
+                return sanction;
         }
 
         return null;
@@ -363,6 +385,7 @@ public class WorkflowService implements IWorkflowService {
         ICCApproval iccApproval = new ICCApproval();
         RiskAssessment riskAssessment = new RiskAssessment();
         Sanction sanction = new Sanction();
+        Partner partner = new Partner();
         String loanContractId = null;
         String loanEnquiryId = null;
 
@@ -457,6 +480,16 @@ public class WorkflowService implements IWorkflowService {
                 sanction.setWorkFlowStatusDescription("Approved");
                 loanEnquiryId = sanction.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = sanction.getProcessInstanceId();
+                break;
+
+            case "BusinessPartner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                partner.setWorkFlowStatusCode(03);
+                partner.setWorkFlowStatusDescription("Approved");
+
+                processInstanceId = partner.getProcessInstanceId();
                 break;
         }
 
@@ -564,6 +597,15 @@ public class WorkflowService implements IWorkflowService {
                 sanctionRepository.flush();
                 sanctionService.processApprovedSanction(sanction, username);
                 return sanction;
+            case "BusinessPartner":
+                //Save entity with the new workflow status code
+                partner.setWorkFlowStatusDescription("Approved");
+                partner.setWorkFlowStatusCode(3);
+                partner.setProcessInstanceId(processInstanceId);
+                partnerRepository.save(partner);
+                sanctionRepository.flush();
+                businessPartnerService.updatePartnerAfterApproval(partner, username);
+                return sanction;
         }
 
         return null;
@@ -583,6 +625,7 @@ public class WorkflowService implements IWorkflowService {
         ApplicationFee applicationFee = new ApplicationFee();
         Sanction sanction = new Sanction();
         RiskAssessment riskAssessment = new RiskAssessment();
+        Partner partner = new Partner();
         String loanContractId = null;
         String loanEnquiryId = null;
 
@@ -664,6 +707,14 @@ public class WorkflowService implements IWorkflowService {
                 loanEnquiryId = sanction.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = sanction.getProcessInstanceId();
                 break;
+            case "BusinessPartner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                partner.setWorkFlowStatusCode(4);
+                partner.setWorkFlowStatusDescription("Rejected");
+                processInstanceId = partner.getProcessInstanceId();
+                break;
         }
 
 
@@ -734,6 +785,12 @@ public class WorkflowService implements IWorkflowService {
                 //Fetch the Entity
                 sanction = sanctionRepository.getOne(businessProcessId);
                 sanctionService.processRejection(sanction,username);
+                break;
+            case "BusinessPartner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                partnerRepository.save(partner);
+                businessPartnerService.updatePartnerAfterRejection(partner,username);
                 break;
         }
 

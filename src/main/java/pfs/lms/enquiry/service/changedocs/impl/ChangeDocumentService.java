@@ -446,32 +446,32 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     return result;
                 case "BusinessPartnerRole":
                     BusinessPartnerRole businessPartnerRole = (BusinessPartnerRole) object;
-                    result.put("id",businessPartnerRole.getId());
-                    result.put("description", businessPartnerRole.getRoleType().getValue());
+                    result.put("id",businessPartnerRole.getId().toString());
+                    result.put("description", businessPartnerRole.getRoleType().getValue().toString());
                     return result;
                 case "BusinessPartnerBankDetail":
                     BusinessPartnerBankDetail businessPartnerBankDetail = (BusinessPartnerBankDetail) object;
-                    result.put("id",businessPartnerBankDetail.getId());
+                    result.put("id",businessPartnerBankDetail.getId().toString());
                     if (businessPartnerBankDetail.getBankKey()!= null)
-                    result.put("description", businessPartnerBankDetail.getBankKey());
+                    result.put("description", businessPartnerBankDetail.getBankKey().toString());
                     else result.put("description", "");
                     return result;
                 case "BusinessPartnerLoanContact":
                     BusinessPartnerLoanContact businessPartnerLoanContact = (BusinessPartnerLoanContact) object;
-                    result.put("id",businessPartnerLoanContact.getId());
+                    result.put("id",businessPartnerLoanContact.getId().toString());
                     if (businessPartnerLoanContact.getLoanNumber() != null)
-                    result.put("description", businessPartnerLoanContact.getLoanNumber());
+                    result.put("description", businessPartnerLoanContact.getLoanNumber().toString());
                     else result.put("description", "");
                     return result;
                 case "BusinessPartnerIdentification":
                     BusinessPartnerIdentification businessPartnerIdentification = (BusinessPartnerIdentification) object;
-                    result.put("id",businessPartnerIdentification.getId());
-                    result.put("description",businessPartnerIdentification.getIdentificationCategoryId());
+                    result.put("id",businessPartnerIdentification.getId().toString());
+                    result.put("description",businessPartnerIdentification.getIdentificationCategoryId().toString());
                     return result;
                 case "BusinessPartnerIndustry":
                     BusinessPartnerIndustry businessPartnerIndustry = (BusinessPartnerIndustry) object;
-                    result.put("id",businessPartnerIndustry.getId());
-                    result.put("description",businessPartnerIndustry.getIndustrySystemId());
+                    result.put("id",businessPartnerIndustry.getId().toString());
+                    result.put("description",businessPartnerIndustry.getIndustrySystemId().toString());
                     return result;
                 case "LoanMonitor":
                         LoanMonitor loanMonitor = (LoanMonitor) object;
