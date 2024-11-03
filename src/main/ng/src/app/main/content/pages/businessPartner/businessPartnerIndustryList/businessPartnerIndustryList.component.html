@@ -21,7 +21,7 @@
             <ng-container matColumnDef="industrySystem">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Industry System</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.industrySystemId }}</p>
+                    <p class="text-truncate">{{ getIndustrySystemName(obj.industrySystemId) }}</p>
                 </mat-cell>
             </ng-container>
 
@@ -29,7 +29,7 @@
             <ng-container matColumnDef="industry">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Industry</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.industryTypeId }}</p>
+                    <p class="text-truncate">{{ getIndustryTypeName(obj.industryTypeId) }}</p>
                 </mat-cell>
             </ng-container>
 

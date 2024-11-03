@@ -23,7 +23,7 @@ export class BusinessPartnerIndustryListComponent implements OnDestroy {
     businessPartnerId: string;
 
     industrySystems: any;
-
+    industryTypes: any;
     displayedColumns = [
         'serialNumber', 'industrySystem', 'industry'
     ];
@@ -41,7 +41,17 @@ export class BusinessPartnerIndustryListComponent implements OnDestroy {
                 private _snackBar: MatSnackBar,
                 private _activatedRoute: ActivatedRoute) {
                     
+        if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
+            this.industryTypes = this._activatedRoute.snapshot.data['routeResolvedData'][10]._embedded.industryTypes;
+        }
+        else {
+            this.industryTypes = this._activatedRoute.snapshot.data['routeResolvedData'][5]._embedded.industryTypes;
+        }
         this.industrySystems = this._activatedRoute.snapshot.data['routeResolvedData'][3]._embedded.industrySystems;
+        
+        console.log('this.industrySystems', this.industrySystems);
+        console.log('this.industryTypes', this.industryTypes);
+        
         if (this._activatedRoute.snapshot.data['routeResolvedData'][6]) {
             this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][6].
                 _embedded.businessPartnerIndustries);
@@ -118,5 +128,21 @@ export class BusinessPartnerIndustryListComponent implements OnDestroy {
                 });
             }
         });    
+    }
+
+    /**
+     * getIndustrySystemName()
+     */
+    getIndustrySystemName(industrySystemId: string): string {
+        const industrySystem = this.industrySystems.find(industrySystem => industrySystem.id === industrySystemId);
+        return industrySystem ? industrySystem.value : '';
+    }
+
+    /**
+     * getIndustryTypeName()
+     */
+    getIndustryTypeName(industryTypeId: string): string {
+        const industryType = this.industryTypes.find(industryType => industryType.id === industryTypeId);
+        return industryType ? industryType.value : '';
     }
 }
