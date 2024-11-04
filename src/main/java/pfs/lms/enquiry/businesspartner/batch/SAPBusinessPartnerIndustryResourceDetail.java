@@ -16,13 +16,14 @@ public class SAPBusinessPartnerIndustryResourceDetail {
     private String busPartnerNumber;
 
     @JsonProperty(value = "Industrysectorkeysystem")
-    private String industrySystem;
+    private String industrysectorkeysystem;
 
     @JsonProperty(value = "Industrysector")
-    private String industryType;
+    private String industrysector;
 
     @JsonProperty(value = "Defaultindustrysector")
     private String defaultIndustrySector;
 
-
+    @JsonProperty(value = "EntityId")
+    private String entityId;
 }

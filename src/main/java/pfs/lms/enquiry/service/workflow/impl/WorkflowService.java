@@ -259,6 +259,15 @@ public class WorkflowService implements IWorkflowService {
                 objectId = partner.getPartyName1() + partner.getPartyName2();
                 processDescription = "BusinessPartner";
                 break;
+            case "Partner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                partner.setWorkFlowStatusCode(02);
+                partner.setWorkFlowStatusDescription("Sent for Approval");
+                objectId = partner.getPartyName1() + partner.getPartyName2();
+                processDescription = "BusinessPartner";
+                break;
         }
 
 
@@ -365,6 +374,7 @@ public class WorkflowService implements IWorkflowService {
             case "BusinessPartner":
                 //Save entity with the Process Instance and workflow status code
                 partner.setProcessInstanceId(processInstanceId);
+                partner.setWorkFlowStatusCode(01);
                 partner = partnerRepository.save(partner);
                 return sanction;
         }
@@ -488,7 +498,7 @@ public class WorkflowService implements IWorkflowService {
                 // Set the Work Flow Status Code "03" - Approved
                 partner.setWorkFlowStatusCode(03);
                 partner.setWorkFlowStatusDescription("Approved");
-
+                partnerRepository.save(partner);
                 processInstanceId = partner.getProcessInstanceId();
                 break;
         }
@@ -603,10 +613,18 @@ public class WorkflowService implements IWorkflowService {
                 partner.setWorkFlowStatusCode(3);
                 partner.setProcessInstanceId(processInstanceId);
                 partnerRepository.save(partner);
-                sanctionRepository.flush();
+                partnerRepository.flush();
                 businessPartnerService.updatePartnerAfterApproval(partner, username);
-                return sanction;
-        }
+                return partner;
+            case "Partner":
+                //Save entity with the new workflow status code
+                partner.setWorkFlowStatusDescription("Approved");
+                partner.setWorkFlowStatusCode(3);
+                partner.setProcessInstanceId(processInstanceId);
+                partnerRepository.save(partner);
+                partnerRepository.flush();
+                businessPartnerService.updatePartnerAfterApproval(partner, username);
+                return partner;}
 
         return null;
 
@@ -715,6 +733,14 @@ public class WorkflowService implements IWorkflowService {
                 partner.setWorkFlowStatusDescription("Rejected");
                 processInstanceId = partner.getProcessInstanceId();
                 break;
+            case "Partner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                partner.setWorkFlowStatusCode(4);
+                partner.setWorkFlowStatusDescription("Rejected");
+                processInstanceId = partner.getProcessInstanceId();
+                break;
         }
 
 
@@ -787,6 +813,12 @@ public class WorkflowService implements IWorkflowService {
                 sanctionService.processRejection(sanction,username);
                 break;
             case "BusinessPartner":
+                //Fetch the Entity
+                partner = partnerRepository.getOne(businessProcessId);
+                partnerRepository.save(partner);
+                businessPartnerService.updatePartnerAfterRejection(partner,username);
+                break;
+            case "Partner":
                 //Fetch the Entity
                 partner = partnerRepository.getOne(businessProcessId);
                 partnerRepository.save(partner);

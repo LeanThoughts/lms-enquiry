@@ -34,5 +34,7 @@ public class SAPBusinessPartnerIdentificationResourceDetail {
     private String countryIso;
     @JsonProperty(value = "Region")
     private String region;
+    @JsonProperty(value = "EntityId")
+    private String entityId;
 
 }

@@ -25,12 +25,14 @@ public class SAPBusinessPartnerRoleResourceDetail {
     private String  partnerRoleCategory;
 
     @JsonProperty(value = "AllPartnerroles")
-    private String  allPartneRoles;
+    private String  allPartnerRoles;
 
     @JsonProperty(value = "ValidFrom")
     private String validFromDate ;
 
-    @JsonProperty(value = "ValidFrom")
+    @JsonProperty(value = "ValidTo")
     private String validToDate ;
 
+    @JsonProperty(value = "EntityId")
+    private String entityId;
 }

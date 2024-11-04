@@ -63,6 +63,9 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
             detailsResource.setControlKey(businessPartnerBankDetail.getControlKey());
         else
             detailsResource.setControlKey("");
+        if (businessPartnerBankDetail.getAccountNumber() != null){
+            detailsResource.setBankAccountNumber(businessPartnerBankDetail.getAccountNumber());
+        }else detailsResource.setBankAccountNumber("");
 
         if (businessPartnerBankDetail.getReferenceNumber() != null)
             detailsResource.setReferenceNumber(businessPartnerBankDetail.getReferenceNumber());
@@ -86,8 +89,8 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
         else detailsResource.setBankAccountName("");
 
         if(businessPartnerBankDetail.getIBan() != null)
-            detailsResource.setIBan(businessPartnerBankDetail.getIBan());
-        else detailsResource.setIBan("");
+            detailsResource.setIban(businessPartnerBankDetail.getIBan());
+        else detailsResource.setIban("");
 
         if (businessPartnerBankDetail.getValidFromDate() != null){
             detailsResource.setValidFromDate(dataConversionUtility.convertDateToSAPFormat(businessPartnerBankDetail.getValidFromDate()));
@@ -100,9 +103,9 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
             detailsResource.setValidToDate(null);
 
         if (businessPartnerBankDetail.getIBanFromDate() != null){
-            detailsResource.setIBanFromDate(dataConversionUtility.convertDateToSAPFormat(businessPartnerBankDetail.getIBanFromDate()));
+            detailsResource.setIbanFromDate(dataConversionUtility.convertDateToSAPFormat(businessPartnerBankDetail.getIBanFromDate()));
         } else
-            detailsResource.setIBanFromDate(null);
+            detailsResource.setIbanFromDate(null);
 
         if (businessPartnerBankDetail.getMoveDate() != null){
             detailsResource.setMoveDate(dataConversionUtility.convertDateToSAPFormat(businessPartnerBankDetail.getMoveDate()));
@@ -114,7 +117,7 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
         } else
             detailsResource.setMoveId(null);
 
-
+        detailsResource.setEntityId(businessPartnerBankDetail.getId().toString());
 
         return detailsResource;
     }

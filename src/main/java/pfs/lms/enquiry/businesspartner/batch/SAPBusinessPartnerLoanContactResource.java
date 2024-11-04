@@ -41,7 +41,7 @@ public class SAPBusinessPartnerLoanContactResource implements Serializable {
             detailsResource.setBusPartnerNumber("");
 
         if(businessPartnerLoanContact.getSelection() != null)
-            detailsResource.setSelection(businessPartnerLoanContact.getSelection());
+            detailsResource.setSelection("");
         else detailsResource.setSelection("");
 
         if(businessPartnerLoanContact.getName() != null)
@@ -84,13 +84,7 @@ public class SAPBusinessPartnerLoanContactResource implements Serializable {
             detailsResource.setFaxNumber(businessPartnerLoanContact.getFaxNumber());
         else detailsResource.setFaxNumber("");
 
-
-
-//        if (customerRejection.getDate() != null){
-//            detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(customerRejection.getDate()));
-//        } else
-//            detailsResource.setDate(null);
-
+        detailsResource.setEntityId(businessPartnerLoanContact.getId().toString());
 
 
         return detailsResource;

@@ -39,14 +39,16 @@ public class SAPBusinessPartnerIndustryResource implements Serializable {
         else
             detailsResource.setBusPartnerNumber("");
 
-//        if(businessPartnerIndustry.getIndustrySystem() !=null)
-//            detailsResource.setIndustrySystem(businessPartnerIndustry.getIndustrySystem().getValue());
+//        if(businessPartnerIndustry.getIndustrySystemId() !=null)
+//            detailsResource.setIndustrysectorkeysystem(businessPartnerIndustry.getIndustrySystemId());
 //        else detailsResource.setIndustrySystem("");
-//
+////
 //        if(businessPartnerIndustry.getIndustryType() !=null)
 //            detailsResource.setIndustryType(businessPartnerIndustry.getIndustryType().getValue());
 //        else detailsResource.setIndustryType("");
 
+
+        detailsResource.setEntityId(businessPartnerIndustry.getId().toString());
 
         return detailsResource;
     }

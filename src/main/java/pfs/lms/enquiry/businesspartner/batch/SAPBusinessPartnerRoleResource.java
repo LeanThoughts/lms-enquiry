@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRole;
-import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.time.LocalDate;
 
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,14 +35,15 @@ public class SAPBusinessPartnerRoleResource implements Serializable {
     mapResource(BusinessPartnerRole businessPartnerRole) throws ParseException {
 
         SAPBusinessPartnerRoleResourceDetail detailsResource = new SAPBusinessPartnerRoleResourceDetail();
+
         if (businessPartnerRole.getPartner().getPartyNumber() != null)
             detailsResource.setBusPartnerNumber(businessPartnerRole.getPartner().getPartyNumber().toString());
         else
             detailsResource.setBusPartnerNumber("");
 
         if (businessPartnerRole.getRoleType() != null) {
-            detailsResource.setRoleType(businessPartnerRole.getRoleType().getValue());
-            detailsResource.setPartnerRoleCategory(businessPartnerRole.getRoleType().getValue());
+            detailsResource.setRoleType(businessPartnerRole.getRoleType().getCode());
+            detailsResource.setPartnerRoleCategory(businessPartnerRole.getRoleType().getCode());
         } else {
             detailsResource.setRoleType("");
             detailsResource.setPartnerRoleCategory("");
@@ -53,19 +54,22 @@ public class SAPBusinessPartnerRoleResource implements Serializable {
         else detailsResource.setDifferentiationType("");
 
         if (businessPartnerRole.getAllPartnerRoles() != null)
-            detailsResource.setAllPartneRoles(businessPartnerRole.getAllPartnerRoles());
-        else detailsResource.setAllPartneRoles("");
+            detailsResource.setAllPartnerRoles(businessPartnerRole.getAllPartnerRoles());
+        else detailsResource.setAllPartnerRoles("");
+
+        LocalDate localDate = LocalDate.now();
 
         if (businessPartnerRole.getValidFromDate() != null) {
             detailsResource.setValidFromDate(dataConversionUtility.convertDateToSAPFormat(businessPartnerRole.getValidFromDate()));
         } else
-            detailsResource.setValidFromDate(null);
+            detailsResource.setValidFromDate(dataConversionUtility.convertDateToSAPFormat(localDate));
 
         if (businessPartnerRole.getValidToDate() != null) {
             detailsResource.setValidToDate(dataConversionUtility.convertDateToSAPFormat(businessPartnerRole.getValidToDate()));
         } else
-            detailsResource.setValidToDate(null);
+            detailsResource.setValidToDate(dataConversionUtility.convertDateToSAPFormat(localDate));
 
+        detailsResource.setEntityId(businessPartnerRole.getId().toString());
 
         return detailsResource;
     }

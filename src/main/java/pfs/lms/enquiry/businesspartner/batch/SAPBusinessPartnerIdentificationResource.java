@@ -4,26 +4,39 @@ package pfs.lms.enquiry.businesspartner.batch;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
+import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
+import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.text.ParseException;
 
-@Component
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties (ignoreUnknown = true)
 
-public class SAPBusinessPartnerIdentificationResource implements Serializable {
+//@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonIgnoreProperties (ignoreUnknown = true)
 
-    public SAPBusinessPartnerIdentificationResource() {
-        sapBusinessPartnerIdentificationResourceDetail = new SAPBusinessPartnerIdentificationResourceDetail();
-    }
+@Slf4j
+@Service
+@Transactional
+ public class SAPBusinessPartnerIdentificationResource implements Serializable {
+
+
 
     @JsonProperty(value = "d")
     private SAPBusinessPartnerIdentificationResourceDetail sapBusinessPartnerIdentificationResourceDetail;
     DataConversionUtility dataConversionUtility =  new DataConversionUtility();
+
+    public SAPBusinessPartnerIdentificationResource( ) {
+         sapBusinessPartnerIdentificationResourceDetail = new SAPBusinessPartnerIdentificationResourceDetail();
+     }
+
 
 
     public void setSapBusinessPartnerIdentificationResourceDetail(SAPBusinessPartnerIdentificationResourceDetail sapBusinessPartnerIdentificationResourceDetail) {
@@ -39,9 +52,7 @@ public class SAPBusinessPartnerIdentificationResource implements Serializable {
         else
             detailsResource.setBusPartnerNumber("");
 
-//        if(businessPartnerIdentification.getIdentificationCategory() != null)
-//            detailsResource.setIdentificationCategory(businessPartnerIdentification.getIdentificationCategory().);
-//        else detailsResource.setIdentificationCategory("");
+
 
         if(businessPartnerIdentification.getIdentificationNumber() != null)
             detailsResource.setIdentificationNumber(businessPartnerIdentification.getIdentificationNumber());
@@ -75,8 +86,7 @@ public class SAPBusinessPartnerIdentificationResource implements Serializable {
             detailsResource.setRegion( businessPartnerIdentification.getRegion() );
         else detailsResource.setRegion("");
 
-
-
+        detailsResource.setEntityId(businessPartnerIdentification.getId().toString());
 
         return detailsResource;
     }

@@ -26,6 +26,9 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value = "PartnerGroup")
     private String partnerGroup;
 
+    @JsonProperty(value = "Title")
+    private String title;
+
     @JsonProperty(value = "PartnerExternalNumber")
     private String partnerExternalNumber;
 
@@ -84,5 +87,8 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value ="Role")
     private String role;
 
+
+    @JsonProperty(value = "EntityId")
+    private String entityId;
 
 }

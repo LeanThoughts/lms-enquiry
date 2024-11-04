@@ -7,12 +7,14 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.PartnerRoleType;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PartnerRepository extends JpaRepository<Partner, UUID> {
     List<Partner> findByEmail(String email);
     Partner findByUserName(String username);
     Partner findByPartyNumber(Integer partyNumber);
+    Optional<Partner> findById(UUID id);
 
     List<Partner> findByPartyNumberBetween(Integer fromPartnerNumber, Integer toPartnerNumber);
     List<Partner> findByPartyName1Contains(String name);

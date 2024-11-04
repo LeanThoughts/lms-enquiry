@@ -4,6 +4,7 @@ package pfs.lms.enquiry.businesspartner.batch;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.utils.DataConversionUtility;
@@ -30,6 +31,10 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         this.sapBusinessPartnerBasicDetailsResourceDetail = sapBusinessPartnerBasicDetailsResourceDetail;
     }
 
+    public SAPBusinessPartnerBasicDetailsResourceDetail getSapBusinessPartnerBasicDetailsResourceDetail() {
+        return sapBusinessPartnerBasicDetailsResourceDetail;
+    }
+
     public SAPBusinessPartnerBasicDetailsResourceDetail
                                 mapBupaBasicDetails(Partner partner) throws ParseException {
 
@@ -41,8 +46,35 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
         if (partner.getPartyCategory() !=null)
             detailsResource.setPartnerCategory(partner.getPartyCategory().toString());
+        else
+            detailsResource.setPartnerType("1");
         if (partner.getPartnerType() != null)
             detailsResource.setPartnerType(partner.getPartnerType());
+        else
+            detailsResource.setPartnerCategory("1");
+
+        if(partner.getTitle() != null){
+            switch (partner.getTitle()){
+                case "Mr.":
+                    detailsResource.setTitle("0001");
+                    break;
+                case "Mrs.":
+                    detailsResource.setTitle("0002");
+                    break;
+                case "Company":
+                    detailsResource.setTitle("0003");
+                    break;
+                case "Mr. and Mrs.":
+                    detailsResource.setTitle("0004");
+                    break;
+                default:
+                    detailsResource.setTitle(partner.getTitle());
+
+            }
+        }
+
+
+
         if (partner.getPartnerExternalNumber() != null)
             detailsResource.setPartnerExternalNumber(partner.getPartnerExternalNumber());
         if (partner.getPartyRole() != null)
@@ -73,8 +105,11 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getAddressLine2() != null){
             detailsResource.setStreet(partner.getAddressLine2());
         }
-        if (partner.getCountry() != null){
+        if (partner.getCountry() == null || partner.getCountry().length() == 0){
+            detailsResource.setCountry("IN");
+        }else{
             detailsResource.setCountry(partner.getCountry());
+
         }
 
         if (partner.getContactPersonName() != null){
@@ -101,6 +136,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 //            detailsResource.setDate(null);
 
 
+        detailsResource.setEntityId(partner.getId().toString());
 
         return detailsResource;
     }

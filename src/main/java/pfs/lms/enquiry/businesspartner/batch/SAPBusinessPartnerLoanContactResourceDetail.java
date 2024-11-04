@@ -12,7 +12,7 @@ import lombok.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SAPBusinessPartnerLoanContactResourceDetail {
 
-    @JsonProperty(value = "Businesspartner")
+    @JsonProperty(value = "Partner")
     private String busPartnerNumber;
 
     @JsonProperty(value = "Slno")
@@ -38,5 +38,6 @@ public class SAPBusinessPartnerLoanContactResourceDetail {
     private String email;
     @JsonProperty(value = "FaxNumber")
     private String faxNumber;
-
+    @JsonProperty(value = "EntityId")
+    private String entityId;
 }

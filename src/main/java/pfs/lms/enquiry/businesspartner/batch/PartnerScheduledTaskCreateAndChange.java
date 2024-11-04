@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.businesspartner.domain.*;
@@ -12,8 +13,6 @@ import pfs.lms.enquiry.businesspartner.repository.*;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.domain.User;
-import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResource;
-import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResourceDetails;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -70,6 +69,10 @@ public class PartnerScheduledTaskCreateAndChange {
     private final BusinessPartnerLoanContactRepository businessPartnerLoanContactRepository;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
+    private final IdentificationCategoryRepository identificationCategoryRepository;
+
+    private final IndustrySystemRepository industrySystemRepository;
+    private final IndustryTypeRepository industryTypeRepository;
 
     User lastChangedByUser = new User();
 
@@ -125,11 +128,26 @@ public class PartnerScheduledTaskCreateAndChange {
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
                         break;
                     }
+                    if (response != null) {
+                        ResponseEntity responseEntity = (ResponseEntity) response;
+                        LinkedHashMap<String, String> responseKeyValueH = (LinkedHashMap<String, String>) responseEntity.getBody();
+                         LinkedHashMap<String, LinkedHashMap<String, String>> responseKeyValueI = (LinkedHashMap<String, LinkedHashMap<String, String>>) responseEntity.getBody();
+
+                         String businessPartnerID =  responseKeyValueI.get("d").get("BusPartnerNumber");
+
+                        partner.setPartyNumber(Integer.parseInt(businessPartnerID));
+                        partnerRepository.save(partner);
+                        log.info("Business Partner Created in SAP: " + businessPartnerID);
+                    }
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "LoanContact":
+                case "BusinessPartnerLoanContact":
                     businessPartnerLoanContact = businessPartnerLoanContactRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if(partner == null) return;
+                    if (partner.getPartyNumber() == null) return;
                     log.info("---------------Sync. Business Partner LoanContact  to SAP : " + partner.getPartyNumber() );
 
                     log.info("Attempting to Post Business Partner LoanContact to SAP AT :" + dateFormat.format(new Date())
@@ -160,8 +178,11 @@ public class PartnerScheduledTaskCreateAndChange {
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "LoanRole":
+                case "BusinessPartnerRole":
                     businessPartnerRole = businessPartnerRoleRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                    partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if(partner == null) return;
+                    if (partner.getPartyNumber() == null) return;
                     log.info("---------------Sync. Business Partner LoanRole  to SAP : " + partner.getPartyNumber() );
 
                     log.info("Attempting to Post Business Partner LoanRole to SAP AT :" + dateFormat.format(new Date())
@@ -192,11 +213,16 @@ public class PartnerScheduledTaskCreateAndChange {
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "BankDetail":
+                case "BusinessPartnerBankDetail":
                     businessPartnerBankDetail = businessPartnerBankDetailRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
-                    log.info("---------------Sync. Business Partner LoanRole  to SAP : " + partner.getPartyNumber() );
+                    partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if(partner == null) return;
+                    if (partner.getPartyNumber() == null) return;
 
-                    log.info("Attempting to Post Business Partner LoanRole to SAP AT :" + dateFormat.format(new Date())
+
+                    log.info("---------------Sync. Business Partner Bank Detail  to SAP : " + partner.getPartyNumber() );
+
+                    log.info("Attempting to Post Business Partner Bank Detail to SAP AT :" + dateFormat.format(new Date())
                             + "Partner Name: " + partner.getPartyName1());
 
                     //Set Status as in progressNot found for upload to SAP
@@ -224,8 +250,11 @@ public class PartnerScheduledTaskCreateAndChange {
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "Identification":
+                case "BusinessPartnerIdentification":
                     businessPartnerIdentification = businessPartnerIdentificationRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                    partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if(partner == null) return;
+                    if (partner.getPartyNumber() == null) return;
                     log.info("---------------Sync. Business Partner Identification  to SAP : " + partner.getPartyNumber() );
 
                     log.info("Attempting to Post Business Partner Identification to SAP AT :" + dateFormat.format(new Date())
@@ -238,7 +267,14 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerIdentificationResourceDetail sapBusinessPartnerIdentificationResourceDetail  =
                             sapBusinessPartnerIdentificationResource.mapResource(businessPartnerIdentification);
 
-                    SAPBusinessPartnerIdentificationResource sapBusinessPartnerIdentificationResource1 = new SAPBusinessPartnerIdentificationResource();
+                    if(businessPartnerIdentification.getIdentificationCategoryId() != null){
+                        IdentificationCategory identificationCategory =
+                                identificationCategoryRepository.findById(businessPartnerIdentification.getIdentificationCategoryId()).get();
+                        sapBusinessPartnerIdentificationResourceDetail.setIdentificationCategory(identificationCategory.getCode());
+                    }
+                    else sapBusinessPartnerIdentificationResourceDetail.setIdentificationCategory("");
+
+                    SAPBusinessPartnerIdentificationResource sapBusinessPartnerIdentificationResource1 = new SAPBusinessPartnerIdentificationResource( );
                     sapBusinessPartnerIdentificationResource1.setSapBusinessPartnerIdentificationResourceDetail(sapBusinessPartnerIdentificationResourceDetail);
 
                     resource = (Object) sapBusinessPartnerIdentificationResource1;
@@ -257,26 +293,33 @@ public class PartnerScheduledTaskCreateAndChange {
                     if (response != null) {
                         if (businessPartnerIdentification.getFileReference() != null && businessPartnerIdentification.getFileReference().length() > 0) {
 
-
-                            response = postDocument(
-                                    businessPartnerIdentification.getPartner().getPartyNumber().toString(),
-                                    sapIntegrationPointer.getSubBusinessProcessName(),
-                                    businessPartnerIdentification.getFileReference(),
-                                    businessPartnerIdentification.getId().toString(),
-                                    "Business Partner",
-                                    "Identification",
-                                    businessPartnerIdentification.getDocumentName(),
-                                    businessPartnerIdentification.getDocumentType());
+                            try {
+                                response = postDocument(
+                                        businessPartnerIdentification.getPartner().getPartyNumber().toString(),
+                                        businessPartnerIdentification.getFileReference(),
+                                        businessPartnerIdentification.getId().toString(),
+                                        businessPartnerIdentification.getId().toString(),
+                                        "Business Partner",
+                                        "Identification",
+                                        businessPartnerIdentification.getDocumentType(),
+                                        businessPartnerIdentification.getDocumentName());
+                            } catch (Exception ex){
+                                log.error("Exception Posting Identification Document : " + businessPartnerIdentification.getPartner().getPartyNumber());
+                            }
                         }
                     }
 
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
-                case "Industry":
+                case "BusinessPartnerIndustry":
                     businessPartnerIndustry = businessPartnerIndustryRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
-                    log.info("---------------Sync. Business Partner Identification  to SAP : " + partner.getPartyNumber() );
+                    partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if(partner == null) return;
+                    if (partner.getPartyNumber() == null) return;
 
-                    log.info("Attempting to Post Business Partner Identification to SAP AT :" + dateFormat.format(new Date())
+                    log.info("---------------Sync. Business Partner Industry  to SAP : " + partner.getPartyNumber() );
+
+                    log.info("Attempting to Post Business Partner Industry to SAP AT :" + dateFormat.format(new Date())
                             + "Partner Name: " + partner.getPartyName1());
 
                     //Set Status as in progressNot found for upload to SAP
@@ -286,11 +329,17 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerIndustryResourceDetail sapBusinessPartnerIndustryResourceDetail  =
                             sapBusinessPartnerIndustryResource.mapResource(businessPartnerIndustry);
 
+                    IndustrySystem industrySystem = industrySystemRepository.getOne(businessPartnerIndustry.getIndustrySystemId());
+                    sapBusinessPartnerIndustryResourceDetail.setIndustrysectorkeysystem(industrySystem.getCode());
+                    IndustryType industryType = industryTypeRepository.getOne(businessPartnerIndustry.getIndustryTypeId());
+                    sapBusinessPartnerIndustryResourceDetail.setIndustrysector(industryType.getCode());
+
+
                     SAPBusinessPartnerIndustryResource sapBusinessPartnerIndustryResource1 = new SAPBusinessPartnerIndustryResource();
                     sapBusinessPartnerIndustryResource1.setSapBusinessPartnerIndustryResourceDetail(sapBusinessPartnerIndustryResourceDetail);
 
                     resource = (Object) sapBusinessPartnerIndustryResource1;
-                    serviceUri = businessPartnerServiceUri + "IdentificationSet";
+                    serviceUri = businessPartnerServiceUri + "IndustrySectorSet";
 
                     switch (sapIntegrationPointer.getMode()){
                         case "C":
@@ -388,15 +437,18 @@ public class PartnerScheduledTaskCreateAndChange {
 //                + ")/$value";
 
         String documentUploadUri = businessPartnerDocumentServiceUri + "("
+
+                + "Businesspartner='" + businessPartnerId + "',"
+
                 + "Id='" + entityId + "',"
-                + "DocSubId='" + docSubId + "',"
+                + "DocSubId='" + "01" + "',"
                 + "EntityId='" +entityId +  "',"
                 + "EntityName='" +entityName +  "',"
                 + "MimeType='" +mimeType +  "',"
                 + "Filename='" +fileName +  "',"
                 + "FileType='" +fileType +  "',"
                 + "DocumentType='" +documentType +  "',"
-                + "FileReference='" +fileReference +  "',"
+                + "Filereference='" +fileReference +  "'"
 
 //                + "DocId='" + "',"
 //                 + "UploadTime='" + "datetime'2015-07-30T00:00:00Z'',"
@@ -413,44 +465,54 @@ public class PartnerScheduledTaskCreateAndChange {
 
     private List<SAPIntegrationPointer> fetchSAPIntegrationPointers() {
         List<SAPIntegrationPointer> sapIntegrationPointers = new ArrayList<>();
+        sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("Partner",  0, "C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("Partner",   2, "C"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("Partner",   0, "U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("Partner",   2, "U"));
 
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 0, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 2, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 0, "U"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 2, "U"));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 0, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 2, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 0, "U"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BasicDetail", 2, "U"));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Identification", 0, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Identification", 2, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Identification", 0, "U"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Identification", 2, "U"));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "ContactDetails", 0, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "ContactDetails", 2, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "ContactDetails", 0, "U"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "ContactDetails", 2, "U"));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BankDetails", 0, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BankDetails", 2, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BankDetails", 0, "U"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "BankDetails", 2, "U"));
-
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Industry", 0, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Industry", 2, "C"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Industry", 0, "U"));
-        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("BusinessPartner", "Industry", 2, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 0, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 2, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 0, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Partner", 2, "U"));
+//
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BasicDetail", 0, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BasicDetail", 2, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BasicDetail", 0, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BasicDetail", 2, "U"));
+//
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Identification", 0, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Identification", 2, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Identification", 0, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Identification", 2, "U"));
+//
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "ContactDetails", 0, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "ContactDetails", 2, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "ContactDetails", 0, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "ContactDetails", 2, "U"));
+//
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BankDetails", 0, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BankDetails", 2, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BankDetails", 0, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "BankDetails", 2, "U"));
+//
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Industry", 0, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Industry", 2, "C"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Industry", 0, "U"));
+//        sapIntegrationPointers.addAll(sapIntegrationRepository.getByBusinessProcessNameAndSubBusinessProcessNameAndStatusAndMode("Partner", "Industry", 2, "U"));
 
         List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
         for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
             try {
-                Partner partner1 = partnerRepository.findById(UUID.fromString(sapIntegrationPointer.getMainEntityId())).get();
-                if (partner1.getWorkFlowStatusCode().equals("03")) {
-                    sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                UUID partnerId = UUID.fromString(sapIntegrationPointer.getMainEntityId());
+                Partner partner1 = partnerRepository.findById(partnerId).get();
+                if (partner1 != null){
+                if (partner1.getWorkFlowStatusCode()!= null) {
+                    if (partner1.getWorkFlowStatusCode() == 3) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
                 }
+            }
+
             } catch (Exception ex){
                 log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
             }

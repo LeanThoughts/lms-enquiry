@@ -107,7 +107,8 @@ public class PartnerService implements IPartnerService {
                 partner = partnerRepository.save(partner);
 
                 changeDocumentService.createChangeDocument(
-                        partner.getId(), partner.getId().toString(), null,
+                        partner.getId(), partner.getId().toString(),
+                        partner.getId().toString(),
                         partner.getId().toString(),
                         null,
                         partner,
