@@ -22,6 +22,8 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
     selectedPartner: PartnerModel;
     states: any;
 
+    partnerTitles: any;
+
     /**
      * constructor()
      */
@@ -31,6 +33,13 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                 private _businessPartnerService: BusinessPartnerService, 
                 private _matSnackBar: MatSnackBar) {
 
+        if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
+            this.partnerTitles = this._activatedRoute.snapshot.data['routeResolvedData'][11]._embedded.titles;
+        }
+        else {
+            this.partnerTitles = this._activatedRoute.snapshot.data['routeResolvedData'][6]._embedded.titles;
+        }
+            
         this.selectedPartner = this._partnerService.selectedPartner.value;
         console.log('selected partner ####', this.selectedPartner);
         this.states = this._activatedRoute.snapshot.data['routeResolvedData'][1];

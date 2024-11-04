@@ -3,6 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { BusinessPartnerService } from '../businessPartner.service';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
     selector: 'fuse-business-partner-identification-update-dialog',
@@ -14,6 +15,8 @@ import { BusinessPartnerService } from '../businessPartner.service';
 export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
 
     dialogTitle = 'Add Identification Details';
+
+    documentTypes = LoanMonitoringConstants.documentTypes;
 
     selectedIdentificationDetails: any;
 
@@ -55,6 +58,7 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
             idValidFromDate: [this.selectedIdentificationDetails.idValidFromDate || null],
             idValidToDate: [this.selectedIdentificationDetails.idValidToDate || null],
             documentName: [this.selectedIdentificationDetails.documentName || null],
+            documentType: [this.selectedIdentificationDetails.documentType || null],
             file: [''],
         });
     }
