@@ -162,6 +162,7 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
                     username,
                     "Partner", "BusinessPartnerBankDetail");
         }
+        log.info("Finished Migrating BusinessPartnerIdentification");
         return businessPartnerBankDetail;
     }
 }

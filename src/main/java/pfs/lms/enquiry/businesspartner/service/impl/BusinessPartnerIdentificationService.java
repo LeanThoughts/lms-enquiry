@@ -185,6 +185,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                     username,
                     "Partner", "BusinessPartnerIdentification");
         }
+        log.info("Finished Migrating BusinessPartnerIdentification");
+
         return businessPartnerIdentification;
+
     }
 }

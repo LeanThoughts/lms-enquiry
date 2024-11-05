@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.businesspartner.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @RepositoryRestController
 @RequiredArgsConstructor
+@Slf4j
 public class BusinessPartnerIdentificationController {
 
     private final IBusinessPartnerIdentificationService businessPartnerIdentificationService;
@@ -45,6 +47,8 @@ public class BusinessPartnerIdentificationController {
             @RequestBody BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource,
             HttpServletRequest request) throws CloneNotSupportedException {
 
-        return ResponseEntity.ok(businessPartnerIdentificationService.migrate(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
+        ResponseEntity responseEntity = ResponseEntity.ok(businessPartnerIdentificationService.migrate(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
+        log.info("Finished Migrating BusinessPartnerIdentification");
+        return responseEntity;
     }
 }
