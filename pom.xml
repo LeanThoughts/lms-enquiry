@@ -257,8 +257,8 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                          <arguments>build</arguments>
-<!--                            <arguments>build-prod</arguments>-->
+<!--                          <arguments>build</arguments>-->
+                            <arguments>build-prod</arguments>
                         </configuration>
                     </execution>
                 </executions>
