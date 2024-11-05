@@ -135,6 +135,9 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
         if (update == true) {
+            log.info("Updating Change Document OLD OBJECT:  " + oldObject.toString());
+            log.info("Updating Change Document NEW OBJECT:  " + businessPartnerBankDetail.toString());
+
             changeDocumentService.createChangeDocument(
                     businessPartnerBankDetail.getId(),
                     businessPartnerBankDetail.getId().toString(),
@@ -146,6 +149,8 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
                     username,
                     "Partner", "BusinessPartnerBankDetail");
         } else {
+            log.info("Creating Change Document :  " + businessPartnerBankDetail.toString());
+
             changeDocumentService.createChangeDocument(
                     businessPartnerBankDetail.getId(),
                     businessPartnerBankDetail.getId().toString(),
