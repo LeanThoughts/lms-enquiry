@@ -27,6 +27,9 @@ export class PartnerModel {
     searchTerm2: null;
     title: null;
 
+    workFlowStatusCode: string;
+    workFlowStatusDescription: string;
+
     /**
      * constructor()
      * Initialize the object.
@@ -59,13 +62,17 @@ export class PartnerModel {
         this.searchTerm1 = _partner && _partner.searchTerm1 || null;
         this.searchTerm2 = _partner && _partner.searchTerm2 || null;
         this.title = _partner && _partner.title || null;
+
+        this.workFlowStatusCode = _partner && _partner.workFlowStatusCode || null;
+        this.workFlowStatusDescription = _partner && _partner.workFlowStatusDescription || null;
+
         this._links = _partner && _partner._links || '';
     }
 
     get partyName(): string {
         return this.partyName1 + (this.partyName2 ? ' ' + this.partyName2 : '');
     }
-    
+
   /*
    Industry Sector Codes
    * Returns the string value of the Industry Sector code.

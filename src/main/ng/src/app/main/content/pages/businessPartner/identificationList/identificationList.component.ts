@@ -124,4 +124,12 @@ export class BusinessPartnerIdentificationListComponent implements OnDestroy {
     getFileURL(fileReference: string): string {
         return 'enquiry/api/download/' + fileReference;
     }
+
+    /**
+     * getIdentificationCategoryDescription()
+     */
+    getIdentificationCategoryDescription(identificationCategoryId: string): string {
+        const identificationCategory = this.identificationCategories.find(identificationCategory => identificationCategory.id === identificationCategoryId);
+        return identificationCategory ? identificationCategory.value : '';
+    }
 }

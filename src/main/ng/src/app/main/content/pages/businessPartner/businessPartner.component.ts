@@ -60,6 +60,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
         this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartner = partner;
             this.businessPartnerId = partner ? partner.id : null;
+            this.workflowStatus = partner ? partner.workFlowStatusDescription : '';
             if (partner && this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
                 this.title = 'Update Business Partner :' + partner.partyName;
             }
