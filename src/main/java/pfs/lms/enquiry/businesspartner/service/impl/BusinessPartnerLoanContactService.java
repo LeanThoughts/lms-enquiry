@@ -1,9 +1,12 @@
 package pfs.lms.enquiry.businesspartner.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerLoanContact;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerLoanContactRepository;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerLoanContactMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerLoanContactResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerLoanContactService;
 import pfs.lms.enquiry.domain.Partner;
@@ -11,9 +14,11 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanContactService {
 
     private final BusinessPartnerLoanContactRepository businessPartnerLoanContactRepository;
@@ -75,6 +80,7 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setLandLineNumber(businessPartnerLoanContactResource.getLandLineNumber());
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
+        businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerLoanContact.getId(),
@@ -87,6 +93,75 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
                 username,
                 "Partner", "BusinessPartnerLoanContact");
 
+        return businessPartnerLoanContact;
+    }
+
+
+    @Override
+    public BusinessPartnerLoanContact migrate(BusinessPartnerLoanContactMigrationResource businessPartnerLoanContactResource, String username) throws CloneNotSupportedException {
+
+        Boolean update = false;
+        Object oldObject = new Object();
+        Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(businessPartnerLoanContactResource.getPartnerId()));
+
+        BusinessPartnerLoanContact businessPartnerLoanContact = new BusinessPartnerLoanContact();
+
+        if (partner != null) {
+            List<BusinessPartnerLoanContact> businessPartnerLoanContacts =
+                    businessPartnerLoanContactRepository.findByLoanNumber(businessPartnerLoanContactResource.getLoanNumber());
+            if (businessPartnerLoanContacts.size() > 0 ){
+                businessPartnerLoanContact = businessPartnerLoanContacts.get(0);
+                oldObject = businessPartnerLoanContact.clone();
+                update = true;
+            } else {
+                businessPartnerLoanContact = new BusinessPartnerLoanContact();
+            }
+        } else{
+            log.error("Business Partner Master Data Not Found for ID: " + businessPartnerLoanContactResource.getPartnerId());
+            return null;
+        }
+
+        if (update == false){
+            List<BusinessPartnerLoanContact> businessPartnerLoanContacts = businessPartnerLoanContactRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
+            businessPartnerLoanContact.setSerialNumber(businessPartnerLoanContacts.size() + 1);
+        }
+
+        businessPartnerLoanContact.setSelection(businessPartnerLoanContactResource.getSelection());
+        businessPartnerLoanContact.setLoanNumber(businessPartnerLoanContactResource.getLoanNumber());
+        businessPartnerLoanContact.setName(businessPartnerLoanContactResource.getName());
+        businessPartnerLoanContact.setBranchAddress(businessPartnerLoanContactResource.getBranchAddress());
+        businessPartnerLoanContact.setDesignation(businessPartnerLoanContactResource.getDesignation());
+        businessPartnerLoanContact.setDepartment(businessPartnerLoanContactResource.getDepartment());
+        businessPartnerLoanContact.setTelephoneNumber(businessPartnerLoanContactResource.getTelephoneNumber());
+        businessPartnerLoanContact.setLandLineNumber(businessPartnerLoanContactResource.getLandLineNumber());
+        businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
+        businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
+        businessPartnerLoanContact.setPartner(partner);
+        businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
+
+        if (update == true) {
+            changeDocumentService.createChangeDocument(
+                    businessPartnerLoanContact.getId(),
+                    businessPartnerLoanContact.getId().toString(),
+                    businessPartnerLoanContact.getPartner().getId().toString(),
+                    businessPartnerLoanContact.getPartner().getId().toString(),
+                    oldObject,
+                    businessPartnerLoanContact,
+                    "Updated",
+                    username,
+                    "Partner", "BusinessPartnerLoanContact");
+        } else{
+            changeDocumentService.createChangeDocument(
+                    businessPartnerLoanContact.getId(),
+                    businessPartnerLoanContact.getId().toString(),
+                    businessPartnerLoanContact.getPartner().getId().toString(),
+                    businessPartnerLoanContact.getPartner().getId().toString(),
+                    null,
+                    businessPartnerLoanContact,
+                    "Created",
+                    username,
+                    "Partner", "BusinessPartnerLoanContact");
+        }
         return businessPartnerLoanContact;
     }
     

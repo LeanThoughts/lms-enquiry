@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRole;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerRoleMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerRoleResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerRoleService;
 
@@ -21,5 +22,11 @@ public class BusinessPartnerRoleController {
     public ResponseEntity<BusinessPartnerRole> create(@RequestBody BusinessPartnerRoleResource businessPartnerRoleResource, HttpServletRequest request) {
 
         return ResponseEntity.ok(businessPartnerRoleService.create(businessPartnerRoleResource, request.getUserPrincipal().getName()));
+    }
+
+    @PostMapping("/businessPartnerRoles/migrate")
+    public ResponseEntity<BusinessPartnerRole> migrate(@RequestBody BusinessPartnerRoleMigrationResource businessPartnerRoleResource, HttpServletRequest request) {
+
+        return ResponseEntity.ok(businessPartnerRoleService.migrate(businessPartnerRoleResource, request.getUserPrincipal().getName()));
     }
 }

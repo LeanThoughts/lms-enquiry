@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 
@@ -37,5 +38,13 @@ public class BusinessPartnerIdentificationController {
             HttpServletRequest request) throws CloneNotSupportedException {
                 
         return ResponseEntity.ok(businessPartnerIdentificationService.update(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
+    }
+
+    @PutMapping("/businessPartnerIdentifications/migrate")
+    public ResponseEntity<BusinessPartnerIdentification> migrate(
+            @RequestBody BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource,
+            HttpServletRequest request) throws CloneNotSupportedException {
+
+        return ResponseEntity.ok(businessPartnerIdentificationService.migrate(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
     }
 }

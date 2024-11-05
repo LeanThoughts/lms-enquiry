@@ -11,5 +11,6 @@ public interface BankMasterRepository extends JpaRepository<BankMaster, Long> {
 
     public BankMaster findBankMasterByBankCountryKeyAndBankKey(String countryKey, String bankKey);
     public List<BankMaster> findBankMasterByBankNameStartingWith(String bankName);
+    public BankMaster findByBankKey(String bankKey);
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerBankDetailMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerBankDetailResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerBankDetailService;
 
@@ -39,4 +40,13 @@ public class BusinessPartnerBankDetailController {
                 
         return ResponseEntity.ok(businessPartnerBankDetailService.update(businessPartnerBankDetailResource,request.getUserPrincipal().getName()));
     }
+
+    @PutMapping("/businessPartnerBankDetails/migrate")
+    public ResponseEntity<BusinessPartnerBankDetail> migrate(
+            @RequestBody BusinessPartnerBankDetailMigrationResource businessPartnerBankDetailResource,
+            HttpServletRequest request) throws CloneNotSupportedException {
+
+        return ResponseEntity.ok(businessPartnerBankDetailService.migrate(businessPartnerBankDetailResource,request.getUserPrincipal().getName()));
+    }
+
 }

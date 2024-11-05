@@ -4,19 +4,31 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityNotFoundException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIndustry;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerLoanContact;
+import pfs.lms.enquiry.businesspartner.domain.IndustrySystem;
+import pfs.lms.enquiry.businesspartner.domain.IndustryType;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIndustryRepository;
+import pfs.lms.enquiry.businesspartner.repository.IndustrySystemRepository;
+import pfs.lms.enquiry.businesspartner.repository.IndustryTypeRepository;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIndustryService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryService {
+    private final IndustryTypeRepository industryTypeRepository;
+    private final IndustrySystemRepository industrySystemRepository;
 
     private final BusinessPartnerIndustryRepository businessPartnerIndustryRepository;
     private final PartnerRepository partnerRepository;
@@ -74,6 +86,74 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
                 username,
                 "Partner", "BusinessPartnerIndustry");
 
+        return  businessPartnerIndustry;
+    }
+
+
+    @Override
+    public BusinessPartnerIndustry migrate(BusinessPartnerIndustryMigrationResource businessPartnerIndustryResource, String username) throws CloneNotSupportedException {
+
+
+
+        Boolean update = false;
+        Object oldObject = new Object();
+        Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(businessPartnerIndustryResource.getPartnerId()));
+
+        BusinessPartnerIndustry businessPartnerIndustry = new BusinessPartnerIndustry();
+
+        IndustrySystem industrySystem = industrySystemRepository.findIndustrySystemByCode(businessPartnerIndustryResource.getIndustrySystemId().toString());
+        IndustryType industryType = industryTypeRepository.findIndustryTypeByCode(businessPartnerIndustryResource.getIndustrySystemId().toString());
+
+        if (partner != null) {
+            List<BusinessPartnerIndustry> businessPartnerIndustries =
+                    businessPartnerIndustryRepository.findByPartnerIdAndIndustrySystemId(partner.getId(),industrySystem.getId());
+            if (businessPartnerIndustries.size() > 0 ){
+                businessPartnerIndustry = businessPartnerIndustries.get(0);
+                oldObject = businessPartnerIndustry.clone();
+                update = true;
+            } else {
+                businessPartnerIndustry = new BusinessPartnerIndustry();
+            }
+        } else{
+            log.error("Business Partner Master Data Not Found for ID: " + businessPartnerIndustryResource.getPartnerId());
+            return null;
+        }
+
+        if (update == false){
+            List<BusinessPartnerIndustry> businessPartnerIndustryList = businessPartnerIndustryRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
+            businessPartnerIndustry.setSerialNumber(businessPartnerIndustryList.size() + 1);
+        }
+
+
+
+        businessPartnerIndustry.setIndustrySystemId(industrySystem.getId());
+        businessPartnerIndustry.setIndustryTypeId(industryType.getId());
+        businessPartnerIndustry.setPartner(partner);
+        businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
+
+        if (update == false) {
+            changeDocumentService.createChangeDocument(
+                    businessPartnerIndustry.getId(),
+                    businessPartnerIndustry.getId().toString(),
+                    businessPartnerIndustry.getPartner().getId().toString(),
+                    businessPartnerIndustry.getPartner().getId().toString(),
+                    null,
+                    businessPartnerIndustry,
+                    "Created",
+                    username,
+                    "Partner", "BusinessPartnerIndustry");
+        } else {
+            changeDocumentService.createChangeDocument(
+                    businessPartnerIndustry.getId(),
+                    businessPartnerIndustry.getId().toString(),
+                    businessPartnerIndustry.getPartner().getId().toString(),
+                    businessPartnerIndustry.getPartner().getId().toString(),
+                    oldObject,
+                    businessPartnerIndustry,
+                    "Updated",
+                    username,
+                    "Partner", "BusinessPartnerIndustry");
+        }
         return  businessPartnerIndustry;
     }
 }

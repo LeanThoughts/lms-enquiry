@@ -57,6 +57,8 @@ sap:
   monitorServiceUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/
   appraisalServiceUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/
   appraisalDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/DocumentSet
+  businessPartnerServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/
+  businessPartnerDocumentServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/DocumentSet
   lieUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LendersIndependentEngineerSet
   lieReportAndFeeUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LIEReportAndFeeSet
   monitorDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/DocumentSet

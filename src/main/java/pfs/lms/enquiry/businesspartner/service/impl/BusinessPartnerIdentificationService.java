@@ -1,11 +1,14 @@
 package pfs.lms.enquiry.businesspartner.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
 import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 import pfs.lms.enquiry.domain.Partner;
@@ -13,9 +16,11 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BusinessPartnerIdentificationService implements IBusinessPartnerIdentificationService {
 
     private final BusinessPartnerIdentificationRepository businessPartnerIdentificationRepository;
@@ -106,6 +111,80 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 username,
                 "Partner", "BusinessPartnerIdentification");
 
+        return businessPartnerIdentification;
+    }
+
+    @Override
+    public BusinessPartnerIdentification migrate(BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException {
+        BusinessPartnerIdentification businessPartnerIdentification = new BusinessPartnerIdentification();
+
+        IdentificationCategory identificationCategory = identificationCategoryRepository.findIdentificationCategoryByCode(businessPartnerIdentificationResource.getIdentificationCategory());
+        if (identificationCategory == null){
+            log.error("Identification Category Not Found: " + businessPartnerIdentificationResource.getIdentificationCategory());
+            return null;
+        }
+
+
+
+        Boolean update = false;
+        Object oldObject = new Object();
+        Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(businessPartnerIdentificationResource.getPartnerId()));
+        if (partner != null) {
+            List<BusinessPartnerIdentification> businessPartnerIdentifications =
+                    businessPartnerIdentificationRepository.findByPartnerIdAndIdentificationCategoryIdAndIdentificationNumber(
+                            partner.getId() , identificationCategory.getId(), businessPartnerIdentificationResource.getIdentificationNumber());
+            if (businessPartnerIdentifications.size() > 0 ){
+                businessPartnerIdentification = businessPartnerIdentifications.get(0);
+                oldObject = businessPartnerIdentification.clone();
+                update = true;
+            } else {
+                businessPartnerIdentification = new BusinessPartnerIdentification();
+            }
+        } else{
+            log.error("Business Partner Master Data Not Found for ID: " + businessPartnerIdentificationResource.getPartnerId());
+            return null;
+        }
+
+        List<BusinessPartnerIdentification> businessPartnerIdentificationList = businessPartnerIdentificationRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
+        if ( businessPartnerIdentification.getId() == null){
+            businessPartnerIdentification.setSerialNumber(businessPartnerIdentificationList.size()+1);
+        }
+
+        businessPartnerIdentification.setIdentificationCategoryId(identificationCategory.getId());
+        businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
+                getIdentificationNumber());
+        businessPartnerIdentification.setIdInstitute(businessPartnerIdentificationResource.getIdInstitute());
+        businessPartnerIdentification.setIdEntryDate(businessPartnerIdentificationResource.getIdEntryDate());
+        businessPartnerIdentification.setIdValidFromDate(businessPartnerIdentificationResource.getIdValidFromDate());
+        businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
+        businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
+        businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
+        businessPartnerIdentification.setPartner(partner);
+        businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        if (update == true) {
+            changeDocumentService.createChangeDocument(
+                    businessPartnerIdentification.getId(),
+                    businessPartnerIdentification.getId().toString(),
+                    businessPartnerIdentification.getPartner().getId().toString(),
+                    businessPartnerIdentification.getPartner().getId().toString(),
+                    oldObject,
+                    businessPartnerIdentification,
+                    "Updated",
+                    username,
+                    "Partner", "BusinessPartnerIdentification");
+        } else {
+            changeDocumentService.createChangeDocument(
+                    businessPartnerIdentification.getId(),
+                    businessPartnerIdentification.getId().toString(),
+                    businessPartnerIdentification.getPartner().getId().toString(),
+                    businessPartnerIdentification.getPartner().getId().toString(),
+                    null,
+                    businessPartnerIdentification,
+                    "Created",
+                    username,
+                    "Partner", "BusinessPartnerIdentification");
+        }
         return businessPartnerIdentification;
     }
 }

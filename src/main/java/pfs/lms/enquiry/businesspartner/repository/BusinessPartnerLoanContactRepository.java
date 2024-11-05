@@ -13,4 +13,6 @@ public interface BusinessPartnerLoanContactRepository extends JpaRepository<Busi
     List<BusinessPartnerLoanContact> findByPartnerIdOrderBySerialNumberDesc(UUID partnerId);
     
     Optional<BusinessPartnerLoanContact> findFirstByPartnerOrderBySerialNumberDesc(Partner partner);
+
+    List<BusinessPartnerLoanContact> findByLoanNumber(String loanNumber);
 }
