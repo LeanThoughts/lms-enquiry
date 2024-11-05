@@ -19,6 +19,8 @@ import pfs.lms.enquiry.repository.BankMasterRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -117,10 +119,11 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
             return null;
         }
 
-        BankMaster bankMaster = bankMasterRepository.findByBankKey(businessPartnerBankDetailResource.getBankKey());
-        if (bankMaster != null)
+        List<BankMaster> bankMasters = bankMasterRepository.findByBankKey(businessPartnerBankDetailResource.getBankKey());
+        if (bankMasters.size() > 0) {
+            BankMaster bankMaster = bankMasters.get(0);
             businessPartnerBankDetail.setBankName(bankMaster.getBankName());
-
+        }
         businessPartnerBankDetail.setSerialNumber(businessPartnerBankDetailResource.getSerialNumber());
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
         businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());
