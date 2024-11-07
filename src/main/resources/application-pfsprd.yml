@@ -85,7 +85,7 @@ batch:
   loanMonitoringScheduledTask: 50000
   loanAppraisalScheduledTaskCreateAndChange:  50000
   loanAppraisalScheduledTaskDelete:  50000
-  loanAppraisalScheduledTaskUpdateLoanPartner : 5000000
-  loanAppraisalScheduledTaskUpdateLoanContractId: 5000000
-  updateMainLoanPartner: 5000000
+  loanAppraisalScheduledTaskUpdateLoanPartner : 50000
+  loanAppraisalScheduledTaskUpdateLoanContractId: 50000
+  updateMainLoanPartner: 50000
   initialDelay: 10000
