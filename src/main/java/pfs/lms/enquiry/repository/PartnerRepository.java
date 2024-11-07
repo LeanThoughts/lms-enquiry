@@ -28,4 +28,5 @@ public interface PartnerRepository extends JpaRepository<Partner, UUID> {
     @Query("select e from Partner e where trim(concat(trim(COALESCE(partyName1, '')), ' ', trim(COALESCE(partyName2, '')))) " +
             "like %:searchString%")
     List<Partner> findBySearchString(@Param("searchString") String searchString);
+
 }

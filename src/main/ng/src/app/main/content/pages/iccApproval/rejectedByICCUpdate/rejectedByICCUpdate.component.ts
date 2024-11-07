@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { ICCApprovalService } from '../iccApproval.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-rejected-by-icc-update-dialog',
@@ -21,12 +22,15 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
 
     rejectedByICCForm: FormGroup;
 
+    enquiryCompletion: any;
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
         public _dialogRef: MatDialogRef<RejectedByICCUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, _activatedRoute: ActivatedRoute) {
+
+        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
 
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedRejectedByICC = Object.assign({}, _dialogData.selectedRejectedByICC);

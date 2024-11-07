@@ -20,7 +20,7 @@
                     <input matInput placeholder="ICC Meeting Number" formControlName="iccMeetingNumber" maxlength="10">          
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker3" placeholder="ICC Meeting Date" formControlName="iccMeetingDate">
+                    <input matInput [matDatepicker]="picker3" placeholder="ICC Meeting Date" formControlName="iccMeetingDate" [min]="enquiryCompletion.date">
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker> 
                 </mat-form-field>

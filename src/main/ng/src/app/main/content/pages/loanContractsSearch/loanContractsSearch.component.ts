@@ -202,22 +202,30 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToICCApprovalStage()
      */
     redirectToICCApprovalStage(): void {
-        //if (this._service.selectedEnquiry.value.loanContractId === undefined) {
-            this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-                this._iccApprovalService._iccApproval.next(response);
-                this.redirect('/iccApprovalStage');
-            }, (error: HttpErrorResponse) => {
-                if (error.status === 404) {
-                    this._iccApprovalService._iccApproval.next({ id: '' });
-                    this.redirect('/iccApprovalStage');
+        this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(enquiryAction => {
+            this._enquiryActionService.getEnquiryCompletion(enquiryAction.id).subscribe(enquiryCompletion => {
+                const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
+                const workFlowStatusCode: number = enquiryCompletion.workFlowStatusCode;
+                if (functionalStatus >= 1 && workFlowStatusCode === 3) {
+                    this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                        this._iccApprovalService._iccApproval.next(response);
+                        this.redirect('/iccApprovalStage');
+                    }, 
+                    (error: HttpErrorResponse) => {
+                        if (error.status === 404) {
+                            this._iccApprovalService._iccApproval.next({ id: '' });
+                            this.redirect('/iccApprovalStage');
+                        }
+                    })
                 }
-            })
-        //}
-        // else {
-        //     this._matSnackBar.open('Loan has already completed the enquiry phase ! ',
-        //         'OK', { duration: 7000 });
-        // }
-        // this.redirect('/iccApprovalStage');
+                else {
+                    this._matSnackBar.open('Cannot start ICC Approval Stage !!!', 'OK', { duration: 7000 });
+                }
+            },
+            (error: HttpErrorResponse) => {
+                this._matSnackBar.open('Enquiry completion not completed for loan enquiry.', 'OK', { duration: 7000 });
+            });
+        });
     }
 
     /**

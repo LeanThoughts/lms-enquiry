@@ -9,6 +9,14 @@ import { BehaviorSubject } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { RejectMessageDialogComponent } from './rejectMessageDialog/rejectMessageDialog.component';
 import { EnquiryApplicationModel } from '../../model/enquiryApplication.model';
+import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
+import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
+import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
+import { ICCApprovalService } from '../iccApproval/iccApproval.service';
+import { SanctionService } from '../sanction/sanction.service';
+import { LoanMonitoringService } from '../monitoring/loanMonitoring.service';
+import { BoardApprovalService } from '../boardApproval/boardApproval.service';
+import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 
 @Component({
     selector: 'app-inbox',
@@ -24,7 +32,15 @@ export class InboxComponent implements OnInit {
                 private _matSnackBar: MatSnackBar,
                 private _router: Router, 
                 private _loanEnquiryService: LoanEnquiryService,
-                private _dialogRef: MatDialog) {
+                private _dialogRef: MatDialog,
+                private _applicationFeeService: ApplicationFeeService,
+                private _riskAssessmentService: RiskAssessmentService,
+                private _enquiryActionService: EnquiryActionService,
+                private _iccApprovalService: ICCApprovalService,
+                private _sanctionService: SanctionService,
+                private _loanMonitoringService: LoanMonitoringService,
+                private _boardApprovalService: BoardApprovalService,
+                private _loanAppraisalService: LoanAppraisalService) {
         
     }
 
@@ -38,7 +54,7 @@ export class InboxComponent implements OnInit {
         this._matSnackBar.open('Review in Process.', 'OK', { duration: 10000 });
         this._loanEnquiryService.getLoanApplicationByLoanContractId(this.inboxItemsComponent.selectedItem.lanContractId).subscribe(response => {
             this._loanEnquiryService.selectedEnquiry.next(new EnquiryApplicationModel(response));
-            if (this._loanEnquiryService.selectedLoanApplicationId !== undefined) {
+            if (this._loanEnquiryService.selectedLoanApplicationId) {
                 this._loanEnquiryService.selectedLoanApplicationId.next(response.loanApplication.id);
                 this._loanEnquiryService.selectedLoanApplicationPartyNumber.next(response.loanApplication.busPartnerNumber);
             }
@@ -48,22 +64,55 @@ export class InboxComponent implements OnInit {
             }
 
             let selectedInboxItem = this.inboxItemsComponent.selectedItem;
-            if (selectedInboxItem.processName === 'EnquiryAction')
-                this._router.navigate(['/enquiryAction']);
-            else if (selectedInboxItem.processName === 'ICCApproval')
-                this._router.navigate(['/iccApprovalStage']);
-            else if (selectedInboxItem.processName === 'Prelim Risk Assessment')
-                this._router.navigate(['/riskAssessment']);
-            else if (selectedInboxItem.processName === 'ApplicationFee')
-                this._router.navigate(['/applicationFee']);
-            else if (selectedInboxItem.processName === 'Appraisal')
-                this._router.navigate(['/loanAppraisal']);
-            else if (selectedInboxItem.processName === 'BoardApproval')
-                this._router.navigate(['/boardApproval']);
-            else if (selectedInboxItem.processName === 'Sanction')
-                this._router.navigate(['/sanction']);
-            else if (selectedInboxItem.processName === 'Monitoring')
-                this._router.navigate(['/loanMonitoring']);
+
+            if (selectedInboxItem.processName === 'EnquiryAction') {
+                this._enquiryActionService.getEnquiryAction(response.loanApplication.id).subscribe(enquiryAction => {
+                    this._enquiryActionService._enquiryAction.next(enquiryAction);
+                    this._router.navigate(['/enquiryAction']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'ICCApproval') {
+                this._iccApprovalService.getICCApproval(response.loanApplication.id).subscribe(iccApproval => {
+                    this._iccApprovalService._iccApproval.next(iccApproval);
+                    this._router.navigate(['/iccApprovalStage']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'Prelim Risk Assessment') {
+                this._riskAssessmentService.getRiskAssessment(response.loanApplication.id).subscribe(riskAssessment => {
+                    this._riskAssessmentService._riskAssessment.next(riskAssessment);
+                    this._router.navigate(['/riskAssessment']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'Application Fee') {
+                this._applicationFeeService.getApplicationFee(response.loanApplication.id).subscribe(applicationFee => {
+                    this._applicationFeeService._applicationFee.next(applicationFee);
+                    this._router.navigate(['/applicationFee']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'Appraisal') {
+                this._loanAppraisalService.getLaonAppraisal(response.loanApplication.id).subscribe(loanAppraisal => {
+                    this._loanAppraisalService._loanAppraisal.next(loanAppraisal);
+                    this._router.navigate(['/loanAppraisal']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'BoardApproval') {
+                this._boardApprovalService.getBoardApproval(response.loanApplication.id).subscribe(boardApproval => {
+                    this._boardApprovalService._boardApproval.next(boardApproval);
+                    this._router.navigate(['/boardApproval']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'Sanction') {
+                this._sanctionService.getSanction(response.loanApplication.id).subscribe(sanction => {
+                    this._sanctionService._sanction.next(sanction);
+                    this._router.navigate(['/sanction']);
+                });
+            }
+            else if (selectedInboxItem.processName === 'Monitoring') {
+                this._loanMonitoringService.getLoanMonitor(response.loanApplication.id).subscribe(loanMonitoring => {
+                    this._loanMonitoringService.loanMonitor.next(loanMonitoring);
+                    this._router.navigate(['/loanMonitoring']);
+                });
+            }
         });
     }
 

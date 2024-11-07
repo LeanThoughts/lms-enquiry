@@ -99,7 +99,8 @@ export class ProjectDetailUpdateComponent {
             loanPurpose: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanPurpose),
             projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity,
                 [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
-            projectCapacityUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacityUnit),
+            // projectCapacityUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacityUnit),
+            projectCapacityUnit: new FormControl(''),
             state: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectLocationState),
             district: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectDistrict),
             loanType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanType),
@@ -107,7 +108,8 @@ export class ProjectDetailUpdateComponent {
             assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
             financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
             endUseOfFunds: new FormControl(this._enquiryActionService._loanApplication.loanApplication.endUseOfFunds),
-            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.expectedInterestRate),
+            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.roi ? this._enquiryActionService._loanApplication.loanApplication / 100 : '',
+                [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
             fees: new FormControl(this._enquiryActionService._loanApplication.loanApplication.fees,
                 [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             tenorYear: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorYear,
@@ -151,6 +153,7 @@ export class ProjectDetailUpdateComponent {
         console.log(this._projectDetailForm.value);
         if (this._projectDetailForm.valid) {
             var formValues = this._projectDetailForm.value;
+            formValues.roi = formValues.roi !== '' ? formValues.roi * 100 : '';
             if (JSON.stringify(this._projectDetail) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
                 formValues.projectProposalId = this._projectProposal.id;
@@ -214,7 +217,7 @@ export class ProjectDetailUpdateComponent {
             'assistanceType': this._projectDetail.assistanceType || '',
             'financingType': this._projectDetail.financingType || '',
             'endUseOfFunds': this._projectDetail.endUseOfFunds || '',
-            'roi': this._projectDetail.roi || '',
+            'roi': this._projectDetail.roi ? this._projectDetail.roi / 100 : '',
             'fees': this._projectDetail.fees || '',
             'tenorYear': this._projectDetail.tenorYear || '',
             'tenorMonths': this._projectDetail.tenorMonths || '',

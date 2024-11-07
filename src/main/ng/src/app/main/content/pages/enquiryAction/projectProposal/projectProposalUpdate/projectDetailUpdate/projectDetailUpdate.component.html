@@ -45,7 +45,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <mat-select placeholder="Project Capacity unit" formControlName="projectCapacityUnit">
-                    <mat-option></mat-option>
+                    <mat-option value=""></mat-option>
                     <mat-option *ngFor="let unitOfMeasure of unitOfMeasures" [value]="unitOfMeasure.code">
                         {{ unitOfMeasure.value }}
                     </mat-option>
@@ -142,16 +142,16 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Rate of Interest" formControlName="roi" maxlength="6">
+                <input matInput placeholder="Rate of Interest" formControlName="roi" maxlength="6" type="number">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Fees" formControlName="fees" maxlength="18">
+                <input matInput placeholder="Fees" formControlName="fees" maxlength="18" type="number">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Tenure (Year)" formControlName="tenorYear" maxlength="2">
+                <input matInput placeholder="Tenure (Year)" formControlName="tenorYear" maxlength="2" type="number">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Tenure (Months)" formControlName="tenorMonths" maxlength="2">
+                <input matInput placeholder="Tenure (Months)" formControlName="tenorMonths" maxlength="2" type="number">
             </mat-form-field>
         </div>
         <div fxLayout="row">

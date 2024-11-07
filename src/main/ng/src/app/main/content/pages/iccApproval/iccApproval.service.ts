@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
+import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
+import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 
 @Injectable()
 export class ICCApprovalService {
@@ -11,15 +13,35 @@ export class ICCApprovalService {
     /**
      * constructor()
      */
-    constructor(private _http: HttpClient) {
+    constructor(private _http: HttpClient, 
+        private _loanEnquiryService: LoanEnquiryService,
+        private _enquiryActionService: EnquiryActionService) {
     }
 
+    /**
+     * resolve()
+     */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return forkJoin([
             this.getICCFurtherDetails(this._iccApproval.value.id),
             this.getLoanEnhancements(this._iccApproval.value.id),
-            this.getRiskNotifications(this._iccApproval.value.id)
+            this.getRiskNotifications(this._iccApproval.value.id),
+            this.getEnquiryCompletion(this._loanEnquiryService.selectedLoanApplicationId.value)
         ]);
+    }
+
+    /**
+     * getEnquiryCompletion()
+     */
+    getEnquiryCompletion(loanApplicationId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._enquiryActionService.getEnquiryAction(loanApplicationId).subscribe(response => {
+                this._enquiryActionService.getEnquiryCompletion(response.id).subscribe(response => {
+                    observer.next(response);
+                    observer.complete();
+                });
+            });
+        });
     }
 
     /**

@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { RiskAssessmentService } from '../riskAssessment.service';
 import { PreliminaryRiskAssessmentUpdateDialogComponent } from '../riskAssessmentInfoUpdate/riskAssessmentInfoUpdate.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'fuse-preliminary-risk-assessment',
@@ -28,7 +29,7 @@ export class PreliminaryRiskAssessmentComponent {
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _riskAssessmentService: RiskAssessmentService, private _matDialog: MatDialog,
-                    private _matSnackBar: MatSnackBar) {
+                    private _matSnackBar: MatSnackBar, private _datePipe: DatePipe) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
@@ -41,9 +42,9 @@ export class PreliminaryRiskAssessmentComponent {
         this._riskAssessmentService.getPreliminaryRiskAssessment(this._riskAssessmentService._riskAssessment.value.id).subscribe(data => {
             this.preliminaryRiskAssessment = data;
             let tableData = [];
-            tableData.push({particulars: 'Date of Assessment', value: this.preliminaryRiskAssessment.dateOfAssessment});
+            tableData.push({particulars: 'Date of Assessment', value: this._datePipe.transform(this.preliminaryRiskAssessment.dateOfAssessment, 'dd/MM/yyyy')});
             tableData.push({particulars: 'Remarks By Risk Department', value: this.preliminaryRiskAssessment.remarksByRiskDepartment});
-            tableData.push({particulars: 'MD Approval Date', value: this.preliminaryRiskAssessment.mdApprovalDate});
+            tableData.push({particulars: 'MD Approval Date', value: this._datePipe.transform(this.preliminaryRiskAssessment.mdApprovalDate, 'dd/MM/yyyy')});
             tableData.push({particulars: 'Remarks', value: this.preliminaryRiskAssessment.remarks});
             tableData.push({particulars: 'Document', value: this.preliminaryRiskAssessment.fileReference});
             this.dataSource = new MatTableDataSource(tableData);

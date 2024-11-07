@@ -3,6 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-icc-further-detail-update-dialog',
@@ -19,13 +20,16 @@ export class ICCFurtherDetailUpdateDialogComponent {
 
     iccFurtherDetailUpdateForm: FormGroup;
 
+    enquiryCompletion: any;
     /**
      * constructor()
      */
     constructor(_formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
         public _dialogRef: MatDialogRef<ICCFurtherDetailUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, _activatedRoute: ActivatedRoute) {
 
+        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
+        
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedICCFurtherDetail !== undefined) {
             this.selectedICCFurtherDetail = Object.assign({}, _dialogData.selectedICCFurtherDetail);
@@ -41,6 +45,7 @@ export class ICCFurtherDetailUpdateDialogComponent {
             iccMeetingDate: [this.selectedICCFurtherDetail.iccMeetingDate || ''],
             detailsRequired: [this.selectedICCFurtherDetail.detailsRequired || ''],
         });
+
     }
 
     /**

@@ -24,14 +24,14 @@
             </ng-container>
 
             <ng-container matColumnDef="iccMeetingNumber">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >Meeting Number</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Meeting Number</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.iccMeetingNumber }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="iccMeetingDate">
-                <mat-header-cell *matHeaderCellDef mat-sort-header >meeting Date</mat-header-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header >ICC Meeting Date</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
                     <p class="text-truncate">{{ obj.iccMeetingDate | date: 'dd/MM/yyyy' }}</p>
                 </mat-cell>

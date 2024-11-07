@@ -46,8 +46,8 @@ export class EnquiryCompletionComponent {
      */
     populateDisplayTable(): void {
         this.dataSource1 = [];
-        this.dataSource1.push({particulars: 'Product Type', description: this._enquiryCompletion.productType    });
-        this.dataSource1.push({particulars: 'Term', description: this._enquiryCompletion.term});
+        this.dataSource1.push({particulars: 'Product Type', description: this.getProductTypeDescription(this._enquiryCompletion.productType)});
+        this.dataSource1.push({particulars: 'Term', description: this.getTermDescription(this._enquiryCompletion.term)});
         this.dataSource1.push({particulars: 'Date of Completion', description: this.getFormattedDate(this._enquiryCompletion.date)});
         this.dataSource1.push({particulars: 'Remarks', description: this._enquiryCompletion.remarks});
     }
@@ -85,5 +85,47 @@ export class EnquiryCompletionComponent {
                 this.populateDisplayTable();
             }
         });    
+    }
+
+    /**
+     * getProductTypeDescription()
+     */
+    getProductTypeDescription(productType: string): string {
+        if (productType === '301') {
+            return 'Bridge Loan';
+        }
+        else if (productType === '302') {
+            return 'Short Term Loan';
+        }
+        else if (productType === '303') {
+            return 'Term Loan';
+        }
+        else if (productType === '304') {
+            return 'Debentures';
+        }
+        else if (productType === '305') {
+            return 'Non Fund Based Loan';
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * getTermDescription()
+     */
+    getTermDescription(term: string): string {
+        if (term === '1') {
+            return 'Short Term (Less than 1 Year)';
+        }
+        else if (term === '2') {
+            return 'Medium Term (Between 1 and 5 years)';
+        }
+        else if (term === '3') {
+            return 'Long Term(Greater than 5 years)';
+        }
+        else {
+            return '';
+        }
     }
 }

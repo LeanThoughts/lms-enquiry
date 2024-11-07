@@ -103,11 +103,13 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
 
-        this.selectedEnquiryForm.get('projectType')
-                .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);
+        const projectType = this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0];
+        if (projectType)
+            this.selectedEnquiryForm.get('projectType').setValue(projectType.value);
 
-        this.selectedEnquiryForm.get('financingTypeDescription')
-            .setValue(this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0].value);
+        const financingType = this._loanEnquiryService.financingTypes.filter(ft => ft.code === this.selectedEnquiry.financingType)[0];
+        if (financingType)
+            this.selectedEnquiryForm.get('financingTypeDescription').setValue(financingType.value);
     }
 
     /**

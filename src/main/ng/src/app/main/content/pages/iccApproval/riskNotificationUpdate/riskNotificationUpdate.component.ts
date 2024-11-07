@@ -19,6 +19,8 @@ export class RiskNotificationUpdateDialogComponent {
 
     riskNotificationUpdateForm: FormGroup;
 
+    today = new Date();
+
     /**
      * constructor()
      */
@@ -46,24 +48,26 @@ export class RiskNotificationUpdateDialogComponent {
      * submit()
      */
     submit(): void {
-        var riskNotification = this.riskNotificationUpdateForm.value;
-        var dt = new Date(riskNotification.notificationDate);
-        riskNotification.notificationDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+        if (this.riskNotificationUpdateForm.valid) {    
+            var riskNotification = this.riskNotificationUpdateForm.value;
+            var dt = new Date(riskNotification.notificationDate);
+            riskNotification.notificationDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-        if (this._dialogData.operation === 'addRiskNotification') {
-            riskNotification.loanApplicationId = this._dialogData.loanApplicationId;
-            this._iccApprovalService.createRiskNotification(riskNotification).subscribe(() => {
-                this._matSnackBar.open('Risk notification details added successfully.', 'OK', { duration: 7000 });
-                this._dialogRef.close({ 'refresh': true });
-            });
-        }
-        else {
-            this.selectedRiskNotification.notificationDate = riskNotification.notificationDate;
-            this.selectedRiskNotification.remarks = riskNotification.remarks;
-            this._iccApprovalService.updateRiskNotification(this.selectedRiskNotification).subscribe(() => {
-                this._matSnackBar.open('Risk notification details updated successfully.', 'OK', { duration: 7000 });
-                this._dialogRef.close({ 'refresh': true });
-            });
+            if (this._dialogData.operation === 'addRiskNotification') {
+                riskNotification.loanApplicationId = this._dialogData.loanApplicationId;
+                this._iccApprovalService.createRiskNotification(riskNotification).subscribe(() => {
+                    this._matSnackBar.open('Risk notification details added successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });
+            }
+            else {
+                this.selectedRiskNotification.notificationDate = riskNotification.notificationDate;
+                this.selectedRiskNotification.remarks = riskNotification.remarks;
+                this._iccApprovalService.updateRiskNotification(this.selectedRiskNotification).subscribe(() => {
+                    this._matSnackBar.open('Risk notification details updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });
+            }
         }
     }
 }

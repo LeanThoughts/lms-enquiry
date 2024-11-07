@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
@@ -107,6 +109,7 @@ public class PartnerController {
     public ResponseEntity<List<Partner>> getAllPartners(HttpServletRequest httpServletRequest) {
 
         List<Partner> partners = partnerService.getAllPartners();
+        // List<Partner> toFlush = new ArrayList<>();
         if (partners != null){
             return ResponseEntity.ok(partners);
         }
@@ -115,6 +118,27 @@ public class PartnerController {
         }
     }
 
+    @GetMapping("partners/forAutoComplete")
+    public ResponseEntity<List<PartnerAutoCompleteProjection>> getPartnersForAutoComplete(HttpServletRequest httpServletRequest) {
+
+        List<Partner> partners = partnerService.getAllPartners();
+        List<PartnerAutoCompleteProjection> projections = new ArrayList<>();
+        if (partners != null) {
+            partners.forEach(partner -> projections.add(new PartnerAutoCompleteProjection(
+                partner.getPartyName1(), 
+                partner.getPartyName2(), 
+                partner.getPartyNumber().toString(), 
+                partner.getAddressLine1(), 
+                partner.getAddressLine2(), 
+                partner.getCity(), 
+                partner.getStreet(), 
+                partner.getId())));
+            return ResponseEntity.ok(projections);
+        }
+        else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 
     @GetMapping("partner/email")
     public ResponseEntity getPartnerByEmailId(@RequestParam("email") String email, HttpServletRequest httpServletRequest) {
