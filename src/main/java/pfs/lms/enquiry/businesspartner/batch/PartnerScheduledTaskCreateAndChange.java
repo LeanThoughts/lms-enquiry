@@ -243,7 +243,8 @@ public class PartnerScheduledTaskCreateAndChange {
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
                             break;
                         case "U":
-                            serviceUri = serviceUri + "('" + partner.getPartyNumber() + "')";
+                           // serviceUri = serviceUri + "(" + "Businesspartner='" + partner.getPartyNumber() + "',Bankdetailid=" +  "'" + sapBusinessPartnerBankDetailResourceDetail.getBankDetailId() + "')";
+                            serviceUri = serviceUri + "(" + "Businesspartner='" + partner.getPartyNumber() + "'" + ")";
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
                             break;
                     }

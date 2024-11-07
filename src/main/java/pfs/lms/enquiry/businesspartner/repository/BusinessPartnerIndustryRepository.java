@@ -14,4 +14,6 @@ public interface BusinessPartnerIndustryRepository extends JpaRepository<Busines
     List<BusinessPartnerIndustry> findByPartnerIdOrderBySerialNumberDesc(UUID partnerId);
 
     Optional<BusinessPartnerIndustry> findFirstByPartnerOrderBySerialNumberDesc(Partner partner);
+
+    List<BusinessPartnerIndustry> findByPartnerIdAndIndustrySystemId(UUID partnerId, Long industrySystemId);
 }

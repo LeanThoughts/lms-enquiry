@@ -41,7 +41,7 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
             detailsResource.setBusPartnerNumber("");
 
         if (businessPartnerBankDetail.getBankDetailId() != null)
-            detailsResource.setBankDetailId(detailsResource.getBankDetailId());
+            detailsResource.setBankDetailId(businessPartnerBankDetail.getBankDetailId());
         else
             detailsResource.setBankDetailId("");
 

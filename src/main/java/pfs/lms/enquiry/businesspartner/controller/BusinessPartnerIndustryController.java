@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIndustry;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIndustryService;
 
@@ -34,7 +35,15 @@ public class BusinessPartnerIndustryController {
     public ResponseEntity<BusinessPartnerIndustry> update(
             @RequestBody BusinessPartnerIndustryResource businessPartnerIndustryResource,
             HttpServletRequest request) throws CloneNotSupportedException {
-                
+
         return ResponseEntity.ok(businessPartnerIndustryService.update(businessPartnerIndustryResource, request.getUserPrincipal().getName()));
+    }
+
+    @PutMapping("/businessPartnerIndustries/migrate")
+    public ResponseEntity<BusinessPartnerIndustry> migrate(
+            @RequestBody BusinessPartnerIndustryMigrationResource businessPartnerIndustryResource,
+            HttpServletRequest request) throws CloneNotSupportedException {
+                
+        return ResponseEntity.ok(businessPartnerIndustryService.migrate(businessPartnerIndustryResource, request.getUserPrincipal().getName()));
     }
 }

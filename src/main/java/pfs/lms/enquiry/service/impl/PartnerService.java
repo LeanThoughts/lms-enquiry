@@ -455,7 +455,7 @@ public class PartnerService implements IPartnerService {
     public Partner migratePartner(Partner partner, HttpServletRequest httpServletRequest) {
 
         log.info("Starting Migration of Business Partner Number :" + partner.getPartyNumber() + partner.getPartyName1());
-
+        log.info("Partner Object for Migration : " + partner.toString());
 
 
         //Check if Partner Number exists

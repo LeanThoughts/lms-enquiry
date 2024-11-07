@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.businesspartner.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 @RepositoryRestController
 @RequiredArgsConstructor
+@Slf4j
 public class BusinessPartnerIdentificationController {
 
     private final IBusinessPartnerIdentificationService businessPartnerIdentificationService;
@@ -37,5 +40,15 @@ public class BusinessPartnerIdentificationController {
             HttpServletRequest request) throws CloneNotSupportedException {
                 
         return ResponseEntity.ok(businessPartnerIdentificationService.update(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
+    }
+
+    @PutMapping("/businessPartnerIdentifications/migrate")
+    public ResponseEntity<BusinessPartnerIdentification> migrate(
+            @RequestBody BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource,
+            HttpServletRequest request) throws CloneNotSupportedException {
+
+        ResponseEntity responseEntity = ResponseEntity.ok(businessPartnerIdentificationService.migrate(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
+        log.info("Finished Migrating BusinessPartnerIdentification");
+        return responseEntity;
     }
 }
