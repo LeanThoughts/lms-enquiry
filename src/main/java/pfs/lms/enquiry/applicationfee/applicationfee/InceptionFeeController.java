@@ -48,13 +48,26 @@ public class InceptionFeeController {
 
             List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByInvoiceNumber(inceptionFeeResource.getInvoiceNumber());
             if (inceptionFeeList.size() > 0) {
+                log.info("Updating Application Fee : " + inceptionFeeResource.getInvoiceNumber());
                 InceptionFee inceptionFee = inceptionFeeList.get(0);
                 inceptionFeeResource.setId(inceptionFee.getId());
-                return ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
+
+                ResponseEntity responseEntity =  ResponseEntity.ok(inceptionFeeService.update(inceptionFeeResource,
                         request.getUserPrincipal().getName()));
+
+                log.info("Updating Application Fee Completed : " + inceptionFeeResource.getInvoiceNumber());
+                log.info(responseEntity.toString());
+                return responseEntity;
+
             } else {
-                return ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
+                log.info("Create Application Fee : " + inceptionFeeResource.getInvoiceNumber());
+
+                ResponseEntity responseEntity = ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
                         request.getUserPrincipal().getName()));
+
+                log.info("Updating Application Fee Completed : " + inceptionFeeResource.getInvoiceNumber());
+                log.info(responseEntity.toString());
+                return responseEntity;
 
             }
 
