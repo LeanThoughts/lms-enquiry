@@ -26,6 +26,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
 
     selectedICCFurtherDetail: any;
 
+    enquiryCompletion: any;
     /**
      * constructor()
      */
@@ -34,6 +35,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[0]);
+        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
     }
 
     /**
@@ -67,7 +69,8 @@ export class ICCFurtherDetailsComponent implements OnInit {
         var data = {
             'operation': operation,
             'loanApplicationId': this.loanApplicationId,
-            'selectedICCFurtherDetail': undefined
+            'selectedICCFurtherDetail': undefined,
+            'enquiryCompletion': this.enquiryCompletion
         };
         if (operation === 'updateICCFurtherDetail') {
             data.selectedICCFurtherDetail = this.selectedICCFurtherDetail;

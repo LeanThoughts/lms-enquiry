@@ -5,6 +5,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ICCApprovalService } from '../iccApproval.service';
 import { ICCApprovalUpdateDialogComponent } from '../iccApprovalUpdate/iccApprovalUpdate.component';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-icc-approval-meeting',
@@ -27,11 +28,17 @@ export class ICCApprovalMeetingComponent {
 
     disableAdd = false;
 
+    enquiryCompletion: any;
+
     /**
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
-                    private _matSnackBar: MatSnackBar, private _datePipe: DatePipe) {
+                    private _matSnackBar: MatSnackBar, private _datePipe: DatePipe, private _activatedRoute: ActivatedRoute) {
+
+        console.log('activated route', _activatedRoute);
+        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
+        console.log('enquiry completion', this.enquiryCompletion);
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
@@ -67,7 +74,8 @@ export class ICCApprovalMeetingComponent {
             width: '750px',
             data: {
                 loanApplicationId: this.loanApplicationId,
-                selectedICCApproval: this.selectedICCApproval
+                selectedICCApproval: this.selectedICCApproval,
+                enquiryCompletion: this.enquiryCompletion
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

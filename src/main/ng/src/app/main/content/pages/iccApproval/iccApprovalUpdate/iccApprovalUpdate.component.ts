@@ -3,7 +3,6 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-icc-approval-update-dialog',
@@ -30,13 +29,12 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
      */
     constructor(private _formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
         public _dialogRef: MatDialogRef<ICCApprovalUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar, _activatedRoute: ActivatedRoute) {
-
-        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
+        private _matSnackBar: MatSnackBar) {
 
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedICCApproval = Object.assign({}, _dialogData.selectedICCApproval);
         this.loanApplicationId = _dialogData.loanApplicationId;
+        this.enquiryCompletion = _dialogData.enquiryCompletion;
 
         if (this.selectedICCApproval.id !== undefined) {
             this.dialogTitle = 'Modify ICC Approval Details';

@@ -40,7 +40,7 @@ export class RiskNotificationUpdateDialogComponent {
         this.riskNotificationUpdateForm = _formBuilder.group({
             serialNumber: [this.selectedRiskNotification.serialNumber],
             notificationDate: [this.selectedRiskNotification.notificationDate],
-            remarks: [this.selectedRiskNotification.remarks || ''],
+            remarks: [this.selectedRiskNotification.remarks || '']
         });
     }
 

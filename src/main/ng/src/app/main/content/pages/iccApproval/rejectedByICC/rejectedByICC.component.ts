@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { RejectedByICCUpdateDialogComponent } from '../rejectedByICCUpdate/rejectedByICCUpdate.component';
 import { ICCApprovalService } from '../iccApproval.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-rejected-by-icc',
@@ -22,14 +23,16 @@ export class RejectedByICCComponent {
     loanApplicationId: string;
 
     selectedRejectedByICC: any;
+    enquiryCompletion: any;
 
     /**
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
-                    private _matSnackBar: MatSnackBar) {
+                    private _matSnackBar: MatSnackBar, private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
+        this.enquiryCompletion = this._activatedRoute.snapshot.data.routeResolvedData[3];
         this.refreshTable();
     }
 
@@ -57,7 +60,8 @@ export class RejectedByICCComponent {
             width: '750px',
             data: {
                 loanApplicationId: this.loanApplicationId,
-                selectedRejectedByICC: this.selectedRejectedByICC
+                selectedRejectedByICC: this.selectedRejectedByICC,
+                enquiryCompletion: this.enquiryCompletion
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

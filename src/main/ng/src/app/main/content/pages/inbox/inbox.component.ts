@@ -65,7 +65,7 @@ export class InboxComponent implements OnInit {
 
             let selectedInboxItem = this.inboxItemsComponent.selectedItem;
 
-            if (selectedInboxItem.processName === 'EnquiryAction') {
+            if (selectedInboxItem.processName === 'Process Enquiry') {
                 this._enquiryActionService.getEnquiryAction(response.loanApplication.id).subscribe(enquiryAction => {
                     this._enquiryActionService._enquiryAction.next(enquiryAction);
                     this._router.navigate(['/enquiryAction']);
