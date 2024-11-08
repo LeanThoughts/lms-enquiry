@@ -290,7 +290,7 @@ public class PartnerService implements IPartnerService {
 
     @Override
     public List<Partner> getAllPartners() {
-        List<Partner> partners = partnerRepository.findAll();
+        List<Partner> partners = partnerRepository.findByPartyName1NotNull();
         partners.sort(Comparator.comparing(Partner::getPartyName1));
         return partners;
     }

@@ -25,6 +25,8 @@ public interface PartnerRepository extends JpaRepository<Partner, UUID> {
     List<Partner> findByPartyRole(String partyRole);
     List <Partner> findByPartnerRoleTypes(PartnerRoleType partnerRoleType);
 
+    List<Partner> findByPartyName1NotNull();
+
     @Query("select e from Partner e where trim(concat(trim(COALESCE(partyName1, '')), ' ', trim(COALESCE(partyName2, '')))) " +
             "like %:searchString%")
     List<Partner> findBySearchString(@Param("searchString") String searchString);
