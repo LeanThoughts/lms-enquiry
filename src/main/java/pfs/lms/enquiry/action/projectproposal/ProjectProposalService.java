@@ -265,7 +265,7 @@ public class ProjectProposalService implements IProjectProposalService {
 
         loanApplication.setFunctionalStatus(1); //Enquiry Stage
         loanApplication.setTechnicalStatus(3);  // Submitted
-        loanApplication.setPostedInSAP(0);
+        //loanApplication.setPostedInSAP(0);
         loanApplication.setFinalDecisionStatus(0); //
 
         changeDocumentService.createChangeDocument(

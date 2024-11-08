@@ -64,8 +64,8 @@ public class LoanApplicationService implements ILoanApplicationService {
     public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException {
 
         //Set PostedInSAP to "Not Posted" - "0"
-        if (resource.getLoanApplication().getPostedInSAP() == null)
-            resource.getLoanApplication().setPostedInSAP(0);
+        //if (resource.getLoanApplication().getPostedInSAP() == null)
+            //resource.getLoanApplication().setPostedInSAP(0);
 
         //Set Group Company from Partner Details
         resource.getLoanApplication().setGroupCompany(resource.getPartner().getGroupCompany());

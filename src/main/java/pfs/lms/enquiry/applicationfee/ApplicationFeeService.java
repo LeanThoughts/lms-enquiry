@@ -80,7 +80,7 @@ public class ApplicationFeeService implements IApplicationFeeService {
 
 
 
-        loanApplication.setPostedInSAP(0);
+         loanApplication.setPostedInSAP(0);
 
 
         loanApplication.setFunctionalStatus(11);

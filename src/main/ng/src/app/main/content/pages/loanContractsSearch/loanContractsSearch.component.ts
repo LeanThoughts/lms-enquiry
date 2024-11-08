@@ -205,12 +205,12 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(enquiryAction => {
             this._enquiryActionService.getEnquiryCompletion(enquiryAction.id).subscribe(enquiryCompletion => {
                 const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
-                const workFlowStatusCode: number = enquiryCompletion.workFlowStatusCode;
+                const workFlowStatusCode: number = enquiryAction.workFlowStatusCode;
                 if (functionalStatus >= 1 && workFlowStatusCode === 3) {
                     this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                         this._iccApprovalService._iccApproval.next(response);
                         this.redirect('/iccApprovalStage');
-                    }, 
+                    },
                     (error: HttpErrorResponse) => {
                         if (error.status === 404) {
                             this._iccApprovalService._iccApproval.next({ id: '' });
