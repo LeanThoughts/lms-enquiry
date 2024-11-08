@@ -358,7 +358,6 @@ public class WorkflowService implements IWorkflowService {
             case "ApplicationFee":
                 //Save entity with the Process Instance and workflow status code
                 applicationFee.setProcessInstanceId(processInstanceId);
-                applicationFeeService.processApprovedApplicationFee(applicationFee, username);
                 applicationFee = applicationFeeRepository.save(applicationFee);
                 return applicationFee;
             case "BoardApproval":

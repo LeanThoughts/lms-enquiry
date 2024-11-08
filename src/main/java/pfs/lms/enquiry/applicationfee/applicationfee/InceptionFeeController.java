@@ -35,14 +35,19 @@ public class InceptionFeeController {
     @PostMapping("/inceptionFees/sapInceptionFees/create")
     public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                       HttpServletRequest request) throws CloneNotSupportedException {
-
+        LoanApplication loanApplication = new LoanApplication();
 //
         log.info("Loan Number : " + inceptionFeeResource.getLoanContractId());
         log.info("Invoice Number : " + inceptionFeeResource.getInvoiceNumber());
         log.info("Invoice Date : " + inceptionFeeResource.getInvoiceDate());
         log.info("Amount : " + inceptionFeeResource.getAmount());
-
-        LoanApplication loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
+        try {
+             loanApplication = loanApplicationRepository.findByLoanContractId(inceptionFeeResource.getLoanContractId());
+        }
+        catch (Exception ex){
+            log.error("Finding LoanApplication by ID: " + inceptionFeeResource.getLoanContractId());
+            log.error("Error: " + ex.getMessage());
+        }
         if (loanApplication != null) {
             inceptionFeeResource.setLoanApplicationId(loanApplication.getId());
 
