@@ -204,27 +204,38 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     redirectToICCApprovalStage(): void {
         this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(enquiryAction => {
             this._enquiryActionService.getEnquiryCompletion(enquiryAction.id).subscribe(enquiryCompletion => {
-                const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
-                const workFlowStatusCode: number = enquiryAction.workFlowStatusCode;
-                if (functionalStatus >= 1 && workFlowStatusCode === 3) {
-                    this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
-                        this._iccApprovalService._iccApproval.next(response);
-                        this.redirect('/iccApprovalStage');
-                    },
-                    (error: HttpErrorResponse) => {
-                        if (error.status === 404) {
-                            this._iccApprovalService._iccApproval.next({ id: '' });
-                            this.redirect('/iccApprovalStage');
-                        }
-                    })
+                console.log('inside enquiry completion', enquiryCompletion);
+
+                if (!enquiryCompletion.id) {
+                    this._matSnackBar.open('Enquiry completion is not completed for loan enquiry.', 'OK', { duration: 7000 });
                 }
                 else {
-                    this._matSnackBar.open('Cannot start ICC Approval Stage !!!', 'OK', { duration: 7000 });
+                    const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
+                    const workFlowStatusCode: number = enquiryAction.workFlowStatusCode;
+                    if (functionalStatus >= 1 && workFlowStatusCode === 3) {
+                        this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                            this._iccApprovalService._iccApproval.next(response);
+                            this.redirect('/iccApprovalStage');
+                        },
+                        (error: HttpErrorResponse) => {
+                            if (error.status === 404) {
+                                this._iccApprovalService._iccApproval.next({ id: '' });
+                                this.redirect('/iccApprovalStage');
+                            }
+                        })
+                    }
+                    else {
+                        this._matSnackBar.open('Cannot start ICC Approval Stage !!!', 'OK', { duration: 7000 });
+                    }
                 }
             },
             (error: HttpErrorResponse) => {
+                console.log('inside error handler for enquiry completion', error);
                 this._matSnackBar.open('Enquiry completion not completed for loan enquiry.', 'OK', { duration: 7000 });
             });
+        },
+        (error: HttpErrorResponse) => {
+            this._matSnackBar.open('Enquiry process should be completed before ICC In-principle approval', 'OK', { duration: 7000 });
         });
     }
 

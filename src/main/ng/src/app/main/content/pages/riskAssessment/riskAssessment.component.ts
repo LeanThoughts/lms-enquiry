@@ -68,13 +68,6 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
                 this.loanApplicationId = data;
             })
         );
-
-        this.subscriptions.add(
-            _riskAssessmentService._riskAssessment.subscribe(data => {
-                this.riskAssessment = data;
-                console.log('riskAssessment in riskAssesment component constructor is', this.riskAssessment);
-            })
-        );
     }
 
     /**
@@ -102,6 +95,13 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
             stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        this.subscriptions.add(
+            this._riskAssessmentService._riskAssessment.subscribe(data => {
+                this.riskAssessment = data;
+                console.log('riskAssessment in riskAssesment component constructor is', this.riskAssessment);
+            })
+        );
 
         const projectType = this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0];
         if (projectType)

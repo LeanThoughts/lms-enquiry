@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { fuseAnimations } from '@fuse/animations';
@@ -16,7 +16,7 @@ import { ConfirmationDialogComponent } from 'app/main/content/pages/appraisal/co
     styleUrls: ['./projectDetailUpdate.component.scss'],
     animations: fuseAnimations
 })
-export class ProjectDetailUpdateComponent {
+export class ProjectDetailUpdateComponent implements OnInit {
 
     _projectDetailForm: FormGroup;
     _projectDetail: any = {};
@@ -38,15 +38,7 @@ export class ProjectDetailUpdateComponent {
     set projectProposal(pp: any) {
         this._projectProposal = pp;
         console.log('project proposal in input is', this._projectProposal);
-        if (this._projectProposal !== undefined && JSON.stringify(this._projectProposal) !== JSON.stringify({})) {
-            this._enquiryActionService.getProjectDetail(this._projectProposal.id).subscribe(response => {
-                this._projectDetail = response;
-                this.initializeFormValues();
-            });
-            this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(response => {
-                this.dataSource = new MatTableDataSource(response._embedded.creditRatings);
-            });
-        }
+        // if (this._projectProposal !== undefined && JSON.stringify(this._projectProposal) !== JSON.stringify({})) {
     }
 
     _selectedCreditRating: any;
@@ -108,8 +100,7 @@ export class ProjectDetailUpdateComponent {
             assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
             financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
             endUseOfFunds: new FormControl(this._enquiryActionService._loanApplication.loanApplication.endUseOfFunds),
-            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.roi ? this._enquiryActionService._loanApplication.loanApplication / 100 : '',
-                [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
+            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.iccApprovedRoi, [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
             fees: new FormControl(this._enquiryActionService._loanApplication.loanApplication.fees,
                 [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             tenorYear: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorYear,
@@ -130,8 +121,24 @@ export class ProjectDetailUpdateComponent {
             loanEnquiryDate: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanEnquiryDate),
         });
 
-        if (JSON.stringify(this._projectDetail) !== JSON.stringify({})) // update mode, initialize for values ...
-            this.initializeFormValues();
+        // console.log('this._projectDetail', this._projectDetail);
+        // console.log('JSON.stringify(this._projectDetail) !== JSON.stringify({})', JSON.stringify(this._projectDetail) !== JSON.stringify({}));
+        // if (this._projectDetail.id) // update mode, initialize form values ...
+        //     this.initializeFormValues();
+    }
+
+    ngOnInit(): void {
+        if (this._projectProposal !== undefined && this._projectProposal.id) {
+            this._enquiryActionService.getProjectDetail(this._projectProposal.id).subscribe(projectDetail => {
+                console.log('got project detail', projectDetail);
+                this._projectDetail = projectDetail;
+                this.initializeFormValues();
+            });
+            this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(creditRatings => {
+                console.log('got credit ratings', creditRatings);
+                this.dataSource = new MatTableDataSource(creditRatings._embedded.creditRatings);
+            });
+        }
     }
 
     /**
@@ -153,7 +160,7 @@ export class ProjectDetailUpdateComponent {
         console.log(this._projectDetailForm.value);
         if (this._projectDetailForm.valid) {
             var formValues = this._projectDetailForm.value;
-            formValues.roi = formValues.roi !== '' ? formValues.roi * 100 : '';
+            // formValues.roi = formValues.roi !== '' ? formValues.roi * 100 : '';
             if (JSON.stringify(this._projectDetail) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
                 formValues.projectProposalId = this._projectProposal.id;
@@ -203,33 +210,33 @@ export class ProjectDetailUpdateComponent {
      * initializeFormValues()
      */
     initializeFormValues(): void {
-        this._projectDetailForm.setValue({
-            'projectName': this._projectDetail.projectName || '',
-            'borrowerName': this._projectDetail.borrowerName || '',
-            'promoterName': this._projectDetail.promoterName || '',
-            'loanPurpose': this._projectDetail.loanPurpose || '',
-            'projectCapacity': this._projectDetail.projectCapacity || '',
-            'projectCapacityUnit': this._projectDetail.projectCapacityUnit || '',
-            'state': this._projectDetail.state || '',
-            'district': this._projectDetail.district || '',
-            'loanType': this._projectDetail.loanType || '',
-            'loanClass': this._projectDetail.loanClass || '',
-            'assistanceType': this._projectDetail.assistanceType || '',
-            'financingType': this._projectDetail.financingType || '',
-            'endUseOfFunds': this._projectDetail.endUseOfFunds || '',
-            'roi': this._projectDetail.roi ? this._projectDetail.roi / 100 : '',
-            'fees': this._projectDetail.fees || '',
-            'tenorYear': this._projectDetail.tenorYear || '',
-            'tenorMonths': this._projectDetail.tenorMonths || '',
-            'moratoriumPeriod': this._projectDetail.moratoriumPeriod || '',
-            'moratoriumPeriodUnit': this._projectDetail.moratoriumPeriodUnit || '',
-            'constructionPeriod': this._projectDetail.constructionPeriod || '',
-            'constructionPeriodUnit': this._projectDetail.constructionPeriodUnit || '',
-            'status': this._projectDetail.status || '',
-            'projectTypeCoreSector': this._projectDetail.projectTypeCoreSector || '',
-            'purposeOfLoan': this._projectDetail.purposeOfLoan || '',
-            'projectType': this._projectDetail.projectType || ''
-        });
+        console.log('Initializing form values');
+        console.log('this._projectDetail', this._projectDetail);
+        this._projectDetailForm.controls['projectName'].setValue(this._projectDetail.projectName);
+        this._projectDetailForm.controls['borrowerName'].setValue(this._projectDetail.borrowerName);
+        this._projectDetailForm.controls['promoterName'].setValue(this._projectDetail.promoterName);
+        this._projectDetailForm.controls['loanPurpose'].setValue(this._projectDetail.loanPurpose);
+        this._projectDetailForm.controls['projectCapacity'].setValue(this._projectDetail.projectCapacity);
+        this._projectDetailForm.controls['projectCapacityUnit'].setValue(this._projectDetail.projectCapacityUnit);
+        this._projectDetailForm.controls['state'].setValue(this._projectDetail.state);
+        this._projectDetailForm.controls['district'].setValue(this._projectDetail.district);
+        this._projectDetailForm.controls['loanType'].setValue(this._projectDetail.loanType);
+        this._projectDetailForm.controls['loanClass'].setValue(this._projectDetail.loanClass);
+        this._projectDetailForm.controls['assistanceType'].setValue(this._projectDetail.assistanceType);
+        this._projectDetailForm.controls['financingType'].setValue(this._projectDetail.financingType);
+        this._projectDetailForm.controls['endUseOfFunds'].setValue(this._projectDetail.endUseOfFunds);
+        this._projectDetailForm.controls['roi'].setValue(this._projectDetail.roi);
+        this._projectDetailForm.controls['fees'].setValue(this._projectDetail.fees);
+        this._projectDetailForm.controls['tenorYear'].setValue(this._projectDetail.tenorYear);
+        this._projectDetailForm.controls['tenorMonths'].setValue(this._projectDetail.tenorMonths);
+        this._projectDetailForm.controls['moratoriumPeriod'].setValue(this._projectDetail.moratoriumPeriod);
+        this._projectDetailForm.controls['moratoriumPeriodUnit'].setValue(this._projectDetail.moratoriumPeriodUnit);
+        this._projectDetailForm.controls['constructionPeriod'].setValue(this._projectDetail.constructionPeriod);
+        this._projectDetailForm.controls['constructionPeriodUnit'].setValue(this._projectDetail.constructionPeriodUnit);
+        this._projectDetailForm.controls['status'].setValue(this._projectDetail.status);
+        this._projectDetailForm.controls['projectTypeCoreSector'].setValue(this._projectDetail.projectTypeCoreSector);
+        this._projectDetailForm.controls['purposeOfLoan'].setValue(this._projectDetail.purposeOfLoan);
+        this._projectDetailForm.controls['projectType'].setValue(this._projectDetail.projectType);
         // Set _projectDetailForm.dirty to false
         this._projectDetailForm.markAsPristine();
     }

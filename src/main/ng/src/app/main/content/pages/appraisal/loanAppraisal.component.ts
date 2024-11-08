@@ -69,12 +69,6 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
             })
         );
 
-        this.subscriptions.add(
-            _loanAppraisalService._loanAppraisalBehaviourSubject.subscribe(data => {
-                this.loanAppraisal = data;
-                console.log('loan appraisal in appraisal component subscription is', this.loanAppraisal);
-            })
-        );
     }
 
     /**
@@ -102,6 +96,13 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
             stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        this.subscriptions.add(
+            this._loanAppraisalService._loanAppraisalBehaviourSubject.subscribe(data => {
+                this.loanAppraisal = data;
+                console.log('loan appraisal in appraisal component subscription is', this.loanAppraisal);
+            })
+        );
 
         this.selectedEnquiryForm.get('projectType')
                 .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);

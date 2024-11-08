@@ -135,7 +135,7 @@ public class EnquiriesExcelUploadController {
                     }
 
                     enquiry.setReasonForIccStatus(row.getCell(14).getStringCellValue().trim());
-                    enquiry.setBorrowerRequestedROI(row.getCell(9).getNumericCellValue());
+                    enquiry.setBorrowerRequestedROI(row.getCell(9).getNumericCellValue() * 100);
                     enquiry.setRemarksOnIccReadiness(row.getCell(11).getStringCellValue().trim());
                     enquiry.setPresentedInIcc(row.getCell(12).getStringCellValue().trim());
 
@@ -148,7 +148,7 @@ public class EnquiriesExcelUploadController {
 
                     enquiry.setIccMeetingNumber(row.getCell(16).getStringCellValue().trim());
                     enquiry.setAmountApproved(row.getCell(17).getNumericCellValue());
-                    enquiry.setIccApprovedRoi(row.getCell(18).getNumericCellValue());
+                    enquiry.setIccApprovedRoi(row.getCell(18).getNumericCellValue() * 100);
                     enquiry.setRemarksForIccApproval(row.getCell(19).getStringCellValue().trim());
 
                     enquiry.setComments(comments);
@@ -234,9 +234,9 @@ public class EnquiriesExcelUploadController {
             loanApplication.setLoanEnquiryDate(enquiry.getDateOfLeadGeneration());
             loanApplication.setICCClearanceDate(enquiry.getIccClearanceDate());
             loanApplication.setLoanContractAmount(enquiry.getAmountRequested());
-            loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI() * 100);
+            loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
             loanApplication.setAmountApproved(enquiry.getAmountApproved());
-            loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi() * 100);
+            loanApplication.setIccApprovedRoi(enquiry.getIccApprovedRoi());
             loanApplication.setExpectedInterestRate(enquiry.getBorrowerRequestedROI());
             loanApplication.setPfsDebtAmount(enquiry.getAmountRequested());
 

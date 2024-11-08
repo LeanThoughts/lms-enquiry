@@ -53,10 +53,6 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
                 this.loanApplicationId = data;
             })
         );
-
-        this.subscriptions.add(this._boardApprovalService._boardApproval.subscribe(data => {
-            this.boardApproval = data;
-        }));
     }
 
     /**
@@ -84,6 +80,10 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
             stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        this.subscriptions.add(this._boardApprovalService._boardApproval.subscribe(data => {
+            this.boardApproval = data;
+        }));
 
         this.selectedEnquiryForm.get('projectType')
             .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);

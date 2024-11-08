@@ -72,12 +72,6 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 });
             })
         );
-
-        this.subscriptions.add(
-            _enquiryActionService._enquiryAction.subscribe(data => {
-                this.enquiryAction = data;
-            })
-        );
     }
 
     /**
@@ -105,6 +99,12 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
             stage: [this.selectedEnquiry.functionalStatusDescription || ''],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        this.subscriptions.add(
+            this._enquiryActionService._enquiryAction.subscribe(data => {
+                this.enquiryAction = data;
+            })
+        );
 
         console.debug('projectTypes', this._loanEnquiryService.projectTypes);
         this.selectedEnquiryForm.get('projectType')

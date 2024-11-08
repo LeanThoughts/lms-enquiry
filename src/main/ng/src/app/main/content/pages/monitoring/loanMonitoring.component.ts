@@ -109,6 +109,10 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
 
+        this.subscriptions.add(this._loanMonitoringService.getLoanMonitor(this.loanApplicationId).subscribe(data => {
+            this.loanMonitor = data;
+        }));
+
         this.boardApprovalDetailsForm = this._formBuilder.group({
             boardMeetingNumber: [this.loanContractExtension.boardMeetingNumber || ''],
             boardApprovalDate: [this.loanContractExtension.boardApprovalDate || ''],

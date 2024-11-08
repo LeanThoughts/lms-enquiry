@@ -54,12 +54,6 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
                 this.loanApplicationId = data;
             })
         );
-
-        this.subscriptions.add(
-            _iccApprovalService._iccApproval.subscribe(data => {
-                this.iccApproval = data;
-            })
-        );
     }
 
     /**
@@ -87,6 +81,12 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
             stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        this.subscriptions.add(
+            this._iccApprovalService._iccApproval.subscribe(data => {
+                this.iccApproval = data;
+            })
+        );
 
         this.selectedEnquiryForm.get('projectType')
             .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);

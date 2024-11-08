@@ -58,10 +58,6 @@ export class DocumentationComponent implements OnInit, OnDestroy {
                 // });
             })
         );
-
-        this.subscriptions.add(this._documentationService._documentation.subscribe(data => {
-            this.documentation = data;
-        }));
     }
 
     /**
@@ -89,6 +85,10 @@ export class DocumentationComponent implements OnInit, OnDestroy {
             stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
         });
+
+        this.subscriptions.add(this._documentationService._documentation.subscribe(data => {
+            this.documentation = data;
+        }));
 
         this.selectedEnquiryForm.get('projectType')
             .setValue(this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0].value);

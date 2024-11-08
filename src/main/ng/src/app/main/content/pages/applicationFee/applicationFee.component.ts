@@ -60,11 +60,6 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
             })
         );
 
-        this.subscriptions.add(
-            _applicationFeeService._applicationFee.subscribe(data => {
-                this.applicationFee = data;
-            })
-        );
     }
 
     /**
@@ -93,6 +88,12 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || ''],
             iccMeetingNumber: [''],
         });
+
+        this.subscriptions.add(
+            this._applicationFeeService._applicationFee.subscribe(data => {
+                this.applicationFee = data;
+            })
+        );
 
         const projectType = this._loanEnquiryService.projectTypes.filter(pt => pt.code === this.selectedEnquiry.projectType)[0];
         this.selectedEnquiryForm.get('projectType').setValue(projectType ? projectType.value : '');
