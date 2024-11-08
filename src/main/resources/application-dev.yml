@@ -55,6 +55,7 @@ server:
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:
+  businessPartnerMasterDataScheduledTask: 3000
   loanApplicationsScheduledTask: 10000
   loanMonitoringScheduledTask: 5000
   loanAppraisalScheduledTaskCreateAndChange:  5000

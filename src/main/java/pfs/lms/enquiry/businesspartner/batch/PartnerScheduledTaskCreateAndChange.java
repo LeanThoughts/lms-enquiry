@@ -76,7 +76,7 @@ public class PartnerScheduledTaskCreateAndChange {
 
     User lastChangedByUser = new User();
 
-    @Scheduled(fixedRateString = "${batch.loanAppraisalScheduledTaskCreateAndChange}",initialDelayString = "${batch.initialDelay}")
+    @Scheduled(fixedRateString = "${batch.businessPartnerMasterDataScheduledTask}",initialDelayString = "${batch.initialDelay}")
     public void syncBusinessPartnerToBackend() throws Exception {
 
         Object response = new Object();

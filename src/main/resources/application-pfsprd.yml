@@ -81,6 +81,7 @@ server:
 riskRating:
   baseUrl: http://enquiry.pfs-ess.com:8090/risk/api
 batch:
+  businessPartnerMasterDataScheduledTask: 3000
   loanApplicationsScheduledTask: 50000
   loanMonitoringScheduledTask: 50000
   loanAppraisalScheduledTaskCreateAndChange:  50000
