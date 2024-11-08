@@ -34,6 +34,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
     
     projectDetails: any;
 
+    enquiryCompletion: any;
+
     /**
      * constructor()
      */
@@ -54,6 +56,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
         this.productTypes = _activatedRoute.snapshot.data.routeResolvedData[14]._embedded.products;
         
         this.projectDetails = _activatedRoute.snapshot.data.routeResolvedData[13];
+
+        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[15];
 
         console.log('projectDetails', this.projectDetails);
 
@@ -151,6 +155,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
                 formValues[key] = loanApplication[formFields[key]];
             });
             this.projectDetailForm.patchValue(formValues);
+            this.projectDetailForm.controls['productTypeCode'].setValue(this.enquiryCompletion.productType);
+            this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.iccApprovedRoi);
         }
         else {
             let formValues = {};
@@ -189,4 +195,27 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             });
         }
     }
+
+    /**
+     * calculateRatio()
+     */
+    calculateRatio(): void {
+        // Calculate debt equity ratio without grant
+        var debt = this.projectDetailForm.controls.debt.value;
+        var equity = this.projectDetailForm.controls.promoterContributionEquity.value;
+        if (equity > 0)
+            this.projectDetailForm.controls.debtEquityRatio.setValue((debt/equity).toFixed(2));
+        else if (equity == 0)
+            this.projectDetailForm.controls.debtEquityRatio.setValue(0);
+
+        // Calculate debt equity ratio with grant
+        const grantAmount = this.projectDetailForm.get('grantSubsidyAmount').value;
+        if (debt && equity && grantAmount && equity > 0) {
+            const ratioWithGrant = (Number(grantAmount) + Number(debt)) / Number(equity);
+            this.projectDetailForm.get('debtEquityRatioWithGrant').setValue(ratioWithGrant.toFixed(2));
+        } else {
+            this.projectDetailForm.get('debtEquityRatioWithGrant').setValue('');
+        }
+    }
+        
 }

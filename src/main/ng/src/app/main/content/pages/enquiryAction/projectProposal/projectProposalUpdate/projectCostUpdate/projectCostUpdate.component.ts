@@ -82,10 +82,11 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
      * calculateRatio()
      */
     calculateRatio(): void {
+        // Calculate debt equity ratio without grant
         var debt = this._projectCostForm.controls.debt.value;
         var equity = this._projectCostForm.controls.equity.value;
         if (equity > 0)
-            this._projectCostForm.controls.debtEquityRatio.setValue(debt/equity);
+            this._projectCostForm.controls.debtEquityRatio.setValue((debt/equity).toFixed(2));
         else if (equity == 0)
             this._projectCostForm.controls.debtEquityRatio.setValue(0);
 

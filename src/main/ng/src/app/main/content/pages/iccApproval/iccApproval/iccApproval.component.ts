@@ -60,8 +60,21 @@ export class ICCApprovalMeetingComponent {
                 this._datePipe.transform(this.selectedICCApproval.edApprovalDate, 'dd/MM/yyyy')});
             tableData.push({particulars: 'CFO Approval Date', value: 
                 this._datePipe.transform(this.selectedICCApproval.cfoApprovalDate, 'dd/MM/yyyy')});
+            if (this.selectedICCApproval.fileReference1 !== '') {
+                tableData.push({particulars: 'Minutes Document', value: this.selectedICCApproval.fileReference1});
+            }
+            if (this.selectedICCApproval.fileReference2 !== '') {
+                tableData.push({particulars: 'Mail from Company Secretary/Internal Note Sheet', value: this.selectedICCApproval.fileReference2});
+            }
             this.dataSource = new MatTableDataSource(tableData);
         });
+    }
+
+    /**
+     * getFileURL()
+     */
+    getFileURL(fileReference: string): string {
+        return 'enquiry/api/download/' + fileReference;
     }
 
     /**

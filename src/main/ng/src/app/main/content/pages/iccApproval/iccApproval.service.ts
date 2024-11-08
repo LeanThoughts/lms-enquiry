@@ -31,6 +31,13 @@ export class ICCApprovalService {
     }
 
     /**
+     * uploadVaultDocument()
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this._http.post('enquiry/api/upload', file);
+    }
+
+    /**
      * getEnquiryCompletion()
      */
     getEnquiryCompletion(loanApplicationId: string): Observable<any> {

@@ -22,5 +22,8 @@ public class ApprovalByICCResource {
     private LocalDate meetingDate;
     private LocalDate edApprovalDate;
     private LocalDate cfoApprovalDate;
+    
+    private String fileReference1;
+    private String fileReference2;
 
 }

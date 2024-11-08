@@ -44,6 +44,22 @@
                     </mat-form-field>
                 </div>
             </ng-container>
+            <div fxLayout="row">
+                <div fxFlex="100">
+                    <div fxLayout="column">
+                        <label for="document1">Upload Minutes Document</label>
+                        <input type="file" name="file1" (change)="onFile1Select($event)" accept="application/pdf" id="document1" required/>
+                    </div>
+                </div>
+            </div>
+            <div fxLayout="row" class="mt-16">
+                <div fxFlex="100">
+                    <div fxLayout="column">
+                        <label for="document2">Mail from Company Secretary/Internal Note Sheet</label>
+                        <input type="file" name="file2" (change)="onFile2Select($event)" accept="application/pdf" id="document2" required/>
+                    </div>
+                </div>
+            </div>
 
             <div mat-dialog-actions fxLayout="row" class="mb-8">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">

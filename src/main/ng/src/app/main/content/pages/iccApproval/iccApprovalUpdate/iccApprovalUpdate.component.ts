@@ -24,6 +24,9 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
 
     enquiryCompletion: any;
     
+    fileReference1: string = '';
+    fileReference2: string = '';
+
     /**
      * constructor()
      */
@@ -45,7 +48,9 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             meetingDate: [this.selectedICCApproval.meetingDate || ''],
             remarks: [this.selectedICCApproval.remarks || ''],
             edApprovalDate: [this.selectedICCApproval.edApprovalDate || ''],
-            cfoApprovalDate: [this.selectedICCApproval.cfoApprovalDate || '']
+            cfoApprovalDate: [this.selectedICCApproval.cfoApprovalDate || ''],
+            file1: [''],
+            file2: ['']
         });
     }
 
@@ -56,12 +61,53 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
     }
 
     /**
+     * onFile1Select()
+     */
+    onFile1Select(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.iccApprovalForm.get('file1').setValue(file);
+        }
+    }
+
+    /**
+     * onFile2Select()
+     */
+    onFile2Select(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.iccApprovalForm.get('file2').setValue(file);
+        }
+    }
+
+    /**
      * submit()
      */
-    submit(): void {
+    async submit(): Promise<void> {
         if (this.iccApprovalForm.valid) {
+
+            if (this.iccApprovalForm.get('file1').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.iccApprovalForm.get('file1').value);
+                const response1 = await this.uploadDocument1(formData);
+                console.log('received response from uploadDocument1');
+                // this.selectedICCApproval.fileReference1 = response1.fileReference;
+            }
+
+            if (this.iccApprovalForm.get('file2').value !== '') {
+                var formData = new FormData();
+                formData.append('file', this.iccApprovalForm.get('file2').value);
+                const response2 = await this.uploadDocument2(formData);
+                console.log('received response from uploadDocument2');
+                // this.selectedICCApproval.fileReference2 = response2.fileReference;
+            }
+
+            console.log('completing rest of the submission');
+
             var iccApproval = this.iccApprovalForm.value;
-                
+            iccApproval.fileReference1 = this.fileReference1;
+            iccApproval.fileReference2 = this.fileReference2;
+
             // To solve the utc time zone issue
             var dt = new Date(iccApproval.meetingDate);
             iccApproval.meetingDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
@@ -81,6 +127,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             if (this.selectedICCApproval.id === undefined) {
                 iccApproval.loanApplicationId = this.loanApplicationId;
                 this._iccApprovalService.createApprovalByICC(iccApproval).subscribe(() => {
+                    this.fileReference1 = '';
+                    this.fileReference2 = '';
                     this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
                         this._iccApprovalService._iccApproval.next(data);
                         this._matSnackBar.open('ICC Approval details created successfully.', 'OK', { duration: 7000 });
@@ -94,11 +142,31 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
                 this.selectedICCApproval.remarks = iccApproval.remarks;
                 this.selectedICCApproval.edApprovalDate = iccApproval.edApprovalDate;
                 this.selectedICCApproval.cfoApprovalDate = iccApproval.cfoApprovalDate;
+                if (this.fileReference1 !== '') {
+                    this.selectedICCApproval.fileReference1 = this.fileReference1;
+                }
+                if (this.fileReference2 !== '') {
+                    this.selectedICCApproval.fileReference2 = this.fileReference2;
+                }
                 this._iccApprovalService.updateApprovalByICC(this.selectedICCApproval).subscribe(() => {
+                    this.fileReference1 = '';
+                    this.fileReference2 = '';
                     this._matSnackBar.open('ICC Approval details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            
             }
         }
+    }
+
+    async uploadDocument1(file: FormData): Promise<any> {
+        console.log('uploading document 1');
+        let httpData = await this._iccApprovalService.uploadVaultDocument(file).toPromise();
+        this.fileReference1 = httpData.fileReference;
+    }
+
+    async uploadDocument2(file: FormData): Promise<any> {
+        console.log('uploading document 2');
+        let httpData = await this._iccApprovalService.uploadVaultDocument(file).toPromise();
+        this.fileReference2 = httpData.fileReference;
     }
 }

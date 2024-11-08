@@ -17,7 +17,9 @@
             <ng-container matColumnDef="value">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Value</mat-header-cell>
                 <mat-cell *matCellDef="let obj">
-                    <p class="text-truncate">{{ obj.value }}</p>
+                    <a *ngIf="obj.particulars === 'Minutes Document'" [href]="getFileURL(obj.value)">Download</a>
+                    <a *ngIf="obj.particulars === 'Mail from Company Secretary/Internal Note Sheet'" [href]="getFileURL(obj.value)">Download</a>
+                    <p *ngIf="obj.particulars !== 'Minutes Document' && obj.particulars !== 'Mail from Company Secretary/Internal Note Sheet'" class="text-truncate">{{ obj.value }}</p>
                 </mat-cell>
             </ng-container>
 

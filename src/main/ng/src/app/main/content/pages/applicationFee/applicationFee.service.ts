@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
+import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 
 @Injectable()
 export class ApplicationFeeService {
@@ -12,7 +13,9 @@ export class ApplicationFeeService {
     /**
      * constructor()
      */
-    constructor(private _http: HttpClient, private _loanEnquiryService: LoanEnquiryService) {
+    constructor(private _http: HttpClient, 
+        private _loanEnquiryService: LoanEnquiryService, 
+        private _enquiryActionService: EnquiryActionService) {
     }
 
     /**
@@ -34,8 +37,23 @@ export class ApplicationFeeService {
             this._loanEnquiryService.getPurposeOfLoans(),
             this._loanEnquiryService.getUnitOfMeasures(),
             this.getProjectDetails(this._applicationFee.value.id),
-            this._loanEnquiryService.getProductTypes()
+            this._loanEnquiryService.getProductTypes(),
+            this.getEnquiryCompletion(this._loanEnquiryService.selectedLoanApplicationId.value)
         ]);
+    }
+
+    /**
+     * getEnquiryCompletion()
+     */
+    getEnquiryCompletion(loanApplicationId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._enquiryActionService.getEnquiryAction(loanApplicationId).subscribe(response => {
+                this._enquiryActionService.getEnquiryCompletion(response.id).subscribe(response => {
+                    observer.next(response);
+                    observer.complete();
+                });
+            });
+        });
     }
 
     /**

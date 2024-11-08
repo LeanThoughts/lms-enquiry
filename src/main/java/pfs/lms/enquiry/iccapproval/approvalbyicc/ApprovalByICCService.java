@@ -56,6 +56,8 @@ public class ApprovalByICCService implements IApprovalByICCService {
         approvalByIcc.setEdApprovalDate(approvalByIccResource.getEdApprovalDate());
         approvalByIcc.setCfoApprovalDate(approvalByIccResource.getCfoApprovalDate());
         approvalByIcc.setRemarks(approvalByIccResource.getRemarks());
+        approvalByIcc.setFileReference1(approvalByIccResource.getFileReference1());
+        approvalByIcc.setFileReference2(approvalByIccResource.getFileReference2());
         approvalByIcc = approvalByIccRepository.save(approvalByIcc);
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -85,6 +87,8 @@ public class ApprovalByICCService implements IApprovalByICCService {
         approvalByIcc.setRemarks(approvalByIccResource.getRemarks());
         approvalByIcc.setEdApprovalDate(approvalByIccResource.getEdApprovalDate());
         approvalByIcc.setCfoApprovalDate(approvalByIccResource.getCfoApprovalDate());
+        approvalByIcc.setFileReference1(approvalByIccResource.getFileReference1());
+        approvalByIcc.setFileReference2(approvalByIccResource.getFileReference2());
 
         approvalByIcc = approvalByIccRepository.save(approvalByIcc);
 

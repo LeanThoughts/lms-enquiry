@@ -153,12 +153,17 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         }
         else {
             this._service.searchLoanContracts(this.loanContractsSearchForm.value).subscribe((result) => {
-                const enquiryApplications = new Array<EnquiryApplicationModel>();
-                result.map(loanApplicationResourceModel => {
-                    enquiryApplications.push(new EnquiryApplicationModel(loanApplicationResourceModel));
-                });
-                this.loanContractList = enquiryApplications;
-                this.expandPanel = false;
+                if (result.length === 0) {
+                    this._matSnackBar.open('No records found for search criteria', 'OK', { duration: 7000 });
+                }
+                else {
+                    const enquiryApplications = new Array<EnquiryApplicationModel>();
+                    result.map(loanApplicationResourceModel => {
+                        enquiryApplications.push(new EnquiryApplicationModel(loanApplicationResourceModel));
+                    });
+                    this.loanContractList = enquiryApplications;
+                    this.expandPanel = false;
+                }
             });
         }
     }

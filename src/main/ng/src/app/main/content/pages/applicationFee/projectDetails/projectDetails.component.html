@@ -136,22 +136,22 @@
                     <input matInput placeholder="Project Cost (Crores)" formControlName="projectCost" maxlength="7" type="number">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="7" type="number">
+                    <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="7" type="number" (focusout)="calculateRatio()">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Promoter Contribution /Equity (Crores)" formControlName="promoterContributionEquity" maxlength="7" type="number">
+                    <input matInput placeholder="Promoter Contribution /Equity (Crores)" formControlName="promoterContributionEquity" maxlength="7" type="number" (focusout)="calculateRatio()">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Debt:Equity Ratio without grant" formControlName="debtEquityRatio" maxlength="7" type="number">
+                    <input matInput placeholder="Debt:Equity Ratio without grant" formControlName="debtEquityRatio" maxlength="7" readonly>
                 </mat-form-field>
 
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Grant/Subsidy Amount (Crores)" formControlName="grantSubsidyAmount" maxlength="7" type="number">
+                    <input matInput placeholder="Grant/Subsidy Amount (Crores)" formControlName="grantSubsidyAmount" maxlength="7" type="number" (focusout)="calculateRatio()">
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Debt:Equity Ratio with grant" formControlName="debtEquityRatioWithGrant" maxlength="7" type="number">
+                    <input matInput placeholder="Debt:Equity Ratio with grant" formControlName="debtEquityRatioWithGrant" maxlength="7" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
                     <input matInput placeholder="PFS Debt Amount (Crores)" formControlName="pfsDebtAmount" maxlength="7" type="number">
