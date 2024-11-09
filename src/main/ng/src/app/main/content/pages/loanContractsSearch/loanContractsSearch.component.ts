@@ -18,7 +18,6 @@ import { ICCApprovalService } from '../iccApproval/iccApproval.service';
 import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
 import { DocumentationService } from '../documentation/documentation.service';
 import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
-import { log } from 'console';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -230,7 +229,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                         })
                     }
                     else {
-                        this._matSnackBar.open('Cannot start ICC Approval Stage !!!', 'OK', { duration: 7000 });
+                        this._matSnackBar.open('Enquiry stage is still under process. ICC In-principle approval cannot be started until enquiry stage is completed', 'OK', { duration: 7000 });
                     }
                 }
             },

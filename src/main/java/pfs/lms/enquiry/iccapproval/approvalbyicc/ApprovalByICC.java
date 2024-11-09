@@ -29,7 +29,10 @@ public class ApprovalByICC extends AggregateRoot<ApprovalByICC> implements Clone
     private LocalDate edApprovalDate;
     private LocalDate cfoApprovalDate;
 
+    private String documentTypeMinutes;
     private String fileReference1;
+
+    private String documentTypeMailFromCS;
     private String fileReference2;
     
     public Object clone () throws CloneNotSupportedException {

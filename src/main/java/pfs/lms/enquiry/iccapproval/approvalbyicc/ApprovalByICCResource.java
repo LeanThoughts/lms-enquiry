@@ -23,6 +23,9 @@ public class ApprovalByICCResource {
     private LocalDate edApprovalDate;
     private LocalDate cfoApprovalDate;
     
+    private String documentTypeMinutes;
+    private String documentTypeMailFromCS;
+    
     private String fileReference1;
     private String fileReference2;
 

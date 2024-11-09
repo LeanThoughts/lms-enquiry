@@ -84,7 +84,7 @@ export class ICCApprovalMeetingComponent {
         // Open the dialog.
         const dialogRef = this._matDialog.open(ICCApprovalUpdateDialogComponent, {
             panelClass: 'fuse-icc-approval-update-dialog',
-            width: '750px',
+            width: '900px',
             data: {
                 loanApplicationId: this.loanApplicationId,
                 selectedICCApproval: this.selectedICCApproval,

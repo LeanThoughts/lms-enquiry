@@ -3,6 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
+import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 
 @Component({
     selector: 'fuse-icc-approval-update-dialog',
@@ -27,6 +28,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
     fileReference1: string = '';
     fileReference2: string = '';
 
+    documentTypes = LoanMonitoringConstants.documentTypes;
+
     /**
      * constructor()
      */
@@ -49,6 +52,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             remarks: [this.selectedICCApproval.remarks || ''],
             edApprovalDate: [this.selectedICCApproval.edApprovalDate || ''],
             cfoApprovalDate: [this.selectedICCApproval.cfoApprovalDate || ''],
+            documentTypeMinutes: [this.selectedICCApproval.documentTypeMinutes || ''],
+            documentTypeMailFromCS: [this.selectedICCApproval.documentTypeMailFromCS || ''],
             file1: [''],
             file2: ['']
         });
@@ -127,8 +132,6 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             if (this.selectedICCApproval.id === undefined) {
                 iccApproval.loanApplicationId = this.loanApplicationId;
                 this._iccApprovalService.createApprovalByICC(iccApproval).subscribe(() => {
-                    this.fileReference1 = '';
-                    this.fileReference2 = '';
                     this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
                         this._iccApprovalService._iccApproval.next(data);
                         this._matSnackBar.open('ICC Approval details created successfully.', 'OK', { duration: 7000 });
@@ -142,6 +145,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
                 this.selectedICCApproval.remarks = iccApproval.remarks;
                 this.selectedICCApproval.edApprovalDate = iccApproval.edApprovalDate;
                 this.selectedICCApproval.cfoApprovalDate = iccApproval.cfoApprovalDate;
+                this.selectedICCApproval.documentTypeMinutes = iccApproval.documentTypeMinutes;
+                this.selectedICCApproval.documentTypeMailFromCS = iccApproval.documentTypeMailFromCS;
                 if (this.fileReference1 !== '') {
                     this.selectedICCApproval.fileReference1 = this.fileReference1;
                 }
@@ -149,8 +154,6 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
                     this.selectedICCApproval.fileReference2 = this.fileReference2;
                 }
                 this._iccApprovalService.updateApprovalByICC(this.selectedICCApproval).subscribe(() => {
-                    this.fileReference1 = '';
-                    this.fileReference2 = '';
                     this._matSnackBar.open('ICC Approval details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            
@@ -158,12 +161,18 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
         }
     }
 
+    /**
+     * uploadDocument1()
+     */
     async uploadDocument1(file: FormData): Promise<any> {
         console.log('uploading document 1');
         let httpData = await this._iccApprovalService.uploadVaultDocument(file).toPromise();
         this.fileReference1 = httpData.fileReference;
     }
 
+    /**
+     * uploadDocument2()
+     */
     async uploadDocument2(file: FormData): Promise<any> {
         console.log('uploading document 2');
         let httpData = await this._iccApprovalService.uploadVaultDocument(file).toPromise();
