@@ -25,7 +25,7 @@ public class ApplicationFeeProjectDetailService implements IApplicationFeeProjec
 
     @Override
     public ApplicationFeeProjectDetail create(ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource,
-            String username) {
+            String username) throws CloneNotSupportedException {
                 
         LoanApplication loanApplication = loanApplicationRepository.getOne(applicationFeeProjectDetailResource.getLoanApplicationId());
 
@@ -56,6 +56,8 @@ public class ApplicationFeeProjectDetailService implements IApplicationFeeProjec
             "id", "applicationFee", "createdAt", "updatedAt");
         applicationFeeProjectDetail = applicationFeeProjectDetailRepository.save(applicationFeeProjectDetail);
 
+        saveLoanApplication(applicationFeeProjectDetail,username);
+
         return applicationFeeProjectDetail;
     }
 
@@ -82,6 +84,7 @@ public class ApplicationFeeProjectDetailService implements IApplicationFeeProjec
                 username,
                 "ApplicationFee", "ApplicationFeeProjectDetail");
 
+        saveLoanApplication(applicationFeeProjectDetail,username);
 
         return applicationFeeProjectDetail;
     }

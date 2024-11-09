@@ -17,7 +17,7 @@ public class ApplicationFeeProjectDetailController {
     @PostMapping("/applicationFeeProjectDetails/create")
     public ResponseEntity<ApplicationFeeProjectDetail> createApplicationFeeProjectDetail(
             @RequestBody ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws CloneNotSupportedException {
         String username = request.getUserPrincipal().getName();
         return ResponseEntity.ok(applicationFeeProjectDetailService.create(applicationFeeProjectDetailResource, username));
     }

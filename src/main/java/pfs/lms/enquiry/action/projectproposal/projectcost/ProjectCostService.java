@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
+import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class ProjectCostService implements IProjectCostService {
+    private final LoanApplicationRepository loanApplicationRepository;
 
     private final IChangeDocumentService changeDocumentService;
 
@@ -50,6 +53,8 @@ public class ProjectCostService implements IProjectCostService {
                 "Created",
                 username,
                 "EnquiryAction", "Project Cost" );
+
+        updateLoanApplication(projectCost);
 
         return projectCost;
     }
@@ -89,6 +94,20 @@ public class ProjectCostService implements IProjectCostService {
                 username,
                 "EnquiryAction", "Project Cost" );
 
+       updateLoanApplication(projectCost);
+
         return projectCost;
+    }
+
+    LoanApplication updateLoanApplication(ProjectCost projectCost){
+        LoanApplication loanApplication = projectCost.getProjectProposal().getEnquiryAction().getLoanApplication();
+        loanApplication.setProjectCost(projectCost.getProjectCost());
+        loanApplication.setPfsDebtAmount(projectCost.getPfsDebtAmount());
+        loanApplication.setEquity(projectCost.getEquity());
+        loanApplication.setGrantSubsidyAmount(projectCost.getGrantAmount());
+        loanApplication.setDebtEquityRatio(projectCost.getDebtEquityRatio());
+        loanApplication.setDebtEquityRatioWithGrant(projectCost.getDebtEquityRatioWithGrant());
+        loanApplication = loanApplicationRepository.save(loanApplication);
+        return loanApplication;
     }
 }

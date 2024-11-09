@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface IApplicationFeeProjectDetailService {
 
-    ApplicationFeeProjectDetail create(ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource, String username);
+    ApplicationFeeProjectDetail create(ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource, String username) throws CloneNotSupportedException;
 
     ApplicationFeeProjectDetail update(ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource, String username) throws CloneNotSupportedException;
 

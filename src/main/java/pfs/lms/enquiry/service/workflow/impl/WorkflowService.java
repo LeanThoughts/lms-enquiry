@@ -109,13 +109,11 @@ public class WorkflowService implements IWorkflowService {
     private PartnerRepository partnerRepository;
 
 
-
     @Autowired
     private UserRepository userRepository;
 
     private final RiskNotificationRepository riskNotificationRepository;
     private final RiskAssessmentRepository riskAssessmentRepository;
-
 
 
     private static final Logger log = LoggerFactory.getLogger(FileSystemStorage.class);
@@ -124,7 +122,7 @@ public class WorkflowService implements IWorkflowService {
     private final BoardApprovalService boardApprovalService;
     private final SanctionService sanctionService;
     private final IRiskAssessmentService riskAssessmentService;
-    private  final ILoanMonitoringService loanMonitoringService;
+    private final ILoanMonitoringService loanMonitoringService;
     private final ILoanAppraisalService loanAppraisalService;
     private final ICCApprovalService iccApprovalService;
     private final ApplicationFeeService applicationFeeService;
@@ -212,7 +210,7 @@ public class WorkflowService implements IWorkflowService {
                 break;
             case "Prelim Risk Assessment":
                 //Fetch the Entity
-                 riskAssessment = riskAssessmentRepository.getOne(businessProcessId);
+                riskAssessment = riskAssessmentRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "02" - Sent for Approval
                 riskAssessment.setWorkFlowStatusCode(02);
                 riskAssessment.setWorkFlowStatusDescription("Sent for Approval");
@@ -220,7 +218,7 @@ public class WorkflowService implements IWorkflowService {
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "Prelim Risk Assessment";
                 break;
-                case "ApplicationFee":
+            case "ApplicationFee":
                 //Fetch the Entity
                 applicationFee = applicationFeeRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "02" - Sent for Approval
@@ -515,7 +513,7 @@ public class WorkflowService implements IWorkflowService {
         try {
             taskService.complete(task.getId(), variables);
         } catch (Exception ex) {
-            log.info("WorkFlow Approval Exception : " + ex.getMessage()  + " :" + processName);
+            log.info("WorkFlow Approval Exception : " + ex.getMessage() + " :" + processName);
             return null;
         }
         System.out.println("--------------- Workflow APPROVAL Task Execution Finished @ : " + DateTime.now());
@@ -579,6 +577,7 @@ public class WorkflowService implements IWorkflowService {
                 riskAssessmentRepository.flush();
                 riskAssessmentService.processRiskAssessmentApproval(riskAssessment, username);
                 return iccApproval;
+
             case "Application Fee":
                 //Save entity with the new workflow status code
                 applicationFee.setWorkFlowStatusDescription("Approved");
@@ -623,7 +622,8 @@ public class WorkflowService implements IWorkflowService {
                 partnerRepository.save(partner);
                 partnerRepository.flush();
                 businessPartnerService.updatePartnerAfterApproval(partner, username);
-                return partner;}
+                return partner;
+        }
 
         return null;
 
@@ -652,7 +652,7 @@ public class WorkflowService implements IWorkflowService {
         switch (processName) {
             case "Monitoring":
                 loanMonitor = loanMonitorRepository.getOne(businessProcessId);
-                loanMonitoringService.processRejection(loanMonitor,username);
+                loanMonitoringService.processRejection(loanMonitor, username);
                 loanContractId = loanMonitor.getLoanApplication().getLoanContractId();
                 processInstanceId = loanMonitor.getProcessInstanceId();
                 break;
@@ -769,27 +769,27 @@ public class WorkflowService implements IWorkflowService {
         switch (processName) {
             case "Monitoring":
                 //Save entity with the new workflow status code
-                loanMonitor = loanMonitoringService.processRejection(loanMonitor,username);
+                loanMonitor = loanMonitoringService.processRejection(loanMonitor, username);
                 return loanMonitor;
             case "Appraisal":
                 //Fetch the Entity
                 loanAppraisal = loanAppraisalRepository.getOne(businessProcessId);
-                loanAppraisalService.processRejection(loanAppraisal,username);
+                loanAppraisalService.processRejection(loanAppraisal, username);
                 break;
             case "Process Enquiry":
                 //Fetch the Entity
                 enquiryAction = enquiryActionRepository.getOne(businessProcessId);
-                enquiryActionService.processRejection(enquiryAction,username);
+                enquiryActionService.processRejection(enquiryAction, username);
                 break;
             case "ICC Stage":
                 //Fetch the Entity
                 iccApproval = iccApprovalRepository.getOne(businessProcessId);
-                iccApprovalService.processRejection(iccApproval,username);
+                iccApprovalService.processRejection(iccApproval, username);
                 break;
             case "ICC In-Principal Approval":
                 //Fetch the Entity
                 iccApproval = iccApprovalRepository.getOne(businessProcessId);
-                iccApprovalService.processRejection(iccApproval,username);
+                iccApprovalService.processRejection(iccApproval, username);
                 break;
             case "Prelim Risk Assessment":
                 //Fetch the Entity
@@ -799,29 +799,29 @@ public class WorkflowService implements IWorkflowService {
             case "Application Fee":
                 //Fetch the Entity
                 applicationFee = applicationFeeRepository.getOne(businessProcessId);
-                applicationFeeService.processRejection(applicationFee,username);
+                applicationFeeService.processRejection(applicationFee, username);
                 break;
             case "Board Approval":
                 //Fetch the Entity
                 boardApproval = boardApprovalRepository.getOne(businessProcessId);
-                boardApprovalService.processRejection(boardApproval,username);
+                boardApprovalService.processRejection(boardApproval, username);
                 break;
             case "Sanction":
                 //Fetch the Entity
                 sanction = sanctionRepository.getOne(businessProcessId);
-                sanctionService.processRejection(sanction,username);
+                sanctionService.processRejection(sanction, username);
                 break;
             case "BusinessPartner":
                 //Fetch the Entity
                 partner = partnerRepository.getOne(businessProcessId);
                 partnerRepository.save(partner);
-                businessPartnerService.updatePartnerAfterRejection(partner,username);
+                businessPartnerService.updatePartnerAfterRejection(partner, username);
                 break;
             case "Partner":
                 //Fetch the Entity
                 partner = partnerRepository.getOne(businessProcessId);
                 partnerRepository.save(partner);
-                businessPartnerService.updatePartnerAfterRejection(partner,username);
+                businessPartnerService.updatePartnerAfterRejection(partner, username);
                 break;
         }
 
