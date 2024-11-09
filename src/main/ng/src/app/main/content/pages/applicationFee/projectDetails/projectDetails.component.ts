@@ -121,8 +121,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             loanPurpose: 'loanPurpose',
             projectCapacity: 'projectCapacity',
             projectCapacityUnit: 'projectCapacityUnit',
-            state: 'state',
-            productTypeCode: 'productTypeCode',
+            // state: 'state',
+            // productTypeCode: 'productTypeCode',
             term: 'term',
             enquiryCompletionDate: 'enquiryCompletionDate',
             loanType: 'loanType',
@@ -133,16 +133,16 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             projectTypeCoreSector:   'projectCoreSector',  // 'projectTypeCoreSector',
             purposeOfLoan: 'purposeOfLoan',
             projectCost: 'projectCost',
-          // tslint:disable-next-line:comment-format
+            //   tslint:disable-next-line:comment-format
             debt: 'projectDebtAmount' , // 'debt',
             promoterContributionEquity:   'equity',  // 'promoterContributionEquity',
             debtEquityRatio: 'debtEquityRatio',
             grantSubsidyAmount: 'grantSubsidyAmount',
             debtEquityRatioWithGrant: 'debtEquityRatioWithGrant',
             pfsDebtAmount: 'pfsDebtAmount',
-            rateOfInterest: 'rateOfInterest',
+            // rateOfInterest: 'rateOfInterest',
             tenorYear: 'tenorYear',
-            tenorMonths: 'tenorMonths',
+            // tenorMonths: 'tenorMonths',
             moratoriumPeriod: 'moratoriumPeriod',
             moratoriumPeriodUnit: 'moratoriumPeriodUnit',
             constructionPeriod: 'constructionPeriod',
@@ -158,6 +158,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             this.projectDetailForm.patchValue(formValues);
             this.projectDetailForm.controls['productTypeCode'].setValue(this.enquiryCompletion.productType);
             this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.expectedInterestRate);
+            this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
+            this.projectDetailForm.controls['tenorMonths'].setValue(loanApplication.tenorMonth);
         }
         else {
             const formValues = {};
