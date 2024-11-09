@@ -2,6 +2,8 @@ package pfs.lms.enquiry.applicationfee.invoice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
@@ -200,5 +202,25 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         });
 
         return meetingNumbers;
+    }
+
+    @Override
+    public List<Partner> searchPartners(PartnerSearchResource partnerSearchResource) {
+        List<Partner> partners = null;
+        Specification<Partner> specification = Specification.where(null);
+        if (!partnerSearchResource.getPartyName1().equals("")) {
+            specification = specification.and(PartnerSearchSpecification.partyName1Contains(partnerSearchResource.getPartyName1()));
+        }
+        if (!partnerSearchResource.getPartyNumber().equals("")) {
+            specification = specification.and(PartnerSearchSpecification.partyNumberContains(partnerSearchResource.getPartyNumber()));
+        }
+        if (!partnerSearchResource.getSearchTerm1().equals("")) {
+            specification = specification.and(PartnerSearchSpecification.searchTerm1Contains(partnerSearchResource.getSearchTerm1()));
+        }
+        if (!partnerSearchResource.getSearchTerm2().equals("")) {
+            specification = specification.and(PartnerSearchSpecification.searchTerm2Contains(partnerSearchResource.getSearchTerm2()));
+        }
+        partners = partnerRepository.findAll(specification);
+        return partners;
     }
 }

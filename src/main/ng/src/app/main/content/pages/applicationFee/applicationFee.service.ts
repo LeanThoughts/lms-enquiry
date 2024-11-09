@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 
@@ -27,7 +27,7 @@ export class ApplicationFeeService {
             this._loanEnquiryService.getLoanApplication(this._loanEnquiryService.selectedLoanApplicationId.value),
             this._loanEnquiryService.getProjectTypes(),
             this.getMeetingNumbers(this._loanEnquiryService.selectedLoanApplicationId.value),
-            this.getAllPartners(),
+            of([]),
             this._loanEnquiryService.getStates(),
             this._loanEnquiryService.getLoanTypes(),
             this._loanEnquiryService.getLoanClasses(),
@@ -57,10 +57,10 @@ export class ApplicationFeeService {
     }
 
     /**
-     * getAllPartners()
+     * searchPartners()
      */
-    public getAllPartners(): Observable<any> {
-        return this._http.get('enquiry/api/partners/all');
+    public searchPartners(partner: any): Observable<any> {
+        return this._http.post('enquiry/api/invoicingDetails/searchPartners', partner);
     }
     
     /**

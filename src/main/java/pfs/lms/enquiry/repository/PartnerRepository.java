@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pfs.lms.enquiry.domain.Partner;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PartnerRepository extends JpaRepository<Partner, UUID> {
+public interface PartnerRepository extends JpaRepository<Partner, UUID>, JpaSpecificationExecutor<Partner> {
     List<Partner> findByEmail(String email);
     Partner findByUserName(String username);
     Partner findByPartyNumber(Integer partyNumber);
@@ -31,4 +32,5 @@ public interface PartnerRepository extends JpaRepository<Partner, UUID> {
             "like %:searchString%")
     List<Partner> findBySearchString(@Param("searchString") String searchString);
 
+    List<Partner> findByPartyName1Containing(String partyName1);
 }

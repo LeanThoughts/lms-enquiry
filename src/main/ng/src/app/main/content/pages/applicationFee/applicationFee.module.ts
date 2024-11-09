@@ -27,6 +27,7 @@ import { InceptionFeeReceiptUpdateDialogComponent } from './inceptionFeeReceiptU
 import { InceptionFeeReceiptComponent } from './inceptionFeeReceipt/inceptionFeeReceipt.component';
 import { InvoicingDetailsComponent } from './invoicingDetails/invoicingDetails.component';
 import { ApplicationFeeProjectDetailsComponent } from './projectDetails/projectDetails.component';
+import { SearchPartnersDialogComponent } from './searchPartnersDialog/searchPartnersDialog.component';
 
 const routes = [
     {
@@ -85,7 +86,8 @@ const MY_FORMATS = {
         InceptionFeeReceiptComponent,
         InceptionFeeReceiptUpdateDialogComponent,
         InvoicingDetailsComponent,
-        ApplicationFeeProjectDetailsComponent
+        ApplicationFeeProjectDetailsComponent,
+        SearchPartnersDialogComponent
     ],
     providers: [
         ApplicationFeeService,
@@ -105,12 +107,14 @@ const MY_FORMATS = {
         InceptionFeeReceiptComponent,
         InceptionFeeReceiptUpdateDialogComponent,
         InvoicingDetailsComponent,
-        ApplicationFeeProjectDetailsComponent
+        ApplicationFeeProjectDetailsComponent,
+        SearchPartnersDialogComponent
     ],
     entryComponents: [
         TermSheetUpdateDialogComponent,
         FormalRequestUpdateDialogComponent,
-        InceptionFeeReceiptUpdateDialogComponent
+        InceptionFeeReceiptUpdateDialogComponent,
+        SearchPartnersDialogComponent
     ]
 })
 export class ApplicationFeeModule {

@@ -2,6 +2,8 @@ package pfs.lms.enquiry.applicationfee.invoice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import pfs.lms.enquiry.domain.Partner;
+
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +40,11 @@ public class InvoicingDetailController {
                                                          HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(invoicingDetailService.getICCMeetingNumbers(loanApplicationId));
+    }
+
+    @PostMapping("/invoicingDetails/searchPartners")
+    public ResponseEntity<List<Partner>> searchPartners(@RequestBody PartnerSearchResource partnerSearchResource,
+                                                        HttpServletRequest request) {
+        return ResponseEntity.ok(invoicingDetailService.searchPartners(partnerSearchResource));
     }
 }

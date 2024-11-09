@@ -1,16 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ApplicationFeeService } from '../applicationFee.service';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ActivatedRoute } from '@angular/router';
 import { StateModel } from 'app/main/content/model/state.model';
-import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
-import { Observable } from 'rxjs';
-import { PartnerModel } from 'app/main/content/model/partner.model';
-import { map, startWith } from 'rxjs/operators';
-import { PartnerService } from '../../administration/partner/partner.service';
+import { SearchPartnersDialogComponent } from '../searchPartnersDialog/searchPartnersDialog.component';
 
 @Component({
     selector: 'fuse-invoicing-details',
@@ -30,10 +26,10 @@ export class InvoicingDetailsComponent implements OnInit {
     states = StateModel.getStates();
     projectTypes = [];
 
-    partnerNameFilteredOptions: Observable<PartnerModel[]>;
-    partnerIdFilteredOptions: Observable<PartnerModel[]>;
+    // partnerNameFilteredOptions: Observable<PartnerModel[]>;
+    // partnerIdFilteredOptions: Observable<PartnerModel[]>;
   
-    partners: Array<PartnerModel>;
+    // partners: Array<PartnerModel>;
     selectedPartnerId = '';
 
     partnerNameFormControl = new FormControl();
@@ -44,8 +40,12 @@ export class InvoicingDetailsComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, private _applicationFeeService: ApplicationFeeService,
-        _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, _activatedRoute: ActivatedRoute) {
+    constructor(private _formBuilder: FormBuilder, 
+                private _applicationFeeService: ApplicationFeeService,
+                _enquiryService: LoanEnquiryService, 
+                private _matSnackBar: MatSnackBar, 
+                _activatedRoute: ActivatedRoute, 
+                private _matDialog: MatDialog) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
@@ -80,102 +80,12 @@ export class InvoicingDetailsComponent implements OnInit {
                 this.loadPartnerForm(data);
             });
         }
-
-        this.partners = _activatedRoute.snapshot.data.routeResolvedData[4];
-        // Check for nulls and convert partynumber to string
-        this.partners.map(x => {
-            if (!x.partyNumber)
-                x.partyNumber = '';
-            else
-                x.partyNumber = x.partyNumber.toString();
-            if (!x.addressLine1) x.addressLine1 = '';
-            if (!x.addressLine2) x.addressLine2 = '';
-            if (!x.street) x.street = '';
-            if (!x.city) x.city = '';
-        })
     }
 
     /**
      * ngOnInit()
      */
     ngOnInit(): void {
-        this.partnerNameFilteredOptions = this.partnerNameFormControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(name => name ? this._filterPartnersByName(name) : this.partners.slice())
-            );
-
-        this.partnerIdFilteredOptions = this.partnerIdFormControl.valueChanges
-            .pipe(
-                startWith(''),
-                map(name => name ? this._filterPartnersById(name) : this.partners.slice())
-            );
-    }
-
-    /**
-     * validatePartnerByName()
-     */
-    validatePartnerByName($event) {
-        let partner: PartnerModel;
-        if ($event.target.value.trim() !== '') {
-            const filteredPartners = this.partners.filter(partner => partner.partyName1.toLowerCase().localeCompare(
-                $event.target.value.toLowerCase()) === 0);
-            if (filteredPartners.length > 0) {
-                partner = filteredPartners[0];
-                this.partnerIdFormControl.setValue(partner.partyNumber);
-                this.selectedPartnerId = partner.id;
-                this.loadPartnerForm(partner);
-            }
-        }
-    }
-
-    /**
-     * validatePartnerById()
-     */
-    validatePartnerById($event) {
-        let partner: PartnerModel;
-        if ($event.target.value.trim() !== '') {
-            const filteredPartners = this.partners.filter(partner => partner.partyNumber.localeCompare($event.target.value) === 0);
-            if (filteredPartners.length > 0) {
-                partner = filteredPartners[0];
-                this.partnerNameFormControl.setValue(partner.partyName1);
-                this.selectedPartnerId = partner.id;
-                this.loadPartnerForm(partner);
-            }
-        }
-    }
-
-    /**
-     * _filterPartnersByName()
-     */
-    private _filterPartnersByName(value: string): PartnerModel[] {
-        const filterValue = value.toLowerCase();
-        return this.partners.filter(partner => partner.partyName1.toLowerCase().indexOf(filterValue) === 0);
-    }
-
-    /**
-     * _filterPartnersById()
-     */
-    private _filterPartnersById(value: string): PartnerModel[] {
-        const filterValue = value.toLowerCase();
-        return this.partners.filter(partner => {
-            if (partner.partyNumber.trim() !== '') {
-                return partner.partyNumber.toLowerCase().indexOf(filterValue) === 0
-            }
-            else
-                return false;
-        });
-    }
-
-    /**
-     * getPartyAddress()
-     */
-    getPartyAddress(partner: PartnerModel): string {
-        let str = partner.addressLine1.trim();
-        str = str + ' ' + partner.addressLine2;
-        str = str.trim() + ' ' + partner.street;
-        str = str.trim() + ' ' + partner.city;
-        return str.trim();;
     }
 
     /**
@@ -237,5 +147,24 @@ export class InvoicingDetailsComponent implements OnInit {
                 });
             }
         }
+    }
+
+    searchPartners() {
+        // Open the search dialog.
+        const dialogRef = this._matDialog.open(SearchPartnersDialogComponent, {
+            panelClass: 'fuse-search-partners-dialog',
+            width: '900px',
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result.selectedPartner) {
+                if (result.selectedPartner.id) {
+                    this.loadPartnerForm(result.selectedPartner);
+                }
+                else {
+                    this._matSnackBar.open('Errors occured while selection a partner.', 'OK', { duration: 7000 });
+                }
+            }
+        });        
     }
 }
