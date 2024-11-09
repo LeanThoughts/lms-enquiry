@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.Partner;
+import pfs.lms.enquiry.repository.PartnerAutoCompleteProjection;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.collectingAndThen;

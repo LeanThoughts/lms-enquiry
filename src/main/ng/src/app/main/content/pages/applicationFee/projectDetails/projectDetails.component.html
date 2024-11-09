@@ -9,7 +9,7 @@
                 </button>
             </div>
 
-            <div fxLayout="row">
+            <div fxLayout="row" class="mt-16">
                 <span><b>Project Details</b></span>
             </div>
 
@@ -62,7 +62,11 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
-                    <input matInput placeholder="Term" formControlName="term" maxlength="3" required type="number">
+                    <mat-select placeholder="Term" formControlName="term" required>
+                        <mat-option [value]="'1'">Short Term (Less than 1 Year)</mat-option>
+                        <mat-option [value]="'2'">Medium Term (Between 1 and 5 years)</mat-option>
+                        <mat-option [value]="'3'">Long Term(Greater than 5 years)</mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="25">
                     <input matInput [matDatepicker]="picker" placeholder="Enquiry Completion Date" formControlName="enquiryCompletionDate" required>

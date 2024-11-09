@@ -69,7 +69,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             projectCapacityUnit: [''],
             state: [''],
             productTypeCode: [''],
-            term: ['', [Validators.pattern(/^\d+$/)]],
+            term: [''],
             enquiryCompletionDate: [''],
             loanType: [''],
             loanClass: [''],

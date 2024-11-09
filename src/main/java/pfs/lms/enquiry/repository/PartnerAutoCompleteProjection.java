@@ -1,10 +1,10 @@
-package pfs.lms.enquiry.controller;
-
-import java.util.UUID;
+package pfs.lms.enquiry.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
