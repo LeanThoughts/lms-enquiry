@@ -31,7 +31,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
     financingTypes: any;
     projectTypeCoreSectors: any;
     productTypes: any;
-    
+
     projectDetails: any;
 
     enquiryCompletion: any;
@@ -43,7 +43,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
         _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
-        
+
         this.projectTypes = _activatedRoute.snapshot.data.routeResolvedData[2]._embedded.projectTypes;
         this.states = _activatedRoute.snapshot.data.routeResolvedData[5];
         this.loanTypes = _activatedRoute.snapshot.data.routeResolvedData[6]._embedded.loanTypes;
@@ -54,7 +54,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
         this.purposeOfLoans = _activatedRoute.snapshot.data.routeResolvedData[11]._embedded.purposeOfLoans;
         this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[12]._embedded.unitOfMeasures;
         this.productTypes = _activatedRoute.snapshot.data.routeResolvedData[14]._embedded.products;
-        
+
         this.projectDetails = _activatedRoute.snapshot.data.routeResolvedData[13];
 
         this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[15];
@@ -148,7 +148,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             constructionPeriodUnit: 'constructionPeriodUnit'
         };
         if (!this.projectDetails || Object.keys(this.projectDetails).length === 0) {
-            
+
             let loanApplication = this._activatedRoute.snapshot.data.routeResolvedData[1].loanApplication;
             let formValues = {};
             Object.keys(formFields).forEach(key => {
@@ -156,7 +156,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             });
             this.projectDetailForm.patchValue(formValues);
             this.projectDetailForm.controls['productTypeCode'].setValue(this.enquiryCompletion.productType);
-            this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.iccApprovedRoi);
+            this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.expectedInterestRate);
         }
         else {
             let formValues = {};
@@ -217,5 +217,5 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             this.projectDetailForm.get('debtEquityRatioWithGrant').setValue('');
         }
     }
-        
+
 }

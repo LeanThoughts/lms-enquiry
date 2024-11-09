@@ -100,7 +100,7 @@ export class ProjectDetailUpdateComponent implements OnInit {
             assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
             financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
             endUseOfFunds: new FormControl(this._enquiryActionService._loanApplication.loanApplication.endUseOfFunds),
-            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.iccApprovedRoi, [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
+            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.expectedInterestRate, [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
             fees: new FormControl(this._enquiryActionService._loanApplication.loanApplication.fees,
                 [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             tenorYear: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorYear,
@@ -202,7 +202,7 @@ export class ProjectDetailUpdateComponent implements OnInit {
                 });
             }
             // Set _projectDetailForm.dirty to false
-            this._projectDetailForm.markAsPristine();            
+            this._projectDetailForm.markAsPristine();
         }
     }
 
