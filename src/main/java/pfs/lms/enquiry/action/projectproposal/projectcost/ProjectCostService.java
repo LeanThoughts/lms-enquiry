@@ -11,6 +11,7 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Slf4j
 @Service
@@ -77,7 +78,7 @@ public class ProjectCostService implements IProjectCostService {
         projectCost.setDebtEquityRatioWithGrant(resource.getDebtEquityRatioWithGrant());
         if (resource.getDebt() != null && resource.getEquity() != null && resource.getDebt() > 0 && resource.getEquity() > 0) {
             double d = resource.getDebt() / resource.getEquity();
-            d = new BigDecimal(d).setScale(2).doubleValue();
+            d = new BigDecimal(d).setScale(2, RoundingMode.HALF_UP).doubleValue();
             projectCost.setDebtEquityRatio(d);
         }
         projectCost = projectCostRepository.save(projectCost);

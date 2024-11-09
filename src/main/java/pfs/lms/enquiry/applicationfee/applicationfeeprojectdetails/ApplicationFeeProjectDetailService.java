@@ -138,16 +138,16 @@ public class ApplicationFeeProjectDetailService implements IApplicationFeeProjec
 
         loanApplicationRepository.save(loanApplication);
 
-        changeDocumentService.createChangeDocument(
-                loanApplication.getId(),
-                loanApplication.getId().toString(),
-                loanApplication.getId().toString(),
-                loanApplication.getEnquiryNo().getId().toString(),
-                oldLoanApplication,
-                loanApplication,
-                "Updated",
-                username,
-                "LoanApplication", "LoanApplication");
+//        changeDocumentService.createChangeDocument(
+//                loanApplication.getId(),
+//                loanApplication.getId().toString(),
+//                loanApplication.getId().toString(),
+//                loanApplication.getEnquiryNo().getId().toString(),
+//                oldLoanApplication,
+//                loanApplication,
+//                "Updated",
+//                username,
+//                "LoanApplication", "LoanApplication");
 
 
         return  loanApplication;

@@ -30,7 +30,7 @@ public class ApplicationFeeProjectDetail extends AggregateRoot<ApplicationFeePro
     private String projectCapacityUnit;
     private String state;
     private String productTypeCode;
-    private Double term;
+    private String term;
     private LocalDate enquiryCompletionDate;
     private String loanType;
     private String loanClass;
