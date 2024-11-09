@@ -183,7 +183,7 @@ export class ApplicationFeeService {
    * getInceptionFees()
    */
   public getInceptionFees(applicationFeeId: string): Observable<any> {
-    return this._http.get('enquiry/api/inceptionFees/ + applicationFeeId');
+    return this._http.get("enquiry/api/inceptionFees/" + applicationFeeId);
   }
 
     /**

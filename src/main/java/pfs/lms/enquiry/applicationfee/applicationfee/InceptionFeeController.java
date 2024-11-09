@@ -74,11 +74,16 @@ public class InceptionFeeController {
                 ResponseEntity responseEntity = ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
                         request.getUserPrincipal().getName()));
 
-                log.info("Updating Application Fee Completed : " + inceptionFeeResource.getInvoiceNumber());
+                log.info("Creating Application Fee Completed : " + inceptionFeeResource.getInvoiceNumber());
                 log.info(responseEntity.toString());
                 return responseEntity;
 
             }
+
+        } else {
+            log.error("Loan Application Not Found for  Loan Contract Id : " + inceptionFeeResource.getLoanContractId());
+            log.info("Input Content below : " + inceptionFeeResource.getLoanContractId());
+            log.info(inceptionFeeResource.toString());
 
         }
         return null;
@@ -125,9 +130,11 @@ public class InceptionFeeController {
     }
 
     @GetMapping("/inceptionFees/{id}")
-    public ResponseEntity<List<InceptionFee>> get(@PathVariable("id") UUID applicationFeeId){
+    public ResponseEntity<List<InceptionFee>> get(@PathVariable("id") String applicationFeeId){
 
-        ApplicationFee applicationFee = applicationFeeRepository.getOne(applicationFeeId);
+        UUID applicationFeeIdUUID = UUID.fromString(applicationFeeId);
+
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(applicationFeeIdUUID);
         List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByApplicationFeeId(applicationFee.getId());
         return ResponseEntity.ok(inceptionFeeList);
     }
