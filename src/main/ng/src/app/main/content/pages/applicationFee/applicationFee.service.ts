@@ -13,8 +13,8 @@ export class ApplicationFeeService {
     /**
      * constructor()
      */
-    constructor(private _http: HttpClient, 
-        private _loanEnquiryService: LoanEnquiryService, 
+    constructor(private _http: HttpClient,
+        private _loanEnquiryService: LoanEnquiryService,
         private _enquiryActionService: EnquiryActionService) {
     }
 
@@ -62,7 +62,7 @@ export class ApplicationFeeService {
     public searchPartners(partner: any): Observable<any> {
         return this._http.post('enquiry/api/invoicingDetails/searchPartners', partner);
     }
-    
+
     /**
      * getApplicationFee()
      */
@@ -172,12 +172,19 @@ export class ApplicationFeeService {
         return this._http.get("enquiry/api/invoicingDetails/meetingNumbers/" + loanApplicationId);
     }
 
-    /**
-     * getInceptionFees()
-     */
-    public getInceptionFees(applicationFeeId: string): Observable<any> {
-        return this._http.get('enquiry/api/inceptionFees/search/findByApplicationFeeId?applicationFeeId=' + applicationFeeId);
-    }
+    // /**
+    //  * getInceptionFees()
+    //  */
+    // public getInceptionFees(applicationFeeId: string): Observable<any> {
+    //     return this._http.get('enquiry/api/inceptionFees/search/findByApplicationFeeId?applicationFeeId=' + applicationFeeId);
+    // }
+
+  /**
+   * getInceptionFees()
+   */
+  public getInceptionFees(applicationFeeId: string): Observable<any> {
+    return this._http.get("enquiry/api/inceptionFees/" + applicationFeeId);
+  }
 
     /**
      * deleteInceptionFee()

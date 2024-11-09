@@ -2,10 +2,13 @@ package pfs.lms.enquiry.applicationfee.applicationfee;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.applicationfee.ApplicationFee;
+import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 
@@ -18,6 +21,7 @@ import java.util.UUID;
 //@RestController
 @RequiredArgsConstructor
 public class InceptionFeeController {
+    private final ApplicationFeeRepository applicationFeeRepository;
     private final LoanApplicationRepository loanApplicationRepository;
 
     private final IInceptionFeeService inceptionFeeService;
@@ -70,11 +74,16 @@ public class InceptionFeeController {
                 ResponseEntity responseEntity = ResponseEntity.ok(inceptionFeeService.create(inceptionFeeResource,
                         request.getUserPrincipal().getName()));
 
-                log.info("Updating Application Fee Completed : " + inceptionFeeResource.getInvoiceNumber());
+                log.info("Creating Application Fee Completed : " + inceptionFeeResource.getInvoiceNumber());
                 log.info(responseEntity.toString());
                 return responseEntity;
 
             }
+
+        } else {
+            log.error("Loan Application Not Found for  Loan Contract Id : " + inceptionFeeResource.getLoanContractId());
+            log.info("Input Content below : " + inceptionFeeResource.getLoanContractId());
+            log.info(inceptionFeeResource.toString());
 
         }
         return null;
@@ -119,6 +128,17 @@ public class InceptionFeeController {
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(inceptionFee);
     }
+
+    @GetMapping("/inceptionFees/{id}")
+    public ResponseEntity<List<InceptionFee>> get(@PathVariable("id") String applicationFeeId){
+
+        UUID applicationFeeIdUUID = UUID.fromString(applicationFeeId);
+
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(applicationFeeIdUUID);
+        List<InceptionFee> inceptionFeeList = inceptionFeeRepository.findByApplicationFeeId(applicationFee.getId());
+        return ResponseEntity.ok(inceptionFeeList);
+    }
+
 
 
 }

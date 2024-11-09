@@ -41,7 +41,7 @@ export class InceptionFeeReceiptComponent {
      */
     refreshTable(): void {
         this._applicationFeeService.getInceptionFees(this._applicationFeeService._applicationFee.value.id).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.inceptionFees);
+            this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
     }
