@@ -100,7 +100,8 @@ export class ProjectDetailUpdateComponent implements OnInit {
             assistanceType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.assistanceType),
             financingType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.financingType),
             endUseOfFunds: new FormControl(this._enquiryActionService._loanApplication.loanApplication.endUseOfFunds),
-            roi: new FormControl(this._enquiryActionService._loanApplication.loanApplication.expectedInterestRate, [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
+            roi: new FormControl(Number(this._enquiryActionService._loanApplication.loanApplication.expectedInterestRate).toFixed(2), 
+                [Validators.pattern(MonitoringRegEx.holdingPercentage)]),
             fees: new FormControl(this._enquiryActionService._loanApplication.loanApplication.fees,
                 [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             tenorYear: new FormControl(this._enquiryActionService._loanApplication.loanApplication.tenorYear,
@@ -225,7 +226,7 @@ export class ProjectDetailUpdateComponent implements OnInit {
         this._projectDetailForm.controls['assistanceType'].setValue(this._projectDetail.assistanceType);
         this._projectDetailForm.controls['financingType'].setValue(this._projectDetail.financingType);
         this._projectDetailForm.controls['endUseOfFunds'].setValue(this._projectDetail.endUseOfFunds);
-        this._projectDetailForm.controls['roi'].setValue(this._projectDetail.roi);
+        this._projectDetailForm.controls['roi'].setValue(Number(this._projectDetail.roi).toFixed(2));
         this._projectDetailForm.controls['fees'].setValue(this._projectDetail.fees);
         this._projectDetailForm.controls['tenorYear'].setValue(this._projectDetail.tenorYear);
         this._projectDetailForm.controls['tenorMonths'].setValue(this._projectDetail.tenorMonths);

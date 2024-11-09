@@ -2,6 +2,13 @@
     <div class="content-card mat-white-bg mat-elevation-z4 p-16" fusePerfectScrollbar style="width: 100%">
         <form [formGroup]="projectDetailForm">
 
+            
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+            </div>
+
             <div fxLayout="row">
                 <span><b>Project Details</b></span>
             </div>
@@ -199,12 +206,6 @@
                     </mat-select>
                 </mat-form-field>
 
-            </div>
-
-            <div mat-dialog-actions fxLayout="row">
-                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
-                    Submit
-                </button>
             </div>
         </form>
     </div>

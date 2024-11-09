@@ -2,6 +2,12 @@
     <div class="content-card mat-white-bg mat-elevation-z4 p-16" fusePerfectScrollbar style="width: 100%">
         <form [formGroup]="invoicingDetailForm">
 
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+            </div>
+
             <div fxLayout="row">
                 <span><b>Search Partner</b></span>
             </div>
@@ -123,12 +129,6 @@
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="Email" formControlName="email" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
-            </div>
-
-            <div mat-dialog-actions fxLayout="row">
-                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
-                    Submit
-                </button>
             </div>
         </form>
     </div>

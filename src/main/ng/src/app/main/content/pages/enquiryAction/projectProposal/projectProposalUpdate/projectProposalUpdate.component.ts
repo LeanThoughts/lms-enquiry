@@ -51,7 +51,7 @@ export class ProjectProposalUpdateComponent {
 
         this.projectProposalForm = this._formBuilder.group({
             loanEnquiryNumber: [ this.projectProposal.loanEnquiryNumber || _enquiryActionService._loanApplication.loanApplication.enquiryNo.id ],
-            proposalFormSharingDate: [ this.projectProposal.proposalFormSharingDate || undefined ],
+            proposalFormSharingDate: [ this.projectProposal.proposalFormSharingDate || new Date() ],
             proposalStatus: [ this.projectProposal.proposalStatus || '' ],
             documentName: [ this.projectProposal.documentName || '' ],
             documentType: [ this.projectProposal.documentType || '' ],
