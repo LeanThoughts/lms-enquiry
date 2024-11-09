@@ -236,10 +236,15 @@ public class ProjectProposalService implements IProjectProposalService {
 
 
         if (projectCost != null) {
-            loanApplication.setProjectCost(projectCost.getProjectCost());
+
             loanApplication.setProjectDebtAmount(projectCost.getDebt());
-            loanApplication.setEquity(projectCost.getEquity());
+            loanApplication.setProjectCost(projectCost.getProjectCost());
             loanApplication.setPfsDebtAmount(projectCost.getPfsDebtAmount());
+            loanApplication.setEquity(projectCost.getEquity());
+            loanApplication.setGrantSubsidyAmount(projectCost.getGrantAmount());
+            loanApplication.setDebtEquityRatio(projectCost.getDebtEquityRatio());
+            loanApplication.setDebtEquityRatioWithGrant(projectCost.getDebtEquityRatioWithGrant());
+
         }
 
         if (projectProposalOtherDetail != null){

@@ -54,7 +54,7 @@ public class ProjectCostService implements IProjectCostService {
                 username,
                 "EnquiryAction", "Project Cost" );
 
-        updateLoanApplication(projectCost);
+       // updateLoanApplication(projectCost);
 
         return projectCost;
     }
@@ -94,7 +94,7 @@ public class ProjectCostService implements IProjectCostService {
                 username,
                 "EnquiryAction", "Project Cost" );
 
-       updateLoanApplication(projectCost);
+       //updateLoanApplication(projectCost);
 
         return projectCost;
     }

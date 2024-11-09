@@ -115,7 +115,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
      * populateFormValues()
      */
     populateFormValues() {
-        let formFields = {
+        const formFields = {
             projectName: 'projectName',
             promoterName: 'promoterName',
             loanPurpose: 'loanPurpose',
@@ -130,11 +130,12 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             assistanceType: 'assistanceType',
             financingType: 'financingType',
             projectType: 'projectType',
-            projectTypeCoreSector: 'projectTypeCoreSector',
+            projectTypeCoreSector:   'projectCoreSector',  // 'projectTypeCoreSector',
             purposeOfLoan: 'purposeOfLoan',
             projectCost: 'projectCost',
-            debt: 'debt',
-            promoterContributionEquity: 'promoterContributionEquity',
+          // tslint:disable-next-line:comment-format
+            debt: 'projectDebtAmount' , // 'debt',
+            promoterContributionEquity:   'equity',  // 'promoterContributionEquity',
             debtEquityRatio: 'debtEquityRatio',
             grantSubsidyAmount: 'grantSubsidyAmount',
             debtEquityRatioWithGrant: 'debtEquityRatioWithGrant',
@@ -149,8 +150,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
         };
         if (!this.projectDetails || Object.keys(this.projectDetails).length === 0) {
 
-            let loanApplication = this._activatedRoute.snapshot.data.routeResolvedData[1].loanApplication;
-            let formValues = {};
+            const loanApplication = this._activatedRoute.snapshot.data.routeResolvedData[1].loanApplication;
+            const formValues = {};
             Object.keys(formFields).forEach(key => {
                 formValues[key] = loanApplication[formFields[key]];
             });
@@ -159,7 +160,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.expectedInterestRate);
         }
         else {
-            let formValues = {};
+            const formValues = {};
             Object.keys(formFields).forEach(key => {
                 formValues[key] = this.projectDetails[formFields[key]];
             });
@@ -173,8 +174,8 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
      */
     saveProjectDetails() {
         if (Object.keys(this.projectDetails).length === 0) {
-            var projectDetails = this.projectDetailForm.value;
-            var dt = new Date(projectDetails.enquiryCompletionDate);
+            const projectDetails = this.projectDetailForm.value;
+            const dt = new Date(projectDetails.enquiryCompletionDate);
             projectDetails.enquiryCompletionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             console.log('projectDetails', projectDetails);
             projectDetails.loanApplicationId = this.loanApplicationId;
@@ -183,11 +184,11 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             });
         }
         else {
-            var projectDetails = this.projectDetails;
+            const projectDetails = this.projectDetails;
             Object.keys(this.projectDetailForm.value).forEach(key => {
                 projectDetails[key] = this.projectDetailForm.value[key];
             });
-            var dt = new Date(projectDetails.enquiryCompletionDate);
+            const dt = new Date(projectDetails.enquiryCompletionDate);
             projectDetails.enquiryCompletionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             console.log('projectDetails', projectDetails);
             this._applicationFeeService.updateProjectDetails(projectDetails).subscribe((data) => {
@@ -201,12 +202,14 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
      */
     calculateRatio(): void {
         // Calculate debt equity ratio without grant
-        var debt = this.projectDetailForm.controls.debt.value;
-        var equity = this.projectDetailForm.controls.promoterContributionEquity.value;
-        if (equity > 0)
-            this.projectDetailForm.controls.debtEquityRatio.setValue((debt/equity).toFixed(2));
-        else if (equity == 0)
+        const debt = this.projectDetailForm.controls.debt.value;
+        const equity = this.projectDetailForm.controls.promoterContributionEquity.value;
+        if (equity > 0) {
+            this.projectDetailForm.controls.debtEquityRatio.setValue((debt / equity).toFixed(2));
+        }
+        else if (equity == 0) {
             this.projectDetailForm.controls.debtEquityRatio.setValue(0);
+             }
 
         // Calculate debt equity ratio with grant
         const grantAmount = this.projectDetailForm.get('grantSubsidyAmount').value;

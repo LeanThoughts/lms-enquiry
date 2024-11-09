@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
+import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 @Service
 @RequiredArgsConstructor
 public class ProjectDetailService implements IProjectDetailService {
+    private final LoanApplicationRepository loanApplicationRepository;
 
     private final IChangeDocumentService changeDocumentService;
 
@@ -127,6 +130,44 @@ public class ProjectDetailService implements IProjectDetailService {
                 username,
                 "EnquiryAction", "Project Detail" );
 
+        //updateLoanApplication(projectDetail, projectDetail.getProjectProposal());
+
         return projectDetail;
+    }
+
+    LoanApplication updateLoanApplication(ProjectDetail projectDetail, ProjectProposal projectProposal){
+
+        LoanApplication loanApplication = projectProposal.getEnquiryAction().getLoanApplication();
+
+        loanApplication.setProjectName(projectDetail.getProjectName());
+        loanApplication.setPromoterName(projectDetail.getPromoterName());
+        loanApplication.setLoanPurpose(projectDetail.getLoanPurpose());
+        loanApplication.setEndUseOfFunds(projectDetail.getEndUseOfFunds());
+        loanApplication.setProjectCapacity(projectDetail.getProjectCapacity());
+        loanApplication.setProjectCapacityUnit(projectDetail.getProjectCapacityUnit());
+        loanApplication.setProjectLocationState(projectDetail.getState());
+        loanApplication.setProjectDistrict(projectDetail.getDistrict());
+        loanApplication.setLoanClass(projectDetail.getLoanClass());
+        loanApplication.setAssistanceType(projectDetail.getAssistanceType());
+        loanApplication.setFinancingType(projectDetail.getFinancingType());
+        loanApplication.setProjectType(projectDetail.getProjectType());
+        loanApplication.setProjectCoreSector(projectDetail.getProjectCoreSector());
+        loanApplication.setRenewableFlag(projectDetail.getRenewableFlag());
+        loanApplication.setPolicyExposure(projectDetail.getPolicyExposure());
+        loanApplication.setFees(projectDetail.getFees());
+        loanApplication.setTenorYear(projectDetail.getTenorYear());
+        loanApplication.setTenorMonth(projectDetail.getTenorMonths());
+        loanApplication.setMoratoriumPeriodUnit(projectDetail.getMoratoriumPeriodUnit());
+        loanApplication.setMoratoriumPeriod(projectDetail.getMoratoriumPeriod());
+        loanApplication.setConstructionPeriodUnit(projectDetail.getConstructionPeriodUnit());
+        loanApplication.setConstructionPeriod(projectDetail.getConstructionPeriod());
+        loanApplication.setExpectedInterestRate(projectDetail.getRoi());
+        loanApplication.setProjectType(projectDetail.getProjectType());
+        loanApplication.setLoanType(projectDetail.getLoanType());
+        loanApplication.setProjectTypeCoreSector(projectDetail.getProjectTypeCoreSector());
+        loanApplication.setPurposeOfLoan(projectDetail.getPurposeOfLoan());
+
+        loanApplicationRepository.save(loanApplication);
+        return loanApplication;
     }
 }

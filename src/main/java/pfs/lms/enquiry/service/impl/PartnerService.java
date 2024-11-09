@@ -292,6 +292,9 @@ public class PartnerService implements IPartnerService {
     public List<Partner> getAllPartners() {
         List<Partner> partners = partnerRepository.findByPartyName1NotNull();
         partners.sort(Comparator.comparing(Partner::getPartyName1));
+
+        partners = partners.stream().filter(partner -> partner.getPartyNumber() != null).collect(Collectors.toList());
+
         return partners;
     }
 
