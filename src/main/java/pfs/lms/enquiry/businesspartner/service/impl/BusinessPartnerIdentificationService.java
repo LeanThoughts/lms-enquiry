@@ -88,6 +88,19 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
         Object oldObject = businessPartnerIdentification.clone();
 
+        IdentificationCategory identificationCategory = identificationCategoryRepository.findById(businessPartnerIdentificationResource.getIdentificationCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryId().toString()
+                        + " : Identification category not found"));
+
+        if (identificationCategory.isDuplicateCheckRequired()) {
+            List<BusinessPartnerIdentification> existingIdentifications = businessPartnerIdentificationRepository
+                    .findByIdentificationCategoryId(businessPartnerIdentificationResource.getIdentificationCategoryId());
+            if (existingIdentifications != null) {
+                String partyName1 = existingIdentifications.get(0).getPartner().getPartyName1();
+                throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partyName1 + ")");
+            }
+        }
+
         businessPartnerIdentification.setIdentificationCategoryId(businessPartnerIdentificationResource.
                 getIdentificationCategoryId());
         businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
