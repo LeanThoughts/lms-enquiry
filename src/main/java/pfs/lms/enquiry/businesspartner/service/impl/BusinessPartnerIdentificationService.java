@@ -3,7 +3,6 @@ package pfs.lms.enquiry.businesspartner.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
@@ -16,6 +15,7 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Service
@@ -38,10 +38,11 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 + " : Identification category not found"));
         
         if (identificationCategory.isDuplicateCheckRequired()) {
-            BusinessPartnerIdentification existingIdentification = businessPartnerIdentificationRepository
+            List<BusinessPartnerIdentification> existingIdentifications = businessPartnerIdentificationRepository
                 .findByIdentificationCategoryId(businessPartnerIdentificationResource.getIdentificationCategoryId());
-            if (existingIdentification != null) {
-                throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partner.getPartyName() + ")");
+            if (existingIdentifications != null) {
+                String partyName1 = existingIdentifications.get(0).getPartner().getPartyName1();
+                throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partyName1 + ")");
             }
         }
 
