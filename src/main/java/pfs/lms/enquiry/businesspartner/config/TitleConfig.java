@@ -21,10 +21,11 @@ public class TitleConfig implements CommandLineRunner {
 
         Title title = new Title();
 
-        title = titleRepository.findByCode("0001");if (title == null){ title = new Title(null,"0001","Ms."); titleRepository.save(title); }
-        title = titleRepository.findByCode("0002");if (title == null){ title = new Title(null,"0002","Mr."   ); titleRepository.save(title); }
-        title = titleRepository.findByCode("0003");if (title == null){ title = new Title(null,"0003","Company"   ); titleRepository.save(title); }
-        title = titleRepository.findByCode("0004");if (title == null){ title = new Title(null,"0004","Mr. and Mrs."   ); titleRepository.save(title); }
+
+        title = titleRepository.findByCode("0001");if (title == null){ title = new Title(null,"0001","Ms.","1"); titleRepository.save(title); }
+        title = titleRepository.findByCode("0002");if (title == null){ title = new Title(null,"0002","Mr." ,"1"  ); titleRepository.save(title); }
+        title = titleRepository.findByCode("0003");if (title == null){ title = new Title(null,"0003","Company", "2"   ); titleRepository.save(title); }
+        title = titleRepository.findByCode("0004");if (title == null){ title = new Title(null,"0004","Mr. and Mrs.","3"   ); titleRepository.save(title); }
 
         return;
     }

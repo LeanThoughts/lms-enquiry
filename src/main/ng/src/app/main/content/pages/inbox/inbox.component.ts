@@ -27,10 +27,10 @@ import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 export class InboxComponent implements OnInit {
 
     @ViewChild(InboxItemsComponent) inboxItemsComponent: InboxItemsComponent;
-    
+
     constructor(private _inboxService: InboxService ,
                 private _matSnackBar: MatSnackBar,
-                private _router: Router, 
+                private _router: Router,
                 private _loanEnquiryService: LoanEnquiryService,
                 private _dialogRef: MatDialog,
                 private _applicationFeeService: ApplicationFeeService,
@@ -41,7 +41,7 @@ export class InboxComponent implements OnInit {
                 private _loanMonitoringService: LoanMonitoringService,
                 private _boardApprovalService: BoardApprovalService,
                 private _loanAppraisalService: LoanAppraisalService) {
-        
+
     }
 
     ngOnInit(): void {
@@ -71,7 +71,7 @@ export class InboxComponent implements OnInit {
                     this._router.navigate(['/enquiryAction']);
                 });
             }
-            else if (selectedInboxItem.processName === 'ICCApproval') {
+            else if (selectedInboxItem.processName === 'ICC In-Principal Approval') {
                 this._iccApprovalService.getICCApproval(response.loanApplication.id).subscribe(iccApproval => {
                     this._iccApprovalService._iccApproval.next(iccApproval);
                     this._router.navigate(['/iccApprovalStage']);
@@ -126,7 +126,7 @@ export class InboxComponent implements OnInit {
             width: '750px'
         });
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((result) => { 
+        dialogRef.afterClosed().subscribe((result) => {
             if (!result.cancel) {
                 let selectedInboxItem = this.inboxItemsComponent.selectedItem;
                 let workFlowProcessRequestResource = {
@@ -134,14 +134,14 @@ export class InboxComponent implements OnInit {
                     'processName': selectedInboxItem.processName,
                     'processInstanceId': selectedInboxItem.id,
                     'rejectionReason': result.rejectionReason
-                }        
+                }
                 this._matSnackBar.open('Reject in Process.', 'OK', { duration: 25000 });
                 this._inboxService.rejectTask(workFlowProcessRequestResource).subscribe(response => {
                     this._matSnackBar.open( 'Selected task is rejected and email notification was sent to requestor', 'Ok', { duration: 7000 });
                     this.inboxItemsComponent.refreshList();
-                });            
+                });
             }
-        }); 
+        });
     }
 
     /**
@@ -169,6 +169,6 @@ export class InboxComponent implements OnInit {
         this._inboxService.fetchTasks().subscribe(response => {
             this.inboxItemsComponent.inboxItems = response;
         });
-        this.inboxItemsComponent.selectedItem = undefined;   
+        this.inboxItemsComponent.selectedItem = undefined;
     }
 }
