@@ -18,6 +18,7 @@ import pfs.lms.enquiry.resource.WorkflowRequestResource;
 import pfs.lms.enquiry.service.workflow.IWorkflowService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,7 +41,7 @@ public class ICCApprovalController {
                 rejectedByICCRepository.findByIccApprovalId(workflowRequestResource.getBusinessProcessId());
         RejectedByCustomer rejectedByCustomer =
                 rejectedByCustomerRepository.findByIccApprovalId(workflowRequestResource.getBusinessProcessId());
-        ICCReasonForDelay iccReasonForDelay =
+        List<ICCReasonForDelay> iccReasonForDelay =
                 iccReasonForDelayRepository.findByIccApprovalId(workflowRequestResource.getBusinessProcessId());
 
         if (approvalByICC == null && rejectedByICC == null && rejectedByCustomer == null && iccReasonForDelay == null)
