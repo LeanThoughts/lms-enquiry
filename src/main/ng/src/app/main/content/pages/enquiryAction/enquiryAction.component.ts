@@ -7,7 +7,7 @@ import { MatDialog, MatSnackBar, MatTabGroup } from '@angular/material';
 import { AppService } from 'app/app.service';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from './enquiryAction.service';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { log } from 'console';
 
 
@@ -55,7 +55,9 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 public _appService: AppService,
                 public _enquiryActionService: EnquiryActionService,
                 private _matSnackBar: MatSnackBar, 
-                private _location: Location) {
+                private _location: Location,
+                private _datepipe: DatePipe
+            ) {
 
         this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[6];
 
@@ -104,7 +106,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
             leadFI: [this.selectedEnquiry.leadFI || ''],
             stage: [this.selectedEnquiry.functionalStatusDescription || ''],
             enquiryNumber: [this.selectedEnquiry.enquiryNumber || ''],
-            enquiryDate: [this.selectedEnquiry.loanEnquiryDate || '']
+            enquiryDate: [this._datepipe.transform(this.selectedEnquiry.loanEnquiryDate, 'dd/MM/yyyy') || '']
         });
 
         this.subscriptions.add(

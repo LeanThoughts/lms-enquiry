@@ -7,6 +7,7 @@ import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringCo
 import { LFAModel } from 'app/main/content/model/lfa.model';
 import { LFAReportAndFeeModel } from 'app/main/content/model/lfaReportAndFee.model';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-lfa-report-fee-update-dialog',
@@ -27,7 +28,7 @@ export class LFAReportAndFeeUpdateDialogComponent {
     reportTypes = LoanMonitoringConstants.reportTypes;
     feePaidStatuses = LoanMonitoringConstants.feePaidStatuses;
     feeReceiptStatuses = LoanMonitoringConstants.feeReceiptStatuses;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
@@ -39,7 +40,9 @@ export class LFAReportAndFeeUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LFAReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedLFA = _dialogData.selectedLFA;
@@ -69,11 +72,6 @@ export class LFAReportAndFeeUpdateDialogComponent {
             reportDate: [this.selectedLFAReportAndFee.reportDate || ''],
             percentageCompletion: [this.selectedLFAReportAndFee.percentageCompletion, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedLFAReportAndFee.remarks || '']
-        });
-
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-            return obj1.value.localeCompare(obj2.value);
         });
     }
 

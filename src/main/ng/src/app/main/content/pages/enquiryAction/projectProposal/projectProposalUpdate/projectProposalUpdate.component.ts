@@ -24,7 +24,7 @@ export class ProjectProposalUpdateComponent {
     projectProposal: any = {};
     projectProposalForm: FormGroup;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     private _loanApplication: any;
     
@@ -42,6 +42,8 @@ export class ProjectProposalUpdateComponent {
                 private _matSnackBar: MatSnackBar,
                 public _loanEnquiryService: LoanEnquiryService,
                 private _enquiryActionService: EnquiryActionService) { 
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected project proposal details from the dialog's data attribute
         this.projectProposal = Object.assign({}, _dialogData.projectProposal);

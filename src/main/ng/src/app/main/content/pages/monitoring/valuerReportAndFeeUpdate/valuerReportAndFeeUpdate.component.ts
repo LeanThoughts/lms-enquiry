@@ -7,6 +7,7 @@ import { LoanMonitoringService } from '../loanMonitoring.service';
 import { LIEReportAndFeeModel } from 'app/main/content/model/lieReportAndFee.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-valuer-report-fee-update-dialog',
@@ -27,7 +28,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
     reportTypes = LoanMonitoringConstants.reportTypes;
     feePaidStatuses = LoanMonitoringConstants.feePaidStatuses;
     feeReceiptStatuses = LoanMonitoringConstants.feeReceiptStatuses;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
@@ -39,7 +40,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<ValuerReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedValuer = _dialogData.selectedValuer;
@@ -71,10 +72,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
             remarks: [this.selectedValuerReportAndFee.remarks || '']
         });
 
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-                return obj1.value.localeCompare(obj2.value);
-        });
+        this.documentTypes = this._loanEnquiryService.documentTypes;
     }
 
     /**

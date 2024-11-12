@@ -7,6 +7,7 @@ import { TRAModel } from 'app/main/content/model/tra.model';
 import { TRAStatementModel } from 'app/main/content/model/traStatement.model';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-tra-statement-update-dialog',
@@ -26,7 +27,7 @@ export class TRAStatementUpdateDialogComponent {
 
     viewRights = LoanMonitoringConstants.viewRights;
     periodQuarters = LoanMonitoringConstants.periodQuarters;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
@@ -38,7 +39,7 @@ export class TRAStatementUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<TRAStatementUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedTRA = _dialogData.selectedTRA;
@@ -60,10 +61,7 @@ export class TRAStatementUpdateDialogComponent {
             file: ['']
         });
 
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((doc1, doc2) => {
-            return doc1.value.localeCompare(doc2.value);
-        });
+        this.documentTypes = this._loanEnquiryService.documentTypes;
     }
 
     /**

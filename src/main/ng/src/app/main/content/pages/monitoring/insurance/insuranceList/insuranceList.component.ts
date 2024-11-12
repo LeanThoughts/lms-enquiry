@@ -29,9 +29,9 @@ export class InsuranceListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
-        this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        _loanMonitoringService.getInsurances(this.loanApplicationId).subscribe(data => {
+    constructor(private _loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+        this.loanApplicationId = this._loanEnquiryService.selectedLoanApplicationId.value;
+        this._loanMonitoringService.getInsurances(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
@@ -102,9 +102,9 @@ export class InsuranceListComponent {
      * getDocumentTypeDescription()
      */
     getDocumentTypeDescription(documentType: string): string {
-        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        const obj = this._loanEnquiryService.documentTypes.filter(f => f.code === documentType)[0];
         if (obj !== undefined)
-            return obj.value;
+            return obj.description;
         else
             return '';
     }

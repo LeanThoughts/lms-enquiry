@@ -6,6 +6,7 @@ import { SanctionService } from '../sanction.service';
 import { BoardApprovalService } from '../../boardApproval/boardApproval.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-sanction-letter-update-dialog',
@@ -23,7 +24,7 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
 
     sanctionLetterForm: FormGroup;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     sanctionTypes = [];
     
@@ -41,7 +42,7 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
     originalInterestRateReadonly = false;
     revisedInterestRateReadonly = false;
 
-    approvalByBoards: any;
+    _approvalByBoards: any;
 
     /**
      * constructor()
@@ -51,14 +52,17 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
                 private _boardApprovalService: BoardApprovalService,
                 public _dialogRef: MatDialogRef<SanctionLetterUpdateDialogComponent>, 
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-                private _matSnackBar: MatSnackBar) {
+                private _matSnackBar: MatSnackBar,
+                private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         console.log('in constructor');
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedSanctionLetter = Object.assign({}, _dialogData.selectedSanctionLetter);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        this.approvalByBoards = this._boardApprovalService._approvalByBoards.value;
-        
+        this._approvalByBoards = this._boardApprovalService._approvalByBoards.value;
+
         if (_dialogData.selectedSanctionLetter !== undefined) {
             if (_dialogData.operation === 'updateSanctionLetter') {
                 this.dialogTitle = 'Modify Sanction Letter';

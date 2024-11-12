@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-icc-approval-update-dialog',
@@ -28,14 +29,16 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
     fileReference1: string = '';
     fileReference2: string = '';
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
         public _dialogRef: MatDialogRef<ICCApprovalUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedICCApproval = Object.assign({}, _dialogData.selectedICCApproval);

@@ -40,9 +40,9 @@ export class LoanDocumentationListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
-        this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
-        _loanMonitoringService.getLoanDocumentations(this.loanApplicationId).subscribe(data => {
+    constructor(private _loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+        this.loanApplicationId = this._loanEnquiryService.selectedLoanApplicationId.value;
+        this._loanMonitoringService.getLoanDocumentations(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
@@ -76,11 +76,11 @@ export class LoanDocumentationListComponent {
    * getDocumentType()
    */
   getDocumentType(documentType: string): string {
-    const filtered = LoanMonitoringConstants.documentTypes.filter(obj => obj.code === documentType);
+    const filtered = this._loanEnquiryService.documentTypes.filter(obj => obj.code === documentType);
     return filtered[0].value;
   }
 
-    /**
+    /** 
      * addLIE()
      */
     addLoanDocumentation(): void {

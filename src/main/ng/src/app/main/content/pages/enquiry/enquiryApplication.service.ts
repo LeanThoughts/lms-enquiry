@@ -21,6 +21,8 @@ export class LoanEnquiryService implements Resolve<any> {
   projectTypes: any[] = [];
   financingTypes: any[] = [];
   
+  documentTypes: any[] = [];
+
     /**
      *
      */
@@ -31,6 +33,10 @@ export class LoanEnquiryService implements Resolve<any> {
 
         this.getFinancingTypes().subscribe(data => {
             this.financingTypes = data._embedded.financingTypes;
+        });
+
+        this.getDocumentTypes().subscribe(data => {
+            this.documentTypes = data;
         });
     }
 
@@ -87,6 +93,10 @@ export class LoanEnquiryService implements Resolve<any> {
         this.getAllPartners()
       ]);
     }
+  }
+
+  public getDocumentTypes(): Observable<any> {
+    return this._http.get('enquiry/api/documentTypes');
   }
 
   public getAllPartners(): Observable<any> {

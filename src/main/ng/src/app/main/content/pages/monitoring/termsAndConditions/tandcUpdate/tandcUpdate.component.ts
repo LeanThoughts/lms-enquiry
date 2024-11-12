@@ -6,6 +6,7 @@ import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { TandCModel } from 'app/main/content/model/tandc.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { forkJoin, Observable } from 'rxjs';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-tandc-update-dialog',
@@ -23,7 +24,7 @@ export class TandCUpdateDialogComponent {
     tandcUpdateForm: FormGroup;
 
     communications = LoanMonitoringConstants.communications;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = []; 
     brlReasonsForAmendment = LoanMonitoringConstants.brlReasonsForAmendment;
     
     /**
@@ -36,7 +37,9 @@ export class TandCUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<TandCUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _enquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._enquiryService.documentTypes;
 
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedTandC !== undefined) {
@@ -70,12 +73,7 @@ export class TandCUpdateDialogComponent {
             internalDocumentRemarks: [this.selectedTandC.internalDocumentRemarks || ''],
             internalDocumentTitle: [this.selectedTandC.internalDocumentTitle || ''],
             brlReasonsForAmendment: [this.selectedTandC.brlReasonsForAmendment || '']
-        });
-        
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((doc1, doc2) => {
-            return doc1.value.localeCompare(doc2.value);
-        })
+        });        
     }
 
     /**
@@ -127,17 +125,17 @@ export class TandCUpdateDialogComponent {
                 var dt3 = new Date(tandc.dateOfIssueOfAmendedDocument);
                 tandc.dateOfIssueOfAmendedDocument = new Date(Date.UTC(dt3.getFullYear(), dt3.getMonth(), dt3.getDate()));
 
-                if (response[0] !== {}) {
+                if (Object.keys(response[0]).length !== 0) {
                     tandc.fileReference = response[0].fileReference;
                 }
-                if (response[1] !== {}) {
+                if (Object.keys(response[1]).length !== 0) {
                     tandc.amendedDocumentFileReference = response[1].fileReference;
                 }
-                if (response[2] !== {}) {
+                if (Object.keys(response[2]).length !== 0) {
                     tandc.leadBankerDocumentFileReference = response[2].fileReference;
                 }
-                if (response[3] !== {}) {
-                    tandc.internalDocumentFileReference = response[2].fileReference;
+                if (Object.keys(response[3]).length !== 0) {
+                    tandc.internalDocumentFileReference = response[3].fileReference;
                 }
 
                 if (this._dialogData.operation === 'addT&C') {

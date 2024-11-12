@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-insurance-update-dialog',
@@ -22,14 +23,14 @@ export class InsuranceUpdateDialogComponent implements OnInit {
 
     allowUpdates = true;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
     
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<InsuranceUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedInsurance = Object.assign({}, _dialogData.selectedInsurance);
@@ -39,6 +40,8 @@ export class InsuranceUpdateDialogComponent implements OnInit {
                 this.dialogTitle = 'Modify Insurance Details';
             }
         }
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
     }
 
     /**

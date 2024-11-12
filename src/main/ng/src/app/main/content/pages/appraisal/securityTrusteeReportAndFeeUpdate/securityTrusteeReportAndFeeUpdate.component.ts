@@ -6,6 +6,7 @@ import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringCo
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanAppraisalService } from '../loanAppraisal.service';
 import { LoanMonitoringService } from '../../monitoring/loanMonitoring.service';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-securityTrustee-report-fee-update-dialog',
@@ -26,14 +27,17 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
     reportTypes = LoanMonitoringConstants.reportTypes;
     feePaidStatuses = LoanMonitoringConstants.feePaidStatuses;
     feeReceiptStatuses = LoanMonitoringConstants.feeReceiptStatuses;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<SecurityTrusteeReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar, private _loanAppraisalService: LoanAppraisalService) {
+        private _matSnackBar: MatSnackBar, private _loanAppraisalService: LoanAppraisalService,
+        private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedSecurityTrustee = _dialogData.selectedSecurityTrustee;
@@ -63,11 +67,6 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
             reportDate: [this.selectedSecurityTrusteeReportAndFee.reportDate || ''],
             percentageCompletion: [this.selectedSecurityTrusteeReportAndFee.percentageCompletion, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedSecurityTrusteeReportAndFee.remarks || '']
-        });
-
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-            return obj1.value.localeCompare(obj2.value);
         });
     }
 

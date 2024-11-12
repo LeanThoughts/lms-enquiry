@@ -29,7 +29,7 @@ export class TandCListComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_enquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(private _enquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getTermsAndConditions(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -77,8 +77,8 @@ export class TandCListComponent implements OnInit {
      * @param documentType 
      */
     getDocumentType(documentType: string): string {
-        const filtered = LoanMonitoringConstants.documentTypes.filter(obj => obj.code === documentType);
-        return filtered[0].value;    
+        const filtered = this._enquiryService.documentTypes.filter(obj => obj.code === documentType);
+        return filtered[0].description;    
     }
 
     

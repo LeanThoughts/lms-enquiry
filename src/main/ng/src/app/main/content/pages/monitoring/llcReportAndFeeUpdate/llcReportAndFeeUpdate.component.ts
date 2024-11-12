@@ -7,6 +7,7 @@ import { LoanMonitoringService } from '../loanMonitoring.service';
 import { LIEReportAndFeeModel } from 'app/main/content/model/lieReportAndFee.model';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-llc-report-fee-update-dialog',
@@ -27,7 +28,7 @@ export class LLCReportAndFeeUpdateDialogComponent {
     reportTypes = LoanMonitoringConstants.reportTypes;
     feePaidStatuses = LoanMonitoringConstants.feePaidStatuses;
     feeReceiptStatuses = LoanMonitoringConstants.feeReceiptStatuses;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
@@ -39,7 +40,9 @@ export class LLCReportAndFeeUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LLCReportAndFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedLLC = _dialogData.selectedLLC;
@@ -69,11 +72,6 @@ export class LLCReportAndFeeUpdateDialogComponent {
             reportDate: [this.selectedLLCReportAndFee.reportDate || ''],
             percentageCompletion: [this.selectedLLCReportAndFee.percentageCompletion , [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedLLCReportAndFee.remarks || '']
-        });
-
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-                return obj1.value.localeCompare(obj2.value);
         });
     }
 

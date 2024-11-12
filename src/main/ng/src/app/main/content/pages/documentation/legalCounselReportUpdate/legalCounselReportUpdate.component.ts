@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { DocumentationService } from '../documentation.service';
 import { LoanMonitoringService } from '../../monitoring/loanMonitoring.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-legal-counsel-report-update-dialog',
@@ -22,14 +23,17 @@ export class LegalCounselReportUpdateDialogComponent implements OnInit {
     legalCounselReportForm: FormGroup;
 
     // businessPartnerRoles = LoanMonitoringConstants.businessPartnerRoles;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _documentationService: DocumentationService,
         public _dialogRef: MatDialogRef<LegalCounselReportUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar, private _loanMonitoringService: LoanMonitoringService) {
+        private _matSnackBar: MatSnackBar, private _loanMonitoringService: LoanMonitoringService,
+        private _loanEnquiryService: LoanEnquiryService) {
+        
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected legal counsel details from the dialog's data attribute.
         this.selectedLegalCounselId = _dialogData.selectedLegalCounselId;
@@ -43,11 +47,6 @@ export class LegalCounselReportUpdateDialogComponent implements OnInit {
             this.selectedLegalCounselId = _dialogData.selectedLegalCounselId;
             this.selectedLegalCounselReport = {};
         }
-
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-            return obj1.value.localeCompare(obj2.value);
-        });
     }
 
     /**

@@ -41,7 +41,7 @@ export class TRAStatementListComponent implements OnDestroy {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(private _loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
 
@@ -76,8 +76,8 @@ export class TRAStatementListComponent implements OnDestroy {
      * @param documentType 
      */
     getDocumentType(documentType: string): string {
-        const filtered = LoanMonitoringConstants.documentTypes.filter(obj => obj.code === documentType);
-        return filtered[0].value;    
+        const filtered = this._loanEnquiryService.documentTypes.filter(obj => obj.code === documentType);
+        return filtered[0].description;    
     }
 
     /**

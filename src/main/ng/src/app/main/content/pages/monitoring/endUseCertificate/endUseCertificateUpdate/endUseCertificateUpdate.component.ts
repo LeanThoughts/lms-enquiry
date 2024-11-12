@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-end-use-certificate-update-dialog',
@@ -22,14 +23,16 @@ export class EndUseCertificateUpdateDialogComponent implements OnInit {
 
     allowUpdates = true;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
     
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<EndUseCertificateUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedEndUseCertificate = Object.assign({}, _dialogData.selectedEndUseCertificate);

@@ -9,6 +9,7 @@ import {LoanDocumentationModel} from '../../../model/loanDocumentation.model';
 import {DocumentationTypeModel} from '../../../model/documentationType.model';
 import {DocumentationStatusModel} from '../../../model/documentationStatus.model';
 import {MonitoringRegEx} from '../../../others/monitoring.regEx';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-loan-documentation-dialog',
@@ -28,7 +29,7 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
     // businessPartnerRoles = LoanMonitoringConstants.businessPartnerRoles;
     documentationTypes: DocumentationTypeModel[] = new Array();
     documentationStatuses: DocumentationStatusModel[] = new Array();
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
 
 
@@ -45,7 +46,9 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
      */
     constructor(private _formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<LoanDocumentationUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedLoanDocumentation !== undefined) {
@@ -84,12 +87,6 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
         });
       });
 
-      // Sort document types array
-      this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-        return obj1.value.localeCompare(obj2.value);
-      });
-
-      this.documentationTypes = LoanMonitoringConstants.documentationTypes;
       this.documentationStatuses = LoanMonitoringConstants.documentationStatuses;
     }
 

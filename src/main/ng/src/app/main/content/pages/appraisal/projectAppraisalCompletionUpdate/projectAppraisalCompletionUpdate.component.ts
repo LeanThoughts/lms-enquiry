@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { LoanAppraisalService } from '../loanAppraisal.service';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
   selector: 'fuse-project-appraisal-completion-update',
@@ -15,10 +16,10 @@ export class ProjectAppraisalCompletionUpdateComponent {
 
     _projectAppraisalCompletionForm: FormGroup;
     _projectAppraisalCompletion: any;
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     today: Date = new Date();
-    
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -30,13 +31,16 @@ export class ProjectAppraisalCompletionUpdateComponent {
                 private _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<ProjectAppraisalCompletionUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
-                private _matSnackBar: MatSnackBar) { 
+                private _matSnackBar: MatSnackBar,
+                private _loanEnquiryService: LoanEnquiryService) { 
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
         this._projectAppraisalCompletion = Object.assign({}, _dialogData.projectAppraisalCompletion);
         // this._projectAppraisalCompletion.fileReference = '';
         console.log('this._projectAppraisalCompletion', this._projectAppraisalCompletion);
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         this._projectAppraisalCompletionForm = _formBuilder.group({
             dateOfProjectAppraisalCompletion: [ this._projectAppraisalCompletion.dateOfProjectAppraisalCompletion || undefined ],

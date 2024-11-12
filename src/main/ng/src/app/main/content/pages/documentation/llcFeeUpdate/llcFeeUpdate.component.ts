@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { DocumentationService } from '../documentation.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-llc-fee-update-dialog',
@@ -20,14 +21,14 @@ export class LLCFeeUpdateDialogComponent implements OnInit {
 
     llcFeeForm: FormGroup;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _documentationService: DocumentationService,
         public _dialogRef: MatDialogRef<LLCFeeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch selected llc fee details from the dialog's data attribute.
         if (_dialogData.operation === 'addLLCFee') {
@@ -37,12 +38,9 @@ export class LLCFeeUpdateDialogComponent implements OnInit {
         else {
             this.dialogTitle = 'Modify LLC Fee';
             this.selectedLLCFee = Object.assign({}, _dialogData.selectedLLCFee);
-        }
+        }        
 
-        // Sort document types array
-        this.documentTypes = this.documentTypes.sort((obj1, obj2) => {
-            return obj1.value.localeCompare(obj2.value);
-        });    
+        this.documentTypes = this._loanEnquiryService.documentTypes;
     }
 
     /**

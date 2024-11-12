@@ -29,7 +29,7 @@ export class EndUseCertificateListComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(private _loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getEndUseCertificates(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
@@ -102,9 +102,9 @@ export class EndUseCertificateListComponent {
      * getDocumentTypeDescription()
      */
     getDocumentTypeDescription(documentType: string): string {
-        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        const obj = this._loanEnquiryService.documentTypes.filter(f => f.code === documentType)[0];
         if (obj !== undefined)
-            return obj.value;
+            return obj.description;
         else
             return '';
     }

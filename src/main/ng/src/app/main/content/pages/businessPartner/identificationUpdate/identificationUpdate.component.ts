@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { BusinessPartnerService } from '../businessPartner.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-business-partner-identification-update-dialog',
@@ -16,7 +17,7 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
 
     dialogTitle = 'Add Identification Details';
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
     selectedIdentificationDetails: any;
 
@@ -30,10 +31,11 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
                 private _businessPartnerService: BusinessPartnerService,
                 public _dialogRef: MatDialogRef<BusinessPartnerIdentificationUpdateComponent>, 
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-                private _matSnackBar: MatSnackBar
-            ) {
+                private _matSnackBar: MatSnackBar,
+                private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch list of identification and other details from the dialog's data attribute.
+        this.documentTypes = this._loanEnquiryService.documentTypes;
         this.identificationCategories = this._dialogData.identificationCategories;
         if (_dialogData.selectedIdentificationDetails !== undefined) {
             this.selectedIdentificationDetails = Object.assign({}, _dialogData.selectedIdentificationDetails);

@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { RiskAssessmentService } from '../riskAssessment.service';
 import { ICCApprovalService } from '../../iccApproval/iccApproval.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-preliminary-risk-assessment-update-dialog',
@@ -24,7 +25,7 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
 
     approvalByIcc: any;
 
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
 
 
     /**
@@ -32,7 +33,8 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
      */
     constructor(private _formBuilder: FormBuilder, private _riskAssessmentService: RiskAssessmentService,
         public _dialogRef: MatDialogRef<PreliminaryRiskAssessmentUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar, private _iccApprovalService: ICCApprovalService) {
+        private _matSnackBar: MatSnackBar, private _iccApprovalService: ICCApprovalService,
+        private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch selected reason details from the dialog's data attribute.
         this.preliminaryRiskAssessment = Object.assign({}, _dialogData.preliminaryRiskAssessment);
@@ -58,6 +60,8 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
             documentType: [this.preliminaryRiskAssessment.documentType || ''],
             document: [this.preliminaryRiskAssessment.document || '']
         });
+        
+        this.documentTypes = this._loanEnquiryService.documentTypes;
     }
 
     /**

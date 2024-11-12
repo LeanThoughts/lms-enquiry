@@ -45,7 +45,7 @@
                     <mat-select placeholder="Document Type (Minutes)" formControlName="documentTypeMinutes">
                       <mat-option> </mat-option>
                       <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
-                        {{ documentType.value }}
+                        {{ documentType.description }}
                       </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -61,7 +61,7 @@
                     <mat-select placeholder="Document Type (Mail from Company Secretary/Internal Note Sheet)" formControlName="documentTypeMailFromCS">
                       <mat-option> </mat-option>
                       <mat-option *ngFor="let documentType of documentTypes" [value]="documentType.code">
-                        {{ documentType.value }}
+                        {{ documentType.description }}
                       </mat-option>
                     </mat-select>
                 </mat-form-field>

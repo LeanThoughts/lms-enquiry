@@ -38,7 +38,7 @@ export class LLCFeeAndLegalCounselFeeComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _documentationService: DocumentationService, private _matDialog: MatDialog,
+    constructor(private _loanEnquiryService: LoanEnquiryService, private _documentationService: DocumentationService, private _matDialog: MatDialog,
             private _matSnackBar: MatSnackBar) {
                 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -240,9 +240,9 @@ export class LLCFeeAndLegalCounselFeeComponent {
      * getDocumentTypeDescription()
      */
     getDocumentTypeDescription(documentType: string): string {
-        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        const obj = this._loanEnquiryService.documentTypes.filter(f => f.code === documentType)[0];
         if (obj !== undefined)
-            return obj.value;
+            return obj.description;
         else
             return '';
     }

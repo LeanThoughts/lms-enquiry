@@ -6,6 +6,7 @@ import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { OperatingParameterModel } from 'app/main/content/model/operatingParameter';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-operating-parameter-update-dialog',
@@ -22,7 +23,7 @@ export class OperatingParameterUpdateDialogComponent {
 
     operatingParameterUpdateForm: FormGroup;
   
-    documentTypes = LoanMonitoringConstants.documentTypes;
+    documentTypes: any[] = [];
     months = LoanMonitoringConstants.months;
 
     /**
@@ -35,7 +36,9 @@ export class OperatingParameterUpdateDialogComponent {
      */
     constructor(_formBuilder: FormBuilder, private _loanMonitoringService: LoanMonitoringService,
         public _dialogRef: MatDialogRef<OperatingParameterUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
+
+        this.documentTypes = this._loanEnquiryService.documentTypes;
 
         // Fetch selected operating parameter details from the dialog's data attribute.
         if (_dialogData.selectedOperatingParameter !== undefined) {

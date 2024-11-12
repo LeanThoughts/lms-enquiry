@@ -159,9 +159,9 @@ export class ProjectProposalOtherDetailUpdateComponent {
      * getDocumentTypeDescription()
      */
     getDocumentTypeDescription(documentType: string): string {
-        const obj = LoanMonitoringConstants.documentTypes.filter(f => f.code === documentType)[0];
+        const obj = this._enquiryApplicationService.documentTypes.filter(f => f.code === documentType)[0];
         if (obj !== undefined)
-            return obj.value;
+            return obj.description;
         else
             return '';
     }
