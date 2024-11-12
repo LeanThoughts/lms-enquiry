@@ -22,6 +22,7 @@ public class IdentificationCategory {
     private String value;
 
     private boolean duplicateCheckRequired;
+    private boolean panNumberValidation;
 
     public IdentificationCategory() {
     }

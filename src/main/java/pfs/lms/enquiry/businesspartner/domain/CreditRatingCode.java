@@ -13,11 +13,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class CreditRatingCode implements Cloneable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
+    @Id
+    @Column(name = "code", nullable = false)
     private String code;
 
     private String value;
