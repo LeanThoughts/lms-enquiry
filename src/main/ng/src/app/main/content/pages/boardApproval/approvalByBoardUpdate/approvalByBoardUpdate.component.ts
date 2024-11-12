@@ -21,12 +21,16 @@ export class ApprovalByBoardUpdateDialogComponent implements OnInit {
 
     approvalByBoardForm: FormGroup;
 
+    _pac: any; // Project Appraisal Completion
+
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _boardApprovalService: BoardApprovalService,
         public _dialogRef: MatDialogRef<ApprovalByBoardUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
+
+        this._pac = this._boardApprovalService._projectAppraisalCompletion.value;
 
         // Fetch selected details from the dialog's data attribute.
         this.selectedApprovalByBoard = Object.assign({}, _dialogData.selectedApprovalByBoard);

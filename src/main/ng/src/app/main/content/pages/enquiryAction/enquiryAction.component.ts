@@ -35,6 +35,9 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
     loanContractId: any;
     functionalStatus: string;
     
+    unitOfMeasures: any;
+    uom = '';
+
     // Declare and initialize tabGroup
     @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -54,9 +57,12 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 private _matSnackBar: MatSnackBar, 
                 private _location: Location) {
 
+        this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[6];
+
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             console.debug('selectedEnquiry', data);
             this.selectedEnquiry = data;
+            this.uom = this.unitOfMeasures.filter(uom => uom.code === this.selectedEnquiry.projectCapacityUnit)[0].value;
             if (this.selectedEnquiry.loanContractId === null)
                 this.loanContractId = this.selectedEnquiry.enquiryNumber;
             else
@@ -90,14 +96,15 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
             projectLocationState: [this.selectedEnquiry.projectLocationState || ''],
             projectType: [this.selectedEnquiry.projectType || ''],
             loanClassDescription: [this.selectedEnquiry.loanClassDescription || ''],
-            projectCapacity: [this.selectedEnquiry.projectCapacity || ''],
+            projectCapacity: [this.selectedEnquiry.projectCapacity + ' ' + this.uom || ''],
             assistanceTypeDescription: [this.selectedEnquiry.assistanceTypeDescription || ''],
             projectCost: [this.selectedEnquiry.projectCost || ''],
             loanAmount: [this.selectedEnquiry.loanAmount || ''],
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
             stage: [this.selectedEnquiry.functionalStatusDescription || ''],
-            enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
+            enquiryNumber: [this.selectedEnquiry.enquiryNumber || ''],
+            enquiryDate: [this.selectedEnquiry.loanEnquiryDate || '']
         });
 
         this.subscriptions.add(

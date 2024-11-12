@@ -2,17 +2,41 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
-export class BoardApprovalService {
+export class BoardApprovalService implements Resolve<any> {
 
+    _approvalByBoards: BehaviorSubject<any> = new BehaviorSubject({});
     _boardApproval: BehaviorSubject<any> = new BehaviorSubject({});
+    _projectAppraisalCompletion: BehaviorSubject<any> = new BehaviorSubject({});
 
     /**
      * constructor()
      * @param _http
      */
-    constructor(private _http: HttpClient, private _loanEnquiryService: LoanEnquiryService) {
+    constructor(private _http: HttpClient, 
+                private _loanEnquiryService: LoanEnquiryService, 
+                private _loanAppraisalService: LoanAppraisalService) {
+    }
+
+    /**
+     * resolve()
+     * @param route
+     * @param state
+     */
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        const loanApplicationId = this._loanEnquiryService.selectedLoanApplicationId.value;
+        return new Observable(observer => { 
+            this._loanAppraisalService.getLaonAppraisal(loanApplicationId).subscribe(response => {
+                this._loanAppraisalService.getProjectAppraisalCompletion(response.id).subscribe(projectAppraisalCompletion => {
+                    this._projectAppraisalCompletion.next(projectAppraisalCompletion);
+                    observer.next([]);
+                    observer.complete();
+                });
+            });
+        });
     }
 
     /**

@@ -70,8 +70,8 @@ export class PartnerComponent implements OnInit {
       partnerName: [],
       email: [],
       partnerNumberFrom: [],
-      partnerNumberTo: []
-
+      partnerNumberTo: [],
+      panNumber: []
     });
 
     this.partnerUpdateForm = _formBuilder.group({
@@ -97,14 +97,16 @@ export class PartnerComponent implements OnInit {
     let searchParameters: Array<string> = [searchForm.partnerName,
                                            searchForm.email,
                                            searchForm.partnerNumberFrom,
-                                           searchForm.partnerNumberTo];
+                                           searchForm.partnerNumberTo,
+                                           searchForm.panNumber];
 
 
     //Check if from search parameters are is empty
     if ( searchForm.partnerName == undefined &&
          searchForm.email == undefined &&
          searchForm.partnerNumberFrom == undefined &&
-         searchForm.partnerNumberTo == undefined) {
+         searchForm.partnerNumberTo == undefined &&
+         searchForm.panNumber == undefined) {
       this._matSnackBar.open('Error: Enter at least one search parameter', 'OK', { duration: 7000 });
 
       return;

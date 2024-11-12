@@ -39,7 +39,7 @@ export class BusinessPartnerService {
                 this.getBusinessPartnerBankDetails(this._partnerService.selectedPartner.value.id),
                 this.getBusinessPartnerRoles(this._partnerService.selectedPartner.value.id),
                 this.getAllIndustryTypes(),
-                this.getTitles()
+                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory)
             ]);
         }
         else {
@@ -50,7 +50,7 @@ export class BusinessPartnerService {
                 this.getIndustrySystems(),
                 this.getIdentificationCategories(),
                 this.getAllIndustryTypes(),
-                this.getTitles()
+                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory)
             ]);
         }
     }
@@ -58,8 +58,8 @@ export class BusinessPartnerService {
     /**
      * getTitles()
      */
-    getTitles(): Observable<any> {
-        return this._http.get<any>('enquiry/api/titles', { params: { 'size': '100', 'sort': 'id,asc' } });
+    getTitles(code: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/titles/search/findByPartnerCategory', { params: { code } });
     }
 
     /**

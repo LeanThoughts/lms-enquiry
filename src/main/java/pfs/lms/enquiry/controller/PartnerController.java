@@ -304,6 +304,7 @@ public class PartnerController {
     private List<Partner> removeDuplicatesById(List<Partner> partners) {
 
         List<Partner> uniquePartners = partners.stream()
+                .filter(partner -> partner.getPartyNumber() != null)
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Partner::getPartyNumber))),
                         ArrayList::new));
         return uniquePartners;

@@ -17,7 +17,7 @@ export class ICCReasonForDelayComponent {
     dataSource: MatTableDataSource<any>;
 
     displayedColumns = [
-        'particulars', 'value'
+        'reasonForDelay', 'date'
     ];
 
     loanApplicationId: string;
@@ -39,13 +39,34 @@ export class ICCReasonForDelayComponent {
      */
     refreshTable(): void {
         this._iccApprovalService.getReasonForDelay(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
-            console.log('reason for delay in refresh table is', data);
-            this.selectedReasonForDelay = data;
-            let tableData = [];
-            tableData.push({particulars: 'Reason For Delay', value: this.selectedReasonForDelay.reasonForDelay});
-            tableData.push({particulars: 'Date', value: this.selectedReasonForDelay.date});
-            console.log(tableData);
-            this.dataSource = new MatTableDataSource(tableData);
+            this.dataSource = new MatTableDataSource(data);
+        });
+    }
+
+    /**
+     * onSelect()
+     */
+    onSelect(reasonForDelay: any): void {
+        this.selectedReasonForDelay = reasonForDelay;
+    }
+
+    /**
+     * add()
+     */
+    add(): void {
+        // Open the dialog.
+        const dialogRef = this._matDialog.open(ICCReasonForDelayUpdateDialogComponent, {
+            panelClass: 'fuse-icc-reason-for-delay-update-dialog',
+            width: '750px',
+            data: {
+                loanApplicationId: this.loanApplicationId,
+            }
+        });
+        // Subscribe to the dialog close event to intercept the action taken.
+        dialogRef.afterClosed().subscribe((result) => { 
+            if (result.refresh) {
+                this.refreshTable();
+            }
         });
     }
 

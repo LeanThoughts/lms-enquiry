@@ -23,6 +23,7 @@ export class EnquiryApplicationModel {
     borrowerName: string;
     proposalType: string;
     financingType: string;
+    loanEnquiryDate: Date;
     
     /**
      * constructor()
@@ -50,6 +51,7 @@ export class EnquiryApplicationModel {
         this.projectType = _enquiryApplication.loanApplication.projectType;
         this.proposalType = _enquiryApplication.loanApplication.proposalType;
         this.financingType = _enquiryApplication.loanApplication.financingType;
+        this.loanEnquiryDate = _enquiryApplication.loanApplication.loanEnquiryDate;
         this.technicalStatusDescription = _enquiryApplication.loanApplication.technicalStatusDescription;
         this.rating = _enquiryApplication.loanApplication.rating;
         if (_enquiryApplication.partner)

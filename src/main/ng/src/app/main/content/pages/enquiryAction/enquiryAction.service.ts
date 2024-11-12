@@ -28,7 +28,8 @@ export class EnquiryActionService implements Resolve<any> {
             this.getRejectByCustomers(this._enquiryAction.value.id),
             this.getEnquiryCompletion(this._enquiryAction.value.id),
             this.getOtherDetails(this._enquiryAction.value.id),
-            this.getProjectProposals(this._enquiryAction.value.id)
+            this.getProjectProposals(this._enquiryAction.value.id),
+            this._loanEnquiryService.getUnitOfMeasures()
         ]);
     }
 

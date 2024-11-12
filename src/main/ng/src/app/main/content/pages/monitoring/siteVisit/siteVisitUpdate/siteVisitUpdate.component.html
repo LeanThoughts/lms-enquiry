@@ -31,12 +31,13 @@
             </div>
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput [matDatepicker]="picker2" placeholder="Date of Site Visit" formControlName="dateOfSiteVisit" readonly>
+                <mat-form-field fxFlex="33" *ngIf="siteVisitUpdateForm.get('siteVisitType').value === 1">
+                    <input matInput [matDatepicker]="picker2" placeholder="Date of Site Visit" formControlName="dateOfSiteVisit" readonly 
+                        [max]="new Date()">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="34" *ngIf="siteVisitUpdateForm.get('siteVisitType').value === 2">
                     <input matInput [matDatepicker]="picker3" placeholder="Date of Lenders Meet" formControlName="dateOfLendersMeet" readonly>
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker> 

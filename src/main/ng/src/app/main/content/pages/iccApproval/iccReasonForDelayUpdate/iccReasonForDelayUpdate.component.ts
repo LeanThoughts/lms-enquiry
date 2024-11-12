@@ -3,7 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
-import { log } from 'console';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-icc-reason-for-delay-update-dialog',
@@ -21,12 +21,14 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
 
     reasonForDelayForm: FormGroup;
 
+    selectedEnquiry: any;
+
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
         public _dialogRef: MatDialogRef<ICCReasonForDelayUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
 
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedReasonForDelay = Object.assign({}, _dialogData.selectedReasonForDelay);
@@ -39,6 +41,8 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
             reasonForDelay: [this.selectedReasonForDelay.reasonForDelay || ''],
             date: [this.selectedReasonForDelay.date || '']
         });
+
+        this.selectedEnquiry = this._loanEnquiryService.selectedEnquiry.value;
     }
 
     /**

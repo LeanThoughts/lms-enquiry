@@ -23,12 +23,16 @@ export class BoardApprovalRejectedByCustomerUpdateDialogComponent implements OnI
     approvalByBoards: any;
     customerRejectionReasons: any;
 
+    _pac: any; // Project Appraisal Completion
+
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _boardApprovalService: BoardApprovalService,
         public _dialogRef: MatDialogRef<BoardApprovalRejectedByCustomerUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
+
+        this._pac = this._boardApprovalService._projectAppraisalCompletion.value;
 
         this._boardApprovalService.getApprovalByBoards().subscribe(data => {
             this.approvalByBoards = data._embedded.approvalByBoards;

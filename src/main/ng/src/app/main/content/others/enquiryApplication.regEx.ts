@@ -30,4 +30,6 @@ export class EnquiryApplicationRegEx {
     public  static email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     public static telephoneNumber = /^[+\d]+$/;
+
+    public static numbersOnly = /^[+\d]+$/;
 }

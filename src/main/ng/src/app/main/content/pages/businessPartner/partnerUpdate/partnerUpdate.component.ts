@@ -6,6 +6,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BusinessPartnerService } from '../businessPartner.service';
 import { MatSnackBar } from '@angular/material';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
+import { LoanAppraisalRegEx } from '../../appraisal/loanAppraisal.regEx';
+import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 
 @Component({
     selector: 'fuse-partner-update',
@@ -52,14 +55,14 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
             searchTerm2: [this.selectedPartner.searchTerm2 || null],
             addressLine1: [this.selectedPartner.addressLine1 || null],
             street: [this.selectedPartner.street || null],
-            postalCode: [this.selectedPartner.postalCode || null],
+            postalCode: [this.selectedPartner.postalCode || null, [Validators.pattern(EnquiryApplicationRegEx.numbersOnly)]],
             state: [this.selectedPartner.state || null],
             country: [this.selectedPartner.country || 'India'],
             city: [this.selectedPartner.city || null],
-            contactNumber: [this.selectedPartner.contactNumber || null],
-            email: [this.selectedPartner.email || null],
-            mobileNumber: [this.selectedPartner.mobileNumber || null],
-            faxNumber: [this.selectedPartner.faxNumber || null],
+            contactNumber: [this.selectedPartner.contactNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            email: [this.selectedPartner.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]],
+            mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
         });
     }
 

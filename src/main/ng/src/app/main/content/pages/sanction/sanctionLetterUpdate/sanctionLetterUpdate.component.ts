@@ -41,18 +41,24 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
     originalInterestRateReadonly = false;
     revisedInterestRateReadonly = false;
 
+    approvalByBoards: any;
+
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, private _sanctionService: SanctionService, private _boardApprovalService: BoardApprovalService,
-        public _dialogRef: MatDialogRef<SanctionLetterUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+    constructor(private _formBuilder: FormBuilder, 
+                private _sanctionService: SanctionService, 
+                private _boardApprovalService: BoardApprovalService,
+                public _dialogRef: MatDialogRef<SanctionLetterUpdateDialogComponent>, 
+                @Inject(MAT_DIALOG_DATA) public _dialogData: any,
+                private _matSnackBar: MatSnackBar) {
 
         console.log('in constructor');
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedSanctionLetter = Object.assign({}, _dialogData.selectedSanctionLetter);
         this.loanApplicationId = _dialogData.loanApplicationId;
-
+        this.approvalByBoards = this._boardApprovalService._approvalByBoards.value;
+        
         if (_dialogData.selectedSanctionLetter !== undefined) {
             if (_dialogData.operation === 'updateSanctionLetter') {
                 this.dialogTitle = 'Modify Sanction Letter';

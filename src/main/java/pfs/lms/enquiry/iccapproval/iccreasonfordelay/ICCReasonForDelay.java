@@ -6,7 +6,7 @@ import pfs.lms.enquiry.iccapproval.ICCApproval;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -20,9 +20,10 @@ import java.time.LocalDate;
 public class ICCReasonForDelay extends AggregateRoot<ICCReasonForDelay> implements Cloneable {
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ICCApproval iccApproval;
 
+    private Integer serialNumber;
     private String reasonForDelay;
     private LocalDate date;
 

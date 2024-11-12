@@ -172,6 +172,11 @@
                     <mat-form-field fxFlex="25">
                         <input matInput placeholder="Enquiry Number" formControlName="enquiryNumber">
                     </mat-form-field>
+                    <mat-form-field fxFlex="25">
+                        <input matInput placeholder="Enquiry Date" formControlName="enquiryDate" [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
                 </div>
 
                 <div class="pt-12" fxLayout="row" fxLayoutAlign="left center">

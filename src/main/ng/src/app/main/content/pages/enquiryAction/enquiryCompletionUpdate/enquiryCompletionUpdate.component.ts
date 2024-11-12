@@ -1,19 +1,25 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EnquiryActionService } from '../enquiryAction.service';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'fuse-enquiry-completion-update',
   templateUrl: './enquiryCompletionUpdate.component.html',
   styleUrls: ['./enquiryCompletionUpdate.component.scss']
 })
-export class EnquiryCompletionUpdateComponent {
+export class EnquiryCompletionUpdateComponent implements OnDestroy {
 
     dialogTitle = "Enquiry Completion";
 
     _enquiryCompletion: any;
     _enquiryCompletionForm: FormGroup;
+
+    public _enquiry: any;
+
+    private _subscription: Subscription;
 
     /**
      * constructor()
@@ -22,7 +28,8 @@ export class EnquiryCompletionUpdateComponent {
                 private _enquiryActionService: EnquiryActionService,
                 public _dialogRef: MatDialogRef<EnquiryCompletionUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
-                private _matSnackBar: MatSnackBar) { 
+                private _matSnackBar: MatSnackBar,
+                private _loanEnquiryService: LoanEnquiryService) { 
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
@@ -34,6 +41,17 @@ export class EnquiryCompletionUpdateComponent {
             remarks: [ this._enquiryCompletion.remarks || '' ],
             date: [ this._enquiryCompletion.date || undefined ]
         });
+
+        this._subscription = _loanEnquiryService.selectedEnquiry.subscribe(enquiry => {
+            console.log('enquiry in enquiry completion update', enquiry);
+        });
+    }
+
+    /**
+     * ngOnDestroy()
+     */
+    ngOnDestroy(): void {
+        this._subscription.unsubscribe();
     }
 
     /**

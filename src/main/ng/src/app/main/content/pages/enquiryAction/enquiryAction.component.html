@@ -76,16 +76,21 @@
                             <input matInput placeholder="Enquiry Number" formControlName="enquiryNumber" readonly>
                         </mat-form-field>
                     </div>
+                    <div fxLayout="row">  
+                        <mat-form-field fxFlex="25">
+                            <input matInput placeholder="Enquiry Date" formControlName="enquiryDate" readonly [matDatepicker]="picker" [value]="selectedEnquiry.loanEnquiryDate | date:'dd/MM/yyyy'">
+                        </mat-form-field>
+                    </div>
                 </form>
             </mat-expansion-panel>
 
-            <mat-expansion-panel [expanded]="expandPanel2" hideToggle="false" class="mt-16">
+            <!-- <mat-expansion-panel [expanded]="expandPanel2" hideToggle="false" class="mt-16">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         Other Details
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-            </mat-expansion-panel>
+            </mat-expansion-panel> -->
         </div>
 
         <mat-tab-group #tabGroup class="mt-16">

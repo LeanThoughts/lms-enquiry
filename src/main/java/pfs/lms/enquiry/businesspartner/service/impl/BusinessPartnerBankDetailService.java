@@ -48,6 +48,10 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
         businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
+        businessPartnerBankDetail.setBankCountry(businessPartnerBankDetailResource.getBankCountry());
+        businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
+        businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
+        businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
 
@@ -82,6 +86,11 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
         businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
+        businessPartnerBankDetail.setBankCountry(businessPartnerBankDetailResource.getBankCountry());
+        businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
+        businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
+        businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
+
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
         changeDocumentService.createChangeDocument(

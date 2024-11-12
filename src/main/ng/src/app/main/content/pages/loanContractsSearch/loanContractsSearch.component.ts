@@ -78,7 +78,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             borrowerCodeTo: [],
             loanNumberFrom: [],
             loanNumberTo: [],
-            enquiryNumber: []
+            enquiryNumber: [],
+            enquiryDate: []
         });
 
         _service.selectedLoanApplicationId = undefined;
@@ -122,6 +123,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             this.loanContractsSearchForm.controls['loanNumberFrom'].setValue(formValues.loanNumberFrom);
             this.loanContractsSearchForm.controls['loanNumberTo'].setValue(formValues.loanNumberTo);
             this.loanContractsSearchForm.controls['enquiryNumber'].setValue(formValues.enquiryNumber);
+            this.loanContractsSearchForm.controls['enquiryDate'].setValue(formValues.enquiryDate);
         }
     }
 
@@ -146,7 +148,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             loanContractsSearchParameters.borrowerCodeTo == undefined &&
             loanContractsSearchParameters.loanNumberFrom == undefined &&
             loanContractsSearchParameters.loanNumberTo == undefined &&
-            loanContractsSearchParameters.enquiryNumber == undefined
+            loanContractsSearchParameters.enquiryNumber == undefined &&
+            loanContractsSearchParameters.enquiryDate == undefined
         ) {
             this._matSnackBar.open('Error: Enter at least one search parameter', 'OK', { duration: 7000 });
         }
@@ -419,6 +422,20 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                     this._sanctionService._sanction.next({ id: '' });
                     this.redirect('/sanction');
                 }
+            });
+        }
+        else if (functionalStatus == 11) {
+            this._boardApprovalService.getBoardApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(data => {
+                this._boardApprovalService._boardApproval.next(data);
+                this._boardApprovalService.getApprovalByBoards().subscribe(approvalByBoards => {
+                    if (approvalByBoards._embedded.approvalByBoards.length > 0) {
+                        this._boardApprovalService._approvalByBoards.next(approvalByBoards);
+                        this.redirect('/sanction');
+                    }
+                    else {
+                        this._matSnackBar.open('Board approval workflow not completed for loan.', 'OK', { duration: 7000 });
+                    }
+                });
             });
         }
     }

@@ -59,6 +59,22 @@
                     <mat-datepicker #validToPicker></mat-datepicker>
                 </mat-form-field>
             </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Country" formControlName="bankCountry" maxlength="60">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Reference Details" formControlName="referenceNumber" maxlength="60">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Account Holder" formControlName="accountHolderName" maxlength="60">
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput placeholder="Account Name" formControlName="bankAccountName" maxlength="60">
+                </mat-form-field>
+            </div>
             <div mat-dialog-actions fxLayout="row" class="mb-16">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
                     Submit

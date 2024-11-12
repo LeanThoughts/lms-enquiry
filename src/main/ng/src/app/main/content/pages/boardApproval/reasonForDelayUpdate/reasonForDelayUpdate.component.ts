@@ -20,12 +20,16 @@ export class BoardApprovalReasonForDelayUpdateDialogComponent implements OnInit 
 
     reasonForm: FormGroup;
 
+    _pac: any; // Project Appraisal Completion
+
     /**
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, private _boardApprovalService: BoardApprovalService,
         public _dialogRef: MatDialogRef<BoardApprovalReasonForDelayUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
+
+        this._pac = this._boardApprovalService._projectAppraisalCompletion.value;
 
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedReason = Object.assign({}, _dialogData.selectedReason);

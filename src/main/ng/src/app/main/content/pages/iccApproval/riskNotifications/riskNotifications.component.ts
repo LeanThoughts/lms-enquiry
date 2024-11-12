@@ -27,6 +27,8 @@ export class RiskNotificationComponent implements OnInit {
 
     selectedRiskNotification: any;
 
+    approvalByICC: any;
+
     /**
      * constructor()
      */
@@ -35,6 +37,9 @@ export class RiskNotificationComponent implements OnInit {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[2]);
+        this._iccApprovalService.getApprovalByICC(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
+            this.approvalByICC = data;
+        });
     }
 
     /**
@@ -105,11 +110,18 @@ export class RiskNotificationComponent implements OnInit {
         });
     }
 
+    /**
+     * sendNotification()
+     */
     sendNotification(): void {
-        var obj = Object.assign({}, this.selectedRiskNotification);
-        obj.loanApplicationId = this.loanApplicationId;
-        this._iccApprovalService.sendNotification(obj).subscribe(() => {
-            this._matSnackBar.open('Notification was sent successfully.', 'OK', { duration: 7000 });
-        });
+        if (this.approvalByICC && this.approvalByICC.id) {
+            var obj = Object.assign({}, this.selectedRiskNotification);
+            obj.loanApplicationId = this.loanApplicationId;
+            this._iccApprovalService.sendNotification(obj).subscribe(() => {
+                this._matSnackBar.open('Notification was sent successfully.', 'OK', { duration: 7000 });
+            });
+        } else {
+            this._matSnackBar.open('Cannot send notification. Please save ICC approval details first.', 'OK', { duration: 7000 });
+        }
     }
 }

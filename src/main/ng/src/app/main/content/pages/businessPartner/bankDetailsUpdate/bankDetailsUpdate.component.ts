@@ -61,6 +61,10 @@ export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
             entryDate: [this.selectedBankDetails.entryDate || null],
             validFromDate: [this.selectedBankDetails.validFromDate || null],
             validToDate: [this.selectedBankDetails.validToDate || null],
+            bankCountry: [this.selectedBankDetails.bankCountry || null],
+            referenceNumber: [this.selectedBankDetails.referenceNumber || null],
+            accountHolderName: [this.selectedBankDetails.accountHolderName || null],
+            bankAccountName: [this.selectedBankDetails.bankAccountName || null],
         });
         
         this.bankFilteredOptions = this.bankKeyFormControl.valueChanges.pipe(

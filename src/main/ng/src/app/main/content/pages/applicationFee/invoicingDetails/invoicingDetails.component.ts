@@ -160,6 +160,7 @@ export class InvoicingDetailsComponent implements OnInit {
             if (result.selectedPartner) {
                 if (result.selectedPartner.id) {
                     this.loadPartnerForm(result.selectedPartner);
+                    this.selectedPartnerId = result.selectedPartner.id;
                 }
                 else {
                     this._matSnackBar.open('Errors occured while selection a partner.', 'OK', { duration: 7000 });

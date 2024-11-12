@@ -868,6 +868,11 @@ public class LoanApplicationContoller {
             }
         }
 
+        if(resource.getEnquiryDate() != null) {
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getLoanEnquiryDate().isAfter(resource.getEnquiryDate()) 
+                || loanApplication.getLoanEnquiryDate().isEqual(resource.getEnquiryDate())).collect(Collectors.toList());
+        }
+        
         User user;
         if (request.getUserPrincipal().getName().equals("admin")) {
             user = userRepository.findByEmail("admin@gmail.com");

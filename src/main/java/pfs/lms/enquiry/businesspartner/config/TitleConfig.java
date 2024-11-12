@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.Title;
-import pfs.lms.enquiry.businesspartner.domain.Title;
-import pfs.lms.enquiry.businesspartner.repository.TitleRepository;
 import pfs.lms.enquiry.businesspartner.repository.TitleRepository;
 
 @Slf4j

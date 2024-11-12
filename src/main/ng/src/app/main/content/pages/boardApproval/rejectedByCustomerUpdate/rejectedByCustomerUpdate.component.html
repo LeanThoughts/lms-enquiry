@@ -22,7 +22,8 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="picker2" placeholder="Meeting Date" formControlName="meetingDate" readonly>
+                    <input matInput [matDatepicker]="picker2" placeholder="Meeting Date" formControlName="meetingDate" readonly
+                        [min]="_pac.agendaNoteApprovalByMDAndCEO" [max]="new Date()">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>
