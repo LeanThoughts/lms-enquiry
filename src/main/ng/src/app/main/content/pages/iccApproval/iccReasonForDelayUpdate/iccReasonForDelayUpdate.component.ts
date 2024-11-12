@@ -23,6 +23,7 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
 
     selectedEnquiry: any;
 
+    today: Date = new Date();
     /**
      * constructor()
      */

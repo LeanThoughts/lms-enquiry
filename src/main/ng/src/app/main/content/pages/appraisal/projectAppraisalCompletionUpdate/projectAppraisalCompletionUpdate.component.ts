@@ -17,6 +17,8 @@ export class ProjectAppraisalCompletionUpdateComponent {
     _projectAppraisalCompletion: any;
     documentTypes = LoanMonitoringConstants.documentTypes;
 
+    today: Date = new Date();
+    
     /**
      * constructor()
      * @param _formBuilder 

@@ -17,7 +17,7 @@
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="picker2" placeholder="Date" formControlName="date" readonly [min]="selectedEnquiry.loanEnquiryDate"
-                        [max]="new Date()">
+                        [max]="today">
                     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                     <mat-datepicker #picker2></mat-datepicker> 
                 </mat-form-field>

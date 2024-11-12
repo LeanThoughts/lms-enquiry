@@ -27,6 +27,8 @@ export class SiteVisitUpdateDialogComponent {
 
     moduleName: string;
 
+    today: Date = new Date();
+    
     /**
      * constructor()
      * @param _formBuilder

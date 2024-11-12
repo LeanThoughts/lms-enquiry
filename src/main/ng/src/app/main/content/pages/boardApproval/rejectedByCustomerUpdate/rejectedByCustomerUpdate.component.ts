@@ -25,6 +25,8 @@ export class BoardApprovalRejectedByCustomerUpdateDialogComponent implements OnI
 
     _pac: any; // Project Appraisal Completion
 
+    today: Date = new Date();
+    
     /**
      * constructor()
      */
