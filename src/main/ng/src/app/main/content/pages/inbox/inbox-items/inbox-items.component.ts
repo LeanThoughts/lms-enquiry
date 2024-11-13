@@ -19,7 +19,7 @@ export class InboxItemsComponent implements OnInit {
     selectedItem: any;
 
     displayedColumns = [
-        'requestDate', 'lanContractId', 'projectName', 'processName', 'requestorName', 'approverName', 'status'
+        'requestDate', 'lanContractId', 'projectName', 'processName', 'requestorName', 'approverName'
     ];
 
     /**

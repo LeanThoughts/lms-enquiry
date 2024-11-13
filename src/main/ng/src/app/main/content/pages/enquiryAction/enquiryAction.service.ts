@@ -43,16 +43,37 @@ export class EnquiryActionService implements Resolve<any> {
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
     }
 
+    /**
+     * getCreditRatingCodes()
+     */
+    public getCreditRatingCodes(): Observable<any> {
+        return this._http.get('enquiry/api/creditRatingCodes');
+    }
+
+    /**
+     * getCreditRatingAgencies()
+     */
+    public getCreditRatingAgencies(): Observable<any> {
+        return this._http.get('enquiry/api/creditRatingAgencies');
+    }
+
+    /**
+     * deleteShareHolder()
+     */
     public deleteShareHolder(shareHolder: any): Observable<any> {
         const url = "enquiry/api/shareHolders/delete/" + shareHolder.id;
         return this._http.delete(url);
     }
+
 
     public deleteCreditRating(creditRating: any): Observable<any> {
         const url = "enquiry/api/creditRatings/delete/" + creditRating.id;
         return this._http.delete(url);
     }
     
+    /**
+     * deleteOtherDetailsDocument()
+     */
     public deleteOtherDetailsDocument(otherDetialsDocument: any): Observable<any> {
         const url = "enquiry/api/otherDetailsDocuments/delete/" + otherDetialsDocument.id;
         return this._http.delete(url);

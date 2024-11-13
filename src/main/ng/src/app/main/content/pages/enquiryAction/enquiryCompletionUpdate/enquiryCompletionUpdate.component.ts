@@ -24,12 +24,12 @@ export class EnquiryCompletionUpdateComponent implements OnDestroy {
     /**
      * constructor()
      */
-    constructor(_formBuilder: FormBuilder, 
+    constructor(_formBuilder: FormBuilder,
                 private _enquiryActionService: EnquiryActionService,
                 public _dialogRef: MatDialogRef<EnquiryCompletionUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar,
-                private _loanEnquiryService: LoanEnquiryService) { 
+                private _loanEnquiryService: LoanEnquiryService) {
 
         this._enquiry = this._loanEnquiryService.selectedEnquiry.value;
 

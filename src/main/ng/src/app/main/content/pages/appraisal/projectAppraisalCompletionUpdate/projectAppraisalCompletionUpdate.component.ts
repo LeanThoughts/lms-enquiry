@@ -58,6 +58,19 @@ export class ProjectAppraisalCompletionUpdateComponent {
         });
     }
 
+    getMdAndCeoMinDate(): Date {
+        if (this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirA').value && this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirB').value) {
+            return new Date(Math.max(this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirA').value, this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirB').value));
+        }
+        else if (this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirA').value) {
+            return this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirA').value;
+        }
+        else if (this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirB').value) {
+            return this._projectAppraisalCompletionForm.get('agendaNoteApprovalByDirB').value;
+        }
+        return undefined;
+    }
+
     /**
      * onFileSelect()
      */

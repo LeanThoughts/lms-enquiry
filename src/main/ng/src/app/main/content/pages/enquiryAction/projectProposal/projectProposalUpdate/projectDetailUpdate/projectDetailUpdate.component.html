@@ -44,7 +44,8 @@
                 <input matInput placeholder="Project Capacity" formControlName="projectCapacity" maxlength="10" >
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Project Capacity unit" formControlName="projectCapacityUnit" [required]="_projectDetailForm.get('projectCapacity').value">
+                <mat-select placeholder="Project Capacity unit" formControlName="projectCapacityUnit" 
+                        [required]="_projectDetailForm.get('projectCapacity').value !== '' && _projectDetailForm.get('projectCapacity').value !== null && _projectDetailForm.get('projectCapacity').value !== undefined">
                     <mat-option value=""></mat-option>
                     <mat-option *ngFor="let unitOfMeasure of unitOfMeasures" [value]="unitOfMeasure.code">
                         {{ unitOfMeasure.value }}

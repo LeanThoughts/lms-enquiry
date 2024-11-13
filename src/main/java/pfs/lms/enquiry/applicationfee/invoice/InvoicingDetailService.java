@@ -9,6 +9,7 @@ import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
+import pfs.lms.enquiry.domain.PartnerRoleType;
 import pfs.lms.enquiry.iccapproval.ICCApproval;
 import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
 import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICC;
@@ -23,6 +24,7 @@ import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICC;
 import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICCRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.repository.PartnerRoleTypeRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
@@ -40,6 +42,8 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final ApplicationFeeRepository applicationFeeRepository;
     private final InvoicingDetailRepository invoicingDetailRepository;
+
+    private final PartnerRoleTypeRepository partnerRoleTypeRepository;
     private final PartnerRepository partnerRepository;
 
     private final ICCApprovalRepository iccApprovalRepository;
@@ -55,7 +59,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
     public InvoicingDetail create(InvoicingDetailResource invoicingDetailResource, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(invoicingDetailResource.getLoanApplicationId());
-
+        
         ApplicationFee applicationFee = applicationFeeRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
                     ApplicationFee obj = new ApplicationFee();
@@ -76,11 +80,16 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                     return obj;
                 });
 
-        Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());
+        Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());        
         InvoicingDetail invoicingDetail = new InvoicingDetail();
         invoicingDetail.setApplicationFee(applicationFee);
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
+
+        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("TR0100").get(0);
+        partner.addPartnerRole(partnerRoleType);
+        partnerRepository.save(partner);
+        
         changeDocumentService.createChangeDocument(
                 invoicingDetail.getId(),
                 invoicingDetail.getId().toString(),

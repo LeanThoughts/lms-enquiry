@@ -14,7 +14,11 @@
                     <input matInput placeholder="Name of the Sourcing Company" formControlName="nameOfSourcingCompany" maxlength="100" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Rating" formControlName="rating" maxlength="100">
+                    <mat-select placeholder="Credit Rating Agency" formControlName="rating">
+                        <mat-option *ngFor="let creditRatingCode of _creditRatingCodes" [value]="creditRatingCode.code">
+                            {{ creditRatingCode.value }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
@@ -22,7 +26,11 @@
                     <input matInput placeholder="Contact Person Name" formControlName="contactPersonName" maxlength="100">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Credit Standing" formControlName="creditStanding" maxlength="100">
+                    <mat-select placeholder="Credit Rating" formControlName="creditStanding">
+                        <mat-option *ngFor="let creditRatingAgency of _creditRatingAgencies" [value]="creditRatingAgency.code">
+                            {{ creditRatingAgency.value }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div fxLayout="row">

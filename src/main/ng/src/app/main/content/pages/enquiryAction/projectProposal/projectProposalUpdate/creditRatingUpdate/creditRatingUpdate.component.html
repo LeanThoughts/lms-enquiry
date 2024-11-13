@@ -11,12 +11,20 @@
         <form [formGroup]="_creditRatingUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Credit Rating" formControlName="creditRating" maxlength="10" >
+                    <mat-select placeholder="Credit Rating" formControlName="creditRating" >
+                        <mat-option *ngFor="let creditRatingCode of _creditRatingCodes" [value]="creditRatingCode.code">
+                            {{ creditRatingCode.value }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="100">
-                    <input matInput placeholder="Credit Rating Agency" formControlName="creditRatingAgency" maxlength="100" >
+                    <mat-select placeholder="Credit Rating Agency" formControlName="creditRatingAgency" >
+                        <mat-option *ngFor="let creditRatingAgency of _creditRatingAgencies" [value]="creditRatingAgency.code">
+                            {{ creditRatingAgency.value }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div fxLayout="row">

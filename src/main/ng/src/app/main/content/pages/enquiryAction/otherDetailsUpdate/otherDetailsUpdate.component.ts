@@ -15,6 +15,9 @@ export class OtherDetailsUpdateComponent {
     _otherDetails: any;
     _otherDetailsForm: FormGroup;
 
+    _creditRatingCodes: any;
+    _creditRatingAgencies: any;
+
     /**
      * constructor()
      */
@@ -23,6 +26,13 @@ export class OtherDetailsUpdateComponent {
                 public _dialogRef: MatDialogRef<OtherDetailsUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
+
+        this._enquiryActionService.getCreditRatingCodes().subscribe(response => {
+            this._creditRatingCodes = response.creditRatingCodes;
+        });
+        this._enquiryActionService.getCreditRatingAgencies().subscribe(response => {
+            this._creditRatingAgencies = response.creditRatingAgencies;
+        });
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);

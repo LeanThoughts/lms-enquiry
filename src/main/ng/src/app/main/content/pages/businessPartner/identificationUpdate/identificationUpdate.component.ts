@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatSelectChange } from '@angular/material';
 import { BusinessPartnerService } from '../businessPartner.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
+import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 
 @Component({
     selector: 'fuse-business-partner-identification-update-dialog',
@@ -63,6 +64,22 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
             documentType: [this.selectedIdentificationDetails.documentType || null],
             file: [''],
         });
+    }
+
+    /**
+     * onIdentificationCategorySelect()
+     */
+    onIdentificationCategorySelect(event) {
+        console.log(event);
+        const identificationCategory = this.identificationCategories.find(category => category.code === event.value);
+        console.debug(identificationCategory);
+        if (identificationCategory.code === 'Z00002' && identificationCategory.panNumberValidation) {
+            this.identificationDetailsUpdateForm.get('identificationNumber').setValidators([Validators.pattern(EnquiryApplicationRegEx.pan)]);
+        }
+        else {
+            this.identificationDetailsUpdateForm.get('identificationNumber').clearValidators();
+        }
+        this.identificationDetailsUpdateForm.get('identificationNumber').updateValueAndValidity();
     }
 
     /**
