@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { AppService } from 'app/app.service';
 import { MatSnackBar } from '@angular/material';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { ICCApprovalService } from './iccApproval.service';
 import { log } from 'console';
 
@@ -36,7 +36,7 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
      */
     constructor(private _formBuilder: FormBuilder, public _appService: AppService, private _matSnackBar: MatSnackBar,
                 public _loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService,
-                private _location: Location) {
+                private _location: Location, private _datepipe: DatePipe) {
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
@@ -79,7 +79,8 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
             financingTypeDescription: [this.selectedEnquiry.financingTypeDescription || ''],
             leadFI: [this.selectedEnquiry.leadFI || ''],
             stage: [this.selectedEnquiry.stage || this.selectedEnquiry.functionalStatusDescription],
-            enquiryNumber: [this.selectedEnquiry.enquiryNumber || '']
+            enquiryNumber: [this.selectedEnquiry.enquiryNumber || ''],
+            enquiryDate: [this._datepipe.transform(this.selectedEnquiry.loanEnquiryDate, 'dd/MM/yyyy') || '']
         });
 
         this.subscriptions.add(

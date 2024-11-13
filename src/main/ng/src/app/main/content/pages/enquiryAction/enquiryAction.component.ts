@@ -59,12 +59,14 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 private _datepipe: DatePipe
             ) {
 
-        this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[6];
+        this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[6]._embedded.unitOfMeasures;
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             console.debug('selectedEnquiry', data);
             this.selectedEnquiry = data;
+
             this.uom = this.unitOfMeasures.filter(uom => uom.code === this.selectedEnquiry.projectCapacityUnit)[0].value;
+            
             if (this.selectedEnquiry.loanContractId === null)
                 this.loanContractId = this.selectedEnquiry.enquiryNumber;
             else

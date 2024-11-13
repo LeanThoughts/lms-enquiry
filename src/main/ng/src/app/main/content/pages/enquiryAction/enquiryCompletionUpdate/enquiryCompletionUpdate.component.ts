@@ -31,6 +31,8 @@ export class EnquiryCompletionUpdateComponent implements OnDestroy {
                 private _matSnackBar: MatSnackBar,
                 private _loanEnquiryService: LoanEnquiryService) { 
 
+        this._enquiry = this._loanEnquiryService.selectedEnquiry.value;
+
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
         this._enquiryCompletion = Object.assign({}, _dialogData.enquiryCompletion);

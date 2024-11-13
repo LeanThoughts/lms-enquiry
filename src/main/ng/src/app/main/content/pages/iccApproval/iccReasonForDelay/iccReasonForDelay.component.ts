@@ -39,7 +39,7 @@ export class ICCReasonForDelayComponent {
      */
     refreshTable(): void {
         this._iccApprovalService.getReasonForDelay(this._iccApprovalService._iccApproval.value.id).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data);
+            this.dataSource = new MatTableDataSource(data._embedded.iCCReasonForDelays);
         });
     }
 
