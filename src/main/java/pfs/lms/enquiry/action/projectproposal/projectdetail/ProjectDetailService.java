@@ -41,6 +41,8 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setProjectTypeCoreSector(resource.getProjectTypeCoreSector());
         projectDetail.setPurposeOfLoan(resource.getPurposeOfLoan());
 
+
+
         projectDetail.setLoanClass(resource.getLoanClass());
         projectDetail.setAssistanceType(resource.getAssistanceType());
         projectDetail.setFinancingType(resource.getFinancingType());

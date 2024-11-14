@@ -231,10 +231,6 @@ public class ProjectProposalService implements IProjectProposalService {
             loanApplication.setEnquiryRemarks(enquiryCompletion.getRemarks());
         }
 
-
-
-
-
         if (projectCost != null) {
 
             loanApplication.setProjectDebtAmount(projectCost.getDebt());
