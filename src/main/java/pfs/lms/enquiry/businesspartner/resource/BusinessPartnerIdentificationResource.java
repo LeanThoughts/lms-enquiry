@@ -15,7 +15,7 @@ public class BusinessPartnerIdentificationResource {
 
     private UUID partnerId;
 
-    private Long identificationCategoryId;
+    private String identificationCategoryId;
 
     private Integer serialNumber;
     private String identificationNumber;
