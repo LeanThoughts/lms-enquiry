@@ -44,6 +44,13 @@ public class TermLoanRiskRatingController {
     @GetMapping("/termLoanRiskRatings/riskModelSummary/{loanContractId}")
     public ResponseEntity<List<RiskEvaluationSummary>> findRiskModelSummaryForLoanContractId(
             @PathVariable String loanContractId, HttpServletRequest request) {
-        return ResponseEntity.ok(riskClient.findRiskModelSummaryForLoanContractId(loanContractId));
-    }
+        try {
+            return ResponseEntity.ok(riskClient.findRiskModelSummaryForLoanContractId(loanContractId));
+        }
+        catch (Exception ex){
+            log.error("Error fetching Risk Evaluations for Loan Contract Id: " + loanContractId);
+            log.error("Check if Risk Portal is up and running............" );
+        }
+        return null;
+        }
 }

@@ -70,6 +70,6 @@ public class ICCApprovalController {
                 workflowRequestResource.getRequestorEmail(),
                 workflowRequestResource.getProcessName());
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(processObject);
     }
 }
