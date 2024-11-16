@@ -29,7 +29,7 @@
             </div>
             <div mat-dialog-actions fxLayout="row" class="mb-8">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
-                    Submit
+                    Search Partners
                 </button>
                 <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({})">
                     Cancel
@@ -91,7 +91,7 @@
         
             </div>
             <div mat-dialog-actions fxLayout="row" class="mb-8">
-                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="selectPartner()">
+                <button class="mr-8" mat-raised-button type="button" color="accent" (click)="selectPartner()" [disabled]="!selectedPartner">
                     Select
                 </button>
             </div>

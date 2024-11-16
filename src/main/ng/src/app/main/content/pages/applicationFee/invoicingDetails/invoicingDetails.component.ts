@@ -117,23 +117,24 @@ export class InvoicingDetailsComponent implements OnInit {
      */
     loadOtherDetails(identificationDetails: any[]): void {
         const identificationMap = {
-            'Z00004': 'cinNumber',
-            'Z00011': 'gstNumber', 
-            'Z00002': 'pan',
-            'Z00009': 'msmeRegistrationNumber'
+            '1258': 'cinNumber',
+            '1263': 'gstNumber', 
+            '1257': 'pan',
+            '1261': 'msmeRegistrationNumber'
         };
 
         const formValues = {};
         
         Object.entries(identificationMap).forEach(([code, formField]) => {
-            const identification = identificationDetails.find(id => 
-                id.identificationCategory.code === code
+            const identification = identificationDetails.find(id =>
+                id.identificationCategoryId.toString() === code
             );
+            console.log('identification', identification);
             if (identification) {
-                formValues[formField] = identification.value;
+                formValues[formField] = identification.identificationNumber;
             }
         });
-
+        console.log('formValues', formValues);
         this.invoicingDetailForm.patchValue(formValues);
     }
 
@@ -189,7 +190,7 @@ export class InvoicingDetailsComponent implements OnInit {
                     this.loadPartnerForm(result.selectedPartner);
                     this.selectedPartnerId = result.selectedPartner.id;
                     this._businessPartnerService.getBusinessPartnerIdentificationDetails(this.selectedPartnerId).subscribe(data => {
-                        this.loadOtherDetails(data);
+                        this.loadOtherDetails(data._embedded.businessPartnerIdentifications);
                     });
                 }
                 else {
