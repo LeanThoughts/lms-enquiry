@@ -175,7 +175,8 @@ export class InvoicingDetailsComponent implements OnInit {
                         roleType: 'TR0100',
                         roleDescription: 'Main Loan Partner',
                         kycStatus: 'Not Started',
-                        loanApplicationId: this.loanApplicationId
+                        loanApplicationId: this.loanApplicationId,
+                        startDate: this.selectedPartner.loanEnquiryDate
                     }
                     this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
                         // this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
@@ -187,6 +188,16 @@ export class InvoicingDetailsComponent implements OnInit {
                 this._applicationFeeService.updateInvoicingDetail(this.selectedInvoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing details updated successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;
+                    this._loanAppraisalService.getLoanOfficersByRoleType(this.loanApplicationId, 'TR0100').subscribe(data => {
+                        if (data._embedded.loanPartners.length >= 0) {
+                            var loanPartner = data._embedded.loanPartners[0];
+                            loanPartner.businessPartnerId = this.selectedPartner.partyNumber;
+                            loanPartner.businessPartnerName = this.selectedPartner.partyName1 + ' ' + this.selectedPartner.partyName2;
+                            this._loanAppraisalService.updateLoanOfficer(loanPartner).subscribe(data => {
+                                // this._matSnackBar.open('Loan partner updated successfully.', 'OK', { duration: 7000 });
+                            });
+                        }
+                    });
                 });
             }
         }
