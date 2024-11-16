@@ -60,6 +60,7 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setConstructionPeriodUnit(resource.getConstructionPeriodUnit());
         projectDetail.setStatus(resource.getStatus());
         projectDetail.setRoi(resource.getRoi());
+        projectDetail.setLoanEnquiryDate(resource.getLoanEnquiryDate());
         projectDetail = projectDetailRepository.save(projectDetail);
 
         // Change Documents for Project Detail
@@ -117,7 +118,7 @@ public class ProjectDetailService implements IProjectDetailService {
         projectDetail.setLoanType(resource.getLoanType());
         projectDetail.setProjectTypeCoreSector(resource.getProjectTypeCoreSector());
         projectDetail.setPurposeOfLoan(resource.getPurposeOfLoan());
-
+        projectDetail.setLoanEnquiryDate(resource.getLoanEnquiryDate());
         projectDetail = projectDetailRepository.save(projectDetail);
 
         // Change Documents for Project Detail
@@ -168,7 +169,7 @@ public class ProjectDetailService implements IProjectDetailService {
         loanApplication.setLoanType(projectDetail.getLoanType());
         loanApplication.setProjectTypeCoreSector(projectDetail.getProjectTypeCoreSector());
         loanApplication.setPurposeOfLoan(projectDetail.getPurposeOfLoan());
-
+        loanApplication.setLoanEnquiryDate(projectDetail.getLoanEnquiryDate());
         loanApplicationRepository.save(loanApplication);
         return loanApplication;
     }

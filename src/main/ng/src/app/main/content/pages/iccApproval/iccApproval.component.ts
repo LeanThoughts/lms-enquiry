@@ -103,12 +103,14 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
         let email = this._appService.currentUser.email;
         this._matSnackBar.open('Please wait while attempting to send the icc approval for approval.', 'OK', { duration: 25000 });
         this._iccApprovalService.sendICCApprovalForApproval(this.iccApproval.id, name, email).subscribe(
-            response => {
+            (response) => {
+                console.log('response', response);
                 this.iccApproval = response;
                 this._matSnackBar.dismiss();
+                console.log('just closed the snackbar');
                 this._matSnackBar.open('ICC Stage is sent for approval.', 'OK', { duration: 7000 });
             },
-            error => {
+            (error) => {
                 console.log(error);
                 this.disableSendForApproval = false;
                 if (error.status === 500) {

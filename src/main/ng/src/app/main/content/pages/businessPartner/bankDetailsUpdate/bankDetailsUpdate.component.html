@@ -39,7 +39,7 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Account Number" formControlName="accountNumber" maxlength="40">
+                    <input matInput placeholder="Account Number" formControlName="accountNumber" maxlength="18">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <input matInput [matDatepicker]="entryDatePicker" placeholder="Entry Date" formControlName="entryDate">
@@ -61,10 +61,14 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Country" formControlName="bankCountry" maxlength="60">
+                    <mat-select placeholder="Country" formControlName="bankCountry">
+                        <mat-option *ngFor="let countryCode of countryCodes" [value]="countryCode.code">
+                            {{countryCode.value}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Reference Details" formControlName="referenceNumber" maxlength="60">
+                    <input matInput placeholder="Reference Details" formControlName="referenceNumber" maxlength="20">
                 </mat-form-field>
             </div>
             <div fxLayout="row">
@@ -72,7 +76,7 @@
                     <input matInput placeholder="Account Holder" formControlName="accountHolderName" maxlength="60">
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput placeholder="Account Name" formControlName="bankAccountName" maxlength="60">
+                    <input matInput placeholder="Account Name" formControlName="bankAccountName" maxlength="40">
                 </mat-form-field>
             </div>
             <div mat-dialog-actions fxLayout="row" class="mb-16">

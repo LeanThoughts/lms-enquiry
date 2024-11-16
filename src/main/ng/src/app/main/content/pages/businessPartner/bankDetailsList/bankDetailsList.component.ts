@@ -29,6 +29,8 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
 
     subscription: Subscription;
 
+    countryCodes: any;
+
     /**
      * constructor()
      */
@@ -43,6 +45,14 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
             this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][8].
                 _embedded.businessPartnerBankDetails);
         }
+        
+        if (this._activatedRoute.snapshot.data['routeResolvedData'][12]) {
+            this.countryCodes = this._activatedRoute.snapshot.data['routeResolvedData'][12];
+        }
+        else {
+            this.countryCodes = this._activatedRoute.snapshot.data['routeResolvedData'][7];
+        }
+
         this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartnerId = partner ? partner.id : null;
         });
@@ -79,6 +89,7 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
                     banks: this.banks,
                     operation: 'addBankDetails',
                     businessPartnerId: this.businessPartnerId,
+                    countryCodes: this.countryCodes
                 }
             });
             // Subscribe to the dialog close event to intercept the action taken.
@@ -105,6 +116,7 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
                 operation: 'updateBankDetails',
                 businessPartnerId: this.businessPartnerId,
                 selectedBankDetails: this.selectedBankDetails,
+                countryCodes: this.countryCodes
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

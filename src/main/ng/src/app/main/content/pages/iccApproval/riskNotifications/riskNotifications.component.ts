@@ -114,14 +114,15 @@ export class RiskNotificationComponent implements OnInit {
      * sendNotification()
      */
     sendNotification(): void {
-        if (this.approvalByICC && this.approvalByICC.id) {
+        if (this.approvalByICC && this.approvalByICC.id && this._iccApprovalService._iccApproval.value.workFlowStatusDescription === 'Approved') {
             var obj = Object.assign({}, this.selectedRiskNotification);
             obj.loanApplicationId = this.loanApplicationId;
             this._iccApprovalService.sendNotification(obj).subscribe(() => {
                 this._matSnackBar.open('Notification was sent successfully.', 'OK', { duration: 7000 });
             });
         } else {
-            this._matSnackBar.open('Cannot send notification. Please save ICC approval details first.', 'OK', { duration: 7000 });
+            this._matSnackBar.open('Risk Department can be notified only after ICC In-principle approval workflow is approved.', 
+                'OK', { duration: 7000 });
         }
     }
 }

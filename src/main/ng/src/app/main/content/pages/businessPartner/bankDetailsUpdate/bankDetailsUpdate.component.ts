@@ -26,6 +26,8 @@ export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
     bankFilteredOptions: any;
     bankKeyFormControl = new FormControl();
 
+    countryCodes: any;
+
     /**
      * constructor()
      */
@@ -33,12 +35,11 @@ export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
                 private _businessPartnerService: BusinessPartnerService,
                 public _dialogRef: MatDialogRef<BusinessPartnerBankDetailsUpdateComponent>, 
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-                private _matSnackBar: MatSnackBar,
-                private _activatedRoute: ActivatedRoute
-            ) {
+                private _matSnackBar: MatSnackBar) {
 
         // Fetch list of banks and other details from the dialog's data attribute.
         this.banks = this._dialogData.banks;
+        this.countryCodes = this._dialogData.countryCodes;
         if (_dialogData.selectedBankDetails !== undefined) {
             this.selectedBankDetails = Object.assign({}, _dialogData.selectedBankDetails);
             this.dialogTitle = 'Modify Bank Details';
@@ -61,7 +62,7 @@ export class BusinessPartnerBankDetailsUpdateComponent implements OnInit {
             entryDate: [this.selectedBankDetails.entryDate || null],
             validFromDate: [this.selectedBankDetails.validFromDate || null],
             validToDate: [this.selectedBankDetails.validToDate || null],
-            bankCountry: [this.selectedBankDetails.bankCountry || null],
+            bankCountry: [this.selectedBankDetails.bankCountry || 'India'],
             referenceNumber: [this.selectedBankDetails.referenceNumber || null],
             accountHolderName: [this.selectedBankDetails.accountHolderName || null],
             bankAccountName: [this.selectedBankDetails.bankAccountName || null],

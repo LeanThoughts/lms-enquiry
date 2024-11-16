@@ -3,6 +3,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
     selector: 'fuse-icc-further-detail-update-dialog',
@@ -20,13 +21,18 @@ export class ICCFurtherDetailUpdateDialogComponent {
     iccFurtherDetailUpdateForm: FormGroup;
 
     enquiryCompletion: any;
+
+    today = new Date();
+    public selectedLoanEnquiry: any;
+
     /**
      * constructor()
      */
     constructor(_formBuilder: FormBuilder, private _iccApprovalService: ICCApprovalService,
         public _dialogRef: MatDialogRef<ICCFurtherDetailUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
-        private _matSnackBar: MatSnackBar) {
+        private _matSnackBar: MatSnackBar, private _loanEnquiryService: LoanEnquiryService) {
 
+        this.selectedLoanEnquiry = this._loanEnquiryService.selectedEnquiry.value;
         this.enquiryCompletion = _dialogData.enquiryCompletion;
         
         // Fetch selected user details from the dialog's data attribute.

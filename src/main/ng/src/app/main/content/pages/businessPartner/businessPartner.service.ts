@@ -39,7 +39,8 @@ export class BusinessPartnerService {
                 this.getBusinessPartnerBankDetails(this._partnerService.selectedPartner.value.id),
                 this.getBusinessPartnerRoles(this._partnerService.selectedPartner.value.id),
                 this.getAllIndustryTypes(),
-                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory)
+                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory),
+                this.getCountryCodes()
             ]);
         }
         else {
@@ -50,9 +51,17 @@ export class BusinessPartnerService {
                 this.getIndustrySystems(),
                 this.getIdentificationCategories(),
                 this.getAllIndustryTypes(),
-                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory)
+                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory),
+                this.getCountryCodes()
             ]);
         }
+    }
+
+    /**
+     * getCountryCodes()
+     */
+    getCountryCodes(): Observable<any> {
+        return this._http.get<any>('enquiry/api/countryCodes');
     }
 
     /**
@@ -182,7 +191,7 @@ export class BusinessPartnerService {
      * getIdentificationCategories()
      */
     getIdentificationCategories(): Observable<any> {
-        return this._http.get<any>('enquiry/api/identificationCategories');
+        return this._http.get<any>('enquiry/api/identificationCategories?size=100&sort=value,asc');
     }
 
     /**

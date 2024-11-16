@@ -27,7 +27,8 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
 
     documentTypes: any[] = [];
 
-
+    today = new Date();
+    
     /**
      * constructor()
      */
@@ -60,7 +61,7 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
             documentType: [this.preliminaryRiskAssessment.documentType || ''],
             document: [this.preliminaryRiskAssessment.document || '']
         });
-        
+
         this.documentTypes = this._loanEnquiryService.documentTypes;
     }
 

@@ -16,10 +16,10 @@
                         formControlName="projectCost" maxlength="18" >
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="18" type="number" (focusout)="calculateRatio()">
+                <input matInput placeholder="Debt (Crores)" formControlName="debt" maxlength="18" type="number" (focusout)="calculateRatio()" (keypress)="keyPress($event)">
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Promoter Contribution (Crores)" formControlName="equity" maxlength="18" type="number" (focusout)="calculateRatio()">
+                <input matInput placeholder="Promoter Contribution (Crores)" formControlName="equity" maxlength="18" type="number" (focusout)="calculateRatio()" (keypress)="keyPress($event)">
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <input matInput placeholder="PFS Debt Amount (Crores)"
@@ -31,7 +31,7 @@
                 <input matInput placeholder="Debt/Equity Ratio without Grant" formControlName="debtEquityRatio" maxlength="18" readonly>
             </mat-form-field>
             <mat-form-field fxFlex="25">
-                <input matInput placeholder="Grant/Subsidy Amount" formControlName="grantAmount" maxlength="18" type="number" (focusout)="calculateRatio()">
+                <input matInput placeholder="Grant/Subsidy Amount" formControlName="grantAmount" maxlength="18" type="number" (focusout)="calculateRatio()" (keypress)="keyPress($event)">
             </mat-form-field>
             <mat-form-field fxFlex="25">
                 <input matInput placeholder="Debt/Equity Ratio with Grant" formControlName="debtEquityRatioWithGrant" maxlength="18" readonly>

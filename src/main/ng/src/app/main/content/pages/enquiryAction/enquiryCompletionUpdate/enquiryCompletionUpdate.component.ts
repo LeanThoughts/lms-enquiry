@@ -21,6 +21,8 @@ export class EnquiryCompletionUpdateComponent implements OnDestroy {
 
     private _subscription: Subscription;
 
+    today = new Date();
+    
     /**
      * constructor()
      */

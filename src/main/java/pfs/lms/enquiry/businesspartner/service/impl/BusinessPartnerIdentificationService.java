@@ -15,10 +15,7 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.constraints.Size;
 import java.util.List;
-
-import static com.sun.xml.internal.ws.policy.sourcemodel.wspolicy.XmlToken.Optional;
 
 @Service
 @RequiredArgsConstructor

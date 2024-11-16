@@ -22,6 +22,9 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
     rejectedByICCForm: FormGroup;
 
     enquiryCompletion: any;
+
+    today = new Date();
+    
     /**
      * constructor()
      */
@@ -39,7 +42,7 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
         }
 
         this.rejectedByICCForm = this._formBuilder.group({
-            meetingNumber: [this.selectedRejectedByICC.meetingNumber || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
+            meetingNumber: [this.selectedRejectedByICC.meetingNumber || ''],
             meetingDate: [this.selectedRejectedByICC.meetingDate || ''],
             reasonForRejection: [this.selectedRejectedByICC.reasonForRejection || ''],
             rejectionCategory: [this.selectedRejectedByICC.rejectionCategory || 'Rejected By ICC']

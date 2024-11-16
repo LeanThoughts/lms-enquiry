@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
-
+import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
 @Injectable()
 export class ApplicationFeeService {
 
@@ -15,7 +15,8 @@ export class ApplicationFeeService {
      */
     constructor(private _http: HttpClient,
         private _loanEnquiryService: LoanEnquiryService,
-        private _enquiryActionService: EnquiryActionService) {
+        private _enquiryActionService: EnquiryActionService,
+        private _riskAssessmentService: RiskAssessmentService) {
     }
 
     /**
@@ -38,7 +39,8 @@ export class ApplicationFeeService {
             this._loanEnquiryService.getUnitOfMeasures(),
             this.getProjectDetails(this._applicationFee.value.id),
             this._loanEnquiryService.getProductTypes(),
-            this.getEnquiryCompletion(this._loanEnquiryService.selectedLoanApplicationId.value)
+            this.getEnquiryCompletion(this._loanEnquiryService.selectedLoanApplicationId.value),
+            this.getPreliminaryRiskAssessment(this._loanEnquiryService.selectedLoanApplicationId.value)
         ]);
     }
 
@@ -49,6 +51,20 @@ export class ApplicationFeeService {
         return new Observable((observer) => {
             this._enquiryActionService.getEnquiryAction(loanApplicationId).subscribe(response => {
                 this._enquiryActionService.getEnquiryCompletion(response.id).subscribe(response => {
+                    observer.next(response);
+                    observer.complete();
+                });
+            });
+        });
+    }
+
+    /**
+     * getPreliminaryRiskAssessment()
+     */
+    getPreliminaryRiskAssessment(loanApplicationId: string): Observable<any> {
+        return new Observable((observer) => {
+            this._riskAssessmentService.getRiskAssessment(loanApplicationId).subscribe(riskAssessment => {
+                this._riskAssessmentService.getPreliminaryRiskAssessment(riskAssessment.id).subscribe(response => {
                     observer.next(response);
                     observer.complete();
                 });

@@ -79,6 +79,18 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * keyPress()
+     */
+    keyPress(event: any): void {
+        if (event.which < 48 || event.which > 57) {
+            event.preventDefault();
+        }
+        else {
+            this.calculateRatio();
+        }
+    }
+
+    /**
      * calculateRatio()
      */
     calculateRatio(): void {

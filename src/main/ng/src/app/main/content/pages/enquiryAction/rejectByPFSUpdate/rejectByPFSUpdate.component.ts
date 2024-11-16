@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EnquiryActionService } from '../enquiryAction.service';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
   selector: 'fuse-reject-by-pfs-update',
@@ -15,6 +16,9 @@ export class RejectByPFSUpdateComponent {
     _rejectBy: any;
     _rejectByForm: FormGroup;
 
+    today = new Date();
+    public selectedLoanEnquiry: any;
+
     /**
      * constructor()
      */
@@ -22,7 +26,11 @@ export class RejectByPFSUpdateComponent {
                 private _enquiryActionService: EnquiryActionService,
                 public _dialogRef: MatDialogRef<RejectByPFSUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
-                private _matSnackBar: MatSnackBar) { 
+                private _matSnackBar: MatSnackBar,
+                private _loanEnquiryService: LoanEnquiryService
+            ) { 
+
+        this.selectedLoanEnquiry = this._loanEnquiryService.selectedEnquiry.value;
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);

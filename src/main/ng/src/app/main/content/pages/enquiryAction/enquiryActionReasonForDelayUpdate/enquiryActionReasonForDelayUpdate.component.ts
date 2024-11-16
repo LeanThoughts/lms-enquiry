@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EnquiryActionService } from '../enquiryAction.service';
+import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 
 @Component({
   selector: 'fuse-enquiry-action-reason-for-delay-update',
@@ -15,6 +16,10 @@ export class EnquiryActionReasonForDelayUpdateComponent {
     _reasonForDelay: any;
     _reasonForDelayForm: FormGroup;
 
+    today = new Date();
+
+    public selectedLoanEnquiry: any;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -26,10 +31,14 @@ export class EnquiryActionReasonForDelayUpdateComponent {
                 private _enquiryActionService: EnquiryActionService,
                 public _dialogRef: MatDialogRef<EnquiryActionReasonForDelayUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
-                private _matSnackBar: MatSnackBar) { 
+                private _matSnackBar: MatSnackBar,
+                private _loanEnquiryService: LoanEnquiryService
+            ) { 
 
         console.log('_dialogData', _dialogData);
         this._reasonForDelay = Object.assign({}, _dialogData.reasonForDelay);
+
+        this.selectedLoanEnquiry = this._loanEnquiryService.selectedEnquiry.value;
 
         this._reasonForDelayForm = _formBuilder.group({
             reason: [ this._reasonForDelay.reason || '' ],

@@ -7,6 +7,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ActivatedRoute } from '@angular/router';
 import { StateModel } from 'app/main/content/model/state.model';
 import { SearchPartnersDialogComponent } from '../searchPartnersDialog/searchPartnersDialog.component';
+import { BusinessPartnerService } from '../../businessPartner/businessPartner.service';
 
 @Component({
     selector: 'fuse-invoicing-details',
@@ -45,7 +46,8 @@ export class InvoicingDetailsComponent implements OnInit {
                 _enquiryService: LoanEnquiryService, 
                 private _matSnackBar: MatSnackBar, 
                 _activatedRoute: ActivatedRoute, 
-                private _matDialog: MatDialog) {
+                private _matDialog: MatDialog, 
+                private _businessPartnerService: BusinessPartnerService) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
@@ -94,10 +96,10 @@ export class InvoicingDetailsComponent implements OnInit {
     loadPartnerForm(partner: any): void {
         this.invoicingDetailForm.patchValue({
             companyName: partner.partyName1,
-            cinNumber: partner.CINNumber,
-            gstNumber: partner.gstNumber,
-            pan: partner.pan,
-            msmeRegistrationNumber: partner.msmeRegistrationNumber,
+            // cinNumber: partner.CINNumber,
+            // gstNumber: partner.gstNumber,
+            // pan: partner.pan,
+            // msmeRegistrationNumber: partner.msmeRegistrationNumber,
             doorNumber: partner.addressLine1,
             address: partner.addressLine2,
             street: partner.street,
@@ -108,6 +110,31 @@ export class InvoicingDetailsComponent implements OnInit {
             mobile: partner.mobile,
             email: partner.email
         });
+    }
+
+    /**
+     * loadOtherDetails()
+     */
+    loadOtherDetails(identificationDetails: any[]): void {
+        const identificationMap = {
+            'Z00004': 'cinNumber',
+            'Z00011': 'gstNumber', 
+            'Z00002': 'pan',
+            'Z00009': 'msmeRegistrationNumber'
+        };
+
+        const formValues = {};
+        
+        Object.entries(identificationMap).forEach(([code, formField]) => {
+            const identification = identificationDetails.find(id => 
+                id.identificationCategory.code === code
+            );
+            if (identification) {
+                formValues[formField] = identification.value;
+            }
+        });
+
+        this.invoicingDetailForm.patchValue(formValues);
     }
 
     /**
@@ -161,6 +188,9 @@ export class InvoicingDetailsComponent implements OnInit {
                 if (result.selectedPartner.id) {
                     this.loadPartnerForm(result.selectedPartner);
                     this.selectedPartnerId = result.selectedPartner.id;
+                    this._businessPartnerService.getBusinessPartnerIdentificationDetails(this.selectedPartnerId).subscribe(data => {
+                        this.loadOtherDetails(data);
+                    });
                 }
                 else {
                     this._matSnackBar.open('Errors occured while selection a partner.', 'OK', { duration: 7000 });

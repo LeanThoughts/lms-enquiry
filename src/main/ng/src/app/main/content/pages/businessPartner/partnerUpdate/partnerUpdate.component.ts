@@ -6,8 +6,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BusinessPartnerService } from '../businessPartner.service';
 import { MatSnackBar } from '@angular/material';
-import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
-import { LoanAppraisalRegEx } from '../../appraisal/loanAppraisal.regEx';
 import { EnquiryApplicationRegEx } from 'app/main/content/others/enquiryApplication.regEx';
 
 @Component({

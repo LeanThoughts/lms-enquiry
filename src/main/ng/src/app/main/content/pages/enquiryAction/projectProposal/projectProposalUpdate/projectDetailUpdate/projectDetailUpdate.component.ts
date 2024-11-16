@@ -9,6 +9,7 @@ import { productTypes } from '../../../enquiryAction.constants';
 import { EnquiryActionService } from '../../../enquiryAction.service';
 import { CreditRatingUpdateComponent } from '../creditRatingUpdate/creditRatingUpdate.component';
 import { ConfirmationDialogComponent } from 'app/main/content/pages/appraisal/confirmationDialog/confirmationDialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'fuse-project-detail-update',
@@ -16,7 +17,7 @@ import { ConfirmationDialogComponent } from 'app/main/content/pages/appraisal/co
     styleUrls: ['./projectDetailUpdate.component.scss'],
     animations: fuseAnimations
 })
-export class ProjectDetailUpdateComponent implements OnInit {
+export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
 
     _projectDetailForm: FormGroup;
     _projectDetail: any = {};
@@ -34,6 +35,8 @@ export class ProjectDetailUpdateComponent implements OnInit {
     projectTypeCoreSectors = [];
     purposeOfLoans = [];
 
+    today = new Date(); // Today's date
+
     @Input()
     set projectProposal(pp: any) {
         this._projectProposal = pp;
@@ -46,6 +49,8 @@ export class ProjectDetailUpdateComponent implements OnInit {
     displayedColumns = [
         'creditRating', 'creditRatingAgency', 'creditStandingInstruction', 'creditStandingText'
     ];
+
+    subscriptions = new Subscription();
 
     /**
      * constructor()
@@ -130,16 +135,23 @@ export class ProjectDetailUpdateComponent implements OnInit {
 
     ngOnInit(): void {
         if (this._projectProposal !== undefined && this._projectProposal.id) {
-            this._enquiryActionService.getProjectDetail(this._projectProposal.id).subscribe(projectDetail => {
+            this.subscriptions.add(this._enquiryActionService.getProjectDetail(this._projectProposal.id).subscribe(projectDetail => {
                 console.log('got project detail', projectDetail);
                 this._projectDetail = projectDetail;
                 this.initializeFormValues();
-            });
-            this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(creditRatings => {
+            }));
+            this.subscriptions.add(this._enquiryActionService.getCreditRatings(this._projectProposal.id).subscribe(creditRatings => {
                 console.log('got credit ratings', creditRatings);
                 this.dataSource = new MatTableDataSource(creditRatings._embedded.creditRatings);
-            });
+            }));
         }
+    }
+
+    /**
+     * ngOnDestroy()
+     */
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     /**
@@ -161,7 +173,11 @@ export class ProjectDetailUpdateComponent implements OnInit {
         console.log(this._projectDetailForm.value);
         if (this._projectDetailForm.valid) {
             var formValues = this._projectDetailForm.value;
+            var dt = new Date(formValues.loanEnquiryDate);
+            formValues.loanEnquiryDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            
             // formValues.roi = formValues.roi !== '' ? formValues.roi * 100 : '';
+            console.log('Object.keys(this._projectDetail).length', Object.keys(this._projectDetail).length);
             if (JSON.stringify(this._projectDetail) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
                 formValues.projectProposalId = this._projectProposal.id;
@@ -197,6 +213,7 @@ export class ProjectDetailUpdateComponent implements OnInit {
                 this._projectDetail.projectTypeCoreSector = formValues.projectTypeCoreSector;
                 this._projectDetail.purposeOfLoan = formValues.purposeOfLoan;
                 this._projectDetail.projectType = formValues.projectType;
+                this._projectDetail.loanEnquiryDate = formValues.loanEnquiryDate;
                 this._enquiryActionService.updateProjectDetail(this._projectDetail).subscribe(response => {
                     this._projectDetail = response;
                     this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
@@ -204,6 +221,9 @@ export class ProjectDetailUpdateComponent implements OnInit {
             }
             // Set _projectDetailForm.dirty to false
             this._projectDetailForm.markAsPristine();
+        }
+        else {
+            console.log('form is invalid');
         }
     }
 
@@ -238,6 +258,7 @@ export class ProjectDetailUpdateComponent implements OnInit {
         this._projectDetailForm.controls['projectTypeCoreSector'].setValue(this._projectDetail.projectTypeCoreSector);
         this._projectDetailForm.controls['purposeOfLoan'].setValue(this._projectDetail.purposeOfLoan);
         this._projectDetailForm.controls['projectType'].setValue(this._projectDetail.projectType);
+        this._projectDetailForm.controls['loanEnquiryDate'].setValue(this._projectDetail.loanEnquiryDate);
         // Set _projectDetailForm.dirty to false
         this._projectDetailForm.markAsPristine();
     }

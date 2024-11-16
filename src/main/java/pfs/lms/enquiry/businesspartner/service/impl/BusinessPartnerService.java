@@ -2,17 +2,10 @@ package pfs.lms.enquiry.businesspartner.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
-import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
-import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
-import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
-import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor

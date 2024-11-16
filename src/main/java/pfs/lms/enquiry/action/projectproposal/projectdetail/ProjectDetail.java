@@ -4,6 +4,8 @@ import lombok.*;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
@@ -52,6 +54,8 @@ public class ProjectDetail extends AggregateRoot<ProjectDetail> implements Clone
     private String projectType;
 
     private String status;
+
+    private LocalDate loanEnquiryDate;
 
     public Object clone () throws CloneNotSupportedException {
         return super.clone();

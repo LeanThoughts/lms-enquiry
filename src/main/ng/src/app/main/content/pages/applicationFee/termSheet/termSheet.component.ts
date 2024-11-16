@@ -5,6 +5,7 @@ import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { ApplicationFeeService } from '../applicationFee.service';
 import { TermSheetUpdateDialogComponent } from '../termSheetUpdate/termSheetUpdate.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'fuse-term-sheet',
@@ -24,6 +25,7 @@ export class TermSheetComponent {
     loanApplicationId: string;
 
     selectedTermSheet: any;
+    preliminaryRiskAssessment: any;
 
     /**
      * constructor()
@@ -31,9 +33,13 @@ export class TermSheetComponent {
     constructor(_loanEnquiryService: LoanEnquiryService, 
                 private _applicationFeeService: ApplicationFeeService, 
                 private _matDialog: MatDialog,
-                private _matSnackBar: MatSnackBar) {
+                private _matSnackBar: MatSnackBar,
+                private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
+        this.preliminaryRiskAssessment = _activatedRoute.snapshot.data.routeResolvedData[16];
+        if (!this.preliminaryRiskAssessment && this.preliminaryRiskAssessment.dateOfAssessment)
+            this._matSnackBar.open('Date of Preliminary Risk Assessment is not available.', 'OK', { duration: 7000 });
         this.refreshTable();
     }
 
@@ -72,6 +78,7 @@ export class TermSheetComponent {
             data: {
                 operation: mode,
                 loanApplicationId: this.loanApplicationId,
+                preliminaryRiskAssessment: this.preliminaryRiskAssessment
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -106,7 +113,8 @@ export class TermSheetComponent {
             data: {
                 operation: mode,
                 loanApplicationId: this.loanApplicationId,
-                selectedTermSheet: this.selectedTermSheet
+                selectedTermSheet: this.selectedTermSheet,
+                preliminaryRiskAssessment: this.preliminaryRiskAssessment
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

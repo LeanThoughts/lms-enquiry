@@ -17,9 +17,10 @@ export class TermSheetUpdateDialogComponent implements OnInit {
 
     loanApplicationId = '';
     selectedTermSheet: any;
-
+    preliminaryRiskAssessment: any;
     issuanceForm: FormGroup;
-
+    today = new Date();
+    
     /**
      * constructor()
      */
@@ -30,7 +31,8 @@ export class TermSheetUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedTermSheet = Object.assign({}, _dialogData.selectedTermSheet);
         this.loanApplicationId = _dialogData.loanApplicationId;
-
+        this.preliminaryRiskAssessment = _dialogData.preliminaryRiskAssessment;
+            
         this.issuanceForm = this._formBuilder.group({
             issuanceDate: [this.selectedTermSheet.issuanceDate || ''],
             acceptanceDate: [this.selectedTermSheet.acceptanceDate || ''],

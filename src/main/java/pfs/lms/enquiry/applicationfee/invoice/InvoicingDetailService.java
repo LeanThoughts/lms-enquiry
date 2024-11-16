@@ -86,9 +86,16 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 
-        PartnerRoleType partnerRoleType = partnerRoleTypeRepository.findByRoleCode("TR0100").get(0);
-        partner.addPartnerRole(partnerRoleType);
-        partnerRepository.save(partner);
+        boolean hasMainLoanPartnerRole = partner.getPartnerRoleTypes().stream()
+                .anyMatch(prt -> prt.getRoleCode().equals("TR0100"));               
+        if (!hasMainLoanPartnerRole) {
+            PartnerRoleType mainLoanPartnerRole = partnerRoleTypeRepository.findByRoleCode("TR0100")
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Main loan partner role TR0100 not found"));
+            partner.addPartnerRole(mainLoanPartnerRole);
+            partnerRepository.save(partner);
+        }
         
         changeDocumentService.createChangeDocument(
                 invoicingDetail.getId(),
