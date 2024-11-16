@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { StateModel } from 'app/main/content/model/state.model';
 import { SearchPartnersDialogComponent } from '../searchPartnersDialog/searchPartnersDialog.component';
 import { BusinessPartnerService } from '../../businessPartner/businessPartner.service';
+import { LoanAppraisalService } from '../../appraisal/loanAppraisal.service';
 
 @Component({
     selector: 'fuse-invoicing-details',
@@ -32,6 +33,7 @@ export class InvoicingDetailsComponent implements OnInit {
   
     // partners: Array<PartnerModel>;
     selectedPartnerId = '';
+    selectedPartner: any;
 
     partnerNameFormControl = new FormControl();
     partnerIdFormControl = new FormControl();
@@ -47,7 +49,8 @@ export class InvoicingDetailsComponent implements OnInit {
                 private _matSnackBar: MatSnackBar, 
                 _activatedRoute: ActivatedRoute, 
                 private _matDialog: MatDialog, 
-                private _businessPartnerService: BusinessPartnerService) {
+                private _businessPartnerService: BusinessPartnerService,
+                private _loanAppraisalService: LoanAppraisalService) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
 
@@ -165,6 +168,18 @@ export class InvoicingDetailsComponent implements OnInit {
                     this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
                         this._applicationFeeService._applicationFee.next(data);
                     });
+
+                    const loanPartner = {
+                        businessPartnerId: this.selectedPartner.partyNumber,
+                        businessPartnerName: this.selectedPartner.partyName1 + ' ' + this.selectedPartner.partyName2,
+                        roleType: 'TR0100',
+                        roleDescription: 'Main Loan Partner',
+                        kycStatus: 'Not Started',
+                        loanApplicationId: this.loanApplicationId
+                    }
+                    this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
+                        // this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
+                    });
                 });
             }
             else {
@@ -189,6 +204,7 @@ export class InvoicingDetailsComponent implements OnInit {
                 if (result.selectedPartner.id) {
                     this.loadPartnerForm(result.selectedPartner);
                     this.selectedPartnerId = result.selectedPartner.id;
+                    this.selectedPartner = result.selectedPartner;
                     this._businessPartnerService.getBusinessPartnerIdentificationDetails(this.selectedPartnerId).subscribe(data => {
                         this.loadOtherDetails(data._embedded.businessPartnerIdentifications);
                     });
