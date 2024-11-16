@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EnquiryActionService } from '../../../enquiryAction.service';
@@ -8,7 +8,7 @@ import { EnquiryActionService } from '../../../enquiryAction.service';
   templateUrl: './creditRatingUpdate.component.html',
   styleUrls: ['./creditRatingUpdate.component.scss']
 })
-export class CreditRatingUpdateComponent {
+export class CreditRatingUpdateComponent implements OnInit {
 
     dialogTitle = "Credit Rating";
 
@@ -27,13 +27,6 @@ export class CreditRatingUpdateComponent {
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
 
-        this._enquiryActionService.getCreditRatingCodes().subscribe(response => {
-            this._creditRatingCodes = response.creditRatingCodes;
-        });
-        this._enquiryActionService.getCreditRatingAgencies().subscribe(response => {
-            this._creditRatingAgencies = response.creditRatingAgencies;
-        });
-
         // Fetch selected collateral details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
         this._selectedCreditRating = Object.assign({}, _dialogData._creditRating);
@@ -46,6 +39,14 @@ export class CreditRatingUpdateComponent {
         });
     }
 
+    ngOnInit(): void {
+        this._enquiryActionService.getCreditRatingCodes().subscribe(response => {
+            this._creditRatingCodes = response;
+        });
+        this._enquiryActionService.getCreditRatingAgencies().subscribe(response => {
+            this._creditRatingAgencies = response;
+        });
+    }
     /**
      * submit()
      */
