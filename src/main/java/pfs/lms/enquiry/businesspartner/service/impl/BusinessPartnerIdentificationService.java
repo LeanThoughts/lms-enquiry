@@ -38,8 +38,8 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         
         if (identificationCategory.isDuplicateCheckRequired()) {
             List<BusinessPartnerIdentification> existingIdentifications = businessPartnerIdentificationRepository
-                .findByIdentificationCategoryId(identificationCategory.getId());
-            if (existingIdentifications != null) {
+                .findByIdentificationCategoryIdAndIdentificationNumber(identificationCategory.getId(), businessPartnerIdentificationResource.getIdentificationNumber());
+            if (existingIdentifications.size() > 0 ) {
                 String partyName1 = existingIdentifications.get(0).getPartner().getPartyName1();
                 throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partyName1 + ")");
             }
