@@ -28,7 +28,7 @@ export class BusinessPartnerIdentificationListComponent implements OnDestroy {
 
     selectedIdentificationDetails: any;
 
-    subscription: Subscription;
+    subscription: Subscription = new Subscription();
 
     /**
      * constructor()
@@ -40,13 +40,15 @@ export class BusinessPartnerIdentificationListComponent implements OnDestroy {
                 private _activatedRoute: ActivatedRoute) {
                     
         this.identificationCategories = this._activatedRoute.snapshot.data['routeResolvedData'][4]._embedded.identificationCategories;
-        if (this._activatedRoute.snapshot.data['routeResolvedData'][7]) {
-            this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][7].
-                _embedded.businessPartnerIdentifications);
+        if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
+            if (this._activatedRoute.snapshot.data['routeResolvedData'][7]) {
+                this.dataSource = new MatTableDataSource(this._activatedRoute.snapshot.data['routeResolvedData'][7].
+                    _embedded.businessPartnerIdentifications);
+            }
         }
-        this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
+        this.subscription.add(this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartnerId = partner ? partner.id : null;
-        });
+        }));
     }
 
     /**
