@@ -54,7 +54,7 @@ public class SAPLoanAppraisalProjectDataResource implements Serializable {
 
         detailsResource.setProjectname(projectData.getProjectName());
 
-        detailsResource.setTypeoffunding(projectData.getTypeOfFunding());
+        detailsResource.setTypeoffunding(projectData.getFinancingType());
 
         detailsResource.setPolicyapplicable(projectData.getPolicyApplicable());
         detailsResource.setTechnology(projectData.getTechnology());

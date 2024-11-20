@@ -88,6 +88,13 @@ public class PartnerService implements IPartnerService {
             existing.setSearchTerm2(partner.getSearchTerm2());
             existing.setFaxNumber(partner.getFaxNumber());
             existing.setTitle(partner.getTitle());
+            existing.setPartnerCategory(partner.getPartnerCategory());
+            existing.setDefaultPartnerRole(partner.getDefaultPartnerRole());
+            existing.setCinNumber(partner.getCinNumber());
+            existing.setGstNumber(partner.getGstNumber());
+            existing.setMsmeRegisterNumber(partner.getMsmeRegisterNumber());
+            existing.setPan(partner.getPan());
+    
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -177,6 +184,7 @@ public class PartnerService implements IPartnerService {
         partner.setSearchTerm2(partnerResource.getSearchTerm2());
         partner.setEmail(partnerResource.getEmail());
         partner.setAddressLine1(partnerResource.getAddressLine1());
+        partner.setAddressLine2(partnerResource.getAddressLine2());
         partner.setCity(partnerResource.getCity());
         partner.setCountry(partnerResource.getCountry());
         partner.setState(partnerResource.getState());
@@ -186,6 +194,12 @@ public class PartnerService implements IPartnerService {
         partner.setContactNumber(partnerResource.getContactNumber());
         partner.setStreet(partnerResource.getStreet());
         partner.setTitle(partnerResource.getTitle());
+        partner.setPartnerCategory(partnerResource.getPartnerCategory());
+        partner.setDefaultPartnerRole(partnerResource.getDefaultPartnerRole());
+        partner.setCinNumber(partnerResource.getCinNumber());
+        partner.setGstNumber(partnerResource.getGstNumber());
+        partner.setMsmeRegisterNumber(partnerResource.getMsmeRegisterNumber());
+        partner.setPan(partnerResource.getPan());
         partner = partnerRepository.save(partner);
         return partner;
     }

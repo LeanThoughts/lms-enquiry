@@ -8,6 +8,23 @@
 
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Partner Category" formControlName="partnerCategory" required (selectionChange)="partnerCategoryChange($event)">
+                        <mat-option></mat-option>
+                        <mat-option [value]="'1'">Person</mat-option>
+                        <mat-option [value]="'2'">Organization</mat-option>
+                        <mat-option [value]="'3'">Group</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Select Default Partner Role" formControlName="defaultPartnerRole" required>
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let businessPartnerRole of businessPartnerRoles" [value]="businessPartnerRole.code">
+                            {{ businessPartnerRole.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="33">
                     <mat-select placeholder="Title" formControlName="title">
                         <mat-option></mat-option>
                         <mat-option *ngFor="let title of partnerTitles" [value]="title.code">
@@ -21,12 +38,12 @@
                     <input matInput placeholder="Name 1" formControlName="partyName1" maxlength="40" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Name 2" formControlName="partyName2" maxlength="40" required>
+                    <input matInput placeholder="Name 2" formControlName="partyName2" maxlength="40">
                 </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Search Term 1" formControlName="searchTerm1" maxlength="10" >
+                    <input matInput placeholder="Search Term 1" formControlName="searchTerm1" maxlength="10" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
                     <input matInput placeholder="Search Term 2" formControlName="searchTerm2" maxlength="10" >
@@ -38,10 +55,10 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Door No." formControlName="addressLine1" maxlength="10">
+                    <input matInput placeholder="Door No." formControlName="addressLine1" maxlength="10" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Street" formControlName="street" maxlength="40">
+                    <input matInput placeholder="Street" formControlName="street" maxlength="40" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="6">
@@ -49,7 +66,7 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="City" formControlName="city" maxlength="40">
+                    <input matInput placeholder="City" formControlName="city" maxlength="40" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
                     <input matInput placeholder="Country" formControlName="country" maxlength="60" readonly>

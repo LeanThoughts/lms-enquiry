@@ -29,6 +29,8 @@ export class PartnerModel {
 
     workFlowStatusCode: string;
     workFlowStatusDescription: string;
+    partnerCategory: null;
+    defaultPartnerRole: null;
 
     /**
      * constructor()
@@ -62,6 +64,9 @@ export class PartnerModel {
         this.searchTerm1 = _partner && _partner.searchTerm1 || null;
         this.searchTerm2 = _partner && _partner.searchTerm2 || null;
         this.title = _partner && _partner.title || null;
+        
+        this.partnerCategory = _partner && _partner.partnerCategory || null;
+        this.defaultPartnerRole = _partner && _partner.defaultPartnerRole || null;
 
         this.workFlowStatusCode = _partner && _partner.workFlowStatusCode || null;
         this.workFlowStatusDescription = _partner && _partner.workFlowStatusDescription || null;

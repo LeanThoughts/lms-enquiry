@@ -149,16 +149,17 @@ public class LoanPartnerService implements ILoanPartnerService {
         LoanAppraisal loanAppraisalForPartner = loanAppraisalRepository.getOne(UUID.fromString(loanPartner.getLoanAppraisalId()));
 
         // Change Documents for  Loan Partner
-        changeDocumentService.createChangeDocument(
-                loanAppraisalForPartner.getId(),
-                loanPartner.getId().toString(),
-                loanAppraisalForPartner.getId().toString(),
-                loanPartner.getLoanApplication().getLoanContractId(),
-                oldLoanPartner,
-                loanPartner,
-                "Updated",
-                username,
-                "Appraisal", "Loan Partner");
+//        changeDocumentService.createChangeDocument(
+//                loanAppraisalForPartner.getId(),
+//                loanPartner.getId().toString(),
+//                loanAppraisalForPartner.getId().toString(),
+//                loanPartner.getLoanApplication().getLoanContractId(),
+//                oldLoanPartner,
+//                loanPartner,
+//                "Updated",
+//                username,
+//                "Appraisal", "Loan Partner");
+
         return loanPartner;
     }
 

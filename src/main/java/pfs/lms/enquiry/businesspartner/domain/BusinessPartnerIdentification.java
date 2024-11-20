@@ -21,10 +21,9 @@ public class BusinessPartnerIdentification extends AggregateRoot<BusinessPartner
     @JoinColumn(name = "partner_id")
     Partner partner;
 
-    private Long identificationCategoryId;
-
     private Integer serialNumber;
     
+    private String identificationCategoryCode;
     private String identificationNumber;
     private String idInstitute;
     private LocalDate idEntryDate;

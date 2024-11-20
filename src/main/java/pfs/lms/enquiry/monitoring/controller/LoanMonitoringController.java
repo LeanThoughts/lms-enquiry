@@ -293,9 +293,9 @@ public class LoanMonitoringController {
 
     }
 
-    @DeleteMapping("/termsAndConditionsModifications/delete/{id}")
+    @DeleteMapping("/loanApplications/termsAndConditions/delete/{id}")
     public ResponseEntity<TermsAndConditionsModification> deleteTermsAndConditions(
-                                                       @PathVariable("id") UUID termsAndConditionsId,
+                                                        @PathVariable("id") UUID termsAndConditionsId,
                                                        HttpServletRequest request)
             throws CloneNotSupportedException {
         TermsAndConditionsModification termsAndConditionsModification = loanMonitoringService.deleteTermsAndConditions(

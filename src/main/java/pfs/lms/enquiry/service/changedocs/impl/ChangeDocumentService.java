@@ -466,7 +466,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                 case "BusinessPartnerIdentification":
                     BusinessPartnerIdentification businessPartnerIdentification = (BusinessPartnerIdentification) object;
                     result.put("id",businessPartnerIdentification.getId().toString());
-                    result.put("description",businessPartnerIdentification.getIdentificationCategoryId().toString());
+                    result.put("description",businessPartnerIdentification.getIdentificationCategoryCode().toString());
                     return result;
                 case "BusinessPartnerIndustry":
                     BusinessPartnerIndustry businessPartnerIndustry = (BusinessPartnerIndustry) object;

@@ -47,4 +47,10 @@ public class InvoicingDetailController {
                                                         HttpServletRequest request) {
         return ResponseEntity.ok(invoicingDetailService.searchPartners(partnerSearchResource));
     }
+
+    @PutMapping("/invoicingDetails/updateLoanApplication")
+    public void updateLoanApplication(@RequestParam UUID loanApplicationId, @RequestParam UUID partnerId,
+                                    HttpServletRequest request) throws CloneNotSupportedException {
+        invoicingDetailService.saveLoanApplication(loanApplicationId, partnerId, request.getUserPrincipal().getName());
+    }
 }

@@ -268,9 +268,9 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerIdentificationResourceDetail sapBusinessPartnerIdentificationResourceDetail  =
                             sapBusinessPartnerIdentificationResource.mapResource(businessPartnerIdentification);
 
-                    if(businessPartnerIdentification.getIdentificationCategoryId() != null){
+                    if(businessPartnerIdentification.getIdentificationCategoryCode() != null){
                         IdentificationCategory identificationCategory =
-                                identificationCategoryRepository.findById(businessPartnerIdentification.getIdentificationCategoryId()).get();
+                                identificationCategoryRepository.findByCode(businessPartnerIdentification.getIdentificationCategoryCode()).get();
                         sapBusinessPartnerIdentificationResourceDetail.setIdentificationCategory(identificationCategory.getCode());
                     }
                     else sapBusinessPartnerIdentificationResourceDetail.setIdentificationCategory("");

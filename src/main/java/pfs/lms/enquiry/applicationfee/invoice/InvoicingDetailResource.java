@@ -17,4 +17,19 @@ public class InvoicingDetailResource {
     private UUID loanApplicationId;
 
     private UUID partnerId;
+
+    private String companyName;
+    private String cinNumber;
+    private String gstNumber;
+    private String pan;
+    private String msmeRegistrationNumber;
+    private String doorNumber;
+    private String address;
+    private String street;
+    private String city;
+    private String state;
+    private String postalCode;
+    private String landline;
+    private String mobile;
+    private String email;
 }

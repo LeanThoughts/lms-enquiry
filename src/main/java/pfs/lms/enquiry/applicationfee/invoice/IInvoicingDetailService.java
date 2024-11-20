@@ -3,6 +3,7 @@ package pfs.lms.enquiry.applicationfee.invoice;
 import java.util.List;
 import java.util.UUID;
 
+import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 
 public interface IInvoicingDetailService {
@@ -14,4 +15,6 @@ public interface IInvoicingDetailService {
     List<MeetingNumber> getICCMeetingNumbers(UUID loanApplicationId);
 
     List<Partner> searchPartners(PartnerSearchResource partnerSearchResource);
+
+    LoanApplication saveLoanApplication(UUID loanApplicationId, UUID partnerId, String username) throws CloneNotSupportedException;
 }

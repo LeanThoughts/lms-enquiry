@@ -1082,6 +1082,9 @@ public class LoanMonitoringService implements ILoanMonitoringService {
 //        UUID loanBusinessProcessObjectId = this.getLoanBusinessProcessObjectId(siteVisit.getLoanMonitor(),
 //                siteVisit.getLoanAppraisal(), moduleName);
 //
+        termsAndConditionsRepository.delete(termsAndConditionsModification);
+        updateTermsAndConditionsSerialNumbers(loanMonitor);
+
         // Create Change Document for Terms And Conditions Delete
         changeDocumentService.createChangeDocument(
                 termsAndConditionsModification.getLoanMonitor().getId(),
@@ -1094,8 +1097,6 @@ public class LoanMonitoringService implements ILoanMonitoringService {
                 username,
                 "Monitoring", "Terms And Conditions" );
 
-        termsAndConditionsRepository.delete(termsAndConditionsModification);
-        updateTermsAndConditionsSerialNumbers(loanMonitor);
 
         return termsAndConditionsModification;
     }

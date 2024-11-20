@@ -32,13 +32,13 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getPartnerId().toString() 
                 + " : Business partner not found"));
 
-        IdentificationCategory identificationCategory = identificationCategoryRepository.findIdentificationCategoryByCode(businessPartnerIdentificationResource.getIdentificationCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryId().toString() 
+        IdentificationCategory identificationCategory = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategoryCode())
+                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryCode()
                 + " : Identification category not found"));
         
         if (identificationCategory.isDuplicateCheckRequired()) {
             List<BusinessPartnerIdentification> existingIdentifications = businessPartnerIdentificationRepository
-                .findByIdentificationCategoryId(identificationCategory.getId());
+                .findByIdentificationCategoryCode(identificationCategory.getCode());
             if (existingIdentifications != null) {
                 String partyName1 = existingIdentifications.get(0).getPartner().getPartyName1();
                 throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partyName1 + ")");
@@ -52,7 +52,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 .orElse(0);
         businessPartnerIdentification.setSerialNumber(lastSerialNumber + 1);
 
-        businessPartnerIdentification.setIdentificationCategoryId(identificationCategory.getId());
+        businessPartnerIdentification.setIdentificationCategoryCode(identificationCategory.getCode());
         businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
                 getIdentificationNumber());
         businessPartnerIdentification.setIdInstitute(businessPartnerIdentificationResource.getIdInstitute());
@@ -60,6 +60,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidFromDate(businessPartnerIdentificationResource.getIdValidFromDate());
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
+        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
 
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
@@ -87,20 +88,20 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
         Object oldObject = businessPartnerIdentification.clone();
 
-        IdentificationCategory identificationCategory = identificationCategoryRepository.findIdentificationCategoryByCode(businessPartnerIdentificationResource.getIdentificationCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryId().toString()
+        IdentificationCategory identificationCategory = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategoryCode())
+                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryCode()
                         + " : Identification category not found"));
 
         if (identificationCategory.isDuplicateCheckRequired()) {
             List<BusinessPartnerIdentification> existingIdentifications = businessPartnerIdentificationRepository
-                    .findByIdentificationCategoryId(identificationCategory.getId());
+                    .findByIdentificationCategoryCode(identificationCategory.getCode());
             if (existingIdentifications != null) {
                 String partyName1 = existingIdentifications.get(0).getPartner().getPartyName1();
                 throw new RuntimeException(identificationCategory.getValue() + " is already assigned to another business partner (" + partyName1 + ")");
             }
         }
 
-        businessPartnerIdentification.setIdentificationCategoryId(identificationCategory.getId());
+        businessPartnerIdentification.setIdentificationCategoryCode(identificationCategory.getCode());
         businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
                 getIdentificationNumber());
         businessPartnerIdentification.setIdInstitute(businessPartnerIdentificationResource.getIdInstitute());
@@ -108,6 +109,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidFromDate(businessPartnerIdentificationResource.getIdValidFromDate());
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
+        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
 
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
@@ -130,7 +132,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
     public BusinessPartnerIdentification migrate(BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException {
         BusinessPartnerIdentification businessPartnerIdentification = new BusinessPartnerIdentification();
 
-        Object idCat = identificationCategoryRepository.findIdentificationCategoryByCode(businessPartnerIdentificationResource.getIdentificationCategory());
+        Object idCat = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategory());
         IdentificationCategory identificationCategory = (IdentificationCategory) idCat;
 
         if (identificationCategory == null){
@@ -145,8 +147,8 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(businessPartnerIdentificationResource.getPartnerId()));
         if (partner != null) {
             List<BusinessPartnerIdentification> businessPartnerIdentifications =
-                    businessPartnerIdentificationRepository.findByPartnerIdAndIdentificationCategoryIdAndIdentificationNumber(
-                            partner.getId() , identificationCategory.getId(), businessPartnerIdentificationResource.getIdentificationNumber());
+                    businessPartnerIdentificationRepository.findByPartnerIdAndIdentificationCategoryCodeAndIdentificationNumber(
+                            partner.getId() , identificationCategory.getCode(), businessPartnerIdentificationResource.getIdentificationNumber());
             if (businessPartnerIdentifications.size() > 0 ){
                 businessPartnerIdentification = businessPartnerIdentifications.get(0);
                 oldObject = businessPartnerIdentification.clone();
@@ -164,7 +166,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
             businessPartnerIdentification.setSerialNumber(businessPartnerIdentificationList.size()+1);
         }
 
-        businessPartnerIdentification.setIdentificationCategoryId(identificationCategory.getId());
+        businessPartnerIdentification.setIdentificationCategoryCode(identificationCategory.getCode());
         businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
                 getIdentificationNumber());
         businessPartnerIdentification.setIdInstitute(businessPartnerIdentificationResource.getIdInstitute());

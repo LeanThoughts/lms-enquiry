@@ -24,7 +24,8 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
     states: any;
 
     partnerTitles: any;
-
+    businessPartnerRoles: any;
+    businessPartnerCategoryAndRole: any;
     /**
      * constructor()
      */
@@ -34,16 +35,13 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                 private _businessPartnerService: BusinessPartnerService, 
                 private _matSnackBar: MatSnackBar) {
 
-        if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
-            this.partnerTitles = this._activatedRoute.snapshot.data['routeResolvedData'][11]._embedded.titles;
-        }
-        else {
-            this.partnerTitles = this._activatedRoute.snapshot.data['routeResolvedData'][6]._embedded.titles;
-        }
+        this.businessPartnerRoles = this._activatedRoute.snapshot.data.routeResolvedData[0]._embedded.businessPartnerRoleTypes;
             
         this.selectedPartner = this._partnerService.selectedPartner.value;
         console.log('selected partner ####', this.selectedPartner);
         this.states = this._activatedRoute.snapshot.data['routeResolvedData'][1];
+        this.businessPartnerCategoryAndRole = _businessPartnerService.businessPartnerCategoryAndRole.value;
+        console.log('businessPartnerCategoryAndRole', this.businessPartnerCategoryAndRole);
 
         this.partnerDetailsForm = this._formBuilder.group({
             title: [this.selectedPartner.title || null],
@@ -61,6 +59,26 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
             email: [this.selectedPartner.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]],
             mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
             faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            partnerCategory: [this.selectedPartner.partnerCategory || this.businessPartnerCategoryAndRole.partnerCategory],
+            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || this.businessPartnerCategoryAndRole.defaultPartnerRole.code]
+        });
+
+        if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
+            this._businessPartnerService.getTitles(this.selectedPartner.partnerCategory).subscribe(response => {
+                this.partnerTitles = response._embedded.titles;
+            });
+        }
+        else {
+            this.partnerTitles = this._activatedRoute.snapshot.data['routeResolvedData'][6]._embedded.titles;
+        }
+    }
+
+    /**
+     * partnerCategoryChange()
+     */
+    partnerCategoryChange(event: any): void {
+        this._businessPartnerService.getTitles(event.value).subscribe(response => {
+            this.partnerTitles = response._embedded.titles;
         });
     }
 
@@ -89,7 +107,7 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                     this._matSnackBar.open('Partner created successfully', 'Close', {duration: 7000});
                 }, error => {
                     this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
-                });
+                }); 
             }
             else {
                 Object.keys(this.partnerDetailsForm.value).forEach(key => {

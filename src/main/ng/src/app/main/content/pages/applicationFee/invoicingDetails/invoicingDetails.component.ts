@@ -162,7 +162,7 @@ export class InvoicingDetailsComponent implements OnInit {
             invoicingDetail.loanApplicationId = this.loanApplicationId;
             invoicingDetail.partnerId = this.selectedPartnerId;
             if (this.selectedInvoicingDetail.id === undefined) {
-                    this._applicationFeeService.createInvoicingDetail(invoicingDetail).subscribe((data) => {
+                this._applicationFeeService.createInvoicingDetail(invoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing deails saved successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;
                     this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
@@ -178,8 +178,9 @@ export class InvoicingDetailsComponent implements OnInit {
                         loanApplicationId: this.loanApplicationId,
                         startDate: this.selectedPartner.loanEnquiryDate
                     }
-                    this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
-                        // this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
+                    this._applicationFeeService.updateLoanApplication(this.loanApplicationId, this.selectedPartnerId).subscribe(data => {
+                        this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
+                        });
                     });
                 });
             }
@@ -193,8 +194,9 @@ export class InvoicingDetailsComponent implements OnInit {
                             var loanPartner = data._embedded.loanPartners[0];
                             loanPartner.businessPartnerId = this.selectedPartner.partyNumber;
                             loanPartner.businessPartnerName = this.selectedPartner.partyName1 + ' ' + this.selectedPartner.partyName2;
-                            this._loanAppraisalService.updateLoanOfficer(loanPartner).subscribe(data => {
-                                // this._matSnackBar.open('Loan partner updated successfully.', 'OK', { duration: 7000 });
+                            this._applicationFeeService.updateLoanApplication(this.loanApplicationId, this.selectedPartnerId).subscribe(data => {
+                                this._loanAppraisalService.updateLoanOfficer(loanPartner).subscribe(data => {
+                                });
                             });
                         }
                     });

@@ -18,7 +18,7 @@ public class ProjectDataResource {
     private UUID loanApplicationId;
 
     private String projectName;
-    private String typeOfFunding;
+    private String financingType;
     private String policyApplicable;
     private String technology;
     private Double projectCapacityUnitSize;

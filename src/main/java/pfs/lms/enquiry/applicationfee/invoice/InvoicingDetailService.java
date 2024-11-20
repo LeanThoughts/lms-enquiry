@@ -94,9 +94,13 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("Main loan partner role TR0100 not found"));
             partner.addPartnerRole(mainLoanPartnerRole);
-            partnerRepository.save(partner);
         }
-        
+        partner.setGstNumber(invoicingDetailResource.getGstNumber());
+        partner.setCinNumber(invoicingDetailResource.getCinNumber());
+        partner.setPan(invoicingDetailResource.getPan());
+        partner.setMsmeRegisterNumber(invoicingDetailResource.getMsmeRegistrationNumber());
+        partnerRepository.save(partner);
+    
         changeDocumentService.createChangeDocument(
                 invoicingDetail.getId(),
                 invoicingDetail.getId().toString(),
@@ -108,7 +112,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                 username,
                 "ApplicationFee", "InvoicingDetail");
 
-        saveLoanApplication(invoicingDetail.getApplicationFee().getLoanApplication(), partner, username);
+        // saveLoanApplication(invoicingDetail.getApplicationFee().getLoanApplication(), partner, username);
 
 
         return invoicingDetail;
@@ -126,29 +130,32 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 
-        changeDocumentService.createChangeDocument(
-                invoicingDetail.getId(),
-                invoicingDetail.getId().toString(),
-                invoicingDetail.getApplicationFee().getId().toString(),
-                invoicingDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
-                oldInvoicingDetail,
-                invoicingDetail,
-                "Updated",
-                username,
-                "ApplicationFee", "InvoicingDetail");
+//        changeDocumentService.createChangeDocument(
+//                invoicingDetail.getId(),
+//                invoicingDetail.getId().toString(),
+//                invoicingDetail.getApplicationFee().getId().toString(),
+//                invoicingDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString(),
+//                oldInvoicingDetail,
+//                invoicingDetail,
+//                "Updated",
+//                username,
+//                "ApplicationFee", "InvoicingDetail");
 
-        saveLoanApplication(invoicingDetail.getApplicationFee().getLoanApplication(), partner, username);
+        // saveLoanApplication(invoicingDetail.getApplicationFee().getLoanApplication(), partner, username);
 
         return invoicingDetail;
     }
 
-    private LoanApplication saveLoanApplication(LoanApplication loanApplication, Partner partner, String username) throws CloneNotSupportedException {
+    @Override
+    public LoanApplication saveLoanApplication(UUID loanApplicationId, UUID partnerId, String username) throws CloneNotSupportedException {
 
-        Object oldLoanApplication = loanApplication.clone();
+//        Object oldLoanApplication = loanApplicationRepository.getOne(loanApplicationId).clone();
 
-        loanApplication.setLoanApplicant(partner.getId());
-        loanApplication.setBusPartnerNumber(partner.getPartyNumber().toString());
-        loanApplicationRepository.save(loanApplication);
+        LoanApplication loanAppln = loanApplicationRepository.getOne(loanApplicationId);
+        Partner partner = partnerRepository.getOne(partnerId);
+        loanAppln.setLoanApplicant(partnerId);
+        loanAppln.setBusPartnerNumber(partner.getPartyNumber().toString());
+        loanApplicationRepository.save(loanAppln);
 //        changeDocumentService.createChangeDocument(
 //                loanApplication.getId(),
 //                loanApplication.getId().toString(),
@@ -160,7 +167,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
 //                username,
 //                "LoanApplication", "LoanApplication");
 
-        return loanApplication;
+        return loanAppln;
     }
 
     @Override

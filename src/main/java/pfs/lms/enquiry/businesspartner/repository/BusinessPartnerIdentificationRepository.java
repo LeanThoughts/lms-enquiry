@@ -14,9 +14,11 @@ public interface BusinessPartnerIdentificationRepository extends JpaRepository<B
 
     Optional<BusinessPartnerIdentification> findFirstByPartnerOrderBySerialNumberDesc(Partner partner);
 
-    List<BusinessPartnerIdentification> findByIdentificationCategoryId(Long identificationCategoryId);
+//    List<BusinessPartnerIdentification> findByIdentificationCategoryId(Long identificationCategoryId);
+    List<BusinessPartnerIdentification> findByIdentificationCategoryCode(String code);
 
-    List<BusinessPartnerIdentification> findByPartnerIdAndIdentificationCategoryIdAndIdentificationNumber(UUID partnerId, Long identificationCategory, String identificationNUmber);
+//    List<BusinessPartnerIdentification> findByPartnerIdAndIdentificationCategoryIdAndIdentificationNumber(UUID partnerId, Long identificationCategory, String identificationNUmber);
+    List<BusinessPartnerIdentification> findByPartnerIdAndIdentificationCategoryCodeAndIdentificationNumber(UUID partnerId, String code, String identificationNUmber);
 
 
 }

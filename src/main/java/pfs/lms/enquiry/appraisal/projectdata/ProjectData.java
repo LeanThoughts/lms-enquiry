@@ -21,7 +21,7 @@ public class ProjectData extends AggregateRoot<ProjectData> implements Cloneable
     private LoanAppraisal loanAppraisal;
 
     private String projectName;
-    private String typeOfFunding;
+    private String financingType;
     private String policyApplicable;
     private String technology;
     private Double projectCapacityUnitSize;

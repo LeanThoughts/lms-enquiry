@@ -119,8 +119,11 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     @JoinColumn(name="partner__id",referencedColumnName = "id")
     private List<PartnerContact> partnerContacts;
 
+    private String partnerCategory;
 
-    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber) {
+    private String defaultPartnerRole;
+
+    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber, String partnerCategory, String defaultPartnerRole) {
         this.partyNumber = partyNumber;
         this.partyCategory = partyCategory;
         this.partnerGroup = partnerGroup;
@@ -148,6 +151,8 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
         this.gstNumber = gstNumber;
         this.cinNumber = cinNumber;
         this.mobileNumber = mobileNumber;
+        this.partnerCategory = partnerCategory;
+        this.defaultPartnerRole = defaultPartnerRole;
         registerEvent(PartnerCreated.of(this));
     }
 
