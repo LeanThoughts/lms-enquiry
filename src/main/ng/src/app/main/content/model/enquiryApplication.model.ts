@@ -25,6 +25,14 @@ export class EnquiryApplicationModel {
     financingType: string;
     loanEnquiryDate: Date;
     
+    moratoriumPeriod: number;
+    moratoriumPeriodUnit: string;
+    constructionPeriod: number;
+    constructionPeriodUnit: string;
+    debtEquityRatio: number;
+    debtEquityRatioWithGrant: number;
+    projectDebtAmount: number; // totalDebt
+
     /**
      * constructor()
      * Initialize the object.
@@ -56,6 +64,13 @@ export class EnquiryApplicationModel {
         this.rating = _enquiryApplication.loanApplication.rating;
         if (_enquiryApplication.partner)
             this.borrowerName = _enquiryApplication.partner.partyName1;
+        this.moratoriumPeriod = _enquiryApplication.loanApplication.moratoriumPeriod;
+        this.moratoriumPeriodUnit = _enquiryApplication.loanApplication.moratoriumPeriodUnit;
+        this.constructionPeriod = _enquiryApplication.loanApplication.constructionPeriod;
+        this.constructionPeriodUnit = _enquiryApplication.loanApplication.constructionPeriodUnit;
+        this.debtEquityRatio = _enquiryApplication.loanApplication.debtEquityRatio;
+        this.debtEquityRatioWithGrant = _enquiryApplication.loanApplication.debtEquityRatioWithGrant;
+        this.projectDebtAmount = _enquiryApplication.loanApplication.projectDebtAmount;
     }
 
     /**

@@ -72,7 +72,12 @@ export class LoanApplicationModel {
     iCCRemarks: string;
     dealingNodalOfficer: string;
 
-  _links: Object;
+    moratoriumPeriod: number;
+    moratoriumPeriodUnit: string;
+    constructionPeriod: number;
+    constructionPeriodUnit: string;
+    
+    _links: Object;
 
     /**
      * constructor()
@@ -143,7 +148,12 @@ export class LoanApplicationModel {
        this.iCCRemarks = _loanApplication.iCCRemarks || '';
        this.dealingNodalOfficer = _loanApplication.dealingNodalOfficer || '';
 
-        this._links = _loanApplication._links;
+       this.moratoriumPeriod = _loanApplication.moratoriumPeriod || 0;
+       this.moratoriumPeriodUnit = _loanApplication.moratoriumPeriodUnit || '';
+       this.constructionPeriod = _loanApplication.constructionPeriod || 0;
+       this.constructionPeriodUnit = _loanApplication.constructionPeriodUnit || '';
+       
+       this._links = _loanApplication._links;
     }
 
     /**

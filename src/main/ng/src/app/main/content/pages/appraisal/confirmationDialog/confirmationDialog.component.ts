@@ -16,7 +16,8 @@ export class ConfirmationDialogComponent {
      * constructor()
      */
     constructor(public _dialogRef: MatDialogRef<ConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) private _data: any) {
-        this.dialogContentMessage = _data.message || 'Are you sure you want to delete the selected entry?';
+        
+        this.dialogContentMessage = _data ? _data.message : 'Are you sure you want to delete the selected entry?';
         this.dialogTitle = 'Confirmation Dialog';
     }
 

@@ -1,4 +1,4 @@
-import {BehaviorSubject, Observable, forkJoin} from 'rxjs';
+import {BehaviorSubject, Observable, forkJoin, of} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -39,7 +39,7 @@ export class BusinessPartnerService {
                 this.getBusinessPartnerBankDetails(this._partnerService.selectedPartner.value.id),
                 this.getBusinessPartnerRoles(this._partnerService.selectedPartner.value.id),
                 this.getAllIndustryTypes(),
-                this.getTitles(this.businessPartnerCategoryAndRole.value.partnerCategory),
+                of({}), // empty object to avoid errors
                 this.getCountryCodes()
             ]);
         }

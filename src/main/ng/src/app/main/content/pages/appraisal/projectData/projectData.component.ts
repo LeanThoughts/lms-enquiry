@@ -70,7 +70,7 @@ export class ProjectDataComponent implements OnDestroy {
         this.dataSource3 = [];
 
         this.dataSource1.push({particulars: 'Project Name', description: this._projectData.projectName});
-        this.dataSource1.push({particulars: 'Type of Funding', description: this._projectData.typeOfFunding});
+        this.dataSource1.push({particulars: 'Financing Type', description: this._projectData.financingType});
         this.dataSource1.push({particulars: 'Policy Applicable', description: this._projectData.policyApplicable});
         this.dataSource1.push({particulars: 'Technology', description: this._projectData.technology});
         this.dataSource1.push({particulars: 'Unit Size', description: this._projectData.projectCapacityUnitSize});

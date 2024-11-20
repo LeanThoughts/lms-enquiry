@@ -113,8 +113,8 @@ export class TRAListComponent {
     deleteTRA(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((ur) => { // ur is the response from the confirmation dialog
+            if (ur.response) {
                 this._loanMonitoringService.deleteTRA(this.selectedTRA, this._module).subscribe(() => {
                     this.selectedTRA = undefined;
                     this._loanMonitoringService.getTrustRetentionaccounts(this.loanApplicationId).subscribe(data => {

@@ -19,7 +19,7 @@ export class SecurityComplianceListComponent {
     @ViewChild(MatSort) sort: MatSort;
 
     displayedColumns = [
-        'serialNumber', 'particulars', 'qty', 'faceValue','percentage', 'applicability', 'timelines', 'dateOfCreation', 'validityDate', 'value',
+        'serialNumber', 'particulars', 'qty', 'faceValue','percentage', 'timelines', 'dateOfCreation', 'validityDate', 'value',
             'securityPerfectionDate', 'remarks'
     ];
 

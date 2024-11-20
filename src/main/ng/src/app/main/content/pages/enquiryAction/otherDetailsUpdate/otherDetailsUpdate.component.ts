@@ -28,10 +28,10 @@ export class OtherDetailsUpdateComponent {
                 private _matSnackBar: MatSnackBar) { 
 
         this._enquiryActionService.getCreditRatingCodes().subscribe(response => {
-            this._creditRatingCodes = response.creditRatingCodes;
+            this._creditRatingCodes = response;
         });
         this._enquiryActionService.getCreditRatingAgencies().subscribe(response => {
-            this._creditRatingAgencies = response.creditRatingAgencies;
+            this._creditRatingAgencies = response;
         });
 
         // Fetch selected loan officer details from the dialog's data attribute

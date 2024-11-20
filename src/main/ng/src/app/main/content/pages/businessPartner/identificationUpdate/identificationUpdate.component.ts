@@ -54,7 +54,7 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
     ngOnInit(): void {
         this.identificationDetailsUpdateForm = this._formBuilder.group({
             serialNumber: [this.selectedIdentificationDetails.serialNumber || null],
-            identificationCategoryId: [this.selectedIdentificationDetails.identificationCategoryId || null],
+            identificationCategoryCode: [this.selectedIdentificationDetails.identificationCategoryCode || null],
             identificationNumber: [this.selectedIdentificationDetails.identificationNumber || null],
             idInstitute: [this.selectedIdentificationDetails.idInstitute || null],
             idEntryDate: [this.selectedIdentificationDetails.idEntryDate || null],
@@ -128,6 +128,7 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
         if (this.identificationDetailsUpdateForm.valid) {
             // solve the utc time zone issue
             var identificationDetails = this.identificationDetailsUpdateForm.value;
+            
             const convertToUTCDate = (date) => {
                 if (!date) return null;
                 const dt = new Date(date);
@@ -149,7 +150,7 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
                 });
             }
             else {
-                this.selectedIdentificationDetails.identificationCategoryId = identificationDetails.identificationCategoryId;
+                this.selectedIdentificationDetails.identificationCategoryCode = identificationDetails.identificationCategoryCode;
                 this.selectedIdentificationDetails.identificationNumber = identificationDetails.identificationNumber;
                 this.selectedIdentificationDetails.idInstitute = identificationDetails.idInstitute;
                 this.selectedIdentificationDetails.idEntryDate = identificationDetails.idEntryDate;

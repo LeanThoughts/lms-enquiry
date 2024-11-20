@@ -1,6 +1,6 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add Application Fee Request </button>
+        <!-- <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add Application Fee Request </button> -->
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedInceptionFee">
             Modify
         </button>
@@ -42,28 +42,28 @@
             <ng-container matColumnDef="amount">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Amount</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.amount }}</p>
+                    <p class="text-truncate">{{ obj.amount | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="taxAmount">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Tax Amount</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.taxAmount }}</p>
+                    <p class="text-truncate">{{ obj.taxAmount | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="totalAmount">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Total Amount</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.totalAmount }}</p>
+                    <p class="text-truncate">{{ obj.totalAmount | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="amountReceived">
                 <mat-header-cell *matHeaderCellDef mat-sort-header >Amount Received</mat-header-cell>
                 <mat-cell *matCellDef="let obj" >
-                    <p class="text-truncate">{{ obj.amountReceived }}</p>
+                    <p class="text-truncate">{{ obj.amountReceived | number: '1.2-2' }}</p>
                 </mat-cell>
             </ng-container>
 

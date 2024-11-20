@@ -7,6 +7,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { SubLocationUpdateComponent } from '../subLocationUpdate/subLocationUpdate.component';
+import { StateModel } from 'app/main/content/model/state.model';
 
 @Component({
     selector: 'fuse-main-location-details',
@@ -27,7 +28,8 @@ export class MainLocationUpdateComponent {
     ];
 
     selectedSubLocation: any;
-
+    states = StateModel.getStates();
+    
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
     

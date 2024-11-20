@@ -22,7 +22,10 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="40">
-                    <input matInput placeholder="State" formControlName="state" maxlength="50" required>
+                    <mat-select placeholder="State" formControlName="state" required>
+                        <mat-option [value]="''"></mat-option>
+                        <mat-option *ngFor="let state of states" [value]="state.code">{{ state.value }}</mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="40">
                     <input matInput placeholder="Nearest Railway Station" formControlName="nearestRailwayStation" maxlength="50">

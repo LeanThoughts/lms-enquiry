@@ -412,7 +412,7 @@ export class LoanMonitoringService implements Resolve<any> {
     }
 
     public deleteTandC(tandc: any): Observable<any> {
-        const url = "enquiry/api/termsAndConditions/delete/" + tandc.id;
+        const url = "enquiry/api/loanApplications/termsAndConditions/delete/" + tandc.id;
         return this._http.delete(url);
     }
 

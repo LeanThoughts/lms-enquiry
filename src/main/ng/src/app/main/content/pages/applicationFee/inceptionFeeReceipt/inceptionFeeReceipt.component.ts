@@ -56,6 +56,7 @@ export class InceptionFeeReceiptComponent {
     /**
      * add()
      */
+    /*
     add(): void {
         // Open the dialog.
         const dialogRef = this._matDialog.open(InceptionFeeReceiptUpdateDialogComponent, {
@@ -81,7 +82,8 @@ export class InceptionFeeReceiptComponent {
             }
         });
     }
-
+    */
+   
     /**
      * update()
      */

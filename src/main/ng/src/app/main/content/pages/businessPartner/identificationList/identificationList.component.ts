@@ -130,8 +130,8 @@ export class BusinessPartnerIdentificationListComponent implements OnDestroy {
     /**
      * getIdentificationCategoryDescription()
      */
-    getIdentificationCategoryDescription(identificationCategoryId: string): string {
-        const identificationCategory = this.identificationCategories.find(identificationCategory => identificationCategory.id === identificationCategoryId);
+    getIdentificationCategoryDescription(identificationCategoryCode: string): string {
+        const identificationCategory = this.identificationCategories.find(identificationCategory => identificationCategory.code === identificationCategoryCode);
         return identificationCategory ? identificationCategory.value : '';
     }
 }

@@ -24,7 +24,7 @@ export class SecurityComplianceUpdateDialogComponent {
 
     collateralObjectTypes = LoanMonitoringConstants.collateralObjectTypes;
     collateralAgreementTypes: any;
-    applicability = LoanMonitoringConstants.applicability;
+    // applicability = LoanMonitoringConstants.applicability;
     actionPeriods = LoanMonitoringConstants.actionPeriods;
     actionPeriodSuffixes = LoanMonitoringConstants.actionPeriodSuffixes;
     eventTypes = LoanMonitoringConstants.eventTypes;
@@ -61,7 +61,7 @@ export class SecurityComplianceUpdateDialogComponent {
             collateralAgreementType: [this.selectedSecurityCompliance.collateralAgreementType],
             collateralAgreementTypeDescription: [this.selectedSecurityCompliance.collateralAgreementTypeDescription],
             timelines: [this.selectedSecurityCompliance.timelines],
-            applicability: [this.selectedSecurityCompliance.applicability],
+            // applicability: [this.selectedSecurityCompliance.applicability],
             dateOfCreation: [this.selectedSecurityCompliance.dateOfCreation || ''],
             value: [this.selectedSecurityCompliance.value, [Validators.pattern(MonitoringRegEx.genericAmount)]],
             validityDate: [this.selectedSecurityCompliance.validityDate || ''],
@@ -113,7 +113,7 @@ export class SecurityComplianceUpdateDialogComponent {
                 this.selectedSecurityCompliance.collateralAgreementType = securityCompliance.collateralAgreementType;
                 this.selectedSecurityCompliance.collateralAgreementTypeDescription  = securityCompliance.collateralAgreementTypeDescription;
                 this.selectedSecurityCompliance.timelines  = securityCompliance.timelines;
-                this.selectedSecurityCompliance.applicability  = securityCompliance.applicability;
+                // this.selectedSecurityCompliance.applicability  = securityCompliance.applicability;
                 this.selectedSecurityCompliance.dateOfCreation  = securityCompliance.dateOfCreation;
                 this.selectedSecurityCompliance.value  = securityCompliance.value;
                 this.selectedSecurityCompliance.validityDate  = securityCompliance.validityDate;

@@ -131,8 +131,8 @@ export class TRAStatementListComponent implements OnDestroy {
     deleteTRAStatement(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((ur) => { // ur is the response from the confirmation dialog
+            if (ur.response) {
                 this._loanMonitoringService.deleteTRAStatement(this.selectedTRAStatement, this._module).subscribe(() => {
                     this.selectedTRAStatement = undefined;
                     this._loanMonitoringService.getTRAStatements(this.selectedTRA.id).subscribe(data => {

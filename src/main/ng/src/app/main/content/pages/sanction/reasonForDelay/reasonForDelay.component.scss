@@ -14,3 +14,11 @@ mat-paginator.mat-paginator.paginator--centered {
 .highlight{
     background: #FFA500; /* orange */
 }
+
+.mat-column-serialNumber {
+    width: 10% !important;
+}
+
+.mat-column-date {
+    width: 15% !important;
+}

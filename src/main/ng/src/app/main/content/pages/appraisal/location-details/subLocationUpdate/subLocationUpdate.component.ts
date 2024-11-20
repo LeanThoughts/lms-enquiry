@@ -6,6 +6,7 @@ import { LoanMonitoringService } from '../../../monitoring/loanMonitoring.servic
 import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 import { LoanAppraisalService } from '../../loanAppraisal.service';
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
+import { StateModel } from 'app/main/content/model/state.model';
 
 @Component({
     selector: 'fuse-sub-location-update-dialog',
@@ -20,6 +21,8 @@ export class SubLocationUpdateComponent {
 
     selectedSubLocation: any;
     subLocationUpdateForm: FormGroup;
+
+    states = StateModel.getStates();
 
     /**
      * constructor()

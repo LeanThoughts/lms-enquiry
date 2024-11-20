@@ -22,7 +22,8 @@ export class BusinessPartnerBankDetailsListComponent implements OnDestroy {
     businessPartnerId: string;
 
     displayedColumns = [
-        'serialNumber', 'bankKey', 'ifscCode', 'accountNumber', 'entryDate', 'validFrom', 'validTo'
+        'serialNumber', 'bankName', 'ifscCode', 'accountNumber', 'entryDate', 'validFrom', 'validTo', 'bankCountry', 
+            'referenceNumber', 'accountHolderName', 'bankAccountName'
     ];
 
     selectedBankDetails: any;

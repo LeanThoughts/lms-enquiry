@@ -29,7 +29,7 @@ export class LIEUpdateDialogComponent implements OnInit {
     allowUpdates: boolean = true;
     allowBusinessPartnerUpdates = true;
 
-    lieList: any;
+    // lieList: any;
 
     /**
      * constructor()
@@ -66,9 +66,9 @@ export class LIEUpdateDialogComponent implements OnInit {
             });
         })
 
-        this._loanMonitoringService.getLendersIndependentEngineers(this._dialogData.loanApplicationId).subscribe(data => {
-            this.lieList = data;
-        });
+        // this._loanMonitoringService.getLendersIndependentEngineers(this._dialogData.loanApplicationId).subscribe(data => {
+        //     this.lieList = data;
+        // });
     }
 
     /**
@@ -93,41 +93,44 @@ export class LIEUpdateDialogComponent implements OnInit {
     submit(): void {
         if (this.lieUpdateForm.valid) {
             var lie: LIEModel = new LIEModel(this.lieUpdateForm.value);
-            const filteredList = this.lieList.filter(obj => obj.lendersIndependentEngineer.bpCode  === lie.bpCode);
-            if (filteredList.length == 0) {
-                // To solve the utc time zone issue
-                var dt = new Date(lie.dateOfAppointment);
-                lie.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-                dt = new Date(lie.contractPeriodFrom);
-                lie.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
-                dt = new Date(lie.contractPeriodTo);
-                lie.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-                if (this._dialogData.operation === 'addLIE') {
-                    this._loanMonitoringService.saveLIE(lie, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
-                        this._matSnackBar.open('LIE added successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });
-                }
-                else {
-                    this.selectedLIE.bpCode  = lie.bpCode;
-                    this.selectedLIE.name = lie.name;
-                    this.selectedLIE.dateOfAppointment = lie.dateOfAppointment;
-                    this.selectedLIE.contactPerson = lie.contactPerson;
-                    this.selectedLIE.contractPeriodFrom = lie.contractPeriodFrom;
-                    this.selectedLIE.contractPeriodTo = lie.contractPeriodTo;
-                    this.selectedLIE.contactNumber = lie.contactNumber;
-                    this.selectedLIE.email = lie.email;
+            // To solve the utc time zone issue
+            var dt = new Date(lie.dateOfAppointment);
+            lie.dateOfAppointment = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(lie.contractPeriodFrom);
+            lie.contractPeriodFrom = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            dt = new Date(lie.contractPeriodTo);
+            lie.contractPeriodTo = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
-                    this._loanMonitoringService.updateLIE(this.selectedLIE, this._dialogData.module).subscribe(() => {
-                        this._matSnackBar.open('LIE updated successfully.', 'OK', { duration: 7000 });
-                        this._dialogRef.close({ 'refresh': true });
-                    });            
-                }
+            if (this._dialogData.operation === 'addLIE') {
+                this._loanMonitoringService.getLendersIndependentEngineers(this._dialogData.loanApplicationId).subscribe(data => {
+                    const filteredList = data.find(obj => obj.lendersIndependentEngineer.bpCode.toString()  === lie.bpCode.toString());
+                    if (!filteredList) {
+                        this._loanMonitoringService.saveLIE(lie, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+                            this._matSnackBar.open('LIE added successfully.', 'OK', { duration: 7000 });
+                            this._dialogRef.close({ 'refresh': true });
+                        });
+                    }
+                    else {
+                        this._matSnackBar.open('Business partner ' + lie.bpCode + ' is already in the list. Please select a different business ' + 
+                            'partner.', 'OK', { duration: 7000 });
+                    }
+                });
             }
             else {
-                this._matSnackBar.open('Business partner ' + lie.bpCode + ' is already in the list. Please select a different business partner.', 
-                        'OK', { duration: 7000 });
+                // this.selectedLIE.bpCode  = lie.bpCode;
+                // this.selectedLIE.name = lie.name;
+                this.selectedLIE.dateOfAppointment = lie.dateOfAppointment;
+                this.selectedLIE.contactPerson = lie.contactPerson;
+                this.selectedLIE.contractPeriodFrom = lie.contractPeriodFrom;
+                this.selectedLIE.contractPeriodTo = lie.contractPeriodTo;
+                this.selectedLIE.contactNumber = lie.contactNumber;
+                this.selectedLIE.email = lie.email;
+
+                this._loanMonitoringService.updateLIE(this.selectedLIE, this._dialogData.module).subscribe(() => {
+                    this._matSnackBar.open('LIE updated successfully.', 'OK', { duration: 7000 });
+                    this._dialogRef.close({ 'refresh': true });
+                });            
             }
         }
     }

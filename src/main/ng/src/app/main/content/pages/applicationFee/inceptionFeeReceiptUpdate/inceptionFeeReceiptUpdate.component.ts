@@ -65,8 +65,8 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
             var inceptionFee = this.inceptionFeeForm.value;
 
             // To solve the utc time zone issue
-            // var dt = new Date(inceptionFee.invoiceDate);
-            // inceptionFee.invoiceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            var dt = new Date(inceptionFee.dateOfTransfer);
+            inceptionFee.dateOfTransfer = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
 
             if (this._dialogData.operation === 'addInceptionFee') {
                 inceptionFee.loanApplicationId = this.loanApplicationId;
@@ -80,6 +80,7 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
               this.selectedInceptionFee.referenceNumber = inceptionFee.referenceNumber;
                 this.selectedInceptionFee.remarks = inceptionFee.remarks;
                 this.selectedInceptionFee.amountReceived = inceptionFee.amountReceived;
+                this.selectedInceptionFee.dateOfTransfer = inceptionFee.dateOfTransfer;
                 this._applicationFeeService.updateInceptionFee(this.selectedInceptionFee).subscribe(() => {
                     this._matSnackBar.open('Inception fee details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

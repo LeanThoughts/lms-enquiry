@@ -29,7 +29,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     title: string = 'Create Business Partner';
     workflowStatus: string = '';
 
-    subscription: Subscription;
+    subscriptions: Subscription = new Subscription();
 
     disableSendForApproval: boolean;
     
@@ -57,7 +57,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.subscription = this._partnerService.selectedPartner.subscribe(partner => {
+        this.subscriptions.add(this._partnerService.selectedPartner.subscribe(partner => {
             this.businessPartner = partner;
             this.businessPartnerId = partner ? partner.id : null;
             if (partner && this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
@@ -68,13 +68,14 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                     this.selectedRoleTypes[0].id, true).subscribe(response => {
                 });
             }
-        });
+        }));
     }
 
     /**
      * ngOnDestroy()
      */
     ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     /**
@@ -127,26 +128,56 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
-        if (this.businessPartner) {
-            let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-            let email = this._appService.currentUser.email;
-            this._matSnackBar.open('Please wait while attempting to send the business partner for approval.', 'OK', { duration: 25000 });
-            this._businessPartnerService.sendBusinessPartnerForWorkflowApproval(this.businessPartnerId, name, email).subscribe(
-            response => {
-                this._partnerService.selectedPartner.next(response);
-                // this._matSnackBar.dismiss();
-                this._matSnackBar.open('Business partner is sent for approval.', 'OK', { duration: 7000 });
-            },
-            error => {
-                this.disableSendForApproval = false;
-                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-                    'OK', { duration: 7000 });
-            });
-            this.disableSendForApproval = true;
-            // this._location.back();
-        }
-        else {
+        if (!this.businessPartner) {
             this._matSnackBar.open('Please save the business partner details before sending for approval', 'OK', { duration: 7000 });
+            return;
         }
+
+        // Check bank details
+        this._businessPartnerService.getBusinessPartnerBankDetails(this.businessPartner.id).subscribe({
+            next: response => {
+                if (response._embedded.businessPartnerBankDetails.length === 0) {
+                    this._matSnackBar.open('Please add at least one bank details before sending for approval', 'OK', { duration: 7000 });
+                    return;
+                }
+
+                // Check identification details
+                this._businessPartnerService.getBusinessPartnerIdentificationDetails(this.businessPartner.id).subscribe({
+                    next: bpIds => {
+                        const identificationCategory = bpIds._embedded.businessPartnerIdentifications.find(category => 
+                            category.identificationCategoryCode === 'Z00002');
+                        if (!identificationCategory) {
+                            this._matSnackBar.open('Please add PAN in identification details before sending for approval', 'OK', 
+                                { duration: 7000 });
+                            return;
+                        }
+
+                        const currentUser = this._appService.currentUser;
+                        const name = `${currentUser.firstName} ${currentUser.lastName}`;
+                        const { email } = currentUser;
+
+                        // Send for approval
+                        this._businessPartnerService.sendBusinessPartnerForWorkflowApproval(this.businessPartnerId, name, email).subscribe({
+                            next: response => {
+                                this._partnerService.selectedPartner.next(response);
+                                this._matSnackBar.open('Business partner is sent for approval.', 'OK', { duration: 7000 });
+                                this.disableSendForApproval = true;
+                            },
+                            error: () => {
+                                this.disableSendForApproval = false;
+                                this._matSnackBar.open('Error occurred. Please try again later or contact your system administrator',
+                                    'OK', { duration: 7000 });
+                            }
+                        });
+                    },
+                    error: () => {
+                        this._matSnackBar.open('Error validating identification details. Please try again.', 'OK', { duration: 7000 });
+                    }
+                });
+            },
+            error: () => {
+                this._matSnackBar.open('Error validating bank details. Please try again.', 'OK', { duration: 7000 });
+            }
+        });
     }
 }

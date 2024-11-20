@@ -11,7 +11,7 @@
         <form [formGroup]="identificationDetailsUpdateForm">
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
-                    <mat-select placeholder="Select Identification Category" formControlName="identificationCategoryId" required 
+                    <mat-select placeholder="Select Identification Category" formControlName="identificationCategoryCode" required 
                             (selectionChange)="onIdentificationCategorySelect($event)">
                         <mat-option *ngFor="let identificationCategory of identificationCategories" [value]="identificationCategory.code">
                             {{identificationCategory.value}}

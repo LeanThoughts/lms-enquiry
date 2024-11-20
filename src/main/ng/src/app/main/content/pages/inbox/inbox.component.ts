@@ -91,11 +91,11 @@ export class InboxComponent implements OnInit {
             }
             else if (selectedInboxItem.processName === 'Appraisal') {
                 this._loanAppraisalService.getLaonAppraisal(response.loanApplication.id).subscribe(loanAppraisal => {
-                    this._loanAppraisalService._loanAppraisal.next(loanAppraisal);
+                    this._loanAppraisalService._loanAppraisal = loanAppraisal;
                     this._router.navigate(['/loanAppraisal']);
                 });
             }
-            else if (selectedInboxItem.processName === 'BoardApproval') {
+            else if (selectedInboxItem.processName === 'Board Approval') {
                 this._boardApprovalService.getBoardApproval(response.loanApplication.id).subscribe(boardApproval => {
                     this._boardApprovalService._boardApproval.next(boardApproval);
                     this._router.navigate(['/boardApproval']);

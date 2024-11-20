@@ -40,7 +40,7 @@ export class ProjectDataUpdateComponent {
 
         this._projectDataStep1Form = _formBuilder.group({
             projectName: [this._projectData.projectName || this._loanEnquiry.projectName],
-            typeOfFunding: [this._projectData.typeOfFunding || ''],
+            financingType: [this._projectData.financingType || this._loanEnquiry.financingType],
             policyApplicable: [this._projectData.policyApplicable || ''],
             technology: [this._projectData.technology || ''],
             projectCapacityUnitMeasure: [this._projectData.projectCapacityUnitMeasure || this._loanEnquiry.projectCapacityUnitMeasure],
@@ -74,14 +74,25 @@ export class ProjectDataUpdateComponent {
         this._projectDataStep3Form = _formBuilder.group({
             epcCost: [this._projectData.epcCost || '', [Validators.pattern(MonitoringRegEx.thirteenCommaTwo)]],
             overallProjectCost: [this._projectData.overallProjectCost || '',  [Validators.pattern(MonitoringRegEx.sixteenCommaTwo)]],
-            debtEquityRatio: [this._projectData.twoCommaTwo || ''],
-            totalDebt: [this._projectData.totalDebt || '', [Validators.pattern(MonitoringRegEx.sixteenCommaTwo)]],
-            roiPreCod: [this._projectData.roiPreCod || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
-            roiPostCod: [this._projectData.roiPostCod || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
-            constructionPeriod: [this._projectData.constructionPeriod || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
-            constructionPeriodUnit: [this._projectData.constructionPeriodUnit || ''],
-            moratoriumPeriod: [this._projectData.moratoriumPeriod || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
-            moratoriumPeriodUnit: [this._projectData.moratoriumPeriodUnit || ''],
+
+            debtEquityRatio: [this._projectData.debtEquityRatio || this._loanEnquiry.debtEquityRatio, 
+                [Validators.pattern(MonitoringRegEx.twoCommaTwo)]],
+            debtEquityRatioWithGrant: [this._projectData.debtEquityRatioWithGrant || this._loanEnquiry.debtEquityRatioWithGrant, 
+                [Validators.pattern(MonitoringRegEx.twoCommaTwo)]],
+
+            totalDebt: [this._projectData.totalDebt || this._loanEnquiry.projectDebtAmount, 
+                [Validators.pattern(MonitoringRegEx.sixteenCommaTwo)]],
+
+            // roiPreCod: [this._projectData.roiPreCod || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
+            // roiPostCod: [this._projectData.roiPostCod || '', [Validators.pattern(MonitoringRegEx.threeCommaTwo)]],
+            
+            constructionPeriod: [this._projectData.constructionPeriod || this._loanEnquiry.constructionPeriod, 
+                [Validators.pattern(MonitoringRegEx.digitsOnly)]],
+            constructionPeriodUnit: [this._projectData.constructionPeriodUnit || this._loanEnquiry.constructionPeriodUnit],
+            moratoriumPeriod: [this._projectData.moratoriumPeriod || this._loanEnquiry.moratoriumPeriod, 
+                [Validators.pattern(MonitoringRegEx.digitsOnly)]],
+            moratoriumPeriodUnit: [this._projectData.moratoriumPeriodUnit || this._loanEnquiry.moratoriumPeriodUnit],
+            
             tenorPeriod: [this._projectData.tenorPeriod || '', [Validators.pattern(MonitoringRegEx.digitsOnly)]],
             tenorUnit: [this._projectData.tenorUnit || ''],
             repaymentSchedule: [this._projectData.repaymentSchedule || ''],
@@ -149,8 +160,8 @@ export class ProjectDataUpdateComponent {
                 this._projectData.overallProjectCost = formValues.overallProjectCost;
                 this._projectData.debtEquityRatio = formValues.debtEquityRatio;
                 this._projectData.totalDebt = formValues.totalDebt;
-                this._projectData.roiPreCod = formValues.roiPreCod;
-                this._projectData.roiPostCod = formValues.roiPostCod;
+                // this._projectData.roiPreCod = formValues.roiPreCod;
+                // this._projectData.roiPostCod = formValues.roiPostCod;
                 this._projectData.constructionPeriod = formValues.constructionPeriod;
                 this._projectData.constructionPeriodUnit = formValues.constructionPeriodUnit;
                 this._projectData.moratoriumPeriod = formValues.moratoriumPeriod;

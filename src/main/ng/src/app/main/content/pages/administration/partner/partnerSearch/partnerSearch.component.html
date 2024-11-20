@@ -115,7 +115,7 @@
       <ng-container matColumnDef="partyName1">
         <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="20">Name</mat-header-cell>
         <mat-cell *matCellDef="let partner" fxFlex="20">
-          <p class="text-truncate">{{ partner.partyName1 + partner.partyName2}}</p>
+          <p class="text-truncate">{{ partner.partyName1 + ' ' + partner.partyName2}}</p>
         </mat-cell>
       </ng-container>
 
