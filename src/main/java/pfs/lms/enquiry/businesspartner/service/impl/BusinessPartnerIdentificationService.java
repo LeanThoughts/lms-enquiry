@@ -60,7 +60,6 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidFromDate(businessPartnerIdentificationResource.getIdValidFromDate());
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
-        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
 
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
@@ -109,7 +108,6 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidFromDate(businessPartnerIdentificationResource.getIdValidFromDate());
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
-        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
 
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
