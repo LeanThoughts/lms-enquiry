@@ -190,13 +190,13 @@ export class SanctionService {
      * getSanctionTypes()
      */
     public getSanctionTypes(): Observable<any> {
-        return this._http.get('http://localhost:8080/enquiry/api/sanctionTypes?size=100&sort=code');
+        return this._http.get('enquiry/api/sanctionTypes?size=100&sort=code');
     }
 
     /**
      * getFeeTypes()
      */
     public getFeeTypes(): Observable<any> {
-        return this._http.get('http://localhost:8080/enquiry/api/feeTypes?size=100&sort=code');
+        return this._http.get('enquiry/api/feeTypes?size=100&sort=code');
     }
 }

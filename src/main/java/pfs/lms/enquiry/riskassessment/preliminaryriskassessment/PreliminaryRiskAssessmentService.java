@@ -34,6 +34,7 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
                     RiskAssessment obj = new RiskAssessment();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = riskAssessmentRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -92,6 +93,10 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
 
         preliminaryRiskAssessment = preliminaryRiskAssessmentRepository.save(preliminaryRiskAssessment);
 
+        RiskAssessment riskAssessment = riskAssessmentRepository.getOne(preliminaryRiskAssessment.getRiskAssessment().getId());
+        riskAssessment.setModified(true);
+        riskAssessmentRepository.save(riskAssessment);
+        
         // Change Documents for  Loan Partner
         changeDocumentService.createChangeDocument(
                 preliminaryRiskAssessment.getId(),

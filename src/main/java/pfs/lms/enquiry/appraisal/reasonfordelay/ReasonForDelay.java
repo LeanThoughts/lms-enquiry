@@ -6,8 +6,9 @@ import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 @Entity
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 public class ReasonForDelay extends AggregateRoot<ReasonForDelay> implements Cloneable {
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LoanAppraisal loanAppraisal;
 
     private String statusOfProposal;

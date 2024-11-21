@@ -1,10 +1,12 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openReasonForDelayDialog()"> 
-            Update Reason for Delay
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openReasonForDelayDialog('add')"> 
+            Add
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openReasonForDelayDialog('update')"> 
+            Update
         </button>
     </div>
-
 
     <div  fxLayout="row">
         <div class="mat-table-container mat-white-bg mr-8" style="width: 50%">
@@ -12,24 +14,17 @@
             <mat-table class="enquiries-table" [dataSource]="dataSource1" matSort fusePerfectScrollbar>
     
                 <!-- particulars Column -->
-                <ng-container matColumnDef="particulars">
-                    <mat-header-cell *matHeaderCellDef>Particulars</mat-header-cell>
+                <ng-container matColumnDef="reasonForDelay">
+                    <mat-header-cell *matHeaderCellDef>Reason for Delay</mat-header-cell>
                     <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.particulars }}</p>
-                    </mat-cell>
-                </ng-container>
-    
-                <!-- description Column -->
-                <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-                    <mat-cell *matCellDef="let obj" >
-                        <p class="text-truncate">{{ obj.description }}</p>
+                        <p class="text-truncate">{{ obj.reasonForDelay }}</p>
                     </mat-cell>
                 </ng-container>
     
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     
-                <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj">
+                <mat-row *matRowDef="let obj; columns: displayedColumns;" (click)="onSelect(obj)"
+                        [ngClass]="{'highlight':obj.id === selectedReasonForDelay?.id}">
                 </mat-row>
     
             </mat-table>

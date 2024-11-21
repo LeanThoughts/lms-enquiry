@@ -99,6 +99,7 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this._riskAssessmentService._riskAssessment.subscribe(data => {
                 this.riskAssessment = data;
+                this.disableSendForApproval = !this.riskAssessment.modified;
                 console.log('riskAssessment in riskAssesment component constructor is', this.riskAssessment);
             })
         );

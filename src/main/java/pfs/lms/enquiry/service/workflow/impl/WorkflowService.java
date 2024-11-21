@@ -575,6 +575,7 @@ public class WorkflowService implements IWorkflowService {
                 riskAssessment.setWorkFlowStatusDescription("Approved");
                 riskAssessment.setWorkFlowStatusCode(3);
                 riskAssessment.setProcessInstanceId(processInstanceId);
+                riskAssessment.setModified(false);
                 riskAssessmentRepository.save(riskAssessment);
                 riskAssessmentRepository.flush();
                 riskAssessmentService.processRiskAssessmentApproval(riskAssessment, username);

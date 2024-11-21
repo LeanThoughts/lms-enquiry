@@ -36,6 +36,8 @@ public class RiskAssessment extends AggregateRoot<RiskAssessment> implements Clo
 
     private String workFlowStatusDescription;
 
+    private boolean isModified;
+    
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

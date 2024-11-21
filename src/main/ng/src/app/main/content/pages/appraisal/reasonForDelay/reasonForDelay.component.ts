@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
@@ -19,10 +18,10 @@ export class ReasonForDelayComponent {
     dataSource1 = [];
     
     displayedColumns = [
-        'particulars', 'description'
+        'reasonForDelay'
     ];
 
-    private _reasonForDelay: any;
+    private selectedReasonForDelay: any;
     
     /**
      * constructor()
@@ -32,59 +31,41 @@ export class ReasonForDelayComponent {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 private _activatedRoute: ActivatedRoute,
-                _loanAppraisalService: LoanAppraisalService, public datepipe: DatePipe) {
+                private _loanAppraisalService: LoanAppraisalService) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
-
-        this._reasonForDelay = _activatedRoute.snapshot.data.routeResolvedData[8];        
-        
-        this.populateDisplayTables();
+        if (Object.keys(_activatedRoute.snapshot.data.routeResolvedData[8]).length > 0) {
+            this.dataSource1 = _activatedRoute.snapshot.data.routeResolvedData[8]._embedded.reasonForDelays;
+        }
     }
  
     /**
      * populateDisplayTables()
      */
     populateDisplayTables(): void {
-        this.dataSource1 = [];
-        this.dataSource1.push({particulars: 'Status of Proposal/ Reason for Delay (if any)', description: this._reasonForDelay.statusOfProposal});
-        this.dataSource1.push({particulars: 'Date', description: this.getFormattedDate(this._reasonForDelay.date)});
-        this.dataSource1.push({particulars: 'Type', description: this.getHeldBy(this._reasonForDelay.heldBy)});
+        this._loanAppraisalService.getReasonForDelay(this._loanAppraisalId).subscribe(response => {
+            this.dataSource1 = response._embedded.reasonForDelays;
+        });
     }
 
     /**
-     * getFormattedDate()
+     * onSelect()
      */
-    getFormattedDate(dt: any): string {
-        if (dt) {
-            return this.datepipe.transform(dt, 'dd-MM-yyyy')
-        }
-        else {
-            return '';
-        }
-    }
-
-    /**
-     * getHeldBy()
-     */
-    getHeldBy(heldBy: any): string {
-        if (heldBy === '1') {
-            return 'With Appraisal';
-        }
-        else {
-            return 'With Risk';
-        }
+    onSelect(obj: any): void {
+        this.selectedReasonForDelay = obj;
     }
 
     /**
      * openReasonForDelayDialog()
      */
-     openReasonForDelayDialog(): void {
+     openReasonForDelayDialog(operation: string): void {
         // Open the dialog.
         var data = {
             'loanApplicationId': this._loanApplicationId,
             'loanAppraisalId': this._loanAppraisalId,
-            'reasonForDelay': this._reasonForDelay
+            'selectedReasonForDelay': (operation === 'update') ? this.selectedReasonForDelay : null,
+            'operation': operation
         };
         const dialogRef = this._dialogRef.open(ReasonForDelayUpdateComponent, {
             width: '750px',
@@ -93,7 +74,6 @@ export class ReasonForDelayComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.refresh === true) {
-                this._reasonForDelay = result.reasonForDelay;
                 this.populateDisplayTables();
             }
         });    

@@ -13,9 +13,10 @@ export class ReasonForDelayUpdateComponent {
 
     dialogTitle = "Update Reason For Delay";
 
-    _reasonForDelay: any;
     _reasonForDelayForm: FormGroup;
-    reasonsForDelay = appraisalReasonsForDelay;
+    _reasonsForDelay = appraisalReasonsForDelay;
+
+    _selectedReasonForDelay: any;
 
     /**
      * constructor()
@@ -32,14 +33,20 @@ export class ReasonForDelayUpdateComponent {
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
-        this._reasonForDelay = Object.assign({}, _dialogData.reasonForDelay);
+        if (_dialogData.operation === 'update') {
+            this._selectedReasonForDelay = Object.assign({}, _dialogData.selectedReasonForDelay);
+        }
+        else {
+            this.dialogTitle = "Add Reason For Delay";
+            this._selectedReasonForDelay = {};
+        }
 
         this._reasonForDelayForm = _formBuilder.group({
-            statusOfProposal: [ this._reasonForDelay.statusOfProposal || '' ],
-            date: [ this._reasonForDelay.date || undefined ],
-            heldBy: [ this._reasonForDelay.heldBy || '' ],
-            reasonForDelay: [ this._reasonForDelay.reasonForDelay || '' ],
-            remarks: [ this._reasonForDelay.remarks || '' ]
+            statusOfProposal: [ this._selectedReasonForDelay.statusOfProposal || null ],
+            date: [ this._selectedReasonForDelay.date || null ],
+            heldBy: [ this._selectedReasonForDelay.heldBy || null ],
+            reasonForDelay: [ this._selectedReasonForDelay.reasonForDelay || null ],
+            remarks: [ this._selectedReasonForDelay.remarks || null ]
         });
     }
 
@@ -50,27 +57,29 @@ export class ReasonForDelayUpdateComponent {
         if (this._reasonForDelayForm.valid) {
             var formValues = this._reasonForDelayForm.value;
 
-            var dt = new Date(formValues.date);
-            formValues.date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            if (formValues.date) {
+                var dt = new Date(formValues.date);
+                formValues.date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+            }
 
-            if (JSON.stringify(this._reasonForDelay) === JSON.stringify({})) { // Insert a new record ...
+            if (this._dialogData.operation === 'add') { // Insert a new record ...
                 console.log('inserting new record');
                 formValues.loanApplicationId = this._dialogData.loanApplicationId;
                 this._loanAppraisalService.createReasonForDelay(formValues).subscribe(response => {
                     this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true, 'reasonForDelay': response });
+                    this._dialogRef.close({ 'refresh': true });
                 });
             }
             else {
                 console.log('updating');
-                this._reasonForDelay.statusOfProposal = formValues.statusOfProposal;
-                this._reasonForDelay.date = formValues.date;
-                this._reasonForDelay.heldBy = formValues.heldBy;
-                this._reasonForDelay.reasonForDelay = formValues.reasonForDelay;
-                this._reasonForDelay.remarks = formValues.remarks;
-                this._loanAppraisalService.updateReasonForDelay(this._reasonForDelay).subscribe(response => {
+                this._selectedReasonForDelay.statusOfProposal = formValues.statusOfProposal;
+                this._selectedReasonForDelay.date = formValues.date;
+                this._selectedReasonForDelay.heldBy = formValues.heldBy;
+                this._selectedReasonForDelay.reasonForDelay = formValues.reasonForDelay;
+                this._selectedReasonForDelay.remarks = formValues.remarks;
+                this._loanAppraisalService.updateReasonForDelay(this._selectedReasonForDelay).subscribe(response => {
                     this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true, 'reasonForDelay': response });
+                    this._dialogRef.close({ 'refresh': true });
                 });
             }
         }

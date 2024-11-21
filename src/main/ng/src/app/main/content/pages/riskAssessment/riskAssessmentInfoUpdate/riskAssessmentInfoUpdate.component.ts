@@ -134,9 +134,9 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
             this._riskAssessmentService.createPreliminaryRiskAssessment(riskAssessment).subscribe(() => {
                 this._riskAssessmentService.getRiskAssessment(this.loanApplicationId).subscribe(data => {
                     this._riskAssessmentService._riskAssessment.next(data);
-                    this._matSnackBar.open('Preliminary Risk Assessment details created successfully.', 'OK', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
                 });
+                this._matSnackBar.open('Preliminary Risk Assessment details created successfully.', 'OK', { duration: 7000 });
+                this._dialogRef.close({ 'refresh': true });
             });
         }
         else {
@@ -144,6 +144,9 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
                 this.preliminaryRiskAssessment[key] = riskAssessment[key];
             });
             this._riskAssessmentService.updatePreliminaryRiskAssessment(this.preliminaryRiskAssessment).subscribe(() => {
+                this._riskAssessmentService.getRiskAssessment(this.loanApplicationId).subscribe(data => {
+                    this._riskAssessmentService._riskAssessment.next(data);
+                });
                 this._matSnackBar.open('Preliminary Risk Assessment details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });            
