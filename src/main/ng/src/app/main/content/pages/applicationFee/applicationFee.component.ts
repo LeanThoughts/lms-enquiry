@@ -92,6 +92,7 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this._applicationFeeService._applicationFee.subscribe(data => {
                 this.applicationFee = data;
+                this.disableSendForApproval = !this.applicationFee.modified;
             })
         );
 

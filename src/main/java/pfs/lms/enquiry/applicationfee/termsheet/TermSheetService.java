@@ -35,6 +35,7 @@ public class TermSheetService implements ITermSheetService {
                     ApplicationFee obj = new ApplicationFee();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = applicationFeeRepository.save(obj);
 
                     // Change Documents for ApplicationFee Header
@@ -111,6 +112,10 @@ public class TermSheetService implements ITermSheetService {
         termSheet.setFileReference(termSheetResource.getFileReference());
         termSheet = termSheetRepository.save(termSheet);
 
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(termSheet.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
+
          changeDocumentService.createChangeDocument(
                  termSheet.getId(),
                  termSheet.getId().toString(),
@@ -129,6 +134,11 @@ public class TermSheetService implements ITermSheetService {
     public TermSheet delete(UUID termSheetId, String username) {
         TermSheet termSheet = termSheetRepository.findById(termSheetId)
                 .orElseThrow(() -> new EntityNotFoundException(termSheetId.toString()));
+        
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(termSheet.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
+
         termSheetRepository.delete(termSheet);
 
         changeDocumentService.createChangeDocument(

@@ -109,6 +109,9 @@ export class FormalRequestComponent {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
+                this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                    this._applicationFeeService._applicationFee.next(data);
+                });
                 this.refreshTable();
             }
         });
@@ -120,10 +123,13 @@ export class FormalRequestComponent {
     delete(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._applicationFeeService.deleteFormalRequest(this.selectedFormalRequest.id).subscribe(() => {
                     this.selectedFormalRequest = undefined;
+                    this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                        this._applicationFeeService._applicationFee.next(data);
+                    });    
                     this.refreshTable();
                 },
                 (error) => {

@@ -34,6 +34,7 @@ public class RejectedByICCService implements IRejectedByICCService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -83,6 +84,10 @@ public class RejectedByICCService implements IRejectedByICCService {
         rejectedByIcc.setReasonForRejection(rejectedByIccResource.getReasonForRejection());
         rejectedByIcc = rejectedByIccRepository.save(rejectedByIcc);
 
+        ICCApproval iccApproval = iccApprovalRepository.getOne(rejectedByIcc.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         // Change Documents for  Loan Partner
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -102,6 +107,11 @@ public class RejectedByICCService implements IRejectedByICCService {
     public RejectedByICC delete(UUID rejectedByICCId, String username) {
         RejectedByICC rejectedByIcc = rejectedByIccRepository.findById(rejectedByICCId)
                 .orElseThrow(() -> new EntityNotFoundException(rejectedByICCId.toString()));
+
+        ICCApproval iccApproval = iccApprovalRepository.getOne(rejectedByIcc.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         rejectedByIccRepository.delete(rejectedByIcc);
         return rejectedByIcc;
     }

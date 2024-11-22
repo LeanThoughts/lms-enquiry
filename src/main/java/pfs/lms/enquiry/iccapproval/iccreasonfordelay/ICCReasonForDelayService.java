@@ -34,6 +34,7 @@ public class ICCReasonForDelayService implements IICCReasonForDelayService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -54,6 +55,7 @@ public class ICCReasonForDelayService implements IICCReasonForDelayService {
         iccReasonForDelay.setReasonForDelay(iccReasonForDelayResource.getReasonForDelay());
         iccReasonForDelay.setDate(iccReasonForDelayResource.getDate());
         iccReasonForDelay = iccReasonForDelayRepository.save(iccReasonForDelay);
+
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),
@@ -100,7 +102,13 @@ public class ICCReasonForDelayService implements IICCReasonForDelayService {
     public ICCReasonForDelay delete(UUID iccFurtherDetailId, String username) {
         ICCReasonForDelay iccReasonForDelay = iccReasonForDelayRepository.findById(iccFurtherDetailId)
                 .orElseThrow(() -> new EntityNotFoundException(iccFurtherDetailId.toString()));
+
+        ICCApproval iccApproval = iccApprovalRepository.getOne(iccReasonForDelay.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         iccReasonForDelayRepository.delete(iccReasonForDelay);
+        
         return iccReasonForDelay;
     }
 }

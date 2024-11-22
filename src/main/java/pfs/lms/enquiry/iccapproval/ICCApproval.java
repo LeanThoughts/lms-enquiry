@@ -36,6 +36,8 @@ public class ICCApproval extends AggregateRoot<ICCApproval> implements Cloneable
 
     private String workFlowStatusDescription;
 
+    private boolean isModified;
+    
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

@@ -86,6 +86,7 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this._iccApprovalService._iccApproval.subscribe(data => {
                 this.iccApproval = data;
+                this.disableSendForApproval = !this.iccApproval.modified;
             })
         );
 

@@ -85,6 +85,9 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
                 this.selectedRejectedByICC.meetingNumber = rejectedByICC.meetingNumber;
                 this.selectedRejectedByICC.reasonForRejection = rejectedByICC.reasonForRejection;
                 this._iccApprovalService.updateRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                    });
                     this._matSnackBar.open('Rejected by ICC details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

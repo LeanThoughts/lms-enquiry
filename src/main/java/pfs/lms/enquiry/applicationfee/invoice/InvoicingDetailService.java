@@ -65,6 +65,7 @@ public class InvoicingDetailService implements IInvoicingDetailService {
                     ApplicationFee obj = new ApplicationFee();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = applicationFeeRepository.save(obj);
 
                     // Change Documents for ApplicationFee Header
@@ -129,6 +130,10 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
+
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(invoicingDetail.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
 
 //        changeDocumentService.createChangeDocument(
 //                invoicingDetail.getId(),

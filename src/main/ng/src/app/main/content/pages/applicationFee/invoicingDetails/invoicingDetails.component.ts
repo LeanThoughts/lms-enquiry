@@ -181,6 +181,9 @@ export class InvoicingDetailsComponent implements OnInit {
                     this._applicationFeeService.updateLoanApplication(this.loanApplicationId, this.selectedPartnerId).subscribe(data => {
                         this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
                         });
+                        this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                            this._applicationFeeService._applicationFee.next(data);
+                        });
                     });
                 });
             }
@@ -196,6 +199,9 @@ export class InvoicingDetailsComponent implements OnInit {
                             loanPartner.businessPartnerName = this.selectedPartner.partyName1 + ' ' + this.selectedPartner.partyName2;
                             this._applicationFeeService.updateLoanApplication(this.loanApplicationId, this.selectedPartnerId).subscribe(data => {
                                 this._loanAppraisalService.updateLoanOfficer(loanPartner).subscribe(data => {
+                                });
+                                this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                                    this._applicationFeeService._applicationFee.next(data);
                                 });
                             });
                         }

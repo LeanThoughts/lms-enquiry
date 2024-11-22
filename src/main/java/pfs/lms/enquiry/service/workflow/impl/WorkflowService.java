@@ -567,6 +567,7 @@ public class WorkflowService implements IWorkflowService {
                 iccApproval.setWorkFlowStatusDescription("Approved");
                 iccApproval.setWorkFlowStatusCode(3);
                 iccApproval.setProcessInstanceId(processInstanceId);
+                iccApproval.setModified(false);
                 iccApprovalRepository.save(iccApproval);
                 iccApprovalRepository.flush();
                 iccApprovalService.processApprovedICC(iccApproval, username);
@@ -586,6 +587,7 @@ public class WorkflowService implements IWorkflowService {
                 applicationFee.setWorkFlowStatusDescription("Approved");
                 applicationFee.setWorkFlowStatusCode(3);
                 applicationFee.setProcessInstanceId(processInstanceId);
+                applicationFee.setModified(false);
                 applicationFeeRepository.save(applicationFee);
                 applicationFeeRepository.flush();
                 applicationFeeService.processApprovedApplicationFee(applicationFee, username);

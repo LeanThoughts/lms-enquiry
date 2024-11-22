@@ -157,6 +157,9 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
                     this.selectedICCApproval.fileReference2 = this.fileReference2;
                 }
                 this._iccApprovalService.updateApprovalByICC(this.selectedICCApproval).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                    });
                     this._matSnackBar.open('ICC Approval details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

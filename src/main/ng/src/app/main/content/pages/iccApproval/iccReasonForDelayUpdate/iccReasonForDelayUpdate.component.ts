@@ -79,6 +79,9 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
                 this.selectedReasonForDelay.date = reasonForDelay.date;
                 this.selectedReasonForDelay.reasonForDelay = reasonForDelay.reasonForDelay;
                 this._iccApprovalService.updateReasonForDelay(this.selectedReasonForDelay).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                    });
                     this._matSnackBar.open('Reason for Delay updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

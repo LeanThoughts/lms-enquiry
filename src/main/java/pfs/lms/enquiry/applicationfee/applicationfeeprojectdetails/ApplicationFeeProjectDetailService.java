@@ -34,6 +34,7 @@ public class ApplicationFeeProjectDetailService implements IApplicationFeeProjec
                     ApplicationFee obj = new ApplicationFee();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = applicationFeeRepository.save(obj);
 
                     // Change Documents for ApplicationFee Header
@@ -72,6 +73,9 @@ public class ApplicationFeeProjectDetailService implements IApplicationFeeProjec
         applicationFeeProjectDetail = applicationFeeProjectDetailRepository.save(applicationFeeProjectDetail);
 
 
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(applicationFeeProjectDetail.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
 
         changeDocumentService.createChangeDocument(
                 applicationFeeProjectDetail.getId(),

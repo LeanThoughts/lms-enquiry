@@ -3,6 +3,8 @@ package pfs.lms.enquiry.applicationfee.applicationfee;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import pfs.lms.enquiry.applicationfee.ApplicationFee;
 import pfs.lms.enquiry.applicationfee.ApplicationFeeRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -33,6 +35,7 @@ public class InceptionFeeService implements IInceptionFeeService {
                     pfs.lms.enquiry.applicationfee.ApplicationFee obj = new pfs.lms.enquiry.applicationfee.ApplicationFee();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = applicationFeeRepository.save(obj);
 
                     // Change Documents for Application Fee Header
@@ -107,7 +110,11 @@ public class InceptionFeeService implements IInceptionFeeService {
 
         inceptionFee = inceptionFeeRepository.save(inceptionFee);
 
-         changeDocumentService.createChangeDocument(
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(inceptionFee.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
+
+        changeDocumentService.createChangeDocument(
                 inceptionFee.getId(),
                 inceptionFee.getId().toString(),
                 inceptionFee.getId().toString(),
@@ -125,7 +132,13 @@ public class InceptionFeeService implements IInceptionFeeService {
     public InceptionFee delete(UUID inceptionFeeId, String username) {
         InceptionFee inceptionFee = inceptionFeeRepository.findById(inceptionFeeId)
                 .orElseThrow(() -> new EntityNotFoundException(inceptionFeeId.toString()));
+
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(inceptionFee.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
+
         inceptionFeeRepository.delete(inceptionFee);
+
 
         changeDocumentService.createChangeDocument(
                 inceptionFee.getId(),

@@ -44,6 +44,7 @@ public class RiskNotificationService implements IRiskNotificationService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for ICCApproval
@@ -93,6 +94,10 @@ public class RiskNotificationService implements IRiskNotificationService {
         riskNotification.setRemarks(riskNotificationResource.getRemarks());
         riskNotification = riskNotificationRepository.save(riskNotification);
 
+        ICCApproval iccApproval = iccApprovalRepository.getOne(riskNotification.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         // Change Documents for  Risk Notification
         changeDocumentService.createChangeDocument(
                 riskNotification.getId(),
@@ -132,6 +137,11 @@ public class RiskNotificationService implements IRiskNotificationService {
     public RiskNotification delete(UUID riskNotificationId, String username) {
         RiskNotification riskNotification = riskNotificationRepository.findById(riskNotificationId)
                 .orElseThrow(() -> new EntityNotFoundException(riskNotificationId.toString()));
+
+        ICCApproval iccApproval = iccApprovalRepository.getOne(riskNotification.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         riskNotificationRepository.delete(riskNotification);
         return riskNotification;
     }

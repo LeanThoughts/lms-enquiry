@@ -119,7 +119,10 @@ export class TermSheetComponent {
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
-            if (result.refresh) {
+            if (result && result.refresh) {
+                this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                    this._applicationFeeService._applicationFee.next(data);
+                });
                 this.refreshTable();
             }
         });
@@ -135,6 +138,9 @@ export class TermSheetComponent {
             if (response) {
                 this._applicationFeeService.deleteTermSheet(this.selectedTermSheet.id).subscribe(() => {
                     this.selectedTermSheet = undefined;
+                    this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                        this._applicationFeeService._applicationFee.next(data);
+                    });
                     this.refreshTable();
                 },
                 (error) => {

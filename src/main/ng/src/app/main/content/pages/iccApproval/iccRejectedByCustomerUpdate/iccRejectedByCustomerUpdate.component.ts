@@ -80,6 +80,9 @@ export class ICCRejectedByCustomerUpdateDialogComponent implements OnInit {
                 this.selectedRejectedByCustomer.dateOfRejection = rejectedByCustomer.dateOfRejection;
                 this.selectedRejectedByCustomer.remarks = rejectedByCustomer.remarks;
                 this._iccApprovalService.updateRejectedByCustomer(this.selectedRejectedByCustomer).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                    });
                     this._matSnackBar.open('Rejected by Customer details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });            

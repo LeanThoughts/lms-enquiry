@@ -34,6 +34,7 @@ public class FormalRequestService implements IFormalRequestService {
                     ApplicationFee obj = new ApplicationFee();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = applicationFeeRepository.save(obj);
 
                     // Change Documents for Application Fee - Header
@@ -91,6 +92,10 @@ public class FormalRequestService implements IFormalRequestService {
         formalRequest.setFileReference(formalRequestResource.getFileReference());
         formalRequest = formalRequestRepository.save(formalRequest);
 
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(formalRequest.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
+
         // Change Documents
         changeDocumentService.createChangeDocument(
                 formalRequest.getId(),
@@ -111,6 +116,11 @@ public class FormalRequestService implements IFormalRequestService {
     public FormalRequest delete(UUID formalRequestId, String username) {
         FormalRequest formalRequest = formalRequestRepository.findById(formalRequestId)
                 .orElseThrow(() -> new EntityNotFoundException(formalRequestId.toString()));
+
+        ApplicationFee applicationFee = applicationFeeRepository.getOne(formalRequest.getApplicationFee().getId());
+        applicationFee.setModified(true);
+        applicationFeeRepository.save(applicationFee);
+
         formalRequestRepository.delete(formalRequest);
 
         changeDocumentService.createChangeDocument(

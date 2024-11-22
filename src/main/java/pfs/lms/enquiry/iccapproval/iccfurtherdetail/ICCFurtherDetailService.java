@@ -34,6 +34,7 @@ public class ICCFurtherDetailService implements IICCFurtherDetailService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -84,6 +85,10 @@ public class ICCFurtherDetailService implements IICCFurtherDetailService {
         iccFurtherDetail.setDetailsRequired(iccFurtherDetailResource.getDetailsRequired());
         iccFurtherDetail = iccFurtherDetailRepository.save(iccFurtherDetail);
 
+        ICCApproval iccApproval = iccApprovalRepository.getOne(iccFurtherDetail.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         // Change Documents for  Loan Partner
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -103,7 +108,13 @@ public class ICCFurtherDetailService implements IICCFurtherDetailService {
     public ICCFurtherDetail delete(UUID iccFurtherDetailId, String username) {
         ICCFurtherDetail iccFurtherDetail = iccFurtherDetailRepository.findById(iccFurtherDetailId)
                 .orElseThrow(() -> new EntityNotFoundException(iccFurtherDetailId.toString()));
+        
+        ICCApproval iccApproval = iccApprovalRepository.getOne(iccFurtherDetail.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         iccFurtherDetailRepository.delete(iccFurtherDetail);
+        
         return iccFurtherDetail;
     }
 }

@@ -183,6 +183,9 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             projectDetails.loanApplicationId = this.loanApplicationId;
             this._applicationFeeService.createProjectDetails(this.projectDetailForm.value).subscribe((data) => {
                 this._matSnackBar.open('Project details saved successfully.', 'OK', { duration: 7000 });
+                this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                    this._applicationFeeService._applicationFee.next(data);
+                });
             });
         }
         else {
@@ -195,6 +198,9 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             console.log('projectDetails', projectDetails);
             this._applicationFeeService.updateProjectDetails(projectDetails).subscribe((data) => {
                 this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
+                this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
+                    this._applicationFeeService._applicationFee.next(data);
+                });
             });
         }
     }

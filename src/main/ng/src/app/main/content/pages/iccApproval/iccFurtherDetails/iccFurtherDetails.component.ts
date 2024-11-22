@@ -85,8 +85,8 @@ export class ICCFurtherDetailsComponent implements OnInit {
             if (result.refresh) {
                 this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
                     this._iccApprovalService._iccApproval.next(data);
-                    this.refreshTable();
                 });
+                this.refreshTable();
             }
         });
     }
@@ -100,6 +100,9 @@ export class ICCFurtherDetailsComponent implements OnInit {
         dialogRef.afterClosed().subscribe((response) => {
             if (response) {
                 this._iccApprovalService.deleteFurtherDetail(this.selectedICCFurtherDetail.id).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                    });
                     this.selectedICCFurtherDetail = undefined;
                     this.refreshTable();
                 });

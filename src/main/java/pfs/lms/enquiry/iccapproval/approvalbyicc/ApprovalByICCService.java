@@ -34,6 +34,7 @@ public class ApprovalByICCService implements IApprovalByICCService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -96,6 +97,10 @@ public class ApprovalByICCService implements IApprovalByICCService {
 
         approvalByIcc = approvalByIccRepository.save(approvalByIcc);
 
+        ICCApproval iccApproval = iccApprovalRepository.getOne(approvalByIcc.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         // Change Documents for  Loan Partner
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -115,6 +120,11 @@ public class ApprovalByICCService implements IApprovalByICCService {
     public ApprovalByICC delete(UUID approvalByICCId, String username) {
         ApprovalByICC approvalByIcc = approvalByIccRepository.findById(approvalByICCId)
                 .orElseThrow(() -> new EntityNotFoundException(approvalByICCId.toString()));
+        
+        ICCApproval iccApproval = iccApprovalRepository.getOne(approvalByIcc.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         approvalByIccRepository.delete(approvalByIcc);
         return approvalByIcc;
     }

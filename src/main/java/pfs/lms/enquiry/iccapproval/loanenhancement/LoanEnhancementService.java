@@ -34,6 +34,7 @@ public class LoanEnhancementService implements ILoanEnhancementService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -94,6 +95,10 @@ public class LoanEnhancementService implements ILoanEnhancementService {
         loanEnhancement.setRemarks(loanEnhancementResource.getRemarks());
         loanEnhancement = loanEnhancementRepository.save(loanEnhancement);
 
+        ICCApproval iccApproval = iccApprovalRepository.getOne(loanEnhancement.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         // Change Documents for  Loan Partner
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -113,6 +118,11 @@ public class LoanEnhancementService implements ILoanEnhancementService {
     public LoanEnhancement delete(UUID loanEnhancementId, String username) {
         LoanEnhancement loanEnhancement = loanEnhancementRepository.findById(loanEnhancementId)
                 .orElseThrow(() -> new EntityNotFoundException(loanEnhancementId.toString()));
+
+        ICCApproval iccApproval = iccApprovalRepository.getOne(loanEnhancement.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         loanEnhancementRepository.delete(loanEnhancement);
         return loanEnhancement;
     }

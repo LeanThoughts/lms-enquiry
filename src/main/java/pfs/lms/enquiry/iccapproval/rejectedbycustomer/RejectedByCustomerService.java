@@ -34,6 +34,7 @@ public class RejectedByCustomerService implements IRejectedByCustomerService {
                     ICCApproval obj = new ICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
+                    obj.setModified(true);
                     obj = iccApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
@@ -85,6 +86,10 @@ public class RejectedByCustomerService implements IRejectedByCustomerService {
         rejectedByCustomer.setRejectionCategory(rejectedByCustomerResource.getRejectionCategory());
         rejectedByCustomer = rejectedByCustomerRepository.save(rejectedByCustomer);
 
+        ICCApproval iccApproval = iccApprovalRepository.getOne(rejectedByCustomer.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         // Change Documents for  Loan Partner
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -104,6 +109,11 @@ public class RejectedByCustomerService implements IRejectedByCustomerService {
     public RejectedByCustomer delete(UUID rejectedByCustomerId, String username) {
         RejectedByCustomer rejectedByCustomer = rejectedByCustomerRepository.findById(rejectedByCustomerId)
                 .orElseThrow(() -> new EntityNotFoundException(rejectedByCustomerId.toString()));
+
+        ICCApproval iccApproval = iccApprovalRepository.getOne(rejectedByCustomer.getIccApproval().getId());
+        iccApproval.setModified(true);
+        iccApprovalRepository.save(iccApproval);
+
         rejectedByCustomerRepository.delete(rejectedByCustomer);
         return rejectedByCustomer;
     }

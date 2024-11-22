@@ -88,8 +88,8 @@ export class RiskNotificationComponent implements OnInit {
             if (result.refresh) {
                 this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
                     this._iccApprovalService._iccApproval.next(data);
-                    this.refreshTable();
                 });
+                this.refreshTable();
             }
         });
     }
@@ -100,9 +100,12 @@ export class RiskNotificationComponent implements OnInit {
     deleteRiskNotification(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._iccApprovalService.deleteRiskNotification(this.selectedRiskNotification.id).subscribe(() => {
+                    this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                        this._iccApprovalService._iccApproval.next(data);
+                    });
                     this.selectedRiskNotification = undefined;
                     this.refreshTable();
                 });
