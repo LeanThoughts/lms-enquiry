@@ -115,8 +115,8 @@ export class PaymentReceiptPreSanctionComponent {
     delete(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._sactionService.deletePaymentReceipt(this.selectedPaymentReceipt.id, 'pre').subscribe(() => {
                     this.selectedPaymentReceipt = undefined;
                     this.refreshTable();

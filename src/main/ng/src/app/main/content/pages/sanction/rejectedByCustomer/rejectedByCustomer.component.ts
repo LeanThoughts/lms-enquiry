@@ -115,8 +115,8 @@ export class SanctionRejectedByCustomerComponent {
     delete(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._sanctionService.deleteRejectedByCustomer(this.selectedRejectedByCustomer.id).subscribe(() => {
                     this.selectedRejectedByCustomer = undefined;
                     this.refreshTable();

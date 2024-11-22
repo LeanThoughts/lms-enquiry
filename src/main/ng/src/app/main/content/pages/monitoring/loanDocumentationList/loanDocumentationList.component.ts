@@ -154,8 +154,8 @@ export class LoanDocumentationListComponent {
     deleteLoanDocumentation(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteLoanDocumentation(this.selectedLoanDocumentation, this._module).subscribe(() => {
                     this.selectedLoanDocumentation = undefined;
                     this._loanMonitoringService.getLoanDocumentations(this.loanApplicationId).subscribe(data => {

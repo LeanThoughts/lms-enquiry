@@ -102,12 +102,14 @@ export class CorporateLoanRiskRatingListComponent {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
-            this._loanAppraisalService.deleteCorporateLoanRiskRating(this.selectedRating.id).subscribe(() => {
-                this._loanAppraisalService.getCorporateLoanRiskRatings(this._loanAppraisalId).subscribe(response => {
+            if (result && result.response) {
+                this._loanAppraisalService.deleteCorporateLoanRiskRating(this.selectedRating.id).subscribe(() => {
+                    this._loanAppraisalService.getCorporateLoanRiskRatings(this._loanAppraisalId).subscribe(response => {
                     this.dataSource = new MatTableDataSource(response._embedded.corporateLoanRiskRatings);
-                    this.selectedRating = undefined;
+                        this.selectedRating = undefined;
+                    });
                 });
-            });
+            }
         });
     }
 }

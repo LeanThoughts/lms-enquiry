@@ -135,8 +135,8 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
     deleteLIEReportAndFee(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((ur) => { // ur is the response from the confirmation dialog
-            if (ur.response) {
+        dialogRef.afterClosed().subscribe((result) => { // ur is the response from the confirmation dialog
+            if (result && result.response) {
                 this._loanMonitoringService.deleteLIEReportAndFee(this.selectedLIEReportAndFee, this._module).subscribe(() => {
                     this.selectedLIEReportAndFee = undefined;
                     this._loanMonitoringService.getLIEReportsAndFees(this.selectedLIE.id).subscribe(data => {

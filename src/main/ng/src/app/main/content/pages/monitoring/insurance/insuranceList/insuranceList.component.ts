@@ -115,8 +115,8 @@ export class InsuranceListComponent {
     deleteInsurance(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteInsurance(this.selectedInsurance).subscribe(() => {
                     this.selectedInsurance = undefined;
                     this._loanMonitoringService.getInsurances(this.loanApplicationId).subscribe(data => {

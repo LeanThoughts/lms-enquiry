@@ -139,8 +139,8 @@ export class LFAReportAndFeeListComponent implements OnDestroy {
     deleteLFAReportAndFee(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteLFAReportAndFee(this.selectedLFAReportAndFee, this._module).subscribe(() => {
                     this.selectedLFAReportAndFee = undefined;
                     this._loanMonitoringService.getLFAReportsAndFees(this.selectedLFA.id).subscribe(data => {

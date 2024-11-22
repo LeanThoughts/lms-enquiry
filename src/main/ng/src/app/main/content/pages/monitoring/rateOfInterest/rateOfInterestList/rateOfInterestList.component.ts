@@ -134,8 +134,8 @@ export class RateOfInterestListComponent {
     deleteRateOfInterest(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteRateOfInterest(this.selectedRateOfInterest).subscribe(() => {
                     this.selectedRateOfInterest = undefined;
                     this._loanMonitoringService.getRateOfInterests(this.loanApplicationId).subscribe(data => {

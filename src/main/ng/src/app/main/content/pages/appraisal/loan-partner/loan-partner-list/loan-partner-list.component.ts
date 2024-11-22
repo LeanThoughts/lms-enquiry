@@ -75,7 +75,7 @@ export class LoanPartnerListComponent {
         const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
-            if (result.response) {
+            if (result && result.response) {
                 this._loanAppraisalService.deleteLoanOfficer(this.selectedLoanOfficer.id).subscribe(() => {
                     this.getLoanOfficers();
                 });

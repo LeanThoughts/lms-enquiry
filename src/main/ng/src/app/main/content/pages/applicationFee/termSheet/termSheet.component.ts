@@ -134,8 +134,8 @@ export class TermSheetComponent {
     delete(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._applicationFeeService.deleteTermSheet(this.selectedTermSheet.id).subscribe(() => {
                     this.selectedTermSheet = undefined;
                     this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {

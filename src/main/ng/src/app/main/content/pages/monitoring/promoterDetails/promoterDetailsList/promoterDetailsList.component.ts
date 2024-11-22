@@ -91,8 +91,8 @@ export class PromoterDetailsItemListComponent {
     deletePromoterDetailItem(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deletePromoterDetailItem(this.selectedPromoterDetailItem).subscribe(() => {
                     this.selectedPromoterDetailItem = undefined;
                     this._loanMonitoringService.getPromoterDetailItems(this.loanApplicationId).subscribe(data => {

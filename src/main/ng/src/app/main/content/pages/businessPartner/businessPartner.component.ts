@@ -97,7 +97,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                 }
             });
             dialogRef.afterClosed().subscribe((result) => {
-                if (result.response) {
+                if (result && result.response) {
                     if (this.businessPartnerId) {
                         this._businessPartnerService.createBusinessPartnerRole(this.businessPartnerId, this.businessPartnerRoleType.value.id, false).
                             subscribe(response => {

@@ -104,8 +104,8 @@ export class SecurityComplianceListComponent {
     deleteSecurityCompliance(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteSecurityCompliance(this.selectedSecurityCompliance).subscribe(() => {
                     this.selectedSecurityCompliance = undefined;
                     this._loanMonitoringService.getSecurityCompliances(this.loanApplicationId).subscribe(data => {

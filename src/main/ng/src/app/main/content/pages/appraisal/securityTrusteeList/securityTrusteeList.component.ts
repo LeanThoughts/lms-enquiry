@@ -125,8 +125,8 @@ export class SecurityTrusteeListComponent {
     deleteSecurityTrustee(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanAppraisalService.deleteSecurityTrustee(this.selectedSecurityTrustee, this._module).subscribe(() => {
                     this.selectedSecurityTrustee = undefined;
                     this._loanAppraisalService.getSecurityTrustees(this.loanApplicationId).subscribe(data => {

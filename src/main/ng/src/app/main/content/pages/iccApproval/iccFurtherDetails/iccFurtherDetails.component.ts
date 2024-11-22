@@ -97,8 +97,8 @@ export class ICCFurtherDetailsComponent implements OnInit {
     deleteICCFurtherDetail(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._iccApprovalService.deleteFurtherDetail(this.selectedICCFurtherDetail.id).subscribe(() => {
                     this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
                         this._iccApprovalService._iccApproval.next(data);

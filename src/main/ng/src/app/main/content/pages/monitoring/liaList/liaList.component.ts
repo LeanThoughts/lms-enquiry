@@ -131,8 +131,8 @@ export class LIAListComponent {
     deleteLIA(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteLIA(this.selectedLIA, this._module).subscribe(() => {
                     this.selectedLIA = undefined;
                     this._loanMonitoringService.getLendersInsuranceAdvisors(this.loanApplicationId).subscribe(data => {

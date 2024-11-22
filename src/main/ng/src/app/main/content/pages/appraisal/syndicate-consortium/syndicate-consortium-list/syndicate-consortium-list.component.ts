@@ -85,7 +85,7 @@ export class SyndicateConsortiumListComponent implements OnInit {
         const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
-            if (result.response) {
+            if (result && result.response) {
                 this._loanAppraisalService.deleteSyndicateConsortium(this.selectedSyndicateConsortium.id).subscribe(() => {
                     this.getSyndicateConsortiums();
                 });

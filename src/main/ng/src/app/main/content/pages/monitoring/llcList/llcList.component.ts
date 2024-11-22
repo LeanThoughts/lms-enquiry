@@ -131,8 +131,8 @@ export class LLCListComponent {
     deleteLLC(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteLLC(this.selectedLLC, this._module).subscribe(() => {
                     this.selectedLLC = undefined;
                     this._loanMonitoringService.getLendersLegalCouncils(this.loanApplicationId).subscribe(data => {

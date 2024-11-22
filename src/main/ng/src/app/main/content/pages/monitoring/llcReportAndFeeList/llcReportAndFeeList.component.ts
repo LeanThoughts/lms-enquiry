@@ -135,8 +135,8 @@ export class LLCReportAndFeeListComponent implements OnDestroy {
     deleteLLCReportAndFee(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteLLCReportAndFee(this.selectedLLCReportAndFee, this._module).subscribe(() => {
                     this.selectedLLCReportAndFee = undefined;
                     this._loanMonitoringService.getLLCReportsAndFees(this.selectedLLC.id).subscribe(data => {

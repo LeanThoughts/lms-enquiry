@@ -131,8 +131,8 @@ export class LLCFeeAndLegalCounselFeeComponent {
     deleteLLCFee(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._documentationService.deleteLLCFee(this.selectedLLCFee.id).subscribe(() => {
                     this.selectedLLCFee = undefined;
                     this._documentationService.getLLCFees().subscribe(data => {
@@ -213,8 +213,8 @@ export class LLCFeeAndLegalCounselFeeComponent {
     deleteLegalCounselFee(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._documentationService.deleteLLCFee(this.selectedLLCFee.id).subscribe(() => {
                     this.selectedLLCFee = undefined;
                     this._documentationService.getLegalCounselFees().subscribe(data => {

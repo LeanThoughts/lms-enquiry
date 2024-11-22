@@ -209,8 +209,8 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
     delete(): void {
         const dialogRef = this._dialogRef.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((data) => {
-            if (data.response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._enquiryActionService.deleteShareHolder(this._selectedShareHolder).subscribe(() => {
                     this._enquiryActionService.getShareHolders(this._projectProposal.id).subscribe(response => {
                         this.dataSource.data = response._embedded.shareHolders;

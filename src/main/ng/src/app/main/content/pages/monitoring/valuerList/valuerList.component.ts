@@ -131,8 +131,8 @@ export class ValuerListComponent {
     deleteValuer(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteValuer(this.selectedValuer, this._module).subscribe(() => {
                     this.selectedValuer = undefined;
                     this._loanMonitoringService.getValuers(this.loanApplicationId).subscribe(data => {

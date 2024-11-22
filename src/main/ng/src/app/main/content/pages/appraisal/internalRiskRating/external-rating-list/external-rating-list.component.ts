@@ -104,12 +104,14 @@ export class ExternalRatingListComponent {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
-            this._loanAppraisalService.deleteExternalRating(this.selectedRating.id).subscribe(() => {
-                this._loanAppraisalService.getExternalRatings(this._loanAppraisalId).subscribe(response => {
-                    this.dataSource = new MatTableDataSource(response._embedded.externalRatings);
-                    this.selectedRating = undefined;
+            if (result && result.response) {
+                this._loanAppraisalService.deleteExternalRating(this.selectedRating.id).subscribe(() => {
+                    this._loanAppraisalService.getExternalRatings(this._loanAppraisalId).subscribe(response => {
+                        this.dataSource = new MatTableDataSource(response._embedded.externalRatings);
+                        this.selectedRating = undefined;
+                    });
                 });
-            });
+            }
         });
     }
 }

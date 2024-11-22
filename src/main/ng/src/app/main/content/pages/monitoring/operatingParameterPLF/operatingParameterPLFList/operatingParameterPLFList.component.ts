@@ -83,8 +83,8 @@ export class OperatingParameterPLFListComponent {
     deleteOperatingParameterPLF(): void {
         const dialogRef = this._dialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._loanMonitoringService.deleteOperatingParameterPLF(this.selectedOperatingParameterPLF).subscribe(() => {
                     this.selectedOperatingParameterPLF = undefined;
                     this._loanMonitoringService.getOperatingParameterPLFs(this.loanApplicationId).subscribe(data => {

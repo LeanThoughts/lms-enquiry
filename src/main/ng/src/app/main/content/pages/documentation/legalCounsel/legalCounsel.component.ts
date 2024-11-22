@@ -111,8 +111,8 @@ export class LegalCounselComponent {
     delete(): void {
         const dialogRef = this._matDialog.open(ConfirmationDialogComponent);
         // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed().subscribe((response) => {
-            if (response) {
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result && result.response) {
                 this._documentationService.deleteLegalCounsel(this.selectedLegalCounsel.id).subscribe(() => {
                     this.selectedLegalCounsel = undefined;
                     this._documentationService.getLegalCounsels().subscribe(data => {
