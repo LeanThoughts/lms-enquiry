@@ -48,7 +48,7 @@ export class ApplicationFeeService {
      * updateLoanApplication()
      */
     public updateLoanApplication(loanApplicationId: any, partnerId: any): Observable<any> {
-        return this._http.put('enquiry/api/invoicingDetails/updateLoanApplication', {}, {params: {loanApplicationId, partnerId}});
+        return this._http.post('enquiry/api/invoicingDetails/updateLoanApplication', {loanApplicationId, partnerId});
     }
 
     /**

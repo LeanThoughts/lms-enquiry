@@ -2,6 +2,7 @@ package pfs.lms.enquiry.applicationfee.invoice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -48,9 +49,16 @@ public class InvoicingDetailController {
         return ResponseEntity.ok(invoicingDetailService.searchPartners(partnerSearchResource));
     }
 
-    @PutMapping("/invoicingDetails/updateLoanApplication")
-    public void updateLoanApplication(@RequestParam UUID loanApplicationId, @RequestParam UUID partnerId,
-                                    HttpServletRequest request) throws CloneNotSupportedException {
-        invoicingDetailService.saveLoanApplication(loanApplicationId, partnerId, request.getUserPrincipal().getName());
+//    @PutMapping("/invoicingDetails/updateLoanApplication")
+//    public void updateLoanApplication(@RequestParam UUID loanApplicationId, @RequestParam UUID partnerId,
+//                                    HttpServletRequest request) throws CloneNotSupportedException {
+//        invoicingDetailService.saveLoanApplication(loanApplicationId, partnerId, request.getUserPrincipal().getName());
+//    }
+
+    @PostMapping("/invoicingDetails/updateLoanApplication")
+    public ResponseEntity<LoanApplication> updateLoanApplication(@RequestBody InvoicingDetailResource invoicingDetailResource,
+                                                                 HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(invoicingDetailService.saveLoanApplication(invoicingDetailResource.getLoanApplicationId(),
+                invoicingDetailResource.getPartnerId(), request.getUserPrincipal().getName()));
     }
 }

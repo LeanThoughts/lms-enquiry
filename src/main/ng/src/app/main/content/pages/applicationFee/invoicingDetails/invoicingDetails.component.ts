@@ -82,6 +82,7 @@ export class InvoicingDetailsComponent implements OnInit {
                 this.partnerNameFormControl.setValue(data.partyName1);
                 this.partnerIdFormControl.setValue(data.partyNumber);
                 this.selectedPartnerId = data.id;
+                console.log('loading partner form with this data', data);
                 this.loadPartnerForm(data);
             });
         }
@@ -130,7 +131,7 @@ export class InvoicingDetailsComponent implements OnInit {
         
         Object.entries(identificationMap).forEach(([code, formField]) => {
             const identification = identificationDetails.find(id =>
-                id.identificationCategoryCode() === code
+                id.identificationCategoryCode === code
             );
             console.log('identification', identification);
             if (identification) {
