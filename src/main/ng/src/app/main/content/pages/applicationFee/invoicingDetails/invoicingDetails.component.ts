@@ -120,17 +120,17 @@ export class InvoicingDetailsComponent implements OnInit {
      */
     loadOtherDetails(identificationDetails: any[]): void {
         const identificationMap = {
-            '1258': 'cinNumber',
-            '1263': 'gstNumber', 
-            '1257': 'pan',
-            '1261': 'msmeRegistrationNumber'
+            'Z00004': 'cinNumber',
+            'Z00011': 'gstNumber', 
+            'Z00002': 'pan',
+            'Z00009': 'msmeRegistrationNumber'
         };
 
         const formValues = {};
         
         Object.entries(identificationMap).forEach(([code, formField]) => {
             const identification = identificationDetails.find(id =>
-                id.identificationCategoryId.toString() === code
+                id.identificationCategoryCode() === code
             );
             console.log('identification', identification);
             if (identification) {
@@ -179,21 +179,24 @@ export class InvoicingDetailsComponent implements OnInit {
                         startDate: this.selectedPartner.loanEnquiryDate
                     }
                     this._applicationFeeService.updateLoanApplication(this.loanApplicationId, this.selectedPartnerId).subscribe(data => {
+                        console.log('updated loan application, creating loan partner');
                         this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
                         });
-                        this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
-                            this._applicationFeeService._applicationFee.next(data);
+                        this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(applicationFee => {
+                            this._applicationFeeService._applicationFee.next(applicationFee);
                         });
                     });
                 });
             }
             else {
+                console.log('selectedPartner', this.selectedPartner);
                 this.selectedInvoicingDetail.partnerId = this.selectedPartnerId;
                 this._applicationFeeService.updateInvoicingDetail(this.selectedInvoicingDetail).subscribe((data) => {
                     this._matSnackBar.open('Customer/ Invoicing details updated successfully.', 'OK', { duration: 7000 });
                     this.selectedInvoicingDetail = data;
                     this._loanAppraisalService.getLoanOfficersByRoleType(this.loanApplicationId, 'TR0100').subscribe(data => {
-                        if (data._embedded.loanPartners.length >= 0) {
+                        if (data._embedded.loanPartners.length > 0) {
+                            console.log('found loan partner, updating existing one');
                             var loanPartner = data._embedded.loanPartners[0];
                             loanPartner.businessPartnerId = this.selectedPartner.partyNumber;
                             loanPartner.businessPartnerName = this.selectedPartner.partyName1 + ' ' + this.selectedPartner.partyName2;
@@ -204,6 +207,19 @@ export class InvoicingDetailsComponent implements OnInit {
                                     this._applicationFeeService._applicationFee.next(data);
                                 });
                             });
+                        } else {
+                            console.log('did not find loan partner, creating new one');
+                            const loanPartner = {
+                                businessPartnerId: this.selectedPartner.partyNumber,
+                                businessPartnerName: this.selectedPartner.partyName1 + ' ' + this.selectedPartner.partyName2,
+                                roleType: 'TR0100',
+                                roleDescription: 'Main Loan Partner',
+                                kycStatus: 'Not Started',
+                                loanApplicationId: this.loanApplicationId,
+                                startDate: this.selectedPartner.loanEnquiryDate
+                            }
+                            this._loanAppraisalService.createLoanOfficer(loanPartner).subscribe(data => {
+                            });    
                         }
                     });
                 });
@@ -219,6 +235,7 @@ export class InvoicingDetailsComponent implements OnInit {
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
+            console.log('result from search partners dialog', result);
             if (result.selectedPartner) {
                 if (result.selectedPartner.id) {
                     this.loadPartnerForm(result.selectedPartner);

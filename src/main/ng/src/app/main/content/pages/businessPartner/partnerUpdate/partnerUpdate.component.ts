@@ -60,7 +60,8 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
             mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
             faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
             partnerCategory: [this.selectedPartner.partnerCategory || this.businessPartnerCategoryAndRole.partnerCategory],
-            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || this.businessPartnerCategoryAndRole.defaultPartnerRole.code]
+            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || 
+                (this.businessPartnerCategoryAndRole.defaultPartnerRole ? this.businessPartnerCategoryAndRole.defaultPartnerRole.code : null)]
         });
 
         if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
