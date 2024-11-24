@@ -38,7 +38,7 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
         this.businessPartnerRoles = this._activatedRoute.snapshot.data.routeResolvedData[0]._embedded.businessPartnerRoleTypes;
             
         this.selectedPartner = this._partnerService.selectedPartner.value;
-        console.log('selected partner ####', this.selectedPartner);
+        console.log('selected partner ######', this.selectedPartner);
         this.states = this._activatedRoute.snapshot.data['routeResolvedData'][1];
         this.businessPartnerCategoryAndRole = _businessPartnerService.businessPartnerCategoryAndRole.value;
         console.log('businessPartnerCategoryAndRole', this.businessPartnerCategoryAndRole);

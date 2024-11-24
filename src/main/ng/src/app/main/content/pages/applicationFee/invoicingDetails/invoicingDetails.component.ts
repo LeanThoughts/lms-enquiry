@@ -235,7 +235,7 @@ export class InvoicingDetailsComponent implements OnInit {
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
-            console.log('result from search partners dialog', result);
+            console.log('result from search partners dialog.', result);
             if (result.selectedPartner) {
                 if (result.selectedPartner.id) {
                     this.loadPartnerForm(result.selectedPartner);
