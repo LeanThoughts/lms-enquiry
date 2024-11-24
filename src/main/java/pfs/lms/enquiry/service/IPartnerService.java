@@ -11,7 +11,7 @@ public interface IPartnerService {
     Partner getOne(String username);
     Partner save(Partner partner, String username) throws CloneNotSupportedException;
     Partner migrate(Partner partner);
-    Partner update(Partner partner);
+    Partner update(Partner partner, String username) throws CloneNotSupportedException;
     List<Partner> searchPartners(String[] searchParameters);
     PartnerResourcesOrderByAlphabet getPartnersOrderedByAlphabets();
 

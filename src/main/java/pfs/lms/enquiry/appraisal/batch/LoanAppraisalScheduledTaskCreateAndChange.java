@@ -594,7 +594,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      mainLocationDetail = mainLocationDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
                      loanAppraisal = loanAppraisalRepository.getOne( mainLocationDetail.getLoanAppraisal().getId());
 
-                     log.info("Attempting to Post Appraisal Main Location to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanContractId().toString()
+                     log.info("Attempting to Post Appraisal Main Location to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanApplication().getLoanContractId().toString()
                              + "Loan Contract: " + loanAppraisal.getLoanApplication().getLoanContractId());
 
 
@@ -619,7 +619,7 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
                      subLocationDetail = subLocationDetailRepository.getOne(UUID.fromString((sapIntegrationPointer.getBusinessObjectId())));
                      loanAppraisal = loanAppraisalRepository.getOne( subLocationDetail.getLoanAppraisal().getId());
 
-                     log.info("Attempting to Post Appraisal Sub Location to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanContractId().toString()
+                     log.info("Attempting to Post Appraisal Sub Location to SAP AT :" + dateFormat.format(new Date())  + loanAppraisal.getLoanApplication().getLoanContractId().toString()
                              + "Loan Contract: " + loanAppraisal.getLoanApplication().getLoanContractId());
 
 
@@ -856,13 +856,13 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
             switch (sapIntegrationPointer.getBusinessProcessName()){
                 case "Appraisal":
                     LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if (loanAppraisal.getWorkFlowStatusCode().equals("03")) {
+                    if (loanAppraisal.getWorkFlowStatusCode() == 3) {
                         sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
                     }
                     break;
                 case "Monitoring":
                     LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if (loanMonitor.getWorkFlowStatusCode().equals("03")) {
+                    if (loanMonitor.getWorkFlowStatusCode() == 3 ) {
                         sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
                     }
                     break;

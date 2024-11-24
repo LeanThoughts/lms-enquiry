@@ -174,10 +174,11 @@ public class PartnerService implements IPartnerService {
     }
 
     @Override
-    public Partner update(Partner partnerResource) {
+    public Partner update(Partner partnerResource, String username) throws CloneNotSupportedException {
 
         Partner partner = partnerRepository.findById(partnerResource.getId()).orElseThrow(() ->
                 new RuntimeException("Partner not found"));
+        Object oldPartner = partner.clone();
         partner.setPartyName1(partnerResource.getPartyName1());
         partner.setPartyName2(partnerResource.getPartyName2());
         partner.setSearchTerm1(partnerResource.getSearchTerm1());
@@ -201,6 +202,18 @@ public class PartnerService implements IPartnerService {
         partner.setMsmeRegisterNumber(partnerResource.getMsmeRegisterNumber());
         partner.setPan(partnerResource.getPan());
         partner = partnerRepository.save(partner);
+
+        changeDocumentService.createChangeDocument(
+                partner.getId(),
+                partner.getId().toString(),
+                partner.getId().toString(),
+                partner.getId().toString(),
+                oldPartner,
+                partner,
+                "Updated",
+                username,
+                "Partner", "Partner");
+
         return partner;
     }
 

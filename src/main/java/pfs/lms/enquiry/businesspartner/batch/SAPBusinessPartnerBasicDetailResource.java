@@ -53,25 +53,25 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         else
             detailsResource.setPartnerCategory("1");
 
-        if(partner.getTitle() != null){
-            switch (partner.getTitle()){
-                case "Mr.":
-                    detailsResource.setTitle("0001");
-                    break;
-                case "Mrs.":
-                    detailsResource.setTitle("0002");
-                    break;
-                case "Company":
-                    detailsResource.setTitle("0003");
-                    break;
-                case "Mr. and Mrs.":
-                    detailsResource.setTitle("0004");
-                    break;
-                default:
-                    detailsResource.setTitle(partner.getTitle());
-
-            }
-        }
+//        if(partner.getTitle() != null){
+//            switch (partner.getTitle()){
+//                case "Mr.":
+//                    detailsResource.setTitle("0001");
+//                    break;
+//                case "Mrs.":
+//                    detailsResource.setTitle("0002");
+//                    break;
+//                case "Company":
+//                    detailsResource.setTitle("0003");
+//                    break;
+//                case "Mr. and Mrs.":
+//                    detailsResource.setTitle("0004");
+//                    break;
+//                default:
+//                    detailsResource.setTitle(partner.getTitle());
+//
+//             }
+//        }
 
 
 
@@ -104,6 +104,9 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         }
         if (partner.getAddressLine2() != null){
             detailsResource.setStreet(partner.getAddressLine2());
+        }
+        if(partner.getStreet() != null){
+            detailsResource.setStreet(partner.getStreet());
         }
         if (partner.getCountry() == null || partner.getCountry().length() == 0){
             detailsResource.setCountry("IN");

@@ -215,14 +215,19 @@ public class LoanMonitoringScheduledTask {
             switch (sapIntegrationPointer.getBusinessProcessName()){
                 case "Appraisal":
                     LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if (loanAppraisal.getWorkFlowStatusCode().equals("03")) {
-                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    if (loanAppraisal != null ) {
+                        if (loanAppraisal.getWorkFlowStatusCode() == 3) {
+                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                        }
                     }
                     break;
                 case "Monitoring":
+
                     LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if (loanMonitor.getWorkFlowStatusCode().equals("03")) {
-                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    if (loanMonitor != null) {
+                        if (loanMonitor.getWorkFlowStatusCode() == 3) {
+                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                        }
                     }
                     break;
             }

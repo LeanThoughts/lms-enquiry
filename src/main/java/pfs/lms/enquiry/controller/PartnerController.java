@@ -36,8 +36,8 @@ public class PartnerController {
     }
 
     @PutMapping("/partners/update")
-    public ResponseEntity<Partner> updatePartner(@RequestBody Partner partner) {
-        return ResponseEntity.ok(partnerService.update(partner));
+    public ResponseEntity<Partner> updatePartner(@RequestBody Partner partner, HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(partnerService.update(partner,request.getUserPrincipal().getName()));
     }
 
     @GetMapping("/me")

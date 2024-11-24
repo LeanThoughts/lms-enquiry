@@ -235,6 +235,7 @@ public class LoanApplicationsScheduledTask {
                         .orElseGet(() -> {
                             LoanAppraisal obj = new LoanAppraisal();
                             obj.setLoanApplication(loanApplication1);
+                            obj.setLoanContractId(loanApplication1.getLoanContractId());
                             obj = loanAppraisalRepository.save(obj);
 
                             // Change Documents for Appraisal Header
@@ -258,14 +259,16 @@ public class LoanApplicationsScheduledTask {
                 if(loanMonitor == null)
                 {
                     loanMonitor = new LoanMonitor();
-                    loanMonitor.setLoanApplication(loanApplication);
+                    loanMonitor.setLoanApplication(loanApplication1);
                     loanMonitor.setWorkFlowStatusCode(01); loanMonitor.setWorkFlowStatusDescription("Created");
                     loanMonitor = loanMonitorRepository.save(loanMonitor);
 
                     // Change Documents for Monitoring Header
                     changeDocumentService.createChangeDocument(
-                            loanMonitor.getId(), loanMonitor.getId().toString(), loanMonitor.getId().toString(),
-                            loanApplication.getLoanContractId(),
+                            loanMonitor.getId(),
+                            loanMonitor.getId().toString(),
+                            loanMonitor.getId().toString(),
+                            loanApplication1.getLoanContractId(),
                             null,
                             loanMonitor,
                             "Created",

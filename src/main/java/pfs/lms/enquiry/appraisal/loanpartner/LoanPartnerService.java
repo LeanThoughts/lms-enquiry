@@ -100,7 +100,7 @@ public class LoanPartnerService implements ILoanPartnerService {
         changeDocumentService.createChangeDocument(
                 loanAppraisalForPartner.getId(),
                 loanPartner.getId().toString(),
-                loanAppraisalForPartner.getId().toString(),
+                loanAppraisal.getId().toString(),
                 loanApplication.getLoanContractId(),
                 null,
                 loanPartner,
@@ -180,7 +180,7 @@ public class LoanPartnerService implements ILoanPartnerService {
         changeDocumentService.createChangeDocument(
                 loanAppraisalForPartner.getId(),
                 loanPartner.getId().toString(),
-                loanAppraisalForPartner.getId().toString(),
+                loanPartner.getLoanAppraisalId(),
                 loanPartner.getLoanApplication().getLoanContractId(),
                 null,
                 loanPartner,

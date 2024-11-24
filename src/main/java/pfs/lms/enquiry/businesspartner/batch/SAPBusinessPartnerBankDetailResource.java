@@ -46,7 +46,7 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
             detailsResource.setBankDetailId("");
 
         if (businessPartnerBankDetail.getBankCountry() != null)
-            detailsResource.setBankCountry(businessPartnerBankDetail.getBankCountry());
+            detailsResource.setBankCountry(businessPartnerBankDetail.getBankCountry().substring(0,2));
         else detailsResource.setBankCountry("");
 
         if (businessPartnerBankDetail.getBankCountryIso() != null)
