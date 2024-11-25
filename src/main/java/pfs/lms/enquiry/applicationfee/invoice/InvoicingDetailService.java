@@ -128,6 +128,12 @@ public class InvoicingDetailService implements IInvoicingDetailService {
         Object oldInvoicingDetail = invoicingDetail.clone();
 
         Partner partner = partnerRepository.getOne(invoicingDetailResource.getPartnerId());
+        partner.setGstNumber(invoicingDetailResource.getGstNumber());
+        partner.setCinNumber(invoicingDetailResource.getCinNumber());
+        partner.setPan(invoicingDetailResource.getPan());
+        partner.setMsmeRegisterNumber(invoicingDetailResource.getMsmeRegistrationNumber());
+        partner = partnerRepository.save(partner);
+
         invoicingDetail.setPartner(partner);
         invoicingDetail = invoicingDetailRepository.save(invoicingDetail);
 

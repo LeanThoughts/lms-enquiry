@@ -119,7 +119,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
             constructionPeriod: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriod,
                 [Validators.pattern(MonitoringRegEx.digitsOnly)]),
             constructionPeriodUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.constructionPeriodUnit),
-            status: new FormControl('Draft'),
+            status: new FormControl(null),
 
             projectTypeCoreSector: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectTypeCoreSector),
             purposeOfLoan: new FormControl(this._enquiryActionService._loanApplication.loanApplication.purposeOfLoan),
@@ -135,6 +135,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         if (this._projectProposal !== undefined && this._projectProposal.id) {
+            this._projectDetailForm.controls['status'].setValue(this._projectProposal.proposalStatus);
             this.subscriptions.add(this._enquiryActionService.getProjectDetail(this._projectProposal.id).subscribe(projectDetail => {
                 console.log('got project detail', projectDetail);
                 this._projectDetail = projectDetail;

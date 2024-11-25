@@ -100,20 +100,27 @@ export class InvoicingDetailsComponent implements OnInit {
     loadPartnerForm(partner: any): void {
         this.invoicingDetailForm.patchValue({
             companyName: partner.partyName1,
-            // cinNumber: partner.CINNumber,
-            // gstNumber: partner.gstNumber,
-            // pan: partner.pan,
-            // msmeRegistrationNumber: partner.msmeRegistrationNumber,
+            cinNumber: partner.CINNumber,
+            gstNumber: partner.gstNumber,
+            pan: partner.pan,
+            msmeRegistrationNumber: partner.msmeRegistrationNumber,
             doorNumber: partner.addressLine1,
             address: partner.addressLine2,
             street: partner.street,
             city: partner.city,
-            state: partner.state,
+            state: this.getState(partner.state),
             postalCode: partner.postalCode,
             landline: partner.contactNumber,
             mobile: partner.mobile,
             email: partner.email
         });
+    }
+
+    /**
+     * getState()
+     */
+    getState(stateCode: string): string {
+        return StateModel.getState(stateCode);
     }
 
     /**
@@ -244,6 +251,7 @@ export class InvoicingDetailsComponent implements OnInit {
                     this.selectedPartner = result.selectedPartner;
                     this._businessPartnerService.getBusinessPartnerIdentificationDetails(this.selectedPartnerId).subscribe(data => {
                         this.loadOtherDetails(data._embedded.businessPartnerIdentifications);
+                        this.submit();
                     });
                 }
                 else {
