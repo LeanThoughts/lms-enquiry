@@ -81,7 +81,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
-
+        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         changeDocumentService.createChangeDocument(
@@ -95,7 +95,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 username,
                 "Partner", "BusinessPartnerIdentification");
 
-        updateLoanPartnerKYC(businessPartnerIdentification);
+       // updateLoanPartnerKYC(businessPartnerIdentification);
 
 
         return businessPartnerIdentification;
@@ -141,7 +141,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
-
+        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         changeDocumentService.createChangeDocument(
@@ -154,7 +154,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 "Updated",
                 username,
                 "Partner", "BusinessPartnerIdentification");
-        updateLoanPartnerKYC(businessPartnerIdentification);
+        //updateLoanPartnerKYC(businessPartnerIdentification);
 
         return businessPartnerIdentification;
     }
@@ -207,6 +207,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
+        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setPartner(partner);
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
@@ -235,13 +236,13 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         }
         log.info("Finished Migrating BusinessPartnerIdentification");
 
-        updateLoanPartnerKYC(businessPartnerIdentification);
+        //updateLoanPartnerKYC(businessPartnerIdentification);
 
         return businessPartnerIdentification;
 
     }
 
-    private void updateLoanPartnerKYC( BusinessPartnerIdentification businessPartnerIdentification  ){
+    public BusinessPartnerIdentification updateLoanPartnerKYC( BusinessPartnerIdentification businessPartnerIdentification  ){
         Boolean addKycDocument = false;
 
 //        ZPFSBP0002 PAN Card
@@ -251,18 +252,23 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 //        ZPFSBP0005 MoA and Articles of Association (AoA)
 //        ZPFSBP0006 Certification of Incorporation
 //        ZPFSBP0004 Address Proof
+        try {
         if (
             (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0002")) ||
             (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0008")) ||
-                (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0003")) ||
-                (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0019")) ||
-                (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0005")) ||
-                (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0006")) ||
-                (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0004"))
+            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0003")) ||
+            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0019")) ||
+            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0005")) ||
+            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0006")) ||
+            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0004"))
                     ){
             addKycDocument = true;
         } else {
-            return;
+            return null;
+        }
+        } catch (Exception ex ){
+            log.error("Document Type is empty in Business Partner Identification Number :" + businessPartnerIdentification.getIdentificationNumber()
+                       + " Partner Name " + businessPartnerIdentification.getPartner().getPartyName1() +  businessPartnerIdentification.getPartner().getPartyName2() );
         }
 
         List<LoanApplication> loanApplications =   loanApplicationRepository.findByLoanApplicant(businessPartnerIdentification.getPartner().getId());
@@ -274,7 +280,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                     if (loanPartner.getBusinessPartnerId() != null) {
                         List<KnowYourCustomer> knowYourCustomerList = knowYourCustomerRepository.findByLoanPartnerId(loanPartner.getBusinessPartnerId());
                         KnowYourCustomer knowYourCustomer = new KnowYourCustomer();
-                        knowYourCustomer = knowYourCustomerRepository.findByLoanPartnerIdAndDocumentType( loanPartner.getBusinessPartnerId(), businessPartnerIdentification.getDocumentType());
+                        knowYourCustomer = knowYourCustomerRepository.findByLoanPartnerIdAndDocumentType( loanPartner.getId().toString(), businessPartnerIdentification.getDocumentType());
                         if (knowYourCustomer != null) {
                             knowYourCustomer.setDateOfCompletion(businessPartnerIdentification.getIdEntryDate());
                             knowYourCustomer.setDocumentName(businessPartnerIdentification.getDocumentName());
@@ -295,6 +301,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
         }
 
+        return businessPartnerIdentification;
 
     }
 }

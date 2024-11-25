@@ -28,9 +28,9 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, 
+    constructor(private _formBuilder: FormBuilder,
                 private _businessPartnerService: BusinessPartnerService,
-                public _dialogRef: MatDialogRef<BusinessPartnerIdentificationUpdateComponent>, 
+                public _dialogRef: MatDialogRef<BusinessPartnerIdentificationUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
                 private _matSnackBar: MatSnackBar,
                 private _loanEnquiryService: LoanEnquiryService) {
@@ -99,13 +99,13 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
         if (this.identificationDetailsUpdateForm.valid) {
             if (this.identificationDetailsUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
-                formData.append('file', this.identificationDetailsUpdateForm.get('file').value);      
+                formData.append('file', this.identificationDetailsUpdateForm.get('file').value);
                 this._businessPartnerService.uploadVaultDocument(formData).subscribe(
                     (response) => {
                         this.saveIdentificationDetails(response.fileReference);
                     },
                     (error) => {
-                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
+                        this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
                 );
@@ -128,7 +128,7 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
         if (this.identificationDetailsUpdateForm.valid) {
             // solve the utc time zone issue
             var identificationDetails = this.identificationDetailsUpdateForm.value;
-            
+
             const convertToUTCDate = (date) => {
                 if (!date) return null;
                 const dt = new Date(date);
@@ -157,12 +157,13 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
                 this.selectedIdentificationDetails.idValidFromDate = identificationDetails.idValidFromDate;
                 this.selectedIdentificationDetails.idValidToDate = identificationDetails.idValidToDate;
                 this.selectedIdentificationDetails.documentName = identificationDetails.documentName;
+                this.selectedIdentificationDetails.documentType = identificationDetails.documentType;
                 this._businessPartnerService.updateBusinessPartnerIdentificationDetails(this.selectedIdentificationDetails).subscribe(() => {
                     this._matSnackBar.open('Identification details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 }, error => {
                     this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
-                });            
+                });
             }
         }
     }
