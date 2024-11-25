@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface KnowYourCustomerRepository extends JpaRepository<KnowYourCustomer, UUID> {
 
     List<KnowYourCustomer> findByLoanPartnerId(String loanPartnerId);
+    KnowYourCustomer findByDocumentType(String documentType);
+    KnowYourCustomer findByLoanPartnerIdAndDocumentType(String loanPartnerId, String documentType);
 }
