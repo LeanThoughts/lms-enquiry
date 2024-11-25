@@ -10,5 +10,6 @@ public interface IBusinessPartnerIdentificationService {
 
     BusinessPartnerIdentification update(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException;
     BusinessPartnerIdentification migrate(BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException;
+    public BusinessPartnerIdentification updateLoanPartnerKYC( BusinessPartnerIdentification businessPartnerIdentification  ) ;
 
 }

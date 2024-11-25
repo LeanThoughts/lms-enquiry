@@ -5,11 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetail;
 import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetailRepository;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
+import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
+import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
+import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -21,6 +27,8 @@ public class ApplicationFeeService implements IApplicationFeeService {
     private final ApplicationFeeRepository applicationFeeRepository;
     private final PartnerRepository partnerRepository;
     private final InvoicingDetailRepository invoicingDetailRepository;
+    private final IBusinessPartnerIdentificationService businessPartnerIdentificationService;
+    private final BusinessPartnerIdentificationRepository businessPartnerIdentificationRepository;
 
     @Override
     public ApplicationFee processRejection(ApplicationFee applicationFee, String username) throws CloneNotSupportedException {
@@ -58,30 +66,7 @@ public class ApplicationFeeService implements IApplicationFeeService {
 
         oldPartner = partner.clone();
 
-        InvoicingDetail invoicingDetail = invoicingDetailRepository.findByApplicationFeeId(applicationFee.getId());
-        if (invoicingDetail != null){
-//            partner.setPartyName1(invoicingDetail.getCompanyName());
-//
-//            partner.setEmail(invoicingDetail.getEmail());
-//            partner.setMobileNumber(invoicingDetail.getMobile());
-//            partner.setContactNumber(invoicingDetail.getCinNumber());
-//
-//            partner.setCity(invoicingDetail.getCity());
-//            partner.setStreet(invoicingDetail.getStreet());
-//            partner.setState(invoicingDetail.getState());
-//            partner.setPostalCode(invoicingDetail.getPostalCode());
-//            partner.setAddressLine1(invoicingDetail.getDoorNumber());
-//            partner.setAddressLine2(invoicingDetail.getAddress());
-//
-//            partner.setGstNumber(invoicingDetail.getGstNumber());
-//            partner.setMsmeRegisterNumber(invoicingDetail.getMsmeRegistrationNumber());
-//            partner.setCinNumber(invoicingDetail.getCinNumber());
-        }
-
-
-
          loanApplication.setPostedInSAP(0);
-
 
         loanApplication.setFunctionalStatus(11);
         loanApplication.setFunctionalStatusDescription("Application Fee Stage");
@@ -101,18 +86,15 @@ public class ApplicationFeeService implements IApplicationFeeService {
                 username,
                 "LoanApplication", "LoanApplication" );
 
-//        // Change Documents for Loan Application
-//        changeDocumentService.createChangeDocument(
-//                loanApplication.getId(),
-//                loanApplication.getId().toString(),
-//                loanApplication.getId().toString(),
-//                loanApplication.getEnquiryNo().getId().toString(),
-//                oldLoanApplication,
-//                loanApplication,
-//                "Updated",
-//                username,
-//                "LoanApplication", "LoanApplication" );
+        InvoicingDetail invoicingDetail = invoicingDetailRepository.findByApplicationFeeId(applicationFee.getId());
+        if (invoicingDetail != null) {
+            List<BusinessPartnerIdentification> businessPartnerIdentificationList =
+                    businessPartnerIdentificationRepository.findByPartnerIdOrderBySerialNumberDesc(invoicingDetail.getPartner().getId());
 
+            for (BusinessPartnerIdentification businessPartnerIdentification : businessPartnerIdentificationList) {
+                businessPartnerIdentificationService.updateLoanPartnerKYC(businessPartnerIdentification);
+            }
+        }
         return applicationFee;
     }
 
