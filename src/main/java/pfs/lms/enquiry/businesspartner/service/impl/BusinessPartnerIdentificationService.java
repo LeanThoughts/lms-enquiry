@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomerRepository;
-import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomerService;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
