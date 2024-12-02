@@ -220,7 +220,9 @@ public class ProjectProposalService implements IProjectProposalService {
             loanApplication.setMoratoriumPeriod(projectDetail.getMoratoriumPeriod());
             loanApplication.setMoratoriumPeriodUnit(projectDetail.getMoratoriumPeriodUnit());
             loanApplication.setConstructionPeriod(projectDetail.getConstructionPeriod());
-            loanApplication.setConstructionPeriodUnit(projectDetail.getConstructionPeriodUnit()); }
+            loanApplication.setConstructionPeriodUnit(projectDetail.getConstructionPeriodUnit());
+            loanApplication.setLoanEnquiryDate(projectDetail.getLoanEnquiryDate());
+        }
 
 
         if (enquiryCompletion!= null) {

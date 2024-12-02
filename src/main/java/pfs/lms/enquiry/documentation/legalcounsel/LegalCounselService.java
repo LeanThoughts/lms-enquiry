@@ -33,15 +33,15 @@ public class LegalCounselService implements ILegalCounselService {
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = documentationRepository.save(obj);
-                    // Change Documents for Sanction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Sanction", "Header");
+                    // Change Documents for Documentation Header
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Documentation", "Header");
                     return obj;
                 });
         LegalCounsel legalCounsel = new LegalCounsel();
@@ -58,17 +58,16 @@ public class LegalCounselService implements ILegalCounselService {
         legalCounsel.setDeleteFlag(false);
         legalCounsel = legalCounselRepository.save(legalCounsel);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Created",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+         changeDocumentService.createChangeDocument(
+                 legalCounsel.getId(),
+                 legalCounsel.getId().toString(),
+                 legalCounsel.getDocumentation().getId().toString(),
+                 legalCounsel.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                 legalCounsel,
+                "Created",
+                username,
+                "Documentation", "LegalCounsel" );
 
         return legalCounsel;
     }
@@ -92,17 +91,16 @@ public class LegalCounselService implements ILegalCounselService {
         legalCounsel.setDeleteFlag(false);
         legalCounsel = legalCounselRepository.save(legalCounsel);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                oldObject,
-//                documentationReasonForDelay,
-//                "Updated",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                legalCounsel.getId(),
+                legalCounsel.getId().toString(),
+                legalCounsel.getDocumentation().getId().toString(),
+                legalCounsel.getDocumentation().getLoanApplication().getLoanContractId(),
+                oldObject,
+                legalCounsel,
+                "Updated",
+                username,
+                "Documentation", "LegalCounsel" );
 
         return legalCounsel;
     }
@@ -114,17 +112,16 @@ public class LegalCounselService implements ILegalCounselService {
         legalCounsel.setDeleteFlag(true);
         legalCounsel = legalCounselRepository.save(legalCounsel);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Deleted",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                legalCounsel.getId(),
+                legalCounsel.getId().toString(),
+                legalCounsel.getDocumentation().getId().toString(),
+                legalCounsel.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                legalCounsel,
+                "Deleted",
+                username,
+                "Documentation", "LegalCounsel" );
         return legalCounsel;
     }
 }

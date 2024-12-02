@@ -33,16 +33,17 @@ public class DocumentationReasonForDelayService implements IDocumentationReasonF
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = documentationRepository.save(obj);
-                    // Change Documents for Sanction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Sanction", "Header");
+
+                     changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Documentation", "Header");
                     return obj;
+
                 });
         DocumentationReasonForDelay documentationReasonForDelay = new DocumentationReasonForDelay();
         documentationReasonForDelay.setDocumentation(documentation);
@@ -53,17 +54,16 @@ public class DocumentationReasonForDelayService implements IDocumentationReasonF
         documentationReasonForDelay.setDeleteFlag(false);
         documentationReasonForDelay = documentationReasonForDelayRepository.save(documentationReasonForDelay);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Created",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+         changeDocumentService.createChangeDocument(
+                 documentationReasonForDelay.getId(),
+                 documentationReasonForDelay.getId().toString(),
+                 documentationReasonForDelay.getDocumentation().getId().toString(),
+                 documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                 documentationReasonForDelay,
+                "Created",
+                username,
+                "Documentation", "DocumentationReasonForDelay" );
 
         return documentationReasonForDelay;
     }
@@ -80,17 +80,16 @@ public class DocumentationReasonForDelayService implements IDocumentationReasonF
         documentationReasonForDelay.setReason(resource.getReason());
         documentationReasonForDelay = documentationReasonForDelayRepository.save(documentationReasonForDelay);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                oldObject,
-//                documentationReasonForDelay,
-//                "Updated",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                documentationReasonForDelay.getId(),
+                documentationReasonForDelay.getId().toString(),
+                documentationReasonForDelay.getDocumentation().getId().toString(),
+                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
+                oldObject,
+                documentationReasonForDelay,
+                "Updated",
+                username,
+                "Documentation", "DocumentationReasonForDelay" );
 
         return documentationReasonForDelay;
     }
@@ -102,17 +101,16 @@ public class DocumentationReasonForDelayService implements IDocumentationReasonF
         documentationReasonForDelay.setDeleteFlag(true);
         documentationReasonForDelay = documentationReasonForDelayRepository.save(documentationReasonForDelay);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Deleted",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                documentationReasonForDelay.getId(),
+                documentationReasonForDelay.getId().toString(),
+                documentationReasonForDelay.getDocumentation().getId().toString(),
+                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                documentationReasonForDelay,
+                "Deleted",
+                username,
+                "Documentation", "DocumentationReasonForDelay" );
         return documentationReasonForDelay;
     }
 }

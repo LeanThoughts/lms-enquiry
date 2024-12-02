@@ -2,27 +2,21 @@ package pfs.lms.enquiry.businesspartner.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
-public class CountryCode implements Cloneable{
-
+@NoArgsConstructor
+public  class SanctionAuthority {
     @Id
     @Column(name = "code", nullable = false)
     private String code;
 
     private String value;
-
-
-    public Object clone () throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-
 }

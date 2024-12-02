@@ -40,6 +40,14 @@ import pfs.lms.enquiry.appraisal.riskrating.ExternalRating;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrustee;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrusteeReportAndFee;
 import pfs.lms.enquiry.businesspartner.domain.*;
+import pfs.lms.enquiry.documentation.Documentation;
+import pfs.lms.enquiry.documentation.contractamendments.ContractAmendment;
+import pfs.lms.enquiry.documentation.legalcouncelreport.LegalCounselReport;
+import pfs.lms.enquiry.documentation.legalcounsel.LegalCounsel;
+import pfs.lms.enquiry.documentation.legalcounselfee.LegalCounselFee;
+import pfs.lms.enquiry.documentation.llcfee.LLCFee;
+import pfs.lms.enquiry.documentation.nodalofficer.NodalOfficer;
+import pfs.lms.enquiry.documentation.reasonfordelay.DocumentationReasonForDelay;
 import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
 import pfs.lms.enquiry.appraisal.knowyourcustomer.KnowYourCustomer;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
@@ -226,6 +234,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
         } catch (Exception ex){
             log.error("Error during change document create: " + businessProcessName + "-" + subProcessName + ":" + ex.getMessage() );
         }
+        log.info("Change Document Creation Completed: " + businessProcessName + "-" + subProcessName + ":"  + changeDocument.getLoanContractId() );
 
         return changeDocument;
     }
@@ -1079,6 +1088,52 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         result.put("description", applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
                     result.put("loanApplication",applicationFeeProjectDetail.getApplicationFee().getLoanApplication());
+                    return result;
+                case "Documentation":
+                    Documentation documentation = (Documentation) object;
+                    result.put("id", documentation.getId().toString());
+                    result.put("description", documentation.getLoanApplication().getLoanContractId());
+                    return result;
+                case "LegalCounsel":
+                    LegalCounsel legalCounsel = (LegalCounsel) object;
+                    result.put("id", legalCounsel.getId().toString());
+                    result.put("description", legalCounsel.getDocumentation().getLoanApplication().getLoanContractId());
+                    return result;
+
+                case "LLCFee":
+                    LLCFee llcFee = (LLCFee) object;
+                    result.put("id", llcFee.getId());
+                    result.put("description", llcFee.getDocumentation().getLoanContractId());
+                    return result;
+
+                case "LegalCounselFee":
+                    LegalCounselFee legalCounselFee = (LegalCounselFee) object;
+                    result.put("id", legalCounselFee.getId());
+                    result.put("description", legalCounselFee.getDocumentation().getLoanContractId());
+                    return result;
+
+                case "ContractAmendment":
+                    ContractAmendment contractAmendment = (ContractAmendment) object;
+                    result.put("id", contractAmendment.getId());
+                    result.put("description", contractAmendment.getDocumentation().getLoanContractId());
+                    return result;
+
+                case "LegalCounselReport":
+                    LegalCounselReport legalCounselReport = (LegalCounselReport) object;
+                    result.put("id", legalCounselReport.getId());
+                    result.put("description", legalCounselReport.getLegalCounsel().getDocumentation().getLoanApplication().getLoanContractId());
+                    return result;
+
+                case "NodalOfficer":
+                    NodalOfficer nodalOfficer = (NodalOfficer) object;
+                    result.put("id", nodalOfficer.getId());
+                    result.put("description", nodalOfficer.getDocumentation().getLoanContractId());
+                    return result;
+
+                case "DocumentationReasonForDelay":
+                    DocumentationReasonForDelay documentationReasonForDelay = (DocumentationReasonForDelay) object;
+                    result.put("id", documentationReasonForDelay.getId());
+                    result.put("description", documentationReasonForDelay.getDocumentation().getLoanContractId());
                     return result;
 
 

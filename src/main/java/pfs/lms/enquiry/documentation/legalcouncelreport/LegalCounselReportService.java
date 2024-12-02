@@ -37,17 +37,16 @@ public class LegalCounselReportService implements ILegalCounselReportService {
         legalCounselReport.setDeleteFlag(false);
         legalCounselReport = legalCounselReportRepository.save(legalCounselReport);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Created",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+         changeDocumentService.createChangeDocument(
+                legalCounselReport.getId(),
+                        legalCounselReport.getId().toString(),
+                        legalCounselReport.getLegalCounsel().getId().toString(),
+                        legalCounselReport.getLegalCounsel().getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                        legalCounselReport,
+                "Created",
+                username,
+                "Documentation", "LegalCounselReport" );
 
         return legalCounselReport;
     }
@@ -70,17 +69,16 @@ public class LegalCounselReportService implements ILegalCounselReportService {
         legalCounselReport.setDeleteFlag(false);
         legalCounselReport = legalCounselReportRepository.save(legalCounselReport);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                oldObject,
-//                documentationReasonForDelay,
-//                "Updated",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                legalCounselReport.getId(),
+                legalCounselReport.getId().toString(),
+                legalCounselReport.getLegalCounsel().getId().toString(),
+                legalCounselReport.getLegalCounsel().getDocumentation().getLoanApplication().getLoanContractId(),
+                oldObject,
+                legalCounselReport,
+                "Upated",
+                username,
+                "Documentation", "LegalCounselReport" );
 
         return legalCounselReport;
     }
@@ -92,17 +90,17 @@ public class LegalCounselReportService implements ILegalCounselReportService {
         legalCounselReport.setDeleteFlag(true);
         legalCounselReport = legalCounselReportRepository.save(legalCounselReport);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Deleted",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                legalCounselReport.getId(),
+                legalCounselReport.getId().toString(),
+                legalCounselReport.getLegalCounsel().getId().toString(),
+                legalCounselReport.getLegalCounsel().getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                legalCounselReport,
+                "Deleted",
+                username,
+                "Documentation", "LegalCounselReport" );
+
         return legalCounselReport;
     }
 }

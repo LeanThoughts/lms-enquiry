@@ -1,0 +1,39 @@
+package pfs.lms.enquiry.documentation.contractamendments;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class ContractAmendmentResource {
+
+    private UUID id;
+    private UUID documentationId;
+    private UUID loanApplicationId;
+
+    private Integer serialNumber;
+
+    private LocalDate approvalDate;
+
+    private String sanctioningAuthorityCode;
+
+    private String reasonForChange;
+
+    private String referenceClausesOfContractAgreement;
+    private String remarks;
+
+    private String documentName;
+    private String documentType;
+    private String fileReference;
+
+    private Boolean deleteFlag;
+
+
+}

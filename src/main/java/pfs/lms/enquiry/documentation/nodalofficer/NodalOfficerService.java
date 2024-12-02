@@ -33,15 +33,14 @@ public class NodalOfficerService implements INodalOfficerService {
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = documentationRepository.save(obj);
-                    // Change Documents for Sanction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Sanction", "Header");
+                    changeDocumentService.createChangeDocument(
+                           obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Documentation", "Header");
                     return obj;
                 });
         NodalOfficer nodalOfficer = new NodalOfficer();
@@ -54,17 +53,16 @@ public class NodalOfficerService implements INodalOfficerService {
         nodalOfficer.setDeleteFlag(false);
         nodalOfficer = nodalOfficerRepository.save(nodalOfficer);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Created",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+         changeDocumentService.createChangeDocument(
+                 nodalOfficer.getId(),
+                 nodalOfficer.getId().toString(),
+                 nodalOfficer.getDocumentation().getId().toString(),
+                 nodalOfficer.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                 nodalOfficer,
+                "Created",
+                username,
+                "Documentation", "NodalOfficer" );
 
         return nodalOfficer;
     }
@@ -84,17 +82,17 @@ public class NodalOfficerService implements INodalOfficerService {
         nodalOfficer.setDeleteFlag(false);
         nodalOfficer = nodalOfficerRepository.save(nodalOfficer);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                oldObject,
-//                documentationReasonForDelay,
-//                "Updated",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                nodalOfficer.getId(),
+                nodalOfficer.getId().toString(),
+                nodalOfficer.getDocumentation().getId().toString(),
+                nodalOfficer.getDocumentation().getLoanApplication().getLoanContractId(),
+                oldObject,
+                nodalOfficer,
+                "Updated",
+                username,
+                "Documentation", "NodalOfficer" );
+
 
         return nodalOfficer;
     }
@@ -106,17 +104,16 @@ public class NodalOfficerService implements INodalOfficerService {
         nodalOfficer.setDeleteFlag(true);
         nodalOfficer = nodalOfficerRepository.save(nodalOfficer);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Deleted",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                nodalOfficer.getId(),
+                nodalOfficer.getId().toString(),
+                nodalOfficer.getDocumentation().getId().toString(),
+                nodalOfficer.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                nodalOfficer,
+                "Deleted",
+                username,
+                "Documentation", "NodalOfficer" );
         return nodalOfficer;
     }
 }

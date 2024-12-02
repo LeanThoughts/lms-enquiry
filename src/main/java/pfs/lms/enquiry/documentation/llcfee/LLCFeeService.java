@@ -33,15 +33,14 @@ public class LLCFeeService implements ILLCFeeService {
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj = documentationRepository.save(obj);
-                    // Change Documents for Sanction Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Sanction", "Header");
+                     changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "Documentation", "Header");
                     return obj;
                 });
         LLCFee llcFee = new LLCFee();
@@ -59,17 +58,16 @@ public class LLCFeeService implements ILLCFeeService {
         llcFee.setDeleteFlag(false);
         llcFee = LLCFeeRepository.save(llcFee);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Created",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+         changeDocumentService.createChangeDocument(
+                 llcFee.getId(),
+                 llcFee.getId().toString(),
+                 llcFee.getDocumentation().getId().toString(),
+                 llcFee.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                 llcFee,
+                "Created",
+                username,
+                "Documentation", "LLCFee" );
 
         return llcFee;
     }
@@ -93,18 +91,16 @@ public class LLCFeeService implements ILLCFeeService {
         llcFee.setFileReference(resource.getFileReference());
         llcFee = LLCFeeRepository.save(llcFee);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                oldObject,
-//                documentationReasonForDelay,
-//                "Updated",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
-
+        changeDocumentService.createChangeDocument(
+                llcFee.getId(),
+                llcFee.getId().toString(),
+                llcFee.getDocumentation().getId().toString(),
+                llcFee.getDocumentation().getLoanApplication().getLoanContractId(),
+                oldObject,
+                llcFee,
+                "Updated",
+                username,
+                "Documentation", "LLCFee" );
         return llcFee;
     }
 
@@ -115,17 +111,16 @@ public class LLCFeeService implements ILLCFeeService {
         llcFee.setDeleteFlag(true);
         llcFee = LLCFeeRepository.save(llcFee);
 
-        // Change Documents for SanctionReasonForDelay
-//        changeDocumentService.createChangeDocument(
-//                documentationReasonForDelay.getDocumentation().getId(),
-//                documentationReasonForDelay.getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getId().toString(),
-//                documentationReasonForDelay.getDocumentation().getLoanApplication().getLoanContractId(),
-//                null,
-//                documentationReasonForDelay,
-//                "Deleted",
-//                username,
-//                "Sanction", "SanctionReasonForDelay" );
+        changeDocumentService.createChangeDocument(
+                llcFee.getId(),
+                llcFee.getId().toString(),
+                llcFee.getDocumentation().getId().toString(),
+                llcFee.getDocumentation().getLoanApplication().getLoanContractId(),
+                null,
+                llcFee,
+                "Deleted",
+                username,
+                "Documentation", "LLCFee" );
         return llcFee;
     }
 }
