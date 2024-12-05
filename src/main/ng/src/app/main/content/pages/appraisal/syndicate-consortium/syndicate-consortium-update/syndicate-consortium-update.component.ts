@@ -24,6 +24,8 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
 
     selectedSyndicateConsortium: any;
 
+    disableSubmitButton = false;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -82,6 +84,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this.syndicateConsortiumForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this.syndicateConsortiumForm.value;
             this.selectedSyndicateConsortium.sanctionedAmount = formValues.sanctionedAmount;            
             this.selectedSyndicateConsortium.currency = formValues.currency;
@@ -96,6 +99,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
                 this._loanAppraisalService.updateSyndicateConsortium(this.selectedSyndicateConsortium).subscribe(() => {
                     this._matSnackBar.open('Syndicate consortium updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -103,6 +107,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
                 this._loanAppraisalService.createSyndicateConsortium(this.selectedSyndicateConsortium).subscribe(() => {
                     this._matSnackBar.open('Syndicate consortium added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
         }

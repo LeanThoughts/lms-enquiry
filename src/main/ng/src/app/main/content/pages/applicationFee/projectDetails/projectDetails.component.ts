@@ -18,7 +18,7 @@ import { log } from 'console';
 export class ApplicationFeeProjectDetailsComponent implements OnInit {
 
     projectDetailForm: FormGroup;
-
+    disableSubmitButton = false;
     loanApplicationId = '';
 
     states = StateModel.getStates();
@@ -107,6 +107,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
      */
     submit(): void {
         if (this.projectDetailForm.valid) {
+            this.disableSubmitButton = true;
             this.saveProjectDetails();
         }
     }
@@ -182,6 +183,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             console.log('projectDetails', projectDetails);
             projectDetails.loanApplicationId = this.loanApplicationId;
             this._applicationFeeService.createProjectDetails(this.projectDetailForm.value).subscribe((data) => {
+                this.disableSubmitButton = false;
                 this._matSnackBar.open('Project details saved successfully.', 'OK', { duration: 7000 });
                 this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
                     this._applicationFeeService._applicationFee.next(data);
@@ -197,6 +199,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             projectDetails.enquiryCompletionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             console.log('projectDetails', projectDetails);
             this._applicationFeeService.updateProjectDetails(projectDetails).subscribe((data) => {
+                this.disableSubmitButton = false;
                 this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
                 this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
                     this._applicationFeeService._applicationFee.next(data);

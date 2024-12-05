@@ -62,7 +62,8 @@
             </mat-form-field>
         </div>
     </form>
-    <button class="mr-8 btn" mat-raised-button color="accent" (click)="saveMainLocationDetails()"> 
+    <button class="mr-8 btn" mat-raised-button color="accent" (click)="saveMainLocationDetails()"
+            [disabled]="disableSaveButton"> 
         Save
     </button>
 </div>

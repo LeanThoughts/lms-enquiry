@@ -11,7 +11,7 @@ import { LoanAppraisalService } from '../../loanAppraisal.service';
 export class CorporateLoanRiskRatingUpdateComponent {
 
     dialogTitle = "Add Corporate Loan Risk Rating";
-
+    disableSubmitButton = false;
     selectedRating: any;
 
     ratingForm: FormGroup;
@@ -55,6 +55,7 @@ export class CorporateLoanRiskRatingUpdateComponent {
     submit(): void {
         console.log('checking if valid');
         if (this.ratingForm.valid) {
+            this.disableSubmitButton = true;
             console.log('is valid');
             var formData = this.ratingForm.value;
             this.selectedRating.year = formData.year;
@@ -71,6 +72,7 @@ export class CorporateLoanRiskRatingUpdateComponent {
                 this._loanAppraisalService.updateCorporateLoanRiskRating(this.selectedRating).subscribe(response => {
                     this._matSnackBar.open('Corporate loan risk rating updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -79,6 +81,7 @@ export class CorporateLoanRiskRatingUpdateComponent {
                 this._loanAppraisalService.createCorporateLoanRiskRating(this.selectedRating).subscribe(response => {
                     this._matSnackBar.open('Corporate loan risk rating created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             } 
         }

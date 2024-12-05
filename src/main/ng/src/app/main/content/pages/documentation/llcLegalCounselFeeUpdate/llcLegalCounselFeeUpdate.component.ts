@@ -16,7 +16,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 export class LLCLegalCounselFeeUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add LLC Fee charged by Legal Counsel';
-
+    disableSubmitButton = false;
     selectedLegalCounselFee: any;
 
     legalCounselFeeForm: FormGroup;
@@ -75,6 +75,7 @@ export class LLCLegalCounselFeeUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.legalCounselFeeForm.valid) {
+            this.disableSubmitButton = true;
             if (this.legalCounselFeeForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.legalCounselFeeForm.get('file').value);      
@@ -85,12 +86,14 @@ export class LLCLegalCounselFeeUpdateDialogComponent implements OnInit {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addLLCFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveLegalCounselFee('');

@@ -16,6 +16,8 @@ export class RejectedByBoardUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Rejected By Board';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedRejectedByBoard: any;
 
@@ -58,6 +60,7 @@ export class RejectedByBoardUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.rejectedByBoardForm.valid) {
+            this.disableSubmitButton = true;
             var rejectedByBoard = this.rejectedByBoardForm.value;
                 
             // To solve the utc time zone issue

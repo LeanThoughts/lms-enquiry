@@ -13,6 +13,7 @@ import { ApplicationFeeService } from '../applicationFee.service';
 })
 export class TermSheetUpdateDialogComponent implements OnInit {
 
+    disableSubmitButton = false;
     dialogTitle = '';
 
     loanApplicationId = '';
@@ -75,6 +76,7 @@ export class TermSheetUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.issuanceForm.valid) {
+            this.disableSubmitButton = true;
             if (this.issuanceForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.issuanceForm.get('file').value);
@@ -83,6 +85,7 @@ export class TermSheetUpdateDialogComponent implements OnInit {
                         this.saveTermSheet(response.fileReference);
                     },
                     (error) => {
+                        this.disableSubmitButton = false;
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
                     }
@@ -90,6 +93,7 @@ export class TermSheetUpdateDialogComponent implements OnInit {
             }
             else {
                 if (this._dialogData.operation.includes('new')) {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
                 }
                 else {
@@ -121,6 +125,7 @@ export class TermSheetUpdateDialogComponent implements OnInit {
                     this._dialogRef.close({ 'refresh': true });
                 },
                     (error) => {
+                        this.disableSubmitButton = false;
                         this._matSnackBar.open(error.error.message, 'OK', { duration: 7000 });
                     }
                 );

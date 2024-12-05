@@ -14,6 +14,8 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'New Inception Fee';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedInceptionFee: any;
 
@@ -62,6 +64,7 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.inceptionFeeForm.valid) {
+            this.disableSubmitButton = true;
             var inceptionFee = this.inceptionFeeForm.value;
 
             // To solve the utc time zone issue

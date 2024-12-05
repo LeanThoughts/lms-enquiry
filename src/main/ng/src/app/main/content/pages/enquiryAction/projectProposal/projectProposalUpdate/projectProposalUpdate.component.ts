@@ -28,6 +28,8 @@ export class ProjectProposalUpdateComponent {
 
     private _loanApplication: any;
     
+    disableSubmitButton = false;
+
     @ViewChild(ProjectDetailUpdateComponent) projectDetailUpdateComponent: ProjectDetailUpdateComponent;
     @ViewChild(ProjectCostUpdateComponent) projectCostUpdateComponent: ProjectCostUpdateComponent;
     @ViewChild(ProjectProposalOtherDetailUpdateComponent) projectProposalOtherDetailUpdateComponent: ProjectProposalOtherDetailUpdateComponent;
@@ -78,6 +80,7 @@ export class ProjectProposalUpdateComponent {
     submit(): void {
         console.log(this.projectProposalForm.value);
         if (this.projectProposalForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this.projectProposalForm.value;
 
             var dt = new Date(formValues.proposalFormSharingDate);
@@ -90,12 +93,14 @@ export class ProjectProposalUpdateComponent {
                     this.projectProposal = response;
                     this._matSnackBar.open('Project Proposal created successfully.', 'OK', { duration: 7000 });
                     this.displayTabs = true;
+                    this.disableSubmitButton = false;
                     this._enquiryActionService.getEnquiryAction(this._dialogData.loanApplicationId).subscribe((response) => {
                         this._enquiryActionService._enquiryAction.next(response);
                     });
                 },
                 (errorResponse => {
                     this._matSnackBar.open(errorResponse.error.message, 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }));
             }
             else {
@@ -109,9 +114,11 @@ export class ProjectProposalUpdateComponent {
                 this._enquiryActionService.updateProjectProposal(this.projectProposal).subscribe(response => {
                     this.projectProposal = response;
                     this._matSnackBar.open('Project Proposal updated successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 },
                 (errorResponse => {
                     this._matSnackBar.open(errorResponse.error.message, 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }));
             }
         }

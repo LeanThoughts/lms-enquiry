@@ -14,6 +14,7 @@ export class CustomerRejectionUpdateComponent {
 
     _customerRejection: any;
     _customerRejectionForm: FormGroup;
+    disableSubmitButton = false;
 
     /**
      * constructor()
@@ -43,6 +44,7 @@ export class CustomerRejectionUpdateComponent {
      */
     submit(): void {
         if (this._customerRejectionForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._customerRejectionForm.value;
 
             var dt = new Date(formValues.date);
@@ -55,6 +57,7 @@ export class CustomerRejectionUpdateComponent {
                     this._matSnackBar.open('Customer rejection details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'customerRejection': response });
                 });
+                this.disableSubmitButton = false;
             }
             else {
                 console.log('updating');
@@ -63,6 +66,7 @@ export class CustomerRejectionUpdateComponent {
                 this._loanAppraisalService.updateCustomerRejection(this._customerRejection).subscribe(response => {
                     this._matSnackBar.open('Customer rejection details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'customerRejection': response });
+                    this.disableSubmitButton = false;
                 });
             }
         }

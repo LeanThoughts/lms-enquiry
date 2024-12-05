@@ -62,7 +62,8 @@
                         <mat-form-field fxFlex="75">
                             <input matInput placeholder="Additional Details" formControlName="additionalDetails">
                         </mat-form-field>
-                        <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()" style="height:fit-content; margin: 10px;">
+                        <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()" style="height:fit-content; margin: 10px;"
+                                [disabled]="disableSubmitButton">
                             Submit
                         </button>
                     </div>

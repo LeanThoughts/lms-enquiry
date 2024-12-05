@@ -16,6 +16,8 @@ export class ApprovalByBoardUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Approval By Board';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedApprovalByBoard: any;
 
@@ -58,6 +60,7 @@ export class ApprovalByBoardUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.approvalByBoardForm.valid) {
+            this.disableSubmitButton = true;
             var approvalByBoard = this.approvalByBoardForm.value;
                 
             // To solve the utc time zone issue

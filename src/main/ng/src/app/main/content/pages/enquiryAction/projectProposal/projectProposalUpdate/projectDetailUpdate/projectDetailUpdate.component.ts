@@ -37,6 +37,8 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
 
     today = new Date(); // Today's date
 
+    disableSubmitButton = false;
+
     @Input()
     set projectProposal(pp: any) {
         this._projectProposal = pp;
@@ -173,6 +175,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
     submit(): void {
         console.log(this._projectDetailForm.value);
         if (this._projectDetailForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._projectDetailForm.value;
             var dt = new Date(formValues.loanEnquiryDate);
             formValues.loanEnquiryDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
@@ -185,6 +188,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
                 this._enquiryActionService.createProjectDetail(formValues).subscribe(response => {
                     this._projectDetail = response;
                     this._matSnackBar.open('Project details created successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -218,12 +222,14 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
                 this._enquiryActionService.updateProjectDetail(this._projectDetail).subscribe(response => {
                     this._projectDetail = response;
                     this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
             // Set _projectDetailForm.dirty to false
             this._projectDetailForm.markAsPristine();
         }
         else {
+            console.log('this._projectDetailForm.errors', this._projectDetailForm.errors);
             console.log('form is invalid');
         }
     }

@@ -16,7 +16,7 @@ export class PromoterBorrowerFinancialUpdateComponent {
     _financial: any;
     _financialUpdateForm: FormGroup;
     _financials: any;
-
+    disableSubmitButton = false;
     /**
      * constructor()
      */
@@ -75,6 +75,7 @@ export class PromoterBorrowerFinancialUpdateComponent {
      * submit()
      */
     submit(): void {
+        this.disableSubmitButton = true;
         if (this._financialUpdateForm.valid) {
             var formValues = this._financialUpdateForm.value;
             if (JSON.stringify(this._financial) === JSON.stringify({})) { // Insert a new record ...
@@ -89,11 +90,13 @@ export class PromoterBorrowerFinancialUpdateComponent {
                     this._enquiryActionService.createFinancial(formValues).subscribe(response => {
                         this._matSnackBar.open('Financial details created successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
+                        this.disableSubmitButton = false;
                     });
                 }
                 else {
                     this._matSnackBar.open('Data for fiscal year already found. Please select a different fiscal year.', 'OK', 
                             { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }        
             }
             else {
@@ -137,6 +140,7 @@ export class PromoterBorrowerFinancialUpdateComponent {
                 this._enquiryActionService.updateFinancial(this._financial).subscribe(response => {
                     this._matSnackBar.open('Financial details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }    
         }

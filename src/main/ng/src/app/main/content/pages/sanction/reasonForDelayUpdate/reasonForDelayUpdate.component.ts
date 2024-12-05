@@ -15,6 +15,8 @@ export class SanctionReasonForDelayUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Reason for Delay';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedReason: any;
 
@@ -52,6 +54,7 @@ export class SanctionReasonForDelayUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.reasonForm.valid) {
+            this.disableSubmitButton = true;
             var reasonForDelay = this.reasonForm.value;
                 
             // To solve the utc time zone issue

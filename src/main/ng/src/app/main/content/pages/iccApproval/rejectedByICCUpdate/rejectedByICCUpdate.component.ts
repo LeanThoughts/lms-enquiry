@@ -16,6 +16,8 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Rejected By ICC';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedRejectedByICC: any;
 
@@ -60,6 +62,7 @@ export class RejectedByICCUpdateDialogComponent implements OnInit {
      * submit()
      */
     submit(): void {
+        this.disableSubmitButton = true;
         if (this.rejectedByICCForm.valid) {
             var rejectedByICC = this.rejectedByICCForm.value;
                 

@@ -12,7 +12,7 @@ import { appraisalReasonsForDelay } from '../loanAppraisal.constants';
 export class ReasonForDelayUpdateComponent {
 
     dialogTitle = "Update Reason For Delay";
-
+    disableSubmitButton = false;
     _reasonForDelayForm: FormGroup;
     _reasonsForDelay = appraisalReasonsForDelay;
 
@@ -55,6 +55,7 @@ export class ReasonForDelayUpdateComponent {
      */
     submit(): void {
         if (this._reasonForDelayForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._reasonForDelayForm.value;
 
             if (formValues.date) {
@@ -68,6 +69,7 @@ export class ReasonForDelayUpdateComponent {
                 this._loanAppraisalService.createReasonForDelay(formValues).subscribe(response => {
                     this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -80,6 +82,7 @@ export class ReasonForDelayUpdateComponent {
                 this._loanAppraisalService.updateReasonForDelay(this._selectedReasonForDelay).subscribe(response => {
                     this._matSnackBar.open('Reason for delay updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
         }

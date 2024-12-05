@@ -34,7 +34,8 @@
             </div>
             
             <div mat-dialog-actions fxLayout="row">
-                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()"
+                        [disabled]="disableSubmitButton">
                     Submit
                 </button>
                 <button class="mr-8" mat-raised-button type="button" color="accent" (click)="_dialogRef.close({ 'refresh': false })">

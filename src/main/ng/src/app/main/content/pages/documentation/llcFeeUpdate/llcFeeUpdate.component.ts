@@ -16,7 +16,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 export class LLCFeeUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add LLC Fee';
-
+    disableSubmitButton = false;
     selectedLLCFee: any;
 
     llcFeeForm: FormGroup;
@@ -75,6 +75,7 @@ export class LLCFeeUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.llcFeeForm.valid) {
+            this.disableSubmitButton = true;
             if (this.llcFeeForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.llcFeeForm.get('file').value);      
@@ -85,12 +86,14 @@ export class LLCFeeUpdateDialogComponent implements OnInit {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addLLCFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveLegalCounsel('');
@@ -104,6 +107,7 @@ export class LLCFeeUpdateDialogComponent implements OnInit {
      */
     saveLegalCounsel(fileReference: string): void {
         if (this.llcFeeForm.valid) {
+            this.disableSubmitButton = true;
             // To solve the utc time zone issue
             var llcFee = this.llcFeeForm.value;
             var dt = new Date(llcFee.invoiceDate);

@@ -11,6 +11,7 @@ import { LoanAppraisalService } from '../loanAppraisal.service';
 })
 export class ProjectDataUpdateComponent {
 
+    disableSubmitButton = false;
     dialogTitle = "Update Project Data";
 
     _projectDataStep1Form: FormGroup;
@@ -111,6 +112,7 @@ export class ProjectDataUpdateComponent {
      */
     submit(): void {
         if (this._projectDataStep1Form.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._projectDataStep1Form.value;
             Object.assign(formValues, this._projectDataStep2Form.value, this._projectDataStep3Form.value);
 
@@ -121,6 +123,7 @@ export class ProjectDataUpdateComponent {
                 console.log('inserting new project data');
                 formValues.loanApplicationId = this._dialogData.loanApplicationId;
                 this._loanAppraisalService.createProjectData(formValues).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Project data created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'projectData': response });
                 });
@@ -178,6 +181,7 @@ export class ProjectDataUpdateComponent {
                 this._projectData.workingCapitalUnit = formValues.workingCapitalUnit;
 
                 this._loanAppraisalService.updateProjectData(this._projectData).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Project data updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'projectData': response });
                 });

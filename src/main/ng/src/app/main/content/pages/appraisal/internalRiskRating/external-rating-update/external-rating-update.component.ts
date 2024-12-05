@@ -11,7 +11,7 @@ import { LoanAppraisalService } from '../../loanAppraisal.service';
 export class ExternalRatingUpdateComponent {
 
     dialogTitle = "Add External Rating";
-
+    disableSubmitButton = false;
     selectedRating: any;
 
     ratings: any;
@@ -52,6 +52,7 @@ export class ExternalRatingUpdateComponent {
      */
     submit(): void {
         if (this.ratingForm.valid) {
+            this.disableSubmitButton = true;
             var formData = this.ratingForm.value;
             
             var dt = new Date(formData.validityDate);
@@ -69,6 +70,7 @@ export class ExternalRatingUpdateComponent {
                 this._loanAppraisalService.updateExternalRating(this.selectedRating).subscribe(response => {
                     this._matSnackBar.open('External rating updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -77,6 +79,7 @@ export class ExternalRatingUpdateComponent {
                 this._loanAppraisalService.createExternalRating(this.selectedRating).subscribe(response => {
                     this._matSnackBar.open('External rating created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             } 
         }

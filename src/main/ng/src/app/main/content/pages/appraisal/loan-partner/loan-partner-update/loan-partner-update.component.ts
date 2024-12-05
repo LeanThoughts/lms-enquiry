@@ -16,6 +16,8 @@ export class LoanPartnerUpdateComponent implements OnInit {
 
     dialogTitle = "Add Loan Partners";
 
+    disableSubmitButton = false;
+
     loanOfficerForm: FormGroup;
 
     selectedLoanOfficer: any;
@@ -73,6 +75,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this.loanOfficerForm.valid) {
+            this.disableSubmitButton = true;
             var formData = this.loanOfficerForm.value;
 
             var dt = new Date(formData.startDate);
@@ -85,6 +88,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
             this.selectedLoanOfficer.roleDescription = this.selectedRoleTypeDescription;
             if (this._dialogData.operation === 'modifyOfficer') {
                 this._loanAppraisalService.updateLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Loan partner updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                     if (response.kycRequired == true) {
@@ -107,6 +111,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
                         }
                         else {
                             this._matSnackBar.open('Only one main loan partner possible for a loan account.', 'OK', { duration: 7000 });
+                            this.disableSubmitButton = false;
                         }
                     });
                 }
@@ -121,6 +126,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
         this.selectedLoanOfficer.loanApplicationId = this._dialogData.loanApplicationId;
         this.selectedLoanOfficer.kycStatus = "Not Started";
         this._loanAppraisalService.createLoanOfficer(this.selectedLoanOfficer).subscribe(response => {
+            this.disableSubmitButton = false;
             this._matSnackBar.open('Loan partner added successfully.', 'OK', { duration: 7000 });
             this._dialogRef.close({ 'refresh': true });
             if (response.kycRequired == true) {

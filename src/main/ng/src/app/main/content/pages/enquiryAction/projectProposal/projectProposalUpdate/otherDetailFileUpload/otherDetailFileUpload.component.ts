@@ -20,6 +20,8 @@ export class OtherDetailsFileUploadComponent {
 
     documentTypes = documentTypes;
 
+    disableSubmitButton = false;
+
     /**
      * constructor()
      * @param _formBuilder 
@@ -51,7 +53,7 @@ export class OtherDetailsFileUploadComponent {
      */
     submit(): void {
         if (this.otherDetailsDocumentForm.valid) {
-
+            this.disableSubmitButton = true;
             var otherDetailsDocument = this.otherDetailsDocumentForm.value;
 
             if (this._dialogData.operation === 'addDocument') {
@@ -64,11 +66,13 @@ export class OtherDetailsFileUploadComponent {
                             otherDetailsDocument.projectProposalId = this.projectProposal.id;
                             console.log('payload', otherDetailsDocument);
                             this._enquiryActionService.createOtherDetailsDocument(otherDetailsDocument).subscribe(() => {
+                                this.disableSubmitButton = false;
                                 this._matSnackBar.open('Document added successfully.', 'OK', { duration: 7000 });
                                 this._dialogRef.close({ 'refresh': true });
                             });
                         },
                         (error) => {
+                            this.disableSubmitButton = false;
                             this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                                 'OK', { duration: 7000 });
                         }
@@ -89,11 +93,13 @@ export class OtherDetailsFileUploadComponent {
                             this.selectedDocument.documentType = otherDetailsDocument.documentType;
                             this.selectedDocument.fileReference = response.fileReference;
                             this._enquiryActionService.updateOtherDetailsDocument(this.selectedDocument).subscribe(() => {
+                                this.disableSubmitButton = false;
                                 this._matSnackBar.open('Document updated uccessfully.', 'OK', { duration: 7000 });
                                 this._dialogRef.close({ 'refresh': true });
                             });
                         },
                         (error) => {
+                            this.disableSubmitButton = false;
                             this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                                 'OK', { duration: 7000 });
                         }
@@ -104,6 +110,7 @@ export class OtherDetailsFileUploadComponent {
                     this.selectedDocument.documentName = otherDetailsDocument.documentName;
                     this.selectedDocument.documentType = otherDetailsDocument.documentType;
                     this._enquiryActionService.updateOtherDetailsDocument(this.selectedDocument).subscribe(() => {
+                        this.disableSubmitButton = false;
                         this._matSnackBar.open('Document details updated successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });

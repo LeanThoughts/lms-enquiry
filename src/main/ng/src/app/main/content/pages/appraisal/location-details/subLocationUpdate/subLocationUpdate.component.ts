@@ -18,7 +18,7 @@ import { StateModel } from 'app/main/content/model/state.model';
 export class SubLocationUpdateComponent {
 
     dialogTitle = 'Add New Sub Location Details';
-
+    disableSubmitButton = false;
     selectedSubLocation: any;
     subLocationUpdateForm: FormGroup;
 
@@ -74,6 +74,7 @@ export class SubLocationUpdateComponent {
      */
     submit(): void {
         if (this.subLocationUpdateForm.valid) {
+            this.disableSubmitButton = true;
             this.saveSubLocationDetails();
         }
     }
@@ -89,6 +90,7 @@ export class SubLocationUpdateComponent {
                 this._matSnackBar.open('Sub location details added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });
+            this.disableSubmitButton = false;
         }
         else {
             this.selectedSubLocation.loanApplicationId = this._dialogData.loanApplicationId;
@@ -109,7 +111,8 @@ export class SubLocationUpdateComponent {
             this._loanAppraisalService.updateSubLocationDetail(this.selectedSubLocation).subscribe(() => {
                 this._matSnackBar.open('Sub location details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
-            });            
+                this.disableSubmitButton = false;
+            });
         }
     }
 }

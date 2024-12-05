@@ -16,6 +16,8 @@ export class DeferredByBoardUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Deferred By Board';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedDeferredByBoard: any;
 
@@ -58,6 +60,7 @@ export class DeferredByBoardUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.deferredByBoardForm.valid) {
+            this.disableSubmitButton = true;
             var deferredByBoard = this.deferredByBoardForm.value;
                 
             // To solve the utc time zone issue

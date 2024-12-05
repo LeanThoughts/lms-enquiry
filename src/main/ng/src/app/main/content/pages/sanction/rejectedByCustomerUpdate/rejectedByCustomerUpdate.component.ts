@@ -16,6 +16,8 @@ export class SanctionRejectedByCustomerUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Rejected By Customer';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedRejectedByCustomer: any;
 
@@ -66,6 +68,7 @@ export class SanctionRejectedByCustomerUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.rejectedByCustomerForm.valid) {
+            this.disableSubmitButton = true;
             var rejectedByCustomer = this.rejectedByCustomerForm.value;
                 
             // To solve the utc time zone issue

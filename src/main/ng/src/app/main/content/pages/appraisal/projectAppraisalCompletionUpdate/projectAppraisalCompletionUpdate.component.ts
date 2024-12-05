@@ -12,6 +12,8 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 })
 export class ProjectAppraisalCompletionUpdateComponent {
 
+    disableSubmitButton = false;
+
     dialogTitle = "Update Project Appraisal Completion Details";
 
     _projectAppraisalCompletionForm: FormGroup;
@@ -94,6 +96,7 @@ export class ProjectAppraisalCompletionUpdateComponent {
     submit(): void {
 
         if (this._projectAppraisalCompletionForm.valid) {
+            this.disableSubmitButton = true;
             if (this._projectAppraisalCompletionForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this._projectAppraisalCompletionForm.get('file').value);      
@@ -104,6 +107,7 @@ export class ProjectAppraisalCompletionUpdateComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
@@ -150,6 +154,7 @@ export class ProjectAppraisalCompletionUpdateComponent {
                 formValues.loanApplicationId = this._dialogData.loanApplicationId;
                 formValues.fileReference = fileReference;
                 this._loanAppraisalService.createProjectAppraisalCompletion(formValues).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Project appraisal completion details created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'projectAppraisalCompletion': response });
                 });
@@ -174,6 +179,7 @@ export class ProjectAppraisalCompletionUpdateComponent {
                 this._projectAppraisalCompletion.documentTitle = formValues.documentTitle;
                 this._projectAppraisalCompletion.documentType = formValues.documentType;
                 this._loanAppraisalService.updateProjectAppraisalCompletion(this._projectAppraisalCompletion).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Project appraisal completion details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'projectAppraisalCompletion': response });
                 });

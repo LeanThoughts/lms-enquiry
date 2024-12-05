@@ -15,7 +15,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 export class LoanEnhancementUpdateDialogComponent {
 
     dialogTitle = 'Add Loan Enhancement Details';
-
+    disableSubmitButton = false;
     selectedLoanEnhancement: any ;
 
     loanEnhancementForm: FormGroup;
@@ -54,6 +54,7 @@ export class LoanEnhancementUpdateDialogComponent {
      */
     submit(): void {
         if (this.loanEnhancementForm.valid) {
+            this.disableSubmitButton = true;
             var loanEnhancement = this.loanEnhancementForm.value;
             var dt = new Date(loanEnhancement.iccClearanceDate);
             loanEnhancement.iccClearanceDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));

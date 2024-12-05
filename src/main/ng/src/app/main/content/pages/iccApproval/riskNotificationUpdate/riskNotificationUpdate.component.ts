@@ -15,6 +15,8 @@ export class RiskNotificationUpdateDialogComponent {
 
     dialogTitle = 'Add New Risk Notification';
 
+    disableSubmitButton = false;
+
     selectedRiskNotification: any ;
 
     riskNotificationUpdateForm: FormGroup;
@@ -48,7 +50,8 @@ export class RiskNotificationUpdateDialogComponent {
      * submit()
      */
     submit(): void {
-        if (this.riskNotificationUpdateForm.valid) {    
+        if (this.riskNotificationUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var riskNotification = this.riskNotificationUpdateForm.value;
             var dt = new Date(riskNotification.notificationDate);
             riskNotification.notificationDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));

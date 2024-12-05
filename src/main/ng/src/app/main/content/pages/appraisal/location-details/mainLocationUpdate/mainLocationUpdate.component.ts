@@ -17,6 +17,8 @@ import { StateModel } from 'app/main/content/model/state.model';
 })
 export class MainLocationUpdateComponent {
 
+    disableSaveButton = false;
+
     _loanApplicationId: string;
     _loanAppraisalId: string;
 
@@ -79,13 +81,14 @@ export class MainLocationUpdateComponent {
      */
     saveMainLocationDetails(): void {
         if (this._mainLocationDetailForm.valid) {
-
+            this.disableSaveButton = true;
             var formValues = this._mainLocationDetailForm.value;
 
             if (JSON.stringify(this._mainLocationDetail) === JSON.stringify({})) {
                 formValues.loanApplicationId = this._loanApplicationId;
                 this._loanAppraisalService.updateMainLocationDetail(formValues).subscribe(() => {
                     this._matSnackBar.open('Main location details added successfully.', 'OK', { duration: 7000 });
+                    this.disableSaveButton = false;
                 });
             }
             else {
@@ -106,6 +109,7 @@ export class MainLocationUpdateComponent {
                 this._mainLocationDetail.nearestFunctionalAirportDistance = formValues.nearestFunctionalAirportDistance;
                 this._loanAppraisalService.updateMainLocationDetail(this._mainLocationDetail).subscribe(() => {
                     this._matSnackBar.open('Main location details updated successfully.', 'OK', { duration: 7000 });
+                    this.disableSaveButton = false;
                 });
             }
         }

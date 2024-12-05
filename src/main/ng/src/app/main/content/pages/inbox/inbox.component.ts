@@ -28,6 +28,9 @@ export class InboxComponent implements OnInit {
 
     @ViewChild(InboxItemsComponent) inboxItemsComponent: InboxItemsComponent;
 
+    disableApproveButton = false;
+    disableRejectButton = false;
+
     constructor(private _inboxService: InboxService ,
                 private _matSnackBar: MatSnackBar,
                 private _router: Router,
@@ -128,6 +131,7 @@ export class InboxComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
             if (!result.cancel) {
+                this.disableRejectButton = true;
                 let selectedInboxItem = this.inboxItemsComponent.selectedItem;
                 let workFlowProcessRequestResource = {
                     'businessProcessId': selectedInboxItem.businessProcessId,
@@ -139,6 +143,7 @@ export class InboxComponent implements OnInit {
                 this._inboxService.rejectTask(workFlowProcessRequestResource).subscribe(response => {
                     this._matSnackBar.open( 'Selected task is rejected and email notification was sent to requestor', 'Ok', { duration: 7000 });
                     this.inboxItemsComponent.refreshList();
+                    this.disableRejectButton = false;
                 });
             }
         });
@@ -148,6 +153,7 @@ export class InboxComponent implements OnInit {
      * approveTask()
      */
     approveTask(): void {
+        this.disableApproveButton = true;
         let selectedInboxItem = this.inboxItemsComponent.selectedItem;
         let workFlowProcessRequestResource = {
             'businessProcessId': selectedInboxItem.businessProcessId,
@@ -158,6 +164,7 @@ export class InboxComponent implements OnInit {
         this._matSnackBar.open('Approval in Process.', 'OK', { duration: 25000 });
         this._inboxService.approveTask(workFlowProcessRequestResource).subscribe(response => {
             this._matSnackBar.open( 'Selected task is approved and email notification was sent to requestor', 'Ok', { duration: 7000 });
+            this.disableApproveButton = false;
             this.inboxItemsComponent.refreshList();
         });
     }

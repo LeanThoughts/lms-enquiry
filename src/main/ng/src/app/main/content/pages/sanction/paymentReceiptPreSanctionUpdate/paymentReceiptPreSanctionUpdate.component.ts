@@ -15,7 +15,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Payment Receipt - Pre Sanction';
-
+    disableSubmitButton = false;
     loanApplicationId = '';
     selectedPaymentReceipt: any;
 
@@ -67,6 +67,7 @@ export class PaymentReceiptPreSanctionUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.paymentReceiptForm.valid) {
+            this.disableSubmitButton = true;
             var paymentReceipt = this.paymentReceiptForm.value;
                 
             // To solve the utc time zone issue

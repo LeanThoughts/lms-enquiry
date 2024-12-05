@@ -16,6 +16,8 @@ export class ICCFurtherDetailUpdateDialogComponent {
 
     dialogTitle = 'Add New Further Details';
 
+    disableSubmitButton = false;
+
     selectedICCFurtherDetail: any ;
 
     iccFurtherDetailUpdateForm: FormGroup;
@@ -57,6 +59,7 @@ export class ICCFurtherDetailUpdateDialogComponent {
      * submit()
      */
     submit(): void {
+        this.disableSubmitButton = true;
         var furtherDetail = this.iccFurtherDetailUpdateForm.value;
         var dt = new Date(furtherDetail.iccMeetingDate);
         furtherDetail.iccMeetingDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));

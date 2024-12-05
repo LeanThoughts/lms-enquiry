@@ -279,7 +279,8 @@
                     <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="accent">
                         Previous
                     </button>
-                    <button mat-raised-button type="button" color="accent" (click)="submit()">
+                    <button mat-raised-button type="button" color="accent" (click)="submit()"
+                            [disabled]="disableSubmitButton">
                         Finish
                     </button>
                 </div>

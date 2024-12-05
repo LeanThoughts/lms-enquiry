@@ -18,6 +18,8 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Preliminary Risk Assessment Details';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
 
     preliminaryRiskAssessment: any;
@@ -86,6 +88,7 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.riskAssessmentForm.valid) {
+            this.disableSubmitButton = true;
             if (this.riskAssessmentForm.get('document').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.riskAssessmentForm.get('document').value);      
@@ -96,6 +99,7 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
@@ -132,6 +136,7 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
         if (this.preliminaryRiskAssessment.id === undefined) {
             riskAssessment.loanApplicationId = this.loanApplicationId;
             this._riskAssessmentService.createPreliminaryRiskAssessment(riskAssessment).subscribe(() => {
+                this.disableSubmitButton = false;
                 this._riskAssessmentService.getRiskAssessment(this.loanApplicationId).subscribe(data => {
                     this._riskAssessmentService._riskAssessment.next(data);
                 });
@@ -144,6 +149,7 @@ export class PreliminaryRiskAssessmentUpdateDialogComponent implements OnInit {
                 this.preliminaryRiskAssessment[key] = riskAssessment[key];
             });
             this._riskAssessmentService.updatePreliminaryRiskAssessment(this.preliminaryRiskAssessment).subscribe(() => {
+                this.disableSubmitButton = false;
                 this._riskAssessmentService.getRiskAssessment(this.loanApplicationId).subscribe(data => {
                     this._riskAssessmentService._riskAssessment.next(data);
                 });

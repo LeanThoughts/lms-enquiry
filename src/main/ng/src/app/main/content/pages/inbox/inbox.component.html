@@ -14,10 +14,10 @@
             <button mat-raised-button class="mr-8 mb-8" (click)="reviewTask()" [disabled]="!inboxItemsComponent.selectedItem">
                 <mat-icon matSuffix class="mr-8">rate_review</mat-icon>Review
             </button>
-            <button mat-raised-button class="mr-8 mb-8" (click)="approveTask()" [disabled]="!inboxItemsComponent.selectedItem">
+            <button mat-raised-button class="mr-8 mb-8" (click)="approveTask()" [disabled]="!inboxItemsComponent.selectedItem || disableApproveButton">
                 <mat-icon matSuffix class="mr-8">check</mat-icon>Approve
             </button>
-            <button mat-raised-button class="mr-8 mb-8" (click)="rejectTask()" [disabled]="!inboxItemsComponent.selectedItem">
+            <button mat-raised-button class="mr-8 mb-8" (click)="rejectTask()" [disabled]="!inboxItemsComponent.selectedItem || disableRejectButton">
                 <mat-icon matSuffix class="mr-8">clear</mat-icon>Reject
             </button>
             <button mat-raised-button class="mr-8 mb-8" (click)="refreshTasks()">

@@ -14,7 +14,7 @@ import { DocumentationService } from '../documentation.service';
 export class NodalOfficerUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Nodal Officer';
-
+    disableSubmitButton = false;
     selectedNodalOfficer: any;
 
     nodalOfficerForm: FormGroup;
@@ -63,6 +63,7 @@ export class NodalOfficerUpdateDialogComponent implements OnInit {
      * submit()
      */
     submit(): void {
+        this.disableSubmitButton = true;
         this.saveNodalOfficer();
     }
 

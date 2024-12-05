@@ -17,6 +17,7 @@ export class CreditRatingUpdateComponent implements OnInit {
     _creditRatingCodes: any;
     _creditRatingAgencies: any;
     _creditRatingUpdateForm: FormGroup;
+    disableSubmitButton = false;
 
     /**
      * constructor()
@@ -52,12 +53,14 @@ export class CreditRatingUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this._creditRatingUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._creditRatingUpdateForm.value;
 
             if (JSON.stringify(this._selectedCreditRating) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
                 formValues.projectProposalId = this._dialogData.projectProposalId;
                 this._enquiryActionService.createCreditRating(formValues).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Credit rating created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -69,6 +72,7 @@ export class CreditRatingUpdateComponent implements OnInit {
                 this._selectedCreditRating.creditStandingInstruction= formValues.creditStandingInstruction;
                 this._selectedCreditRating.creditStandingText= formValues.creditStandingText;
                 this._enquiryActionService.updateCreditRating(this._selectedCreditRating).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Credit rating updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });

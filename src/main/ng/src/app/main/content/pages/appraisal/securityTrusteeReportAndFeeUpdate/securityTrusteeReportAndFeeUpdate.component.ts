@@ -19,6 +19,8 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add Security Trustee Report Submission';
 
+    disableSubmitButton = false;
+
     selectedSecurityTrustee: any;
     selectedSecurityTrusteeReportAndFee: any;
 
@@ -86,6 +88,7 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.stReportUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.stReportUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.stReportUpdateForm.get('file').value);
@@ -96,12 +99,14 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addSecurityTrusteeReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveSecurityTrusteeReportAndFee('');
@@ -129,6 +134,7 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
             this._loanAppraisalService.saveSecurityTrusteeReportAndFee(securityTrusteeReportAndFee, this.selectedSecurityTrustee.id, this._dialogData.module).subscribe((data) => {
                 this._matSnackBar.open('Security Trustee report added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
+                this.disableSubmitButton = false;
             });
         }
         else {
@@ -151,6 +157,7 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
             this._loanAppraisalService.updateSecurityTrusteeReportAndFee(this.selectedSecurityTrusteeReportAndFee, this._dialogData.module).subscribe(() => {
                 this._matSnackBar.open('Security Trustee report updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
+                this.disableSubmitButton = false;
             });
         }
     }

@@ -17,7 +17,7 @@ export class CollateralDetailUpdateComponent {
     _collateralDetailUpdateForm: FormGroup;
 
     collateralTypes = collateralTypes;
-    
+    disableSubmitButton = false;
     /**
      * constructor()
      */
@@ -42,12 +42,14 @@ export class CollateralDetailUpdateComponent {
      */
     submit(): void {
         if (this._collateralDetailUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._collateralDetailUpdateForm.value;
 
             if (JSON.stringify(this._collateralDetail) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
                 formValues.projectProposalId = this._dialogData.projectProposalId;
                 this._enquiryActionService.createCollateralDetail(formValues).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Collateral details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -57,6 +59,7 @@ export class CollateralDetailUpdateComponent {
                 this._collateralDetail.collateralType = formValues.collateralType;
                 this._collateralDetail.details = formValues.details;
                 this._enquiryActionService.updateCollateralDetail(this._collateralDetail).subscribe(response => {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Collateral details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });

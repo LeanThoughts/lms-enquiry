@@ -21,6 +21,8 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
     _projectProposal: any;
     _loanApplication: any;
 
+    disableSubmitButton = false;
+
     @Input()
     set projectProposal(pp: any) {
         this._projectProposal = pp;
@@ -119,6 +121,7 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
     submit(): void {        
         console.log(this._projectCostForm.value);
         if (this._projectCostForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._projectCostForm.value;
             if (JSON.stringify(this._projectCost) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
@@ -127,6 +130,7 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
                     this._projectCost = response;
                     this._matSnackBar.open('Project cost created successfully.', 'OK', { duration: 7000 });
                     this._projectCostForm.markAsPristine();
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -141,6 +145,7 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
                     this._projectCost = response;
                     this.initializeFormValues();
                     this._matSnackBar.open('Project cost updated successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
         }

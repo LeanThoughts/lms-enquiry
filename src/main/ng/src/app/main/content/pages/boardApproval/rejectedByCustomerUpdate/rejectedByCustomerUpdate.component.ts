@@ -15,6 +15,8 @@ export class BoardApprovalRejectedByCustomerUpdateDialogComponent implements OnI
 
     dialogTitle = 'Add Rejected By Customer';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedRejectedByCustomer: any;
 
@@ -71,6 +73,7 @@ export class BoardApprovalRejectedByCustomerUpdateDialogComponent implements OnI
      */
     submit(): void {
         if (this.rejectedByCustomerForm.valid) {
+            this.disableSubmitButton = true;
             var rejectedByCustomer = this.rejectedByCustomerForm.value;
                 
             // To solve the utc time zone issue

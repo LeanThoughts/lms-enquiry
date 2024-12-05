@@ -16,6 +16,8 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Reason For Delay';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedReasonForDelay: any;
 
@@ -57,6 +59,7 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.reasonForDelayForm.valid) {
+            this.disableSubmitButton = true;
             var reasonForDelay = this.reasonForDelayForm.value;
                 
             // To solve the utc time zone issue

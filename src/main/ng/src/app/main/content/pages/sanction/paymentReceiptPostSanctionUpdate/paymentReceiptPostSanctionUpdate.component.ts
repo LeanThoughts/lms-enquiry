@@ -15,6 +15,8 @@ export class PaymentReceiptPostSanctionUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Payment Receipt - Pre Sanction';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedPaymentReceipt: any;
 
@@ -66,6 +68,7 @@ export class PaymentReceiptPostSanctionUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.paymentReceiptForm.valid) {
+            this.disableSubmitButton = true;
             var paymentReceipt = this.paymentReceiptForm.value;
                 
             // To solve the utc time zone issue

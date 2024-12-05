@@ -15,6 +15,8 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'New Formal Request';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedFormalRequest: any;
 
@@ -68,6 +70,7 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.formalRequestForm.valid) {
+            this.disableSubmitButton = true;
             if (this.formalRequestForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.formalRequestForm.get('file').value);
@@ -78,11 +81,13 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addSiteVisit') {
+                    this.disableSubmitButton = false;
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
                 }
                 else {
@@ -127,7 +132,7 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
                 this._applicationFeeService.updateFormalRequest(this.selectedFormalRequest).subscribe(() => {
                     this._matSnackBar.open('Formal Request details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
-                });            
+                });
             }
         }
     }

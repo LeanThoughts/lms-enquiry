@@ -21,7 +21,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
     _otherDetail: any = {};
 
     _projectProposal: any;
-
+    disableSubmitButton = false;
     @Input()
     set projectProposal(pp: any) {
         this._projectProposal = pp;
@@ -72,6 +72,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
     submit(): void {        
         console.log(this._otherDetailForm.value);
         if (this._otherDetailForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._otherDetailForm.value;
 
             var dt = new Date(formValues.optimumDateOfLoan);
@@ -83,6 +84,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
                 this._enquiryActionService.createProjectProposalOtherDetails(formValues).subscribe(response => {
                     this._otherDetail = response;
                     this._matSnackBar.open('Other details created successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -98,6 +100,7 @@ export class ProjectProposalOtherDetailUpdateComponent {
                 this._enquiryActionService.updateProjectProposalOtherDetails(this._otherDetail).subscribe(response => {
                     this._otherDetail = response;
                     this._matSnackBar.open('Other details updated successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
             this._otherDetailForm.markAsPristine();

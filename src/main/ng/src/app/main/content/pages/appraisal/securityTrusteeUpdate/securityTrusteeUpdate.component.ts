@@ -16,7 +16,7 @@ import { LoanAppraisalService } from '../loanAppraisal.service';
 export class SecurityTrusteeUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Security Trustee';
-
+    disableSubmitButton = false;
     selectedSecurityTrustee: any;
 
     securityTrusteeUpdateForm: FormGroup;
@@ -85,6 +85,7 @@ export class SecurityTrusteeUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.securityTrusteeUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var securityTrustee = this.securityTrusteeUpdateForm.value;
             securityTrustee.advisor = 'Security Trustee';
             // To solve the utc time zone issue
@@ -99,6 +100,7 @@ export class SecurityTrusteeUpdateDialogComponent implements OnInit {
                 const filteredList = this.securityTrusteeList.filter(obj => obj.securityTrustee.bpCode  === securityTrustee.bpCode);
                 if (filteredList.length == 0) {
                     this._loanAppraisalService.saveSecurityTrustee(securityTrustee, this._dialogData.loanApplicationId, this._dialogData.module).subscribe(() => {
+                        this.disableSubmitButton = false;
                         this._matSnackBar.open('Security Trustee added successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });
@@ -106,6 +108,7 @@ export class SecurityTrusteeUpdateDialogComponent implements OnInit {
                 else {
                     this._matSnackBar.open('Business partner ' + securityTrustee.bpCode + ' is already in the list. Please select a different business partner.', 
                             'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
             }
             else {
@@ -120,6 +123,7 @@ export class SecurityTrusteeUpdateDialogComponent implements OnInit {
                 this._loanAppraisalService.updateSecurityTrustee(this.selectedSecurityTrustee, this._dialogData.module).subscribe(() => {
                     this._matSnackBar.open('Security Trustee updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });            
             }
         }

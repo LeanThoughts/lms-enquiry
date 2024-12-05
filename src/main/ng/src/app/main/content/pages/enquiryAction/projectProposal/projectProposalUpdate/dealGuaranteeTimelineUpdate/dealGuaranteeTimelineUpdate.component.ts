@@ -10,6 +10,7 @@ import { EnquiryActionService } from '../../../enquiryAction.service';
 })
 export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
 
+    disableSubmitButton = false;
     _dealGuaranteeTimelineForm: FormGroup;
     _dealGuaranteeTimeline: any = {};
 
@@ -64,6 +65,7 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
     submit(): void {        
         console.log(this._dealGuaranteeTimelineForm.value);
         if (this._dealGuaranteeTimelineForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._dealGuaranteeTimelineForm.value;
             if (JSON.stringify(this._dealGuaranteeTimeline) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new record');
@@ -71,6 +73,7 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
                 this._enquiryActionService.createDealGuaranteeTimeline(formValues).subscribe(response => {
                     this._dealGuaranteeTimeline = response;
                     this._matSnackBar.open('Deal, Guarantee, Timelines created successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -89,6 +92,7 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
                 this._enquiryActionService.updateDealGuaranteeTimeline(this._dealGuaranteeTimeline).subscribe(response => {
                     this._dealGuaranteeTimeline = response;
                     this._matSnackBar.open('Deal, Guarantee, Timelines updated successfully.', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 });
             }
             this._dealGuaranteeTimelineForm.markAsPristine();

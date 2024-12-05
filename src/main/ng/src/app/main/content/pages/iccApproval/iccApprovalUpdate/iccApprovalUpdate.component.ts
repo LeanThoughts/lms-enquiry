@@ -17,6 +17,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add ICC Approval Details';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedICCApproval: any;
 
@@ -93,7 +95,7 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
      */
     async submit(): Promise<void> {
         if (this.iccApprovalForm.valid) {
-
+            this.disableSubmitButton = true;
             if (this.iccApprovalForm.get('file1').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.iccApprovalForm.get('file1').value);

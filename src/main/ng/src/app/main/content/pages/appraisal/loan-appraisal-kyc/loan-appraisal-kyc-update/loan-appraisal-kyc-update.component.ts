@@ -12,6 +12,8 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
 
     dialogTitle = "KYC Document Upload";
 
+    disableSubmitButton = false;
+
     loanAppraisalKYCForm: FormGroup;
 
     selectedLoanAppraisalKYC: any;
@@ -50,7 +52,7 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this.loanAppraisalKYCForm.valid) {
-
+            this.disableSubmitButton = true;
             var formValues = this.loanAppraisalKYCForm.value;
             
             var dt = new Date(formValues.dateOfCompletion);
@@ -65,11 +67,13 @@ export class LoanAppraisalKYCUpdateComponent implements OnInit {
                     (response) => {
                         this.selectedLoanAppraisalKYC.fileReference = response.fileReference;
                         this._loanAppraisalService.updateKYC(this.selectedLoanAppraisalKYC).subscribe(() => {
+                            this.disableSubmitButton = false;
                             this._matSnackBar.open('KYC updated successfully.', 'OK', { duration: 7000 });
                             this._dialogRef.close({ 'refresh': true });
                         });
                     },
                     (error) => {
+                        this.disableSubmitButton = false;
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
                     }

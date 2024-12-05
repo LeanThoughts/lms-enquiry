@@ -12,7 +12,7 @@ import { LoanAppraisalService } from '../../loanAppraisal.service';
 export class ProposalDetailsUpdateComponent {
 
     dialogTitle = "Update Proposal Details";
-
+    disableSubmitButton = false;
     _proposalDetailsForm: FormGroup;
     _proposalDetail: any;
 
@@ -70,6 +70,7 @@ export class ProposalDetailsUpdateComponent {
      */
     submit(): void {
         if (this._proposalDetailsForm.valid) {
+            this.disableSubmitButton = true;
             var formValues = this._proposalDetailsForm.value;
             if (JSON.stringify(this._proposalDetail) === JSON.stringify({})) { // Insert a new record ...
                 console.log('inserting new proposal detail');
@@ -77,6 +78,7 @@ export class ProposalDetailsUpdateComponent {
                 this._loanAppraisalService.createProposalDetail(formValues).subscribe(response => {
                     this._matSnackBar.open('Proposal details created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'proposalDetail': response });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -101,6 +103,7 @@ export class ProposalDetailsUpdateComponent {
                 this._loanAppraisalService.updateProposalDetail(this._proposalDetail).subscribe(response => {
                     this._matSnackBar.open('Proposal details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true, 'proposalDetail': response });
+                    this.disableSubmitButton = false;
                 });
             }
         }

@@ -19,6 +19,8 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Sanction Letter';
 
+    disableSubmitButton = false;
+
     loanApplicationId = '';
     selectedSanctionLetter: any;
 
@@ -126,6 +128,7 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.sanctionLetterForm.valid) {
+            this.disableSubmitButton = true;
             if (this.sanctionLetterForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.sanctionLetterForm.get('file').value);      
@@ -136,12 +139,14 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addCLAReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveSanctionLetter('');

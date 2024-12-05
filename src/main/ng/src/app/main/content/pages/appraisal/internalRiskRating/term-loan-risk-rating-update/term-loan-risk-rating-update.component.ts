@@ -11,7 +11,7 @@ import { LoanAppraisalService } from '../../loanAppraisal.service';
 export class TermLoanRiskRatingUpdateComponent {
 
     dialogTitle = "Add Term Loan Risk Rating";
-
+    disableSubmitButton = false;
     selectedRating: any;
 
     ratingForm: FormGroup;
@@ -59,6 +59,7 @@ export class TermLoanRiskRatingUpdateComponent {
     submit(): void {
         console.log('checking if valid');
         if (this.ratingForm.valid) {
+            this.disableSubmitButton = true;
             console.log('is valid');
             var formData = this.ratingForm.value;
             this.selectedRating.year = formData.year;
@@ -79,6 +80,7 @@ export class TermLoanRiskRatingUpdateComponent {
                 this._loanAppraisalService.updateTermLoanRiskRating(this.selectedRating).subscribe(response => {
                     this._matSnackBar.open('Term loan risk rating updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             }
             else {
@@ -87,6 +89,7 @@ export class TermLoanRiskRatingUpdateComponent {
                 this._loanAppraisalService.createTermLoanRiskRating(this.selectedRating).subscribe(response => {
                     this._matSnackBar.open('Term loan risk rating created successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
+                    this.disableSubmitButton = false;
                 });
             } 
         }
