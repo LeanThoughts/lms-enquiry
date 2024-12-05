@@ -17,7 +17,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 export class BorrowerFinancialsUpdateDialogComponent {
 
     dialogTitle: string;
-
+    disableSubmitButton = false;
     selectedFinancials: BorrowerFinancialsModel ;
 
     financialsUpdateForm: FormGroup;
@@ -85,6 +85,7 @@ export class BorrowerFinancialsUpdateDialogComponent {
      */
     submit(): void {
         if (this.financialsUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var financials: BorrowerFinancialsModel = new BorrowerFinancialsModel(this.financialsUpdateForm.value);
             if (this._dialogData.operation === 'addFinancials') {
                 const uploads = Observable.forkJoin(

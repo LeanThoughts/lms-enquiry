@@ -17,7 +17,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 export class SecurityComplianceUpdateDialogComponent {
 
     dialogTitle = 'Add New Security Compliance Maintenance';
-
+    disableSubmitButton = false;
     selectedSecurityCompliance: SecurityComplianceModel;
 
     securityComplianceUpdateForm: FormGroup;
@@ -89,6 +89,7 @@ export class SecurityComplianceUpdateDialogComponent {
      */
     submit(): void {
         if (this.securityComplianceUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var securityCompliance: SecurityComplianceModel = new SecurityComplianceModel(this.securityComplianceUpdateForm.value);
             console.log('securityCompliance form', securityCompliance);
             var dt = new Date(securityCompliance.dateOfCreation);

@@ -20,6 +20,9 @@ export class LIEReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add LIE Report Submission';
 
+    disableSubmitButton = false;
+
+
     selectedLIE: LIEModel;
     selectedLIEReportAndFee: LIEReportAndFeeModel;
 
@@ -183,6 +186,7 @@ export class LIEReportAndFeeUpdateDialogComponent {
         // }
 
         if (this.lieUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.lieUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.lieUpdateForm.get('file').value);
@@ -193,12 +197,14 @@ export class LIEReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addLIEReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveLIEReportAndFee('');

@@ -19,7 +19,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class TRAUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add New TRA Account';
-
+    disableSubmitButton = false;
     selectedTRA: TRAModel;
 
     traUpdateForm: FormGroup;
@@ -112,6 +112,7 @@ export class TRAUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.traUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var tra: TRAModel = new TRAModel(this.traUpdateForm.value);
             console.log('after new model', tra);
             if (this._dialogData.operation === 'addTRA') {

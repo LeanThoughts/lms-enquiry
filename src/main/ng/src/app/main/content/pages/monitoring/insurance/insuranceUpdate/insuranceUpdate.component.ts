@@ -16,7 +16,7 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
 export class InsuranceUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Insurance Details';
-
+    disableSubmitButton = false;
     selectedInsurance: any;
 
     insuranceUpdateForm: FormGroup;
@@ -75,6 +75,7 @@ export class InsuranceUpdateDialogComponent implements OnInit {
      * submit()
      */
     submit(): void {
+        this.disableSubmitButton = true;
         if (this.insuranceUpdateForm.valid) {
             if (this.insuranceUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
@@ -86,12 +87,14 @@ export class InsuranceUpdateDialogComponent implements OnInit {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addInsurance') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveInsuranceDetails('');

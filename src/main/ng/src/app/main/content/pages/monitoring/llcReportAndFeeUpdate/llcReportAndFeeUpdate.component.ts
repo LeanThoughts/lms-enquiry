@@ -19,7 +19,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 export class LLCReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add LLC Report Submission';
-
+    disableSubmitButton = false;
     selectedLLC: LIEModel;
     selectedLLCReportAndFee: LIEReportAndFeeModel;
 
@@ -91,6 +91,7 @@ export class LLCReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.llcUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.llcUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.llcUpdateForm.get('file').value);
@@ -101,12 +102,14 @@ export class LLCReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addLLCReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveLLCReportAndFee('');

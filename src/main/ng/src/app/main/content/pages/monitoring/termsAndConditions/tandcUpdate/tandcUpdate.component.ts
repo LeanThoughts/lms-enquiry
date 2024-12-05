@@ -18,7 +18,7 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
 export class TandCUpdateDialogComponent {
 
     dialogTitle = 'Add New T&C';
-
+    disableSubmitButton = false;
     selectedTandC: TandCModel;
 
     tandcUpdateForm: FormGroup;
@@ -110,6 +110,7 @@ export class TandCUpdateDialogComponent {
      */
     submit(): void {
         if (this.tandcUpdateForm.valid) {
+            this.disableSubmitButton = true;
             forkJoin([
                 this.uploadRegularFile(),
                 this.uploadAmendedFile(),

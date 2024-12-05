@@ -20,6 +20,8 @@ export class ValuerReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add Valuer Report Submission';
 
+    disableSubmitButton = false;
+
     selectedValuer: LIEModel;
     selectedValuerReportAndFee: LIEReportAndFeeModel;
 
@@ -91,6 +93,7 @@ export class ValuerReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.valuerUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.valuerUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.valuerUpdateForm.get('file').value);
@@ -101,12 +104,14 @@ export class ValuerReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addValuerReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveValuerReportAndFee('');

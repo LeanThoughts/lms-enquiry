@@ -17,7 +17,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class LFAUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add LFA';
-
+    disableSubmitButton = false;
     selectedLFA: LFAModel;
 
     lfaUpdateForm: FormGroup;
@@ -86,6 +86,7 @@ export class LFAUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.lfaUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var lfa: LFAModel = new LFAModel(this.lfaUpdateForm.value);
             const filteredList = this.lfaList.filter(obj => obj.lendersFinancialAdvisor.bpCode  === lfa.bpCode);
             if (filteredList.length == 0) {
@@ -121,6 +122,7 @@ export class LFAUpdateDialogComponent implements OnInit {
             else {
                 this._matSnackBar.open('Business partner ' + lfa.bpCode + ' is already in the list. Please select a different business partner.', 
                         'OK', { duration: 7000 });
+                this.disableSubmitButton = false;
             }
         }
     }

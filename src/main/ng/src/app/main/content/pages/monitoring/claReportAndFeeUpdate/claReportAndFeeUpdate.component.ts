@@ -20,6 +20,8 @@ export class CLAReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add CLA Report Submission';
 
+    disableSubmitButton = false;
+
     selectedCLA: LIEModel;
     selectedCLAReportAndFee: LIEReportAndFeeModel;
 
@@ -91,6 +93,7 @@ export class CLAReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.claUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.claUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.claUpdateForm.get('file').value);      
@@ -101,12 +104,14 @@ export class CLAReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addCLAReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveCLAReportAndFee('');

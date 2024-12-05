@@ -20,6 +20,8 @@ export class PromoterFinancialsUpdateDialogComponent {
 
     selectedFinancials: PromoterFinancialsModel ;
 
+    disableSubmitButton = false;
+
     financialsUpdateForm: FormGroup;
   
     /**
@@ -84,6 +86,7 @@ export class PromoterFinancialsUpdateDialogComponent {
      */
     submit(): void {
         if (this.financialsUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var financials: PromoterFinancialsModel = new PromoterFinancialsModel(this.financialsUpdateForm.value);
             if (this._dialogData.operation === 'addFinancials') {
                 const uploads = Observable.forkJoin(

@@ -21,7 +21,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 export class LoanDocumentationUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Loan Documentation';
-
+    disableSubmitButton = false;
     selectedLoanDocumentation: LoanDocumentationModel;
 
     loanDocumentationUpdateForm: FormGroup;
@@ -164,6 +164,7 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.loanDocumentationUpdateForm.valid) {
+          this.disableSubmitButton = true;
           if (this.loanDocumentationUpdateForm.get('file').value !== '') {
             var formData = new FormData();
             formData.append('file', this.loanDocumentationUpdateForm.get('file').value);
@@ -174,12 +175,14 @@ export class LoanDocumentationUpdateDialogComponent implements OnInit {
               (error) => {
                 this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                   'OK', { duration: 7000 });
+                this.disableSubmitButton = false;
               }
             );
           }
           else {
             if (this._dialogData.operation === 'addLoanDocumentation') {
               this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+              this.disableSubmitButton = false;
             }
             else {
               this.saveLoanDocumentation('');

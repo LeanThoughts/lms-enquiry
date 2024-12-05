@@ -17,7 +17,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class LIAUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add LIA';
-
+    disableSubmitButton = false;
     selectedLIA: LIEModel;
 
     liaUpdateForm: FormGroup;
@@ -91,6 +91,7 @@ export class LIAUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.liaUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var lia: LIEModel = new LIEModel(this.liaUpdateForm.value);
             const filteredList = this.liaList.filter(obj => obj.lendersInsuranceAdvisor.bpCode  === lia.bpCode);
             if (filteredList.length == 0) {
@@ -127,6 +128,7 @@ export class LIAUpdateDialogComponent implements OnInit {
             else {
                 this._matSnackBar.open('Business partner ' + lia.bpCode + ' is already in the list. Please select a different business partner.', 
                         'OK', { duration: 7000 });
+                this.disableSubmitButton = false;
             }
         }
     }

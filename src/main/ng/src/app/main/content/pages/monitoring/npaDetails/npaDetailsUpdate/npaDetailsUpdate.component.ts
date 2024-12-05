@@ -18,7 +18,7 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
 export class NPADetailUpdateDialogComponent implements OnDestroy {
 
     dialogTitle = 'Add New NPA Details';
-
+    disableSubmitButton = false;
     selectedNPADetail: any;
     npaDetailUpdateForm: FormGroup;
 
@@ -91,6 +91,7 @@ export class NPADetailUpdateDialogComponent implements OnDestroy {
      */
     submit(): void {
         if (this.npaDetailUpdateForm.valid) {
+            this.disableSubmitButton = true;
             this.saveNPADetails();
         }
     }

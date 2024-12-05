@@ -19,7 +19,7 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
 export class TRAStatementUpdateDialogComponent {
 
     dialogTitle = 'Add TRA Statement';
-
+    disableSubmitButton = false;
     selectedTRA: TRAModel;
     selectedTRAStatement: TRAStatementModel;
 
@@ -80,6 +80,7 @@ export class TRAStatementUpdateDialogComponent {
      */
     submit(): void {
         if (this.traStatementUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.traStatementUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.traStatementUpdateForm.get('file').value);
@@ -90,12 +91,14 @@ export class TRAStatementUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addTRAStatement') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveTRAStatement('');

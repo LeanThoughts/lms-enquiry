@@ -18,6 +18,8 @@ export class SiteVisitUpdateDialogComponent {
 
     dialogTitle = 'Add New Site Visit Details';
 
+    disableSubmitButton = false;
+
     documentTypes = LoanMonitoringConstants.siteVisitDocumentTypes;
     selectedSiteVisit: SiteVisitModel ;
     siteVisitUpdateForm: FormGroup;
@@ -106,6 +108,7 @@ export class SiteVisitUpdateDialogComponent {
      */
     submit(): void {
         if (this.siteVisitUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.siteVisitUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.siteVisitUpdateForm.get('file').value);
@@ -116,12 +119,14 @@ export class SiteVisitUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addSiteVisit') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveSiteVisitDetails('');

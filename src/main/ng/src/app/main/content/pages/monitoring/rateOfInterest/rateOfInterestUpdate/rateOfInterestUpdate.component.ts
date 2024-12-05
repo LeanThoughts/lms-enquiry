@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 export class RateOfInterestUpdateDialogComponent implements OnInit, OnDestroy {
 
     dialogTitle = 'Add New Rate Of Interest';
-
+    disableSubmitButton = false;
     selectedRateOfInterest: RateOfInterestModel ;
 
     rateOfInterestUpdateForm: FormGroup;
@@ -136,6 +136,7 @@ export class RateOfInterestUpdateDialogComponent implements OnInit, OnDestroy {
      */
     submit(): void {
         if (this.rateOfInterestUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var rateOfInterest: RateOfInterestModel = new RateOfInterestModel(this.rateOfInterestUpdateForm.value);
 
             const dt1 = new Date(rateOfInterest.validFromDate);

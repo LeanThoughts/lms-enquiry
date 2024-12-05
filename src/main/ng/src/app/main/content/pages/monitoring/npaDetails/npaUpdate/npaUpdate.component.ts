@@ -18,6 +18,8 @@ import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDial
 })
 export class NPAUpdateComponent implements OnInit {
 
+    disableSubmitButton = false;
+
     assetClasses = LoanMonitoringConstants.assetClasses;
     restructuringTypes = LoanMonitoringConstants.restructuringTypes;
     smaCategories = LoanMonitoringConstants.smaCategories;
@@ -104,6 +106,7 @@ export class NPAUpdateComponent implements OnInit {
      * submit()
      */
     submit(): void {
+        this.disableSubmitButton = true;
         var npa = this.npaUpdateForm.value;
         var dt = new Date(npa.npaDeclarationDate);
         npa.npaDeclarationDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
@@ -124,12 +127,14 @@ export class NPAUpdateComponent implements OnInit {
             this._loanMonitoringService.updateNPA(this.selectedNPA).subscribe((data) => {
                 this._matSnackBar.open('NPA details updated successfully.', 'OK', { duration: 7000 });
                 this.selectedNPA = data;
+                this.disableSubmitButton = false;
             });
         }
         else {
             this._loanMonitoringService.saveNPA(npa, this.loanApplicationId).subscribe((data) => {
                 this._matSnackBar.open('NPA details added successfully.', 'OK', { duration: 7000 });
                 this.selectedNPA = data;
+                this.disableSubmitButton = false;
             });
         }
     }

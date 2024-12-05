@@ -15,6 +15,8 @@ import { OperatingParameterPLFModel } from 'app/main/content/model/operatingPara
 })
 export class OperatingParameterPLFUpdateDialogComponent {
 
+    disableSubmitButton = false;
+
     dialogTitle = 'Add New Operating Parameter PLF';
 
     selectedOperatingParameterPLF: OperatingParameterPLFModel;
@@ -58,6 +60,7 @@ export class OperatingParameterPLFUpdateDialogComponent {
      */
     submit(): void {
         if (this.operatingParameterPLFUpdateForm.valid) {
+            this.disableSubmitButton = true;
             console.log(this.operatingParameterPLFUpdateForm.value);
             var operatingParameterPLF: OperatingParameterPLFModel = new OperatingParameterPLFModel(this.operatingParameterPLFUpdateForm.value);
             console.log(operatingParameterPLF);

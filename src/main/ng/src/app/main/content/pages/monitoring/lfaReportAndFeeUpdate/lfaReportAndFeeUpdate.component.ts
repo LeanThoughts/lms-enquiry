@@ -19,7 +19,7 @@ import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 export class LFAReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add LFA Report Submission';
-
+    disableSubmitButton = false;
     selectedLFA: LFAModel;
     selectedLFAReportAndFee: LFAReportAndFeeModel;
 
@@ -91,6 +91,7 @@ export class LFAReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.lfaUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.lfaUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.lfaUpdateForm.get('file').value);
@@ -101,12 +102,14 @@ export class LFAReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addLFAReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveLFAReportAndFee('');

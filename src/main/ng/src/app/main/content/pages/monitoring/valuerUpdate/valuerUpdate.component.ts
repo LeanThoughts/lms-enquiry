@@ -17,7 +17,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class ValuerUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add Valuer';
-
+    disableSubmitButton = false;
     selectedValuer: LIEModel;
 
     valuerUpdateForm: FormGroup;
@@ -91,6 +91,7 @@ export class ValuerUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.valuerUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var valuer: LIEModel = new LIEModel(this.valuerUpdateForm.value);
             const filteredList = this.valuerList.filter(obj => obj.valuer.bpCode  === valuer.bpCode);
             if (filteredList.length == 0) {
@@ -127,6 +128,7 @@ export class ValuerUpdateDialogComponent implements OnInit {
             else {
                 this._matSnackBar.open('Business partner ' + valuer.bpCode + ' is already in the list. Please select a different business partner.', 
                         'OK', { duration: 7000 });
+                this.disableSubmitButton = false;
             }
         }
     }

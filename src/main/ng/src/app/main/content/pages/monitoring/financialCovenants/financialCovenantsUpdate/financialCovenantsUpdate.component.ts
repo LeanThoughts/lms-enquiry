@@ -17,7 +17,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 export class FinancialCovenantsUpdateDialogComponent {
 
     dialogTitle: string;
-
+    disableSubmitButton = false;
     selectedFinancialCovenants: FinancialCovenantsModel ;
 
     financialCovenantsUpdateForm: FormGroup;
@@ -83,6 +83,7 @@ export class FinancialCovenantsUpdateDialogComponent {
      */
     submit(): void {
         if (this.financialCovenantsUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.financialCovenantsUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.financialCovenantsUpdateForm.get('file').value);      
@@ -93,6 +94,7 @@ export class FinancialCovenantsUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }

@@ -20,6 +20,8 @@ export class LIAReportAndFeeUpdateDialogComponent {
 
     dialogTitle = 'Add LIA Report Submission';
 
+    disableSubmitButton = false;
+
     selectedLIA: LIEModel;
     selectedLIAReportAndFee: LIEReportAndFeeModel;
 
@@ -91,6 +93,7 @@ export class LIAReportAndFeeUpdateDialogComponent {
      */
     submit(): void {
         if (this.liaUpdateForm.valid) {
+            this.disableSubmitButton = true;
             if (this.liaUpdateForm.get('file').value !== '') {
                 var formData = new FormData();
                 formData.append('file', this.liaUpdateForm.get('file').value);
@@ -101,12 +104,14 @@ export class LIAReportAndFeeUpdateDialogComponent {
                     (error) => {
                         this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator',
                             'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 );
             }
             else {
                 if (this._dialogData.operation === 'addLIAReportAndFee') {
                     this._matSnackBar.open('Please select a file to upload', 'OK', { duration: 7000 });
+                    this.disableSubmitButton = false;
                 }
                 else {
                     this.saveLIAReportAndFee('');

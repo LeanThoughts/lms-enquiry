@@ -17,6 +17,8 @@ import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service'
 })
 export class OperatingParameterUpdateDialogComponent {
 
+    disableSubmitButton = false;
+
     dialogTitle = 'Add New Operating Parameter';
 
     selectedOperatingParameter: OperatingParameterModel ;
@@ -72,6 +74,7 @@ export class OperatingParameterUpdateDialogComponent {
      */
     submit(): void {
         if (this.operatingParameterUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var operatingParameter: OperatingParameterModel = new OperatingParameterModel(this.operatingParameterUpdateForm.value);
             var dt = new Date(operatingParameter.dateOfInvoice);
             operatingParameter.dateOfInvoice = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
@@ -92,6 +95,7 @@ export class OperatingParameterUpdateDialogComponent {
                         (error) => {
                             this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                                 'OK', { duration: 7000 });
+                            this.disableSubmitButton = false;
                         }
                     );
                 }
@@ -119,6 +123,7 @@ export class OperatingParameterUpdateDialogComponent {
                         (error) => {
                             this._matSnackBar.open('Unable to upload the file. Pls try again after sometime or contact your system administrator', 
                                 'OK', { duration: 7000 });
+                            this.disableSubmitButton = false;
                         }
                     );
                 }

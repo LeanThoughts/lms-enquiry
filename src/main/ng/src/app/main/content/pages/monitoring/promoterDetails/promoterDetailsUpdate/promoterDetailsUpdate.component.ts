@@ -16,7 +16,7 @@ import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 export class PromoterDetailsUpdateDialogComponent {
 
     dialogTitle = 'Add New Promoter Details';
-
+    disableSubmitButton = false;
     selectedPromoterDetailItem: PromoterDetailsItemModel;
 
     promoterDetailUpdateForm: FormGroup;
@@ -53,6 +53,7 @@ export class PromoterDetailsUpdateDialogComponent {
      */
     submit(): void {
         if (this.promoterDetailUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var promoterDetailItem: PromoterDetailsItemModel = new PromoterDetailsItemModel(this.promoterDetailUpdateForm.value);
 
             var dt = new Date(promoterDetailItem.dateOfChange);

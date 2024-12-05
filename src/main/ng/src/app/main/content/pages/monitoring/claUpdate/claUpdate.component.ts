@@ -17,7 +17,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class CLAUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add CLA';
-
+    disableSubmitButton = false;
     selectedCLA: LIEModel;
 
     claUpdateForm: FormGroup;
@@ -82,6 +82,7 @@ export class CLAUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.claUpdateForm.valid) {
+            this.disableSubmitButton = true;
             // To solve the utc time zone issue
             var cla: LIEModel = new LIEModel(this.claUpdateForm.value);
             var dt = new Date(cla.dateOfAppointment);

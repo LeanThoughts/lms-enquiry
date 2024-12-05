@@ -14,7 +14,7 @@ import { LoanMonitoringService } from '../../loanMonitoring.service';
 export class ProjectMonitoringDataItemUpdateComponent implements OnInit {
 
     dialogTitle = 'Update Project Monitoring Data';
-
+    disableSubmitButton = false;
     selectedProjectMonitoringDataItem: any;
 
     projectMonitoringDataForm: FormGroup;
@@ -56,6 +56,7 @@ export class ProjectMonitoringDataItemUpdateComponent implements OnInit {
      */
     submit(): void {
         if (this.projectMonitoringDataForm.valid) {
+            this.disableSubmitButton = true;
             var projectMonitoringDataItem = this.projectMonitoringDataForm.value;
             var dt = new Date(projectMonitoringDataItem.dateOfEntry);
             this.selectedProjectMonitoringDataItem.dateOfEntry = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));

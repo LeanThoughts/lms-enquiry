@@ -17,7 +17,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class LLCUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add LLC';
-
+    disableSubmitButton = false;
     selectedLLC: LIEModel;
 
     llcUpdateForm: FormGroup;
@@ -91,6 +91,7 @@ export class LLCUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.llcUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var llc: LIEModel = new LIEModel(this.llcUpdateForm.value);
             const filteredList = this.llcList.filter(obj => obj.lendersLegalCouncil.bpCode  === llc.bpCode);
             if (filteredList.length == 0) {
@@ -127,6 +128,7 @@ export class LLCUpdateDialogComponent implements OnInit {
             else {
                 this._matSnackBar.open('Business partner ' + llc.bpCode + ' is already in the list. Please select a different business partner.', 
                         'OK', { duration: 7000 });
+                this.disableSubmitButton = false;
             }
         }
     }

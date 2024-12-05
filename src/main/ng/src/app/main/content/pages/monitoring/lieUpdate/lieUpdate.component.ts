@@ -18,7 +18,7 @@ import { PartnerModel } from 'app/main/content/model/partner.model';
 export class LIEUpdateDialogComponent implements OnInit {
 
     dialogTitle = 'Add LIE';
-
+    disableSubmitButton = false;
     selectedLIE: LIEModel;
 
     lieUpdateForm: FormGroup;
@@ -92,6 +92,7 @@ export class LIEUpdateDialogComponent implements OnInit {
      */
     submit(): void {
         if (this.lieUpdateForm.valid) {
+            this.disableSubmitButton = true;
             var lie: LIEModel = new LIEModel(this.lieUpdateForm.value);
 
             // To solve the utc time zone issue
@@ -114,6 +115,7 @@ export class LIEUpdateDialogComponent implements OnInit {
                     else {
                         this._matSnackBar.open('Business partner ' + lie.bpCode + ' is already in the list. Please select a different business ' + 
                             'partner.', 'OK', { duration: 7000 });
+                        this.disableSubmitButton = false;
                     }
                 });
             }
