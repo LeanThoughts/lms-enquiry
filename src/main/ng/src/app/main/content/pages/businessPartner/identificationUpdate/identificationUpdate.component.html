@@ -39,7 +39,8 @@
                     <mat-datepicker #validFromPicker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
-                    <input matInput [matDatepicker]="validToPicker" placeholder="Valid To" formControlName="idValidToDate">
+                    <input matInput [matDatepicker]="validToPicker" placeholder="Valid To" formControlName="idValidToDate" 
+                            [min]="identificationDetailsUpdateForm.get('idValidFromDate').value">
                     <mat-datepicker-toggle matSuffix [for]="validToPicker"></mat-datepicker-toggle>
                     <mat-datepicker #validToPicker></mat-datepicker>
                 </mat-form-field>
