@@ -130,6 +130,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
      * sendEnquiryActionForApproval()
      */
     sendEnquiryActionForApproval(): void {
+        this.disableSendForApproval = true;
         this._enquiryActionService.getEnquiryCompletion(this.enquiryAction.id).subscribe(data => {
             if (Object.keys(data).length > 0) {
                 this._enquiryActionService.getProjectProposalByStatus(this.enquiryAction.id, 'Final').subscribe(pp => {
@@ -147,6 +148,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                                 this.disableSendForApproval = false;
                                 this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
                                     'OK', { duration: 7000 });
+                                this.disableSendForApproval = false;
                             });
                         this.disableSendForApproval = true;
                         this._location.back();
@@ -154,6 +156,7 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                     else {
                         this._matSnackBar.open('Project Proposal with status Final not found. Cannot send enquiry for approval.',
                         'OK', { duration: 7000 });
+                        this.disableSendForApproval = false;
                     }
                 });
             }

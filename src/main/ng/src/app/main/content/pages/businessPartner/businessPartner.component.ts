@@ -133,6 +133,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             return;
         }
 
+        this.disableSendForApproval = true;
         // Check bank details
         this._businessPartnerService.getBusinessPartnerBankDetails(this.businessPartner.id).subscribe({
             next: response => {
@@ -167,16 +168,19 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                                 this.disableSendForApproval = false;
                                 this._matSnackBar.open('Error occurred. Please try again later or contact your system administrator',
                                     'OK', { duration: 7000 });
+                                this.disableSendForApproval = false;
                             }
                         });
                     },
                     error: () => {
                         this._matSnackBar.open('Error validating identification details. Please try again.', 'OK', { duration: 7000 });
+                        this.disableSendForApproval = false;
                     }
                 });
             },
             error: () => {
                 this._matSnackBar.open('Error validating bank details. Please try again.', 'OK', { duration: 7000 });
+                this.disableSendForApproval = false;
             }
         });
     }

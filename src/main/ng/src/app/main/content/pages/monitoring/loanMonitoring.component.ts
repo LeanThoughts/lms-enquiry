@@ -144,6 +144,7 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
      * sendMonitoringForApproval()
      */
      sendMonitoringForApproval(): void {
+        this.disableSendForApproval = true;
         let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
         let email = this._appService.currentUser.email;
         this._matSnackBar.open('Please wait while attempting to send monitoring for approval.', 'OK', { duration: 25000 });
@@ -157,8 +158,9 @@ export class LoanMonitoringComponent implements OnInit, OnDestroy {
                 this.disableSendForApproval = false;
                 this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
                     'OK', { duration: 7000 });
+                this.disableSendForApproval = false;
             });
-        this.disableSendForApproval = true;
+        // this.disableSendForApproval = false;
         this._location.back();
     }
 

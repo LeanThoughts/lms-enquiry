@@ -113,9 +113,9 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
      */
     sendForApproval(): void {
         if (this.applicationFee.id) {
+            this.disableSendForApproval = true;
             this._applicationFeeService.getInvoicingDetails(this.applicationFee.id).subscribe(
                 (response) => {
-                    console.log('response is unbelievable', response);
                     if (Object.keys(response).length === 0) {
                         this._matSnackBar.open('Invoicing details not found. Please complete Customer and Invoicing details before sending for approval.', 'OK', { duration: 7000 });
                         return;
@@ -135,6 +135,7 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
                             this.disableSendForApproval = false;
                             this._matSnackBar.open('Errors occurred while sending for approval. Please try again later or contact your system administrator.',
                                 'OK', { duration: 7000 });
+                            this.disableSendForApproval = false;
                         }
                     );
                 },
@@ -144,11 +145,13 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
                     } else {
                         this._matSnackBar.open('An error occurred while fetching invoicing details. Please try again later or contact your system administrator.', 'OK', { duration: 7000 });
                     }
+                    this.disableSendForApproval = false;
                 }
             );
         }
         else {
             this._matSnackBar.open('Please complete Customer and Invoicing details before sending for approval', 'OK', { duration: 7000 });
+            // this.disableSendForApproval = false;
         }
     }
 }

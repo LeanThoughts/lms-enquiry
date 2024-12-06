@@ -100,6 +100,7 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
      * sendAppraisalForApproval()
      */
     sendForApproval(): void {
+        this.disableSendForApproval = true;
         let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
         let email = this._appService.currentUser.email;
         this._matSnackBar.open('Please wait while attempting to send the icc approval for approval.', 'OK', { duration: 25000 });
