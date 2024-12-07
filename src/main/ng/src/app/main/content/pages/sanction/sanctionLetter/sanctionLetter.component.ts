@@ -5,6 +5,7 @@ import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { SanctionService } from '../sanction.service';
 import { SanctionLetterUpdateDialogComponent } from '../sanctionLetterUpdate/sanctionLetterUpdate.component';
+import { BoardApprovalService } from '../../boardApproval/boardApproval.service';
 
 @Component({
     selector: 'fuse-sanction-letter',
@@ -14,6 +15,7 @@ import { SanctionLetterUpdateDialogComponent } from '../sanctionLetterUpdate/san
 })
 export class sanctionLetterComponent {
     
+    approvalByBoards: any;
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
 
@@ -32,12 +34,18 @@ export class sanctionLetterComponent {
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _sanctionService: SanctionService, private _matDialog: MatDialog,
-                    private _matSnackBar: MatSnackBar) {
+                    private _matSnackBar: MatSnackBar, private _boardApprovalService: BoardApprovalService) {
 
         this._sanctionService.getSanctionTypes().subscribe(data => {
             this.sanctionTypes = data._embedded.sanctionTypes;
         });
-                
+        
+        this._boardApprovalService.getBoardApproval(this.loanApplicationId).subscribe(data => {
+            this._boardApprovalService.getApprovalByBoards(data.id).subscribe(approvalByBoards => {
+                this.approvalByBoards = approvalByBoards._embedded.approvalByBoards;
+            });
+        });
+
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
     }
@@ -70,6 +78,7 @@ export class sanctionLetterComponent {
             data: {
                 operation: 'addSanctionLetter',
                 loanApplicationId: this.loanApplicationId,
+                approvalByBoards: this.approvalByBoards
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -99,7 +108,8 @@ export class sanctionLetterComponent {
             data: {
                 operation: 'updateSanctionLetter',
                 loanApplicationId: this.loanApplicationId,
-                selectedSanctionLetter: this.selectedSanctionLetter
+                selectedSanctionLetter: this.selectedSanctionLetter,
+                approvalByBoards: this.approvalByBoards
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

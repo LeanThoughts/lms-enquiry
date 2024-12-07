@@ -136,9 +136,9 @@ export class BoardApprovalService implements Resolve<any> {
     /**
      * getApprovalByBoards()
      */
-    public getApprovalByBoards(): Observable<any> {
-        return this._http.get("enquiry/api/approvalByBoards/search/findByBoardApprovalId?boardApprovalId=" + 
-            this._boardApproval.value.id);
+    public getApprovalByBoards(boardApprovalId?: string): Observable<any> {
+        const id = boardApprovalId || this._boardApproval.value.id;
+        return this._http.get("enquiry/api/approvalByBoards/search/findByBoardApprovalId?boardApprovalId=" + id);
     }
 
     /**

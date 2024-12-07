@@ -46,6 +46,8 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
 
     _approvalByBoards: any;
 
+    today = new Date();
+
     /**
      * constructor()
      */
@@ -63,7 +65,7 @@ export class SanctionLetterUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedSanctionLetter = Object.assign({}, _dialogData.selectedSanctionLetter);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        this._approvalByBoards = this._boardApprovalService._approvalByBoards.value;
+        this._approvalByBoards = _dialogData.approvalByBoards;
 
         if (_dialogData.selectedSanctionLetter !== undefined) {
             if (_dialogData.operation === 'updateSanctionLetter') {

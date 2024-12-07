@@ -133,7 +133,7 @@ public class ProjectDetailService implements IProjectDetailService {
                 username,
                 "EnquiryAction", "Project Detail" );
 
-        //updateLoanApplication(projectDetail, projectDetail.getProjectProposal());
+//        updateLoanApplication(projectDetail, projectDetail.getProjectProposal());
 
         return projectDetail;
     }

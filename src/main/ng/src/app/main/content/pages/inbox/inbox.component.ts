@@ -17,6 +17,8 @@ import { SanctionService } from '../sanction/sanction.service';
 import { LoanMonitoringService } from '../monitoring/loanMonitoring.service';
 import { BoardApprovalService } from '../boardApproval/boardApproval.service';
 import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
+import { BusinessPartnerService } from '../businessPartner/businessPartner.service';
+import { PartnerService } from '../administration/partner/partner.service';
 
 @Component({
     selector: 'app-inbox',
@@ -43,7 +45,8 @@ export class InboxComponent implements OnInit {
                 private _sanctionService: SanctionService,
                 private _loanMonitoringService: LoanMonitoringService,
                 private _boardApprovalService: BoardApprovalService,
-                private _loanAppraisalService: LoanAppraisalService) {
+                private _loanAppraisalService: LoanAppraisalService,
+                private _partnerService: PartnerService) {
 
     }
 
@@ -55,68 +58,77 @@ export class InboxComponent implements OnInit {
      */
      reviewTask(): void {
         this._matSnackBar.open('Review in Process.', 'OK', { duration: 10000 });
-        this._loanEnquiryService.getLoanApplicationByLoanContractId(this.inboxItemsComponent.selectedItem.lanContractId).subscribe(response => {
-            this._loanEnquiryService.selectedEnquiry.next(new EnquiryApplicationModel(response));
-            if (this._loanEnquiryService.selectedLoanApplicationId) {
-                this._loanEnquiryService.selectedLoanApplicationId.next(response.loanApplication.id);
-                this._loanEnquiryService.selectedLoanApplicationPartyNumber.next(response.loanApplication.busPartnerNumber);
-            }
-            else {
-                this._loanEnquiryService.selectedLoanApplicationId = new BehaviorSubject(response.loanApplication.id);
-                this._loanEnquiryService.selectedLoanApplicationPartyNumber = new BehaviorSubject(response.loanApplication.busPartnerNumber);
-            }
 
-            let selectedInboxItem = this.inboxItemsComponent.selectedItem;
+        let selectedInboxItem = this.inboxItemsComponent.selectedItem;
 
-            if (selectedInboxItem.processName === 'Process Enquiry') {
-                this._enquiryActionService.getEnquiryAction(response.loanApplication.id).subscribe(enquiryAction => {
-                    this._enquiryActionService._enquiryAction.next(enquiryAction);
-                    this._router.navigate(['/enquiryAction']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'ICC In-Principal Approval') {
-                this._iccApprovalService.getICCApproval(response.loanApplication.id).subscribe(iccApproval => {
-                    this._iccApprovalService._iccApproval.next(iccApproval);
-                    this._router.navigate(['/iccApprovalStage']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'Prelim Risk Assessment') {
-                this._riskAssessmentService.getRiskAssessment(response.loanApplication.id).subscribe(riskAssessment => {
-                    this._riskAssessmentService._riskAssessment.next(riskAssessment);
-                    this._router.navigate(['/riskAssessment']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'Application Fee') {
-                this._applicationFeeService.getApplicationFee(response.loanApplication.id).subscribe(applicationFee => {
-                    this._applicationFeeService._applicationFee.next(applicationFee);
-                    this._router.navigate(['/applicationFee']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'Appraisal') {
-                this._loanAppraisalService.getLaonAppraisal(response.loanApplication.id).subscribe(loanAppraisal => {
-                    this._loanAppraisalService._loanAppraisal = loanAppraisal;
-                    this._router.navigate(['/loanAppraisal']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'Board Approval') {
-                this._boardApprovalService.getBoardApproval(response.loanApplication.id).subscribe(boardApproval => {
-                    this._boardApprovalService._boardApproval.next(boardApproval);
-                    this._router.navigate(['/boardApproval']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'Sanction') {
-                this._sanctionService.getSanction(response.loanApplication.id).subscribe(sanction => {
-                    this._sanctionService._sanction.next(sanction);
-                    this._router.navigate(['/sanction']);
-                });
-            }
-            else if (selectedInboxItem.processName === 'Monitoring') {
-                this._loanMonitoringService.getLoanMonitor(response.loanApplication.id).subscribe(loanMonitoring => {
-                    this._loanMonitoringService.loanMonitor.next(loanMonitoring);
-                    this._router.navigate(['/loanMonitoring']);
-                });
-            }
-        });
+        if (selectedInboxItem.processName === 'BusinessPartner') {
+            this._partnerService.getPartnerByEmail(selectedInboxItem.businessProcessId).subscribe(partner => {
+                this._partnerService.selectedPartner.next(partner);
+                this._router.navigate(['/updateBusinessPartner']);
+            });
+        }
+        else {
+            this._loanEnquiryService.getLoanApplicationByLoanContractId(this.inboxItemsComponent.selectedItem.lanContractId).subscribe(response => {
+                this._loanEnquiryService.selectedEnquiry.next(new EnquiryApplicationModel(response));
+                if (this._loanEnquiryService.selectedLoanApplicationId) {
+                    this._loanEnquiryService.selectedLoanApplicationId.next(response.loanApplication.id);
+                    this._loanEnquiryService.selectedLoanApplicationPartyNumber.next(response.loanApplication.busPartnerNumber);
+                }
+                else {
+                    this._loanEnquiryService.selectedLoanApplicationId = new BehaviorSubject(response.loanApplication.id);
+                    this._loanEnquiryService.selectedLoanApplicationPartyNumber = new BehaviorSubject(response.loanApplication.busPartnerNumber);
+                }
+
+                if (selectedInboxItem.processName === 'Process Enquiry') {
+                    this._enquiryActionService.getEnquiryAction(response.loanApplication.id).subscribe(enquiryAction => {
+                        this._enquiryActionService._enquiryAction.next(enquiryAction);
+                        this._router.navigate(['/enquiryAction']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'ICC In-Principal Approval') {
+                    this._iccApprovalService.getICCApproval(response.loanApplication.id).subscribe(iccApproval => {
+                        this._iccApprovalService._iccApproval.next(iccApproval);
+                        this._router.navigate(['/iccApprovalStage']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'Prelim Risk Assessment') {
+                    this._riskAssessmentService.getRiskAssessment(response.loanApplication.id).subscribe(riskAssessment => {
+                        this._riskAssessmentService._riskAssessment.next(riskAssessment);
+                        this._router.navigate(['/riskAssessment']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'Application Fee') {
+                    this._applicationFeeService.getApplicationFee(response.loanApplication.id).subscribe(applicationFee => {
+                        this._applicationFeeService._applicationFee.next(applicationFee);
+                        this._router.navigate(['/applicationFee']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'Appraisal') {
+                    this._loanAppraisalService.getLaonAppraisal(response.loanApplication.id).subscribe(loanAppraisal => {
+                        this._loanAppraisalService._loanAppraisal = loanAppraisal;
+                        this._router.navigate(['/loanAppraisal']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'Board Approval') {
+                    this._boardApprovalService.getBoardApproval(response.loanApplication.id).subscribe(boardApproval => {
+                        this._boardApprovalService._boardApproval.next(boardApproval);
+                        this._router.navigate(['/boardApproval']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'Sanction') {
+                    this._sanctionService.getSanction(response.loanApplication.id).subscribe(sanction => {
+                        this._sanctionService._sanction.next(sanction);
+                        this._router.navigate(['/sanction']);
+                    });
+                }
+                else if (selectedInboxItem.processName === 'Monitoring') {
+                    this._loanMonitoringService.getLoanMonitor(response.loanApplication.id).subscribe(loanMonitoring => {
+                        this._loanMonitoringService.loanMonitor.next(loanMonitoring);
+                        this._router.navigate(['/loanMonitoring']);
+                    });
+                }
+            });
+        }
     }
 
     /**
