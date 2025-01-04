@@ -137,6 +137,16 @@ public class Initializer implements CommandLineRunner {
             LoanClass lc29 = new LoanClass("43", "NFB-LOCOthers");
             LoanClass lc30 = new LoanClass("51", "CL-Corp.Privat");
             LoanClass lc31 = new LoanClass("52", "CL-Corp.Govt");
+            LoanClass lc33 = new LoanClass("32", "Electric Mobility");
+            LoanClass lc34 = new LoanClass("33", "Roads");
+            LoanClass lc35 = new LoanClass("34", "Power Distribution");
+            LoanClass lc36= new LoanClass("35", "Steel");
+            LoanClass lc37 = new LoanClass("36", "Power Generation");
+            LoanClass lc38 = new LoanClass("37", "Waste Management");
+            LoanClass lc39 = new LoanClass("38", "NBFC");
+            LoanClass lc40 = new LoanClass("31", "Defence");
+
+
             loanClassRepository.saveAll(Arrays.asList(lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10,
                     lc11, lc12, lc13, lc14, lc15, lc16, lc17, lc18, lc19, lc20, lc21, lc22,
                     lc23, lc24, lc25, lc26, lc27, lc28, lc29, lc30, lc31,lc32
@@ -200,6 +210,19 @@ public class Initializer implements CommandLineRunner {
             ProjectType pt51 = new ProjectType("51","Energy Efficiency");
             ProjectType pt52 = new ProjectType("52","Smart Metering");
             ProjectType pt53 = new ProjectType("53","Others");
+
+            ProjectType pt54 = new ProjectType("54","Defence");
+            ProjectType pt55 = new ProjectType("55","Electric Trucks");
+            ProjectType pt56 = new ProjectType("56","Electric Buses");
+            ProjectType pt57 = new ProjectType("57","Road –EPC");
+            ProjectType pt58 = new ProjectType("58","Road-Annuity");
+            ProjectType pt59 = new ProjectType("59","State Power Utility");
+            ProjectType pt60 = new ProjectType("60","Steel");
+            ProjectType pt61 = new ProjectType("61","Renewable -O&M");
+            ProjectType pt62 = new ProjectType("62","Waste to Energy");
+            ProjectType pt63 = new ProjectType("63","NBFC");
+            ProjectType pt64 = new ProjectType("64","Infrastructure - EPC");
+
 
 
             projectTypeRepository.saveAll(Arrays.asList(

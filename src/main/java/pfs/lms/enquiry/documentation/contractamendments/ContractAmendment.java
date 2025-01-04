@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.documentation.contractamendments;
 
 import lombok.*;
+import pfs.lms.enquiry.businesspartner.domain.AmendmentReason;
 import pfs.lms.enquiry.businesspartner.domain.SanctionAuthority;
 import pfs.lms.enquiry.documentation.Documentation;
 import pfs.lms.enquiry.domain.AggregateRoot;
@@ -31,8 +32,9 @@ public class ContractAmendment extends AggregateRoot<ContractAmendment> implemen
     @OneToOne
     @JoinColumn(name = "sanction_authority_code")
     private SanctionAuthority sanctionAuthority;
-
-    private String reasonForChange;
+    @OneToOne
+    @JoinColumn(name = "amendment_reason_code")
+    private AmendmentReason amendmentReason ;
 
     private String referenceClausesOfContractAgreement;
     private String remarks;

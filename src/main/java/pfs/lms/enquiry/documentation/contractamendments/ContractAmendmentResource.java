@@ -24,7 +24,7 @@ public class ContractAmendmentResource {
 
     private String sanctioningAuthorityCode;
 
-    private String reasonForChange;
+    private String amendmentReason;
 
     private String referenceClausesOfContractAgreement;
     private String remarks;

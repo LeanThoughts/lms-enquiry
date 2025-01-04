@@ -3,7 +3,9 @@ package pfs.lms.enquiry.documentation.contractamendments;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.domain.AmendmentReason;
 import pfs.lms.enquiry.businesspartner.domain.SanctionAuthority;
+import pfs.lms.enquiry.businesspartner.repository.AmendmentReasonRepository;
 import pfs.lms.enquiry.businesspartner.repository.SanctionAuthorityRepository;
 import pfs.lms.enquiry.documentation.Documentation;
 import pfs.lms.enquiry.documentation.DocumentationRepository;
@@ -28,10 +30,12 @@ public class ContractAmendmentServiceImpl  implements  IContractAmendmentService
     private final DocumentationRepository documentationRepository;
     private final ContractAmendmentRepository contractAmendmentRepository;
     private final IChangeDocumentService changeDocumentService;
+    private final AmendmentReasonRepository amendmentReasonRepository;
 
     @Override
     public ContractAmendment create(ContractAmendmentResource resource, String username) {
         SanctionAuthority sanctionAuthority = new SanctionAuthority();
+        AmendmentReason amendmentReason = new AmendmentReason();
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         Documentation documentation = documentationRepository.findByLoanApplication(loanApplication)
@@ -53,12 +57,15 @@ public class ContractAmendmentServiceImpl  implements  IContractAmendmentService
         if ( resource.getSanctioningAuthorityCode() != null ) {
               sanctionAuthority = sanctionAuthorityRepository.findByCode(resource.getSanctioningAuthorityCode());
         }
+        if ( resource.getAmendmentReason() != null ) {
+            amendmentReason = amendmentReasonRepository.findByCode(resource.getAmendmentReason());
+        }
         ContractAmendment contractAmendment = new ContractAmendment();
         contractAmendment.setDocumentation(documentation);
         contractAmendment.setSerialNumber(resource.getSerialNumber());
         contractAmendment.setApprovalDate(resource.getApprovalDate());
         contractAmendment.setSanctionAuthority( sanctionAuthority );
-        contractAmendment.setReasonForChange(resource.getReasonForChange());
+        contractAmendment.setAmendmentReason(amendmentReason);
         contractAmendment.setReferenceClausesOfContractAgreement(resource.getReferenceClausesOfContractAgreement());
         contractAmendment.setRemarks(resource.getRemarks());
         contractAmendment.setDocumentName(resource.getDocumentName());
@@ -83,6 +90,7 @@ public class ContractAmendmentServiceImpl  implements  IContractAmendmentService
 
     @Override
     public ContractAmendment update(ContractAmendmentResource resource, String username) throws CloneNotSupportedException {
+        AmendmentReason amendmentReason = new AmendmentReason();
 
         SanctionAuthority sanctionAuthority = new SanctionAuthority();
 
@@ -95,11 +103,13 @@ public class ContractAmendmentServiceImpl  implements  IContractAmendmentService
         if ( resource.getSanctioningAuthorityCode() != null ) {
             sanctionAuthority = sanctionAuthorityRepository.findByCode(resource.getSanctioningAuthorityCode());
         }
-
+        if ( resource.getAmendmentReason() != null ) {
+            amendmentReason = amendmentReasonRepository.findByCode(resource.getAmendmentReason());
+        }
         contractAmendment.setSerialNumber(resource.getSerialNumber());
         contractAmendment.setApprovalDate(resource.getApprovalDate());
         contractAmendment.setSanctionAuthority(sanctionAuthority);
-        contractAmendment.setReasonForChange(resource.getReasonForChange());
+        contractAmendment.setAmendmentReason(amendmentReason);
         contractAmendment.setReferenceClausesOfContractAgreement(resource.getReferenceClausesOfContractAgreement());
         contractAmendment.setRemarks(resource.getRemarks());
         contractAmendment.setDocumentName(resource.getDocumentName());
