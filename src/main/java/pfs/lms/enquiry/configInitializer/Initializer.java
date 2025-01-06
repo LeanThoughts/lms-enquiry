@@ -223,11 +223,13 @@ public class Initializer implements CommandLineRunner {
             ProjectType pt63 = new ProjectType("63","NBFC");
             ProjectType pt64 = new ProjectType("64","Infrastructure-EPC");
 
+            ProjectType pt65 = new ProjectType("65", "Metro");
 
 
-            ProjectType pt65 = new ProjectType("65", "Power Transmission-Non State");
-            ProjectType pt66 = new ProjectType("65", "ower Distribution-Non State");
-            ProjectType pt67 = new ProjectType("65", "Data Center");
+            ProjectType pt66 = new ProjectType("66", "Power Transmission-Non State");
+            ProjectType pt67 = new ProjectType("67", "Power Distribution-Non State");
+            ProjectType pt68 = new ProjectType("68", "Data Center");
+            ProjectType pt69 = new ProjectType("69", "EV Manufacturing");
 
             projectTypeRepository.saveAll(Arrays.asList(
                     pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8, pt9, pt10, pt11, pt12,
@@ -246,7 +248,7 @@ public class Initializer implements CommandLineRunner {
                     pt52,
                     pt53,
                     pt54, pt55,pt56,pt57,pt58,pt59,pt60,pt61,pt62,pt63,pt64,
-                    pt65, pt66,pt67
+                    pt65, pt66,pt67, pt68, pt69
 
                     ));
             log.info("Added project type sample data");
@@ -314,14 +316,16 @@ public class Initializer implements CommandLineRunner {
             FinancingType ft1 = new FinancingType("1", "Sole Lending");
             FinancingType ft2 = new FinancingType("2", "MultipleBanking");
             FinancingType ft3 = new FinancingType("3", "ConsortiumLendg");
-            financingTypeRepository.saveAll(Arrays.asList(ft1, ft2, ft3));
+            FinancingType ft4 = new FinancingType("4", "Mul.Bank/St.Utl");
+
+            financingTypeRepository.saveAll(Arrays.asList(ft1, ft2, ft3,ft4));
             log.info("Added financing type  ");
         }
         loanTypeRepository.deleteAll();
 
         if (loanTypeRepository.count() == 0) {
             LoanType lt1 = new LoanType("001", "Term Loan");
-            LoanType lt2 = new LoanType("002", "Non Fund Loan");
+            LoanType lt2 = new LoanType("002", "Non Fund Based");
             LoanType lt3 = new LoanType("003", "Corporate Loan");
             loanTypeRepository.saveAll(Arrays.asList(lt1, lt2, lt3));
             log.info("Added Loan types  ");
