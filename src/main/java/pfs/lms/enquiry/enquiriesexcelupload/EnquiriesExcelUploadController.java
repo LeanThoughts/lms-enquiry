@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class EnquiriesExcelUploadController {
+    private final FinancingTypeRepository financingTypeRepository;
 
     private final ExcelEnquiryRepository excelEnquiryRepository;
     private final LoanApplicationRepository loanApplicationRepository;
@@ -41,7 +42,7 @@ public class EnquiriesExcelUploadController {
     private final LoanApplicationService loanApplicationService;
 
     @PostMapping("/api/enquiriesExcelUpload")
-        public ResponseEntity<List<ExcelEnquiry>> processExcelFile(@RequestParam(value = "file") MultipartFile file)
+    public ResponseEntity<List<ExcelEnquiry>> processExcelFile(@RequestParam(value = "file") MultipartFile file)
             throws Exception {
 
         XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -62,58 +63,57 @@ public class EnquiriesExcelUploadController {
                     String comments = "";
 
                     enquiry.setSerialNumber(new Double(row.getCell(0).getNumericCellValue()).longValue());
-                    if(enquiry.getSerialNumber() == null || enquiry.getSerialNumber() == 0)
+                    if (enquiry.getSerialNumber() == null || enquiry.getSerialNumber() == 0)
                         comments += "Serial Number is missing.\n";
 
                     try {
                         enquiry.setSapEnquiryId(new Double(row.getCell(1).getNumericCellValue()).longValue());
-                    }
-                    catch (IllegalStateException ex) {
+                    } catch (IllegalStateException ex) {
                         enquiry.setSapEnquiryId(0L);
                     }
 
                     enquiry.setBorrowerName(row.getCell(2).getStringCellValue());
-                    if(enquiry.getBorrowerName() == null || enquiry.getBorrowerName().trim().equals(""))
+                    if (enquiry.getBorrowerName() == null || enquiry.getBorrowerName().trim().equals(""))
                         comments += "Borrower Name is missing.\n";
 
                     enquiry.setGroupName(row.getCell(3).getStringCellValue());
-                    if(enquiry.getGroupName() == null || enquiry.getGroupName().trim().equals(""))
+                    if (enquiry.getGroupName() == null || enquiry.getGroupName().trim().equals(""))
                         comments += "Group Name is missing.\n";
 
                     enquiry.setProjectType(row.getCell(4).getStringCellValue().trim());
-                    if(enquiry.getProjectType().trim().equals(""))
+                    if (enquiry.getProjectType().trim().equals(""))
                         comments += "Project Type is missing.\n";
-                    else if(projectTypeRepository.findByValue(enquiry.getProjectType()) == null)
+                    else if (projectTypeRepository.findByValue(enquiry.getProjectType()) == null)
                         comments += "Project Type is invalid. Provide valid input for Project Type.\n";
 
                     enquiry.setLoanType(row.getCell(5).getStringCellValue().trim());
-                    if(enquiry.getLoanType().trim().equals(""))
+                    if (enquiry.getLoanType().trim().equals(""))
                         comments += "Type of Loan is missing.\n";
-                    else if(loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()) == null)
+                    else if (loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()) == null)
                         comments += "Loan Type is invalid. Provide valid input for Loan Type.\n";
 
                     enquiry.setProposalType(row.getCell(6).getStringCellValue().trim());
-                    if(enquiry.getProposalType().trim().equals(""))
+                    if (enquiry.getProposalType().trim().equals(""))
                         comments += "Proposal Type is missing.\n";
-                    else if(proposalTypeRepository.findByValue(enquiry.getProposalType()) == null)
+                    else if (proposalTypeRepository.findByValue(enquiry.getProposalType()) == null)
                         comments += "Proposal Type is invalid. Provide valid input for Proposal Type.\n";
 
                     enquiry.setIccReadinessStatus(row.getCell(10).getStringCellValue().trim());
-                    if(!enquiry.getIccReadinessStatus().trim().equals("") &&
+                    if (!enquiry.getIccReadinessStatus().trim().equals("") &&
                             iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus()) == null)
                         comments += "Provide valid input for ICC Readiness Status.\n";
 
                     enquiry.setAmountRequested(row.getCell(8).getNumericCellValue());
-                    if(enquiry.getAmountRequested() == null || enquiry.getAmountRequested() == 0)
+                    if (enquiry.getAmountRequested() == null || enquiry.getAmountRequested() == 0)
                         comments += "Provide valid input for Requested Amount..\n";
 
                     enquiry.setIccStatus(row.getCell(13).getStringCellValue().trim());
-                    if(!enquiry.getIccStatus().trim().equals("") &&
+                    if (!enquiry.getIccStatus().trim().equals("") &&
                             iccStatusRepository.findByValue(enquiry.getIccStatus()) == null)
                         comments += "Provide valid input for ICC Status.\n";
 
                     String enquiryDate = row.getCell(7).getStringCellValue();
-                    if(enquiryDate.equals(""))
+                    if (enquiryDate.equals(""))
                         comments += "Provide valid input for Date of Lead Generation.\n";
                     else {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -121,14 +121,28 @@ public class EnquiriesExcelUploadController {
                         enquiry.setDateOfLeadGeneration(LocalDate.parse(enquiryDate, formatter));
                     }
 
+                    ProjectType projectType = projectTypeRepository.findByValue(enquiry.getProjectType());
+                    if (projectType == null)
+                        throw new Exception("Project type : " + enquiry.getProjectType() + " is not found in configuration. File upload failed");
+
+
+                    LoanType loanType = loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType());
+                    if (loanType == null)
+                        throw new Exception("Loan type : " + enquiry.getLoanType() + " is not found in configuration. File upload failed");
+
+                    FinancingType financingType = financingTypeRepository.findByValue(enquiry.getProposalType());
+                    if (financingType == null)
+                        throw new Exception("Financing type : " + enquiry.getProposalType() + " is not found in configuration. File upload failed");
+
+
                     List<LoanApplication> loanApplications = loanApplicationRepository.
                             findByProjectTypeAndLoanTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate(
                                     projectTypeRepository.findByValue(enquiry.getProjectType()).getCode(),
                                     loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()).getCode(),
-                                    proposalTypeRepository.findByValue(enquiry.getProposalType()).getCode(),
+                                    financingTypeRepository.findByValue(enquiry.getProposalType()).getCode(),
                                     enquiry.getAmountRequested(),
                                     enquiry.getDateOfLeadGeneration());
-                    if(loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(enquiry
+                    if (loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(enquiry
                             .getSapEnquiryId())) {
                         comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
                                 " and Requested amount and Date of lead generation.\n";
@@ -140,7 +154,7 @@ public class EnquiriesExcelUploadController {
                     enquiry.setPresentedInIcc(row.getCell(12).getStringCellValue().trim());
 
                     String clearanceDate = row.getCell(15).getStringCellValue();
-                    if(!clearanceDate.equals("")) {
+                    if (!clearanceDate.equals("")) {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                         formatter = formatter.withLocale(Locale.UK);
                         enquiry.setIccClearanceDate(LocalDate.parse(clearanceDate, formatter));
@@ -156,8 +170,7 @@ public class EnquiriesExcelUploadController {
                     System.out.println(enquiry.getBorrowerName());
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new Exception(e.getMessage() + "Upload failed due to file format errors !!");
         }
 
@@ -197,8 +210,7 @@ public class EnquiriesExcelUploadController {
                 loanApplication.setProjectCapacity(0.00);
                 loanApplication.setProjectCapacityUnit("MW");
                 loanApplication.created(null, request.getUserPrincipal().getName());
-            }
-            else {
+            } else {
                 loanApplication.setTechnicalStatus(2);
                 loanApplication.setTechnicalStatusDescription("Changed");
                 loanApplication.modified(null, request.getUserPrincipal().getName());
@@ -208,23 +220,23 @@ public class EnquiriesExcelUploadController {
             loanApplication.setGroupCompany(enquiry.getGroupName());
 
             ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
-            loanApplication.setProjectType(pt == null? null: pt.getCode());
+            loanApplication.setProjectType(pt == null ? null : pt.getCode());
 
             LoanType lt = loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType());
-            loanApplication.setLoanType(lt == null? null: lt.getCode());
+            loanApplication.setLoanType(lt == null ? null : lt.getCode());
 
             ProposalType prt = proposalTypeRepository.findByValue(enquiry.getProposalType());
-            loanApplication.setProposalType(prt == null? null: prt.getCode());
-            loanApplication.setFinancingType(prt == null? null: prt.getCode());
+            loanApplication.setProposalType(prt == null ? null : prt.getCode());
+            loanApplication.setFinancingType(prt == null ? null : prt.getCode());
 
             ICCReadinessStatus irs = iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus());
-            loanApplication.setIccReadinessStatus(irs == null? null: irs.getCode());
+            loanApplication.setIccReadinessStatus(irs == null ? null : irs.getCode());
 
             PresentedInICC pi = presentedInICCRepository.findByValue(enquiry.getPresentedInIcc());
-            loanApplication.setPresentedInIcc(pi == null? null: pi.getCode());
+            loanApplication.setPresentedInIcc(pi == null ? null : pi.getCode());
 
             ICCStatus is = iccStatusRepository.findByValue(enquiry.getIccStatus());
-            loanApplication.setICCStatus(is == null? null: is.getCode());
+            loanApplication.setICCStatus(is == null ? null : is.getCode());
 
             loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
             loanApplication.setRemarksOnIccReadiness(enquiry.getRemarksOnIccReadiness());
@@ -248,8 +260,7 @@ public class EnquiriesExcelUploadController {
                 partner.setGroupCompany(enquiry.getGroupName());
                 partner = partnerRepository.save(partner);
                 loanApplication = loanApplication.applicant(partner);
-            }
-            else {
+            } else {
                 loanApplication = loanApplication.applicant(partners.get(0));
             }
 

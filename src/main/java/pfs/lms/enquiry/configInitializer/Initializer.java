@@ -137,12 +137,12 @@ public class Initializer implements CommandLineRunner {
             LoanClass lc29 = new LoanClass("43", "NFB-LOCOthers");
             LoanClass lc30 = new LoanClass("51", "CL-Corp.Privat");
             LoanClass lc31 = new LoanClass("52", "CL-Corp.Govt");
-            LoanClass lc33 = new LoanClass("32", "Electric Mobility");
-            LoanClass lc34 = new LoanClass("33", "Roads");
-            LoanClass lc35 = new LoanClass("34", "Power Distribution");
-            LoanClass lc36= new LoanClass("35", "Steel");
+
+
+            LoanClass lc36= new LoanClass("32", "ElectricMobilit");
+            LoanClass lc38= new LoanClass("35", "Steel");
             LoanClass lc37 = new LoanClass("36", "Power Generation");
-            LoanClass lc38 = new LoanClass("37", "Waste Management");
+
             LoanClass lc39 = new LoanClass("38", "NBFC");
             LoanClass lc40 = new LoanClass("31", "Defence");
 
@@ -188,9 +188,9 @@ public class Initializer implements CommandLineRunner {
             ProjectType pt29 = new ProjectType("29","Coal Mining");
             ProjectType pt30 = new ProjectType("30","Coal Washery");
             ProjectType pt31 = new ProjectType("31","Large Country Pipelines");
-            ProjectType pt32 = new ProjectType("32","Power Transmission");
+            ProjectType pt32 = new ProjectType("32","Power Transmission-State");
             ProjectType pt33 = new ProjectType("33","Solar Park/Pooling Substation");
-            ProjectType pt34 = new ProjectType("34","Power Distribution");
+            ProjectType pt34 = new ProjectType("34","Power Distribution-State");
             ProjectType pt35 = new ProjectType("35","Solar Power Pumps/Electric Pumps");
             ProjectType pt36 = new ProjectType("36","Logistics Park/ Terminal");
             ProjectType pt37 = new ProjectType("37","Warehouse / Cold Chain Facility");
@@ -214,16 +214,20 @@ public class Initializer implements CommandLineRunner {
             ProjectType pt54 = new ProjectType("54","Defence");
             ProjectType pt55 = new ProjectType("55","Electric Trucks");
             ProjectType pt56 = new ProjectType("56","Electric Buses");
-            ProjectType pt57 = new ProjectType("57","Road –EPC");
+            ProjectType pt57 = new ProjectType("57","Road-EPC");
             ProjectType pt58 = new ProjectType("58","Road-Annuity");
             ProjectType pt59 = new ProjectType("59","State Power Utility");
             ProjectType pt60 = new ProjectType("60","Steel");
-            ProjectType pt61 = new ProjectType("61","Renewable -O&M");
+            ProjectType pt61 = new ProjectType("61","Renewable-O&M");
             ProjectType pt62 = new ProjectType("62","Waste to Energy");
             ProjectType pt63 = new ProjectType("63","NBFC");
-            ProjectType pt64 = new ProjectType("64","Infrastructure - EPC");
+            ProjectType pt64 = new ProjectType("64","Infrastructure-EPC");
 
 
+
+            ProjectType pt65 = new ProjectType("65", "Power Transmission-Non State");
+            ProjectType pt66 = new ProjectType("65", "ower Distribution-Non State");
+            ProjectType pt67 = new ProjectType("65", "Data Center");
 
             projectTypeRepository.saveAll(Arrays.asList(
                     pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8, pt9, pt10, pt11, pt12,
@@ -240,9 +244,11 @@ public class Initializer implements CommandLineRunner {
                     pt50,
                     pt51,
                     pt52,
-                    pt53
+                    pt53,
+                    pt54, pt55,pt56,pt57,pt58,pt59,pt60,pt61,pt62,pt63,pt64,
+                    pt65, pt66,pt67
 
-            ));
+                    ));
             log.info("Added project type sample data");
         }
 
@@ -306,8 +312,8 @@ public class Initializer implements CommandLineRunner {
 
         if (financingTypeRepository.count() == 0) {
             FinancingType ft1 = new FinancingType("1", "Sole Lending");
-            FinancingType ft2 = new FinancingType("2", "Multiple Banking");
-            FinancingType ft3 = new FinancingType("3", "Consortium Lending");
+            FinancingType ft2 = new FinancingType("2", "MultipleBanking");
+            FinancingType ft3 = new FinancingType("3", "ConsortiumLendg");
             financingTypeRepository.saveAll(Arrays.asList(ft1, ft2, ft3));
             log.info("Added financing type  ");
         }
@@ -406,6 +412,11 @@ public class Initializer implements CommandLineRunner {
         if (at4 == null) {
             at4 = new AssistanceType("C", "CCD");
             assistanceTypeRepository.save(at4);
+        }
+        AssistanceType at5 = assistanceTypeRepository.getAssistanceTypeByCode("S");
+        if (at5 == null) {
+            at5 = new AssistanceType("S", "Sub Debt");
+            assistanceTypeRepository.save(at5);
         }
 //        assistanceTypeRepository.save(new AssistanceType("PL", "Project Loan"));
 //        assistanceTypeRepository.save(new AssistanceType("TL", "Term Loan"));

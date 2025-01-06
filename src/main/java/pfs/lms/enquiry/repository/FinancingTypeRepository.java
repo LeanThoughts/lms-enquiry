@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface FinancingTypeRepository extends JpaRepository<FinancingType, UUID> {
 
     FinancingType findByCode(String code);
+    FinancingType findByValue(String value);
 }
