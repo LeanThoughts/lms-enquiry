@@ -74,7 +74,7 @@ public class EnquiryReportExcelV1 {
         createSXSSCell(row, 3, "Enquiry Date", style);
         createSXSSCell(row, 4, "Enquiry Number", style);
         createSXSSCell(row, 5, "Loan Contract Number", style);
-        createSXSSCell(row, 6, "Busines Partner Number", style);
+        createSXSSCell(row, 6, "Business Partner Number", style);
         createSXSSCell(row, 7, "Business Partner Name", style);
         createSXSSCell(row, 8, "Project Name", style);
         createSXSSCell(row, 9, "Group Name", style);

@@ -2,6 +2,7 @@ package pfs.lms.enquiry.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
@@ -792,7 +793,18 @@ public class LoanApplicationService implements ILoanApplicationService {
         return loanApplication;
     }
 
-    /*
+    @Override
+    public List<LoanApplication> getLoanEnquiries(HttpServletRequest request, Pageable pageable) {
+
+        Page<LoanApplication> loanApplicationList = loanApplicationRepository.findByFunctionalStatus(1,pageable);
+
+        List<LoanApplication> loanApplications = new ArrayList<>();
+        loanApplications = loanApplicationList.getContent();
+
+        return loanApplications;
+    }
+
+/*
          If Partner to the User Belongs to the role TR0100, return only the loans associcated with that partner.
          Else
          Return all Loan Applications

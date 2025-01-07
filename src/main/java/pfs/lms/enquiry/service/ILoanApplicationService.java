@@ -1,5 +1,6 @@
 package pfs.lms.enquiry.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
@@ -23,5 +24,7 @@ public interface ILoanApplicationService {
     MainLocationDetail migrateMainLocation(MainLocationDetail mainLocationDetail, LoanAppraisal loanAppraisal);
 
     List<SubLocationDetail> migrateSubLocation(List<SubLocationDetail> subLocationDetailList, LoanAppraisal loanAppraisal);
+
+    List<LoanApplication> getLoanEnquiries(HttpServletRequest request, Pageable pageable);
 
 }

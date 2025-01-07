@@ -39,5 +39,7 @@ public class ExcelEnquiry extends AggregateRoot<ExcelEnquiry> {
     private Double amountApproved;
     private Double iccApprovedRoi;
 
+    private String nodalOfficerBD;
+
     private String comments;
 }
