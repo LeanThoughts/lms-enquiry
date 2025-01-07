@@ -27,7 +27,7 @@
     <mat-expansion-panel [expanded]="expandPanel" hideToggle="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Upload Enquiries
+          Upload/ Download Enquiries
         </mat-panel-title>
         <!--mat-panel-description>
             Use the search form to filter data.
@@ -51,6 +51,17 @@
             </div>
         </div>
       </form>
+
+      <hr class="mt-16">
+
+      <div fxLayout="row">
+        <div fxFlex="100" class="mt-16">
+            <button mat-raised-button type="button" color="accent" (click)="downloadEnquiries()">
+                Download Enquiries
+            </button>
+        </div>
+    </div>
+
     </mat-expansion-panel>
   </div>
 

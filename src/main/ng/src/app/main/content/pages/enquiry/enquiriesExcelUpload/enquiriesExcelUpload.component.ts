@@ -64,4 +64,11 @@ export class EnquiriesExcelUploadComponent {
             this._matSnackBar.open('Please select a file to upload.', 'OK', { duration: 7000 });
         };
     }
+
+    /**
+     * downloadEnquiries()
+     */
+    downloadEnquiries(): void {
+        this._service.downloadEnquiries();
+    }
 }

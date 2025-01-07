@@ -361,4 +361,11 @@ export class LoanEnquiryService implements Resolve<any> {
     createExcelEnquiries() {
         return this._http.post('enquiry/api/createExcelEnquiries', {});
     }
+
+    /**
+     * downloadEnquiries()
+     */
+    downloadEnquiries(): void {
+        this._http.get('enquiry/api/enquiriesExcelDownload').subscribe();
+    }
 }
