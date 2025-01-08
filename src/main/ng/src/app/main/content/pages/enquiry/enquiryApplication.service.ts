@@ -17,10 +17,10 @@ export class LoanEnquiryService implements Resolve<any> {
   selectedEnquiry: BehaviorSubject<any> = new BehaviorSubject({});
 
   loanContractSearchValues = undefined;
-  
+
   projectTypes: any[] = [];
   financingTypes: any[] = [];
-  
+
   documentTypes: any[] = [];
 
     /**
@@ -366,6 +366,7 @@ export class LoanEnquiryService implements Resolve<any> {
      * downloadEnquiries()
      */
     downloadEnquiries(): void {
-        this._http.get('enquiry/api/enquiriesExcelDownload').subscribe();
+        //this._http.get('enquiry/api/enquiriesExcelDownload').subscribe();
+        window.open('enquiry/api/enquiriesExcelDownload');
     }
 }

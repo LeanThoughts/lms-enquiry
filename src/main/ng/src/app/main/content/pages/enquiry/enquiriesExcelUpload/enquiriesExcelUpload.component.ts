@@ -47,7 +47,7 @@ export class EnquiriesExcelUploadComponent {
     uploadEnquiries(): void {
         if (this.excelUploadForm.get('file').value !== '') {
             var formData = new FormData();
-            formData.append('file', this.excelUploadForm.get('file').value);      
+            formData.append('file', this.excelUploadForm.get('file').value);
             this._service.uploadExcelDocument(formData).subscribe(
                 (response) => {
                     this.enquiryList = response;
@@ -69,6 +69,9 @@ export class EnquiriesExcelUploadComponent {
      * downloadEnquiries()
      */
     downloadEnquiries(): void {
-        this._service.downloadEnquiries();
+      this._matSnackBar.open('Enquiries file download in progress.', 'OK', { duration: 10000 });
+      //(window as any).open('enquiry/api/enquiriesExcelDownload'  );
+
+      this._service.downloadEnquiries();
     }
 }
