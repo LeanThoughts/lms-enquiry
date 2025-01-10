@@ -221,6 +221,9 @@ public class EnquiriesExcelUploadController {
             loanApplication.setLoanEnquiryId(enquiry.getSerialNumber());
             loanApplication.setGroupCompany(enquiry.getGroupName());
 
+            FinancingType financingType = financingTypeRepository.findByValue(enquiry.getProposalType());
+            loanApplication.setFinancingType(financingType == null ? null : financingType.getCode());
+
             ProjectType pt = projectTypeRepository.findByValue(enquiry.getProjectType());
             loanApplication.setProjectType(pt == null ? null : pt.getCode());
 
