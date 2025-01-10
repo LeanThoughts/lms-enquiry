@@ -97,8 +97,8 @@ public class EnquiriesExcelUploadController {
                     enquiry.setProposalType(row.getCell(6).getStringCellValue().trim());
                     if (enquiry.getProposalType().trim().equals(""))
                         comments += "Proposal Type is missing.\n";
-                    else if (proposalTypeRepository.findByValue(enquiry.getProposalType()) == null)
-                        comments += "Proposal Type is invalid. Provide valid input for Proposal Type.\n";
+                    else if (financingTypeRepository.findByValue(enquiry.getProposalType()) == null)
+                        comments += "Financing Type is invalid. Provide valid input for Financing Type.\n";
 
                     enquiry.setIccReadinessStatus(row.getCell(10).getStringCellValue().trim());
                     if (!enquiry.getIccReadinessStatus().trim().equals("") &&
