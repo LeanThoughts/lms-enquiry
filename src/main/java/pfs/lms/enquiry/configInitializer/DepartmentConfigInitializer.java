@@ -43,7 +43,7 @@ public class DepartmentConfigInitializer implements CommandLineRunner {
             department.setValue("Risk Department");
             departmentRepository.save(department);
         } else {
-            department = new Department("Risk Department", "");
+            department = new Department("02", "Risk Department");
             departmentRepository.save(department);
         }
 

@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.configInitializer;
+package pfs.lms.enquiry.menustructure.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
