@@ -72,18 +72,19 @@ public class EnquiryListBDExcel {
         createSXSSCell(row, 6, "Financing Type", style);
         createSXSSCell(row, 7, "Date of Lead Generation", style);
         createSXSSCell(row, 8, "Amount Requested", style);
-        createSXSSCell(row, 9, "ICC Readiness Status", style);
-        createSXSSCell(row, 10, "Remarks on ICC Readiness", style);
-        createSXSSCell(row, 11, "Presented in ICC", style);
-        createSXSSCell(row, 12, "ICC Status", style);
-        createSXSSCell(row, 13, "Reason for ICC Status", style);
-        createSXSSCell(row, 14, "ICC Clearance Date", style);
-        createSXSSCell(row, 15, "ICC Meeting Number", style);
-        createSXSSCell(row, 16, "Amount Approved (Cr)", style);
-        createSXSSCell(row, 17, "ICC Approved ROI", style);
-        createSXSSCell(row, 18, "Remarks for ICC Approval / Rejection", style);
+        createSXSSCell(row, 9, "Borrower Requested ROI", style);
+        createSXSSCell(row, 10, "ICC Readiness Status", style);
+        createSXSSCell(row, 11, "Remarks on ICC Readiness", style);
+        createSXSSCell(row, 12, "Presented in ICC", style);
+        createSXSSCell(row, 13, "ICC Status", style);
+        createSXSSCell(row, 14, "Reason for ICC Status", style);
+        createSXSSCell(row, 15, "ICC Clearance Date", style);
+        createSXSSCell(row, 16, "ICC Meeting Number", style);
+        createSXSSCell(row, 17, "Amount Approved (Cr)", style);
+        createSXSSCell(row, 18, "ICC Approved ROI", style);
         createSXSSCell(row, 19, "Remarks for ICC Approval / Rejection", style);
-        createSXSSCell(row, 20, "Dealing/Nodal Officer BD", style);
+        createSXSSCell(row, 20, "Remarks for ICC Approval / Rejection", style);
+        createSXSSCell(row, 21, "Dealing/Nodal Officer BD", style);
      }
 
 

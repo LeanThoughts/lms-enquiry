@@ -200,7 +200,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             })
         }
         else {
-            this._matSnackBar.open('Loan is still in the enquiry phase. Process cannot only be executed after the enquiry is approved by BD Team',
+            this._matSnackBar.open('Application Fee Stage is not completed. Appraisal process can start only after loan contract id is created',
                 'OK', { duration: 7000 });
         }
     }

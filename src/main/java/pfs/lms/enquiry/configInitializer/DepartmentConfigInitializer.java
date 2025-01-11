@@ -1,0 +1,114 @@
+package pfs.lms.enquiry.configInitializer;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+import pfs.lms.enquiry.domain.Department;
+import pfs.lms.enquiry.domain.UserRole;
+import pfs.lms.enquiry.repository.DepartmentRepository;
+import pfs.lms.enquiry.repository.UserRoleRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by sajeev on 14-May-21.
+ */
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class DepartmentConfigInitializer implements CommandLineRunner {
+    private final DepartmentRepository departmentRepository;
+
+
+
+
+    @Override
+    public void run(String... strings) throws Exception {
+
+
+
+        Department department = departmentRepository.findByCode("01");
+        if (department != null) {
+            department.setValue("Appraisal");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("01", "Appraisal Department");
+            departmentRepository.save(department);
+        }
+        department = departmentRepository.findByCode("02");
+        if (department != null) {
+            department.setValue("Risk Department");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("Risk Department", "");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("03");
+        if (department != null) {
+            department.setValue("Monitoring Department");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("Monitoring Department", "");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("04");
+        if (department != null) {
+            department.setValue("Business Development");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("04", "Business Development");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("05");
+        if (department != null) {
+            department.setValue("Legal Department");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("05", "Legal Department");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("06");
+        if (department != null) {
+            department.setValue("Disbursement Dept.");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("06", "Disbursement Dept.");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("07");
+        if (department != null) {
+            department.setValue("Billing & Recovery");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("07", "Billing & Recovery");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("08");
+        if (department != null) {
+            department.setValue("Treasury");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("08", "Treasury");
+            departmentRepository.save(department);
+        }
+
+        log.info("Added Departments");
+
+
+
+
+
+
+
+    }
+
+}
