@@ -133,16 +133,14 @@ export class UserService implements Resolve<any>
      * getUserRoles()
       */
     public getUserRoles(): Observable<any> {
+        return this._http.get<any>('enquiry/api/userRoles?size=200');
+    }
 
-        return this._http.get<any>('enquiry/api/userRoles');
-
-        // this.userRoles = [
-        //   {code: 'TR0100' , name: 'Loan Applicant'},
-        //   {code: 'ZLM013' , name: 'Loan Officer'},
-        //   {code: 'ZLM023' , name: 'Administrator'}
-        // ];
-        //
-        // return this.userRoles;
-
+    /**
+     * getUserDepartments()
+     * Fetches a list of departments.
+     */
+    public getUserDepartments(): Observable<any> {
+        return this._http.get<any>('enquiry/api/departments');
     }
 }

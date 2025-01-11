@@ -20,9 +20,20 @@ export class UserUpdateDialogComponent implements OnInit {
 
     userUpdateForm: FormGroup;
 
+    userRoles: any;
+    userDepartments: any;
+
     constructor(_formBuilder: FormBuilder, private _userService: UserService,
         public _dialogRef: MatDialogRef<UserUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
+
+        this._userService.getUserRoles().subscribe((data) => {
+            this.userRoles = data._embedded.userRoles;
+        });
+
+        this._userService.getUserDepartments().subscribe((data) => {
+            this.userDepartments = data;
+        });
 
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedUser !== undefined) {

@@ -7,7 +7,7 @@
             </button>
         </mat-toolbar-row>
     </mat-toolbar>
-    <div mat-dialog-content fusePerfectScrollbar>
+    <div mat-dialog-content fusePerfectScrollbar style="height: 400px">
         <form [formGroup]="userUpdateForm">
             <div fxLayout="row" class="mt-16">
                 <mat-form-field fxFlex="50">
@@ -32,36 +32,7 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Role" formControlName="role">
-                        <mat-option [value]="'TR0110'">Prospect</mat-option>
-                        <mat-option [value]="'ZLM013'">Appraisal Officer</mat-option>
-                        <mat-option [value]="'ZLM010'">Co-Appraisal Officer</mat-option>
-                        <mat-option [value]="'ZLM023'">PFS IT Team</mat-option>
-                        <mat-option [value]="'ZLM001'">Promoter</mat-option>
-                        <mat-option [value]="'TR0100'">Main Loan Promoter</mat-option>
-                        <mat-option [value]="'TR0101'">Co-Borrower</mat-option>
-                        <mat-option [value]="'ZLM002'">Lenders Financial Advisor</mat-option>
-                        <mat-option [value]="'ZLM003'">Lenders Engineer</mat-option>
-                        <mat-option [value]="'ZLM004'">Lenders Insurance Advisor</mat-option>
-                        <mat-option [value]="'ZLM005'">Security Trustee </mat-option>
-                        <mat-option [value]="'ZLM006'">Legal Counsel </mat-option>
-                        <mat-option [value]="'ZLM007'">Loan underwriter </mat-option>
-                        <mat-option [value]="'ZLM008'">Syndicate Partner</mat-option>
-                        <mat-option [value]="'ZLM009'">Co-Security Trustee</mat-option>
-                        <mat-option [value]="'ZLM011'">TRA Banker</mat-option>
-                        <mat-option [value]="'ZLM012'">Consultant</mat-option>
-                        <mat-option [value]="'ZLM014'">PFS Relationship officer</mat-option>
-                        <mat-option [value]="'ZLM015'">EPC contractor</mat-option>
-                        <mat-option [value]="'ZLM016'">Co-Lender</mat-option>
-                        <mat-option [value]="'ZLM017'">Customer-Empl(Supp&3rd Pa</mat-option>
-                        <mat-option [value]="'ZLM018'">Nodal Officer-Legal</mat-option>
-                        <mat-option [value]="'ZLM019'">Nodal Officer-Disb&Recov</mat-option>
-                        <mat-option [value]="'ZLM020'">Lead Bank</mat-option>
-                        <mat-option [value]="'ZLM021'">Employee(SuppServ&3rd pa)</mat-option>
-                        <mat-option [value]="'ZLM022'">Loan DocumentationOfficer</mat-option>
-                        <mat-option [value]="'ZLM024'">Nodal Officer-Monitoring</mat-option>
-                        <mat-option [value]="'ZLM033'">Business Development Head</mat-option>
-                        <mat-option [value]="'ZLM034'">Business Development Officer</mat-option>
-                        <mat-option [value]="'ZLM040'">Head-Monitoring</mat-option>
+                        <mat-option *ngFor="let role of userRoles" [value]="role.code">{{role.value}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -86,9 +57,7 @@
                 <mat-form-field fxFlex="50">
                     <mat-select placeholder="Department" formControlName="riskDepartment">
                         <mat-option [value]="''"> </mat-option>
-                        <mat-option [value]="'01'">Project Dept.</mat-option>
-                        <mat-option [value]="'02'">Risk Dept.</mat-option>
-                        <mat-option [value]="'03'">Monitoring Dept.</mat-option>
+                        <mat-option *ngFor="let department of userDepartments" [value]="department.code">{{department.value}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-checkbox formControlName="departmentHead" class="mt-16">Department Head</mat-checkbox>
