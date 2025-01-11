@@ -2,16 +2,10 @@ package pfs.lms.enquiry.configInitializer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.Department;
-import pfs.lms.enquiry.domain.UserRole;
 import pfs.lms.enquiry.repository.DepartmentRepository;
-import pfs.lms.enquiry.repository.UserRoleRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by sajeev on 14-May-21.
@@ -52,9 +46,10 @@ public class DepartmentConfigInitializer implements CommandLineRunner {
             department.setValue("Monitoring Department");
             departmentRepository.save(department);
         } else {
-            department = new Department("Monitoring Department", "");
+            department = new Department("Monitoring Department", "03");
             departmentRepository.save(department);
         }
+
 
         department = departmentRepository.findByCode("04");
         if (department != null) {
