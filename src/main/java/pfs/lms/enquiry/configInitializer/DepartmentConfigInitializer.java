@@ -46,7 +46,7 @@ public class DepartmentConfigInitializer implements CommandLineRunner {
             department.setValue("Monitoring Department");
             departmentRepository.save(department);
         } else {
-            department = new Department("Monitoring Department", "03");
+            department = new Department("03", "Monitoring Department");
             departmentRepository.save(department);
         }
 
