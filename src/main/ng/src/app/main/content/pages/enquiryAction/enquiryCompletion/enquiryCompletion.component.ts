@@ -48,7 +48,7 @@ export class EnquiryCompletionComponent {
         this.dataSource1 = [];
         this.dataSource1.push({particulars: 'Product Type', description: this.getProductTypeDescription(this._enquiryCompletion.productType)});
         this.dataSource1.push({particulars: 'Term', description: this.getTermDescription(this._enquiryCompletion.term)});
-        this.dataSource1.push({particulars: 'Date of Completion', description: this.getFormattedDate(this._enquiryCompletion.date)});
+        this.dataSource1.push({particulars: 'Date of Enquiry Completion', description: this.getFormattedDate(this._enquiryCompletion.date)});
         this.dataSource1.push({particulars: 'Remarks', description: this._enquiryCompletion.remarks});
     }
 

@@ -4,12 +4,11 @@ import lombok.*;
 import pfs.lms.enquiry.action.projectproposal.ProjectProposal;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
-import java.time.LocalDate;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 @Setter
