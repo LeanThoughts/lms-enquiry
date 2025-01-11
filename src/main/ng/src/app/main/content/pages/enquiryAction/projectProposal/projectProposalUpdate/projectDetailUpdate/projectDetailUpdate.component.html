@@ -72,40 +72,20 @@
         </div>
         <div fxLayout="row">
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Loan Type" formControlName="loanType">
-                    <mat-option></mat-option>
-                    <mat-option *ngFor="let loanType of loanTypes" [value]="loanType.code">
-                        {{ loanType.value }}
-                    </mat-option>
-                </mat-select>
+                <input matInput [matDatepicker]="picker2" placeholder="Loan Enquiry Date" formControlName="loanEnquiryDate" readonly
+                    [max]="today">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
+
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Loan Class" formControlName="loanClass" >
+                <mat-select placeholder="Loan Class (Sector)" formControlName="loanClass" >
                     <mat-option></mat-option>
                     <mat-option *ngFor="let loanClass of loanClasses" [value]="loanClass.code">
                         {{ loanClass.value }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field fxFlex="25">
-                <mat-select placeholder="Type of Assistance" formControlName="assistanceType">
-                    <mat-option></mat-option>
-                    <mat-option *ngFor="let assistanceType of assistanceTypes" [value]="assistanceType.code">
-                        {{ assistanceType.value }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field fxFlex="25">
-                <mat-select placeholder="Financing Type" formControlName="financingType" >
-                    <mat-option> </mat-option>
-                    <mat-option *ngFor="let financingType of financingTypes" [value]="financingType.code">
-                        {{ financingType.value }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-
-        <div fxLayout="row">
             <mat-form-field fxFlex="25">
                 <mat-select placeholder="Project Type (Sub Sector)" formControlName="projectType">
                     <mat-option></mat-option>
@@ -114,13 +94,44 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+
             <mat-form-field fxFlex="25">
-                <mat-select placeholder="Project type (Core Sector)" formControlName="projectTypeCoreSector" >
+                <mat-select placeholder="Project Core Sector" formControlName="projectTypeCoreSector" >
                     <mat-option *ngFor="let projectTypeCoreSector of projectTypeCoreSectors" [value]="projectTypeCoreSector.code">
                         {{ projectTypeCoreSector.value }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+        </div>
+
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Financing Type" formControlName="financingType" >
+                    <mat-option> </mat-option>
+                    <mat-option *ngFor="let financingType of financingTypes" [value]="financingType.code">
+                        {{ financingType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Type of Assistance" formControlName="assistanceType">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let assistanceType of assistanceTypes" [value]="assistanceType.code">
+                        {{ assistanceType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Loan Type (Type of Loan)" formControlName="loanType">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let loanType of loanTypes" [value]="loanType.code">
+                        {{ loanType.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
             <mat-form-field fxFlex="25">
                 <mat-select placeholder="Purpose of Loan" formControlName="purposeOfLoan">
                     <mat-option></mat-option>
@@ -129,16 +140,12 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-
-            <mat-form-field fxFlex="25">
-                <input matInput [matDatepicker]="picker2" placeholder="Loan Enquiry Date" formControlName="loanEnquiryDate" readonly
-                    [max]="today">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
         </div>
 
         <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <input matInput placeholder="Policy Exposure" formControlName="policyExposure" maxlength="18" type="number">
+            </mat-form-field>
             <mat-form-field fxFlex="50">
                 <input matInput placeholder="End use of the funds to be availed from PFS" formControlName="endUseOfFunds"  maxlength="100">
             </mat-form-field>

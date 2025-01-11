@@ -127,6 +127,8 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
             purposeOfLoan: new FormControl(this._enquiryActionService._loanApplication.loanApplication.purposeOfLoan),
             projectType: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectType),
             loanEnquiryDate: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanEnquiryDate),
+            policyExposure: new FormControl(this._enquiryActionService._loanApplication.loanApplication.policyExposure,
+                [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
         });
 
         // console.log('this._projectDetail', this._projectDetail);
@@ -219,6 +221,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
                 this._projectDetail.purposeOfLoan = formValues.purposeOfLoan;
                 this._projectDetail.projectType = formValues.projectType;
                 this._projectDetail.loanEnquiryDate = formValues.loanEnquiryDate;
+                this._projectDetail.policyExposure = formValues.policyExposure;
                 this._enquiryActionService.updateProjectDetail(this._projectDetail).subscribe(response => {
                     this._projectDetail = response;
                     this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
@@ -266,6 +269,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
         this._projectDetailForm.controls['purposeOfLoan'].setValue(this._projectDetail.purposeOfLoan);
         this._projectDetailForm.controls['projectType'].setValue(this._projectDetail.projectType);
         this._projectDetailForm.controls['loanEnquiryDate'].setValue(this._projectDetail.loanEnquiryDate);
+        this._projectDetailForm.controls['policyExposure'].setValue(this._projectDetail.policyExposure);
         // Set _projectDetailForm.dirty to false
         this._projectDetailForm.markAsPristine();
     }
