@@ -64,7 +64,7 @@ public class    MenuInitializer  implements CommandLineRunner {
                     createBDHeadMenu(userRole.getCode(),userRole.getValue());
                     break;
                 case "ZLM034" : //Business Development Officer
-                    createBDOfficerMenu(userRole.getCode(),userRole.getValue());
+                    createBDOfficerMenuV1(userRole.getCode(),userRole.getValue());
                     break;
                 default:
                     createDefaultMenu(userRole.getCode(), userRole.getValue());
@@ -168,6 +168,40 @@ public class    MenuInitializer  implements CommandLineRunner {
             userMenu = menuService.updateMenu(userMenu);
         }
     }
+
+
+    private void createBDOfficerMenuV1(String userRole, String userRoleDesc){
+        // Admin User Menu
+
+        Menu adminMenu = new Menu();
+        Menu adminMenuExisting = new Menu();
+        adminMenuExisting = menuService.findByUserRole(userRole);
+        if (adminMenuExisting != null) {
+            adminMenu = adminMenuExisting;
+
+        }
+        adminMenu.setMenuHeaders(null);
+        adminMenu.setUserRole(userRole);
+        adminMenu.setUserRoleName(userRoleDesc);
+
+        Integer headerSerialNumber =0 ;
+
+
+
+        adminMenu = this.addMain(adminMenu);
+//        adminMenu = this.addAdministration(adminMenu);
+        adminMenu = this.addReports(adminMenu);
+        adminMenu = this.addLoanApplicationAll(adminMenu);
+        adminMenu = this.addLoanServicing(adminMenu);
+        adminMenu = this.addBusinessDevelopment(adminMenu);
+
+        if (adminMenuExisting == null) {
+            adminMenu = menuService.createMenu(adminMenu);
+        } else {
+            adminMenu = menuService.updateMenu(adminMenu);
+        }
+    }
+
 
     private void createDefaultMenu(String userRole, String userRoleName) {
 

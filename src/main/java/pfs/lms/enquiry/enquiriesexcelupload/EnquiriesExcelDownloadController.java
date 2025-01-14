@@ -124,7 +124,7 @@ public class EnquiriesExcelDownloadController {
 
             if (loanApplication.getPfsDebtAmount() != null) {
                 if (loanApplication.getPfsDebtAmount() > 0) {
-                    Double requestAmountInCR = loanApplication.getPfsDebtAmount() / 10000000;
+                    Double requestAmountInCR = loanApplication.getPfsDebtAmount();  // 10000000;
                     excelEnquiry.setAmountRequested(requestAmountInCR);
                 }
             }
@@ -132,7 +132,7 @@ public class EnquiriesExcelDownloadController {
             if (loanApplication.getAmountApproved() != null) {
 
                 if (loanApplication.getAmountApproved() > 0) {
-                    Double approvedAmountInCR = loanApplication.getAmountApproved() / 10000000;
+                    Double approvedAmountInCR = loanApplication.getAmountApproved() ; // 10000000;
                     excelEnquiry.setAmountRequested(approvedAmountInCR);
                 }
             }

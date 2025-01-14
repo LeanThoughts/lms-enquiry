@@ -10,6 +10,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -180,14 +181,18 @@ public class EnquiryListBDExcel {
                     createSXSSCell(row, columnCount++, "", style);
 
                 //Amount Requested
-                if (excelEnquiry.getAmountRequested() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getAmountRequested().toString(), style);
+                if (excelEnquiry.getAmountRequested() != null) {
+                    String amountRequested = new DecimalFormat("#.00#").format(excelEnquiry.getAmountRequested()); // rounded to 2 decimal places
+                    createSXSSCell(row, columnCount++, amountRequested, style);
+                }
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
                 //Borrower Requested ROI
-                if (excelEnquiry.getBorrowerRequestedROI() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getBorrowerRequestedROI().toString(), style);
+                if (excelEnquiry.getBorrowerRequestedROI() != null) {
+                    String borrowerRequestedRoi = new DecimalFormat("#.00#").format(excelEnquiry.getBorrowerRequestedROI()); // rounded to 2 decimal places
+                    createSXSSCell(row, columnCount++, borrowerRequestedRoi, style);
+                }
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
@@ -237,15 +242,19 @@ public class EnquiryListBDExcel {
                     createSXSSCell(row, columnCount++, "", style);
 
                 // Amount Approved (Cr)
-                if (excelEnquiry.getAmountApproved() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getAmountApproved().toString(), style);
+                if (excelEnquiry.getAmountApproved() != null) {
+                    String amountApproved = new DecimalFormat("#.00#").format(excelEnquiry.getAmountApproved()); // rounded to 2 decimal places
+                    createSXSSCell(row, columnCount++, amountApproved, style);
+                }
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
                 // ICC Approved ROI
-                if (excelEnquiry.getIccApprovedRoi() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getIccApprovedRoi().toString(), style);
-                else
+                if (excelEnquiry.getIccApprovedRoi() != null) {
+                    String iccApprovedRoi = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedRoi()); // rounded to 2 decimal places
+                    createSXSSCell(row, columnCount++, iccApprovedRoi, style);
+                }
+                 else
                     createSXSSCell(row, columnCount++, "", style);
 
                 //Remarks for ICC Approval / Rejection
