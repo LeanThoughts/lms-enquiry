@@ -269,10 +269,11 @@ public class    MenuInitializer  implements CommandLineRunner {
         userMenu.setUserRoleName(userRoleName);
 
 
-//        userMenu = this.addMain(userMenu);
-//        userMenu = this.addReports(userMenu);
-        userMenu = this.addLoanApplicantMenu(userMenu);
+        userMenu = this.addMain(userMenu);
+        userMenu = this.addReports(userMenu);
+        userMenu = this.addLoanApplicationAll(userMenu);
         userMenu = this.addBusinessDevelopment(userMenu);
+        userMenu = this.addLoanServicing(userMenu);
 
         if (userMenuExisting == null) {
             userMenu = menuService.createMenu(userMenu);
