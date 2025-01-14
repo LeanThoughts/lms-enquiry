@@ -23,15 +23,17 @@ export class EnquiryApplicationRouteGuard implements CanActivate {
                     observer.next(false);
                 }
                 else {
-                    if (this.currentUser.role === 'TR0100' || this.currentUser.role === 'ZLM023' || this.currentUser.role === 'ZLM013' 
-                            || this.currentUser.role === 'ZLM024' || this.currentUser.role === 'ZLM040' || this.currentUser.role === 'ZLM014') {
-                        console.log('enquiry route guard - true');
-                        observer.next(true);
-                    }
-                    else {
-                        this._router.navigate(['enquiryAlerts']);
-                        observer.next(false);
-                    }
+                    console.log('enquiry route guard - true');
+                    observer.next(true);
+                    // if (this.currentUser.role === 'TR0100' || this.currentUser.role === 'ZLM023' || this.currentUser.role === 'ZLM013' 
+                    //         || this.currentUser.role === 'ZLM024' || this.currentUser.role === 'ZLM040' || this.currentUser.role === 'ZLM014') {
+                    //     console.log('enquiry route guard - true');
+                    //     observer.next(true);
+                    // }
+                    // else {
+                    //     this._router.navigate(['enquiryAlerts']);
+                    //     observer.next(false);
+                    // }
                 }
             });
         });
