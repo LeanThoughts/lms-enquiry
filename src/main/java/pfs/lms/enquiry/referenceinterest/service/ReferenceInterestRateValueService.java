@@ -71,7 +71,31 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
     @Override
     public ReferenceInterestRateValue delete(ReferenceInterestValueResource referenceInterestValueResource, String username) throws Exception {
-        return null;
+
+        ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
+
+        referenceInterestRateValue = referenceInterestRateValueRepository.getOne(referenceInterestValueResource.getId());
+
+
+
+        referenceInterestRateValue.setCreatedBy(username.toString());
+        referenceInterestRateValue.setCreatedOn(LocalDate.now());
+        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
+        referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
+
+        referenceInterestRateValueRepository.save(referenceInterestRateValue);
+
+        // Change Documents
+        changeDocumentService.createChangeDocument(
+                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
+                referenceInterestValueResource.getId().toString(),
+                null,
+                referenceInterestValueResource,
+                "Deleted",
+                username,
+                "ReferenceInterestRateValue", "Header");
+
+        return referenceInterestRateValue;
     }
 
     @Override
