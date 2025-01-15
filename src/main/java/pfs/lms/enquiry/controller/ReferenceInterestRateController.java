@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.config.ApiController;
-import pfs.lms.enquiry.domain.ReferenceInterestRate;
-import pfs.lms.enquiry.repository.ReferenceInterestRateRepository;
+import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRate;
+import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.domain;
+package pfs.lms.enquiry.referenceinterest.domain;
 
 import lombok.*;
 

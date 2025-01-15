@@ -9,9 +9,9 @@ import javax.persistence.Entity;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-public class IndustrySector extends AggregateRoot<IndustrySector> {
+ public class IndustrySector extends AggregateRoot<IndustrySector> {
 
     private String code;
 

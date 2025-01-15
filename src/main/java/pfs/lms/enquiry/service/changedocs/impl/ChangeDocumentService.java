@@ -92,6 +92,7 @@ import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccount;
 import pfs.lms.enquiry.monitoring.tra.TrustRetentionAccountStatement;
 import pfs.lms.enquiry.monitoring.valuer.Valuer;
 import pfs.lms.enquiry.monitoring.valuer.ValuerReportAndFee;
+import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
 import pfs.lms.enquiry.repository.ChangeDocumentRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.riskassessment.RiskAssessment;
@@ -1135,7 +1136,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", documentationReasonForDelay.getId());
                     result.put("description", documentationReasonForDelay.getDocumentation().getLoanContractId());
                     return result;
-
+                case "ReferenceInterestRateValue":
+                    ReferenceInterestRateValue referenceInterestRateValue = (ReferenceInterestRateValue) object;
+                    result.put("id", referenceInterestRateValue.getReferenceInterestRate().getCode());
+                    result.put("description", referenceInterestRateValue.getValidFromDate().toString());
+                    return result;
 
             }
 

@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.*;
-import pfs.lms.enquiry.repository.*;
+import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRate;
+import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateRepository;
 import pfs.lms.enquiry.repository.*;
 
 /**
@@ -36,16 +37,16 @@ public class InterestRateConfigInitializer implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        ReferenceInterestRate referenceInterestRate = referenceInterestRateRepository.findByCode("PFS RATE");
-        if (referenceInterestRate == null) {
-            referenceInterestRate = new ReferenceInterestRate(null, "PFS RATE", "PFS Base Rate");
-            referenceInterestRateRepository.save(referenceInterestRate);
-        }
-        referenceInterestRate = referenceInterestRateRepository.findByCode("AXIS RATE");
-        if (referenceInterestRate == null) {
-            referenceInterestRate = new ReferenceInterestRate(null, "AXIS RATE", "AXIS Base Rate");
-            referenceInterestRateRepository.save(referenceInterestRate);
-        }
+//        ReferenceInterestRate referenceInterestRate = referenceInterestRateRepository.findByCode("PFS RATE");
+//        if (referenceInterestRate == null) {
+//            referenceInterestRate = new ReferenceInterestRate(null, "PFS RATE", "PFS Base Rate");
+//            referenceInterestRateRepository.save(referenceInterestRate);
+//        }
+//        referenceInterestRate = referenceInterestRateRepository.findByCode("AXIS RATE");
+//        if (referenceInterestRate == null) {
+//            referenceInterestRate = new ReferenceInterestRate(null, "AXIS RATE", "AXIS Base Rate");
+//            referenceInterestRateRepository.save(referenceInterestRate);
+//        }
 
         PaymentForm paymentForm = paymentFormRepository.findByCode("JM");
         if (paymentForm == null) {
