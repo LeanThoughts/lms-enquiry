@@ -1,14 +1,21 @@
 package pfs.lms.enquiry.referenceinterest.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
 import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateValueRepository;
 import pfs.lms.enquiry.referenceinterest.resource.ReferenceInterestValueResource;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
-
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
 public class ReferenceInterestRateValueService implements IReferenceInterestRateValueService {
 
     @Autowired
@@ -23,7 +30,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
         ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
         referenceInterestRateValue.setCreatedBy(username.toString());
         referenceInterestRateValue.setCreatedOn(LocalDate.now());
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
+        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
         referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
 
         referenceInterestRateValueRepository.save(referenceInterestRateValue);
@@ -51,7 +58,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         referenceInterestRateValue.setCreatedBy(username.toString());
         referenceInterestRateValue.setCreatedOn(LocalDate.now());
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
+        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
         referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
 
         referenceInterestRateValueRepository.save(referenceInterestRateValue);
@@ -80,7 +87,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         referenceInterestRateValue.setCreatedBy(username.toString());
         referenceInterestRateValue.setCreatedOn(LocalDate.now());
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
+        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
         referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
 
         referenceInterestRateValueRepository.save(referenceInterestRateValue);
@@ -100,11 +107,19 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
     @Override
     public ReferenceInterestRateValue processApprovedReferenceInterestValue(ReferenceInterestRateValue referenceInterestValue, String username) throws CloneNotSupportedException {
-        return null;
+        referenceInterestValue.setWorkFlowStatusCode(3);
+        referenceInterestValue.setWorkFlowStatusDescription("Approved");
+        referenceInterestValue.setModificationStatus(0);
+        referenceInterestRateValueRepository.save(referenceInterestValue);
+        return referenceInterestValue;
     }
 
     @Override
     public ReferenceInterestRateValue processRejectionReferenceInterestValue(ReferenceInterestRateValue referenceInterestValue, String username) throws CloneNotSupportedException {
-        return null;
+        referenceInterestValue.setWorkFlowStatusCode(4);
+        referenceInterestValue.setWorkFlowStatusDescription("Rejected");
+        referenceInterestValue.setModificationStatus(0);
+        referenceInterestRateValueRepository.save(referenceInterestValue);
+        return referenceInterestValue;
     }
 }

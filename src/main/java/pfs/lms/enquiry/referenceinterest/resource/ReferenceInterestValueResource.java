@@ -14,7 +14,7 @@ public class ReferenceInterestValueResource {
     private UUID id;
     private String referenceInterestRate;
 
-    private LocalDate validFromdDate;
+    private LocalDate validFromDate;
     private Double interestRate;
 
 }
