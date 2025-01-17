@@ -65,12 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
                 // Get user menu.
                 _appService.getUserMenu().subscribe(response => {
-                    console.log('menu is', response);
-                    console.log('navigation is', navigation);
                     response.menuHeaderDTOS.forEach(element => {
                         navigation.push(element);
                     });
-                    console.log('navigation is', navigation);
                 });
 
                 // Get default navigation

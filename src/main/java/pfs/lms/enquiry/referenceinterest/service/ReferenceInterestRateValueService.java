@@ -1,44 +1,59 @@
 package pfs.lms.enquiry.referenceinterest.service;
 
-import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRate;
 import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
+import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateRepository;
 import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateValueRepository;
 import pfs.lms.enquiry.referenceinterest.resource.ReferenceInterestValueResource;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
+@Service
+@RequiredArgsConstructor
 public class ReferenceInterestRateValueService implements IReferenceInterestRateValueService {
 
-    @Autowired
-    IChangeDocumentService changeDocumentService;
+    private final IChangeDocumentService changeDocumentService;
 
-    @Autowired
-    ReferenceInterestRateValueRepository referenceInterestRateValueRepository;
+    private final ReferenceInterestRateRepository referenceInterestRateRepository;
+    private final ReferenceInterestRateValueRepository referenceInterestRateValueRepository;
 
     @Override
     public ReferenceInterestRateValue create(ReferenceInterestValueResource referenceInterestValueResource, String username) throws Exception {
 
-        ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
-        referenceInterestRateValue.setCreatedBy(username.toString());
-        referenceInterestRateValue.setCreatedOn(LocalDate.now());
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
-        referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
+        ReferenceInterestRateValue v1 = referenceInterestRateValueRepository.
+                findByReferenceInterestRateIdAndValidFromDate(referenceInterestValueResource.getReferenceInterestRate(),
+                        referenceInterestValueResource.getValidFromDate());
+        ReferenceInterestRateValue referenceInterestRateValue = null;
+        if (v1 == null) {
+            ReferenceInterestRate referenceInterestRate =
+                    referenceInterestRateRepository.getOne(referenceInterestValueResource.getReferenceInterestRate());
+            referenceInterestRateValue = new ReferenceInterestRateValue();
+            referenceInterestRateValue.setCreatedBy(username.toString());
+            referenceInterestRateValue.setCreatedOn(LocalDate.now());
+            referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
+            referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
+            referenceInterestRateValue.setReferenceInterestRate(referenceInterestRate);
+            referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
-        referenceInterestRateValueRepository.save(referenceInterestRateValue);
+            // Change Documents
+//        changeDocumentService.createChangeDocument(
+//                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
+//                referenceInterestValueResource.getId().toString(),
+//                null,
+//                referenceInterestValueResource,
+//                "Created",
+//                username,
+//                "ReferenceInterestRateValue", "Header");
 
-        // Change Documents
-        changeDocumentService.createChangeDocument(
-                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
-                referenceInterestValueResource.getId().toString(),
-                null,
-                referenceInterestValueResource,
-                "Created",
-                username,
-                "ReferenceInterestRateValue", "Header");
-
-        return referenceInterestRateValue;
+            return referenceInterestRateValue;
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
@@ -49,51 +64,40 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         Object existingObject = referenceInterestRateValue.clone();
 
-        referenceInterestRateValue.setCreatedBy(username.toString());
-        referenceInterestRateValue.setCreatedOn(LocalDate.now());
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
-        referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
+        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
+        referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
 
-        referenceInterestRateValueRepository.save(referenceInterestRateValue);
+        referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
         // Change Documents
-        changeDocumentService.createChangeDocument(
-                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
-                referenceInterestValueResource.getId().toString(),
-                existingObject,
-                referenceInterestValueResource,
-                "Updated",
-                username,
-                "ReferenceInterestRateValue", "Header");
+//        changeDocumentService.createChangeDocument(
+//                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
+//                referenceInterestValueResource.getId().toString(),
+//                existingObject,
+//                referenceInterestValueResource,
+//                "Updated",
+//                username,
+//                "ReferenceInterestRateValue", "Header");
 
         return referenceInterestRateValue;
     }
 
     @Override
-    public ReferenceInterestRateValue delete(ReferenceInterestValueResource referenceInterestValueResource, String username) throws Exception {
+    public ReferenceInterestRateValue delete(UUID referenceInterestValueId, String username) throws Exception {
 
-        ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
-
-        referenceInterestRateValue = referenceInterestRateValueRepository.getOne(referenceInterestValueResource.getId());
-
-
-
-        referenceInterestRateValue.setCreatedBy(username.toString());
-        referenceInterestRateValue.setCreatedOn(LocalDate.now());
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromdDate());
-        referenceInterestRateValue.setInterestRate(referenceInterestRateValue.getInterestRate());
-
-        referenceInterestRateValueRepository.save(referenceInterestRateValue);
+        ReferenceInterestRateValue referenceInterestRateValue =
+                referenceInterestRateValueRepository.getOne(referenceInterestValueId);
+        referenceInterestRateValueRepository.delete(referenceInterestRateValue);
 
         // Change Documents
-        changeDocumentService.createChangeDocument(
-                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
-                referenceInterestValueResource.getId().toString(),
-                null,
-                referenceInterestValueResource,
-                "Deleted",
-                username,
-                "ReferenceInterestRateValue", "Header");
+//        changeDocumentService.createChangeDocument(
+//                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
+//                referenceInterestValueResource.getId().toString(),
+//                null,
+//                referenceInterestValueResource,
+//                "Deleted",
+//                username,
+//                "ReferenceInterestRateValue", "Header");
 
         return referenceInterestRateValue;
     }

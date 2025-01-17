@@ -28,7 +28,6 @@ import {UserModule} from './main/content/pages/administration/user/user.module';
 import { ForgotPassword2Module } from './main/content/pages/forgotPassword/forgotPassword.module';
 import { APP_BASE_HREF } from '@angular/common';
  import {PartnerModule} from "./main/content/pages/administration/partner/partner.module";
-import { MailRepoComponent } from './main/content/pages/administration/mail-repo/mail-repo.component';
 import {MailRepoModule} from "./main/content/pages/administration/mail-repo/mail-repo.module";
 import { ChangePasswordModule } from './main/content/pages/changePassword/changePassword.module';
 import { LoanContractsSearchModule } from './main/content/pages/loanContractsSearch/loanContractsSearch.module';
@@ -47,6 +46,7 @@ import { DocumentationModule } from './main/content/pages/documentation/document
 import { EnquiriesExcelUploadModule } from './main/content/pages/enquiry/enquiriesExcelUpload/enquiriesExcelUpload.module';
 import { RiskAssessmentModule } from './main/content/pages/riskAssessment/riskAssessment.module';
 import { BusinessPartnerModule } from './main/content/pages/businessPartner/businessPartner.module';
+import { ReferenceInterestValueModule } from './main/content/pages/referenceInterestValue/referenceInterestValue.module';
 
 const appRoutes: Routes = [
     {
@@ -122,6 +122,9 @@ const appRoutes: Routes = [
         // Workflow
         InboxModule,
         ChangeDocumentModule,
+
+        // Others
+        ReferenceInterestValueModule,
 
         // Ng-idel
         NgIdleKeepaliveModule.forRoot()

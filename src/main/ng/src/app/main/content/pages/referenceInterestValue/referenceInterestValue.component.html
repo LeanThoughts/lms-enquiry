@@ -1,0 +1,139 @@
+<div id="tickers" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- HEADER -->
+    <div class="sub-header p-6 blue-grey-200-bg" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb text-truncate h1 pl-24 pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center"
+            *fuseIfOnDom [@animate]="{value:'*',params:{x:'50px'}}">
+            Maintain Reference Interest Rates
+        </div>
+        <!-- / BREADCRUMB -->
+
+        <!-- TOOLBAR -->
+        <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="sendForApproval()" [disabled]="selectedRow == null">
+                Send for Approval
+            </button>
+        </div>
+        <!-- / TOOLBAR -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <form [formGroup]="referenceInterestRateSearchForm" class="mt-16 p-16">
+        <div fxLayout="row">
+            <mat-form-field fxFlex="25">
+                <mat-select placeholder="Reference Rate Type" formControlName="referenceRateType">
+                  <mat-option *ngFor="let type of referenceInterestRateTypes" [value]="type.id">
+                    {{ type.code }}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="mt-8" fxLayout="row" fxLayoutAlign="left center">
+            <button class="mr-8" mat-raised-button type="button" color="accent" (click)="searchReferenceInterestValues()">
+                Search
+            </button>
+        </div>
+    </form>
+
+    <!-- SEARCH PANEL -->
+    <!-- <div id="loan-enquiry" class="w-100-p p-16" fxLayout="column" fusePerfectScrollbar>
+        <mat-expansion-panel [expanded]="expandPanel" hideToggle="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Search Reference Interest Rates
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <form [formGroup]="referenceInterestRateSearchForm">
+                <div fxLayout="row">
+                    <mat-form-field fxFlex="25">
+                        <mat-select placeholder="Reference Rate Type" formControlName="referenceRateType"  >
+                          <mat-option *ngFor="let type of referenceInterestRateTypes" [value]="type.id">
+                            {{ type.code }}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="pt-12" fxLayout="row" fxLayoutAlign="left center">
+                    <button class="mr-8" mat-raised-button type="button" color="accent" (click)="searchReferenceInterestValues()">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+    </div> -->
+
+    <!-- / SEARCH PANEL -->
+
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="content-card mat-white-bg mat-elevation-z4" fusePerfectScrollbar class="p-12">
+
+            <div class="mat-table-container content-card mat-white-bg mat-elevation-z4" style="width: 100%">
+
+                <div fxLayout="row" class="pt-12 ml-12">
+                    <button class="mr-8" mat-raised-button type="button" color="accent" (click)="addReferenceInterestRateValue()">
+                        Add
+                    </button>
+                    <button class="mr-8" mat-raised-button type="button" color="accent" (click)="updateReferenceInterestRateValue()" [disabled]="selectedRow == null">
+                        Update
+                    </button>
+                    <button mat-raised-button type="button" color="accent" (click)="deleteReferenceInterestRateValue()" [disabled]="selectedRow == null">
+                        Delete
+                    </button>
+                </div>
+
+                <mat-table class="enquiries-table mt-12" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+            
+                    <!-- Reference Interest Rate Type Code Column -->
+                    <ng-container matColumnDef="referenceInterestRateTypeCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >Reference Interest Rate Type Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                            <p class="text-truncate">{{ row.referenceInterestRate.code }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Reference Interest Rate Type Description Column -->
+                    <ng-container matColumnDef="referenceInterestRateTypeDescription">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >Reference Interest Rate Type Description</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                            <p class="text-truncate">{{ row.referenceInterestRate.description }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Valid From Date Column -->
+                    <ng-container matColumnDef="validFromDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >Valid From Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                        <p class="text-truncate">{{ row.validFromDate | date:'dd/MM/yyyy' }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Interest Rate Column -->
+                    <ng-container matColumnDef="interestRate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >Interest Rate</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                            <p class="text-truncate">{{ row.interestRate }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" class="enquiry" matRipple (click)="onSelect(row)"
+                        [ngClass]="{'highlight':row === selectedRow}" [@animate]="{value:'*',params:{y:'100%'}}">
+                    </mat-row>
+            
+                </mat-table>
+            </div>            
+        </div>
+
+    </div>
+
+    <!-- / CONTENT -->
+</div>

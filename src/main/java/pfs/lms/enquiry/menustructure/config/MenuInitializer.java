@@ -135,6 +135,7 @@ public class    MenuInitializer  implements CommandLineRunner {
         adminMenu = this.addLoanApplicationAll(adminMenu);
         adminMenu = this.addLoanServicing(adminMenu);
         adminMenu = this.addBusinessDevelopment(adminMenu);
+        adminMenu = this.addRiskDepartment(adminMenu);
 
         if (adminMenuExisting == null) {
             adminMenu = menuService.createMenu(adminMenu);
@@ -711,4 +712,40 @@ public class    MenuInitializer  implements CommandLineRunner {
 
     }
 
+    private Menu addRiskDepartment(Menu menu) {
+              /*
+                    BUsiness DEvelopment
+             */
+        MenuHeader menuHeader = new MenuHeader();
+        if (menu.getMenuHeaders() == null) {
+            menuHeader.setSerialNumber(1);
+        } else {
+            menuHeader.setSerialNumber(menu.getMenuHeaders().size() + 1);
+        }
+        menuHeader.setId("RiskDepartment");
+        menuHeader.setTitle("RISK DEPARTMENT");
+        menuHeader.setTranslate("NAV.RISKDEPARTMENT");
+        menuHeader.setType("group");
+        menuHeader.setIcon("");
+
+
+        // Report Items
+        Integer serialNo = 0;
+
+        MenuItem menuItem = new MenuItem();
+        serialNo += 1;
+        menuItem.setId("reference-interest-rates");
+        menuItem.setTitle("Reference Interest Rates");
+        menuItem.setSerialNumber(serialNo);
+        menuItem.setTranslate("NAV.REFERENCEINTERESTRATES");
+        menuItem.setType("item");
+        menuItem.setIcon("view_list");
+        menuItem.setUrl("/referenceInterestRateList");
+        menuHeader.addMenuitem(menuItem);
+
+        menu.addMenuHeader(menuHeader);
+
+        return menu;
+
+    }
 }

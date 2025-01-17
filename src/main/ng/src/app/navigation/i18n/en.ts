@@ -21,7 +21,9 @@ export const locale = {
             'SAMPLE'        : {
                 'TITLE': 'Sample',
                 'BADGE': '25'
-            }
+            },
+            'RISKDEPARTMENT': 'Risk Department',
+            'REFERENCEINTERESTRATES': 'Reference Interest Rates'
         }
     }
 };
