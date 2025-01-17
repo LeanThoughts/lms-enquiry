@@ -40,6 +40,9 @@ import pfs.lms.enquiry.iccapproval.risknotification.RiskNotificationRepository;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
 import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
+import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
+import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateValueRepository;
+import pfs.lms.enquiry.referenceinterest.service.IReferenceInterestRateValueService;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -104,6 +107,7 @@ public class WorkflowService implements IWorkflowService {
     private PartnerRepository partnerRepository;
 
 
+
     @Autowired
     private UserRepository userRepository;
 
@@ -123,6 +127,9 @@ public class WorkflowService implements IWorkflowService {
     private final ApplicationFeeService applicationFeeService;
     private final IEnquiryActionService enquiryActionService;
     private final IBusinessPartnerService businessPartnerService;
+    private final IReferenceInterestRateValueService referenceInterestRateValueService;
+    @Autowired
+    private ReferenceInterestRateValueRepository referenceInterestRateValueRepository;
 
 
     @Override
@@ -143,6 +150,7 @@ public class WorkflowService implements IWorkflowService {
         Sanction sanction = new Sanction();
         LoanApplication loanApplication = new LoanApplication();
         RiskAssessment riskAssessment = new RiskAssessment();
+        ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
         Partner partner = new Partner();
         String loanContractId = null;
         String loanEnquiryId = null;
@@ -261,6 +269,15 @@ public class WorkflowService implements IWorkflowService {
                 objectId = partner.getId().toString();
                 processDescription = "BusinessPartner";
                 break;
+            case "ReferenceInterestRateValue":
+                //Fetch the Entity
+                  referenceInterestRateValue = referenceInterestRateValueRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                referenceInterestRateValue.setWorkFlowStatusCode(02);
+                referenceInterestRateValue.setWorkFlowStatusDescription("Sent for Approval");
+                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() + " : " + referenceInterestRateValue.getInterestRate().toString();
+                processDescription = "ReferenceInterestRateValue";
+                break;
         }
 
 
@@ -370,7 +387,13 @@ public class WorkflowService implements IWorkflowService {
                 partner.setProcessInstanceId(processInstanceId);
                 partner.setWorkFlowStatusCode(01);
                 partner = partnerRepository.save(partner);
-                return sanction;
+                return partner;
+            case "ReferenceInterestRateValue":
+                //Save entity with the Process Instance and workflow status code
+                referenceInterestRateValue.setProcessInstanceId(processInstanceId);
+                referenceInterestRateValue.setWorkFlowStatusCode(01);
+                referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
+                return referenceInterestRateValue;
         }
 
         return null;
@@ -388,6 +411,7 @@ public class WorkflowService implements IWorkflowService {
         ApplicationFee applicationFee = new ApplicationFee();
         ICCApproval iccApproval = new ICCApproval();
         RiskAssessment riskAssessment = new RiskAssessment();
+        ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
         Sanction sanction = new Sanction();
         Partner partner = new Partner();
         String loanContractId = null;
@@ -494,6 +518,15 @@ public class WorkflowService implements IWorkflowService {
                 partner.setWorkFlowStatusDescription("Approved");
                 partnerRepository.save(partner);
                 processInstanceId = partner.getProcessInstanceId();
+                break;
+            case "ReferenceInterestRateValue":
+                //Fetch the Entity
+                referenceInterestRateValue = referenceInterestRateValueRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                referenceInterestRateValue.setWorkFlowStatusCode(03);
+                referenceInterestRateValue.setWorkFlowStatusDescription("Approved");
+                referenceInterestRateValueRepository.save(referenceInterestRateValue);
+                processInstanceId = referenceInterestRateValue.getProcessInstanceId();
                 break;
         }
 
@@ -623,6 +656,16 @@ public class WorkflowService implements IWorkflowService {
                 partnerRepository.flush();
                 businessPartnerService.updatePartnerAfterApproval(partner, username);
                 return partner;
+            case "ReferenceInterestRateValue":
+                //Save entity with the new workflow status code
+                referenceInterestRateValue.setWorkFlowStatusDescription("Approved");
+                referenceInterestRateValue.setWorkFlowStatusCode(3);
+                referenceInterestRateValue.setProcessInstanceId(processInstanceId);
+                referenceInterestRateValueRepository.save(referenceInterestRateValue);
+                referenceInterestRateValueRepository.flush();
+                referenceInterestRateValueService.processApprovedReferenceInterestValue(referenceInterestRateValue, username);
+                return referenceInterestRateValue;
+
         }
 
         return null;
@@ -642,6 +685,7 @@ public class WorkflowService implements IWorkflowService {
         ApplicationFee applicationFee = new ApplicationFee();
         Sanction sanction = new Sanction();
         RiskAssessment riskAssessment = new RiskAssessment();
+        ReferenceInterestRateValue referenceInterestRateValue = new ReferenceInterestRateValue();
         Partner partner = new Partner();
         String loanContractId = null;
         String loanEnquiryId = null;
@@ -740,6 +784,14 @@ public class WorkflowService implements IWorkflowService {
                 partner.setWorkFlowStatusDescription("Rejected");
                 processInstanceId = partner.getProcessInstanceId();
                 break;
+            case "ReferenceInterestRateValue":
+                //Fetch the Entity
+                referenceInterestRateValue = referenceInterestRateValueRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                referenceInterestRateValue.setWorkFlowStatusCode(4);
+                referenceInterestRateValue.setWorkFlowStatusDescription("Rejected");
+                processInstanceId = referenceInterestRateValue.getProcessInstanceId();
+                break;
         }
 
 
@@ -822,6 +874,12 @@ public class WorkflowService implements IWorkflowService {
                 partner = partnerRepository.getOne(businessProcessId);
                 partnerRepository.save(partner);
                 businessPartnerService.updatePartnerAfterRejection(partner, username);
+                break;
+            case "ReferenceInterestRateValue":
+                //Fetch the Entity
+                referenceInterestRateValue = referenceInterestRateValueRepository.getOne(businessProcessId);
+                referenceInterestRateValueRepository.save(referenceInterestRateValue);
+                referenceInterestRateValueService.processRejectionReferenceInterestValue(referenceInterestRateValue, username);
                 break;
         }
 

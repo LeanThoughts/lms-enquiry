@@ -62,6 +62,7 @@ sap:
   lieUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LendersIndependentEngineerSet
   lieReportAndFeeUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LIEReportAndFeeSet
   monitorDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/DocumentSet
+  referenceInterestRateValueUri: /sap/opu/odata/sap/ZPFS_LMS_REF_INT_RATE_SRV/ReferenceInterestRateSet
   client: 500
   userName: SAP_PFS_GW
   password: Sapsap@4646
