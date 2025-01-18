@@ -80,6 +80,11 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
+        if (this.selectedRow.modificationStatus !== 1) {
+            this._matSnackBar.open('Reference Interest Value is already sent for approval. Only modified values can be sent for approval.', 
+                'OK', { duration: 7000 });
+            return;
+        }
         let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
         let email = this._appService.currentUser.email;
         this._matSnackBar.open('Please wait while attempting to send monitoring for approval.', 'OK', { duration: 25000 });

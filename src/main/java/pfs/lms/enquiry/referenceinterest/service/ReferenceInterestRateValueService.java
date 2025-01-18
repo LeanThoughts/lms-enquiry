@@ -37,6 +37,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
             referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
             referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
             referenceInterestRateValue.setReferenceInterestRate(referenceInterestRate);
+            referenceInterestRateValue.setModificationStatus(1);
             referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
             // Change Documents
@@ -66,7 +67,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
         referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
-
+        referenceInterestRateValue.setModificationStatus(1);
         referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
         // Change Documents

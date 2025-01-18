@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReferenceInterestRateValueRepository extends JpaRepository<ReferenceInterestRateValue, UUID> {
-    List<ReferenceInterestRateValue> findByReferenceInterestRateId(Long referenceInterestRateId);
+    List<ReferenceInterestRateValue> findByReferenceInterestRateIdOrderByValidFromDate(Long referenceInterestRateId);
     ReferenceInterestRateValue findByReferenceInterestRateIdAndValidFromDate(Long id, LocalDate validFromDate);
 }

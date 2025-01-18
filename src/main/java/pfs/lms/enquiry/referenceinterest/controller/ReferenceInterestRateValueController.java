@@ -27,7 +27,7 @@ public class ReferenceInterestRateValueController {
     public ResponseEntity<List<ReferenceInterestRateValue>> getReferenceInterestRateValues(@PathVariable Long referenceInterestRateId) {
 
         List<ReferenceInterestRateValue> referenceInterestRateValues = referenceInterestRateValueRepository.
-                findByReferenceInterestRateId(referenceInterestRateId);
+                findByReferenceInterestRateIdOrderByValidFromDate(referenceInterestRateId);
         return ResponseEntity.ok(referenceInterestRateValues);
     }
 
