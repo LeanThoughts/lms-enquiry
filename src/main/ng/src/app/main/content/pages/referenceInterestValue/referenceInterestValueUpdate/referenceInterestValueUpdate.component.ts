@@ -65,14 +65,14 @@ export class ReferenceInterestValueUpdateComponent {
             var dt = new Date(referenceInterestFormValue.validFromDate);
             referenceInterestFormValue.validFromDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
     
-            if (this._dialogData.operation === 'add') {
-                const dialogRef = this._dialog.open(ConfirmationDialogComponent, {
-                    data: {
-                        message: 'Are you sure? This will impact cash flows of existing loans in the system.'
-                    }
-                });
-                dialogRef.afterClosed().subscribe((result) => {
-                    if (result && result.response) {
+            const dialogRef = this._dialog.open(ConfirmationDialogComponent, {
+                data: {
+                    message: 'Are you sure? This will impact cash flows of existing loans in the system.'
+                }
+            });
+            dialogRef.afterClosed().subscribe((result) => {
+                if (result && result.response) {
+                    if (this._dialogData.operation === 'add') {
                         referenceInterestFormValue.referenceInterestRate = this.selectedReferenceInterestType.id;
                         this._referenceInterestValueService.saveReferenceInterestValue(referenceInterestFormValue).subscribe(
                             (response: any) => {
@@ -83,21 +83,20 @@ export class ReferenceInterestValueUpdateComponent {
                                 this._matSnackBar.open(error.error.message, 'Close', { duration: 7000 });
                             });
                     }
-                });
-            }
-            else {
-                console.log('referenceInterestFormValue', referenceInterestFormValue);
-                this.selectedReferenceInterestValue.interestRate = referenceInterestFormValue.interestRate;
-                var referenceInterestValueToUpdate = {
-                    id: this.selectedReferenceInterestValue.id,
-                    interestRate: referenceInterestFormValue.interestRate,
-                    validFromDate: referenceInterestFormValue.validFromDate
+                    else {
+                        this.selectedReferenceInterestValue.interestRate = referenceInterestFormValue.interestRate;
+                        var referenceInterestValueToUpdate = {
+                            id: this.selectedReferenceInterestValue.id,
+                            interestRate: referenceInterestFormValue.interestRate,
+                            validFromDate: referenceInterestFormValue.validFromDate
+                        }
+                        this._referenceInterestValueService.updateReferenceInterestValue(referenceInterestValueToUpdate).subscribe((response: any) => {
+                            this._matSnackBar.open('Reference Interest Value Updated Successfully', 'Close', { duration: 7000 });
+                            this._dialogRef.close({ 'refresh': true });
+                        });
+                    }        
                 }
-                this._referenceInterestValueService.updateReferenceInterestValue(referenceInterestValueToUpdate).subscribe((response: any) => {
-                    this._matSnackBar.open('Reference Interest Value Updated Successfully', 'Close', { duration: 7000 });
-                    this._dialogRef.close({ 'refresh': true });
-                });
-            }
+            });
         }
     }
 }
