@@ -65,7 +65,6 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         Object existingObject = referenceInterestRateValue.clone();
 
-        referenceInterestRateValue.setValidFromDate(referenceInterestValueResource.getValidFromDate());
         referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
         referenceInterestRateValue.setModificationStatus(1);
         referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
