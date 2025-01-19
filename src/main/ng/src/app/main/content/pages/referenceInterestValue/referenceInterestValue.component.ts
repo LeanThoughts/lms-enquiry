@@ -18,7 +18,9 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
 
     @ViewChild(MatPaginator ) paginator: MatPaginator;
 
-    displayedColumns: string[] = ['referenceInterestRateTypeCode', 'referenceInterestRateTypeDescription', 'validFromDate', 'interestRate'];
+    displayedColumns: string[] = ['referenceInterestRateTypeCode', 'referenceInterestRateTypeDescription', 'validFromDate', 'interestRate', 
+        'workFlowStatusDescription'
+    ];
     dataSource: any[];
     expandPanel = true;
     referenceInterestRateSearchForm: FormGroup;

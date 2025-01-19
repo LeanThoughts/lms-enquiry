@@ -123,6 +123,14 @@
                         </mat-cell>
                     </ng-container>
 
+                    <!-- Work Flow Status Description Column -->
+                    <ng-container matColumnDef="workFlowStatusDescription">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >Work Flow Status Description</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                            <p class="text-truncate">{{ row.workFlowStatusDescription }}</p>
+                        </mat-cell>
+                    </ng-container>
+
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             
                     <mat-row *matRowDef="let row; columns: displayedColumns;" class="enquiry" matRipple (click)="onSelect(row)"
