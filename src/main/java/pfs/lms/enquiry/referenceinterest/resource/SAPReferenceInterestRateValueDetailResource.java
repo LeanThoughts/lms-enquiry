@@ -43,12 +43,11 @@ public class SAPReferenceInterestRateValueDetailResource implements Serializable
             detailsResource.setReferenz("");
 
         if(referenceInterestRateValue.getValidFromDate() != null){
-            detailsResource.setDatab(dataConversionUtility.convertDateToSAPFormat(referenceInterestRateValue.getValidFromDate()));
+            detailsResource.setDatab( referenceInterestRateValue.getValidFromDate().toString());
         }
 
-        if(referenceInterestRateValue.getInterestRate() != null) {
-            detailsResource.setZsoll(referenceInterestRateValue.getInterestRate().toString());
-        }
+        detailsResource.setZsoll(String.format("%.2f",referenceInterestRateValue.getInterestRate()));
+
 
         return detailsResource;
     }

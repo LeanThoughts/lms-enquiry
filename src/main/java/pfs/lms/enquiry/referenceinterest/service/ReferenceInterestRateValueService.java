@@ -41,14 +41,14 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
             referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
             // Change Documents
-//        changeDocumentService.createChangeDocument(
-//                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
-//                referenceInterestValueResource.getId().toString(),
-//                null,
-//                referenceInterestValueResource,
-//                "Created",
-//                username,
-//                "ReferenceInterestRateValue", "Header");
+        changeDocumentService.createChangeDocument(
+                referenceInterestRateValue.getId(),referenceInterestRateValue.getId().toString(),referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue.getId().toString(),
+                null,
+                referenceInterestRateValue,
+                "Created",
+                username,
+                "ReferenceInterestRateValue", "Header");
 
             return referenceInterestRateValue;
         }
@@ -67,17 +67,19 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
         referenceInterestRateValue.setModificationStatus(1);
+        referenceInterestRateValue.setWorkFlowStatusCode(null);
+        referenceInterestRateValue.setWorkFlowStatusDescription("");
         referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
         // Change Documents
-//        changeDocumentService.createChangeDocument(
-//                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
-//                referenceInterestValueResource.getId().toString(),
-//                existingObject,
-//                referenceInterestValueResource,
-//                "Updated",
-//                username,
-//                "ReferenceInterestRateValue", "Header");
+        changeDocumentService.createChangeDocument(
+                referenceInterestRateValue.getId(),referenceInterestRateValue.getId().toString(),referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue.getId().toString(),
+                existingObject,
+                referenceInterestRateValue,
+                "Updated",
+                username,
+                "ReferenceInterestRateValue", "Header");
 
         return referenceInterestRateValue;
     }
@@ -90,25 +92,29 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
         referenceInterestRateValueRepository.delete(referenceInterestRateValue);
 
         // Change Documents
-//        changeDocumentService.createChangeDocument(
-//                referenceInterestValueResource.getId(),referenceInterestValueResource.getId().toString(),referenceInterestValueResource.getId().toString(),
-//                referenceInterestValueResource.getId().toString(),
-//                null,
-//                referenceInterestValueResource,
-//                "Deleted",
-//                username,
-//                "ReferenceInterestRateValue", "Header");
+        changeDocumentService.createChangeDocument(
+                referenceInterestRateValue.getId(),referenceInterestRateValue.getId().toString(),referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue.getId().toString(),
+                null,
+                referenceInterestRateValue,
+                "Deleted",
+                username,
+                "ReferenceInterestRateValue", "Header");
 
         return referenceInterestRateValue;
     }
 
     @Override
     public ReferenceInterestRateValue processApprovedReferenceInterestValue(ReferenceInterestRateValue referenceInterestValue, String username) throws CloneNotSupportedException {
+        referenceInterestValue.setModificationStatus(0);
+        referenceInterestRateValueRepository.save(referenceInterestValue);
         return null;
     }
 
     @Override
     public ReferenceInterestRateValue processRejectionReferenceInterestValue(ReferenceInterestRateValue referenceInterestValue, String username) throws CloneNotSupportedException {
+        referenceInterestValue.setModificationStatus(0);
+        referenceInterestRateValueRepository.save(referenceInterestValue);
         return null;
     }
 }

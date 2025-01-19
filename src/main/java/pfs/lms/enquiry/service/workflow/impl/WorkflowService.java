@@ -275,17 +275,17 @@ public class WorkflowService implements IWorkflowService {
                 // Set the Work Flow Status Code "02" - Sent for Approval
                 referenceInterestRateValue.setWorkFlowStatusCode(02);
                 referenceInterestRateValue.setWorkFlowStatusDescription("Sent for Approval");
-                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() + " : " + referenceInterestRateValue.getInterestRate().toString();
+                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() +" : " +referenceInterestRateValue.getValidFromDate().toString() +" : " + referenceInterestRateValue.getInterestRate().toString();
                 processDescription = "ReferenceInterestRateValue";
                 break;
         }
 
 
-        //Deterimine Approver Name and Email
-        WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName(processName);
-        if (workflowApprover == null) {
-            throw new HandledException("000", "Workflow approver not mainatained for process : " + processName);
-        }
+            //Deterimine Approver Name and Email
+            WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName(processName);
+            if (workflowApprover == null) {
+                throw new HandledException("000", "Workflow approver not mainatained for process : " + processName);
+            }
 
         User user = userRepository.findByEmail(requestorEmail);
         String requestorFullName = user.getFirstName() + " " + user.getLastName();

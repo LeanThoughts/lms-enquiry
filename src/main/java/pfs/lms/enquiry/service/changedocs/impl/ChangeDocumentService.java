@@ -128,7 +128,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
     ChangeDocument changeDocument;
 
     @Autowired
-    private  final LoanApplicationRepository loanApplicationRepository;
+    private final LoanApplicationRepository loanApplicationRepository;
     @Autowired
     LoanAppraisalRepository loanAppraisalRepository;
 
@@ -232,10 +232,10 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
 
             sapIntegrationPointerService.saveForObject(businessProcessName, subProcessName, entityId, mainEntityId, mode);
-        } catch (Exception ex){
-            log.error("Error during change document create: " + businessProcessName + "-" + subProcessName + ":" + ex.getMessage() );
+        } catch (Exception ex) {
+            log.error("Error during change document create: " + businessProcessName + "-" + subProcessName + ":" + ex.getMessage());
         }
-        log.info("Change Document Creation Completed: " + businessProcessName + "-" + subProcessName + ":"  + changeDocument.getLoanContractId() );
+        log.info("Change Document Creation Completed: " + businessProcessName + "-" + subProcessName + ":" + changeDocument.getLoanContractId());
 
         return changeDocument;
     }
@@ -388,7 +388,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
             Map<String, Object> result = getObjectDetails(object.getClass().getSimpleName(), object);
 
             changeDocumentItem.setEntityName(object.getClass().getSimpleName().toString());
-            changeDocumentItem.setEntityDescription((String)result.get("description"));
+            changeDocumentItem.setEntityDescription((String) result.get("description"));
             changeDocumentItem.setAttributeName(change.getPropertyName());
 
             if (change.getRight() != null)
@@ -400,7 +400,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
             else
                 changeDocumentItem.setOldValue(null);
 
-            changeDocumentItem.setTableKey((String)result.get("id"));
+            changeDocumentItem.setTableKey((String) result.get("id"));
 
             changeDocumentItem.setCreatedAt(new Date());
             changeDocumentItem.setUpdatedAt(new Date());
@@ -443,123 +443,123 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     else
                         result.put("id", loanApplication.getLoanContractId().toString());
                     result.put("description", loanApplication.getProjectName());
-                    result.put("loanApplication",loanApplication );
+                    result.put("loanApplication", loanApplication);
                     return result;
                 case "Partner":
                     Partner partner = (Partner) object;
                     if (partner.getPartyNumber() != null)
                         result.put("id", partner.getPartyNumber().toString());
                     else
-                        result.put("id",  partner.getId().toString());
+                        result.put("id", partner.getId().toString());
                     result.put("description", partner.getPartyName1());
-                    result.put("loanApplication",partner );
+                    result.put("loanApplication", partner);
                     return result;
                 case "BusinessPartnerRole":
                     BusinessPartnerRole businessPartnerRole = (BusinessPartnerRole) object;
-                    result.put("id",businessPartnerRole.getId().toString());
+                    result.put("id", businessPartnerRole.getId().toString());
                     result.put("description", businessPartnerRole.getRoleType().getValue().toString());
                     return result;
                 case "BusinessPartnerBankDetail":
                     BusinessPartnerBankDetail businessPartnerBankDetail = (BusinessPartnerBankDetail) object;
-                    result.put("id",businessPartnerBankDetail.getId().toString());
-                    if (businessPartnerBankDetail.getBankKey()!= null)
-                    result.put("description", businessPartnerBankDetail.getBankKey().toString());
+                    result.put("id", businessPartnerBankDetail.getId().toString());
+                    if (businessPartnerBankDetail.getBankKey() != null)
+                        result.put("description", businessPartnerBankDetail.getBankKey().toString());
                     else result.put("description", "");
                     return result;
                 case "BusinessPartnerLoanContact":
                     BusinessPartnerLoanContact businessPartnerLoanContact = (BusinessPartnerLoanContact) object;
-                    result.put("id",businessPartnerLoanContact.getId().toString());
+                    result.put("id", businessPartnerLoanContact.getId().toString());
                     if (businessPartnerLoanContact.getLoanNumber() != null)
-                    result.put("description", businessPartnerLoanContact.getLoanNumber().toString());
+                        result.put("description", businessPartnerLoanContact.getLoanNumber().toString());
                     else result.put("description", "");
                     return result;
                 case "BusinessPartnerIdentification":
                     BusinessPartnerIdentification businessPartnerIdentification = (BusinessPartnerIdentification) object;
-                    result.put("id",businessPartnerIdentification.getId().toString());
-                    result.put("description",businessPartnerIdentification.getIdentificationCategoryCode().toString());
+                    result.put("id", businessPartnerIdentification.getId().toString());
+                    result.put("description", businessPartnerIdentification.getIdentificationCategoryCode().toString());
                     return result;
                 case "BusinessPartnerIndustry":
                     BusinessPartnerIndustry businessPartnerIndustry = (BusinessPartnerIndustry) object;
-                    result.put("id",businessPartnerIndustry.getId().toString());
-                    result.put("description",businessPartnerIndustry.getIndustrySystemId().toString());
+                    result.put("id", businessPartnerIndustry.getId().toString());
+                    result.put("description", businessPartnerIndustry.getIndustrySystemId().toString());
                     return result;
                 case "LoanMonitor":
-                        LoanMonitor loanMonitor = (LoanMonitor) object;
+                    LoanMonitor loanMonitor = (LoanMonitor) object;
                     result.put("id", loanMonitor.getLoanApplication().getLoanContractId().toString());
                     result.put("description", loanMonitor.getLoanApplication().getProjectName());
-                    result.put("loanApplication",loanMonitor.getLoanApplication());
+                    result.put("loanApplication", loanMonitor.getLoanApplication());
                     return result;
                 case "LendersIndependentEngineer":
                     LendersIndependentEngineer lendersIndependentEngineer = (LendersIndependentEngineer) object;
                     result.put("id", lendersIndependentEngineer.getSerialNumber().toString());
                     result.put("description", lendersIndependentEngineer.getName());
-                    result.put("loanApplication",lendersIndependentEngineer.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", lendersIndependentEngineer.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LIEReportAndFee":
                     LIEReportAndFee lieReportAndFee = (LIEReportAndFee) object;
                     result.put("id", lieReportAndFee.getLendersIndependentEngineer().getSerialNumber().toString());
                     result.put("description", lieReportAndFee.getReportType() + lieReportAndFee.getReportType());
-                    result.put("loanApplication",lieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", lieReportAndFee.getLendersIndependentEngineer().getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LendersInsuranceAdvisor":
                     LendersInsuranceAdvisor lendersInsuranceAdvisor = (LendersInsuranceAdvisor) object;
                     result.put("id", lendersInsuranceAdvisor.getSerialNumber().toString());
                     result.put("description", lendersInsuranceAdvisor.getName());
-                    result.put("loanApplication",lendersInsuranceAdvisor.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", lendersInsuranceAdvisor.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LIAReportAndFee":
                     LIAReportAndFee liaReportAndFee = (LIAReportAndFee) object;
                     result.put("id", liaReportAndFee.getLendersInsuranceAdvisor().getSerialNumber().toString());
                     result.put("description", liaReportAndFee.getReportType() + liaReportAndFee.getReportType());
-                    result.put("loanApplication",liaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", liaReportAndFee.getLendersInsuranceAdvisor().getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LendersLegalCouncil":
                     LendersLegalCouncil lendersLegalCouncil = (LendersLegalCouncil) object;
                     result.put("id", lendersLegalCouncil.getSerialNumber().toString());
                     result.put("description", lendersLegalCouncil.getName());
-                    result.put("loanApplication",lendersLegalCouncil.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", lendersLegalCouncil.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LLCReportAndFee":
                     LLCReportAndFee llcReportAndFee = (LLCReportAndFee) object;
                     result.put("id", llcReportAndFee.getLendersLegalCouncil().getSerialNumber().toString());
                     result.put("description", llcReportAndFee.getReportType() + llcReportAndFee.getReportType());
-                    result.put("loanApplication",llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", llcReportAndFee.getLendersLegalCouncil().getLoanAppraisal().getLoanApplication());
                     return result;
                 case "Valuer":
                     Valuer valuer = (Valuer) object;
                     result.put("id", valuer.getSerialNumber().toString());
                     result.put("description", valuer.getName());
-                    result.put("loanApplication",valuer.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", valuer.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "ValuerReportAndFee":
                     ValuerReportAndFee valuerReportAndFee = (ValuerReportAndFee) object;
                     result.put("id", valuerReportAndFee.getSerialNumber().toString());
                     result.put("description", valuerReportAndFee.getReportType() + valuerReportAndFee.getReportType());
-                    result.put("loanApplication",valuerReportAndFee.getValuer().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", valuerReportAndFee.getValuer().getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LendersFinancialAdvisor":
                     LendersFinancialAdvisor lendersFinancialAdvisor = (LendersFinancialAdvisor) object;
                     result.put("id", lendersFinancialAdvisor.getSerialNumber().toString());
                     result.put("description", lendersFinancialAdvisor.getName());
-                    result.put("loanApplication",lendersFinancialAdvisor.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", lendersFinancialAdvisor.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "LFAReportAndFee":
                     LFAReportAndFee lfaReportAndFee = (LFAReportAndFee) object;
                     result.put("id", lfaReportAndFee.getLendersFinancialAdvisor().getSerialNumber().toString());
                     result.put("description", lfaReportAndFee.getReportType() + lfaReportAndFee.getReportType());
-                    result.put("loanApplication",lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", lfaReportAndFee.getLendersFinancialAdvisor().getLoanAppraisal().getLoanApplication());
                     return result;
                 case "SecurityTrustee":
                     SecurityTrustee securityTrustee = (SecurityTrustee) object;
                     result.put("id", securityTrustee.getSerialNumber().toString());
                     result.put("description", securityTrustee.getName());
-                    result.put("loanApplication",securityTrustee.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", securityTrustee.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "SecurityTrusteeReportAndFee":
                     SecurityTrusteeReportAndFee securityTrusteeReportAndFee = (SecurityTrusteeReportAndFee) object;
                     result.put("id", securityTrusteeReportAndFee.getSecurityTrustee().getSerialNumber().toString());
                     result.put("description", securityTrusteeReportAndFee.getReportType() + securityTrusteeReportAndFee.getReportType());
-                    result.put("loanApplication",securityTrusteeReportAndFee.getSecurityTrustee().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", securityTrusteeReportAndFee.getSecurityTrustee().getLoanAppraisal().getLoanApplication());
                     return result;
 
 
@@ -567,75 +567,75 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     TrustRetentionAccount trustRetentionAccount = (TrustRetentionAccount) object;
                     result.put("id", trustRetentionAccount.getSerialNumber().toString());
                     result.put("description", trustRetentionAccount.getBankKey());
-                    result.put("loanApplication",trustRetentionAccount.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", trustRetentionAccount.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "TrustRetentionAccountStatement":
                     TrustRetentionAccountStatement trustRetentionAccountStatement = (TrustRetentionAccountStatement) object;
                     result.put("id", trustRetentionAccountStatement.getSerialNumber().toString());
                     result.put("description", trustRetentionAccountStatement.getDocumentType());
-                    result.put("loanApplication",trustRetentionAccountStatement.getTrustRetentionAccount().getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", trustRetentionAccountStatement.getTrustRetentionAccount().getLoanAppraisal().getLoanApplication());
 
                     return result;
                 case "TermsAndConditionsModification":
                     TermsAndConditionsModification termsAndConditionsModification = (TermsAndConditionsModification) object;
                     result.put("id", termsAndConditionsModification.getSerialNumber().toString());
                     result.put("description", termsAndConditionsModification.getCommunication());
-                    result.put("loanApplication",termsAndConditionsModification.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", termsAndConditionsModification.getLoanMonitor().getLoanApplication());
                     return result;
                 case "SecurityCompliance":
                     SecurityCompliance securityCompliance = (SecurityCompliance) object;
                     result.put("id", securityCompliance.getSerialNumber().toString());
                     result.put("description", securityCompliance.getCollateralObjectType());
-                    result.put("loanApplication",securityCompliance.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", securityCompliance.getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "SiteVisit":
                     SiteVisit siteVisit = (SiteVisit) object;
                     result.put("id", siteVisit.getSerialNumber().toString());
                     result.put("description", siteVisit.getSerialNumber().toString());
-                    result.put("loanApplication",siteVisit.getLoanApplication());
+                    result.put("loanApplication", siteVisit.getLoanApplication());
 
                     return result;
                 case "OperatingParameter":
                     OperatingParameter operatingParameter = (OperatingParameter) object;
                     result.put("id", operatingParameter.getSerialNumber().toString());
                     result.put("description", operatingParameter.getSerialNumber().toString());
-                    result.put("loanApplication",operatingParameter.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", operatingParameter.getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "OperatingParameterPLF":
                     OperatingParameterPLF operatingParameterPLF = (OperatingParameterPLF) object;
                     result.put("id", operatingParameterPLF.getSerialNumber().toString());
                     result.put("description", operatingParameterPLF.getSerialNumber().toString());
-                    result.put("loanApplication",operatingParameterPLF.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", operatingParameterPLF.getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "RateOfInterest":
                     RateOfInterest rateOfInterest = (RateOfInterest) object;
                     result.put("id", rateOfInterest.getSerialNumber().toString());
                     result.put("description", rateOfInterest.getConditionType().toString());
-                    result.put("loanApplication",rateOfInterest.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", rateOfInterest.getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "BorrowerFinancials":
                     BorrowerFinancials borrowerFinancials = (BorrowerFinancials) object;
                     result.put("id", borrowerFinancials.getSerialNumber().toString());
                     result.put("description", borrowerFinancials.getFiscalYear().toString());
-                    result.put("loanApplication",borrowerFinancials.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", borrowerFinancials.getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "PromoterFinancials":
                     PromoterFinancials promoterFinancials = (PromoterFinancials) object;
                     result.put("id", promoterFinancials.getSerialNumber().toString());
                     result.put("description", promoterFinancials.getFiscalYear().toString());
-                    result.put("loanApplication",promoterFinancials.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", promoterFinancials.getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "FinancialCovenants":
                     FinancialCovenants financialCovenants = (FinancialCovenants) object;
                     result.put("id", financialCovenants.getSerialNumber().toString());
                     result.put("description", financialCovenants.getFinancialCovenantType().toString());
-                    result.put("loanApplication",financialCovenants.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", financialCovenants.getLoanMonitor().getLoanApplication());
 
                     return result;
 
@@ -648,7 +648,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     ProjectMonitoringDataItemResource projectMonitoringDataItemResource = (ProjectMonitoringDataItemResource) object;
                     result.put("id", projectMonitoringDataItemResource.getId().toString());
                     result.put("description", projectMonitoringDataItemResource.getParticulars().toString());
-                    result.put("loanApplication",loanApplicationRepository.getOne(projectMonitoringDataItemResource.getLoanApplicationId()));
+                    result.put("loanApplication", loanApplicationRepository.getOne(projectMonitoringDataItemResource.getLoanApplicationId()));
 
                     return result;
                 case "ProjectMonitoringDataItemHistory":
@@ -694,7 +694,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         result.put("description", loanAppraisal1.getId().toString());
 
                     }
-                    result.put("loanApplication",loanAppraisal1.getLoanApplication());
+                    result.put("loanApplication", loanAppraisal1.getLoanApplication());
 
                     return result;
 
@@ -702,7 +702,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     CustomerRejection customerRejection = (CustomerRejection) object;
                     result.put("id", customerRejection.getDate().toString());
                     result.put("description", customerRejection.getDate().toString());
-                    result.put("loanApplication",customerRejection.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", customerRejection.getLoanAppraisal().getLoanApplication());
 
                     return result;
                 case "FurtherDetail":
@@ -730,313 +730,313 @@ public class ChangeDocumentService implements IChangeDocumentService {
                         result.put("id", loanPartner.getBusinessPartnerId().toString());
                         result.put("description", loanPartner.getBusinessPartnerId().toString());
                     }
-                    result.put("loanApplication",loanAppraisal2.getLoanApplication());
+                    result.put("loanApplication", loanAppraisal2.getLoanApplication());
 
                     return result;
                 case "KnowYourCustomer":
                     KnowYourCustomer knowYourCustomer = (KnowYourCustomer) object;
                     result.put("id", knowYourCustomer.getDocumentType().toString());
                     result.put("description", knowYourCustomer.getDocumentName().toString());
-                    result.put("loanApplication",new LoanApplication());
+                    result.put("loanApplication", new LoanApplication());
                     return result;
                 case "ProjectAppraisalCompletion":
                     ProjectAppraisalCompletion projectAppraisalCompletion = (ProjectAppraisalCompletion) object;
                     result.put("id", projectAppraisalCompletion.getId().toString());
                     result.put("description", projectAppraisalCompletion.getDateOfProjectAppraisalCompletion().toString());
-                    result.put("loanApplication",projectAppraisalCompletion.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", projectAppraisalCompletion.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "ProjectData":
                     ProjectData projectData = (ProjectData) object;
                     result.put("id", projectData.getId().toString());
                     result.put("description", projectData.getProjectName().toString());
-                    result.put("loanApplication",projectData.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", projectData.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "ProposalDetail":
                     ProposalDetail proposalDetail = (ProposalDetail) object;
                     result.put("id", proposalDetail.getId().toString());
                     result.put("description", "Proposal Details");// proposalDetail.get().toString());
-                    result.put("loanApplication",proposalDetail.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", proposalDetail.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "ReasonForDelay":
                     ReasonForDelay reasonForDelay = (ReasonForDelay) object;
                     result.put("id", reasonForDelay.getDate().toString());
                     result.put("description", "Reason for delay");//reasonForDelay.getId().toString());
-                    result.put("loanApplication",reasonForDelay.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", reasonForDelay.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "SyndicateConsortium":
                     SyndicateConsortium syndicateConsortium = (SyndicateConsortium) object;
                     result.put("id", syndicateConsortium.getId().toString());
                     result.put("description", syndicateConsortium.getBankName().toString());
-                    result.put("loanApplication",syndicateConsortium.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", syndicateConsortium.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "CorporateLoanRiskRating":
                     CorporateLoanRiskRating corporateLoanRiskRating = (CorporateLoanRiskRating) object;
                     result.put("id", corporateLoanRiskRating.getId().toString());
                     result.put("description", corporateLoanRiskRating.getYear());
-                    result.put("loanApplication",corporateLoanRiskRating.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", corporateLoanRiskRating.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "TermLoanRiskRating":
                     TermLoanRiskRating termLoanRiskRating = (TermLoanRiskRating) object;
                     result.put("id", termLoanRiskRating.getId().toString());
                     result.put("description", termLoanRiskRating.getYear());
-                    result.put("loanApplication",termLoanRiskRating.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", termLoanRiskRating.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "ExternalRating":
                     ExternalRating externalRating = (ExternalRating) object;
                     result.put("id", externalRating.getId().toString());
                     result.put("description", externalRating.getSerialNumber());
-                    result.put("loanApplication",externalRating.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", externalRating.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "MainLocationDetail":
                     MainLocationDetail mainLocationDetail = (MainLocationDetail) object;
                     result.put("id", mainLocationDetail.getId().toString());
                     result.put("description", mainLocationDetail.getLocation());
-                    result.put("loanApplication",mainLocationDetail.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", mainLocationDetail.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "SubLocationDetail":
                     SubLocationDetail subLocationDetail = (SubLocationDetail) object;
                     result.put("id", subLocationDetail.getSerialNumber().toString());
                     result.put("description", subLocationDetail.getLocation());
-                    result.put("loanApplication",subLocationDetail.getLoanAppraisal().getLoanApplication());
+                    result.put("loanApplication", subLocationDetail.getLoanAppraisal().getLoanApplication());
                     return result;
                 case "NPA":
                     NPA npa = (NPA) object;
                     result.put("id", npa.getId().toString());
                     result.put("description", npa.getAssetClass());
-                    result.put("loanApplication",npa.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", npa.getLoanMonitor().getLoanApplication());
                     return result;
                 case "NPADetail":
                     NPADetail npaDetail = (NPADetail) object;
                     result.put("id", npaDetail.getLineItemNumber().toString());
                     result.put("description", npaDetail.getLoanNumber());
-                    result.put("loanApplication",npaDetail.getNpa().getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", npaDetail.getNpa().getLoanMonitor().getLoanApplication());
 
                     return result;
                 case "LoanDocumentation":
                     LoanDocumentation loanDocumentation = (LoanDocumentation) object;
                     result.put("id", loanDocumentation.getSerialNumber().toString());
                     result.put("description", loanDocumentation.getDocumentationTypeDescription());
-                    result.put("loanApplication",loanDocumentation.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", loanDocumentation.getLoanMonitor().getLoanApplication());
                     return result;
                 case "Insurance":
                     Insurance insurance = (Insurance) object;
                     result.put("id", insurance.getSerialNumber().toString());
                     result.put("description", insurance.getValidFrom().toString());
-                    result.put("loanApplication",insurance.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", insurance.getLoanMonitor().getLoanApplication());
                     return result;
                 case "EndUseCertificate":
                     EndUseCertificate endUseCertificate = (EndUseCertificate) object;
                     result.put("id", endUseCertificate.getSerialNumber().toString());
                     result.put("description", endUseCertificate.getEventDate().toString());
-                    result.put("loanApplication",endUseCertificate.getLoanMonitor().getLoanApplication());
+                    result.put("loanApplication", endUseCertificate.getLoanMonitor().getLoanApplication());
                     return result;
                 case "EnquiryAction":
                     EnquiryAction enquiryAction = (EnquiryAction) object;
                     result.put("id", enquiryAction.getId().toString());
                     result.put("description", enquiryAction.getId().toString());
-                    result.put("loanApplication",enquiryAction.getLoanApplication());
+                    result.put("loanApplication", enquiryAction.getLoanApplication());
                     return result;
                 case "ProjectProposal":
                     ProjectProposal projectProposal = (ProjectProposal) object;
                     result.put("id", projectProposal.getId().toString());
                     result.put("description", projectProposal.getProposalStatus().toString());
-                    result.put("loanApplication",projectProposal.getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", projectProposal.getEnquiryAction().getLoanApplication());
                     return result;
                 case "ProjectProposalOtherDetail":
                     ProjectProposalOtherDetail projectProposalOtherDetail = (ProjectProposalOtherDetail) object;
                     result.put("id", projectProposalOtherDetail.getId().toString());
                     result.put("description", projectProposalOtherDetail.getSourceAndCashFlow());
-                    result.put("loanApplication",projectProposalOtherDetail.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", projectProposalOtherDetail.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "ProjectDetail":
                     ProjectDetail projectDetail = (ProjectDetail) object;
                     result.put("id", projectDetail.getProjectName().toString());
                     result.put("description", projectDetail.getStatus());
-                    result.put("loanApplication",projectDetail.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", projectDetail.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "CollateralDetail":
                     CollateralDetail collateralDetail = (CollateralDetail) object;
                     result.put("id", collateralDetail.getCollateralType().toString());
                     result.put("description", collateralDetail.getDetails());
-                    result.put("loanApplication",collateralDetail.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", collateralDetail.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "CreditRating":
                     CreditRating creditRating = (CreditRating) object;
                     result.put("id", creditRating.getCreditRating().toString());
                     result.put("description", creditRating.getCreditRating());
-                    result.put("loanApplication",creditRating.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", creditRating.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "DealGuaranteeTimeline":
                     DealGuaranteeTimeline dealGuaranteeTimeline = (DealGuaranteeTimeline) object;
                     result.put("id", dealGuaranteeTimeline.getDealTransactionStructure().toString());
                     result.put("description", dealGuaranteeTimeline.getDealTransactionStructure());
-                    result.put("loanApplication",dealGuaranteeTimeline.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", dealGuaranteeTimeline.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "PromoterBorrowerFinancial":
                     PromoterBorrowerFinancial promoterBorrowerFinancial = (PromoterBorrowerFinancial) object;
                     result.put("id", promoterBorrowerFinancial.getFiscalPeriod().toString());
                     result.put("description", promoterBorrowerFinancial.getFiscalPeriod());
-                    result.put("loanApplication",promoterBorrowerFinancial.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", promoterBorrowerFinancial.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "OtherDetailsDocument":
                     OtherDetailsDocument otherDetailsDocument = (OtherDetailsDocument) object;
                     result.put("id", otherDetailsDocument.getDocumentType().toString());
                     result.put("description", otherDetailsDocument.getDocumentName());
-                    result.put("loanApplication",otherDetailsDocument.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", otherDetailsDocument.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "ProjectCost":
                     ProjectCost projectCost = (ProjectCost) object;
                     result.put("id", projectCost.getId().toString());
                     result.put("description", projectCost.getProjectProposal().getEnquiryAction().getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",projectCost.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", projectCost.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
                 case "ShareHolder":
                     ShareHolder shareHolder = (ShareHolder) object;
                     result.put("id", shareHolder.getCompanyName().toString());
                     result.put("description", shareHolder.getCompanyName().toString());
-                    result.put("loanApplication",shareHolder.getProjectProposal().getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", shareHolder.getProjectProposal().getEnquiryAction().getLoanApplication());
                     return result;
-             case "EnquiryActionReasonForDelay":
+                case "EnquiryActionReasonForDelay":
                     EnquiryActionReasonForDelay enquiryActionReasonForDelay = (EnquiryActionReasonForDelay) object;
                     result.put("id", enquiryActionReasonForDelay.getId().toString());
                     result.put("description", enquiryActionReasonForDelay.getReason().toString());
-                    result.put("loanApplication",enquiryActionReasonForDelay.getEnquiryAction().getLoanApplication());
-                 return result;
+                    result.put("loanApplication", enquiryActionReasonForDelay.getEnquiryAction().getLoanApplication());
+                    return result;
                 case "EnquiryCompletion":
                     EnquiryCompletion enquiryCompletion = (EnquiryCompletion) object;
                     result.put("id", enquiryCompletion.getId().toString());
                     result.put("description", enquiryCompletion.getDate().toString());
-                    result.put("loanApplication",enquiryCompletion.getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", enquiryCompletion.getEnquiryAction().getLoanApplication());
                     return result;
                 case "OtherDetail":
                     OtherDetail otherDetail = (OtherDetail) object;
                     result.put("id", otherDetail.getId().toString());
                     result.put("description", otherDetail.getEnquiryDate().toString());
-                    result.put("loanApplication",otherDetail.getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", otherDetail.getEnquiryAction().getLoanApplication());
                     return result;
                 case "RejectByCustomer":
                     RejectByCustomer rejectByCustomer = (RejectByCustomer) object;
                     result.put("id", rejectByCustomer.getId().toString());
                     result.put("description", rejectByCustomer.getRejectionDate().toString());
-                    result.put("loanApplication",rejectByCustomer.getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", rejectByCustomer.getEnquiryAction().getLoanApplication());
                     return result;
                 case "RejectByPfs":
                     RejectByPfs rejectByPfs = (RejectByPfs) object;
                     result.put("id", rejectByPfs.getId().toString());
                     result.put("description", rejectByPfs.getRejectionDate().toString());
-                    result.put("loanApplication",rejectByPfs.getEnquiryAction().getLoanApplication());
+                    result.put("loanApplication", rejectByPfs.getEnquiryAction().getLoanApplication());
                     return result;
                 case "BoardApproval":
                     BoardApproval boardApproval = (BoardApproval) object;
                     result.put("id", boardApproval.getId().toString());
                     result.put("description", boardApproval.getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",boardApproval.getLoanApplication());
+                    result.put("loanApplication", boardApproval.getLoanApplication());
                     return result;
                 case "ApprovalByBoard":
                     ApprovalByBoard approvalByBoard = (ApprovalByBoard) object;
                     result.put("id", approvalByBoard.getId().toString());
                     result.put("description", approvalByBoard.getBoardApproval().getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",approvalByBoard.getBoardApproval().getLoanApplication());
+                    result.put("loanApplication", approvalByBoard.getBoardApproval().getLoanApplication());
                     return result;
                 case "DeferredByBoard":
                     DeferredByBoard deferredByBoard = (DeferredByBoard) object;
                     result.put("id", deferredByBoard.getId().toString());
                     result.put("description", deferredByBoard.getBoardApproval().getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",deferredByBoard.getBoardApproval().getLoanApplication());
+                    result.put("loanApplication", deferredByBoard.getBoardApproval().getLoanApplication());
                     return result;
                 case "BoardApprovalReasonForDelay":
                     BoardApprovalReasonForDelay boardApprovalReasonForDelay = (BoardApprovalReasonForDelay) object;
                     result.put("id", boardApprovalReasonForDelay.getId().toString());
                     result.put("description", boardApprovalReasonForDelay.getBoardApproval().getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",boardApprovalReasonForDelay.getBoardApproval().getLoanApplication());
+                    result.put("loanApplication", boardApprovalReasonForDelay.getBoardApproval().getLoanApplication());
                     return result;
                 case "RejectedByBoard":
                     RejectedByBoard rejectedByBoard = (RejectedByBoard) object;
                     result.put("id", rejectedByBoard.getId().toString());
                     result.put("description", rejectedByBoard.getBoardApproval().getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",rejectedByBoard.getBoardApproval().getLoanApplication());
+                    result.put("loanApplication", rejectedByBoard.getBoardApproval().getLoanApplication());
                     return result;
                 case "BoardApprovalRejectedByCustomer":
                     BoardApprovalRejectedByCustomer boardApprovalRejectedByCustomer = (BoardApprovalRejectedByCustomer) object;
                     result.put("id", boardApprovalRejectedByCustomer.getId().toString());
                     result.put("description", boardApprovalRejectedByCustomer.getBoardApproval().getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",boardApprovalRejectedByCustomer.getBoardApproval().getLoanApplication());
+                    result.put("loanApplication", boardApprovalRejectedByCustomer.getBoardApproval().getLoanApplication());
                     return result;
                 case "Sanction":
                     Sanction sanction = (Sanction) object;
                     result.put("id", sanction.getId().toString());
                     result.put("description", sanction.getLoanApplication().getEnquiryNo().getId().toString());
-                    result.put("loanApplication",sanction.getLoanApplication());
+                    result.put("loanApplication", sanction.getLoanApplication());
                     return result;
                 case "PaymentReceiptPostSanction":
                     PaymentReceiptPostSanction paymentReceiptPostSanction = (PaymentReceiptPostSanction) object;
                     result.put("id", paymentReceiptPostSanction.getId().toString());
                     result.put("description", paymentReceiptPostSanction.getProformaInvoiceNumber().toString());
-                    result.put("loanApplication",paymentReceiptPostSanction.getSanction().getLoanApplication());
+                    result.put("loanApplication", paymentReceiptPostSanction.getSanction().getLoanApplication());
                     return result;
                 case "PaymentReceiptPreSanction":
                     PaymentReceiptPreSanction paymentReceiptPreSanction = (PaymentReceiptPreSanction) object;
                     result.put("id", paymentReceiptPreSanction.getId().toString());
                     result.put("description", paymentReceiptPreSanction.getProformaInvoiceNumber());
-                    result.put("loanApplication",paymentReceiptPreSanction.getSanction().getLoanApplication());
+                    result.put("loanApplication", paymentReceiptPreSanction.getSanction().getLoanApplication());
                     return result;
                 case "SanctionReasonForDelay":
                     SanctionReasonForDelay sanctionReasonForDelay = (SanctionReasonForDelay) object;
                     result.put("id", sanctionReasonForDelay.getId().toString());
                     result.put("description", sanctionReasonForDelay.getSerialNumber().toString());
-                    result.put("loanApplication",sanctionReasonForDelay.getSanction().getLoanApplication());
+                    result.put("loanApplication", sanctionReasonForDelay.getSanction().getLoanApplication());
                     return result;
                 case "SanctionRejectedByCustomer":
                     SanctionRejectedByCustomer sanctionRejectedByCustomer = (SanctionRejectedByCustomer) object;
                     result.put("id", sanctionRejectedByCustomer.getId().toString());
                     result.put("description", sanctionRejectedByCustomer.getMeetingDate().toString());
-                    result.put("loanApplication",sanctionRejectedByCustomer.getSanction().getLoanApplication());
+                    result.put("loanApplication", sanctionRejectedByCustomer.getSanction().getLoanApplication());
                     return result;
                 case "SanctionLetter":
                     SanctionLetter sanctionLetter = (SanctionLetter) object;
                     result.put("id", sanctionLetter.getId().toString());
                     result.put("description", sanctionLetter.getSerialNumber().toString());
-                    result.put("loanApplication",sanctionLetter.getSanction().getLoanApplication());
+                    result.put("loanApplication", sanctionLetter.getSanction().getLoanApplication());
                     return result;
-                 case "ApplicationFee":
-                     ApplicationFee applicationFee = (ApplicationFee) object;
+                case "ApplicationFee":
+                    ApplicationFee applicationFee = (ApplicationFee) object;
                     result.put("id", applicationFee.getId().toString());
                     if (applicationFee.getLoanApplication().getLoanContractId() != null) {
                         result.put("description", applicationFee.getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", applicationFee.getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",applicationFee.getLoanApplication());
+                    result.put("loanApplication", applicationFee.getLoanApplication());
                     return result;
                 case "InceptionFee":
                     InceptionFee inceptionFee = (InceptionFee) object;
                     result.put("id", inceptionFee.getId().toString());
                     if (inceptionFee.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", inceptionFee.getApplicationFee().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", inceptionFee.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",inceptionFee.getApplicationFee().getLoanApplication());
+                    result.put("loanApplication", inceptionFee.getApplicationFee().getLoanApplication());
                     return result;
                 case "RiskNotification":
                     RiskNotification riskNotification = (RiskNotification) object;
                     result.put("id", riskNotification.getId().toString());
                     if (riskNotification.getIccApproval().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", riskNotification.getIccApproval().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", riskNotification.getIccApproval().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",riskNotification.getIccApproval().getLoanApplication());
+                    result.put("loanApplication", riskNotification.getIccApproval().getLoanApplication());
                     return result;
                 case "RiskAssessment":
                     RiskAssessment riskAssessment = (RiskAssessment) object;
                     result.put("id", riskAssessment.getId().toString());
                     if (riskAssessment.getLoanApplication().getLoanContractId() != null) {
                         result.put("description", riskAssessment.getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", riskAssessment.getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",riskAssessment.getLoanApplication());
+                    result.put("loanApplication", riskAssessment.getLoanApplication());
                     return result;
 
                 case "PreliminaryRiskAssessment":
@@ -1044,40 +1044,40 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", preliminaryRiskAssessment.getId().toString());
                     if (preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", preliminaryRiskAssessment.getRiskAssessment().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",preliminaryRiskAssessment.getRiskAssessment().getLoanApplication());
+                    result.put("loanApplication", preliminaryRiskAssessment.getRiskAssessment().getLoanApplication());
                     return result;
                 case "FormalRequest":
                     FormalRequest formalRequest = (FormalRequest) object;
                     result.put("id", formalRequest.getId().toString());
                     if (formalRequest.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", formalRequest.getApplicationFee().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", formalRequest.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",formalRequest.getApplicationFee().getLoanApplication());
+                    result.put("loanApplication", formalRequest.getApplicationFee().getLoanApplication());
                     return result;
                 case "TermSheet":
                     TermSheet termSheet = (TermSheet) object;
                     result.put("id", termSheet.getId().toString());
                     if (termSheet.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", termSheet.getApplicationFee().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", termSheet.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",termSheet.getApplicationFee().getLoanApplication());
+                    result.put("loanApplication", termSheet.getApplicationFee().getLoanApplication());
                     return result;
                 case "InvoicingDetail":
                     InvoicingDetail invoicingDetail = (InvoicingDetail) object;
                     result.put("id", invoicingDetail.getId().toString());
                     if (invoicingDetail.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", invoicingDetail.getApplicationFee().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", invoicingDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",invoicingDetail.getApplicationFee().getLoanApplication());
+                    result.put("loanApplication", invoicingDetail.getApplicationFee().getLoanApplication());
                     return result;
 
                 case "ApplicationFeeProjectDetail":
@@ -1085,10 +1085,10 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", applicationFeeProjectDetail.getId().toString());
                     if (applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getLoanContractId() != null) {
                         result.put("description", applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getLoanContractId().toString());
-                    } else{
+                    } else {
                         result.put("description", applicationFeeProjectDetail.getApplicationFee().getLoanApplication().getEnquiryNo().getId().toString());
                     }
-                    result.put("loanApplication",applicationFeeProjectDetail.getApplicationFee().getLoanApplication());
+                    result.put("loanApplication", applicationFeeProjectDetail.getApplicationFee().getLoanApplication());
                     return result;
                 case "Documentation":
                     Documentation documentation = (Documentation) object;
@@ -1168,21 +1168,24 @@ public class ChangeDocumentService implements IChangeDocumentService {
         changeDocument.setLoanBusinessProcessObjectId(loanBusinessProcessObjectId);
         changeDocument.setDate(new Date());
 
-        if (businessProcessName != "Partner"){
-            LoanApplication loanApplication = new LoanApplication();
-        if (loanContractId != null) {
-            loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
-            if (loanApplication == null) {
-                EnquiryNo enquiryNo = new EnquiryNo();
-                enquiryNo.setId(Long.parseLong(loanContractId.toString()));
-                loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
-            }
-        } else {
-            loanApplication = (LoanApplication) result.get("loanApplication");
-        }
+        if (businessProcessName == "ReferenceInterestRateValue") {
 
-        changeDocument.setLoanApplication(loanApplication);
-        changeDocument.setLoanContractId(loanContractId);
+        }
+        else if (businessProcessName != "Partner"  ) {
+            LoanApplication loanApplication = new LoanApplication();
+            if (loanContractId != null) {
+                loanApplication = loanApplicationRepository.findByLoanContractId(loanContractId);
+                if (loanApplication == null) {
+                    EnquiryNo enquiryNo = new EnquiryNo();
+                    enquiryNo.setId(Long.parseLong(loanContractId.toString()));
+                    loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
+                }
+            } else {
+                loanApplication = (LoanApplication) result.get("loanApplication");
+            }
+
+            changeDocument.setLoanApplication(loanApplication);
+            changeDocument.setLoanContractId(loanContractId);
         }
 
         changeDocument.setAction(action);
@@ -1193,7 +1196,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
         changeDocument.setUserName(userName);
         log.info("businessProcessName: " + businessProcessName);
         log.info("subProcessName     : " + subProcessName);
-        changeDocument.setTableKey((String)result.get("description"));
+        changeDocument.setTableKey((String) result.get("description"));
 
         return changeDocument;
     }

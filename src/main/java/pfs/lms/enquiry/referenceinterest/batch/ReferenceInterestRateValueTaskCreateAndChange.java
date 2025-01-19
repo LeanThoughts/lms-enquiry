@@ -71,7 +71,7 @@ public class ReferenceInterestRateValueTaskCreateAndChange {
 
         for (SAPIntegrationPointer sapIntegrationPointer : sapIntegrationPointers) {
 
-            switch (sapIntegrationPointer.getSubBusinessProcessName()) {
+            switch (sapIntegrationPointer.getBusinessProcessName()) {
                 case "ReferenceInterestRateValue":
                     referenceInterestRateValue = referenceInterestRateValueRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     log.info("---------------Sync. Reference Interest Value To SAP  : " + referenceInterestRateValue.getReferenceInterestRate().getCode() );
@@ -89,19 +89,21 @@ public class ReferenceInterestRateValueTaskCreateAndChange {
 
                     SAPReferenceInterestRateValueResourceDetail sapReferenceInterestRateValueResourceDetail =
                             sapReferenceInterestRateValueDetailResource.mapResourceDetails(referenceInterestRateValue);
+                    log.info(sapReferenceInterestRateValueResourceDetail.toString());
 
                     sapReferenceInterestRateValueDetailResource.setSAPReferenceInterestRateValueResourceDetail(sapReferenceInterestRateValueResourceDetail);
 
                      resource = (Object) sapReferenceInterestRateValueDetailResource;
-                    serviceUri = referenceInterestRateValueUri + "ReferenceInterestRateSet";
+                    serviceUri = referenceInterestRateValueUri ;
 
                     switch (sapIntegrationPointer.getMode()){
                         case "C":
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
                         break;
                             case "U":
-                            serviceUri = serviceUri + "('" + referenceInterestRateValue.getReferenceInterestRate().getCode() + "')";
-                            response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
+                                response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
+//                                serviceUri = serviceUri + "('" + referenceInterestRateValue.getReferenceInterestRate().getCode() + "')";
+//                            response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
                         break;
                     }
                     if (response != null) {
