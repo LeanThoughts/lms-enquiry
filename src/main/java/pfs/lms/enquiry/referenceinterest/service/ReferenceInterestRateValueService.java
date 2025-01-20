@@ -10,6 +10,7 @@ import pfs.lms.enquiry.referenceinterest.resource.ReferenceInterestValueResource
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
@@ -89,11 +90,19 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         ReferenceInterestRateValue referenceInterestRateValue =
                 referenceInterestRateValueRepository.getOne(referenceInterestValueId);
-        referenceInterestRateValueRepository.delete(referenceInterestRateValue);
+        // Only Delete after workflow is approved
+         referenceInterestRateValue.setModificationStatus(2);//Marked for Deletion
+         referenceInterestRateValueRepository.save(referenceInterestRateValue);
+
+        String mainEntityId = referenceInterestRateValue.getReferenceInterestRate().getCode();
+        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String entityId     = referenceInterestRateValue.getValidFromDate().format(formatters);
 
         // Change Documents
         changeDocumentService.createChangeDocument(
-                referenceInterestRateValue.getId(),referenceInterestRateValue.getId().toString(),referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue.getId(),
+                mainEntityId, //Valid From Date
+                entityId,     //Ref. Interest Rate Type
                 referenceInterestRateValue.getId().toString(),
                 null,
                 referenceInterestRateValue,
@@ -106,8 +115,16 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
     @Override
     public ReferenceInterestRateValue processApprovedReferenceInterestValue(ReferenceInterestRateValue referenceInterestValue, String username) throws CloneNotSupportedException {
-        referenceInterestValue.setModificationStatus(0);
-        referenceInterestRateValueRepository.save(referenceInterestValue);
+
+        if (referenceInterestValue.getModificationStatus() == 1 ||  referenceInterestValue.getModificationStatus() == 0) {
+            referenceInterestValue.setModificationStatus(0);
+            referenceInterestRateValueRepository.save(referenceInterestValue);
+        }
+        if (referenceInterestValue.getModificationStatus() == 2 ) {
+            referenceInterestValue.setModificationStatus(0);
+            referenceInterestRateValueRepository.delete(referenceInterestValue );
+        }
+
         return null;
     }
 

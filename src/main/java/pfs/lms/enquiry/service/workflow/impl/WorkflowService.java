@@ -59,6 +59,7 @@ import pfs.lms.enquiry.vault.FileSystemStorage;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -275,7 +276,9 @@ public class WorkflowService implements IWorkflowService {
                 // Set the Work Flow Status Code "02" - Sent for Approval
                 referenceInterestRateValue.setWorkFlowStatusCode(02);
                 referenceInterestRateValue.setWorkFlowStatusDescription("Sent for Approval");
-                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() +" : " +referenceInterestRateValue.getValidFromDate().toString() +" : " + referenceInterestRateValue.getInterestRate().toString();
+                DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String dateAsText = referenceInterestRateValue.getValidFromDate().format(formatters);
+                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() +":" +dateAsText +":" + referenceInterestRateValue.getInterestRate().toString();
                 processDescription = "ReferenceInterestRateValue";
                 break;
         }
@@ -284,7 +287,7 @@ public class WorkflowService implements IWorkflowService {
             //Deterimine Approver Name and Email
             WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName(processName);
             if (workflowApprover == null) {
-                throw new HandledException("000", "Workflow approver not mainatained for process : " + processName);
+                throw new HandledException("000", "Workflow approver not maintained for process : " + processName);
             }
 
         User user = userRepository.findByEmail(requestorEmail);

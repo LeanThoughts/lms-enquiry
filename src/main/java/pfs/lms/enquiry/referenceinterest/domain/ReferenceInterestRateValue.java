@@ -28,12 +28,14 @@ public class ReferenceInterestRateValue extends AggregateRoot<ReferenceInterestR
     private String changedBy;
     private LocalDate changedOn;
 
+
     private Integer workFlowStatusCode;
     private String workFlowStatusDescription;
     private String processInstanceId;
 
     // 0 - Not Changed
     // 1 - Changed
+    // 2 - Marked for Deletion
     private Integer modificationStatus;
 
     public Object clone () throws CloneNotSupportedException {

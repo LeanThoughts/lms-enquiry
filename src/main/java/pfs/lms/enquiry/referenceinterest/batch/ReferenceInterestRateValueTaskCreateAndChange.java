@@ -105,6 +105,11 @@ public class ReferenceInterestRateValueTaskCreateAndChange {
 //                                serviceUri = serviceUri + "('" + referenceInterestRateValue.getReferenceInterestRate().getCode() + "')";
 //                            response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
                         break;
+                        case "D":
+                            String objectId =  referenceInterestRateValue.getReferenceInterestRate().getCode() + "," + referenceInterestRateValue.getValidFromDate().toString();
+                            serviceUri = serviceUri + "('" +objectId + "')";
+                            response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
+                            break;
                     }
                     if (response != null) {
                         ResponseEntity responseEntity = (ResponseEntity) response;
