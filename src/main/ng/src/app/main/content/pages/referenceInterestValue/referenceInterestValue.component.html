@@ -12,7 +12,8 @@
 
         <!-- TOOLBAR -->
         <div class="toolbar" fxLayout="row" fxLayoutAlign="end">
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="sendForApproval()" [disabled]="selectedRow == null">
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="sendForApproval()" 
+                    [disabled]="!selectedRow || selectedRow.workFlowStatusCode === 1 || selectedRow.modificationStatus === 0">
                 Send for Approval
             </button>
         </div>
@@ -81,10 +82,12 @@
                     <button class="mr-8" mat-raised-button type="button" color="accent" (click)="addReferenceInterestRateValue()">
                         Add
                     </button>
-                    <button class="mr-8" mat-raised-button type="button" color="accent" (click)="updateReferenceInterestRateValue()" [disabled]="selectedRow == null">
+                    <button class="mr-8" mat-raised-button type="button" color="accent" (click)="updateReferenceInterestRateValue()" 
+                            [disabled]="!selectedRow || selectedRow.workFlowStatusCode === 1 || selectedRow.modificationStatus === 2">
                         Update
                     </button>
-                    <button mat-raised-button type="button" color="accent" (click)="deleteReferenceInterestRateValue()" [disabled]="selectedRow == null">
+                    <button mat-raised-button type="button" color="accent" (click)="deleteReferenceInterestRateValue()" 
+                            [disabled]="!selectedRow || selectedRow.workFlowStatusCode === 1 || selectedRow.modificationStatus === 2">
                         Delete
                     </button>
                 </div>
@@ -120,6 +123,14 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header >Interest Rate</mat-header-cell>
                         <mat-cell *matCellDef="let row" >
                             <p class="text-truncate">{{ row.interestRate }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Modification Status Description Column -->
+                    <ng-container matColumnDef="modificationStatusDescription">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header >Modification Status Description</mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
+                            <p class="text-truncate">{{ getModificationStatusDescription(row.modificationStatus) }}</p>
                         </mat-cell>
                     </ng-container>
 

@@ -19,7 +19,7 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator ) paginator: MatPaginator;
 
     displayedColumns: string[] = ['referenceInterestRateTypeCode', 'referenceInterestRateTypeDescription', 'validFromDate', 'interestRate', 
-        'workFlowStatusDescription'
+        'modificationStatusDescription', 'workFlowStatusDescription'
     ];
     dataSource: any[];
     expandPanel = true;
@@ -89,7 +89,7 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
         }
         let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
         let email = this._appService.currentUser.email;
-        this._matSnackBar.open('Please wait while attempting to send monitoring for approval.', 'OK', { duration: 25000 });
+        this._matSnackBar.open('Please wait while attempting to send reference interest value for approval.', 'OK', { duration: 7000 });
         this.referenceInterestValueService.sendReferenceInterestValueForApproval(this.selectedRow.id, name, email).subscribe(
             response => {
                 this._matSnackBar.dismiss();
@@ -178,5 +178,21 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    /**
+     * getModificationStatusDescription()
+     */
+    getModificationStatusDescription(modificationStatus: number): string {
+        if (modificationStatus === 0) {
+            return 'Not Changed';
+        } else if (modificationStatus === 1) {
+            return 'Changed';
+        } else if (modificationStatus === 2) {
+            return 'Marked for Deletion';
+        } else {
+            return '';
+        }
+        
     }
 }
