@@ -82,7 +82,12 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
-        if (this.selectedRow.modificationStatus !== 1) {
+        if (this.selectedRow.modificationStatus === 2) {
+            this._matSnackBar.open('Reference Interest Value is marked for deletion. Cannot be sent for approval.', 
+                'OK', { duration: 7000 });
+            return;
+        }
+        else if (this.selectedRow.modificationStatus !== 1) {
             this._matSnackBar.open('Reference Interest Value is already sent for approval. Only modified values can be sent for approval.', 
                 'OK', { duration: 7000 });
             return;
