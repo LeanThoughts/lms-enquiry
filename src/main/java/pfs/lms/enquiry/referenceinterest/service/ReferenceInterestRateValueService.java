@@ -39,6 +39,8 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
             referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
             referenceInterestRateValue.setReferenceInterestRate(referenceInterestRate);
             referenceInterestRateValue.setModificationStatus(1);
+            referenceInterestRateValue.setWorkFlowStatusCode(0);
+            referenceInterestRateValue.setWorkFlowStatusDescription("Not Sent for Approval");
             referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
             // Change Documents
@@ -68,8 +70,8 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
 
         referenceInterestRateValue.setInterestRate(referenceInterestValueResource.getInterestRate());
         referenceInterestRateValue.setModificationStatus(1);
-        referenceInterestRateValue.setWorkFlowStatusCode(null);
-        referenceInterestRateValue.setWorkFlowStatusDescription("");
+        referenceInterestRateValue.setWorkFlowStatusCode(0);
+        referenceInterestRateValue.setWorkFlowStatusDescription("Not Sent for Approval");
         referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
         // Change Documents
@@ -92,7 +94,10 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
                 referenceInterestRateValueRepository.getOne(referenceInterestValueId);
         // Only Delete after workflow is approved
          referenceInterestRateValue.setModificationStatus(2);//Marked for Deletion
-         referenceInterestRateValueRepository.save(referenceInterestRateValue);
+        referenceInterestRateValue.setWorkFlowStatusCode(0);
+        referenceInterestRateValue.setWorkFlowStatusDescription("Not Sent for Approval");
+        referenceInterestRateValueRepository.save(referenceInterestRateValue);
+
 
         String mainEntityId = referenceInterestRateValue.getReferenceInterestRate().getCode();
         DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");

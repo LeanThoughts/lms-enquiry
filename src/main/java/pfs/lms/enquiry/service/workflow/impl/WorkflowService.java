@@ -278,7 +278,16 @@ public class WorkflowService implements IWorkflowService {
                 referenceInterestRateValue.setWorkFlowStatusDescription("Sent for Approval");
                 DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 String dateAsText = referenceInterestRateValue.getValidFromDate().format(formatters);
-                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() +":" +dateAsText +":" + referenceInterestRateValue.getInterestRate().toString();
+                String modificationStatus = "";
+                switch (referenceInterestRateValue.getModificationStatus()){
+                    case 0:
+                        modificationStatus = ""; break;
+                    case 1:
+                        modificationStatus = "New/Updated"; break;
+                    case 2:
+                        modificationStatus = "For Deletion"; break;
+                }
+                objectId = referenceInterestRateValue.getReferenceInterestRate().getCode() +":" +dateAsText +":" + referenceInterestRateValue.getInterestRate().toString() + " " + modificationStatus;
                 processDescription = "ReferenceInterestRateValue";
                 break;
         }
