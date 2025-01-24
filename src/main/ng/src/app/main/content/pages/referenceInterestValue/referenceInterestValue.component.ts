@@ -82,29 +82,26 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
-        if (this.selectedRow.modificationStatus === 2) {
-            this._matSnackBar.open('Reference Interest Value is marked for deletion. Cannot be sent for approval.', 
-                'OK', { duration: 7000 });
-            return;
-        }
-        else if (this.selectedRow.modificationStatus !== 1) {
-            this._matSnackBar.open('Reference Interest Value is already sent for approval. Only modified values can be sent for approval.', 
-                'OK', { duration: 7000 });
-            return;
-        }
-        let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-        let email = this._appService.currentUser.email;
-        this._matSnackBar.open('Please wait while attempting to send reference interest value for approval.', 'OK', { duration: 7000 });
-        this.referenceInterestValueService.sendReferenceInterestValueForApproval(this.selectedRow.id, name, email).subscribe(
-            response => {
-                this._matSnackBar.dismiss();
-                this.searchReferenceInterestValues();
-                this._matSnackBar.open('Reference Interest Value is sent for approval.', 'OK', { duration: 7000 });
-            },
-            error => {
-                this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
+        if (this.selectedRow.workFlowStatusDescription === 'Not Sent for Approval') {
+            if (this.selectedRow.modificationStatus === 0) {
+                this._matSnackBar.open('Reference Interest Value is already sent for approval. Only modified values can be sent for approval.', 
                     'OK', { duration: 7000 });
-            });
+                return;
+            }
+            let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
+            let email = this._appService.currentUser.email;
+            this._matSnackBar.open('Please wait while attempting to send reference interest value for approval.', 'OK', { duration: 7000 });
+            this.referenceInterestValueService.sendReferenceInterestValueForApproval(this.selectedRow.id, name, email).subscribe(
+                response => {
+                    this._matSnackBar.dismiss();
+                    this.searchReferenceInterestValues();
+                    this._matSnackBar.open('Reference Interest Value is sent for approval.', 'OK', { duration: 7000 });
+                },
+                error => {
+                    this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator', 
+                        'OK', { duration: 7000 });
+                });
+        }
     }
 
     /**
