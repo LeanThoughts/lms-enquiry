@@ -43,9 +43,15 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
             referenceInterestRateValue.setWorkFlowStatusDescription("Not Sent for Approval");
             referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
+            String mainEntityId = referenceInterestRateValue.getReferenceInterestRate().getCode();
+            DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String entityId     = referenceInterestRateValue.getValidFromDate().format(formatters);
+
             // Change Documents
         changeDocumentService.createChangeDocument(
-                referenceInterestRateValue.getId(),referenceInterestRateValue.getId().toString(),referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue.getId(),
+                mainEntityId, //Valid From Date
+                entityId,     //Ref. Interest Rate Type
                 referenceInterestRateValue.getId().toString(),
                 null,
                 referenceInterestRateValue,
@@ -74,13 +80,19 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
         referenceInterestRateValue.setWorkFlowStatusDescription("Not Sent for Approval");
         referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
 
+        String mainEntityId = referenceInterestRateValue.getReferenceInterestRate().getCode();
+        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String entityId     = referenceInterestRateValue.getValidFromDate().format(formatters);
+
         // Change Documents
         changeDocumentService.createChangeDocument(
-                referenceInterestRateValue.getId(),referenceInterestRateValue.getId().toString(),referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue.getId(),
+                mainEntityId, //Valid From Date
+                entityId,     //Ref. Interest Rate Type
                 referenceInterestRateValue.getId().toString(),
-                existingObject,
                 referenceInterestRateValue,
-                "Updated",
+                existingObject,
+                 "Updated",
                 username,
                 "ReferenceInterestRateValue", "Header");
 
@@ -128,6 +140,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
         if (referenceInterestValue.getModificationStatus() == 2 ) {
             referenceInterestValue.setModificationStatus(0);
             referenceInterestRateValueRepository.delete(referenceInterestValue );
+            referenceInterestRateValueRepository.flush();
         }
 
         return null;

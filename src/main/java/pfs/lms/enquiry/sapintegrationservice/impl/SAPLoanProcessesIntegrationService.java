@@ -349,6 +349,82 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
     }
 
 
+
+
+    @Override
+    public Object deleteReferenceInterestValueFromSAP(String serviceUri, String referenceRateType, String date,   MediaType mediaType){
+
+        ///sap/opu/odata/sap/ZPFS_LMS_REF_INT_RATE_SRV/ReferenceInterestRateSet(Referenz='AXIS RATE',Datab='05-05-2016')?sap-client=300
+        String deleteURL = baseUrl + serviceUri+ "(Referenz='" +  referenceRateType + "',Datab='" + date + "')" + "?sap-client=" + client;
+        log.info("THE URI : "+deleteURL.toString());
+
+        HttpHeaders headers = new HttpHeaders() {
+            {
+                String auth = userName + ":" + password;
+                byte[] encodedAuth = Base64.encodeBase64(
+                        auth.getBytes(Charset.forName("US-ASCII")) );
+                String authHeader = "Basic " + new String( encodedAuth );
+                set( "Authorization", authHeader );
+                setContentType(mediaType);
+                add("X-Requested-With", "X");
+            }
+        };
+        headers.add("X-Csrf-Token", "Fetch ");
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<Object> requestToPost = new HttpEntity<Object>(null, headers);
+
+        restTemplate = new RestTemplate();
+
+        log.info("Reference Interest ID For Deletion : " + referenceRateType + " - " + date);
+        ResponseEntity responseEntity;
+
+
+        try{
+            responseEntity =
+                    restTemplate.exchange(deleteURL, HttpMethod.DELETE, requestToPost, Object.class);
+        } catch (HttpClientErrorException ex) {
+
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
+            return  null;
+
+        }
+        catch (HttpServerErrorException ex) {
+
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" + ex.getMessage());
+            return  null;
+        }
+        catch (UnknownHttpStatusCodeException ex) {
+
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Message :" + ex.getMessage());
+            return  null;
+        }
+
+        catch (HTTPException ex) {
+
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("HTTP Code    :" + ex.getStatusCode());
+            log.error("HTTP Message :" +ex.getMessage());
+            return  null;
+        }
+        catch (Exception ex) {
+            log.error("HTTP EXCEPTION ----------------------- Delete " + deleteURL + "  from SAP");
+            log.error("Exception Message :" +ex.getMessage());
+            return null;
+
+        }
+
+        log.info("HTTP Delete Status Code : " + responseEntity.getStatusCode().toString());
+
+        return "Deleted";
+
+    }
+
     public void getLoanApplication(String loanApplicationId) {
 
         HttpHeaders headers = new HttpHeaders() {

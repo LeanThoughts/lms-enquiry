@@ -15,7 +15,9 @@ import pfs.lms.enquiry.businesspartner.repository.*;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.domain.User;
+import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRate;
 import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
+import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateRepository;
 import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateValueRepository;
 import pfs.lms.enquiry.referenceinterest.resource.SAPReferenceInterestRateValueDetailResource;
 import pfs.lms.enquiry.referenceinterest.resource.SAPReferenceInterestRateValueResourceDetail;
@@ -31,6 +33,8 @@ import pfs.lms.enquiry.vault.FileStorage;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -38,6 +42,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class ReferenceInterestRateValueTaskCreateAndChange {
+    private final ReferenceInterestRateRepository referenceInterestRateRepository;
 
     @Value("${sap.referenceInterestRateValueUri}")
     private String   referenceInterestRateValueUri;
@@ -73,59 +78,68 @@ public class ReferenceInterestRateValueTaskCreateAndChange {
 
             switch (sapIntegrationPointer.getBusinessProcessName()) {
                 case "ReferenceInterestRateValue":
-                    referenceInterestRateValue = referenceInterestRateValueRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
-                    log.info("---------------Sync. Reference Interest Value To SAP  : " + referenceInterestRateValue.getReferenceInterestRate().getCode() );
 
-                    log.info("Attempting to Post Reference Interest Value to SAP AT :" + dateFormat.format(new Date())
-                            + "Ref. Int. Rate: " +referenceInterestRateValue.getReferenceInterestRate().getCode() );
-
-                    //Set Status as in progressNot found for upload to SAP
-                    sapIntegrationPointer.setStatus(1); // In Posting Process
-                    sapIntegrationRepository.save(sapIntegrationPointer);
-
-
-
-                    SAPReferenceInterestRateValueDetailResource sapReferenceInterestRateValueDetailResource = new SAPReferenceInterestRateValueDetailResource();
-
-                    SAPReferenceInterestRateValueResourceDetail sapReferenceInterestRateValueResourceDetail =
-                            sapReferenceInterestRateValueDetailResource.mapResourceDetails(referenceInterestRateValue);
-                    log.info(sapReferenceInterestRateValueResourceDetail.toString());
-
-                    sapReferenceInterestRateValueDetailResource.setSAPReferenceInterestRateValueResourceDetail(sapReferenceInterestRateValueResourceDetail);
-
-                     resource = (Object) sapReferenceInterestRateValueDetailResource;
-                    serviceUri = referenceInterestRateValueUri ;
 
                     switch (sapIntegrationPointer.getMode()){
-                        case "C":
+                        case "C" :
+                        case "U":
+                            ReferenceInterestRate referenceInterestRate = referenceInterestRateRepository.findByCode(sapIntegrationPointer.getBusinessObjectId());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                            LocalDate validFromDate = LocalDate.parse(sapIntegrationPointer.getMainEntityId(),formatter);
+                            referenceInterestRateValue = referenceInterestRateValueRepository.findByReferenceInterestRateIdAndValidFromDate(referenceInterestRate.getId(),validFromDate);
+
+                            log.info("---------------Sync. Reference Interest Value To SAP  : " + referenceInterestRateValue.getReferenceInterestRate().getCode() );
+
+                            log.info("Attempting to Post Reference Interest Value to SAP AT :" + dateFormat.format(new Date())
+                                    + "Ref. Int. Rate: " +referenceInterestRateValue.getReferenceInterestRate().getCode() );
+
+                            //Set Status as in progressNot found for upload to SAP
+                            sapIntegrationPointer.setStatus(1); // In Posting Process
+                            sapIntegrationRepository.save(sapIntegrationPointer);
+
+                            SAPReferenceInterestRateValueDetailResource sapReferenceInterestRateValueDetailResource = new SAPReferenceInterestRateValueDetailResource();
+
+                            SAPReferenceInterestRateValueResourceDetail sapReferenceInterestRateValueResourceDetail =
+                                    sapReferenceInterestRateValueDetailResource.mapResourceDetails(referenceInterestRateValue);
+                            log.info(sapReferenceInterestRateValueResourceDetail.toString());
+
+                            sapReferenceInterestRateValueDetailResource.setSAPReferenceInterestRateValueResourceDetail(sapReferenceInterestRateValueResourceDetail);
+
+                            resource = (Object) sapReferenceInterestRateValueDetailResource;
+                            serviceUri = referenceInterestRateValueUri ;
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
-                        break;
-                            case "U":
-                                response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
-//                                serviceUri = serviceUri + "('" + referenceInterestRateValue.getReferenceInterestRate().getCode() + "')";
-//                            response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
-                        break;
+                            if (response != null) {
+                                ResponseEntity responseEntity = (ResponseEntity) response;
+                                LinkedHashMap<String, String> responseKeyValueH = (LinkedHashMap<String, String>) responseEntity.getBody();
+                                LinkedHashMap<String, LinkedHashMap<String, String>> responseKeyValueI = (LinkedHashMap<String, LinkedHashMap<String, String>>) responseEntity.getBody();
+                                try {
+                                    String referenceIntRateType = responseKeyValueI.get("d").get("Referenz");
+                                    log.info("Reference Interest Rate Updated SAP: " + referenceIntRateType);
+                                } catch ( Exception ex ){
+                                    log.info("Exception from Reference Interest Rate Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
+                                }
+
+                            }
+
+                            updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                            break;
+
                         case "D":
-                            String objectId =  referenceInterestRateValue.getReferenceInterestRate().getCode() + "," + referenceInterestRateValue.getValidFromDate().toString();
-                            serviceUri = serviceUri + "('" +objectId + "')";
-                            response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
+                            String objectId =  sapIntegrationPointer.getBusinessObjectId() + "," + sapIntegrationPointer.getMainEntityId();
+                            serviceUri = referenceInterestRateValueUri; // + "('" +objectId + "')";
+                            String referenceInterestRateType = sapIntegrationPointer.getBusinessObjectId();
+                            String validFromDateAsString ="";
+                            String[] dateParts = sapIntegrationPointer.getMainEntityId().split("-");
+                            validFromDateAsString = dateParts[2] + "-" + dateParts[1] + "-"+ dateParts[0];
+
+
+                            response = sapLoanProcessesIntegrationService.deleteReferenceInterestValueFromSAP(  serviceUri, referenceInterestRateType, validFromDateAsString,   MediaType.APPLICATION_JSON);
+
+                            if (response.equals("Deleted")) {
+                                updateSAPIntegrationPointer(response, sapIntegrationPointer);
+                            }
                             break;
                     }
-                    if (response != null) {
-                        ResponseEntity responseEntity = (ResponseEntity) response;
-                        LinkedHashMap<String, String> responseKeyValueH = (LinkedHashMap<String, String>) responseEntity.getBody();
-                         LinkedHashMap<String, LinkedHashMap<String, String>> responseKeyValueI = (LinkedHashMap<String, LinkedHashMap<String, String>>) responseEntity.getBody();
-                         try {
-                               String referenceIntRateType = responseKeyValueI.get("d").get("Referenz");
-                             log.info("Reference Interest Rate Updated SAP: " + referenceIntRateType);
-                         } catch ( Exception ex ){
-                             log.info("Exception from Reference Interest Rate Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
-                         }
-
-                    }
-
-                    updateSAPIntegrationPointer(response, sapIntegrationPointer);
-                    break;
 
             }
 
@@ -138,25 +152,39 @@ public class ReferenceInterestRateValueTaskCreateAndChange {
         sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("ReferenceInterestRateValue",   2, "C"));
         sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("ReferenceInterestRateValue",   0, "U"));
         sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("ReferenceInterestRateValue",   2, "U"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("ReferenceInterestRateValue",   0, "D"));
+        sapIntegrationPointers.addAll(sapIntegrationRepository.findByBusinessProcessNameAndStatusAndMode("ReferenceInterestRateValue",   2, "D"));
 
         List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
         for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
             try {
-                UUID referenceInterestRateId = UUID.fromString(sapIntegrationPointer.getMainEntityId());
-                ReferenceInterestRateValue referenceInterestRateValue = referenceInterestRateValueRepository.findById(referenceInterestRateId).get();
+
+                ReferenceInterestRate referenceInterestRate = referenceInterestRateRepository.findByCode(sapIntegrationPointer.getBusinessObjectId());
+                if (referenceInterestRate == null){
+                    continue;
+                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate validFromDate = LocalDate.parse(sapIntegrationPointer.getMainEntityId(),formatter);
+                ReferenceInterestRateValue referenceInterestRateValue = referenceInterestRateValueRepository.findByReferenceInterestRateIdAndValidFromDate(referenceInterestRate.getId(),validFromDate);
+
                 if (referenceInterestRateValue != null){
                 if (referenceInterestRateValue.getWorkFlowStatusCode()!= null) {
                     if (referenceInterestRateValue.getWorkFlowStatusCode() == 3) {
                         sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
                     }
                 }
-            }
+                }else if (sapIntegrationPointer.getMode().equals("D")) {
+                    sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                }
 
             } catch (Exception ex){
                 log.info("ReferenceInterestRate Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
             }
 
         }
+
+
+
         return sapIntegrationPointerListFilteredByWorkflowStatus;
     }
 
@@ -177,4 +205,17 @@ public class ReferenceInterestRateValueTaskCreateAndChange {
         }
 
     }
+    private void updateSAPIntegrationPointerDeleted( SAPIntegrationPointer sapIntegrationPointer) {
+
+        sapIntegrationPointer = sapIntegrationRepository.getOne(sapIntegrationPointer.getId());
+        sapIntegrationPointer.setProcessDate(new Date());
+
+            //Set Status as Posted Successfully
+            sapIntegrationPointer.setStatus(3); // Posting Successful
+            sapIntegrationRepository.save(sapIntegrationPointer);
+            sapIntegrationRepository.flush();
+        }
+
+
+
     }
