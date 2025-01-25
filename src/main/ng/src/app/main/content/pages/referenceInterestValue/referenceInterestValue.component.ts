@@ -27,6 +27,8 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
     referenceInterestRateTypes: any[];
     selectedRow: any;
 
+    referenceInterestRateType: string; // This is the reference interest rate type received from the inbox component.
+
     /**
      * Constructor
      */
@@ -42,8 +44,17 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
             referenceRateType: ['']
         });
 
-        console.log('_route.snapshot.data.routeResolvedData', _route.snapshot.data.routeResolvedData);
+        // console.log('_route.snapshot.data.routeResolvedData', _route.snapshot.data.routeResolvedData);
         this.referenceInterestRateTypes = _route.snapshot.data.routeResolvedData;
+
+        if (this.referenceInterestValueService.referenceInterestRateType !== '') {
+            const referenceInterestRateType = this.referenceInterestRateTypes.filter(r => r.code === this.referenceInterestValueService.referenceInterestRateType)[0];
+            console.log('referenceInterestRateType', referenceInterestRateType);
+            this.referenceInterestRateSearchForm.patchValue({
+                referenceRateType: referenceInterestRateType.id
+            });
+            this.searchReferenceInterestValues();
+        }
     }
 
     /**
@@ -66,6 +77,7 @@ export class ReferenceInterestValueComponent implements OnInit, OnDestroy {
             this.referenceInterestValueService.getReferenceInterestRateValues(this.referenceInterestRateSearchForm.value.referenceRateType).
                 subscribe((response: any) => {
                     this.dataSource = response;
+                    this.referenceInterestValueService.referenceInterestRateType = '';
                 });
         }
         this.selectedRow = undefined;
