@@ -19,6 +19,7 @@ import { BoardApprovalService } from '../boardApproval/boardApproval.service';
 import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 import { BusinessPartnerService } from '../businessPartner/businessPartner.service';
 import { PartnerService } from '../administration/partner/partner.service';
+import { ReferenceInterestValueService } from '../referenceInterestValue/referenceInterestValue.service';
 
 @Component({
     selector: 'app-inbox',
@@ -46,7 +47,8 @@ export class InboxComponent implements OnInit {
                 private _loanMonitoringService: LoanMonitoringService,
                 private _boardApprovalService: BoardApprovalService,
                 private _loanAppraisalService: LoanAppraisalService,
-                private _partnerService: PartnerService) {
+                private _partnerService: PartnerService,
+                private referenceInterestValueService: ReferenceInterestValueService) {
 
     }
 
@@ -66,6 +68,11 @@ export class InboxComponent implements OnInit {
                 this._partnerService.selectedPartner.next(partner);
                 this._router.navigate(['/updateBusinessPartner']);
             });
+        }
+        else if (selectedInboxItem.processName === 'ReferenceInterestRateValue') {
+            const referenceInterestRateType = selectedInboxItem.lanContractId.split(':')[0];
+            this.referenceInterestValueService.referenceInterestRateType = referenceInterestRateType;
+            this._router.navigate(['/referenceInterestRateList']);
         }
         else {
             this._loanEnquiryService.getLoanApplicationByLoanContractId(this.inboxItemsComponent.selectedItem.lanContractId).subscribe(response => {

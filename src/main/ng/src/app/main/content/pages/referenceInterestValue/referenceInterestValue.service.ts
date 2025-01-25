@@ -6,6 +6,8 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class ReferenceInterestValueService implements Resolve<any> {
 
+    referenceInterestRateType: string = ''; // This is the reference interest rate type received from the inbox component.
+
     /**
      * Constructor
      */
@@ -66,4 +68,6 @@ export class ReferenceInterestValueService implements Resolve<any> {
         }
         return this._http.put<any>('enquiry/api/startprocess', requestObj);
     }
+
+
 }
