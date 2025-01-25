@@ -15,4 +15,7 @@ public interface ISAPLoanProcessesIntegrationService {
 
     Object deleteResourceFromSAP(String serviceUri, String objectId,   MediaType mediaType);
 
+    Object deleteReferenceInterestValueFromSAP(String serviceUri, String referenceRateType, String date,   MediaType mediaType);
+
+
 }

@@ -128,6 +128,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
         if (referenceInterestValue.getModificationStatus() == 2 ) {
             referenceInterestValue.setModificationStatus(0);
             referenceInterestRateValueRepository.delete(referenceInterestValue );
+            referenceInterestRateValueRepository.flush();
         }
 
         return null;
