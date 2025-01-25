@@ -90,7 +90,7 @@ public class ReferenceInterestRateValueService implements IReferenceInterestRate
                 mainEntityId, //Valid From Date
                 entityId,     //Ref. Interest Rate Type
                 referenceInterestRateValue.getId().toString(),
-                referenceInterestRateValue.getId().toString(),
+                referenceInterestRateValue,
                 existingObject,
                  "Updated",
                 username,
