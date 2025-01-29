@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc.BMCApprovalByICC;
+import pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc.BmcApprovalByICC;
 import pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc.BMCApprovalByICCRepository;
-import pfs.lms.enquiry.bmcapproval.bmciccreasonfordelay.BMCICCReasonForDelay;
+import pfs.lms.enquiry.bmcapproval.bmciccreasonfordelay.BmcICCReasonForDelay;
 import pfs.lms.enquiry.bmcapproval.bmciccreasonfordelay.BMCICCReasonForDelayRepository;
-import pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer.BMCRejectedByCustomer;
+import pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer.BmcRejectedByCustomer;
 import pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer.BMCRejectedByCustomerRepository;
 import pfs.lms.enquiry.bmcapproval.bmcrejectedbyicc.BMCRejectedByICC;
 import pfs.lms.enquiry.bmcapproval.bmcrejectedbyicc.BMCRejectedByICCRepository;
@@ -35,13 +35,13 @@ public class BMCICCApprovalController {
     public ResponseEntity<Object> process(@RequestBody WorkflowRequestResource workflowRequestResource,
                                           HttpServletRequest request) throws Exception {
 
-        BMCApprovalByICC BMCApprovalByICC =
+        BmcApprovalByICC BMCApprovalByICC =
                 BMCApprovalByICCRepository.findByBmcICCApprovalId(workflowRequestResource.getBusinessProcessId());
         BMCRejectedByICC BMCRejectedByICC =
                 BMCRejectedByICCRepository.findByBmcICCApprovalId(workflowRequestResource.getBusinessProcessId());
-        BMCRejectedByCustomer BMCRejectedByCustomer =
+        BmcRejectedByCustomer BMCRejectedByCustomer =
                 BMCRejectedByCustomerRepository.findByBmcICCApprovalId(workflowRequestResource.getBusinessProcessId());
-        List<BMCICCReasonForDelay> BMCICCReasonForDelay =
+        List<BmcICCReasonForDelay> BMCICCReasonForDelay =
                 BMCICCReasonForDelayRepository.findByBmcICCApprovalId(workflowRequestResource.getBusinessProcessId());
 
         if (BMCApprovalByICC == null && BMCRejectedByICC == null && BMCRejectedByCustomer == null && BMCICCReasonForDelay == null)

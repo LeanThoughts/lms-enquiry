@@ -7,10 +7,10 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface BMCICCApprovalRepository extends JpaRepository<BMCICCApproval, UUID> {
+public interface BMCICCApprovalRepository extends JpaRepository<BmcICCApproval, UUID> {
 
     @RestResource(exported = false)
-    Optional<BMCICCApproval> findByLoanApplication(LoanApplication loanApplication);
+    Optional<BmcICCApproval> findByLoanApplication(LoanApplication loanApplication);
 
-    BMCICCApproval findByLoanApplicationId(UUID loanApplicationId);
+    BmcICCApproval findByLoanApplicationId(UUID loanApplicationId);
  }

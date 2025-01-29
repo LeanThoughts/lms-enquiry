@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface IBMCICCFurtherDetailService {
 
-    BMCICCFurtherDetail create(BMCICCFurtherDetailResource furtherDetailResource, String username);
+    BmcICCFurtherDetail create(BMCICCFurtherDetailResource furtherDetailResource, String username);
 
-    BMCICCFurtherDetail update(BMCICCFurtherDetailResource furtherDetailResource, String username) throws CloneNotSupportedException;
+    BmcICCFurtherDetail update(BMCICCFurtherDetailResource furtherDetailResource, String username) throws CloneNotSupportedException;
 
-    BMCICCFurtherDetail delete(UUID furtherDetailId, String username);
+    BmcICCFurtherDetail delete(UUID furtherDetailId, String username);
 }

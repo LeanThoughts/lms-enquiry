@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface BMCLoanEnhancementRepository extends JpaRepository<BMCLoanEnhancement, UUID> {
+public interface BMCLoanEnhancementRepository extends JpaRepository<BmcLoanEnhancement, UUID> {
 
-    List<BMCLoanEnhancement> findByBmcICCApprovalId(UUID iccApprovalId);
+    List<BmcLoanEnhancement> findByBmcICCApprovalId(UUID iccApprovalId);
 }

@@ -17,17 +17,17 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
     private final BMCICCApprovalRepository BMCICCApprovalRepository;
 
     @Override
-    public BMCICCApproval create(BMCICCApproval bmcICCApproval, String username) throws Exception {
+    public BmcICCApproval create(BmcICCApproval bmcICCApproval, String username) throws Exception {
         return null;
     }
 
     @Override
-    public BMCICCApproval update(BMCICCApproval bmcIccApproval, String username) throws Exception {
+    public BmcICCApproval update(BmcICCApproval bmcIccApproval, String username) throws Exception {
         return null;
     }
 
     @Override
-    public BMCICCApproval processRejection(BMCICCApproval bmcICCApproval, String username) throws CloneNotSupportedException {
+    public BmcICCApproval processRejection(BmcICCApproval bmcICCApproval, String username) throws CloneNotSupportedException {
         Object oldIccApproval = bmcICCApproval.clone();
         bmcICCApproval.setWorkFlowStatusCode(04);
         bmcICCApproval.setWorkFlowStatusDescription("Rejected");
@@ -47,7 +47,7 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
     }
 
     @Override
-    public BMCICCApproval processApprovedICC(BMCICCApproval BMCICCApproval, String username) throws CloneNotSupportedException {
+    public BmcICCApproval processApprovedICC(BmcICCApproval BMCICCApproval, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = BMCICCApproval.getLoanApplication();
         Object oldLoanApplication;

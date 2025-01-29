@@ -17,7 +17,7 @@ public class BMCLoanEnhancementController {
     private final IBMCLoanEnhancementService ibmcLoanEnhancementService;
 
     @PostMapping("/bmcLoanEnhancements/create")
-    public ResponseEntity<BMCLoanEnhancement> create(@RequestBody BMCLoanEnhancementResource bmcLoanEnhancementResource,
+    public ResponseEntity<BmcLoanEnhancement> create(@RequestBody BMCLoanEnhancementResource bmcLoanEnhancementResource,
                                                      HttpServletRequest request) {
 
         return ResponseEntity.ok(ibmcLoanEnhancementService.create(bmcLoanEnhancementResource,
@@ -25,7 +25,7 @@ public class BMCLoanEnhancementController {
     }
 
     @PutMapping("/bmcLoanEnhancements/update")
-    public ResponseEntity<BMCLoanEnhancement> update(@RequestBody BMCLoanEnhancementResource bmcLoanEnhancementResource,
+    public ResponseEntity<BmcLoanEnhancement> update(@RequestBody BMCLoanEnhancementResource bmcLoanEnhancementResource,
                                                      HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(ibmcLoanEnhancementService.update(bmcLoanEnhancementResource,
@@ -33,8 +33,8 @@ public class BMCLoanEnhancementController {
     }
 
     @DeleteMapping("/bmcLoanEnhancements/delete/{id}")
-    public ResponseEntity<BMCLoanEnhancement> delete(@PathVariable("id") UUID bmcLoanEnhancementId, HttpServletRequest request) {
-        BMCLoanEnhancement BMCLoanEnhancement = ibmcLoanEnhancementService.delete(bmcLoanEnhancementId,
+    public ResponseEntity<BmcLoanEnhancement> delete(@PathVariable("id") UUID bmcLoanEnhancementId, HttpServletRequest request) {
+        BmcLoanEnhancement BMCLoanEnhancement = ibmcLoanEnhancementService.delete(bmcLoanEnhancementId,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(BMCLoanEnhancement);
     }

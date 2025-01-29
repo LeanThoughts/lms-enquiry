@@ -3,7 +3,7 @@ package pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.bmcapproval.BMCICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -25,13 +25,13 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BMCRejectedByCustomer create(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username) {
+    public BmcRejectedByCustomer create(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username) {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(bmcRejectedByCustomerResource.getLoanApplicationId());
 
-        BMCICCApproval BMCICCApproval = bmcICCApprovalRepository.findByLoanApplication(loanApplication)
+        BmcICCApproval BMCICCApproval = bmcICCApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
-                    BMCICCApproval obj = new BMCICCApproval();
+                    BmcICCApproval obj = new BmcICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj.setModified(true);
@@ -50,7 +50,7 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
                     return obj;
                 });
 
-        BMCRejectedByCustomer bmcRejectedByCustomer = new BMCRejectedByCustomer();
+        BmcRejectedByCustomer bmcRejectedByCustomer = new BmcRejectedByCustomer();
         bmcRejectedByCustomer.setBmcICCApproval(BMCICCApproval);
         bmcRejectedByCustomer.setMeetingNumber(bmcRejectedByCustomerResource.getMeetingNumber());
         bmcRejectedByCustomer.setDateOfRejection(bmcRejectedByCustomerResource.getDateOfRejection());
@@ -72,10 +72,10 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
     }
 
     @Override
-    public BMCRejectedByCustomer update(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username)
+    public BmcRejectedByCustomer update(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username)
             throws CloneNotSupportedException {
 
-        BMCRejectedByCustomer bmcRejectedByCustomer = bmcRejectedByCustomerRepository.findById(bmcRejectedByCustomerResource.getId())
+        BmcRejectedByCustomer bmcRejectedByCustomer = bmcRejectedByCustomerRepository.findById(bmcRejectedByCustomerResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmcRejectedByCustomerResource.getId().toString()));
 
         Object oldICCFurtherDetail = bmcRejectedByCustomer.clone();
@@ -86,7 +86,7 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
         bmcRejectedByCustomer.setRejectionCategory(bmcRejectedByCustomerResource.getRejectionCategory());
         bmcRejectedByCustomer = bmcRejectedByCustomerRepository.save(bmcRejectedByCustomer);
 
-        BMCICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(bmcRejectedByCustomer.getBmcICCApproval().getId());
+        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(bmcRejectedByCustomer.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 
@@ -106,11 +106,11 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
     }
 
     @Override
-    public BMCRejectedByCustomer delete(UUID bmcRejectedByCustomerId, String username) {
-        BMCRejectedByCustomer bmcRejectedByCustomer = bmcRejectedByCustomerRepository.findById(bmcRejectedByCustomerId)
+    public BmcRejectedByCustomer delete(UUID bmcRejectedByCustomerId, String username) {
+        BmcRejectedByCustomer bmcRejectedByCustomer = bmcRejectedByCustomerRepository.findById(bmcRejectedByCustomerId)
                 .orElseThrow(() -> new EntityNotFoundException(bmcRejectedByCustomerId.toString()));
 
-        BMCICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(bmcRejectedByCustomer.getBmcICCApproval().getId());
+        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(bmcRejectedByCustomer.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 
