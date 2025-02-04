@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface IBMCRejectedByCustomerService {
 
-    BMCRejectedByCustomer create(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username);
+    BmcRejectedByCustomer create(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username);
 
-    BMCRejectedByCustomer update(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username) throws CloneNotSupportedException;
+    BmcRejectedByCustomer update(BMCRejectedByCustomerResource bmcRejectedByCustomerResource, String username) throws CloneNotSupportedException;
 
-    BMCRejectedByCustomer delete(UUID bmcRejectedByCustomerId, String username);
+    BmcRejectedByCustomer delete(UUID bmcRejectedByCustomerId, String username);
 }

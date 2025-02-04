@@ -1,7 +1,7 @@
 package pfs.lms.enquiry.bmcapproval.bmcloanenhancement;
 
 import lombok.*;
-import pfs.lms.enquiry.bmcapproval.BMCICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
@@ -17,11 +17,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"bmcICCApproval", "iccMeetingNumber", "serialNumber"}, callSuper = false)
-public class BMCLoanEnhancement extends AggregateRoot<BMCLoanEnhancement> implements Cloneable {
+public class BmcLoanEnhancement extends AggregateRoot<BmcLoanEnhancement> implements Cloneable {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    private BMCICCApproval bmcICCApproval;
+    private BmcICCApproval bmcICCApproval;
 
     private Integer serialNumber;
     private String iccMeetingNumber;

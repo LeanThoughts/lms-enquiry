@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @ToString
 @EqualsAndHashCode(of = {"loanApplication"}, callSuper = false)
-public class BMCICCApproval extends AggregateRoot<BMCICCApproval> implements Cloneable {
+public class BmcICCApproval extends AggregateRoot<BmcICCApproval> implements Cloneable {
 
     @DiffIgnore
     @NotNull
@@ -42,7 +42,7 @@ public class BMCICCApproval extends AggregateRoot<BMCICCApproval> implements Clo
         return super.clone();
     }
 
-    public BMCICCApproval() {
+    public BmcICCApproval() {
         this.workFlowStatusCode = 1;
         this.workFlowStatusDescription = "Created";
     }

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface BMCICCReasonForDelayRepository extends JpaRepository<BMCICCReasonForDelay, UUID> {
+public interface BMCICCReasonForDelayRepository extends JpaRepository<BmcICCReasonForDelay, UUID> {
 
-    List<BMCICCReasonForDelay> findByBmcICCApprovalId(UUID iccApprovalId);
+    List<BmcICCReasonForDelay> findByBmcICCApprovalId(UUID iccApprovalId);
 }

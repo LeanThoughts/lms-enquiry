@@ -3,7 +3,7 @@ package pfs.lms.enquiry.bmcapproval.bmciccfurtherdetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.bmcapproval.BMCICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -25,13 +25,13 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BMCICCFurtherDetail create(BMCICCFurtherDetailResource bmciccFurtherDetailResource, String username) {
+    public BmcICCFurtherDetail create(BMCICCFurtherDetailResource bmciccFurtherDetailResource, String username) {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(bmciccFurtherDetailResource.getLoanApplicationId());
 
-        BMCICCApproval BMCICCApproval = bmciccApprovalRepository.findByLoanApplication(loanApplication)
+        BmcICCApproval BMCICCApproval = bmciccApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
-                    BMCICCApproval obj = new BMCICCApproval();
+                    BmcICCApproval obj = new BmcICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj.setModified(true);
@@ -50,7 +50,7 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
                     return obj;
                 });
 
-        BMCICCFurtherDetail bmciccFurtherDetail = new BMCICCFurtherDetail();
+        BmcICCFurtherDetail bmciccFurtherDetail = new BmcICCFurtherDetail();
         bmciccFurtherDetail.setBmcICCApproval(BMCICCApproval);
         bmciccFurtherDetail.setSerialNumber(bmciccFurtherDetailRepository.findByBmcICCApprovalId(BMCICCApproval.getId()).size() + 1);
         bmciccFurtherDetail.setDetailsRequired(bmciccFurtherDetailResource.getDetailsRequired());
@@ -72,10 +72,10 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
     }
 
     @Override
-    public BMCICCFurtherDetail update(BMCICCFurtherDetailResource bmciccFurtherDetailResource, String username)
+    public BmcICCFurtherDetail update(BMCICCFurtherDetailResource bmciccFurtherDetailResource, String username)
             throws CloneNotSupportedException {
 
-        BMCICCFurtherDetail bmciccFurtherDetail = bmciccFurtherDetailRepository.findById(bmciccFurtherDetailResource.getId())
+        BmcICCFurtherDetail bmciccFurtherDetail = bmciccFurtherDetailRepository.findById(bmciccFurtherDetailResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmciccFurtherDetailResource.getId().toString()));
 
         Object oldICCFurtherDetail = bmciccFurtherDetail.clone();
@@ -85,7 +85,7 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
         bmciccFurtherDetail.setDetailsRequired(bmciccFurtherDetailResource.getDetailsRequired());
         bmciccFurtherDetail = bmciccFurtherDetailRepository.save(bmciccFurtherDetail);
 
-        BMCICCApproval BMCICCApproval = bmciccApprovalRepository.getOne(bmciccFurtherDetail.getBmcICCApproval().getId());
+        BmcICCApproval BMCICCApproval = bmciccApprovalRepository.getOne(bmciccFurtherDetail.getBmcICCApproval().getId());
         BMCICCApproval.setModified(true);
         bmciccApprovalRepository.save(BMCICCApproval);
 
@@ -105,11 +105,11 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
     }
 
     @Override
-    public BMCICCFurtherDetail delete(UUID bmciccFurtherDetailId, String username) {
-        BMCICCFurtherDetail bmciccFurtherDetail = bmciccFurtherDetailRepository.findById(bmciccFurtherDetailId)
+    public BmcICCFurtherDetail delete(UUID bmciccFurtherDetailId, String username) {
+        BmcICCFurtherDetail bmciccFurtherDetail = bmciccFurtherDetailRepository.findById(bmciccFurtherDetailId)
                 .orElseThrow(() -> new EntityNotFoundException(bmciccFurtherDetailId.toString()));
         
-        BMCICCApproval bmcICCApproval = bmciccApprovalRepository.getOne(bmciccFurtherDetail.getBmcICCApproval().getId());
+        BmcICCApproval bmcICCApproval = bmciccApprovalRepository.getOne(bmciccFurtherDetail.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmciccApprovalRepository.save(bmcICCApproval);
 

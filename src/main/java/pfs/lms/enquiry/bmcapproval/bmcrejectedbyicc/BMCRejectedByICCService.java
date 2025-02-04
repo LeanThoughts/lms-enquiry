@@ -3,7 +3,7 @@ package pfs.lms.enquiry.bmcapproval.bmcrejectedbyicc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.bmcapproval.BMCICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -29,9 +29,9 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(bmcRejectedByICCResource.getLoanApplicationId());
 
-        BMCICCApproval bmcICCApproval = bmcICCApprovalRepository.findByLoanApplication(loanApplication)
+        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
-                    BMCICCApproval obj = new BMCICCApproval();
+                    BmcICCApproval obj = new BmcICCApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj.setModified(true);
@@ -84,7 +84,7 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
         BMCRejectedByIcc.setReasonForRejection(bmcRejectedByICCResource.getReasonForRejection());
         BMCRejectedByIcc = bmcRejectedByICCRepository.save(BMCRejectedByIcc);
 
-        BMCICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
+        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 
@@ -108,7 +108,7 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
         BMCRejectedByICC BMCRejectedByIcc = bmcRejectedByICCRepository.findById(rejectedByICCId)
                 .orElseThrow(() -> new EntityNotFoundException(rejectedByICCId.toString()));
 
-        BMCICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
+        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 

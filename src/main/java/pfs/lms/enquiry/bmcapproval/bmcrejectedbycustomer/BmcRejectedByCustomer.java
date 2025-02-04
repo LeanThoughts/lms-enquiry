@@ -1,7 +1,7 @@
 package pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer;
 
 import lombok.*;
-import pfs.lms.enquiry.bmcapproval.BMCICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
@@ -17,11 +17,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"bmcICCApproval", "meetingNumber", "dateOfRejection"}, callSuper = false)
-public class BMCRejectedByCustomer extends AggregateRoot<BMCRejectedByCustomer> implements Cloneable {
+public class BmcRejectedByCustomer extends AggregateRoot<BmcRejectedByCustomer> implements Cloneable {
 
     @NotNull
     @OneToOne(fetch = FetchType.EAGER)
-    private BMCICCApproval bmcICCApproval;
+    private BmcICCApproval bmcICCApproval;
 
     private String meetingNumber;
     private String rejectionCategory;
