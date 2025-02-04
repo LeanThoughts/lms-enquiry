@@ -163,8 +163,10 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
     public BusinessPartnerIdentification migrate(BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException {
         BusinessPartnerIdentification businessPartnerIdentification = new BusinessPartnerIdentification();
 
-        Object idCat = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategory());
-        IdentificationCategory identificationCategory = (IdentificationCategory) idCat;
+        IdentificationCategory identificationCategory = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategory()).get();
+
+//        Object idCat = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategory());
+//        IdentificationCategory identificationCategory = (IdentificationCategory) idCat;
 
         if (identificationCategory == null){
             log.error("Identification Category Not Found: " + businessPartnerIdentificationResource.getIdentificationCategory());

@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface IdentificationCategoryRepository extends JpaRepository<IdentificationCategory, Long> {
 
     Optional<IdentificationCategory> findByCode(String code);
+    //IdentificationCategory findByCode(String code);
 
 }

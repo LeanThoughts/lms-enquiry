@@ -40,6 +40,7 @@ public class DocumentTypeConfig implements CommandLineRunner {
         documentType = documentTypeRepository.findByCode("ZPFSBP0018");if (documentType == null){ documentType = new DocumentType(null,"ZPFSBP0018","Detail of Dispute/Demand","BUS1006"); documentTypeRepository.save(documentType); }
         documentType = documentTypeRepository.findByCode("ZPFSBP0019");if (documentType == null){ documentType = new DocumentType(null,"ZPFSBP0019","Resolution of BoD","BUS1006"); documentTypeRepository.save(documentType); }
         documentType = documentTypeRepository.findByCode("ZPFSBP0020");if (documentType == null){ documentType = new DocumentType(null,"ZPFSBP0020","KYC detail","BUS1006"); documentTypeRepository.save(documentType); }
+        
         documentType = documentTypeRepository.findByCode("ZPFSLM01");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM01","PFS Project Notes","BUS2049"); documentTypeRepository.save(documentType); }
         documentType = documentTypeRepository.findByCode("ZPFSLM10");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM10","Loan Agreement","BUS2049"); documentTypeRepository.save(documentType); }
         documentType = documentTypeRepository.findByCode("ZPFSLM11");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM11","Lenders Agent Agreement","BUS2049"); documentTypeRepository.save(documentType); }
@@ -135,6 +136,16 @@ public class DocumentTypeConfig implements CommandLineRunner {
         documentType = documentTypeRepository.findByCode("ZPFSLM93");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM93","Mail - General","BUS2049"); documentTypeRepository.save(documentType); }
         documentType = documentTypeRepository.findByCode("ZPFSLM94");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM94","Prelim Risk Assessment Report","BUS2049"); documentTypeRepository.save(documentType); }
 
+        documentType = documentTypeRepository.findByCode("ZPFSLM100");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM100","Legal Counsel fee Charged to PFS","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM101");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM101","Legal Counsel Report","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM102");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM102","Vendor Creation Form","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM103");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM103","List of Collateral Securities","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM104");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM104","List of Loan Documents executed with Bor","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM105");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM105","List of Statutory/Regulatory Compliance","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM106");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM106","No Dues Certificate(NDC) Collateral Sec.","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM107");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM107","NOC Other Terms and Conditions","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM108");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM108","Collateral Security Amendement","BUS2049"); documentTypeRepository.save(documentType); }
+        documentType = documentTypeRepository.findByCode("ZPFSLM109");if (documentType == null){ documentType = new DocumentType(null,"ZPFSLM109","Collateral Security Release","BUS2049"); documentTypeRepository.save(documentType); }
 
 
         return;

@@ -39,6 +39,7 @@ import pfs.lms.enquiry.appraisal.customerrejection.CustomerRejection;
 import pfs.lms.enquiry.appraisal.riskrating.ExternalRating;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrustee;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrusteeReportAndFee;
+import pfs.lms.enquiry.bmcapproval.BMCICCApproval;
 import pfs.lms.enquiry.businesspartner.domain.*;
 import pfs.lms.enquiry.documentation.Documentation;
 import pfs.lms.enquiry.documentation.contractamendments.ContractAmendment;
@@ -1141,7 +1142,11 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", referenceInterestRateValue.getReferenceInterestRate().getCode());
                     result.put("description", referenceInterestRateValue.getValidFromDate().toString());
                     return result;
-
+                case "BMCICCApproval":
+                    BMCICCApproval bmciccApproval = (BMCICCApproval) object;
+                    result.put("id", bmciccApproval.getId());
+                    result.put("description", bmciccApproval.getLoanApplication().getLoanContractId().toString());
+                    return result;
             }
 
         } catch (Exception ex) {

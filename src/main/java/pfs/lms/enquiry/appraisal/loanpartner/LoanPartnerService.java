@@ -2,6 +2,7 @@ package pfs.lms.enquiry.appraisal.loanpartner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
@@ -82,6 +83,7 @@ public class LoanPartnerService implements ILoanPartnerService {
         loanPartner.setRoleType(loanPartnerResource.getRoleType());
         loanPartner.setRoleDescription(loanPartnerResource.getRoleDescription());
         loanPartner.setStartDate(loanPartnerResource.getStartDate());
+
         if (loanPartner.getRoleType().equals("TR0100") || loanPartner.getRoleType().equals("TR0110")|| loanPartner.getRoleType().equals("ZLM038")) {
             loanPartner.setKycRequired(true);
             loanPartner.setKycStatus("Not Started");
