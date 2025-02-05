@@ -156,8 +156,11 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             Object.keys(formFields).forEach(key => {
                 formValues[key] = loanApplication[formFields[key]];
             });
+            console.log('loanApplication', loanApplication);
             this.projectDetailForm.patchValue(formValues);
-            this.projectDetailForm.controls['productTypeCode'].setValue(this.enquiryCompletion.productType);
+            this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
+            this.projectDetailForm.controls['term'].setValue(loanApplication.term);
+            this.projectDetailForm.controls['productTypeCode'].setValue(loanApplication.productCode);
             this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.expectedInterestRate);
             this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
             this.projectDetailForm.controls['tenorMonths'].setValue(loanApplication.tenorMonth);
@@ -183,6 +186,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             console.log('projectDetails', projectDetails);
             projectDetails.loanApplicationId = this.loanApplicationId;
             this._applicationFeeService.createProjectDetails(this.projectDetailForm.value).subscribe((data) => {
+                this.projectDetails = data;
                 this.disableSubmitButton = false;
                 this._matSnackBar.open('Project details saved successfully.', 'OK', { duration: 7000 });
                 this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
@@ -199,6 +203,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             projectDetails.enquiryCompletionDate = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
             console.log('projectDetails', projectDetails);
             this._applicationFeeService.updateProjectDetails(projectDetails).subscribe((data) => {
+                this.projectDetails = data;
                 this.disableSubmitButton = false;
                 this._matSnackBar.open('Project details updated successfully.', 'OK', { duration: 7000 });
                 this._applicationFeeService.getApplicationFee(this.loanApplicationId).subscribe(data => {
