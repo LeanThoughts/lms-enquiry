@@ -129,6 +129,7 @@ public class SAPIntegrationService implements ISAPIntegrationService {
         ResponseEntity responseEntity; // = new ResponseEntity();
 
         try {
+            log.info("URL: " + postURL);
             responseEntity = restTemplate.exchange(postURL, HttpMethod.POST, requestToPost, SAPLoanApplicationResource.class);
             //Object o =   responseEntity.getBody();
            // createdEnquiry = (ResponseEntity<SAPLoanApplicationResource>) responseEntity.getBody();
