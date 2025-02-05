@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface IBMCICCReasonForDelayService {
 
-    BmcICCReasonForDelay create(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username);
+    BmcIccReasonForDelay create(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username);
 
-    BmcICCReasonForDelay update(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username) throws CloneNotSupportedException;
+    BmcIccReasonForDelay update(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username) throws CloneNotSupportedException;
 
-    BmcICCReasonForDelay delete(UUID furtherDetailId, String username);
+    BmcIccReasonForDelay delete(UUID furtherDetailId, String username);
 }

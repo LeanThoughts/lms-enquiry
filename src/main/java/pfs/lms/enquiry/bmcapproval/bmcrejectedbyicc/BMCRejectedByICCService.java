@@ -3,7 +3,7 @@ package pfs.lms.enquiry.bmcapproval.bmcrejectedbyicc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -25,13 +25,13 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BMCRejectedByICC create(BMCRejectedByICCResource bmcRejectedByICCResource, String username) {
+    public BmcRejectedByIcc create(BMCRejectedByICCResource bmcRejectedByICCResource, String username) {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(bmcRejectedByICCResource.getLoanApplicationId());
 
-        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.findByLoanApplication(loanApplication)
+        BmcIccApproval bmcICCApproval = bmcICCApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
-                    BmcICCApproval obj = new BmcICCApproval();
+                    BmcIccApproval obj = new BmcIccApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj.setModified(true);
@@ -50,7 +50,7 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
                     return obj;
                 });
 
-        BMCRejectedByICC BMCRejectedByIcc = new BMCRejectedByICC();
+        BmcRejectedByIcc BMCRejectedByIcc = new BmcRejectedByIcc();
         BMCRejectedByIcc.setBmcICCApproval(bmcICCApproval);
         BMCRejectedByIcc.setMeetingDate(bmcRejectedByICCResource.getMeetingDate());
         BMCRejectedByIcc.setMeetingNumber(bmcRejectedByICCResource.getMeetingNumber());
@@ -71,10 +71,10 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
     }
 
     @Override
-    public BMCRejectedByICC update(BMCRejectedByICCResource bmcRejectedByICCResource, String username)
+    public BmcRejectedByIcc update(BMCRejectedByICCResource bmcRejectedByICCResource, String username)
             throws CloneNotSupportedException {
 
-        BMCRejectedByICC BMCRejectedByIcc = bmcRejectedByICCRepository.findById(bmcRejectedByICCResource.getId())
+        BmcRejectedByIcc BMCRejectedByIcc = bmcRejectedByICCRepository.findById(bmcRejectedByICCResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmcRejectedByICCResource.getId().toString()));
 
         Object oldICCFurtherDetail = BMCRejectedByIcc.clone();
@@ -84,7 +84,7 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
         BMCRejectedByIcc.setReasonForRejection(bmcRejectedByICCResource.getReasonForRejection());
         BMCRejectedByIcc = bmcRejectedByICCRepository.save(BMCRejectedByIcc);
 
-        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
+        BmcIccApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 
@@ -104,11 +104,11 @@ public class BMCRejectedByICCService implements IBMCRejectedByICCService {
     }
 
     @Override
-    public BMCRejectedByICC delete(UUID rejectedByICCId, String username) {
-        BMCRejectedByICC BMCRejectedByIcc = bmcRejectedByICCRepository.findById(rejectedByICCId)
+    public BmcRejectedByIcc delete(UUID rejectedByICCId, String username) {
+        BmcRejectedByIcc BMCRejectedByIcc = bmcRejectedByICCRepository.findById(rejectedByICCId)
                 .orElseThrow(() -> new EntityNotFoundException(rejectedByICCId.toString()));
 
-        BmcICCApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
+        BmcIccApproval bmcICCApproval = bmcICCApprovalRepository.getOne(BMCRejectedByIcc.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 

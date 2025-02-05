@@ -47,6 +47,7 @@ import { EnquiriesExcelUploadModule } from './main/content/pages/enquiry/enquiri
 import { RiskAssessmentModule } from './main/content/pages/riskAssessment/riskAssessment.module';
 import { BusinessPartnerModule } from './main/content/pages/businessPartner/businessPartner.module';
 import { ReferenceInterestValueModule } from './main/content/pages/referenceInterestValue/referenceInterestValue.module';
+import { BMCApprovalModule } from './main/content/pages/bmcIccApproval/bmcIccApproval.module';
 
 const appRoutes: Routes = [
     {
@@ -118,7 +119,8 @@ const appRoutes: Routes = [
         DocumentationModule,
         RiskAssessmentModule,
         BusinessPartnerModule,
-        
+        BMCApprovalModule,
+
         // Workflow
         InboxModule,
         ChangeDocumentModule,

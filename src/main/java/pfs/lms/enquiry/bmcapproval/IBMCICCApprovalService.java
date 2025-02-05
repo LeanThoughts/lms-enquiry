@@ -4,12 +4,12 @@ public interface IBMCICCApprovalService {
 
 //    ProjectProposalResource getProjectProposal(UUID enquiryActionId);
 
-    BmcICCApproval create(BmcICCApproval BMCICCApproval, String username) throws Exception;
+    BmcIccApproval create(BmcIccApproval BMCICCApproval, String username) throws Exception;
 
-    BmcICCApproval update(BmcICCApproval BMCICCApproval, String username) throws Exception;
+    BmcIccApproval update(BmcIccApproval BMCICCApproval, String username) throws Exception;
 
-    BmcICCApproval processApprovedICC(BmcICCApproval BMCICCApproval, String username) throws CloneNotSupportedException;
+    BmcIccApproval processApprovedICC(BmcIccApproval BMCICCApproval, String username) throws CloneNotSupportedException;
 
-    BmcICCApproval processRejection(BmcICCApproval BMCICCApproval, String username) throws CloneNotSupportedException;
+    BmcIccApproval processRejection(BmcIccApproval BMCICCApproval, String username) throws CloneNotSupportedException;
 
 }

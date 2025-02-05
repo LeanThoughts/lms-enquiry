@@ -17,7 +17,7 @@ public class BMCICCReasonForDelayController {
     private final IBMCICCReasonForDelayService IBMCICCReasonForDelayService;
 
     @PostMapping("/bmcICCReasonForDelays/create")
-    public ResponseEntity<BmcICCReasonForDelay> create(@RequestBody BMCICCReasonForDelayResource BMCICCReasonForDelayResource,
+    public ResponseEntity<BmcIccReasonForDelay> create(@RequestBody BMCICCReasonForDelayResource BMCICCReasonForDelayResource,
                                                        HttpServletRequest request) {
 
         return ResponseEntity.ok(IBMCICCReasonForDelayService.create(BMCICCReasonForDelayResource,
@@ -25,7 +25,7 @@ public class BMCICCReasonForDelayController {
     }
 
     @PutMapping("/bmcICCReasonForDelays/update")
-    public ResponseEntity<BmcICCReasonForDelay> update(@RequestBody BMCICCReasonForDelayResource BMCICCReasonForDelayResource,
+    public ResponseEntity<BmcIccReasonForDelay> update(@RequestBody BMCICCReasonForDelayResource BMCICCReasonForDelayResource,
                                                        HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(IBMCICCReasonForDelayService.update(BMCICCReasonForDelayResource,
@@ -33,8 +33,8 @@ public class BMCICCReasonForDelayController {
     }
 
     @DeleteMapping("/bmcICCReasonForDelays/delete/{id}")
-    public ResponseEntity<BmcICCReasonForDelay> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
-        BmcICCReasonForDelay BMCICCReasonForDelay = IBMCICCReasonForDelayService.delete(iccFurtherDetailId,
+    public ResponseEntity<BmcIccReasonForDelay> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
+        BmcIccReasonForDelay BMCICCReasonForDelay = IBMCICCReasonForDelayService.delete(iccFurtherDetailId,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(BMCICCReasonForDelay);
     }

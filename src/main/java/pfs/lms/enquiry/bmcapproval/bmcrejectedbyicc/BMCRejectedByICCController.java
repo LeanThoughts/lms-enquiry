@@ -17,7 +17,7 @@ public class BMCRejectedByICCController {
     private final IBMCRejectedByICCService rejectedByICCService;
 
     @PostMapping("/bmcRejectedByICCs/create")
-    public ResponseEntity<BMCRejectedByICC> create(@RequestBody BMCRejectedByICCResource BMCRejectedByIccResource,
+    public ResponseEntity<BmcRejectedByIcc> create(@RequestBody BMCRejectedByICCResource BMCRejectedByIccResource,
                                                    HttpServletRequest request) {
 
         return ResponseEntity.ok(rejectedByICCService.create(BMCRejectedByIccResource,
@@ -25,7 +25,7 @@ public class BMCRejectedByICCController {
     }
 
     @PutMapping("/bmcRejectedByICCs/update")
-    public ResponseEntity<BMCRejectedByICC> update(@RequestBody BMCRejectedByICCResource BMCRejectedByIccResource,
+    public ResponseEntity<BmcRejectedByIcc> update(@RequestBody BMCRejectedByICCResource BMCRejectedByIccResource,
                                                    HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(rejectedByICCService.update(BMCRejectedByIccResource,
@@ -33,8 +33,8 @@ public class BMCRejectedByICCController {
     }
 
     @DeleteMapping("/bmcRejectedByICCs/delete/{id}")
-    public ResponseEntity<BMCRejectedByICC> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
-        BMCRejectedByICC BMCRejectedByIcc = rejectedByICCService.delete(iccFurtherDetailId,
+    public ResponseEntity<BmcRejectedByIcc> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
+        BmcRejectedByIcc BMCRejectedByIcc = rejectedByICCService.delete(iccFurtherDetailId,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(BMCRejectedByIcc);
     }

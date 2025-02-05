@@ -1,0 +1,32 @@
+<div class="content">
+    <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()"> Modify </button>
+    </div>
+    <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
+        <mat-table class="enquiries-table" [dataSource]="dataSource" matSort fusePerfectScrollbar>
+
+            <!-- particulars Column -->
+            <ng-container matColumnDef="particulars">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Particulars</mat-header-cell>
+                <mat-cell *matCellDef="let obj">
+                    <p class="text-truncate">{{ obj.particulars }}</p>
+                </mat-cell>
+            </ng-container>
+            
+            <!-- value Column -->
+            <ng-container matColumnDef="value">
+                <mat-header-cell *matHeaderCellDef mat-sort-header >Value</mat-header-cell>
+                <mat-cell *matCellDef="let obj">
+                    <p class="text-truncate">{{ obj.value }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple 
+                    [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+
+        </mat-table>
+    </div>
+</div>
