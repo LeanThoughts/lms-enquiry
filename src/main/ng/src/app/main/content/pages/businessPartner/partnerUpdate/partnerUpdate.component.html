@@ -31,7 +31,7 @@
                             {{ title.value }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>    
+                </mat-form-field>
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
@@ -58,10 +58,10 @@
                     <input matInput placeholder="Door No." formControlName="addressLine1" maxlength="10" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Street" formControlName="street" maxlength="40" required>
+                    <input matInput placeholder="Street" formControlName="addressLine2" maxlength="40" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="6">
+                    <input matInput placeholder="District" formControlName="street" maxlength="6">
                 </mat-form-field>
             </div>
             <div fxLayout="row">
@@ -80,6 +80,12 @@
                     </mat-select>
                 </mat-form-field>
             </div>
+
+          <div fxLayout="row">
+            <mat-form-field fxFlex="33">
+              <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="6">
+            </mat-form-field>
+          </div>
 
             <div fxLayout="row">
                 <span><b>Communication Details</b></span>

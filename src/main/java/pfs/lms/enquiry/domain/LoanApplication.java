@@ -174,6 +174,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
      * 09-Recovery
      * 10-Preliminary Risk Assessment Completed
      * 11-Application Fee
+     * 12-BMC Approval
      * 80 - Cancelled
      * 90- Planned Completed
      * 99- Actual Completed

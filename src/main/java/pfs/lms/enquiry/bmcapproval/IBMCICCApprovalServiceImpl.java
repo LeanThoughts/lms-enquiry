@@ -54,7 +54,7 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
         oldLoanApplication = loanApplication.clone();
 
 
-        loanApplication.setFunctionalStatus(2);
+        loanApplication.setFunctionalStatus(12);
         loanApplication.setFunctionalStatusDescription("ICC In-Principle Approved");
 
         // Change Documents for Loan Application
