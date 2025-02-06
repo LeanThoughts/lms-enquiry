@@ -20,10 +20,6 @@
                     [disabled]="_service.selectedLoanApplicationId === undefined">
                 ICC In-Principle Approval
             </button>
-            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToBMCApprovalStage()"
-                    [disabled]="_service.selectedLoanApplicationId === undefined">
-                BMC Approval
-            </button>
 
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToPrelimRiskAssessment()"
                     [disabled]="_service.selectedLoanApplicationId === undefined">
@@ -42,6 +38,12 @@
                     )">
                 Appraisal
             </button>
+
+            <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToBMCApprovalStage()"
+                    [disabled]="_service.selectedLoanApplicationId === undefined">
+                BMC Approval
+            </button>
+
             <button class="mr-8 btn" mat-raised-button color="accent" (click)="redirectToBoardApproval()" *ngIf="boardApproval"
                     [disabled]="_service.selectedLoanApplicationId === undefined">
                 Board Approval
