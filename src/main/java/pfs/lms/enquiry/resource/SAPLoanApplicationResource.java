@@ -3,7 +3,11 @@ package pfs.lms.enquiry.resource;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.extern.log4j.Log4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import pfs.lms.enquiry.batch.LoanApplicationsScheduledTask;
 import pfs.lms.enquiry.boardapproval.BoardApproval;
 import pfs.lms.enquiry.boardapproval.approvalbyboard.ApprovalByBoard;
 import pfs.lms.enquiry.boardapproval.deferredbyboard.DeferredByBoard;
@@ -26,8 +30,9 @@ import java.util.List;
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SAPLoanApplicationResource implements Serializable {
+ public class SAPLoanApplicationResource implements Serializable {
 
+    private static final Logger log = LoggerFactory.getLogger(LoanApplicationsScheduledTask.class);
 
     public SAPLoanApplicationResource() {
         sapLoanApplicationDetailsResource = new SAPLoanApplicationDetailsResource();
@@ -213,6 +218,8 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setTerm(loanApplication.getTerm());
 
 
+
+
         detailsResource.setGroupCompanyName(loanApplication.getGroupCompany());
         detailsResource.setPromoterName(loanApplication.getPromoterName());
         detailsResource.setPromoterPATInCrores(loanApplication.getPromoterPATAmount() == null ? "0.000" :
@@ -242,6 +249,7 @@ public class SAPLoanApplicationResource implements Serializable {
                 loanApplication.setContactEmail(loanApplication.getContactEmail() + "@dummy.co.in");
             }
         }
+
         detailsResource.setContactEmail(loanApplication.getContactEmail());
         detailsResource.setContactFaxNumber(loanApplication.getContactFaxNumber());
         detailsResource.setContactLandLinePhone(loanApplication.getContactLandLinePhone());
@@ -295,6 +303,11 @@ public class SAPLoanApplicationResource implements Serializable {
         detailsResource.setLoanStatus(this.getLoanStatus(loanApplication.getFunctionalStatus(), loanApplication.getTechnicalStatus()));
 
         detailsResource.setiCCClearanceDate(null);
+
+
+        log.info( "Product Code : " + detailsResource.getLoanProduct());
+        log.info( "Term : " + detailsResource.getTerm());
+
 
         return detailsResource;
     }
