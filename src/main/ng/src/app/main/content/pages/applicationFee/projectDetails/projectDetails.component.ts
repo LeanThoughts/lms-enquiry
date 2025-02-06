@@ -149,14 +149,14 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             constructionPeriod: 'constructionPeriod',
             constructionPeriodUnit: 'constructionPeriodUnit'
         };
+        const loanApplication = this._activatedRoute.snapshot.data.routeResolvedData[1].loanApplication;
+        console.log('loanApplication', loanApplication);
         if (!this.projectDetails || Object.keys(this.projectDetails).length === 0) {
 
-            const loanApplication = this._activatedRoute.snapshot.data.routeResolvedData[1].loanApplication;
             const formValues = {};
             Object.keys(formFields).forEach(key => {
                 formValues[key] = loanApplication[formFields[key]];
             });
-            console.log('loanApplication', loanApplication);
             this.projectDetailForm.patchValue(formValues);
             // this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
             this.projectDetailForm.controls['term'].setValue(loanApplication.term);
@@ -171,12 +171,19 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
                 formValues[key] = this.projectDetails[formFields[key]];
             });
             console.log('formValues', formValues);
+
             this.projectDetailForm.patchValue(formValues);
-            this.projectDetailForm.controls['state'].setValue(this.projectDetails.state);
-            this.projectDetailForm.controls['term'].setValue(this.projectDetails.term);
-            this.projectDetailForm.controls['productTypeCode'].setValue(this.projectDetails.productTypeCode);
-            this.projectDetailForm.controls['rateOfInterest'].setValue(this.projectDetails.rateOfInterest);
-            this.projectDetailForm.controls['tenorMonths'].setValue(this.projectDetails.tenorMonth);
+            this.projectDetailForm.controls['term'].setValue(loanApplication.term);
+            this.projectDetailForm.controls['productTypeCode'].setValue(loanApplication.productCode);
+            this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.expectedInterestRate);
+            this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
+            this.projectDetailForm.controls['tenorMonths'].setValue(loanApplication.tenorMonth);
+            
+            // this.projectDetailForm.controls['state'].setValue(this.projectDetails.state);
+            // this.projectDetailForm.controls['term'].setValue(this.projectDetails.term);
+            // this.projectDetailForm.controls['productTypeCode'].setValue(this.projectDetails.productTypeCode);
+            // this.projectDetailForm.controls['rateOfInterest'].setValue(this.projectDetails.rateOfInterest);
+            // this.projectDetailForm.controls['tenorMonths'].setValue(this.projectDetails.tenorMonth);
         }
         console.log('projectDetailForm', this.projectDetailForm.value);
     }
