@@ -122,7 +122,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             loanPurpose: 'loanPurpose',
             projectCapacity: 'projectCapacity',
             projectCapacityUnit: 'projectCapacityUnit',
-            // state: 'state',
+            state: 'state',
             // productTypeCode: 'productTypeCode',
             term: 'term',
             enquiryCompletionDate: 'enquiryCompletionDate',
@@ -158,7 +158,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             });
             console.log('loanApplication', loanApplication);
             this.projectDetailForm.patchValue(formValues);
-            this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
+            // this.projectDetailForm.controls['state'].setValue(loanApplication.projectLocationState);
             this.projectDetailForm.controls['term'].setValue(loanApplication.term);
             this.projectDetailForm.controls['productTypeCode'].setValue(loanApplication.productCode);
             this.projectDetailForm.controls['rateOfInterest'].setValue(loanApplication.expectedInterestRate);
@@ -170,7 +170,13 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             Object.keys(formFields).forEach(key => {
                 formValues[key] = this.projectDetails[formFields[key]];
             });
+            console.log('formValues', formValues);
             this.projectDetailForm.patchValue(formValues);
+            this.projectDetailForm.controls['state'].setValue(this.projectDetails.state);
+            this.projectDetailForm.controls['term'].setValue(this.projectDetails.term);
+            this.projectDetailForm.controls['productTypeCode'].setValue(this.projectDetails.productTypeCode);
+            this.projectDetailForm.controls['rateOfInterest'].setValue(this.projectDetails.rateOfInterest);
+            this.projectDetailForm.controls['tenorMonths'].setValue(this.projectDetails.tenorMonth);
         }
         console.log('projectDetailForm', this.projectDetailForm.value);
     }
