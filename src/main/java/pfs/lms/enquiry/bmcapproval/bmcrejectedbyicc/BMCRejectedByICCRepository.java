@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface BMCRejectedByICCRepository extends JpaRepository<BMCRejectedByICC, UUID> {
+public interface BMCRejectedByICCRepository extends JpaRepository<BmcRejectedByIcc, UUID> {
 
-    BMCRejectedByICC findByBmcICCApprovalId(UUID iccApprovalId);
+    BmcRejectedByIcc findByBmcICCApprovalId(UUID iccApprovalId);
 }

@@ -1,7 +1,7 @@
 package pfs.lms.enquiry.bmcapproval.bmciccreasonfordelay;
 
 import lombok.*;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
@@ -17,11 +17,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"bmcICCApproval", "reasonForDelay", "date"}, callSuper = false)
-public class BmcICCReasonForDelay extends AggregateRoot<BmcICCReasonForDelay> implements Cloneable {
+public class BmcIccReasonForDelay extends AggregateRoot<BmcIccReasonForDelay> implements Cloneable {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    private BmcICCApproval bmcICCApproval;
+    private BmcIccApproval bmcICCApproval;
 
     private Integer serialNumber;
     private String reasonForDelay;

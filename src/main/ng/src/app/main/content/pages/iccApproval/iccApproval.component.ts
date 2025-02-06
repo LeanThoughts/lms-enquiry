@@ -83,9 +83,11 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
             enquiryDate: [this._datepipe.transform(this.selectedEnquiry.loanEnquiryDate, 'dd/MM/yyyy') || '']
         });
 
+        console.log('this.iccApproval', this.iccApproval);
         this.subscriptions.add(
             this._iccApprovalService._iccApproval.subscribe(data => {
                 this.iccApproval = data;
+                console.log('this.iccApproval', this.iccApproval);
                 this.disableSendForApproval = !this.iccApproval.modified;
             })
         );
@@ -120,7 +122,7 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
                 }
                 else {
                     this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-                        'OK', { duration: 7000 });    
+                        'OK', { duration: 7000 });
                 }
             });
         this.disableSendForApproval = true;

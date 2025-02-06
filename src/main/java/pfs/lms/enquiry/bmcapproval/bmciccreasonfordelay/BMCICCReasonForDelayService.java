@@ -3,7 +3,7 @@ package pfs.lms.enquiry.bmcapproval.bmciccreasonfordelay;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -25,13 +25,13 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
     private final IChangeDocumentService changeDocumentService;
 
     @Override
-    public BmcICCReasonForDelay create(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username) {
+    public BmcIccReasonForDelay create(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username) {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(bmciccReasonForDelayResource.getLoanApplicationId());
 
-        BmcICCApproval BMCICCApproval = BMCICCApprovalRepository.findByLoanApplication(loanApplication)
+        BmcIccApproval BMCICCApproval = BMCICCApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
-                    BmcICCApproval obj = new BmcICCApproval();
+                    BmcIccApproval obj = new BmcIccApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj.setModified(true);
@@ -50,7 +50,7 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
                     return obj;
                 });
 
-        BmcICCReasonForDelay BMCICCReasonForDelay = new BmcICCReasonForDelay();
+        BmcIccReasonForDelay BMCICCReasonForDelay = new BmcIccReasonForDelay();
         BMCICCReasonForDelay.setBmcICCApproval(BMCICCApproval);
         BMCICCReasonForDelay.setReasonForDelay(bmciccReasonForDelayResource.getReasonForDelay());
         BMCICCReasonForDelay.setDate(bmciccReasonForDelayResource.getDate());
@@ -71,10 +71,10 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
     }
 
     @Override
-    public BmcICCReasonForDelay update(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username)
+    public BmcIccReasonForDelay update(BMCICCReasonForDelayResource bmciccReasonForDelayResource, String username)
             throws CloneNotSupportedException {
 
-        BmcICCReasonForDelay BMCICCReasonForDelay = BMCICCReasonForDelayRepository.findById(bmciccReasonForDelayResource.getId())
+        BmcIccReasonForDelay BMCICCReasonForDelay = BMCICCReasonForDelayRepository.findById(bmciccReasonForDelayResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmciccReasonForDelayResource.getId().toString()));
 
         Object oldICCFurtherDetail = BMCICCReasonForDelay.clone();
@@ -99,11 +99,11 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
     }
 
     @Override
-    public BmcICCReasonForDelay delete(UUID iccFurtherDetailId, String username) {
-        BmcICCReasonForDelay BMCICCReasonForDelay = BMCICCReasonForDelayRepository.findById(iccFurtherDetailId)
+    public BmcIccReasonForDelay delete(UUID iccFurtherDetailId, String username) {
+        BmcIccReasonForDelay BMCICCReasonForDelay = BMCICCReasonForDelayRepository.findById(iccFurtherDetailId)
                 .orElseThrow(() -> new EntityNotFoundException(iccFurtherDetailId.toString()));
 
-        BmcICCApproval BMCICCApproval = BMCICCApprovalRepository.getOne(BMCICCReasonForDelay.getBmcICCApproval().getId());
+        BmcIccApproval BMCICCApproval = BMCICCApprovalRepository.getOne(BMCICCReasonForDelay.getBmcICCApproval().getId());
         BMCICCApproval.setModified(true);
         BMCICCApprovalRepository.save(BMCICCApproval);
 

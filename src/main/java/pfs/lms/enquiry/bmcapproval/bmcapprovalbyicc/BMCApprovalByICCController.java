@@ -17,7 +17,7 @@ public class BMCApprovalByICCController {
     private final IBMCApprovalByICCService approvalByICCService;
 
     @PostMapping("/bmcApprovalByICCs/create")
-    public ResponseEntity<BmcApprovalByICC> create(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
+    public ResponseEntity<BmcApprovalByIcc> create(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
                                                    HttpServletRequest request) {
 
         return ResponseEntity.ok(approvalByICCService.create(BMCApprovalByIccResource,
@@ -25,7 +25,7 @@ public class BMCApprovalByICCController {
     }
 
     @PutMapping("/bmcApprovalByICCs/update")
-    public ResponseEntity<BmcApprovalByICC> update(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
+    public ResponseEntity<BmcApprovalByIcc> update(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
                                                    HttpServletRequest request) throws CloneNotSupportedException {
 
         return ResponseEntity.ok(approvalByICCService.update(BMCApprovalByIccResource,
@@ -33,8 +33,8 @@ public class BMCApprovalByICCController {
     }
 
     @DeleteMapping("/bmcApprovalByICCs/delete/{id}")
-    public ResponseEntity<BmcApprovalByICC> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
-        BmcApprovalByICC BMCApprovalByIcc = approvalByICCService.delete(iccFurtherDetailId,
+    public ResponseEntity<BmcApprovalByIcc> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
+        BmcApprovalByIcc BMCApprovalByIcc = approvalByICCService.delete(iccFurtherDetailId,
                 request.getUserPrincipal().getName());
         return ResponseEntity.ok(BMCApprovalByIcc);
     }

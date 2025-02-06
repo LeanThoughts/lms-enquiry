@@ -3,7 +3,7 @@ package pfs.lms.enquiry.bmcapproval.bmcloanenhancement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -29,9 +29,9 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
 
         LoanApplication loanApplication = loanApplicationRepository.getOne(bmcLoanEnhancementResource.getLoanApplicationId());
 
-        BmcICCApproval BMCICCApproval = bmcIccApprovalRepository.findByLoanApplication(loanApplication)
+        BmcIccApproval BMCICCApproval = bmcIccApprovalRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
-                    BmcICCApproval obj = new BmcICCApproval();
+                    BmcIccApproval obj = new BmcIccApproval();
                     obj.setLoanApplication(loanApplication);
                     obj.setLoanContractId(loanApplication.getLoanContractId());
                     obj.setModified(true);
@@ -95,7 +95,7 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
         bmcLoanEnhancement.setRemarks(bmcLoanEnhancementResource.getRemarks());
         bmcLoanEnhancement = bmcLoanEnhancementRepository.save(bmcLoanEnhancement);
 
-        BmcICCApproval bmcICCApproval = bmcIccApprovalRepository.getOne(bmcLoanEnhancement.getBmcICCApproval().getId());
+        BmcIccApproval bmcICCApproval = bmcIccApprovalRepository.getOne(bmcLoanEnhancement.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcIccApprovalRepository.save(bmcICCApproval);
 
@@ -119,7 +119,7 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
         BmcLoanEnhancement bmcLoanEnhancement = bmcLoanEnhancementRepository.findById(bmcLoanEnhancementId)
                 .orElseThrow(() -> new EntityNotFoundException(bmcLoanEnhancementId.toString()));
 
-        BmcICCApproval bmcICCApproval = bmcIccApprovalRepository.getOne(bmcLoanEnhancement.getBmcICCApproval().getId());
+        BmcIccApproval bmcICCApproval = bmcIccApprovalRepository.getOne(bmcLoanEnhancement.getBmcICCApproval().getId());
         bmcICCApproval.setModified(true);
         bmcIccApprovalRepository.save(bmcICCApproval);
 

@@ -1,7 +1,7 @@
-package pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc;
+package pfs.lms.enquiry.bmcapproval.bmcrejectedbyicc;
 
 import lombok.*;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
@@ -17,24 +17,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"bmcICCApproval", "meetingNumber", "meetingDate"}, callSuper = false)
-public class BmcApprovalByICC extends AggregateRoot<BmcApprovalByICC> implements Cloneable {
+public class BmcRejectedByIcc extends AggregateRoot<BmcRejectedByIcc> implements Cloneable {
 
     @NotNull
     @OneToOne(fetch = FetchType.EAGER)
-    private BmcICCApproval bmcICCApproval;
+    private BmcIccApproval bmcICCApproval;
 
     private String meetingNumber;
-    private String remarks;
+    private String reasonForRejection;
     private LocalDate meetingDate;
-    private LocalDate edApprovalDate;
-    private LocalDate cfoApprovalDate;
 
-    private String documentTypeMinutes;
-    private String fileReference1;
-
-    private String documentTypeMailFromCS;
-    private String fileReference2;
-    
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

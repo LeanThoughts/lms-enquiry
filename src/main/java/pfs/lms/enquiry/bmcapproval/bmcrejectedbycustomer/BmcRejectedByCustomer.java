@@ -1,7 +1,7 @@
 package pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer;
 
 import lombok.*;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public class BmcRejectedByCustomer extends AggregateRoot<BmcRejectedByCustomer> 
 
     @NotNull
     @OneToOne(fetch = FetchType.EAGER)
-    private BmcICCApproval bmcICCApproval;
+    private BmcIccApproval bmcICCApproval;
 
     private String meetingNumber;
     private String rejectionCategory;

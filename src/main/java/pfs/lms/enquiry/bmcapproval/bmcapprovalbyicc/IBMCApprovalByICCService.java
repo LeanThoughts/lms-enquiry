@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public interface IBMCApprovalByICCService {
 
-    BmcApprovalByICC create(BMCApprovalByICCResource bmcApprovalByICCResource, String username);
+    BmcApprovalByIcc create(BMCApprovalByICCResource bmcApprovalByICCResource, String username);
 
-    BmcApprovalByICC update(BMCApprovalByICCResource bmcApprovalByICCResource, String username) throws CloneNotSupportedException;
+    BmcApprovalByIcc update(BMCApprovalByICCResource bmcApprovalByICCResource, String username) throws CloneNotSupportedException;
 
-    BmcApprovalByICC delete(UUID bmcApprovalByICCId, String username);
+    BmcApprovalByIcc delete(UUID bmcApprovalByICCId, String username);
 }

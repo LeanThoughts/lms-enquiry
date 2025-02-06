@@ -247,6 +247,49 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * redirectToBMCApprovalStage()
+     */
+    redirectToBMCApprovalStage(): void {
+        this.redirect('/bmcApprovalStage');
+
+        // this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(enquiryAction => {
+        //     this._enquiryActionService.getEnquiryCompletion(enquiryAction.id).subscribe(enquiryCompletion => {
+        //         console.log('inside enquiry completion', enquiryCompletion);
+
+        //         if (!enquiryCompletion.id) {
+        //             this._matSnackBar.open('Enquiry completion is not completed for loan enquiry.', 'OK', { duration: 7000 });
+        //         }
+        //         else {
+        //             const functionalStatus: number = this._service.selectedEnquiry.value.functionalStatus;
+        //             const workFlowStatusCode: number = enquiryAction.workFlowStatusCode;
+        //             if (functionalStatus >= 1 && workFlowStatusCode === 3) {
+        //                 this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+        //                     this._iccApprovalService._iccApproval.next(response);
+        //                     this.redirect('/bmcApprovalStage');
+        //                 },
+        //                 (error: HttpErrorResponse) => {
+        //                     if (error.status === 404) {
+        //                         this._iccApprovalService._iccApproval.next({ id: '' });
+        //                         this.redirect('/bmcApprovalStage');
+        //                     }
+        //                 })
+        //             }
+        //             else {
+        //                 this._matSnackBar.open('Enquiry stage is still under process. BMC Approval cannot be started until enquiry stage is completed', 'OK', { duration: 7000 });
+        //             }
+        //         }
+        //     },
+        //     (error: HttpErrorResponse) => {
+        //         console.log('inside error handler for enquiry completion', error);
+        //         this._matSnackBar.open('Enquiry completion not completed for loan enquiry.', 'OK', { duration: 7000 });
+        //     });
+        // },
+        // (error: HttpErrorResponse) => {
+        //     this._matSnackBar.open('Enquiry process should be completed before BMC Approval', 'OK', { duration: 7000 });
+        // });
+    }
+
+    /**
      * redirectToPrelimRiskAssessment()
      */
     redirectToPrelimRiskAssessment(): void {

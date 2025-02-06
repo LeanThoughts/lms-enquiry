@@ -1,7 +1,7 @@
 package pfs.lms.enquiry.bmcapproval.bmcloanenhancement;
 
 import lombok.*;
-import pfs.lms.enquiry.bmcapproval.BmcICCApproval;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 import pfs.lms.enquiry.domain.AggregateRoot;
 
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public class BmcLoanEnhancement extends AggregateRoot<BmcLoanEnhancement> implem
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    private BmcICCApproval bmcICCApproval;
+    private BmcIccApproval bmcICCApproval;
 
     private Integer serialNumber;
     private String iccMeetingNumber;
