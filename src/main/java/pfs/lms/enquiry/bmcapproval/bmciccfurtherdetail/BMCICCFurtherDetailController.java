@@ -16,7 +16,7 @@ public class BMCICCFurtherDetailController {
 
     private final IBMCICCFurtherDetailService iBMCICCFurtherDetailService;
 
-    @PostMapping("/bmcICCFurtherDetails/create")
+    @PostMapping("/bmcIccFurtherDetails/create")
     public ResponseEntity<BmcIccFurtherDetail> create(@RequestBody BMCICCFurtherDetailResource bmciccFurtherDetailResource,
                                                       HttpServletRequest request) {
 
@@ -24,7 +24,7 @@ public class BMCICCFurtherDetailController {
                 request.getUserPrincipal().getName()));
     }
 
-    @PutMapping("/bmcICCFurtherDetails/update")
+    @PutMapping("/bmcIccFurtherDetails/update")
     public ResponseEntity<BmcIccFurtherDetail> update(@RequestBody BMCICCFurtherDetailResource bmciccFurtherDetailResource,
                                                       HttpServletRequest request) throws CloneNotSupportedException {
 
@@ -32,7 +32,7 @@ public class BMCICCFurtherDetailController {
                 request.getUserPrincipal().getName()));
     }
 
-    @DeleteMapping("/bmcICCFurtherDetails/delete/{id}")
+    @DeleteMapping("/bmcIccFurtherDetails/delete/{id}")
     public ResponseEntity<BmcIccFurtherDetail> delete(@PathVariable("id") UUID bmciccFurtherDetailId, HttpServletRequest request) {
         BmcIccFurtherDetail BMCICCFurtherDetail = iBMCICCFurtherDetailService.delete(bmciccFurtherDetailId,
                 request.getUserPrincipal().getName());

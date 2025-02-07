@@ -83,7 +83,7 @@ export class BMCApprovalComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptions.add(
-            this._bmcApprovalService._iccApproval.subscribe(data => {
+            this._bmcApprovalService._bmcIccApproval.subscribe(data => {
                 this.iccApproval = data;
                 this.disableSendForApproval = !this.iccApproval.modified;
             })

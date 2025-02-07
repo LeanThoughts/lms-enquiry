@@ -135,9 +135,9 @@ export class BMCICCApprovalUpdateDialogComponent implements OnInit {
 
             if (this.selectedICCApproval.id === undefined) {
                 iccApproval.loanApplicationId = this.loanApplicationId;
-                this._bmcApprovalService.createApprovalByICC(iccApproval).subscribe(() => {
+                this._bmcApprovalService.createBmcApprovalByICC(iccApproval).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                         this._matSnackBar.open('ICC Approval details created successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });
@@ -157,9 +157,9 @@ export class BMCICCApprovalUpdateDialogComponent implements OnInit {
                 if (this.fileReference2 !== '') {
                     this.selectedICCApproval.fileReference2 = this.fileReference2;
                 }
-                this._bmcApprovalService.updateApprovalByICC(this.selectedICCApproval).subscribe(() => {
+                this._bmcApprovalService.updateBmcApprovalByICC(this.selectedICCApproval).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                     });
                     this._matSnackBar.open('ICC Approval details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

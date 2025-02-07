@@ -48,7 +48,7 @@ export class BMCICCApprovalMeetingComponent {
      * refreshTable()
      */
     refreshTable(): void {
-        this._bmcApprovalService.getApprovalByICC(this._bmcApprovalService._iccApproval.value.id).subscribe(data => {
+        this._bmcApprovalService.getBmcApprovalByICC(this._bmcApprovalService._bmcIccApproval.value.id).subscribe(data => {
             this.selectedICCApproval = data;
             let tableData = [];
 

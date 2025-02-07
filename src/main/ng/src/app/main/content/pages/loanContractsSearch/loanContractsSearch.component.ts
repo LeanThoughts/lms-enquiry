@@ -18,6 +18,7 @@ import { ICCApprovalService } from '../iccApproval/iccApproval.service';
 import { ApplicationFeeService } from '../applicationFee/applicationFee.service';
 import { DocumentationService } from '../documentation/documentation.service';
 import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
+import { BMCApprovalService } from '../bmcIccApproval/bmcIccApproval.service';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -63,7 +64,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
                 private _boardApprovalService: BoardApprovalService, private _sanctionService: SanctionService,
                 private _iccApprovalService: ICCApprovalService, private _applicationFeeService: ApplicationFeeService,
                 private _documentationService: DocumentationService,
-                private _riskAssessmentService: RiskAssessmentService) {
+                private _riskAssessmentService: RiskAssessmentService, 
+                private _bmcIccApprovalService: BMCApprovalService) {
 
         this.loanContractsSearchForm = _formBuilder.group({
             accountStatus: [],
@@ -250,7 +252,18 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToBMCApprovalStage()
      */
     redirectToBMCApprovalStage(): void {
-        this.redirect('/bmcApprovalStage');
+
+        this._bmcIccApprovalService.getBmcICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+            this._bmcIccApprovalService._bmcIccApproval.next(response);
+            this.redirect('/bmcApprovalStage');
+        },
+        (error: HttpErrorResponse) => {
+            if (error.status === 404) {
+                this._bmcIccApprovalService._bmcIccApproval.next({ id: '' });
+                this.redirect('/bmcApprovalStage');
+            }
+        });
+
 
         // this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(enquiryAction => {
         //     this._enquiryActionService.getEnquiryCompletion(enquiryAction.id).subscribe(enquiryCompletion => {

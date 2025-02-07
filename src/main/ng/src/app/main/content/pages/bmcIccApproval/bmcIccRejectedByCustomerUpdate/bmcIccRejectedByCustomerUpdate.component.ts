@@ -68,9 +68,9 @@ export class BMCICCRejectedByCustomerUpdateDialogComponent implements OnInit {
 
             if (this.selectedRejectedByCustomer.id === undefined) {
                 rejectedByCustomer.loanApplicationId = this.loanApplicationId;
-                this._bmcApprovalService.createRejectedByCustomer(rejectedByCustomer).subscribe(() => {
+                this._bmcApprovalService.createBmcRejectedByCustomer(rejectedByCustomer).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                         this._matSnackBar.open('Rejected by Customer details created successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });
@@ -80,9 +80,9 @@ export class BMCICCRejectedByCustomerUpdateDialogComponent implements OnInit {
                 this.selectedRejectedByCustomer.meetingDate = rejectedByCustomer.meetingDate;
                 this.selectedRejectedByCustomer.dateOfRejection = rejectedByCustomer.dateOfRejection;
                 this.selectedRejectedByCustomer.remarks = rejectedByCustomer.remarks;
-                this._bmcApprovalService.updateRejectedByCustomer(this.selectedRejectedByCustomer).subscribe(() => {
+                this._bmcApprovalService.updateBmcRejectedByCustomer(this.selectedRejectedByCustomer).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                     });
                     this._matSnackBar.open('Rejected by Customer details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

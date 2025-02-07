@@ -65,7 +65,7 @@ export class BMCLoanEnhancementUpdateDialogComponent {
 
             if (this._dialogData.operation === 'addLoanEnhancement') {
                 loanEnhancement.loanApplicationId = this._dialogData.loanApplicationId;
-                this._bmcApprovalService.createLoanEnhancement(loanEnhancement).subscribe(() => {
+                this._bmcApprovalService.createBmcLoanEnhancement(loanEnhancement).subscribe(() => {
                     this._matSnackBar.open('Loan Enhancement details added successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });
@@ -79,7 +79,7 @@ export class BMCLoanEnhancementUpdateDialogComponent {
                 this.selectedLoanEnhancement.revisedCommercialOperationsDate  = loanEnhancement.revisedCommercialOperationsDate;
                 this.selectedLoanEnhancement.reviseRepaymentStartDate  = loanEnhancement.reviseRepaymentStartDate;
                 this.selectedLoanEnhancement.remarks = loanEnhancement.remarks;
-                this._bmcApprovalService.updateLoanEnhancement(this.selectedLoanEnhancement).subscribe(() => {
+                this._bmcApprovalService.updateBmcLoanEnhancement(this.selectedLoanEnhancement).subscribe(() => {
                     this._matSnackBar.open('Loan Enhancement details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });
                 });

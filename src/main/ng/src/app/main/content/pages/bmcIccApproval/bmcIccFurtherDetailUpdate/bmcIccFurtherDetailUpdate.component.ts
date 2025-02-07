@@ -66,7 +66,7 @@ export class BMCICCFurtherDetailUpdateDialogComponent {
 
         if (this._dialogData.operation === 'addICCFurtherDetail') {
             furtherDetail.loanApplicationId = this._dialogData.loanApplicationId;
-            this._bmcApprovalService.createFurtherDetail(furtherDetail).subscribe(() => {
+            this._bmcApprovalService.createBmcFurtherDetail(furtherDetail).subscribe(() => {
                 this._matSnackBar.open('Further details added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });
@@ -75,7 +75,7 @@ export class BMCICCFurtherDetailUpdateDialogComponent {
             this.selectedICCFurtherDetail.iccMeetingNumber = furtherDetail.iccMeetingNumber;
             this.selectedICCFurtherDetail.iccMeetingDate = furtherDetail.iccMeetingDate;
             this.selectedICCFurtherDetail.detailsRequired = furtherDetail.detailsRequired;
-            this._bmcApprovalService.updateFurtherDetail(this.selectedICCFurtherDetail).subscribe(() => {
+            this._bmcApprovalService.updateBmcFurtherDetail(this.selectedICCFurtherDetail).subscribe(() => {
                 this._matSnackBar.open('Further details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });

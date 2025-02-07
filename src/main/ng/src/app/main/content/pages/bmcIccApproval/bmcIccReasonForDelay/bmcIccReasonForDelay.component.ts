@@ -38,8 +38,8 @@ export class BMCICCReasonForDelayComponent {
      * refreshTable()
      */
     refreshTable(): void {
-        this._bmcApprovalService.getReasonForDelay(this._bmcApprovalService._iccApproval.value.id).subscribe(data => {
-            this.dataSource = new MatTableDataSource(data._embedded.iCCReasonForDelays);
+        this._bmcApprovalService.getBmcReasonForDelay(this._bmcApprovalService._bmcIccApproval.value.id).subscribe(data => {
+            this.dataSource = new MatTableDataSource(data._embedded.bmcIccReasonForDelays);
         });
     }
 

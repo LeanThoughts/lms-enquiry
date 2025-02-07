@@ -74,9 +74,9 @@ export class BMCRejectedByICCUpdateDialogComponent implements OnInit {
             if (this.selectedRejectedByICC.id === undefined) {
                 console.log('adding reason for delay');
                 rejectedByICC.loanApplicationId = this.loanApplicationId;
-                this._bmcApprovalService.createRejectedByICC(rejectedByICC).subscribe(() => {
+                this._bmcApprovalService.createBmcRejectedByICC(rejectedByICC).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                         this._matSnackBar.open('Rejected by ICC details created successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });
@@ -87,9 +87,9 @@ export class BMCRejectedByICCUpdateDialogComponent implements OnInit {
                 this.selectedRejectedByICC.meetingDate = rejectedByICC.meetingDate;
                 this.selectedRejectedByICC.meetingNumber = rejectedByICC.meetingNumber;
                 this.selectedRejectedByICC.reasonForRejection = rejectedByICC.reasonForRejection;
-                this._bmcApprovalService.updateRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
+                this._bmcApprovalService.updateBmcRejectedByICC(this.selectedRejectedByICC).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                     });
                     this._matSnackBar.open('Rejected by ICC details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

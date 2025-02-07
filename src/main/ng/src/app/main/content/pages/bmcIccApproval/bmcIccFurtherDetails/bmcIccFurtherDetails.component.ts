@@ -48,7 +48,7 @@ export class BMCICCFurtherDetailsComponent implements OnInit {
      * refreshTable()
      */
     refreshTable(): void {
-        this._bmcApprovalService.getICCFurtherDetails(this._bmcApprovalService._iccApproval.value.id).subscribe(data => {
+        this._bmcApprovalService.getBmcICCFurtherDetails(this._bmcApprovalService._bmcIccApproval.value.id).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
@@ -84,7 +84,7 @@ export class BMCICCFurtherDetailsComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                    this._bmcApprovalService._iccApproval.next(data);
+                    this._bmcApprovalService._bmcIccApproval.next(data);
                 });
                 this.refreshTable();
             }
@@ -99,9 +99,9 @@ export class BMCICCFurtherDetailsComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
             if (result && result.response) {
-                this._bmcApprovalService.deleteFurtherDetail(this.selectedICCFurtherDetail.id).subscribe(() => {
+                this._bmcApprovalService.deleteBmcFurtherDetail(this.selectedICCFurtherDetail.id).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                     });
                     this.selectedICCFurtherDetail = undefined;
                     this.refreshTable();

@@ -40,7 +40,7 @@ export class BMCICCRejectedByCustomerComponent {
      * refreshTable()
      */
     refreshTable(): void {
-        this._bmcApprovalService.getRejectedByCustomer(this._bmcApprovalService._iccApproval.value.id).subscribe(data => {
+        this._bmcApprovalService.getBmcRejectedByCustomer(this._bmcApprovalService._bmcIccApproval.value.id).subscribe(data => {
             this.selectedRejectedByCustomer = data;
             let tableData = [];
             tableData.push({particulars: 'ICC Meeting Number', value: this.selectedRejectedByCustomer.meetingNumber});

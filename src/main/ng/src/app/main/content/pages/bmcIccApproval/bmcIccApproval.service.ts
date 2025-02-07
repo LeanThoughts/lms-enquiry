@@ -8,7 +8,7 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 @Injectable()
 export class BMCApprovalService {
 
-    _iccApproval: BehaviorSubject<any> = new BehaviorSubject({});
+    _bmcIccApproval: BehaviorSubject<any> = new BehaviorSubject({});
 
     /**
      * constructor()
@@ -23,8 +23,8 @@ export class BMCApprovalService {
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return forkJoin([
-            this.getICCFurtherDetails(this._iccApproval.value.id),
-            this.getLoanEnhancements(this._iccApproval.value.id),
+            this.getBmcICCFurtherDetails(this._bmcIccApproval.value.id),
+            this.getBmcLoanEnhancements(this._bmcIccApproval.value.id),
             this.getEnquiryCompletion(this._loanEnquiryService.selectedLoanApplicationId.value)
         ]);
     }
@@ -51,21 +51,21 @@ export class BMCApprovalService {
     }
 
     /**
-     * getICCApproval()
+     * getBmcICCApproval()
      */
     public getBmcICCApproval(loanApplicationId: string): Observable<any> {
-        return this._http.get("enquiry/api/iCCApprovals/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
+        return this._http.get("enquiry/api/bmcIccApprovals/search/findByLoanApplicationId?loanApplicationId=" + loanApplicationId);
     }
 
     /**
-     * getICCFurtherDetails()
+     * getBmcICCFurtherDetails()
      */
-    public getICCFurtherDetails(iccApprovalId: string): Observable<any> {
+    public getBmcICCFurtherDetails(bmcIccApprovalId: string): Observable<any> {
         // return this._http.get("enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
         return new Observable((observer) => {
-            this._http.get('enquiry/api/iCCFurtherDetails/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
+            this._http.get('enquiry/api/bmcIccFurtherDetails/search/findByBmcICCApprovalId?iccApprovalId=' + bmcIccApprovalId).subscribe(
                 ((response: any) => {
-                    observer.next(response._embedded.iCCFurtherDetails);
+                    observer.next(response._embedded.bmcIccFurtherDetails);
                     observer.complete();
                 }),
                 (error => {
@@ -77,147 +77,119 @@ export class BMCApprovalService {
     }
 
     /**
-     * deleteFurtherDetail()
+     * deleteBmcFurtherDetail()
      */
-    public deleteFurtherDetail(furtherDetailId: string): Observable<any> {
-        return this._http.delete("enquiry/api/iCCFurtherDetails/delete/" + furtherDetailId);
+    public deleteBmcFurtherDetail(furtherDetailId: string): Observable<any> {
+        return this._http.delete("enquiry/api/bmcIccFurtherDetails/delete/" + furtherDetailId);
     }
 
     /**
-     * createFurtherDetail()
+     * createBmcFurtherDetail()
      */
-    public createFurtherDetail(furtherDetail: any): Observable<any> {
-        return this._http.post("enquiry/api/iCCFurtherDetails/create", furtherDetail);
+    public createBmcFurtherDetail(furtherDetail: any): Observable<any> {
+        return this._http.post("enquiry/api/bmcIccFurtherDetails/create", furtherDetail);
     }
 
     /**
-     * updateFurtherDetail()
+     * updateBmcFurtherDetail()
      */
-    public updateFurtherDetail(furtherDetail: any): Observable<any> {
-        return this._http.put("enquiry/api/iCCFurtherDetails/update", furtherDetail);
+    public updateBmcFurtherDetail(furtherDetail: any): Observable<any> {
+        return this._http.put("enquiry/api/bmcIccFurtherDetails/update", furtherDetail);
     }
 
     /**
-     * getReasonForDelay()
+     * getBmcReasonForDelay()
      */
-    public getReasonForDelay(iccApprovalId: string): Observable<any> {
-        return this._http.get("enquiry/api/iCCReasonForDelays/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    public getBmcReasonForDelay(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/bmcIccReasonForDelays/search/findByBmcICCApprovalId?iccApprovalId=" + iccApprovalId);
     }
 
     /**
-     * deleteReasonForDelay()
+     * createBmcReasonForDelay()
      */
-    // public deleteReasonForDelay(reasonForDelayId: string): Observable<any> {
-    //     return this._http.delete("enquiry/api/iCCReasonForDelays/delete/" + reasonForDelayId);
-    // }
-
-    /**
-     * createReasonForDelay()
-     */
-    public createReasonForDelay(reasonForDelay: any): Observable<any> {
-        return this._http.post("enquiry/api/iCCReasonForDelays/create", reasonForDelay);
+    public createBmcReasonForDelay(reasonForDelay: any): Observable<any> {
+        return this._http.post("enquiry/api/bmcIccReasonForDelays/create", reasonForDelay);
     }
 
     /**
-     * updateReasonForDelay()
+     * updateBmcReasonForDelay()
      */
-    public updateReasonForDelay(reasonForDelay: any): Observable<any> {
-        return this._http.put("enquiry/api/iCCReasonForDelays/update", reasonForDelay);
+    public updateBmcReasonForDelay(reasonForDelay: any): Observable<any> {
+        return this._http.put("enquiry/api/bmcIccReasonForDelays/update", reasonForDelay);
     }
 
     /**
-     * getRejectedByICC()
+     * getBmcRejectedByICC()
      */
-    public getRejectedByICC(iccApprovalId: string): Observable<any> {
-        return this._http.get("enquiry/api/rejectedByICCs/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    public getBmcRejectedByICC(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/bmcRejectedByIccs/search/findByBmcICCApprovalId?iccApprovalId=" + iccApprovalId);
     }
 
     /**
-     * deleteRejectedByICC()
+     * createBmcRejectedByICC()
      */
-    // public deleteRejectedByICC(rejectedByICCId: string): Observable<any> {
-    //     return this._http.delete("enquiry/api/rejectedByICCs/delete/" + rejectedByICCId);
-    // }
-
-    /**
-     * createRejectedByICC()
-     */
-    public createRejectedByICC(rejectedByICC: any): Observable<any> {
-        return this._http.post("enquiry/api/rejectedByICCs/create", rejectedByICC);
+    public createBmcRejectedByICC(rejectedByICC: any): Observable<any> {
+        return this._http.post("enquiry/api/bmcRejectedByIccs/create", rejectedByICC);
     }
 
     /**
-     * updateReasonForDelay()
+     * updateBmcRejectedByICC()
      */
-    public updateRejectedByICC(rejectedByICC: any): Observable<any> {
-        return this._http.put("enquiry/api/rejectedByICCs/update", rejectedByICC);
+    public updateBmcRejectedByICC(rejectedByICC: any): Observable<any> {
+        return this._http.put("enquiry/api/bmcRejectedByIccs/update", rejectedByICC);
     }
 
     /**
-     * getApprovalByICC()
+     * getBmcApprovalByICC()
      */
-    public getApprovalByICC(iccApprovalId: string): Observable<any> {
-        return this._http.get("enquiry/api/approvalByICCs/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    public getBmcApprovalByICC(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/bmcApprovalByIccs/search/findByBmcICCApprovalId?iccApprovalId=" + iccApprovalId);
     }
 
     /**
-     * deleteRejectedByICC()
+     * createBmcApprovalByICC()
      */
-    // public deleteApprovalByICC(approvalByICCId: string): Observable<any> {
-    //     return this._http.delete("enquiry/api/approvalByICCs/delete/" + approvalByICCId);
-    // }
-
-    /**
-     * createApprovalByICC()
-     */
-    public createApprovalByICC(approvalByICC: any): Observable<any> {
-        return this._http.post("enquiry/api/approvalByICCs/create", approvalByICC);
+    public createBmcApprovalByICC(approvalByICC: any): Observable<any> {
+        return this._http.post("enquiry/api/bmcApprovalByIccs/create", approvalByICC);
     }
 
     /**
-     * updateApprovalByICC()
+     * updateBmcApprovalByICC()
      */
-    public updateApprovalByICC(approvalByICC: any): Observable<any> {
-        return this._http.put("enquiry/api/approvalByICCs/update", approvalByICC);
+    public updateBmcApprovalByICC(approvalByICC: any): Observable<any> {
+        return this._http.put("enquiry/api/bmcApprovalByIccs/update", approvalByICC);
     }
 
     /**
-     * getRejectedByCustomer()
+     * getBmcRejectedByCustomer()
      */
-    public getRejectedByCustomer(iccApprovalId: string): Observable<any> {
-        return this._http.get("enquiry/api/rejectedByCustomers/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
+    public getBmcRejectedByCustomer(iccApprovalId: string): Observable<any> {
+        return this._http.get("enquiry/api/bmcRejectedByCustomers/search/findByBmcICCApprovalId?iccApprovalId=" + iccApprovalId);
     }
 
     /**
-     * deleteRejectedByCustomer()
+     * createBmcRejectedByCustomer()
      */
-    // public deleteRejectedByCustomer(rejectedByCustomerId: string): Observable<any> {
-    //     return this._http.delete("enquiry/api/rejectedByCustomers/delete/" + rejectedByCustomerId);
-    // }
-
-    /**
-     * createRejectedByCustomer()
-     */
-    public createRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
-        return this._http.post("enquiry/api/rejectedByCustomers/create", rejectedByCustomer);
+    public createBmcRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this._http.post("enquiry/api/bmcRejectedByCustomers/create", rejectedByCustomer);
     }
 
     /**
-     * updateRejectedByCustomer()
+     * updateBmcRejectedByCustomer()
      */
-    public updateRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
-        return this._http.put("enquiry/api/rejectedByCustomers/update", rejectedByCustomer);
+    public updateBmcRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this._http.put("enquiry/api/bmcRejectedByCustomers/update", rejectedByCustomer);
     }
 
     /**
-     * getLoanEnhancements()
+     * getBmcLoanEnhancements()
      */
-    public getLoanEnhancements(iccApprovalId: string): Observable<any> {
+    public getBmcLoanEnhancements(iccApprovalId: string): Observable<any> {
         // return this._http.get("enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=" + iccApprovalId);
         return new Observable((observer) => {
-            this._http.get('enquiry/api/loanEnhancements/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
+            this._http.get('enquiry/api/bmcLoanEnhancements/search/findByBmcICCApprovalId?iccApprovalId=' + iccApprovalId).subscribe(
                 ((response: any) => {
-                    observer.next(response._embedded.loanEnhancements);
+                    observer.next(response._embedded.bmcLoanEnhancements);
                     observer.complete();
                 }),
                 (error => {
@@ -230,24 +202,24 @@ export class BMCApprovalService {
     }
 
     /**
-     * deleteLoanEnhancement()
+     * deleteBmcLoanEnhancement()
      */
-    public deleteLoanEnhancement(loanEnhancementId: string): Observable<any> {
-        return this._http.delete("enquiry/api/loanEnhancements/delete/" + loanEnhancementId);
+    public deleteBmcLoanEnhancement(loanEnhancementId: string): Observable<any> {
+        return this._http.delete("enquiry/api/bmcLoanEnhancements/delete/" + loanEnhancementId);
     }
 
     /**
-     * createLoanEnhancement()
+     * createBmcLoanEnhancement()
      */
-    public createLoanEnhancement(loanEnhancement: any): Observable<any> {
-        return this._http.post("enquiry/api/loanEnhancements/create", loanEnhancement);
+    public createBmcLoanEnhancement(loanEnhancement: any): Observable<any> {
+        return this._http.post("enquiry/api/bmcLoanEnhancements/create", loanEnhancement);
     }
 
     /**
-     * updateLoanEnhancement()
+     * updateBmcLoanEnhancement()
      */
-    public updateLoanEnhancement(loanEnhancement: any): Observable<any> {
-        return this._http.put("enquiry/api/loanEnhancements/update", loanEnhancement);
+    public updateBmcLoanEnhancement(loanEnhancement: any): Observable<any> {
+        return this._http.put("enquiry/api/bmcLoanEnhancements/update", loanEnhancement);
     }
 
     /**

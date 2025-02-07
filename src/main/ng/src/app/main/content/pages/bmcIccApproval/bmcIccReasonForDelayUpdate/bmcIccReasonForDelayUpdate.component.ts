@@ -69,9 +69,9 @@ export class BMCICCReasonForDelayUpdateDialogComponent implements OnInit {
             if (this.selectedReasonForDelay.id === undefined) {
                 console.log('adding reason for delay');
                 reasonForDelay.loanApplicationId = this.loanApplicationId;
-                this._bmcApprovalService.createReasonForDelay(reasonForDelay).subscribe(() => {
+                this._bmcApprovalService.createBmcReasonForDelay(reasonForDelay).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                         this._matSnackBar.open('Reason for Delay added successfully.', 'OK', { duration: 7000 });
                         this._dialogRef.close({ 'refresh': true });
                     });
@@ -81,9 +81,9 @@ export class BMCICCReasonForDelayUpdateDialogComponent implements OnInit {
                 console.log('updating reason for delay');
                 this.selectedReasonForDelay.date = reasonForDelay.date;
                 this.selectedReasonForDelay.reasonForDelay = reasonForDelay.reasonForDelay;
-                this._bmcApprovalService.updateReasonForDelay(this.selectedReasonForDelay).subscribe(() => {
+                this._bmcApprovalService.updateBmcReasonForDelay(this.selectedReasonForDelay).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                     });
                     this._matSnackBar.open('Reason for Delay updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

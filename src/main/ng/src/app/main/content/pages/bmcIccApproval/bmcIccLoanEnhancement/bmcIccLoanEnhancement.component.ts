@@ -40,7 +40,7 @@ export class BMCLoanEnhancementComponent implements OnInit {
      * refreshTable()
      */
     refreshTable(): void {
-        this._bmcApprovalService.getLoanEnhancements(this._bmcApprovalService._iccApproval.value.id).subscribe(data => {
+        this._bmcApprovalService.getBmcLoanEnhancements(this._bmcApprovalService._bmcIccApproval.value.id).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
@@ -81,7 +81,7 @@ export class BMCLoanEnhancementComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                    this._bmcApprovalService._iccApproval.next(data);
+                    this._bmcApprovalService._bmcIccApproval.next(data);
                     this.refreshTable();
                 });
             }
@@ -96,9 +96,9 @@ export class BMCLoanEnhancementComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => {
             if (result && result.response) {
-                this._bmcApprovalService.deleteLoanEnhancement(this.selectedLoanEnhancement.id).subscribe(() => {
+                this._bmcApprovalService.deleteBmcLoanEnhancement(this.selectedLoanEnhancement.id).subscribe(() => {
                     this._bmcApprovalService.getBmcICCApproval(this.loanApplicationId).subscribe(data => {
-                        this._bmcApprovalService._iccApproval.next(data);
+                        this._bmcApprovalService._bmcIccApproval.next(data);
                     });
                     this.selectedLoanEnhancement = undefined;
                     this.refreshTable();

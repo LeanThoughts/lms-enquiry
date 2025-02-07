@@ -16,7 +16,7 @@ public class BMCApprovalByICCController {
 
     private final IBMCApprovalByICCService approvalByICCService;
 
-    @PostMapping("/bmcApprovalByICCs/create")
+    @PostMapping("/bmcApprovalByIccs/create")
     public ResponseEntity<BmcApprovalByIcc> create(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
                                                    HttpServletRequest request) {
 
@@ -24,7 +24,7 @@ public class BMCApprovalByICCController {
                 request.getUserPrincipal().getName()));
     }
 
-    @PutMapping("/bmcApprovalByICCs/update")
+    @PutMapping("/bmcApprovalByIccs/update")
     public ResponseEntity<BmcApprovalByIcc> update(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
                                                    HttpServletRequest request) throws CloneNotSupportedException {
 
@@ -32,7 +32,7 @@ public class BMCApprovalByICCController {
                 request.getUserPrincipal().getName()));
     }
 
-    @DeleteMapping("/bmcApprovalByICCs/delete/{id}")
+    @DeleteMapping("/bmcApprovalByIccs/delete/{id}")
     public ResponseEntity<BmcApprovalByIcc> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
         BmcApprovalByIcc BMCApprovalByIcc = approvalByICCService.delete(iccFurtherDetailId,
                 request.getUserPrincipal().getName());
