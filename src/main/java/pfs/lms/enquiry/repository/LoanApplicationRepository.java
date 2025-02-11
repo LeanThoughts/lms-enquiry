@@ -37,4 +37,6 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     List<LoanApplication> findByProjectTypeAndLoanTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate
             (String projectType, String loanType, String proposalType, Double loanContractAmount, LocalDate enquiryDate);
 
+    List<LoanApplication> findByProjectTypeAndLoanTypeAndFinancingTypeAndLoanContractAmountAndLoanEnquiryDate
+            (String projectType, String loanType, String financingType, Double loanContractAmount, LocalDate enquiryDate);
 }

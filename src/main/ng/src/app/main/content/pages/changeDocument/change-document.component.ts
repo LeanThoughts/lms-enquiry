@@ -18,8 +18,8 @@ export class ChangeDocumentComponent implements OnInit {
 
     constructor(_formBuilder: FormBuilder, private _service: ChangeDocumentService) {
         this.changeDocumentsForm = _formBuilder.group({
-            processName: new FormControl(),
-            loanContractId: new FormControl(),
+            processName: new FormControl(''),
+            loanContractId: new FormControl(''),
             dateFrom: new FormControl(null),
             dateTo: new FormControl(null)
         });

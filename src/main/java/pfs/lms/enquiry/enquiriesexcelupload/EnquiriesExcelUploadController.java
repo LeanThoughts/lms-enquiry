@@ -137,11 +137,14 @@ public class EnquiriesExcelUploadController {
                         throw new Exception("Financing type : " + enquiry.getProposalType() + " is not found in configuration. File upload failed");
 
 
+                    String projectTypeCode = projectTypeRepository.findByValue(enquiry.getProjectType()).getCode();
+                    String loanTypeCode = loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()).getCode();
+                    String financingTypeCode = financingTypeRepository.findByValue(enquiry.getProposalType()).getCode();
                     List<LoanApplication> loanApplications = loanApplicationRepository.
-                            findByProjectTypeAndLoanTypeAndProposalTypeAndLoanContractAmountAndLoanEnquiryDate(
-                                    projectTypeRepository.findByValue(enquiry.getProjectType()).getCode(),
-                                    loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()).getCode(),
-                                    financingTypeRepository.findByValue(enquiry.getProposalType()).getCode(),
+                            findByProjectTypeAndLoanTypeAndFinancingTypeAndLoanContractAmountAndLoanEnquiryDate(
+                                    projectTypeCode,
+                                    loanTypeCode,
+                                    financingTypeCode,
                                     enquiry.getAmountRequested(),
                                     enquiry.getDateOfLeadGeneration());
                     if (loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(enquiry
@@ -232,7 +235,7 @@ public class EnquiriesExcelUploadController {
 
             ProposalType prt = proposalTypeRepository.findByValue(enquiry.getProposalType());
             loanApplication.setProposalType(prt == null ? null : prt.getCode());
-            loanApplication.setFinancingType(prt == null ? null : prt.getCode());
+            //loanApplication.setFinancingType(prt == null ? null : prt.getCode());
 
             ICCReadinessStatus irs = iccReadinessStatusRepository.findByValue(enquiry.getIccReadinessStatus());
             loanApplication.setIccReadinessStatus(irs == null ? null : irs.getCode());
