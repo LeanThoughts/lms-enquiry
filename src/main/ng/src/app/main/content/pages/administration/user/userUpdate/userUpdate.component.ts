@@ -47,7 +47,7 @@ export class UserUpdateDialogComponent implements OnInit {
             firstname: [this.selectedUser.firstName || ''],
             lastname: [this.selectedUser.lastName || ''],
             email: [this.selectedUser.email || ''],
-            password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
+            // password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
             sapBPNumber: [this.selectedUser.sapBPNumber || ''],
             role: [this.selectedUser.role || 'ZLM013'],
             riskDepartment: [this.selectedUser.riskDepartment],
@@ -62,12 +62,6 @@ export class UserUpdateDialogComponent implements OnInit {
     submit(): void {
         if (this.userUpdateForm.valid) {
             const user: UserModel = new UserModel(this.userUpdateForm.value);
-
-          console.log("user.riskDepartment :" + user.riskDepartment);
-
-          console.log("user.departmentHead :" + user.departmentHead);
-
-
 
           if (user.riskDepartment == null && user.departmentHead == true) {
               this._matSnackBar.open('Error: Select the department.', 'OK', { duration: 7000 });

@@ -28,7 +28,7 @@ export class BMCICCApprovalMeetingComponent {
 
     disableAdd = false;
 
-    enquiryCompletion: any;
+    loanAppraisal: any;
 
     /**
      * constructor()
@@ -37,8 +37,8 @@ export class BMCICCApprovalMeetingComponent {
                     private _matSnackBar: MatSnackBar, private _datePipe: DatePipe, private _activatedRoute: ActivatedRoute) {
 
         console.log('activated route', _activatedRoute);
-        this.enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
-        console.log('enquiry completion', this.enquiryCompletion);
+        this.loanAppraisal = _activatedRoute.snapshot.data.routeResolvedData[3];
+        console.log('loan appraisal', this.loanAppraisal);
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.refreshTable();
@@ -88,7 +88,7 @@ export class BMCICCApprovalMeetingComponent {
             data: {
                 loanApplicationId: this.loanApplicationId,
                 selectedICCApproval: this.selectedICCApproval,
-                enquiryCompletion: this.enquiryCompletion
+                loanAppraisal: this.loanAppraisal
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.

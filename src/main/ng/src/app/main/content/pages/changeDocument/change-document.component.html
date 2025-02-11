@@ -26,8 +26,14 @@
 
                         <mat-form-field fxFlex="50">
                             <mat-select placeholder="Process" formControlName="processName">
-                                <mat-option [value]="'Monitoring'">Monitoring</mat-option>
                                 <mat-option [value]="'Appraisal'">Appraisal</mat-option>
+                                <mat-option [value]="'Monitoring'">Monitoring</mat-option>
+                                <mat-option [value]="'EnquiryAction'">EnquiryAction</mat-option>
+                                <mat-option [value]="'LoanApplication'">LoanApplication</mat-option>
+                                <mat-option [value]="'ICCApproval'">ICCApproval</mat-option>
+                                <mat-option [value]="'Risk Assessment'">Risk Assessment</mat-option>
+                                <mat-option [value]="'ApplicationFee'">ApplicationFee</mat-option>
+                                <mat-option [value]="'Application Fee'">Application Fee</mat-option>
                             </mat-select>
                         </mat-form-field>
 
@@ -51,14 +57,12 @@
                             <mat-datepicker #dateTo></mat-datepicker>
                         </mat-form-field>
 
-                        <div fxLayout="row" fxLayoutAlign="end end" style="width:250px;">
-                            <button class="mr-8" mat-raised-button type="button" color="primary" (click)="searchChangeDocuments()">
-                                <mat-icon matSuffix class="mr-8">search</mat-icon> Search
-                            </button>
-                            <!-- <button class="mr-8" mat-raised-button type="button" color="primary" (click)="searchEnquiriesTest()">
-                                <mat-icon matSuffix class="mr-8">search</mat-icon> Search Test
-                            </button> -->
-                        </div>
+                    </div>
+                    
+                    <div fxLayout="row" fxLayoutAlign="start">
+                        <button class="mr-8" mat-raised-button type="button" color="primary" (click)="searchChangeDocuments()">
+                            <mat-icon matSuffix class="mr-8">search</mat-icon> Search
+                        </button>
                     </div>
                 </form>
             </mat-expansion-panel>

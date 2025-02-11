@@ -25,7 +25,7 @@ export class BMCICCApprovalUpdateDialogComponent implements OnInit {
 
     today = new Date();
 
-    enquiryCompletion: any;
+    loanAppraisal: any;
     
     fileReference1: string = '';
     fileReference2: string = '';
@@ -44,7 +44,7 @@ export class BMCICCApprovalUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedICCApproval = Object.assign({}, _dialogData.selectedICCApproval);
         this.loanApplicationId = _dialogData.loanApplicationId;
-        this.enquiryCompletion = _dialogData.enquiryCompletion;
+        this.loanAppraisal = Object.assign({}, _dialogData.loanAppraisal);
 
         if (this.selectedICCApproval.id !== undefined) {
             this.dialogTitle = 'Modify ICC Approval Details';

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
-import { EnquiryActionService } from '../enquiryAction/enquiryAction.service';
 import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
+import { LoanAppraisalService } from '../appraisal/loanAppraisal.service';
 
 @Injectable()
 export class BMCApprovalService {
@@ -15,7 +15,7 @@ export class BMCApprovalService {
      */
     constructor(private _http: HttpClient, 
         private _loanEnquiryService: LoanEnquiryService,
-        private _enquiryActionService: EnquiryActionService) {
+        private _loanAppraisalService: LoanAppraisalService) {
     }
 
     /**
@@ -25,7 +25,7 @@ export class BMCApprovalService {
         return forkJoin([
             this.getBmcICCFurtherDetails(this._bmcIccApproval.value.id),
             this.getBmcLoanEnhancements(this._bmcIccApproval.value.id),
-            this.getEnquiryCompletion(this._loanEnquiryService.selectedLoanApplicationId.value)
+            this._loanAppraisalService.getProjectAppraisalCompletion(this._loanAppraisalService._loanAppraisalBehaviourSubject.value.id)
         ]);
     }
 
@@ -34,20 +34,6 @@ export class BMCApprovalService {
      */
     public uploadVaultDocument(file: FormData): Observable<any> {
         return this._http.post('enquiry/api/upload', file);
-    }
-
-    /**
-     * getEnquiryCompletion()
-     */
-    getEnquiryCompletion(loanApplicationId: string): Observable<any> {
-        return new Observable((observer) => {
-            this._enquiryActionService.getEnquiryAction(loanApplicationId).subscribe(response => {
-                this._enquiryActionService.getEnquiryCompletion(response.id).subscribe(response => {
-                    observer.next(response);
-                    observer.complete();
-                });
-            });
-        });
     }
 
     /**
