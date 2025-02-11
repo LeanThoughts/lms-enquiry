@@ -37,16 +37,14 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
                     obj.setModified(true);
                     obj = bmciccApprovalRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
-
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "BmcIccApproval", "Header");
                     return obj;
                 });
 
@@ -57,16 +55,17 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
         bmciccFurtherDetail.setIccMeetingNumber(bmciccFurtherDetailResource.getIccMeetingNumber());
         bmciccFurtherDetail.setIccMeetingDate(bmciccFurtherDetailResource.getIccMeetingDate());
         bmciccFurtherDetail = bmciccFurtherDetailRepository.save(bmciccFurtherDetail);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+
+        changeDocumentService.createChangeDocument(
+                bmciccFurtherDetail.getId(),
+                bmciccFurtherDetail.getId().toString(),
+                bmciccFurtherDetail.getBmcICCApproval().getId().toString(),
+                loanApplication.getLoanContractId(),
+                null,
+                bmciccFurtherDetail,
+                "Created",
+                username,
+                "BmcApprovalByIcc", "BmcIccFurtherDetail");
 
         return bmciccFurtherDetail;
     }
@@ -78,7 +77,7 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
         BmcIccFurtherDetail bmciccFurtherDetail = bmciccFurtherDetailRepository.findById(bmciccFurtherDetailResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmciccFurtherDetailResource.getId().toString()));
 
-        Object oldICCFurtherDetail = bmciccFurtherDetail.clone();
+        Object oldBmciccFurtherDetail = bmciccFurtherDetail.clone();
 
         bmciccFurtherDetail.setIccMeetingDate(bmciccFurtherDetailResource.getIccMeetingDate());
         bmciccFurtherDetail.setIccMeetingNumber(bmciccFurtherDetailResource.getIccMeetingNumber());
@@ -89,17 +88,16 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
         BMCICCApproval.setModified(true);
         bmciccApprovalRepository.save(BMCICCApproval);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                bmciccFurtherDetail.getId(),
+                bmciccFurtherDetail.getId().toString(),
+                bmciccFurtherDetail.getBmcICCApproval().getId().toString(),
+                BMCICCApproval.getLoanApplication().getLoanContractId(),
+                oldBmciccFurtherDetail,
+                bmciccFurtherDetail,
+                "Updated",
+                username,
+                "BmcApprovalByIcc", "BmcIccFurtherDetail");
 
         return bmciccFurtherDetail;
     }
@@ -114,7 +112,18 @@ public class BMCICCFurtherDetailService implements IBMCICCFurtherDetailService {
         bmciccApprovalRepository.save(bmcICCApproval);
 
         bmciccFurtherDetailRepository.delete(bmciccFurtherDetail);
-        
+
+        changeDocumentService.createChangeDocument(
+                bmciccFurtherDetail.getId(),
+                bmciccFurtherDetail.getId().toString(),
+                bmciccFurtherDetail.getBmcICCApproval().getId().toString(),
+                bmcICCApproval.getLoanApplication().getLoanContractId(),
+                null,
+                bmciccFurtherDetail,
+                "Deleted",
+                username,
+                "BmcApprovalByIcc", "BmcIccFurtherDetail");
+
         return bmciccFurtherDetail;
     }
 }

@@ -37,15 +37,14 @@ public class BMCApprovalByICCService implements IBMCApprovalByICCService {
                     obj.setModified(true);
                     obj = bmcICCApprovalRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                     changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "BmcIccApproval", "Header");
 
                     return obj;
                 });
@@ -62,16 +61,17 @@ public class BMCApprovalByICCService implements IBMCApprovalByICCService {
         BMCApprovalByIcc.setDocumentTypeMinutes(bmcApprovalByICCResource.getDocumentTypeMinutes());
         BMCApprovalByIcc.setDocumentTypeMailFromCS(bmcApprovalByICCResource.getDocumentTypeMailFromCS());
         BMCApprovalByIcc = bmcApprovalByIccRepository.save(BMCApprovalByIcc);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+
+        changeDocumentService.createChangeDocument(
+                BMCApprovalByIcc.getId(),
+                BMCApprovalByIcc.getId().toString(),
+                BMCApprovalByIcc.getBmcICCApproval().getId().toString(),
+                loanApplication.getLoanContractId(),
+                null,
+                BMCApprovalByIcc,
+                "Created",
+                username,
+                "BmcApprovalByIcc", "BmcApprovalByIcc");
 
         return BMCApprovalByIcc;
     }
@@ -83,7 +83,7 @@ public class BMCApprovalByICCService implements IBMCApprovalByICCService {
         BmcApprovalByIcc BMCApprovalByIcc = bmcApprovalByIccRepository.findById(bmcApprovalByICCResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmcApprovalByICCResource.getId().toString()));
 
-        Object oldICCFurtherDetail = BMCApprovalByIcc.clone();
+        Object oldBmcApprovalByIcc = BMCApprovalByIcc.clone();
 
         BMCApprovalByIcc.setMeetingDate(bmcApprovalByICCResource.getMeetingDate());
         BMCApprovalByIcc.setMeetingNumber(bmcApprovalByICCResource.getMeetingNumber());
@@ -99,19 +99,18 @@ public class BMCApprovalByICCService implements IBMCApprovalByICCService {
 
         BmcIccApproval BMCICCApproval = bmcICCApprovalRepository.getOne(BMCApprovalByIcc.getBmcICCApproval().getId());
         BMCICCApproval.setModified(true);
-        bmcICCApprovalRepository.save(BMCICCApproval);
+        BMCICCApproval =  bmcICCApprovalRepository.save(BMCICCApproval);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                BMCICCApproval.getId(),
+                BMCICCApproval.getId().toString(),
+                BMCApprovalByIcc.getBmcICCApproval().getId().toString(),
+                BMCICCApproval.getLoanApplication().getLoanContractId(),
+                oldBmcApprovalByIcc,
+                BMCICCApproval,
+                "Updated",
+                username,
+                "BmcApprovalByIcc", "BmcApprovalByIcc");
 
         return BMCApprovalByIcc;
     }
@@ -123,9 +122,21 @@ public class BMCApprovalByICCService implements IBMCApprovalByICCService {
         
         BmcIccApproval BMCICCApproval = bmcICCApprovalRepository.getOne(BMCApprovalByIcc.getBmcICCApproval().getId());
         BMCICCApproval.setModified(true);
+        LoanApplication loanApplication = BMCICCApproval.getLoanApplication();
         bmcICCApprovalRepository.save(BMCICCApproval);
 
         bmcApprovalByIccRepository.delete(BMCApprovalByIcc);
+
+        changeDocumentService.createChangeDocument(
+                BMCApprovalByIcc.getId(),
+                BMCApprovalByIcc.getId().toString(),
+                BMCApprovalByIcc.getBmcICCApproval().getId().toString(),
+                loanApplication.getLoanContractId(),
+                null,
+                BMCApprovalByIcc,
+                "Deleted",
+                username,
+                "BmcApprovalByIcc", "BmcApprovalByIcc");
         return BMCApprovalByIcc;
     }
 }

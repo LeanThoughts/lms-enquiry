@@ -37,15 +37,14 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
                     obj.setModified(true);
                     obj = BMCICCApprovalRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "BmcIccApproval", "Header");
 
                     return obj;
                 });
@@ -56,16 +55,17 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
         BMCICCReasonForDelay.setDate(bmciccReasonForDelayResource.getDate());
         BMCICCReasonForDelay = BMCICCReasonForDelayRepository.save(BMCICCReasonForDelay);
 
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+
+        changeDocumentService.createChangeDocument(
+                BMCICCReasonForDelay.getId(),
+                BMCICCReasonForDelay.getId().toString(),
+                BMCICCReasonForDelay.getBmcICCApproval().getId().toString(),
+                BMCICCReasonForDelay.getBmcICCApproval().getLoanApplication().getLoanContractId(),
+                null,
+                BMCICCReasonForDelay,
+                "Created",
+                username,
+                "BmcApprovalByIcc", "BmcIccReasonForDelay");
 
         return BMCICCReasonForDelay;
     }
@@ -77,23 +77,22 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
         BmcIccReasonForDelay BMCICCReasonForDelay = BMCICCReasonForDelayRepository.findById(bmciccReasonForDelayResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmciccReasonForDelayResource.getId().toString()));
 
-        Object oldICCFurtherDetail = BMCICCReasonForDelay.clone();
+        Object oldBMCICCReasonForDelay = BMCICCReasonForDelay.clone();
 
         BMCICCReasonForDelay.setReasonForDelay(bmciccReasonForDelayResource.getReasonForDelay());
         BMCICCReasonForDelay.setDate(bmciccReasonForDelayResource.getDate());
         BMCICCReasonForDelay = BMCICCReasonForDelayRepository.save(BMCICCReasonForDelay);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                BMCICCReasonForDelay.getId(),
+                BMCICCReasonForDelay.getId().toString(),
+                BMCICCReasonForDelay.getBmcICCApproval().getId().toString(),
+                BMCICCReasonForDelay.getBmcICCApproval().getLoanApplication().getLoanContractId(),
+                oldBMCICCReasonForDelay,
+                BMCICCReasonForDelay,
+                "Updated",
+                username,
+                "BmcApprovalByIcc", "BmcIccReasonForDelay");
 
         return BMCICCReasonForDelay;
     }
@@ -108,7 +107,17 @@ public class BMCICCReasonForDelayService implements IBMCICCReasonForDelayService
         BMCICCApprovalRepository.save(BMCICCApproval);
 
         BMCICCReasonForDelayRepository.delete(BMCICCReasonForDelay);
-        
+
+        changeDocumentService.createChangeDocument(
+                BMCICCReasonForDelay.getId(),
+                BMCICCReasonForDelay.getId().toString(),
+                BMCICCReasonForDelay.getBmcICCApproval().getId().toString(),
+                BMCICCReasonForDelay.getBmcICCApproval().getLoanApplication().getLoanContractId(),
+                null,
+                BMCICCReasonForDelay,
+                "Deleted",
+                username,
+                "BmcApprovalByIcc", "BmcIccReasonForDelay");
         return BMCICCReasonForDelay;
     }
 }

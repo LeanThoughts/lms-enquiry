@@ -92,7 +92,7 @@ public class TermSheetService implements ITermSheetService {
                 termSheet,
                 "Created",
                 username,
-                "Application Fee", "TermSheet");
+                "ApplicationFee", "TermSheet");
 
         return termSheet;
     }
@@ -125,7 +125,7 @@ public class TermSheetService implements ITermSheetService {
                  termSheet,
                 "Updated",
                 username,
-                 "Application Fee", "TermSheet");
+                 "ApplicationFee", "TermSheet");
 
         return termSheet;
     }
@@ -150,7 +150,7 @@ public class TermSheetService implements ITermSheetService {
                 termSheet,
                 "Deleted",
                 username,
-                "Application Fee", "TermSheet");
+                "ApplicationFee", "TermSheet");
 
         return termSheet;
     }

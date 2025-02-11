@@ -32,7 +32,6 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
         bmcICCApproval.setWorkFlowStatusCode(04);
         bmcICCApproval.setWorkFlowStatusDescription("Rejected");
 
-        // Change Documents for Monitoring Header
         changeDocumentService.createChangeDocument(
                 bmcICCApproval.getId(), bmcICCApproval.getId().toString(), null,
                 bmcICCApproval.getLoanApplication().getLoanContractId(),
@@ -40,7 +39,7 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
                 oldIccApproval,
                 "Updated",
                 username,
-                "ICC In-Principal Approval", "Header");
+                "BmcIccApproval", "Header");
         BMCICCApprovalRepository.save(bmcICCApproval);
 
         return bmcICCApproval;
@@ -55,7 +54,7 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
 
 
         loanApplication.setFunctionalStatus(12);
-        loanApplication.setFunctionalStatusDescription("ICC In-Principle Approved");
+        loanApplication.setFunctionalStatusDescription("BMC Approval");
 
         // Change Documents for Loan Application
         changeDocumentService.createChangeDocument(
