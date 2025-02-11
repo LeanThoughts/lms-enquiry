@@ -37,15 +37,14 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
                     obj.setModified(true);
                     obj = bmcIccApprovalRepository.save(obj);
 
-                    // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "BmcIccApproval", "Header");
 
                     return obj;
                 });
@@ -62,16 +61,17 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
         bmcLoanEnhancement.setReviseRepaymentStartDate(bmcLoanEnhancementResource.getReviseRepaymentStartDate());
         bmcLoanEnhancement.setRemarks(bmcLoanEnhancementResource.getRemarks());
         bmcLoanEnhancement = bmcLoanEnhancementRepository.save(bmcLoanEnhancement);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+
+        changeDocumentService.createChangeDocument(
+                bmcLoanEnhancement.getId(),
+                bmcLoanEnhancement.getId().toString(),
+                bmcLoanEnhancement.getBmcICCApproval().getId().toString(),
+                BMCICCApproval.getLoanApplication().getLoanContractId(),
+                null,
+                bmcLoanEnhancement,
+                "Created",
+                username,
+                "BmcApprovalByIcc", "BmcLoanEnhancement");
 
         return bmcLoanEnhancement;
     }
@@ -83,7 +83,7 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
         BmcLoanEnhancement bmcLoanEnhancement = bmcLoanEnhancementRepository.findById(bmcLoanEnhancementResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmcLoanEnhancementResource.getId().toString()));
 
-        Object oldICCFurtherDetail = bmcLoanEnhancement.clone();
+        Object oldBmcLoanEnhancement = bmcLoanEnhancement.clone();
 
         bmcLoanEnhancement.setIccMeetingNumber(bmcLoanEnhancementResource.getIccMeetingNumber());
         bmcLoanEnhancement.setIccClearanceDate(bmcLoanEnhancementResource.getIccClearanceDate());
@@ -99,18 +99,16 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
         bmcICCApproval.setModified(true);
         bmcIccApprovalRepository.save(bmcICCApproval);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
-
+        changeDocumentService.createChangeDocument(
+                bmcLoanEnhancement.getId(),
+                bmcLoanEnhancement.getId().toString(),
+                bmcLoanEnhancement.getBmcICCApproval().getId().toString(),
+                bmcICCApproval.getLoanApplication().getLoanContractId(),
+                oldBmcLoanEnhancement,
+                bmcLoanEnhancement,
+                "Updated",
+                username,
+                "BmcApprovalByIcc", "BmcLoanEnhancement");
         return bmcLoanEnhancement;
     }
 
@@ -124,6 +122,17 @@ public class BMCLoanEnhancementService implements IBMCLoanEnhancementService {
         bmcIccApprovalRepository.save(bmcICCApproval);
 
         bmcLoanEnhancementRepository.delete(bmcLoanEnhancement);
+
+        changeDocumentService.createChangeDocument(
+                bmcLoanEnhancement.getId(),
+                bmcLoanEnhancement.getId().toString(),
+                bmcLoanEnhancement.getBmcICCApproval().getId().toString(),
+                bmcICCApproval.getLoanApplication().getLoanContractId(),
+                null,
+                bmcLoanEnhancement,
+                "Deleted",
+                username,
+                "BmcApprovalByIcc", "BmcLoanEnhancement");
         return bmcLoanEnhancement;
     }
 }

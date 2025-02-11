@@ -38,14 +38,14 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
                     obj = bmcICCApprovalRepository.save(obj);
 
                     // Change Documents for Appraisal Header
-//                    changeDocumentService.createChangeDocument(
-//                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
-//                            loanApplication.getLoanContractId(),
-//                            null,
-//                            obj,
-//                            "Created",
-//                            username,
-//                            "Appraisal", "Header");
+                    changeDocumentService.createChangeDocument(
+                            obj.getId(),obj.getId().toString(),obj.getId().toString(),
+                            loanApplication.getLoanContractId(),
+                            null,
+                            obj,
+                            "Created",
+                            username,
+                            "BmcIccApproval", "Header");
 
                     return obj;
                 });
@@ -57,16 +57,17 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
         bmcRejectedByCustomer.setRemarks(bmcRejectedByCustomerResource.getRemarks());
         bmcRejectedByCustomer.setRejectionCategory(bmcRejectedByCustomerResource.getRejectionCategory());
         bmcRejectedByCustomer = bmcRejectedByCustomerRepository.save(bmcRejectedByCustomer);
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanApplication.getLoanContractId(),
-//                null,
-//                loanPartner,
-//                "Created",
-//                username,
-//                "Appraisal", "Loan Partner");
+
+        changeDocumentService.createChangeDocument(
+                bmcRejectedByCustomer.getId(),
+                bmcRejectedByCustomer.getId().toString(),
+                bmcRejectedByCustomer.getBmcICCApproval().getId().toString(),
+                BMCICCApproval.getLoanApplication().getLoanContractId(),
+                null,
+                bmcRejectedByCustomer,
+                "Created",
+                username,
+                "BmcApprovalByIcc", "BmcRejectedByCustomer");
 
         return bmcRejectedByCustomer;
     }
@@ -78,7 +79,7 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
         BmcRejectedByCustomer bmcRejectedByCustomer = bmcRejectedByCustomerRepository.findById(bmcRejectedByCustomerResource.getId())
                 .orElseThrow(() -> new EntityNotFoundException(bmcRejectedByCustomerResource.getId().toString()));
 
-        Object oldICCFurtherDetail = bmcRejectedByCustomer.clone();
+        Object oldBmcRejectedByCustomer = bmcRejectedByCustomer.clone();
 
         bmcRejectedByCustomer.setMeetingNumber(bmcRejectedByCustomerResource.getMeetingNumber());
         bmcRejectedByCustomer.setDateOfRejection(bmcRejectedByCustomerResource.getDateOfRejection());
@@ -90,17 +91,16 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
         bmcICCApproval.setModified(true);
         bmcICCApprovalRepository.save(bmcICCApproval);
 
-        // Change Documents for  Loan Partner
-//        changeDocumentService.createChangeDocument(
-//                loanAppraisalForPartner.getId(),
-//                loanPartner.getId().toString(),
-//                loanAppraisalForPartner.getId().toString(),
-//                loanPartner.getLoanApplication().getLoanContractId(),
-//                oldLoanPartner,
-//                loanPartner,
-//                "Updated",
-//                username,
-//                "Appraisal", "Loan Partner");
+        changeDocumentService.createChangeDocument(
+                bmcRejectedByCustomer.getId(),
+                bmcRejectedByCustomer.getId().toString(),
+                bmcRejectedByCustomer.getBmcICCApproval().getId().toString(),
+                bmcICCApproval.getLoanApplication().getLoanContractId(),
+                oldBmcRejectedByCustomer,
+                bmcRejectedByCustomer,
+                "Updated",
+                username,
+                "BmcApprovalByIcc", "BmcRejectedByCustomer");
 
         return bmcRejectedByCustomer;
     }
@@ -115,6 +115,18 @@ public class BMCRejectedByCustomerService implements IBMCRejectedByCustomerServi
         bmcICCApprovalRepository.save(bmcICCApproval);
 
         bmcRejectedByCustomerRepository.delete(bmcRejectedByCustomer);
+
+        changeDocumentService.createChangeDocument(
+                bmcRejectedByCustomer.getId(),
+                bmcRejectedByCustomer.getId().toString(),
+                bmcRejectedByCustomer.getBmcICCApproval().getId().toString(),
+                bmcICCApproval.getLoanApplication().getLoanContractId(),
+                null,
+                bmcRejectedByCustomer,
+                "Deleted",
+                username,
+                "BmcApprovalByIcc", "BmcRejectedByCustomer");
+
         return bmcRejectedByCustomer;
     }
 }

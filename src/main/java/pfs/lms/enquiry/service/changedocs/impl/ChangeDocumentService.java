@@ -41,6 +41,12 @@ import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrustee;
 import pfs.lms.enquiry.appraisal.securitytrustee.SecurityTrusteeReportAndFee;
 import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
 //import pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc.BMCApprovalByICC;
+import pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc.BmcApprovalByIcc;
+import pfs.lms.enquiry.bmcapproval.bmciccfurtherdetail.BmcIccFurtherDetail;
+import pfs.lms.enquiry.bmcapproval.bmciccreasonfordelay.BmcIccReasonForDelay;
+import pfs.lms.enquiry.bmcapproval.bmcloanenhancement.BmcLoanEnhancement;
+import pfs.lms.enquiry.bmcapproval.bmcrejectedbycustomer.BmcRejectedByCustomer;
+import pfs.lms.enquiry.bmcapproval.bmcrejectedbyicc.BmcRejectedByIcc;
 import pfs.lms.enquiry.businesspartner.domain.*;
 import pfs.lms.enquiry.documentation.Documentation;
 import pfs.lms.enquiry.documentation.contractamendments.ContractAmendment;
@@ -236,6 +242,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
             sapIntegrationPointerService.saveForObject(businessProcessName, subProcessName, entityId, mainEntityId, mode);
         } catch (Exception ex) {
             log.error("Error during change document create: " + businessProcessName + "-" + subProcessName + ":" + ex.getMessage());
+            return null;
         }
         log.info("Change Document Creation Completed: " + businessProcessName + "-" + subProcessName + ":" + changeDocument.getLoanContractId());
 
@@ -1143,10 +1150,35 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", referenceInterestRateValue.getReferenceInterestRate().getCode());
                     result.put("description", referenceInterestRateValue.getValidFromDate().toString());
                     return result;
-                case "BMCICCApproval":
+                case "BmcIccApproval":
                     BmcIccApproval bmciccApproval = (BmcIccApproval) object;
                     result.put("id", bmciccApproval.getId());
                     result.put("description", bmciccApproval.getLoanApplication().getLoanContractId().toString());
+                    return result;
+                case "BmcIccFurtherDetail":
+                    BmcIccFurtherDetail bmcIccFurtherDetail = (BmcIccFurtherDetail) object;
+                    result.put("id", bmcIccFurtherDetail.getId());
+                    result.put("description", bmcIccFurtherDetail.getBmcICCApproval().getLoanApplication().getLoanContractId().toString());
+                    return result;
+                case "BmcIccReasonForDelay":
+                    BmcIccReasonForDelay bmcIccReasonForDelay = (BmcIccReasonForDelay) object;
+                    result.put("id", bmcIccReasonForDelay.getId());
+                    result.put("description", bmcIccReasonForDelay.getBmcICCApproval().getLoanApplication().getLoanContractId().toString());
+                    return result;
+                case "BmcLoanEnhancement":
+                    BmcLoanEnhancement bmcLoanEnhancement = (BmcLoanEnhancement) object;
+                    result.put("id", bmcLoanEnhancement.getId());
+                    result.put("description", bmcLoanEnhancement.getBmcICCApproval().getLoanApplication().getLoanContractId().toString());
+                    return result;
+                case "BmcRejectedByCustomer":
+                    BmcRejectedByCustomer bmcRejectedByCustomer = (BmcRejectedByCustomer) object;
+                    result.put("id", bmcRejectedByCustomer.getId());
+                    result.put("description", bmcRejectedByCustomer.getBmcICCApproval().getLoanApplication().getLoanContractId().toString());
+                    return result;
+                case "BmcRejectedByIcc":
+                    BmcRejectedByIcc bmcRejectedByIcc = (BmcRejectedByIcc) object;
+                    result.put("id", bmcRejectedByIcc.getId().toString());
+                    result.put("description", bmcRejectedByIcc.getBmcICCApproval().getLoanApplication().getLoanContractId().toString());
                     return result;
             }
 
