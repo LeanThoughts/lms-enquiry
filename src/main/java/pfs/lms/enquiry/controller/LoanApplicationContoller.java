@@ -352,8 +352,28 @@ public class LoanApplicationContoller {
 
 
     // Get Loan Application by EnquiryId - Cross Application Call
-    @PutMapping("/loanApplicationEnquiryId")
+    @PutMapping("/loanApplications/loanApplicationEnquiryId")
     public ResponseEntity getEnquiryById(@RequestBody String id, HttpServletRequest request) {
+
+        LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
+
+        EnquiryNo enquiryNo = new EnquiryNo();
+        enquiryNo.setId(Long.parseLong(id));
+
+        LoanApplication loanApplication = loanApplicationRepository.findByEnquiryNo(enquiryNo);
+
+        if (loanApplication != null) {
+            loanApplicationResource.setLoanApplication(loanApplication);
+            loanApplicationResource.setPartner(null);
+            return ResponseEntity.ok(loanApplicationResource);
+        } else {
+            return (ResponseEntity) ResponseEntity.notFound();
+        }
+
+    }
+
+    @GetMapping("/loanApplications/enquiry/enquiryId")
+    public ResponseEntity getLoanApplicationByEnquiryId(@RequestParam("id") String id, HttpServletRequest request) {
 
         LoanApplicationResource loanApplicationResource = new LoanApplicationResource();
 

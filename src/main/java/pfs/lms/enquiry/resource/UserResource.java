@@ -1,8 +1,10 @@
 package pfs.lms.enquiry.resource;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserResource
 {
     private String firstName;
@@ -13,6 +15,7 @@ public class UserResource
     private String role;
     private String sapBPNumber;
     private String riskDepartment;
+    private String riskDepartmentName;
     private Boolean departmentHead;
     private Boolean riskPortalDisplayOnlyAccess;
 

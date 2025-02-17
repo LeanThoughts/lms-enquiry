@@ -15,6 +15,7 @@ import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.mail.service.PasswordResetService;
+import pfs.lms.enquiry.repository.DepartmentRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.EmailId;
@@ -50,6 +51,8 @@ public class UserController {
     private final IUserService userService;
 
     private final IPartnerService partnerService;
+
+    private final DepartmentRepository departmentRepository;
 
     @PostMapping("/user")
     public ResponseEntity signup(@RequestBody UserResource userResource,HttpServletRequest request) throws CloneNotSupportedException {
@@ -179,6 +182,24 @@ public class UserController {
 
         if (user != null) {
             return  ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+
+    }
+
+    @PutMapping("/user/resource/email")
+    public ResponseEntity getUserResourceByEmail(@RequestBody EmailId emailId, HttpServletRequest request) {
+
+        User user = userRepository.findByEmail(emailId.getEmailId());
+        if (user != null) {
+            UserResource userResource = new UserResource();
+            userResource.setEmail(user.getEmail());
+            userResource.setFirstName(user.getFirstName());
+            userResource.setLastName(user.getLastName());
+            userResource.setRiskDepartment(user.getRiskDepartment());
+            userResource.setRiskDepartmentName(departmentRepository.findByCode(user.getRiskDepartment()).getValue());
+            return  ResponseEntity.ok(userResource);
         } else {
             return ResponseEntity.noContent().build();
         }
