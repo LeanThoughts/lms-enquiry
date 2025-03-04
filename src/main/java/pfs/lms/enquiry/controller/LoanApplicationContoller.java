@@ -387,7 +387,7 @@ public class LoanApplicationContoller {
             loanApplicationResource.setPartner(null);
             return ResponseEntity.ok(loanApplicationResource);
         } else {
-            return (ResponseEntity) ResponseEntity.notFound();
+            return ResponseEntity.notFound().build();
         }
 
     }
