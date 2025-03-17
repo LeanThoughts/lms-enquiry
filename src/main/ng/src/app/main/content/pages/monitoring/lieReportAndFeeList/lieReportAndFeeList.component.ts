@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/confirmationDialog.component';
 import { LIEReportAndFeeUpdateDialogComponent } from '../lieReportAndFeeUpdate/lieReportAndFeeUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
+import { LoanAppraisalService } from '../../appraisal/loanAppraisal.service';
 
 @Component({
     selector: 'fuse-lie-report-fee-list',
@@ -27,6 +28,8 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
             'nextReportDate', 'download'
     ];
 
+    accessAllowed = true;
+
     subscriptions = new Subscription()
     
     _module = '';
@@ -39,7 +42,7 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
     /**
      * constructor()
      */
-    constructor(private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog, private _loanAppraisalService: LoanAppraisalService) {
         this.subscriptions.add(_loanMonitoringService.selectedLIE.subscribe(data => {
             this.selectedLIE = new LIEModel(data);
             if (this.selectedLIE.id !== '') {
@@ -49,6 +52,10 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
                 });
             }
         }))
+
+        if (this.module === 'Appraisal') {
+            this.accessAllowed = this._loanAppraisalService.loanAppraisalAuthorization.accessAllowed;
+        }
     }
 
     /**
@@ -100,13 +107,13 @@ export class LIEReportAndFeeListComponent implements OnDestroy {
     /**
      * updateLIEReportAndFee()
      */
-    updateLIEReportAndFee(): void {
+    updateLIEReportAndFee(mode: string): void {
         // Open the dialog.
         const dialogRef = this._dialog.open(LIEReportAndFeeUpdateDialogComponent, {
             panelClass: 'fuse-lie-report-fee-update-dialog',
             width: '1126px',
             data: {
-                operation: 'updateLIEReportAndFee',
+                operation: mode,
                 selectedLIE: this.selectedLIE,
                 selectedLIEReportAndFee: this.selectedLIEReportAndFee,
                 module: this._module

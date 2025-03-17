@@ -43,7 +43,7 @@ export class LoanPartnerUpdateComponent implements OnInit {
         this.selectedLoanOfficer = Object.assign({}, _dialogData.loanOfficer);
 
         // Change diglog title and fetch partners based on the role assigned ...
-        if (this._dialogData.operation === 'modifyOfficer') {
+        if (this._dialogData.operation === 'modifyOfficer' || this._dialogData.operation === 'viewOfficer') {
             this.dialogTitle = 'Modify Loan Partners';
             this._loanAppraisalService.getPartnersByRole(this.selectedLoanOfficer.roleType).subscribe(response => {
                 this.partners = response;
@@ -68,6 +68,11 @@ export class LoanPartnerUpdateComponent implements OnInit {
             roleType: [ this.selectedLoanOfficer.roleType || '' ],
             startDate: [ this.selectedLoanOfficer.startDate || '' ]
         });
+
+        if (this._dialogData.operation === 'viewOfficer') {
+            this.loanOfficerForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     /**

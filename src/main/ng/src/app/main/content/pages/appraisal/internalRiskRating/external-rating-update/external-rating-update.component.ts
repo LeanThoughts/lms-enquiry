@@ -21,16 +21,12 @@ export class ExternalRatingUpdateComponent {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<ExternalRatingUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
 
         this.selectedRating = Object.assign({}, _dialogData.selectedRating);
-
-        if (this._dialogData.operation === 'modifyRating') {
-            this.dialogTitle = 'Modify External Rating';
-        }
 
         this._loanAppraisalService.getRatings().subscribe(response => {
             this.ratings = response._embedded.externalRatingTypes;
@@ -45,6 +41,15 @@ export class ExternalRatingUpdateComponent {
             creditStandingInstruction: [ this.selectedRating.creditStandingInstruction || '' ],
             creditStandingText: [ this.selectedRating.creditStandingText || '' ]
         });
+        
+        if (this._dialogData.operation === 'modifyRating') {
+            this.dialogTitle = 'Modify External Rating';
+        }
+        else if (this._dialogData.operation === 'viewRating') {
+            this.dialogTitle = 'View External Rating';
+            this.ratingForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     /**

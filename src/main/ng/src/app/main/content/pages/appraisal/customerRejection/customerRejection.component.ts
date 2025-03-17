@@ -32,7 +32,8 @@ export class CustomerRejectionComponent {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 private _activatedRoute: ActivatedRoute,
-                _loanAppraisalService: LoanAppraisalService, public datepipe: DatePipe) {
+                public _loanAppraisalService: LoanAppraisalService,
+                public datepipe: DatePipe) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;

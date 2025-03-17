@@ -5,6 +5,7 @@ import { ConfirmationDialogComponent } from '../../appraisal/confirmationDialog/
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
 import { LIEUpdateDialogComponent } from '../lieUpdate/lieUpdate.component';
 import { LoanMonitoringService } from '../loanMonitoring.service';
+import { LoanAppraisalService } from '../../appraisal/loanAppraisal.service';
 
 @Component({
     selector: 'fuse-lie-list',
@@ -13,6 +14,8 @@ import { LoanMonitoringService } from '../loanMonitoring.service';
     animations: fuseAnimations
 })
 export class LIEListComponent {
+
+    accessAllowed = true;
 
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatSort) sort: MatSort;
@@ -38,13 +41,17 @@ export class LIEListComponent {
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog, 
-                        private _matSnackBar: MatSnackBar) {
+                        private _matSnackBar: MatSnackBar, private _loanAppraisalService: LoanAppraisalService) {
                             
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getLendersIndependentEngineers(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
+
+        if (this.module === 'Appraisal') {
+            this.accessAllowed = this._loanAppraisalService.loanAppraisalAuthorization.accessAllowed;
+        }
     }
 
     /**

@@ -41,16 +41,6 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
 
         this.documentTypes = this._loanEnquiryService.documentTypes;
 
-        // Fetch selected user details from the dialog's data attribute.
-        this.selectedSecurityTrustee = _dialogData.selectedSecurityTrustee;
-        if (_dialogData.selectedSecurityTrusteeReportAndFee !== undefined) {
-            this.selectedSecurityTrusteeReportAndFee = Object.assign({}, _dialogData.selectedSecurityTrusteeReportAndFee);
-            this.dialogTitle = 'Modify Security Trustee Report Submission';
-        }
-        else {
-            this.selectedSecurityTrusteeReportAndFee = {};
-        }
-
         this.stReportUpdateForm = _formBuilder.group({
             reportType: [this.selectedSecurityTrusteeReportAndFee.reportType],
             dateOfReceipt: [this.selectedSecurityTrusteeReportAndFee.dateOfReceipt || ''],
@@ -70,6 +60,21 @@ export class SecurityTrusteeReportAndFeeUpdateDialogComponent {
             percentageCompletion: [this.selectedSecurityTrusteeReportAndFee.percentageCompletion, [Validators.pattern(MonitoringRegEx.holdingPercentage)]],
             remarks: [this.selectedSecurityTrusteeReportAndFee.remarks || '']
         });
+
+        // Fetch selected user details from the dialog's data attribute.
+        this.selectedSecurityTrustee = _dialogData.selectedSecurityTrustee;
+        if (_dialogData.selectedSecurityTrusteeReportAndFee !== undefined) {
+            this.selectedSecurityTrusteeReportAndFee = Object.assign({}, _dialogData.selectedSecurityTrusteeReportAndFee);
+            this.dialogTitle = 'Modify Security Trustee Report Submission';
+        }
+        else if (_dialogData.operation === 'viewSecurityTrusteeReportAndFee') {
+            this.dialogTitle = 'View Security Trustee Report Submission';
+            this.selectedSecurityTrusteeReportAndFee = Object.assign({}, _dialogData.selectedSecurityTrusteeReportAndFee);
+            this.disableSubmitButton = true;
+        }
+        else {
+            this.selectedSecurityTrusteeReportAndFee = {};
+        }
     }
 
     /**

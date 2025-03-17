@@ -26,14 +26,14 @@ export class ReasonForDelayUpdateComponent {
      * @param _dialogData 
      */
     constructor(_formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<ReasonForDelayUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);
-        if (_dialogData.operation === 'update') {
+        if (_dialogData.operation === 'update' || _dialogData.operation === 'view') {
             this._selectedReasonForDelay = Object.assign({}, _dialogData.selectedReasonForDelay);
         }
         else {
@@ -48,6 +48,11 @@ export class ReasonForDelayUpdateComponent {
             reasonForDelay: [ this._selectedReasonForDelay.reasonForDelay || null ],
             remarks: [ this._selectedReasonForDelay.remarks || null ]
         });
+
+        if (_dialogData.operation === 'view') {
+            this._reasonForDelayForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     /**

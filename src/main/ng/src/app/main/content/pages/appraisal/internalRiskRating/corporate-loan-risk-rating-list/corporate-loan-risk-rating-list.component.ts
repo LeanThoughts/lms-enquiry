@@ -32,7 +32,7 @@ export class CorporateLoanRiskRatingListComponent {
      * @param _loanAppraisalService 
      */
     constructor(_loanEnquiryService: LoanEnquiryService, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 private _matSnackBar: MatSnackBar,
                 private _matDialog: MatDialog) { 
 
@@ -54,7 +54,7 @@ export class CorporateLoanRiskRatingListComponent {
             'loanApplicationId': this._loanApplicationId,
             'selectedRating': undefined
         };
-        if (operation === 'modifyRating') {
+        if (operation === 'modifyRating' || operation === 'viewRating') {
             data.selectedRating = this.selectedRating;
         }
         const dialogRef = this._matDialog.open(CorporateLoanRiskRatingUpdateComponent, {

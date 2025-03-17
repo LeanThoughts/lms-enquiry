@@ -30,7 +30,7 @@ export class ProjectAppraisalCompletionUpdateComponent {
      * @param _dialogData 
      */
     constructor(_formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<ProjectAppraisalCompletionUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar,
@@ -58,6 +58,11 @@ export class ProjectAppraisalCompletionUpdateComponent {
             documentType: [this._projectAppraisalCompletion.documentType || ''],
             file: ['']
         });
+
+        if (this._dialogData.operation === 'view') {
+            this._projectAppraisalCompletionForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     getMdAndCeoMinDate(): Date {

@@ -31,7 +31,7 @@ export class ReasonForDelayComponent {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 private _activatedRoute: ActivatedRoute,
-                private _loanAppraisalService: LoanAppraisalService) {
+                public _loanAppraisalService: LoanAppraisalService) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
@@ -64,7 +64,7 @@ export class ReasonForDelayComponent {
         var data = {
             'loanApplicationId': this._loanApplicationId,
             'loanAppraisalId': this._loanAppraisalId,
-            'selectedReasonForDelay': (operation === 'update') ? this.selectedReasonForDelay : null,
+            'selectedReasonForDelay': (operation === 'update' || operation === 'view') ? this.selectedReasonForDelay : null,
             'operation': operation
         };
         const dialogRef = this._dialogRef.open(ReasonForDelayUpdateComponent, {

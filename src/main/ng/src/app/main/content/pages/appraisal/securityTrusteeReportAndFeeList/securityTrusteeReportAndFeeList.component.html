@@ -1,15 +1,20 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="addSTReportAndFee()" 
-                [disabled]="selectedSecurityTrustee.id == ''"> 
+                [disabled]="selectedSecurityTrustee.id == ''" *ngIf="accessAllowed"> 
             Add Report
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSTReportAndFee()" 
-                [disabled]="!selectedSecurityTrusteeReportAndFee"> 
+                [disabled]="!selectedSecurityTrusteeReportAndFee" *ngIf="accessAllowed"> 
             Modify Report
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSTReportAndFee()" [disabled]="!selectedSecurityTrusteeReportAndFee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSTReportAndFee()" [disabled]="!selectedSecurityTrusteeReportAndFee" 
+                *ngIf="accessAllowed"> 
             Delete Report
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="viewSTReportAndFee()" 
+                [disabled]="!selectedSecurityTrusteeReportAndFee"> 
+            View Report
         </button>
     </div>
     <div class="mat-table-container" mat-white-bg style="width: 100%">

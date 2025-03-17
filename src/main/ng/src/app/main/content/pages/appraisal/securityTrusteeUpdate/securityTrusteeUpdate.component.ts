@@ -32,7 +32,7 @@ export class SecurityTrusteeUpdateDialogComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, private _loanAppraisalService: LoanAppraisalService,
+    constructor(private _formBuilder: FormBuilder, public _loanAppraisalService: LoanAppraisalService,
         public _dialogRef: MatDialogRef<SecurityTrusteeUpdateDialogComponent>, @Inject(MAT_DIALOG_DATA) public _dialogData: any,
         private _matSnackBar: MatSnackBar) {
 

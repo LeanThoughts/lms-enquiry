@@ -52,6 +52,11 @@ export class LoanAppraisalComponent implements OnInit, OnDestroy {
         this.loanAppraisal = _loanAppraisalService._loanAppraisal;
         console.log('loan appraisal in appraisal component constructor is', this.loanAppraisal);
 
+        _appService.authorization.forEach(element => {
+            if (element.authorizationObject === 'Execute Appraisal')
+                _loanAppraisalService.loanAppraisalAuthorization = element;
+        });
+
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
             console.log('this.selectedEnquiry', this.selectedEnquiry);

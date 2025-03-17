@@ -1,15 +1,15 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLIE()" [disabled]="!selectedLIE" 
-                *ngIf="_module === 'Monitoring'"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displayLIE()" [disabled]="!selectedLIE"> 
             Display LIE Details 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIE()" *ngIf="_module !== 'Monitoring'"> Add LIE </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIE()" *ngIf="_module !== 'Monitoring' && accessAllowed"> Add LIE </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIE()" [disabled]="!selectedLIE" 
-                *ngIf="_module !== 'Monitoring'"> 
+                *ngIf="_module !== 'Monitoring' && accessAllowed"> 
             Modify LIE 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteLIE()" [disabled]="!selectedLIE"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteLIE()" [disabled]="!selectedLIE" 
+                *ngIf="_module !== 'Monitoring' && accessAllowed"> 
             Delete LIE
         </button>
     </div>  

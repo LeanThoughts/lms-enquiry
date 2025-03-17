@@ -9,10 +9,15 @@ import {UserModel} from './main/content/model/user.model';
 export class AppService implements CanActivate {
 
     /**
+     * Authorization.
+     */
+    authorization: any;
+
+    /**
      * Currently logged in user.
      */
     currentUser: UserModel;
-
+    
     /**
      * constructor()
      * @param _http
@@ -54,5 +59,9 @@ export class AppService implements CanActivate {
 
     getUserMenu(): Observable<any> {
         return this._http.get<any>('enquiry/api/menu?userRole=' + this.currentUser.role);
+    }
+
+    getAuthorization(): Observable<any> {
+        return this._http.get<any>('enquiry/api/authorization?userRole=' + this.currentUser.role);
     }
 }

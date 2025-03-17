@@ -24,17 +24,12 @@ export class CorporateLoanRiskRatingUpdateComponent {
      * @param _dialogData 
      */
     constructor(private _formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<CorporateLoanRiskRatingUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
 
         this.selectedRating = Object.assign({}, _dialogData.selectedRating);
-
-        if (this._dialogData.operation === 'modifyRating') {
-            this.dialogTitle = 'Modify Corporate Loan Risk Rating';
-            // this.selectedRating = Object.assign({}, _dialogData.selectedRating);
-        }
 
         this.ratingForm = this._formBuilder.group({
             year: [ this.selectedRating.year || '' ],
@@ -47,6 +42,16 @@ export class CorporateLoanRiskRatingUpdateComponent {
             deviationWithOperationalPolicy: [ this.selectedRating.deviationWithOperationalPolicy || '' ],
             exposure: [ this.selectedRating.exposure || '' ]
         });
+
+        if (this._dialogData.operation === 'modifyRating') {
+            this.dialogTitle = 'Modify Corporate Loan Risk Rating';
+            // this.selectedRating = Object.assign({}, _dialogData.selectedRating);
+        }
+        else if (this._dialogData.operation === 'viewRating') {
+            this.dialogTitle = 'View Corporate Loan Risk Rating';
+            this.ratingForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     /**

@@ -76,6 +76,13 @@ export class LIEReportAndFeeUpdateDialogComponent {
         });
 
         this.documentTypes = this._loanEnquiryService.documentTypes;
+
+        if (_dialogData.operation === 'viewLIEReportAndFee') {
+            this.dialogTitle = 'View LIE Report Submission';
+            this.lieUpdateForm.disable();
+            this.disableSubmitButton = true;
+        }
+
     }
 
     /**

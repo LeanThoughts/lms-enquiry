@@ -34,7 +34,8 @@ export class ProjectAppraisalCompletionDetails {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 _activatedRoute: ActivatedRoute,
-                _loanAppraisalService: LoanAppraisalService, public datepipe: DatePipe) {
+                public _loanAppraisalService: LoanAppraisalService,
+                public datepipe: DatePipe) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;
@@ -91,12 +92,13 @@ export class ProjectAppraisalCompletionDetails {
     /**
      * openProjectAppraisalCompletionUpdateDialog()
      */
-    openProjectAppraisalCompletionUpdateDialog(): void {
+    openProjectAppraisalCompletionUpdateDialog(operation: string): void {
         // Open the dialog.
         var data = {
             'loanApplicationId': this._loanApplicationId,
             'loanAppraisalId': this._loanAppraisalId,
-            'projectAppraisalCompletion': this._projectAppraisalCompletion
+            'projectAppraisalCompletion': this._projectAppraisalCompletion,
+            'operation': operation
         };
         const dialogRef = this._dialogRef.open(ProjectAppraisalCompletionUpdateComponent, {
             width: '750px',

@@ -55,7 +55,7 @@
                 </mat-form-field>
             </div>
 
-            <div mat-dialog-actions fxLayout="row">
+            <div mat-dialog-actions fxLayout="row" *ngIf="_loanAppraisalService.loanAppraisalAuthorization?.accessAllowed">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()"
                         [disabled]="disableSubmitButton">
                     Submit

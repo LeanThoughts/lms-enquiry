@@ -40,7 +40,7 @@ export class MainLocationUpdateComponent {
      */
     constructor(_loanEnquiryService: LoanEnquiryService,
                 _activatedRoute: ActivatedRoute,
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 _formBuilder: FormBuilder,
                 private _matSnackBar: MatSnackBar,
                 private _matDialog: MatDialog) {
@@ -74,6 +74,10 @@ export class MainLocationUpdateComponent {
             nearestFunctionalAirportDistance: [ this._mainLocationDetail.nearestFunctionalAirportDistance || '', 
                     [Validators.pattern(MonitoringRegEx.digitsOnly)] ]
         });
+
+        if (this._loanAppraisalService.loanAppraisalAuthorization && !this._loanAppraisalService.loanAppraisalAuthorization.accessAllowed) {
+            this._mainLocationDetailForm.disable();
+        }
     }
 
     /**
@@ -132,7 +136,7 @@ export class MainLocationUpdateComponent {
             'loanApplicationId': this._loanApplicationId,
             'selectedSubLocation': undefined
         };
-        if (operation === 'updateSubLocation') {
+        if (operation === 'updateSubLocation' || operation === 'viewSubLocation') {
             data.selectedSubLocation = this.selectedSubLocation;
         }
         const dialogRef = this._matDialog.open(SubLocationUpdateComponent, {

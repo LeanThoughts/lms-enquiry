@@ -33,7 +33,7 @@ export class LoanPartnerListComponent {
      */
     constructor(private _dialogRef: MatDialog,
                 _loanEnquiryService: LoanEnquiryService,
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 _activatedRoute: ActivatedRoute) { 
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -52,7 +52,7 @@ export class LoanPartnerListComponent {
             'loanApplicationId': this._loanApplicationId,
             'loanOfficer': {},
         };
-        if (operation === 'modifyOfficer') {
+        if (operation === 'modifyOfficer' || operation === 'viewOfficer') {
             data.loanOfficer = this.selectedLoanOfficer;
         }
         const dialogRef = this._dialogRef.open(LoanPartnerUpdateComponent, {

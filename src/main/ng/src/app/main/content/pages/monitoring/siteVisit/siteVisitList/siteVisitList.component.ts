@@ -6,6 +6,7 @@ import { ConfirmationDialogComponent } from '../../../appraisal/confirmationDial
 import { LoanEnquiryService } from '../../../enquiry/enquiryApplication.service';
 import { LoanMonitoringService } from '../../loanMonitoring.service';
 import { SiteVisitUpdateDialogComponent } from '../siteVisitUpdate/siteVisitUpdate.component';
+import { LoanAppraisalService } from '../../../appraisal/loanAppraisal.service';
 
 @Component({
     selector: 'fuse-site-visit-list',
@@ -27,7 +28,8 @@ export class SiteVisitListComponent implements OnInit {
     selectedSiteVisit: any;
 
     _module = '';
-   
+    accessAllowed = true;
+
     @Input()
     set module(m: string) {
         this._module = m;
@@ -36,12 +38,18 @@ export class SiteVisitListComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog) {
+    constructor(_loanEnquiryService: LoanEnquiryService, private _loanMonitoringService: LoanMonitoringService, private _dialog: MatDialog,
+            private _loanAppraisalService: LoanAppraisalService
+    ) {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         _loanMonitoringService.getSiteVisits(this.loanApplicationId).subscribe(data => {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
+
+        if (this.module === 'Appraisal') {
+            this.accessAllowed = this._loanAppraisalService.loanAppraisalAuthorization.accessAllowed;
+        }
     }
 
     /**

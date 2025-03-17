@@ -1,15 +1,18 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displaySecurityTrustee()" [disabled]="!selectedSecurityTrustee" 
-                *ngIf="_module === 'Monitoring'"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="displaySecurityTrustee()" [disabled]="!selectedSecurityTrustee"> 
             Display Details 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addSecurityTrustee()" *ngIf="_module !== 'Monitoring'"> Add </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="addSecurityTrustee()" 
+                *ngIf="accessAllowed">
+            Add 
+        </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSecurityTrustee()" [disabled]="!selectedSecurityTrustee" 
-                *ngIf="_module !== 'Monitoring'"> 
+                *ngIf="accessAllowed"> 
             Modify  
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSecurityTrustee()" [disabled]="!selectedSecurityTrustee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteSecurityTrustee()" [disabled]="!selectedSecurityTrustee"
+                *ngIf="accessAllowed"> 
             Delete 
         </button>
     </div>

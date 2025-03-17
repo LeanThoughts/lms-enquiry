@@ -90,6 +90,12 @@ export class SiteVisitUpdateDialogComponent {
                 });
             });
         });
+
+        if (_dialogData.operation === 'viewSiteVisit') {
+            this.dialogTitle = 'View Site Visit Details';
+            this.siteVisitUpdateForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     /**

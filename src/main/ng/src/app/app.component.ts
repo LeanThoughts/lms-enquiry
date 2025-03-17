@@ -63,6 +63,11 @@ export class AppComponent implements OnInit, OnDestroy {
                 // Set the currently logged in user.
                 _appService.currentUser = response;
 
+                // Get authorization.
+                _appService.getAuthorization().subscribe(response => {
+                    _appService.authorization = response;
+                });
+
                 // Get user menu.
                 _appService.getUserMenu().subscribe(response => {
                     response.menuHeaderDTOS.forEach(element => {

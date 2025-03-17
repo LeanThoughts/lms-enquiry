@@ -63,7 +63,7 @@
         </div>
     </form>
     <button class="mr-8 btn" mat-raised-button color="accent" (click)="saveMainLocationDetails()"
-            [disabled]="disableSaveButton"> 
+            [disabled]="disableSaveButton" *ngIf="_loanAppraisalService.loanAppraisalAuthorization?.accessAllowed"> 
         Save
     </button>
 </div>
@@ -74,16 +74,17 @@
 
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSubLocation('addSubLocation')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSubLocation('addSubLocation')"  
+                *ngIf="_loanAppraisalService.loanAppraisalAuthorization?.accessAllowed"> 
             Add New Sub Location
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateSubLocation('updateSubLocation')" 
-                [disabled]="!selectedSubLocation"> 
+                [disabled]="!selectedSubLocation" *ngIf="_loanAppraisalService.loanAppraisalAuthorization?.accessAllowed"> 
             Modify Sub Location
         </button>
-        <!-- <button class="btn" mat-raised-button color="accent" (click)="openDeleteDialog()" [disabled]="!selectedSubLocation">
-            Remove Site Visit 
-        </button> -->
+        <button class="btn" mat-raised-button color="accent" (click)="updateSubLocation('viewSubLocation')" [disabled]="!selectedSubLocation">
+            View Sub Location
+        </button>
     </div>
 </div>
 

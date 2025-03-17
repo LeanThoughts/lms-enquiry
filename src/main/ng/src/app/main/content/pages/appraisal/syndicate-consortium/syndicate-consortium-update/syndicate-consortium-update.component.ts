@@ -47,7 +47,7 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
         console.log('this.banks', this.banks);
 
         // Change diglog title and fetch partners based on the role assigned ...
-        if (this._dialogData.operation === 'modifySyndicateConsortium') {
+        if (this._dialogData.operation === 'modifySyndicateConsortium' || this._dialogData.operation === 'viewSyndicateConsortium') {
             this.dialogTitle = 'Modify Syndicate Bank';
         }
     }
@@ -67,12 +67,17 @@ export class SyndicateConsortiumUpdateComponent implements OnInit {
             bankName: [ this.selectedSyndicateConsortium.bankName || '' ],
             sanctionedAmount: [ this.selectedSyndicateConsortium.sanctionedAmount || '0', [Validators.pattern(LoanAppraisalRegEx.genericAmount)] ],
             currency: [ this.selectedSyndicateConsortium.currency || 'INR' ],
-            leadBank: [ (this.selectedSyndicateConsortium.leadBank === true ? 'true' : 'false') || '' ],
+            leadBank: [ this.selectedSyndicateConsortium.leadBank || '' ],
             approvalStatus: [ this.selectedSyndicateConsortium.approvalStatus || '' ],
             documentStage: [ this.selectedSyndicateConsortium.documentStage || '' ],
             disbursedAmount: [ this.selectedSyndicateConsortium.disbursedAmount || '0', [Validators.pattern(LoanAppraisalRegEx.genericAmount)] ],
             disbursementStatus: [ this.selectedSyndicateConsortium.disbursementStatus || '' ]
         });
+
+        if (this._dialogData.operation === 'viewSyndicateConsortium') {
+            this.syndicateConsortiumForm.disable();
+            this.disableSubmitButton = true;
+        }
     }
 
     private _filterBanks(value: string): any {

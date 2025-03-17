@@ -33,17 +33,13 @@ export class SubLocationUpdateComponent {
      * @param _matSnackBar 
      */
     constructor(_formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<SubLocationUpdateComponent>, 
                 @Inject(MAT_DIALOG_DATA) public _dialogData: any,
                 private _matSnackBar: MatSnackBar) {
 
         // Fetch selected user details from the dialog's data attribute.
         this.selectedSubLocation = Object.assign({}, _dialogData.selectedSubLocation);
-
-        if (this._dialogData.operation === 'updateSubLocation') {
-            this.dialogTitle = 'Modify Sub Location Details';
-        }
 
         this.subLocationUpdateForm = _formBuilder.group({
             serialNumber: [this.selectedSubLocation.serialNumber],
@@ -67,6 +63,15 @@ export class SubLocationUpdateComponent {
             nearestFunctionalAirportDistance: [ this.selectedSubLocation.nearestFunctionalAirportDistance || '', 
                     [Validators.pattern(MonitoringRegEx.digitsOnly)] ]
         });
+
+        if (this._dialogData.operation === 'updateSubLocation') {
+            this.dialogTitle = 'Modify Sub Location Details';
+        }
+        else if (this._dialogData.operation === 'viewSubLocation') {
+            this.dialogTitle = 'View Sub Location Details';
+            this.disableSubmitButton = true;
+            this.subLocationUpdateForm.disable();
+        }
     }
 
     /**

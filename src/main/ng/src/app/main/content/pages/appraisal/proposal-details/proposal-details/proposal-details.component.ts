@@ -34,7 +34,7 @@ export class ProposalDetailsComponent {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 _activatedRoute: ActivatedRoute,
-                _loanAppraisalService: LoanAppraisalService) {
+                public _loanAppraisalService: LoanAppraisalService) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._loanAppraisalId = _loanAppraisalService._loanAppraisal.id;

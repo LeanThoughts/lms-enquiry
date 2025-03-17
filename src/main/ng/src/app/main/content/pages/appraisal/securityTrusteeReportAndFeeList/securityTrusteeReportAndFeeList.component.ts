@@ -35,6 +35,8 @@ export class SecurityTrusteeReportAndFeeListComponent implements OnDestroy {
         this._module = m;
     }
     
+    accessAllowed = true;
+    
     /**
      * constructor()
      */
@@ -49,6 +51,10 @@ export class SecurityTrusteeReportAndFeeListComponent implements OnDestroy {
                 });
             }
         }));
+
+        if (this.module === 'Appraisal') {
+            this.accessAllowed = _loanAppraisalService.loanAppraisalAuthorization.accessAllowed;
+        }
     }
 
     /**
@@ -130,6 +136,23 @@ export class SecurityTrusteeReportAndFeeListComponent implements OnDestroy {
                 });
             }
         });    
+    }
+
+    /**
+     * viewSTReportAndFee()
+     */
+    viewSTReportAndFee(): void {
+        // Open the dialog.
+        const dialogRef = this._dialog.open(SecurityTrusteeReportAndFeeUpdateDialogComponent, {
+            panelClass: 'fuse-securityTrustee-report-fee-update-dialog',
+            width: '1126px',
+            data: {
+                operation: 'viewSecurityTrusteeReportAndFee',
+                selectedSecurityTrustee: this.selectedSecurityTrustee,
+                selectedSecurityTrusteeReportAndFee: this.selectedSecurityTrusteeReportAndFee,
+                module: this._module
+            }
+        });
     }
 
     /**

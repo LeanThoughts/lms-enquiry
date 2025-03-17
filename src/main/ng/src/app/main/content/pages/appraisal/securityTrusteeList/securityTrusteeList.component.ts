@@ -32,10 +32,12 @@ export class SecurityTrusteeListComponent {
 
     selectedSecurityTrustee: any;
 
+    accessAllowed = true;
+    
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _loanAppraisalService: LoanAppraisalService, private _matDialog: MatDialog,
+    constructor(_loanEnquiryService: LoanEnquiryService, public _loanAppraisalService: LoanAppraisalService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -43,6 +45,10 @@ export class SecurityTrusteeListComponent {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.sort = this.sort;
         });
+
+        if (this.module === 'Appraisal') {
+            this.accessAllowed = _loanAppraisalService.loanAppraisalAuthorization.accessAllowed;
+        }
     }
 
     /**

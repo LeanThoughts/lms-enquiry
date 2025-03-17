@@ -40,7 +40,8 @@ export class ProjectDataComponent implements OnDestroy {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 private _activatedRoute: ActivatedRoute,
-                _loanAppraisalService: LoanAppraisalService, public datepipe: DatePipe) {
+                public _loanAppraisalService: LoanAppraisalService, 
+                public datepipe: DatePipe) {
 
         this.subscriptions.add(_loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;

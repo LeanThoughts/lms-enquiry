@@ -40,7 +40,7 @@ export class LoanAppraisalKYCListComponent implements OnInit, OnDestroy {
      */
     constructor(private _dialogRef: MatDialog,
                 _loanEnquiryService: LoanEnquiryService,
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 _activatedRoute: ActivatedRoute) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;

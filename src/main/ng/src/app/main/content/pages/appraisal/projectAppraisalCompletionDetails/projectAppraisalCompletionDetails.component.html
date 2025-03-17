@@ -1,7 +1,11 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openProjectAppraisalCompletionUpdateDialog()"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openProjectAppraisalCompletionUpdateDialog('update')"
+                *ngIf="_loanAppraisalService.loanAppraisalAuthorization?.accessAllowed"> 
             Update Project Appraisal Completion Details
+        </button>
+        <button class="btn" mat-raised-button color="accent" (click)="openProjectAppraisalCompletionUpdateDialog('view')">
+            View Project Appraisal Completion Details
         </button>
     </div>
 

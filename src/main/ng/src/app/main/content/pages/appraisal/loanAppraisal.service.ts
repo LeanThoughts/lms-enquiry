@@ -14,6 +14,8 @@ export class LoanAppraisalService implements Resolve<any> {
 
     refreshKYCPartnerList: BehaviorSubject<any> = new BehaviorSubject({'refresh': false});
     
+    loanAppraisalAuthorization: any = null;
+    
     /**
      * constructor()
      * @param _http

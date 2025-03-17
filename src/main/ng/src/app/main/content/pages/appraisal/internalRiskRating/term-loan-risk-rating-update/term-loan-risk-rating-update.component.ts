@@ -24,17 +24,12 @@ export class TermLoanRiskRatingUpdateComponent {
      * @param _dialogData 
      */
     constructor(private _formBuilder: FormBuilder, 
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 public _dialogRef: MatDialogRef<TermLoanRiskRatingUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
 
         this.selectedRating = Object.assign({}, _dialogData.selectedRating);
-
-        if (this._dialogData.operation === 'modifyRating') {
-            this.dialogTitle = 'Modify Term Loan Risk Rating';
-            // this.selectedRating = Object.assign({}, _dialogData.selectedRating);
-        }
 
         this.ratingForm = this._formBuilder.group({
             year: [ this.selectedRating.year || '' ],
@@ -51,6 +46,16 @@ export class TermLoanRiskRatingUpdateComponent {
             technologyRisk: [ this.selectedRating.technologyRisk || '' ],
             overallRisk: [ this.selectedRating.overallRisk || '' ]
         });
+
+        if (this._dialogData.operation === 'modifyRating') {
+            this.dialogTitle = 'Modify Term Loan Risk Rating';
+            // this.selectedRating = Object.assign({}, _dialogData.selectedRating);
+        }
+        else if (this._dialogData.operation === 'viewRating') {
+            this.dialogTitle = 'View Term Loan Risk Rating';
+            this.disableSubmitButton = true;
+            this.ratingForm.disable();
+        }
     }
 
     /**

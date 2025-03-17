@@ -34,7 +34,7 @@ export class SyndicateConsortiumListComponent implements OnInit {
      */
     constructor(private _dialogRef: MatDialog, 
                 private _loanEnquiryService: LoanEnquiryService,
-                private _loanAppraisalService: LoanAppraisalService,
+                public _loanAppraisalService: LoanAppraisalService,
                 _activatedRoute: ActivatedRoute) { 
 
         // Fetch list of banks and syndicate consortiums ...
@@ -62,7 +62,7 @@ export class SyndicateConsortiumListComponent implements OnInit {
             'syndicateConsortium': {},
             'banks': this.banks
         };
-        if (operation === 'modifySyndicateConsortium') {
+        if (operation === 'modifySyndicateConsortium' || operation === 'viewSyndicateConsortium') {
             data.syndicateConsortium = this.selectedSyndicateConsortium;
         }
         const dialogRef = this._dialogRef.open(SyndicateConsortiumUpdateComponent, {

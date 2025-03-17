@@ -1,14 +1,19 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="addLIEReportAndFee()" 
-                [disabled]="selectedLIE.id == ''"> 
+                [disabled]="selectedLIE.id == ''" *ngIf="accessAllowed"> 
             Add Report For LIE 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIEReportAndFee()" [disabled]="!selectedLIEReportAndFee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIEReportAndFee('updateLIEReportAndFee')" [disabled]="!selectedLIEReportAndFee" 
+                *ngIf="accessAllowed"> 
             Modify Report For LIE 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteLIEReportAndFee()" [disabled]="!selectedLIEReportAndFee"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteLIEReportAndFee()" [disabled]="!selectedLIEReportAndFee" 
+                *ngIf="accessAllowed"> 
             Delete Report For LIE
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateLIEReportAndFee('viewLIEReportAndFee')" [disabled]="!selectedLIEReportAndFee"> 
+            View Report For LIE 
         </button>
     </div>
 
