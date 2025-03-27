@@ -66,26 +66,28 @@ public class EnquiryListBDExcel {
 
         createSXSSCell(row, 0, "Serial Number", style);
         createSXSSCell(row, 1, "SAP Enquiry ID", style);
-        createSXSSCell(row, 2, "Borrower Name", style);
-        createSXSSCell(row, 3, "Group Name", style);
-        createSXSSCell(row, 4, "Project Type", style);
-        createSXSSCell(row, 5, "Type of Loan", style);
-        createSXSSCell(row, 6, "Financing Type", style);
-        createSXSSCell(row, 7, "Date of Lead Generation", style);
-        createSXSSCell(row, 8, "Amount Requested", style);
-        createSXSSCell(row, 9, "Borrower Requested ROI", style);
-        createSXSSCell(row, 10, "ICC Readiness Status", style);
-        createSXSSCell(row, 11, "Remarks on ICC Readiness", style);
-        createSXSSCell(row, 12, "Presented in ICC", style);
-        createSXSSCell(row, 13, "ICC Status", style);
-        createSXSSCell(row, 14, "Reason for ICC Status", style);
-        createSXSSCell(row, 15, "ICC Clearance Date", style);
-        createSXSSCell(row, 16, "ICC Meeting Number", style);
-        createSXSSCell(row, 17, "Amount Approved (Cr)", style);
-        createSXSSCell(row, 18, "ICC Approved ROI", style);
-        createSXSSCell(row, 19, "Remarks for ICC Approval / Rejection", style);
-        createSXSSCell(row, 20, "Remarks for ICC Approval / Rejection", style);
-        createSXSSCell(row, 21, "Dealing/Nodal Officer BD", style);
+        createSXSSCell(row, 2, "Status", style);
+        createSXSSCell(row, 3, "Status Description", style);
+        createSXSSCell(row, 4, "Borrower Name", style);
+        createSXSSCell(row, 5, "Group Name", style);
+        createSXSSCell(row, 6, "Project Type", style);
+        createSXSSCell(row, 7, "Type of Loan", style);
+        createSXSSCell(row, 8, "Financing Type", style);
+        createSXSSCell(row, 9, "Date of Lead Generation", style);
+        createSXSSCell(row, 10, "Amount Requested", style);
+        createSXSSCell(row, 11, "Borrower Requested ROI", style);
+        createSXSSCell(row, 12, "ICC Readiness Status", style);
+        createSXSSCell(row, 13, "Remarks on ICC Readiness", style);
+        createSXSSCell(row, 14, "Presented in ICC", style);
+        createSXSSCell(row, 15, "ICC Status", style);
+        createSXSSCell(row, 16, "Reason for ICC Status", style);
+        createSXSSCell(row, 17, "ICC Clearance Date", style);
+        createSXSSCell(row, 18, "ICC Meeting Number", style);
+        createSXSSCell(row, 19, "Amount Approved (Cr)", style);
+        createSXSSCell(row, 20, "ICC Approved ROI", style);
+        createSXSSCell(row, 21, "Remarks for ICC Approval / Rejection", style);
+        createSXSSCell(row, 22, "Remarks for ICC Approval / Rejection", style);
+        createSXSSCell(row, 23, "Dealing/Nodal Officer BD", style);
      }
 
 
@@ -138,6 +140,18 @@ public class EnquiryListBDExcel {
                 //SAP Enquiry ID
                 if (excelEnquiry.getSapEnquiryId() != null)
                     createSXSSCell(row, columnCount++, excelEnquiry.getSapEnquiryId().toString(), style);
+                else
+                    createSXSSCell(row, columnCount++, "", style);
+
+                // Functional Status
+                if (excelEnquiry.getFunctionalStatus() != null)
+                    createSXSSCell(row, columnCount++, excelEnquiry.getFunctionalStatus().toString(), style);
+                else
+                    createSXSSCell(row, columnCount++, "", style);
+
+                // Functional Status Description
+                if (excelEnquiry.getFunctionalStatusDescription() != null)
+                    createSXSSCell(row, columnCount++, excelEnquiry.getFunctionalStatusDescription(), style);
                 else
                     createSXSSCell(row, columnCount++, "", style);
 

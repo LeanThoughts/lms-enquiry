@@ -214,6 +214,8 @@ public class LoanMonitoringScheduledTask {
 
             switch (sapIntegrationPointer.getBusinessProcessName()){
                 case "Appraisal":
+                    if (sapIntegrationPointer.getMainEntityId() == null)
+                        break;
                     LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
                     if (loanAppraisal != null ) {
                         if (loanAppraisal.getWorkFlowStatusCode() == 3) {

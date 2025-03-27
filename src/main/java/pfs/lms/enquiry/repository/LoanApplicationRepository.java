@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface LoanApplicationRepository extends JpaRepository<LoanApplication, UUID> {
 
     Page<LoanApplication> findByFunctionalStatus(Integer status, Pageable pageable);
+//    Page<LoanApplication> findByFunctionalStatusOrderByLoanEnquiryId(Integer status, Pageable pageable);
+    Page<LoanApplication> findAllOrderByEnquiryNoId(Pageable pageable);
 
 
     Page<LoanApplication> findByLoanApplicant(UUID id, Pageable pageable);

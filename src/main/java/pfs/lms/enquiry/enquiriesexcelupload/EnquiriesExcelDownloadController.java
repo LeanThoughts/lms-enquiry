@@ -3,22 +3,16 @@ package pfs.lms.enquiry.enquiriesexcelupload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.domain.*;
-import pfs.lms.enquiry.reports.EnquiryReportExcelV1;
 import pfs.lms.enquiry.repository.*;
-import pfs.lms.enquiry.resource.LoanApplicationResource;
-import pfs.lms.enquiry.resource.SearchResource;
 import pfs.lms.enquiry.service.impl.LoanApplicationService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +21,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -80,7 +73,7 @@ public class EnquiriesExcelDownloadController {
     }
 
     private List<ExcelEnquiry> searchLoanApplications(  HttpServletRequest request,
-                                                        @PageableDefault(sort = "loanEnquiryDate", size = 99999, direction = Sort.Direction.DESC) Pageable pageable) {
+                                                        @PageableDefault(sort = "loanEnquiryDate", size = 999999, direction = Sort.Direction.DESC) Pageable pageable) {
 
         List<LoanApplication> loanApplicationList = loanApplicationService.getLoanEnquiries(request,pageable);
         List<ExcelEnquiry> excelEnquiryList = new ArrayList<>();
@@ -89,14 +82,18 @@ public class EnquiriesExcelDownloadController {
             ExcelEnquiry excelEnquiry = new ExcelEnquiry();
             excelEnquiry.setSerialNumber( loanApplication.getLoanEnquiryId());
             excelEnquiry.setSapEnquiryId(loanApplication.getEnquiryNo().getId());
-
+            excelEnquiry.setFunctionalStatus(loanApplication.getFunctionalStatus());
+            excelEnquiry.setFunctionalStatusDescription(loanApplication.getFunctionalStatusDescription());
             if (loanApplication.getbusPartnerNumber() != null) {
                 Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber()));
-                if (partner != null)
-                    excelEnquiry.setBorrowerName(partner.getPartyName1() + " " + partner.getPartyName2());
+                if (partner != null) {
+                    excelEnquiry.setBorrowerName((partner.getPartyName()));
+                    excelEnquiry.setGroupName(partner.getGroupCompany());
+                }
+                else {
+                    excelEnquiry.setGroupName(loanApplication.getGroupCompany());
+                }
             }
-            excelEnquiry.setGroupName(loanApplication.getGroupCompany());
-
             ProjectType projectType = projectTypeRepository.findByCode(loanApplication.getProjectType());
             LoanType loanType = loanTypeRepository.getLoanTypeByCode(loanApplication.getLoanType());
             FinancingType financingType = financingTypeRepository.findByCode(loanApplication.getProposalType());

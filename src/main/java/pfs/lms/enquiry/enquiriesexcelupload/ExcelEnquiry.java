@@ -18,6 +18,9 @@ public class ExcelEnquiry extends AggregateRoot<ExcelEnquiry> {
     private Long serialNumber;
     private Long sapEnquiryId;
 
+    private Integer functionalStatus;
+    private String  functionalStatusDescription;
+
     private String borrowerName;
     private String groupName;
     private String projectType;

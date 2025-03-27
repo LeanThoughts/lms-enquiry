@@ -2,8 +2,8 @@ package pfs.lms.enquiry.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
@@ -796,11 +796,17 @@ public class LoanApplicationService implements ILoanApplicationService {
     @Override
     public List<LoanApplication> getLoanEnquiries(HttpServletRequest request, Pageable pageable) {
 
-        Page<LoanApplication> loanApplicationList = loanApplicationRepository.findByFunctionalStatus(1,pageable);
-
+//        Page<LoanApplication> loanApplicationList = loanApplicationRepository.findByFunctionalStatusOrderByLoanEnquiryId(1, pageable);
         List<LoanApplication> loanApplications = new ArrayList<>();
-        loanApplications = loanApplicationList.getContent();
-
+        try {
+            Sort sort = Sort.by(Sort.Direction.ASC, "enquiryNo");
+            List<LoanApplication> loanApplicationList = loanApplicationRepository.findAll(sort);
+            loanApplications = loanApplicationList;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
         return loanApplications;
     }
 
