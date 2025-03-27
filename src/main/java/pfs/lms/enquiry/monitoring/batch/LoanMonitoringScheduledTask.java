@@ -224,12 +224,16 @@ public class LoanMonitoringScheduledTask {
                     }
                     break;
                 case "Monitoring":
-
-                    LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if (loanMonitor != null) {
-                        if (loanMonitor.getWorkFlowStatusCode() == 3) {
-                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    try {
+                        LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                        if (loanMonitor != null) {
+                            if (loanMonitor.getWorkFlowStatusCode() == 3) {
+                                sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                            }
                         }
+                    }
+                    catch (Exception ex) {
+                        // Handle exception from getOne()
                     }
                     break;
             }
