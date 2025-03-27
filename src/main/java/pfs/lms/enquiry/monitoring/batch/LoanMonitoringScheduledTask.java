@@ -211,31 +211,29 @@ public class LoanMonitoringScheduledTask {
 
         List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
         for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
-
-            switch (sapIntegrationPointer.getBusinessProcessName()){
-                case "Appraisal":
-                    if (sapIntegrationPointer.getMainEntityId() == null)
-                        break;
-                    LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if (loanAppraisal != null ) {
-                        if (loanAppraisal.getWorkFlowStatusCode() == 3) {
-                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+            try {
+                switch (sapIntegrationPointer.getBusinessProcessName()) {
+                    case "Appraisal":
+                        if (sapIntegrationPointer.getMainEntityId() == null)
+                            break;
+                        LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                        if (loanAppraisal != null) {
+                            if (loanAppraisal.getWorkFlowStatusCode() == 3) {
+                                sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                            }
                         }
-                    }
-                    break;
-                case "Monitoring":
-                    try {
+                        break;
+                    case "Monitoring":
                         LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
                         if (loanMonitor != null) {
                             if (loanMonitor.getWorkFlowStatusCode() == 3) {
                                 sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
                             }
                         }
-                    }
-                    catch (Exception ex) {
-                        // Handle exception from getOne()
-                    }
-                    break;
+                        break;
+                }
+            } catch (Exception ex) {
+                // Handle exception from getOne()
             }
         }
         return sapIntegrationPointerListFilteredByWorkflowStatus;
