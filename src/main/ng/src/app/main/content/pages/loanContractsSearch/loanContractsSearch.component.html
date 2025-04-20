@@ -183,6 +183,14 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
+                    <mat-form-field fxFlex="25">
+                        <mat-select placeholder="Functional Status" formControlName="functionalStatus"  >
+                          <mat-option> </mat-option>
+                          <mat-option *ngFor="let functionalStatus of functionalStatuses" [value]="functionalStatus.code">
+                            {{ functionalStatus.value }}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
                 <div class="pt-12" fxLayout="row" fxLayoutAlign="left center">

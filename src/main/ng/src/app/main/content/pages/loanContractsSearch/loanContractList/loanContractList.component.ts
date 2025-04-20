@@ -74,7 +74,8 @@ export class LoanContractListComponent implements OnInit {
     */
     getProjectTypeDescription(projectType: string): string {
         if (projectType) {
-            return this.projectTypes.filter(pt => pt.code === projectType)[0].value;
+            const matchingType = this.projectTypes.filter(pt => pt.code === projectType)[0];
+            return matchingType ? matchingType.value : '';
         }
         return '';
     }

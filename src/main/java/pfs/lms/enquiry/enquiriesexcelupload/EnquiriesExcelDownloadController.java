@@ -9,9 +9,21 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pfs.lms.enquiry.action.EnquiryAction;
+import pfs.lms.enquiry.action.EnquiryActionRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartner;
 import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.domain.*;
+import pfs.lms.enquiry.iccapproval.ICCApproval;
+import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICC;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICCRepository;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
+import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetailRepository;
+import pfs.lms.enquiry.iccapproval.iccreasonfordelay.ICCReasonForDelay;
+import pfs.lms.enquiry.iccapproval.iccreasonfordelay.ICCReasonForDelayRepository;
+import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICC;
+import pfs.lms.enquiry.iccapproval.rejectedbyicc.RejectedByICCRepository;
 import pfs.lms.enquiry.repository.*;
 import pfs.lms.enquiry.service.impl.LoanApplicationService;
 
@@ -43,8 +55,15 @@ public class EnquiriesExcelDownloadController {
     private final PresentedInICCRepository presentedInICCRepository;
     private final LoanTypeRepository loanTypeRepository;
     private final LoanApplicationService loanApplicationService;
+    private final FunctionalStatusRepository functionalStatusRepository;
 
+    private final EnquiryActionRepository enquiryActionRepository;
 
+    private final ICCApprovalRepository iccApprovalRepository;
+    private final ApprovalByICCRepository approvalByICCRepository;
+    private final RejectedByICCRepository rejectedByICCRepository;
+    private final ICCFurtherDetailRepository iccFurtherDetailRepository;
+    private final ICCReasonForDelayRepository iccReasonForDelayRepository;
 
     @GetMapping(value = "/api/enquiriesExcelDownload")
     public void searchAndGenerateExcel(
@@ -79,75 +98,153 @@ public class EnquiriesExcelDownloadController {
         List<ExcelEnquiry> excelEnquiryList = new ArrayList<>();
 
         for (LoanApplication loanApplication:loanApplicationList) {
-            ExcelEnquiry excelEnquiry = new ExcelEnquiry();
-            excelEnquiry.setSerialNumber( loanApplication.getLoanEnquiryId());
-            excelEnquiry.setSapEnquiryId(loanApplication.getEnquiryNo().getId());
-            excelEnquiry.setFunctionalStatus(loanApplication.getFunctionalStatus());
-            excelEnquiry.setFunctionalStatusDescription(loanApplication.getFunctionalStatusDescription());
-            if (loanApplication.getbusPartnerNumber() != null) {
-                Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber()));
-                if (partner != null) {
-                    excelEnquiry.setBorrowerName((partner.getPartyName()));
-                    excelEnquiry.setGroupName(partner.getGroupCompany());
+            try {
+                ExcelEnquiry excelEnquiry = new ExcelEnquiry();
+                excelEnquiry.setSerialNumber(loanApplication.getLoanEnquiryId());
+                excelEnquiry.setSapEnquiryId(loanApplication.getEnquiryNo().getId());
+                excelEnquiry.setFunctionalStatus(loanApplication.getFunctionalStatus());
+
+                if (loanApplication.getFunctionalStatus() == null)
+                    excelEnquiry.setFunctionalStatusDescription("--");
+                else {
+                    FunctionalStatus functionalStatus = functionalStatusRepository.findByCode(loanApplication.getFunctionalStatus());
+                    if (functionalStatus == null)
+                        excelEnquiry.setFunctionalStatusDescription(loanApplication.getFunctionalStatus().toString());
+                    else
+                        excelEnquiry.setFunctionalStatusDescription(functionalStatus.getValue());
+                }
+
+                if (loanApplication.getbusPartnerNumber() != null) {
+                    Partner partner = partnerRepository.findByPartyNumber(Integer.parseInt(loanApplication.getbusPartnerNumber()));
+                    if (partner != null) {
+                        excelEnquiry.setBorrowerName((partner.getPartyName()));
+                        excelEnquiry.setGroupName(partner.getGroupCompany());
+                    }
+                    else {
+                        excelEnquiry.setBorrowerName(loanApplication.getProjectName());
+                        excelEnquiry.setGroupName("---");
+                    }
                 }
                 else {
-                    excelEnquiry.setGroupName(loanApplication.getGroupCompany());
+                    excelEnquiry.setBorrowerName(loanApplication.getProjectName());
+                    excelEnquiry.setGroupName("--");
                 }
-            }
-            ProjectType projectType = projectTypeRepository.findByCode(loanApplication.getProjectType());
-            LoanType loanType = loanTypeRepository.getLoanTypeByCode(loanApplication.getLoanType());
-            FinancingType financingType = financingTypeRepository.findByCode(loanApplication.getProposalType());
 
-            if ( projectType != null){
-                excelEnquiry.setProjectType(projectType.getValue());
-            }
-            if (loanType != null) {
-                excelEnquiry.setLoanType(loanType.getValue());
-            }
-            if (financingType != null) {
-                excelEnquiry.setProposalType(financingType.getValue());
-            }
-
-            excelEnquiry.setIccReadinessStatus(loanApplication.getIccReadinessStatus());
-            excelEnquiry.setRemarksOnIccReadiness(loanApplication.getRemarksOnIccReadiness());
-            excelEnquiry.setPresentedInIcc(loanApplication.getPresentedInIcc());
-            excelEnquiry.setIccStatus(loanApplication.getiCCStatus());
-            excelEnquiry.setIccMeetingNumber(loanApplication.getiCCMeetNumber());
-            excelEnquiry.setReasonForIccStatus(loanApplication.getReasonForIccStatus());
-            excelEnquiry.setRemarksForIccApproval(loanApplication.getiCCRemarks());
-
-            excelEnquiry.setDateOfLeadGeneration(loanApplication.getLoanEnquiryDate());
-            excelEnquiry.setIccClearanceDate(loanApplication.getiCCClearanceDate());
-
-            if (loanApplication.getPfsDebtAmount() != null) {
-                if (loanApplication.getPfsDebtAmount() > 0) {
-                    Double requestAmountInCR = loanApplication.getPfsDebtAmount();  // 10000000;
-                    excelEnquiry.setAmountRequested(requestAmountInCR);
+                if (loanApplication.getProjectType() == null)
+                    excelEnquiry.setProjectType("--");
+                else {
+                    ProjectType projectType = projectTypeRepository.findByCode(loanApplication.getProjectType());
+                    if (projectType != null)
+                        excelEnquiry.setProjectType(projectType.getValue());
+                    else
+                        excelEnquiry.setProjectType(loanApplication.getProjectType());
                 }
-            }
 
-            if (loanApplication.getAmountApproved() != null) {
-
-                if (loanApplication.getAmountApproved() > 0) {
-                    Double approvedAmountInCR = loanApplication.getAmountApproved() ; // 10000000;
-                    excelEnquiry.setAmountRequested(approvedAmountInCR);
+                if (loanApplication.getLoanType() == null)
+                    excelEnquiry.setLoanType("--");
+                else {
+                    LoanType loanType = loanTypeRepository.getLoanTypeByCode(loanApplication.getLoanType());
+                    if (loanType != null)
+                        excelEnquiry.setLoanType(loanType.getValue());
+                    else
+                        excelEnquiry.setLoanType(loanApplication.getLoanType());
                 }
+
+                if (loanApplication.getProposalType() == null)
+                    excelEnquiry.setProposalType("--");
+                else {
+                    FinancingType financingType = financingTypeRepository.findByCode(loanApplication.getProposalType());
+                    if (financingType != null)
+                        excelEnquiry.setProposalType(financingType.getValue());
+                    else
+                        excelEnquiry.setProposalType(loanApplication.getProposalType());
+                }
+
+                excelEnquiry.setIccReadinessStatus(loanApplication.getIccReadinessStatus());
+                excelEnquiry.setRemarksOnIccReadiness(loanApplication.getRemarksOnIccReadiness());
+                excelEnquiry.setPresentedInIcc(loanApplication.getPresentedInIcc());
+                excelEnquiry.setIccStatus(loanApplication.getiCCStatus());
+                excelEnquiry.setIccMeetingNumber(loanApplication.getiCCMeetNumber());
+                excelEnquiry.setReasonForIccStatus(loanApplication.getReasonForIccStatus());
+                excelEnquiry.setRemarksForIccApproval(loanApplication.getiCCRemarks());
+
+                excelEnquiry.setDateOfLeadGeneration(loanApplication.getLoanEnquiryDate());
+                excelEnquiry.setIccClearanceDate(loanApplication.getiCCClearanceDate());
+
+                if (loanApplication.getPfsDebtAmount() != null) {
+                    if (loanApplication.getPfsDebtAmount() > 0) {
+                        Double requestAmountInCR = loanApplication.getPfsDebtAmount();  // 10000000;
+                        excelEnquiry.setAmountRequested(requestAmountInCR);
+                    }
+                }
+
+                if (loanApplication.getAmountApproved() != null) {
+
+                    if (loanApplication.getAmountApproved() > 0) {
+                        Double approvedAmountInCR = loanApplication.getAmountApproved(); // 10000000;
+                        excelEnquiry.setAmountRequested(approvedAmountInCR);
+                    }
+                }
+
+                excelEnquiry.setBorrowerRequestedROI(loanApplication.getBorrowerRequestedROI());
+
+
+                excelEnquiry.setIccReadinessStatus("Under Process");
+                EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplicationId(loanApplication.getId());
+                if (enquiryAction != null && enquiryAction.getWorkFlowStatusCode() == 3)
+                    excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
+
+                excelEnquiry.setPresentedInIcc("No");
+                if (enquiryAction != null && enquiryAction.getWorkFlowStatusCode() == 3) {
+                    ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+                    if (iccApproval != null) {
+                        ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
+                        if (approvalByICC != null) {
+                            excelEnquiry.setPresentedInIcc("Yes");
+                            excelEnquiry.setIccStatus("Cleared");
+                            excelEnquiry.setReasonForIccStatus(approvalByICC.getRemarks());
+                            excelEnquiry.setIccClearanceDate(approvalByICC.getMeetingDate());
+                            excelEnquiry.setIccMeetingNumber(approvalByICC.getMeetingNumber());
+                        }
+                        else {
+                            RejectedByICC rejectedByICC = rejectedByICCRepository.findByIccApprovalId(iccApproval.getId());
+                            if (rejectedByICC != null) {
+                                excelEnquiry.setPresentedInIcc("Yes");
+                                excelEnquiry.setIccStatus("Dropped");
+                                excelEnquiry.setReasonForIccStatus(rejectedByICC.getReasonForRejection());
+                                excelEnquiry.setIccMeetingNumber(rejectedByICC.getMeetingNumber());
+                            }
+                        }
+                    }
+                    if (!(excelEnquiry.getIccStatus().equals("Cleared") || excelEnquiry.getIccStatus().equals("Dropped"))) {
+                        List<ICCFurtherDetail> furtherDetails = iccFurtherDetailRepository.findByIccApprovalId(iccApproval.getId());
+                        if (furtherDetails != null && furtherDetails.size() > 0)
+                            excelEnquiry.setIccStatus("Deferred");
+                        else {
+                            List<ICCReasonForDelay> reasonForDelays = iccReasonForDelayRepository.findByIccApprovalId(iccApproval.getId());
+                            if (reasonForDelays != null && reasonForDelays.size() > 0)
+                                excelEnquiry.setIccStatus("On Hold");
+                            else
+                                excelEnquiry.setIccStatus("Ready for ICC-In Principle");
+                        }
+                    }
+                }
+
+//                excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
+//                excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
+
+                //Business Development Officer
+                LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication, loanApplication.getbusPartnerNumber(), "ZLM034");
+                if (loanPartner != null) {
+                    Partner nodalOfficeBDPartner = partnerRepository.findByPartyNumber(Integer.parseInt(loanPartner.getBusinessPartnerId()));
+                    if (nodalOfficeBDPartner != null)
+                        excelEnquiry.setNodalOfficerBD(nodalOfficeBDPartner.getPartyName1() + " " + nodalOfficeBDPartner.getPartyName2());
+                }
+                excelEnquiryList.add(excelEnquiry);
             }
-
-            excelEnquiry.setBorrowerRequestedROI(loanApplication.getBorrowerRequestedROI());
-            excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
-            excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
-
-            //Business Development Officer
-            LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication,loanApplication.getbusPartnerNumber(),"ZLM034");
-            if (loanPartner != null){
-                Partner nodalOfficeBDPartner = partnerRepository.findByPartyNumber( Integer.parseInt(loanPartner.getBusinessPartnerId()));
-                if (nodalOfficeBDPartner != null)
-                excelEnquiry.setNodalOfficerBD(nodalOfficeBDPartner.getPartyName1() + " " + nodalOfficeBDPartner.getPartyName2());
+            catch (Exception ex) {
+                ex.printStackTrace();
             }
-            excelEnquiryList.add(excelEnquiry);
-
-
         }
 
         return excelEnquiryList;

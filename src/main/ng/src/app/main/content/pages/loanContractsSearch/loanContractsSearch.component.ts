@@ -43,6 +43,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
     assistanceTypes: Array<any>;
     states: Array<string>;
     technicalStatuses: Array<any>;
+    functionalStatuses: Array<any>;
 
     monitoring: boolean = false;
     appraisal: boolean = false;
@@ -81,7 +82,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             loanNumberFrom: [],
             loanNumberTo: [],
             enquiryNumber: [],
-            enquiryDate: []
+            enquiryDate: [],
+            functionalStatus: []
         });
 
         _service.selectedLoanApplicationId = undefined;
@@ -94,6 +96,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this.states = _route.snapshot.data.routeResolvedData[3];
         this.assistanceTypes = _route.snapshot.data.routeResolvedData[4]._embedded.assistanceTypes;
         this.technicalStatuses = _route.snapshot.data.routeResolvedData[5];
+        this.functionalStatuses = _route.snapshot.data.routeResolvedData[7]._embedded.functionalStatuses;
 
         _route.snapshot.data.routeResolvedData[6].forEach(element => {
             if (element.authorizationObject === 'Execute Appraisal')
@@ -126,6 +129,7 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             this.loanContractsSearchForm.controls['loanNumberTo'].setValue(formValues.loanNumberTo);
             this.loanContractsSearchForm.controls['enquiryNumber'].setValue(formValues.enquiryNumber);
             this.loanContractsSearchForm.controls['enquiryDate'].setValue(formValues.enquiryDate);
+            this.loanContractsSearchForm.controls['functionalStatus'].setValue(formValues.functionalStatus);
         }
     }
 
@@ -151,7 +155,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
             loanContractsSearchParameters.loanNumberFrom == undefined &&
             loanContractsSearchParameters.loanNumberTo == undefined &&
             loanContractsSearchParameters.enquiryNumber == undefined &&
-            loanContractsSearchParameters.enquiryDate == undefined
+            loanContractsSearchParameters.enquiryDate == undefined &&
+            loanContractsSearchParameters.functionalStatus == undefined
         ) {
             this._matSnackBar.open('Error: Enter at least one search parameter', 'OK', { duration: 7000 });
         }

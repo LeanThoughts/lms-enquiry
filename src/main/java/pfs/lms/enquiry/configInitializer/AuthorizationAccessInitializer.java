@@ -9,7 +9,6 @@ import pfs.lms.enquiry.authorization.domain.AuthorizationAccess;
 import pfs.lms.enquiry.authorization.domain.AuthorizationObject;
 import pfs.lms.enquiry.authorization.repository.AuthorizationAccessRepository;
 import pfs.lms.enquiry.authorization.repository.AuthorizationObjectRepository;
-import pfs.lms.enquiry.domain.UserRole;
 
 import java.util.Date;
 import java.util.List;
@@ -37,10 +36,10 @@ public class AuthorizationAccessInitializer implements CommandLineRunner {
             if (authorizationAccess == null) {
                 createAuthorizationAcess(true,"admin", "admin",authorizationObject);
             }
-            authorizationAccess = authorizationAccessRepository.findByUserRoleCodeAndAuthorizationObject("ZLM023",authorizationObject.getAuthorizationObject());
-            if (authorizationAccess == null) {
-                createAuthorizationAcess(true,"ZLM023", "PFS IT",authorizationObject);
-            }
+//            authorizationAccess = authorizationAccessRepository.findByUserRoleCodeAndAuthorizationObject("ZLM023",authorizationObject.getAuthorizationObject());
+//            if (authorizationAccess == null) {
+//                createAuthorizationAcess(true,"ZLM023", "PFS IT",authorizationObject);
+//            }
 
             // Execute Monitoring - Only Monitoring Officers ("ZLM028") and Monitoring Head ("ZLM024')
             if (authorizationObject.getAuthorizationObject().equals("Execute Monitoring")) {

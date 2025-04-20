@@ -912,6 +912,11 @@ public class LoanApplicationContoller {
             }
         }
 
+        if (resource.getFunctionalStatus() != null) {
+            loanApplications = loanApplications.stream().filter(loanApplication -> loanApplication.getFunctionalStatus() == resource.getFunctionalStatus())
+                .collect(Collectors.toList());
+        }
+
         List<LoanApplicationResource> resources = new ArrayList<>(0);
 
         loanApplications.forEach(loanApplication -> {

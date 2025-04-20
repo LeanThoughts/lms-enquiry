@@ -76,7 +76,8 @@ export class LoanEnquiryService implements Resolve<any> {
         this.getStates(), // get states.
         this.getAssistanceTypes(), // get assistance types.
         this.getTechnicalStatus(),   // get technical status.
-        this.getUserRoleAuthorizations()
+        this.getUserRoleAuthorizations(),
+        this.getFunctionalStatus()
       ]);
     } else {
       return forkJoin([
@@ -90,7 +91,7 @@ export class LoanEnquiryService implements Resolve<any> {
         this.getUnitOfMeasures(),   // Get Units
         this.getLoanApplicantsByEmail(), // Get Loan Applicants by Email
         this.getTechnicalStatus(),   // Get Technical Status
-        this.getAllPartners()
+        this.getAllPartners(),
       ]);
     }
   }
@@ -368,5 +369,12 @@ export class LoanEnquiryService implements Resolve<any> {
     downloadEnquiries(): void {
         //this._http.get('enquiry/api/enquiriesExcelDownload').subscribe();
         window.open('enquiry/api/enquiriesExcelDownload');
+    }
+
+    /**
+     * getFunctionalStatus()
+     */
+    getFunctionalStatus(): Observable<any> {
+        return this._http.get('enquiry/api/functionalStatuses?sort=code');
     }
 }
