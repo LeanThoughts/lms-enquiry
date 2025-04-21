@@ -147,8 +147,9 @@ public class EnquiriesExcelUploadController {
                                     financingTypeCode,
                                     enquiry.getAmountRequested(),
                                     enquiry.getDateOfLeadGeneration());
-                    if (loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(enquiry
-                            .getSapEnquiryId())) {
+//                    if (loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(
+//                            enquiry.getSapEnquiryId())) {
+                    if (loanApplications.size() > 0) {
                         comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
                                 " and Requested amount and Date of lead generation.\n";
                     }
@@ -200,9 +201,10 @@ public class EnquiriesExcelUploadController {
             throw new Exception("Found errors in the excel sheet. Cannot proceed unless they are fixed.");
 
         enquiries.forEach((enquiry) -> {
-            // LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
-            LoanApplication loanApplication = loanApplicationRepository
-                    .findByEnquiryNo(new EnquiryNo(enquiry.getSapEnquiryId()));
+            LoanApplication loanApplication = null;
+//            loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
+//            LoanApplication loanApplication  = loanApplicationRepository
+//                    .findByEnquiryNo(new EnquiryNo(enquiry.getSapEnquiryId()));
             List<Partner> partners = partnerRepository.findBySearchString(enquiry.getBorrowerName());
             // Create new enquiry if loanApplication is null
             if (loanApplication == null) {
