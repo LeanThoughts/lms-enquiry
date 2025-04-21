@@ -140,20 +140,27 @@ public class EnquiriesExcelUploadController {
                     String projectTypeCode = projectTypeRepository.findByValue(enquiry.getProjectType()).getCode();
                     String loanTypeCode = loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()).getCode();
                     String financingTypeCode = financingTypeRepository.findByValue(enquiry.getProposalType()).getCode();
-                    List<LoanApplication> loanApplications = loanApplicationRepository.
-                            findByProjectTypeAndLoanTypeAndFinancingTypeAndLoanContractAmountAndLoanEnquiryDate(
-                                    projectTypeCode,
-                                    loanTypeCode,
-                                    financingTypeCode,
-                                    enquiry.getAmountRequested(),
-                                    enquiry.getDateOfLeadGeneration());
+
+                    LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
+                    if (loanApplication != null) {
+                        comments += "Loan application/ Enquiry with Id (Serial Number) " + enquiry.getSerialNumber() +
+                                " exists. Please ensure that Ids are unique.";
+                    }
+                    else {
+                        List<LoanApplication> loanApplications = loanApplicationRepository.
+                                findByProjectTypeAndLoanTypeAndFinancingTypeAndLoanContractAmountAndLoanEnquiryDate(
+                                        projectTypeCode,
+                                        loanTypeCode,
+                                        financingTypeCode,
+                                        enquiry.getAmountRequested(),
+                                        enquiry.getDateOfLeadGeneration());
 //                    if (loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(
 //                            enquiry.getSapEnquiryId())) {
-                    if (loanApplications.size() > 0) {
-                        comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
-                                " and Requested amount and Date of lead generation.\n";
+                        if (loanApplications.size() > 0) {
+                            comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
+                                    " and Requested amount and Date of lead generation.\n";
+                        }
                     }
-
                     enquiry.setReasonForIccStatus(row.getCell(14).getStringCellValue().trim());
                     enquiry.setBorrowerRequestedROI(row.getCell(9).getNumericCellValue() * 100);
                     enquiry.setRemarksOnIccReadiness(row.getCell(11).getStringCellValue().trim());

@@ -75,14 +75,17 @@ export class EnquiriesExcelUploadComponent {
      */
     downloadEnquiries(): void {
 
-        var enquiryDateFrom = new Date(this.excelDownloadForm.get('enquiryDateFrom').value);
-        var dateFrom = new Date(Date.UTC(enquiryDateFrom.getFullYear(), enquiryDateFrom.getMonth(), enquiryDateFrom.getDate()));
-        var enquiryDateTo = new Date(this.excelDownloadForm.get('enquiryDateTo').value);
-        var dateTo = new Date(Date.UTC(enquiryDateTo.getFullYear(), enquiryDateTo.getMonth(), enquiryDateTo.getDate()));
-
-        this._matSnackBar.open('Enquiries file download in progress.', 'OK', { duration: 10000 });
-        //(window as any).open('enquiry/api/enquiriesExcelDownload'  );
-
-        this._service.downloadEnquiries(dateFrom, dateTo);
+        if (this.excelDownloadForm.get('enquiryDateFrom').value && this.excelDownloadForm.get('enquiryDateTo').value) {
+            var enquiryDateFrom = new Date(this.excelDownloadForm.get('enquiryDateFrom').value);
+            var dateFrom = new Date(Date.UTC(enquiryDateFrom.getFullYear(), enquiryDateFrom.getMonth(), enquiryDateFrom.getDate()));
+            var enquiryDateTo = new Date(this.excelDownloadForm.get('enquiryDateTo').value);
+            var dateTo = new Date(Date.UTC(enquiryDateTo.getFullYear(), enquiryDateTo.getMonth(), enquiryDateTo.getDate()));
+            this._matSnackBar.open('Enquiries file download in progress.', 'OK', { duration: 10000 });
+            //(window as any).open('enquiry/api/enquiriesExcelDownload'  );    
+            this._service.downloadEnquiries(dateFrom, dateTo);
+        }
+        else {
+            this._matSnackBar.open('Please select a date range to download the enquiries.', 'OK', { duration: 7000 });
+        }
     }
 }
