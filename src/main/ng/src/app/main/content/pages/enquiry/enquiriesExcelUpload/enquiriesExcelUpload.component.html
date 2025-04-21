@@ -33,29 +33,51 @@
             Use the search form to filter data.
         </mat-panel-description-->
       </mat-expansion-panel-header>
-      <form [formGroup]="excelUploadForm">
-        <div fxLayout="row">
-            <div fxFlex="100" class="mt-16">
-                <div fxLayout="column">
-                    <label for="document">Upload Enquiries Document (Excel)</label>
-                    <input type="file" name="file" (change)="onFileSelect($event)" accept="application/excel" id="document" required/>
+        <form [formGroup]="excelUploadForm">
+            <div fxLayout="row">
+                <div fxFlex="100" class="mt-16">
+                    <div fxLayout="column">
+                        <label for="document">Upload Enquiries Document (Excel)</label>
+                        <input type="file" name="file" (change)="onFileSelect($event)" accept="application/excel" id="document" required/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div fxLayout="row">
-            <div fxFlex="100" class="mt-16">
-                <button mat-raised-button type="button" color="accent" (click)="uploadEnquiries()">
-                    Preview Enquiries from Excel File
-                </button>
+            <div fxLayout="row">
+                <div fxFlex="100" class="mt-16">
+                    <button mat-raised-button type="button" color="accent" (click)="uploadEnquiries()">
+                        Preview Enquiries from Excel File
+                    </button>
+                </div>
             </div>
-        </div>
-      </form>
+        </form>
 
       <hr class="mt-16">
 
-      <div fxLayout="row">
-        <div fxFlex="100" class="mt-16">
+      <!-- <div fxLayout="row"> -->
+        <form [formGroup]="excelDownloadForm">
+            <div fxLayout="row" class="mt-16">
+                <div fxFlex="25">
+                    <mat-form-field appearance="outline" fxFlex="100">
+                        <mat-label>Enquiry Date From</mat-label>
+                        <input matInput [matDatepicker]="enquiryDateFromPicker" formControlName="enquiryDateFrom">
+                        <mat-datepicker-toggle matSuffix [for]="enquiryDateFromPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #enquiryDateFromPicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="25" class="ml-16">
+                    <mat-form-field appearance="outline" fxFlex="100">
+                        <mat-label>Enquiry Date To</mat-label>
+                        <input matInput [matDatepicker]="enquiryDateToPicker" formControlName="enquiryDateTo">
+                        <mat-datepicker-toggle matSuffix [for]="enquiryDateToPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #enquiryDateToPicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    <!-- </div> -->
+    <div fxLayout="row" class="mt-16">
+        <div fxFlex="100">
             <button mat-raised-button type="button" color="accent" (click)="downloadEnquiries()">
                 Download Enquiries
             </button>

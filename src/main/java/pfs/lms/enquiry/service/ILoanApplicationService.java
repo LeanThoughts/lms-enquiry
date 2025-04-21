@@ -1,6 +1,5 @@
 package pfs.lms.enquiry.service;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
@@ -10,6 +9,7 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.resource.LoanApplicationResource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ILoanApplicationService {
@@ -25,6 +25,6 @@ public interface ILoanApplicationService {
 
     List<SubLocationDetail> migrateSubLocation(List<SubLocationDetail> subLocationDetailList, LoanAppraisal loanAppraisal);
 
-    List<LoanApplication> getLoanEnquiries(HttpServletRequest request, Pageable pageable);
+    List<LoanApplication> getLoanEnquiries(LocalDate enquiryDateForm, LocalDate enquiryDateTo, HttpServletRequest request, Pageable pageable);
 
 }

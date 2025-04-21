@@ -181,16 +181,16 @@ export class LoanApplicationModel {
      */
     get projectTypeDescription(): string {
         switch (this.projectType) {
-            case  '0': return '';
-            case '01': return 'Thermal - Coal';
-            case '02': return 'Thermal - Ignite';
-            case '03': return 'Thermal - Gas';
-            case '04': return 'Hydro';
-            case '05': return 'Renewable - Solar';
-            case '06': return 'Renewable - Wind';
-            case '07': return 'Renewable - Biomass';
-            case '08': return 'Renewable - Small Hydro';
-            case '09': return 'EPC Contractors';
+            case '0': return '';
+            case '1': return 'Thermal - Coal';
+            case '2': return 'Thermal - Ignite';
+            case '3': return 'Thermal - Gas';
+            case '4': return 'Hydro';
+            case '5': return 'Renewable - Solar';
+            case '6': return 'Renewable - Wind';
+            case '7': return 'Renewable - Biomass';
+            case '8': return 'Renewable - Small Hydro';
+            case '9': return 'EPC Contractors';
             case '10': return 'Coal Mining';
             case '11': return 'Power Transmission';
             case '12': return 'Railway Siding';

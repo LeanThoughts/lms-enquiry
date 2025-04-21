@@ -366,9 +366,11 @@ export class LoanEnquiryService implements Resolve<any> {
     /**
      * downloadEnquiries()
      */
-    downloadEnquiries(): void {
+    downloadEnquiries(enquiryDateFrom: Date, enquiryDateTo: Date): void {
         //this._http.get('enquiry/api/enquiriesExcelDownload').subscribe();
-        window.open('enquiry/api/enquiriesExcelDownload');
+        let dateFrom = enquiryDateFrom ? enquiryDateFrom.toISOString().split('T')[0] : null;
+        let dateTo = enquiryDateTo ? enquiryDateTo.toISOString().split('T')[0] : null;
+        window.open('enquiry/api/enquiriesExcelDownload?enquiryDateFrom=' + dateFrom + '&enquiryDateTo=' + dateTo);
     }
 
     /**

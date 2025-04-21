@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,8 +75,6 @@ public class EnquiriesExcelDownloadController {
             @PageableDefault(sort = "loanEnquiryDate", size = 99999, direction = Sort.Direction.DESC) Pageable pageable,
             HttpServletRequest request) throws IOException, ParseException {
 
-
-
         response.setContentType("application/octet-stream");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -83,7 +83,16 @@ public class EnquiriesExcelDownloadController {
         String headerValue = "attachment; filename=LoanEnquiryListReport_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
-        List<ExcelEnquiry> excelEnquiryList = searchLoanApplications(  request, pageable);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dateFrom = null;
+        LocalDate dateTo = null;
+        if (enquiryDateFrom != null && !enquiryDateFrom.isEmpty()) {
+            dateFrom = LocalDate.parse(enquiryDateFrom, formatter);
+        }
+        if (enquiryDateTo != null && !enquiryDateTo.isEmpty()) {
+            dateTo = LocalDate.parse(enquiryDateTo, formatter);
+        }
+        List<ExcelEnquiry> excelEnquiryList = searchLoanApplications(dateFrom, dateTo, request, pageable);
 
         EnquiryListBDExcel enquiryListBDExcel = new EnquiryListBDExcel(excelEnquiryList);
 
@@ -91,10 +100,12 @@ public class EnquiriesExcelDownloadController {
 
     }
 
-    private List<ExcelEnquiry> searchLoanApplications(  HttpServletRequest request,
-                                                        @PageableDefault(sort = "loanEnquiryDate", size = 999999, direction = Sort.Direction.DESC) Pageable pageable) {
+    private List<ExcelEnquiry> searchLoanApplications(LocalDate enquiryDateForm,
+                                                      LocalDate enquiryDateTo,
+                                                      HttpServletRequest request,
+                                                      @PageableDefault(sort = "loanEnquiryDate", size = 999999, direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<LoanApplication> loanApplicationList = loanApplicationService.getLoanEnquiries(request,pageable);
+        List<LoanApplication> loanApplicationList = loanApplicationService.getLoanEnquiries(enquiryDateForm, enquiryDateTo, request, pageable);
         List<ExcelEnquiry> excelEnquiryList = new ArrayList<>();
 
         for (LoanApplication loanApplication:loanApplicationList) {
@@ -240,6 +251,9 @@ public class EnquiriesExcelDownloadController {
                     if (nodalOfficeBDPartner != null)
                         excelEnquiry.setNodalOfficerBD(nodalOfficeBDPartner.getPartyName1() + " " + nodalOfficeBDPartner.getPartyName2());
                 }
+                else
+                    excelEnquiry.setNodalOfficerBD("--");
+
                 excelEnquiryList.add(excelEnquiry);
             }
             catch (Exception ex) {

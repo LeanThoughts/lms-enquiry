@@ -15,7 +15,7 @@ import { EnquiriesUploadListComponent } from './enquiriesUploadList/enquiriesUpl
 export class EnquiriesExcelUploadComponent {
 
     excelUploadForm: FormGroup;
-
+    excelDownloadForm: FormGroup;
     expandPanel = true;
 
     enquiryList = [];
@@ -28,6 +28,11 @@ export class EnquiriesExcelUploadComponent {
 
         this.excelUploadForm = _formBuilder.group({
             file: [''],
+        });
+
+        this.excelDownloadForm = _formBuilder.group({
+            enquiryDateFrom: [''],
+            enquiryDateTo: [''],
         });
     }
 
@@ -69,9 +74,15 @@ export class EnquiriesExcelUploadComponent {
      * downloadEnquiries()
      */
     downloadEnquiries(): void {
-      this._matSnackBar.open('Enquiries file download in progress.', 'OK', { duration: 10000 });
-      //(window as any).open('enquiry/api/enquiriesExcelDownload'  );
 
-      this._service.downloadEnquiries();
+        var enquiryDateFrom = new Date(this.excelDownloadForm.get('enquiryDateFrom').value);
+        var dateFrom = new Date(Date.UTC(enquiryDateFrom.getFullYear(), enquiryDateFrom.getMonth(), enquiryDateFrom.getDate()));
+        var enquiryDateTo = new Date(this.excelDownloadForm.get('enquiryDateTo').value);
+        var dateTo = new Date(Date.UTC(enquiryDateTo.getFullYear(), enquiryDateTo.getMonth(), enquiryDateTo.getDate()));
+
+        this._matSnackBar.open('Enquiries file download in progress.', 'OK', { duration: 10000 });
+        //(window as any).open('enquiry/api/enquiriesExcelDownload'  );
+
+        this._service.downloadEnquiries(dateFrom, dateTo);
     }
 }
