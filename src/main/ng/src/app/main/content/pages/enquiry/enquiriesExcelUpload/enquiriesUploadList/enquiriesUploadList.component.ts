@@ -76,9 +76,15 @@ export class EnquiriesUploadListComponent implements OnInit {
             this._service.createExcelEnquiries().subscribe(
                 (response: any) => {
                     this._matSnackBar.open('Created enquiries successfully', 'OK', {panelClass: ['success-snackbar']});
-                    this.dataSource = new MatTableDataSource(response);
+                    this.dataSource = new MatTableDataSource(response.enquiries);
                     this.dataSource.sort = this.sort
                     this.disableUploadButton = true;
+                    if (response.savedCount > 0) {
+                        this._matSnackBar.open(response.savedCount + ' new enquirie(s) uploaded successfully.', 'OK', { duration: 7000 });
+                    }
+                    else {
+                        this._matSnackBar.open('No new enquiries uploaded.', 'OK', { duration: 7000 });
+                    }
                 },
                 (error: HttpErrorResponse) => {
                     this._matSnackBar.open(error.error.message, 'OK', {panelClass: ['success-snackbar']});

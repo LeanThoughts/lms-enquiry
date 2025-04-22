@@ -59,7 +59,6 @@ public class EnquiriesExcelUploadController {
             for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
                 XSSFRow row = worksheet.getRow(i);
                 if (row.getCell(0) != null && !row.getCell(0).toString().equals("")) {
-//                        && row.getCell(1) != null && !row.getCell(1).toString().equals("")) {
 
                     ExcelEnquiry enquiry = new ExcelEnquiry();
                     String comments = "";
@@ -70,7 +69,7 @@ public class EnquiriesExcelUploadController {
 
                     try {
                         enquiry.setSapEnquiryId(new Double(row.getCell(1).getNumericCellValue()).longValue());
-                    } catch (IllegalStateException ex) {
+                    } catch (Exception ex) {
                         enquiry.setSapEnquiryId(0L);
                     }
 
@@ -141,18 +140,18 @@ public class EnquiriesExcelUploadController {
                     String loanTypeCode = loanTypeRepository.getLoanTypeByValue(enquiry.getLoanType()).getCode();
                     String financingTypeCode = financingTypeRepository.findByValue(enquiry.getProposalType()).getCode();
 
-                    List<LoanApplication> loanApplications = loanApplicationRepository.
-                            findByProjectTypeAndLoanTypeAndFinancingTypeAndLoanContractAmountAndLoanEnquiryDate(
-                                    projectTypeCode,
-                                    loanTypeCode,
-                                    financingTypeCode,
-                                    enquiry.getAmountRequested(),
-                                    enquiry.getDateOfLeadGeneration());
-//                    if (loanApplications.size() > 0 && !loanApplications.get(0).getEnquiryNo().getId().equals(
-//                            enquiry.getSapEnquiryId())) {
-                    if (loanApplications.size() > 0) {
-                        comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
-                                " and Requested amount and Date of lead generation.\n";
+                    if (enquiry.getSapEnquiryId() == 0) {
+                        List<LoanApplication> loanApplications = loanApplicationRepository.
+                                findByProjectTypeAndLoanTypeAndFinancingTypeAndLoanContractAmountAndLoanEnquiryDate(
+                                        projectTypeCode,
+                                        loanTypeCode,
+                                        financingTypeCode,
+                                        enquiry.getAmountRequested(),
+                                        enquiry.getDateOfLeadGeneration());
+                        if (loanApplications.size() > 0) {
+                            comments += "Similar loan applications exists (Project type, Assistance type, Proposal type, " +
+                                    " and Requested amount and Date of lead generation.\n";
+                        }
                     }
 
                     enquiry.setReasonForIccStatus(row.getCell(14).getStringCellValue().trim());
@@ -188,7 +187,7 @@ public class EnquiriesExcelUploadController {
     }
 
     @PostMapping("/api/createExcelEnquiries")
-    public ResponseEntity<List<ExcelEnquiry>> createEnquiries(HttpServletRequest request) throws Exception {
+    public ResponseEntity<ExcelEnquiryResponse> createEnquiries(HttpServletRequest request) throws Exception {
 
         List<ExcelEnquiry> enquiries = excelEnquiryRepository.findAll().stream()
                 .sorted(Comparator.comparing(ExcelEnquiry::getSerialNumber)).collect(Collectors.toList());
@@ -201,10 +200,12 @@ public class EnquiriesExcelUploadController {
         if (errors[0])
             throw new Exception("Found errors in the excel sheet. Cannot proceed unless they are fixed.");
 
+        final int[] savedCount = {0};
         enquiries.forEach((enquiry) -> {
             LoanApplication loanApplication = loanApplicationRepository.findByLoanEnquiryId(enquiry.getSerialNumber());
             List<Partner> partners = partnerRepository.findBySearchString(enquiry.getBorrowerName());
-            // Create new enquiry if loanApplication is null
+            // Create new enquiry only if loanApplication is null and ignore or do not update rows if it already exists
+            // in the database.
             if (loanApplication == null) {
                 loanApplication = new LoanApplication();
                 loanApplication.setEnquiryNo(new EnquiryNo());
@@ -269,7 +270,7 @@ public class EnquiriesExcelUploadController {
                 }
 
                 loanApplicationRepository.save(loanApplication);
-
+                savedCount[0]++;
                 if (enquiry.getSapEnquiryId() == 0) {
                     enquiry.setSapEnquiryId(loanApplication.getEnquiryNo().getId());
                     excelEnquiryRepository.save(enquiry);
@@ -277,6 +278,9 @@ public class EnquiriesExcelUploadController {
             }
         });
 
-        return ResponseEntity.ok(enquiries);
+        ExcelEnquiryResponse excelEnquiryResponse = new ExcelEnquiryResponse();
+        excelEnquiryResponse.setSavedCount(savedCount[0]);
+        excelEnquiryResponse.setEnquiries(enquiries);
+        return ResponseEntity.ok(excelEnquiryResponse);
     }
 }
