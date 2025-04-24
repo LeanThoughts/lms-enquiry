@@ -622,7 +622,10 @@ public class LoanApplicationService implements ILoanApplicationService {
 
         LoanApplication loanApplicationExisting = new LoanApplication();
 
-        loanApplication.setLoanEnquiryDate(LocalDate.now());
+        if (loanApplication.getLoanEnquiryDate() == null)
+            loanApplication.setLoanEnquiryDate(LocalDate.now());
+        else
+            loanApplication.setLoanEnquiryDate(loanApplication.getLoanEnquiryDate());
 
         // Check if loan application is existing
         if (loanApplication.getLoanContractId() != null) {
