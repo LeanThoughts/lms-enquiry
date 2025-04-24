@@ -650,7 +650,7 @@ public class LoanApplicationService implements ILoanApplicationService {
                 loanApplicationExisting.setDecisionDate(loanApplication.getDecisionDate());
 
 //            loanApplicationExisting.setId(loanApplication.getId());
-            loanApplicationExisting.setEnquiryNo(loanApplication.getEnquiryNo());
+           // loanApplicationExisting.setEnquiryNo(loanApplication.getEnquiryNo());
 
             if (loanApplication.getEquity() != null)
                 loanApplicationExisting.setEquity(loanApplication.getEquity());
@@ -776,21 +776,31 @@ public class LoanApplicationService implements ILoanApplicationService {
             if (loanApplicationExisting.getRiskDepartmentInitiator() != null)
                 loanApplicationExisting.setRiskDepartmentInitiator(loanApplication.getRiskDepartmentInitiator());
 
+
             loanApplicationExisting.created(partner,username);
             loanApplicationExisting.applicant(partner);
+
+            log.info("Loan Application : Updating Record : " + loanApplicationExisting.getLoanContractId());
+            log.info("Loan Application : Enquiry ID : " + loanApplicationExisting.getEnquiryNo().getId());
+
+
             log.info("Loan Enquiry Date: " , loanApplicationExisting.getLoanEnquiryDate().toString());
 
             //Save and return the Loan Application
             loanApplication = loanApplicationRepository.save(loanApplicationExisting);
+            log.info("Loan Application : Enquiry ID : After Save : " + loanApplicationExisting.getEnquiryNo().getId());
 
         } else {
 
 //            loanApplication.applicant(applicant);
 //            loanApplication.created(applicant);
-
+            log.info("Loan Application : Creating  Record : " + loanApplicationExisting.getLoanContractId());
+            log.info("Loan Application : Enquiry ID : " + loanApplicationExisting.getEnquiryNo().getId());
             //Save and return the Loan Application
             log.info("Loan Enquiry Date: " , loanApplication.getLoanEnquiryDate().toString());
             loanApplication = loanApplicationRepository.save(loanApplication);
+            log.info("Loan Application : Enquiry ID : After Save : " + loanApplicationExisting.getEnquiryNo().getId());
+
         }
 
         System.out.println("Loan Application :" + loanApplication);
