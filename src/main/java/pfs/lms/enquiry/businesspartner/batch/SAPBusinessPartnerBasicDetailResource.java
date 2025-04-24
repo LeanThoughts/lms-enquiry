@@ -39,6 +39,9 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
     mapBupaBasicDetails(Partner partner) throws ParseException {
 
         SAPBusinessPartnerBasicDetailsResourceDetail detailsResource = new SAPBusinessPartnerBasicDetailsResourceDetail();
+
+        detailsResource.setPartnerGroup("0001");
+
         if (partner.getPartyNumber() != null)
             detailsResource.setBusPartnerNumber(partner.getPartyNumber().toString());
         else
@@ -47,11 +50,12 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getPartyCategory() != null)
             detailsResource.setPartnerCategory(partner.getPartyCategory().toString());
         else
-            detailsResource.setPartnerType("1");
+            detailsResource.setPartnerCategory("1");
+
         if (partner.getPartnerType() != null)
             detailsResource.setPartnerType(partner.getPartnerType());
         else
-            detailsResource.setPartnerCategory("1");
+            detailsResource.setPartnerType("1");
 
 
         switch (partner.getPartnerCategory()) {
@@ -61,7 +65,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
                 if (partner.getPartyName2() != null)
                     detailsResource.setLastname(partner.getPartyName2());
                 break;
-            case "2":
+            case "2" :
                 if (partner.getPartyName1() != null)
                     detailsResource.setName1(partner.getPartyName1());
                 if (partner.getPartyName2() != null)
@@ -71,7 +75,9 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
                 if (partner.getPartyName1() != null)
                     detailsResource.setName1(partner.getPartyName1());
                 if (partner.getPartyName2() != null)
-                    break;
+                    detailsResource.setName2(partner.getPartyName2());
+
+                break;
             default:
 
 
