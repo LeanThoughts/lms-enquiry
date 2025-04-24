@@ -778,6 +778,7 @@ public class LoanApplicationService implements ILoanApplicationService {
 
             loanApplicationExisting.created(partner,username);
             loanApplicationExisting.applicant(partner);
+            log.info("Loan Enquiry Date: " , loanApplicationExisting.getLoanEnquiryDate().toString());
 
             //Save and return the Loan Application
             loanApplication = loanApplicationRepository.save(loanApplicationExisting);
@@ -788,6 +789,7 @@ public class LoanApplicationService implements ILoanApplicationService {
 //            loanApplication.created(applicant);
 
             //Save and return the Loan Application
+            log.info("Loan Enquiry Date: " , loanApplication.getLoanEnquiryDate().toString());
             loanApplication = loanApplicationRepository.save(loanApplication);
         }
 
