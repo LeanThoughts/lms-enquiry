@@ -53,40 +53,51 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         else
             detailsResource.setPartnerCategory("1");
 
-//        if(partner.getTitle() != null){
-//            switch (partner.getTitle()){
-//                case "Mr.":
-//                    detailsResource.setTitle("0001");
-//                    break;
-//                case "Mrs.":
-//                    detailsResource.setTitle("0002");
-//                    break;
-//                case "Company":
-//                    detailsResource.setTitle("0003");
-//                    break;
-//                case "Mr. and Mrs.":
-//                    detailsResource.setTitle("0004");
-//                    break;
-//                default:
-//                    detailsResource.setTitle(partner.getTitle());
-//
-//             }
-//        }
+
+            switch (partner.getPartnerType()){
+                case "1":
+                    if (partner.getPartyName1() != null)
+                        detailsResource.setFirstname(partner.getPartyName1());
+                    if (partner.getPartyName2() != null)
+                        detailsResource.setLastname(partner.getPartyName2());
+                    break;
+                case "2":
+                    if (partner.getPartyName1() != null)
+                        detailsResource.setName1(partner.getPartyName1());
+                    if (partner.getPartyName2() != null)
+                        detailsResource.setName2(partner.getPartyName2());
+                    break;
+                case "3":
+                    if (partner.getPartyName1() != null)
+                        detailsResource.setName1(partner.getPartyName1());
+                    if (partner.getPartyName2() != null)
+                        break;
+                default:
 
 
+             }
 
         if (partner.getPartnerExternalNumber() != null)
             detailsResource.setPartnerExternalNumber(partner.getPartnerExternalNumber());
+
+
         if (partner.getPartyRole() != null)
             detailsResource.setPartnerRole(partner.getPartyRole());
-        if (partner.getPartyName1() != null)
-            detailsResource.setName1(partner.getPartyName1());
-        if (partner.getPartyName2() != null)
-            detailsResource.setName2(partner.getPartyName2());
-        if (partner.getPartyName1() != null)
-            detailsResource.setFirstname(partner.getPartyName1());
-        if (partner.getPartyName2() != null)
-            detailsResource.setLastname(partner.getPartyName2());
+
+//        if (partner.getPartyName1() != null)
+//            detailsResource.setName1(partner.getPartyName1());
+//
+//        if (partner.getPartyName2() != null)
+//            detailsResource.setName2(partner.getPartyName2());
+//
+//        if (partner.getPartyName1() != null)
+//            detailsResource.setFirstname(partner.getPartyName1());
+//
+//        if (partner.getPartyName2() != null)
+//            detailsResource.setLastname(partner.getPartyName2());
+//
+
+
         if (partner.getEmail() != null){
             detailsResource.setEmail(partner.getEmail());
         }

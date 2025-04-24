@@ -211,29 +211,25 @@ public class LoanMonitoringScheduledTask {
 
         List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
         for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
-            try {
-                switch (sapIntegrationPointer.getBusinessProcessName()) {
-                    case "Appraisal":
-                        if (sapIntegrationPointer.getMainEntityId() == null)
-                            break;
-                        LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                        if (loanAppraisal != null) {
-                            if (loanAppraisal.getWorkFlowStatusCode() == 3) {
-                                sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
-                            }
+
+            switch (sapIntegrationPointer.getBusinessProcessName()){
+                case "Appraisal":
+                    LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanAppraisal != null ) {
+                        if (loanAppraisal.getWorkFlowStatusCode() == 3) {
+                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
                         }
-                        break;
-                    case "Monitoring":
-                        LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                        if (loanMonitor != null) {
-                            if (loanMonitor.getWorkFlowStatusCode() == 3) {
-                                sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
-                            }
+                    }
+                    break;
+                case "Monitoring":
+
+                    LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanMonitor != null) {
+                        if (loanMonitor.getWorkFlowStatusCode() == 3) {
+                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
                         }
-                        break;
-                }
-            } catch (Exception ex) {
-                // Handle exception from getOne()
+                    }
+                    break;
             }
         }
         return sapIntegrationPointerListFilteredByWorkflowStatus;

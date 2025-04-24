@@ -34,6 +34,7 @@ import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRating;
 import pfs.lms.enquiry.appraisal.riskrating.TermLoanRiskRatingRepository;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortium;
 import pfs.lms.enquiry.appraisal.syndicateconsortium.SyndicateConsortiumRepository;
+import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.iccapproval.iccfurtherdetail.ICCFurtherDetail;
@@ -851,27 +852,27 @@ public class LoanAppraisalScheduledTaskCreateAndChange {
 
         List<SAPIntegrationPointer> sapIntegrationPointerListFilteredByWorkflowStatus = new ArrayList<>();
         for (SAPIntegrationPointer sapIntegrationPointer:sapIntegrationPointers ) {
-            try {
-                switch (sapIntegrationPointer.getBusinessProcessName()) {
-                    case "Appraisal":
-                        LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                        if (loanAppraisal.getWorkFlowStatusCode() == 3) {
-                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
-                        }
-                        break;
-                    case "Monitoring":
-                        LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                        if (loanMonitor.getWorkFlowStatusCode() == 3) {
-                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
-                        }
-                        break;
-                }
+
+            switch (sapIntegrationPointer.getBusinessProcessName()){
+                case "Appraisal":
+                    LoanAppraisal loanAppraisal = loanAppraisalRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanAppraisal.getWorkFlowStatusCode() == 3) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
+                    break;
+                case "Monitoring":
+                    LoanMonitor loanMonitor = loanMonitorRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
+                    if (loanMonitor.getWorkFlowStatusCode() == 3 ) {
+                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    }
+                    break;
             }
-            catch (Exception ex) {
-                // Handle exception thrown
-            }
+
+
         }
         return sapIntegrationPointerListFilteredByWorkflowStatus;
+
+
     }
 
 }
