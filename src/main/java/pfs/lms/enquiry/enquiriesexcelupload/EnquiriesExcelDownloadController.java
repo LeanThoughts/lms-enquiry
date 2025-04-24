@@ -145,6 +145,8 @@ public class EnquiriesExcelDownloadController {
                     excelEnquiry.setProjectType("--");
                 else {
                     ProjectType projectType = projectTypeRepository.findByCode(loanApplication.getProjectType());
+                    log.info("Project Type : " + loanApplication.getProjectType()) ;
+                    log.info("Project Type Config : " + projectType.toString()) ;
                     if (projectType != null)
                         excelEnquiry.setProjectType(projectType.getValue());
                     else
