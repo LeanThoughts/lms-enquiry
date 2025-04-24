@@ -18,7 +18,6 @@ import pfs.lms.enquiry.service.IPartnerService;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -68,6 +67,8 @@ public class PartnerService implements IPartnerService {
             Object oldPartner = existing.clone();
             existing.setAddressLine1(partner.getAddressLine1());
             existing.setAddressLine2(partner.getAddressLine2());
+            existing.setAddressLine3(partner.getAddressLine3());
+            existing.setAddressValidFromDate(partner.getAddressValidFromDate());
             existing.setCity(partner.getCity());
             existing.setContactNumber(partner.getContactNumber());
             existing.setContactPersonName(partner.getContactPersonName());
@@ -94,7 +95,7 @@ public class PartnerService implements IPartnerService {
             existing.setGstNumber(partner.getGstNumber());
             existing.setMsmeRegisterNumber(partner.getMsmeRegisterNumber());
             existing.setPan(partner.getPan());
-    
+            existing.setExternalBPNumber(partner.getExternalBPNumber());
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -186,6 +187,8 @@ public class PartnerService implements IPartnerService {
         partner.setEmail(partnerResource.getEmail());
         partner.setAddressLine1(partnerResource.getAddressLine1());
         partner.setAddressLine2(partnerResource.getAddressLine2());
+        partner.setAddressLine3(partnerResource.getAddressLine3());
+        partner.setAddressValidFromDate(partnerResource.getAddressValidFromDate());
         partner.setCity(partnerResource.getCity());
         partner.setCountry(partnerResource.getCountry());
         partner.setState(partnerResource.getState());
@@ -201,6 +204,7 @@ public class PartnerService implements IPartnerService {
         partner.setGstNumber(partnerResource.getGstNumber());
         partner.setMsmeRegisterNumber(partnerResource.getMsmeRegisterNumber());
         partner.setPan(partnerResource.getPan());
+        partner.setExternalBPNumber(partnerResource.getExternalBPNumber());
         partner = partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
@@ -637,7 +641,5 @@ public class PartnerService implements IPartnerService {
             newUser.setSapBPNumber(partner.getPartyNumber().toString());
             userRepository.save(newUser);
         }
-
-
     }
 }

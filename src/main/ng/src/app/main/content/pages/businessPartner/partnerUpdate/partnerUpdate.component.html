@@ -15,7 +15,7 @@
                         <mat-option [value]="'3'">Group</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="34">
                     <mat-select placeholder="Select Default Partner Role" formControlName="defaultPartnerRole" required>
                         <mat-option></mat-option>
                         <mat-option *ngFor="let businessPartnerRole of businessPartnerRoles" [value]="businessPartnerRole.code">
@@ -23,7 +23,11 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="External BP Id" formControlName="externalBPNumber" maxlength="40">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="Title" formControlName="title">
                         <mat-option></mat-option>
@@ -32,12 +36,10 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="33">
+                <mat-form-field fxFlex="34">
                     <input matInput placeholder="Name 1" formControlName="partyName1" maxlength="40" required>
                 </mat-form-field>
-                <mat-form-field fxFlex="34">
+                <mat-form-field fxFlex="33">
                     <input matInput placeholder="Name 2" formControlName="partyName2" maxlength="40">
                 </mat-form-field>
             </div>
@@ -55,13 +57,13 @@
             </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Door No." formControlName="addressLine1" maxlength="10" required>
+                    <input matInput placeholder="Street/ House No." formControlName="addressLine1" maxlength="60" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Street" formControlName="addressLine2" maxlength="40" required>
+                    <input matInput placeholder="Street 2" formControlName="addressLine2" maxlength="60" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="District" formControlName="street" maxlength="6">
+                    <input matInput placeholder="Street 3" formControlName="addressLine3" maxlength="60">
                 </mat-form-field>
             </div>
             <div fxLayout="row">
@@ -69,7 +71,7 @@
                     <input matInput placeholder="City" formControlName="city" maxlength="40" required>
                 </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Country" formControlName="country" maxlength="60" readonly>
+                    <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="6">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
                     <mat-select placeholder="State/ Region" formControlName="state" required>
@@ -81,11 +83,16 @@
                 </mat-form-field>
             </div>
 
-          <div fxLayout="row">
-            <mat-form-field fxFlex="33">
-              <input matInput placeholder="Postal Code" formControlName="postalCode" maxlength="6">
-            </mat-form-field>
-          </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <input matInput placeholder="Country" formControlName="country" maxlength="60" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="34">
+                    <input matInput [matDatepicker]="addressValidFromPicker" placeholder="Address Valid From" formControlName="addressValidFromDate">
+                    <mat-datepicker-toggle matSuffix [for]="addressValidFromPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #addressValidFromPicker></mat-datepicker>
+                </mat-form-field>
+            </div>
 
             <div fxLayout="row">
                 <span><b>Communication Details</b></span>

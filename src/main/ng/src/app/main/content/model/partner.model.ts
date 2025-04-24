@@ -2,6 +2,7 @@ export class PartnerModel {
     partyNumber: string;
     addressLine1: string;
     addressLine2: string;
+    addressLine3: string;
     city: string;
     contactNumber: string;
     contactPersonName: string;
@@ -32,6 +33,9 @@ export class PartnerModel {
     partnerCategory: null;
     defaultPartnerRole: null;
 
+    addressValidFromDate: Date;
+    externalBPNumber: string;
+
     /**
      * constructor()
      * Initialize the object.
@@ -41,6 +45,7 @@ export class PartnerModel {
         this.partyNumber = _partner.partyNumber || '';
         this.addressLine1 = _partner && _partner.addressLine1 || '';
         this.addressLine2 = _partner && _partner.addressLine2 || '';
+        this.addressLine3 = _partner && _partner.addressLine3 || '';
         this.city = _partner && _partner.city || '';
         this.contactNumber = _partner && _partner.contactNumber || '';
         this.contactPersonName = _partner && _partner.contactPersonName || '';
@@ -71,6 +76,8 @@ export class PartnerModel {
         this.workFlowStatusCode = _partner && _partner.workFlowStatusCode || null;
         this.workFlowStatusDescription = _partner && _partner.workFlowStatusDescription || null;
 
+        this.addressValidFromDate = _partner && _partner.addressValidFromDate || null;
+        this.externalBPNumber = _partner && _partner.externalBPNumber || '';
         this._links = _partner && _partner._links || '';
     }
 
