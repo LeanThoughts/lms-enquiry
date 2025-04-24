@@ -14,7 +14,7 @@ import java.text.ParseException;
 
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties (ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
@@ -24,7 +24,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
     @JsonProperty(value = "d")
     private SAPBusinessPartnerBasicDetailsResourceDetail sapBusinessPartnerBasicDetailsResourceDetail;
-    DataConversionUtility dataConversionUtility =  new DataConversionUtility();
+    DataConversionUtility dataConversionUtility = new DataConversionUtility();
 
 
     public void setSAPBusinessPartnerBasicDetailsResourceDetails(SAPBusinessPartnerBasicDetailsResourceDetail sapBusinessPartnerBasicDetailsResourceDetail) {
@@ -36,7 +36,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
     }
 
     public SAPBusinessPartnerBasicDetailsResourceDetail
-                                mapBupaBasicDetails(Partner partner) throws ParseException {
+    mapBupaBasicDetails(Partner partner) throws ParseException {
 
         SAPBusinessPartnerBasicDetailsResourceDetail detailsResource = new SAPBusinessPartnerBasicDetailsResourceDetail();
         if (partner.getPartyNumber() != null)
@@ -44,7 +44,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         else
             detailsResource.setBusPartnerNumber("");
 
-        if (partner.getPartyCategory() !=null)
+        if (partner.getPartyCategory() != null)
             detailsResource.setPartnerCategory(partner.getPartyCategory().toString());
         else
             detailsResource.setPartnerType("1");
@@ -54,28 +54,28 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
             detailsResource.setPartnerCategory("1");
 
 
-            switch (partner.getPartnerType()){
-                case "1":
-                    if (partner.getPartyName1() != null)
-                        detailsResource.setFirstname(partner.getPartyName1());
-                    if (partner.getPartyName2() != null)
-                        detailsResource.setLastname(partner.getPartyName2());
+        switch (partner.getPartnerCategory()) {
+            case "1":
+                if (partner.getPartyName1() != null)
+                    detailsResource.setFirstname(partner.getPartyName1());
+                if (partner.getPartyName2() != null)
+                    detailsResource.setLastname(partner.getPartyName2());
+                break;
+            case "2":
+                if (partner.getPartyName1() != null)
+                    detailsResource.setName1(partner.getPartyName1());
+                if (partner.getPartyName2() != null)
+                    detailsResource.setName2(partner.getPartyName2());
+                break;
+            case "3":
+                if (partner.getPartyName1() != null)
+                    detailsResource.setName1(partner.getPartyName1());
+                if (partner.getPartyName2() != null)
                     break;
-                case "2":
-                    if (partner.getPartyName1() != null)
-                        detailsResource.setName1(partner.getPartyName1());
-                    if (partner.getPartyName2() != null)
-                        detailsResource.setName2(partner.getPartyName2());
-                    break;
-                case "3":
-                    if (partner.getPartyName1() != null)
-                        detailsResource.setName1(partner.getPartyName1());
-                    if (partner.getPartyName2() != null)
-                        break;
-                default:
+            default:
 
 
-             }
+        }
 
         if (partner.getPartnerExternalNumber() != null)
             detailsResource.setPartnerExternalNumber(partner.getPartnerExternalNumber());
@@ -98,49 +98,49 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 //
 
 
-        if (partner.getEmail() != null){
+        if (partner.getEmail() != null) {
             detailsResource.setEmail(partner.getEmail());
         }
-        if (partner.getCity() != null){
+        if (partner.getCity() != null) {
             detailsResource.setCity(partner.getCity());
         }
-        if (partner.getState() != null){
+        if (partner.getState() != null) {
             detailsResource.setState(partner.getState());
         }
-        if (partner.getPostalCode() != null){
+        if (partner.getPostalCode() != null) {
             detailsResource.setPostalCode(partner.getPostalCode());
         }
-        if (partner.getAddressLine1() != null){
+        if (partner.getAddressLine1() != null) {
             detailsResource.setHouseNo(partner.getAddressLine1());
         }
-        if (partner.getAddressLine2() != null){
+        if (partner.getAddressLine2() != null) {
             detailsResource.setStreet(partner.getAddressLine2());
         }
-        if(partner.getStreet() != null){
+        if (partner.getStreet() != null) {
             detailsResource.setStreet(partner.getStreet());
         }
-        if (partner.getCountry() == null || partner.getCountry().length() == 0){
+        if (partner.getCountry() == null || partner.getCountry().length() == 0) {
             detailsResource.setCountry("IN");
-        }else{
+        } else {
             detailsResource.setCountry(partner.getCountry());
 
         }
 
-        if (partner.getContactPersonName() != null){
+        if (partner.getContactPersonName() != null) {
             detailsResource.setContactPerName(partner.getContactPersonName());
         }
-        if (partner.getContactNumber() != null){
+        if (partner.getContactNumber() != null) {
             detailsResource.setContactNumber(partner.getContactNumber());
         }
 
-        if (partner.getSearchTerm1() != null){
+        if (partner.getSearchTerm1() != null) {
             detailsResource.setSearchTerm1(partner.getSearchTerm1());
         }
 
-        if (partner.getSearchTerm2() != null){
+        if (partner.getSearchTerm2() != null) {
             detailsResource.setSearchTerm2(partner.getSearchTerm2());
         }
-        if (partner.getPartyRole() != null){
+        if (partner.getPartyRole() != null) {
             detailsResource.setRole(partner.getPartyRole());
         }
 
@@ -154,7 +154,6 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
         return detailsResource;
     }
-
 
 
 }
