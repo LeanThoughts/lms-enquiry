@@ -784,7 +784,7 @@ public class LoanApplicationService implements ILoanApplicationService {
             log.info("Loan Application : Enquiry ID : " + loanApplicationExisting.getEnquiryNo().getId());
 
 
-            log.info("Loan Enquiry Date: " , loanApplicationExisting.getLoanEnquiryDate().toString());
+            log.info("Loan Enquiry Date: " + loanApplicationExisting.getLoanEnquiryDate().toString());
 
             //Save and return the Loan Application
             loanApplication = loanApplicationRepository.save(loanApplicationExisting);
@@ -797,7 +797,7 @@ public class LoanApplicationService implements ILoanApplicationService {
             log.info("Loan Application : Creating  Record : " + loanApplicationExisting.getLoanContractId());
             log.info("Loan Application : Enquiry ID : " + loanApplicationExisting.getEnquiryNo().getId());
             //Save and return the Loan Application
-            log.info("Loan Enquiry Date: " , loanApplication.getLoanEnquiryDate().toString());
+            log.info("Loan Enquiry Date: " + loanApplication.getLoanEnquiryDate().toString());
             loanApplication = loanApplicationRepository.save(loanApplication);
             log.info("Loan Application : Enquiry ID : After Save : " + loanApplicationExisting.getEnquiryNo().getId());
 

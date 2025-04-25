@@ -66,8 +66,19 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value = "HouseNo")
     private String houseNo;
 
-    @JsonProperty(value = "Street")
-    private String street;
+//    @JsonProperty(value = "Street")
+//    private String street;
+
+    @JsonProperty(value = "AddressLine1")
+    private String addressLine1;
+    @JsonProperty(value = "AddressLine2")
+    private String addressLine2;
+    @JsonProperty(value = "AddressLine3")
+    private String addressLine3;
+
+
+    @JsonProperty(value = "AddressValidFromDate")
+    private String addressValidFromDate;
 
     @JsonProperty(value = "Country")
     private String country;

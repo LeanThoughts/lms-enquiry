@@ -83,26 +83,12 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
         }
 
-        if (partner.getPartnerExternalNumber() != null)
-            detailsResource.setPartnerExternalNumber(partner.getPartnerExternalNumber());
+        if (partner.getExternalBPNumber() != null)
+            detailsResource.setPartnerExternalNumber(partner.getExternalBPNumber());
 
 
         if (partner.getPartyRole() != null)
             detailsResource.setPartnerRole(partner.getPartyRole());
-
-//        if (partner.getPartyName1() != null)
-//            detailsResource.setName1(partner.getPartyName1());
-//
-//        if (partner.getPartyName2() != null)
-//            detailsResource.setName2(partner.getPartyName2());
-//
-//        if (partner.getPartyName1() != null)
-//            detailsResource.setFirstname(partner.getPartyName1());
-//
-//        if (partner.getPartyName2() != null)
-//            detailsResource.setLastname(partner.getPartyName2());
-//
-
 
         if (partner.getEmail() != null) {
             detailsResource.setEmail(partner.getEmail());
@@ -117,14 +103,20 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
             detailsResource.setPostalCode(partner.getPostalCode());
         }
         if (partner.getAddressLine1() != null) {
-            detailsResource.setHouseNo(partner.getAddressLine1());
+            detailsResource.setAddressLine1(partner.getAddressLine1());
         }
         if (partner.getAddressLine2() != null) {
-            detailsResource.setStreet(partner.getAddressLine2());
+            detailsResource.setAddressLine2(partner.getAddressLine2());
         }
-        if (partner.getStreet() != null) {
-            detailsResource.setStreet(partner.getStreet());
+        if (partner.getAddressLine3() != null) {
+            detailsResource.setAddressLine3(partner.getAddressLine3());
         }
+//        if (partner.getStreet() != null) {
+//            detailsResource.setStreet(partner.getStreet());
+//        }
+        if(partner.getAddressValidFromDate() != null)
+            detailsResource.setAddressValidFromDate(partner.getAddressValidFromDate().toString());
+
         if (partner.getCountry() == null || partner.getCountry().length() == 0) {
             detailsResource.setCountry("IN");
         } else {
