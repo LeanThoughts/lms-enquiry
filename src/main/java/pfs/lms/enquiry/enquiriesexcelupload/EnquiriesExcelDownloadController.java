@@ -140,8 +140,10 @@ public class EnquiriesExcelDownloadController {
                     excelEnquiry.setBorrowerName(loanApplication.getProjectName());
                     excelEnquiry.setGroupName("--");
                 }
-
-                if (loanApplication.getProjectType() == null)
+                if (loanApplication.getGroupCompany() != null){
+                    excelEnquiry.setGroupName(loanApplication.getGroupCompany());
+                }
+                if (loanApplication.getProjectType() == null || loanApplication.getProjectType().length() == 0)
                     excelEnquiry.setProjectType("--");
                 else {
                     ProjectType projectType = projectTypeRepository.findByCode(loanApplication.getProjectType());
@@ -163,10 +165,10 @@ public class EnquiriesExcelDownloadController {
                         excelEnquiry.setLoanType(loanApplication.getLoanType());
                 }
 
-                if (loanApplication.getProposalType() == null)
+                if (loanApplication.getFinancingType() == null || loanApplication.getFinancingType().length() == 0)
                     excelEnquiry.setProposalType("--");
                 else {
-                    FinancingType financingType = financingTypeRepository.findByCode(loanApplication.getProposalType());
+                    FinancingType financingType = financingTypeRepository.findByCode(loanApplication.getFinancingType());
                     if (financingType != null)
                         excelEnquiry.setProposalType(financingType.getValue());
                     else
@@ -229,16 +231,18 @@ public class EnquiriesExcelDownloadController {
                             }
                         }
                     }
-                    if (!(excelEnquiry.getIccStatus().equals("Cleared") || excelEnquiry.getIccStatus().equals("Dropped"))) {
-                        List<ICCFurtherDetail> furtherDetails = iccFurtherDetailRepository.findByIccApprovalId(iccApproval.getId());
-                        if (furtherDetails != null && furtherDetails.size() > 0)
-                            excelEnquiry.setIccStatus("Deferred");
-                        else {
-                            List<ICCReasonForDelay> reasonForDelays = iccReasonForDelayRepository.findByIccApprovalId(iccApproval.getId());
-                            if (reasonForDelays != null && reasonForDelays.size() > 0)
-                                excelEnquiry.setIccStatus("On Hold");
-                            else
-                                excelEnquiry.setIccStatus("Ready for ICC-In Principle");
+                    if (excelEnquiry.getIccStatus() != null) {
+                        if (!(excelEnquiry.getIccStatus().equals("Cleared") || excelEnquiry.getIccStatus().equals("Dropped"))) {
+                            List<ICCFurtherDetail> furtherDetails = iccFurtherDetailRepository.findByIccApprovalId(iccApproval.getId());
+                            if (furtherDetails != null && furtherDetails.size() > 0)
+                                excelEnquiry.setIccStatus("Deferred");
+                            else {
+                                List<ICCReasonForDelay> reasonForDelays = iccReasonForDelayRepository.findByIccApprovalId(iccApproval.getId());
+                                if (reasonForDelays != null && reasonForDelays.size() > 0)
+                                    excelEnquiry.setIccStatus("On Hold");
+                                else
+                                    excelEnquiry.setIccStatus("Ready for ICC-In Principle");
+                            }
                         }
                     }
                 }
@@ -259,6 +263,7 @@ public class EnquiriesExcelDownloadController {
                 excelEnquiryList.add(excelEnquiry);
             }
             catch (Exception ex) {
+                log.error("Exception processing enquiry id: " + loanApplication.getEnquiryNo().getId());
                 ex.printStackTrace();
             }
         }

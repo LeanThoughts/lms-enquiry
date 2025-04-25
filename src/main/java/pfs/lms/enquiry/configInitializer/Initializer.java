@@ -157,15 +157,15 @@ public class Initializer implements CommandLineRunner {
         projectTypeRepository.deleteAll();
 
         if (projectTypeRepository.count() == 0) {
-            ProjectType pt1 = new ProjectType("01","Thermal-Coal.");
-            ProjectType pt2 = new ProjectType("02","Thermal-Lignite");
-            ProjectType pt3 = new ProjectType("03","Thermal-Gas");
-            ProjectType pt4 = new ProjectType("04","Renewable-Hydro");
-            ProjectType pt5 = new ProjectType("05","Renewable-Solar");
-            ProjectType pt6 = new ProjectType("06","Renewable-Wind");
-            ProjectType pt7 = new ProjectType("07","Renewable-Biomass");
-            ProjectType pt8 = new ProjectType("08","Renewable-Co-Gen.");
-            ProjectType pt9 = new ProjectType("09","Railway Siding");
+            ProjectType pt1 = new ProjectType("1","Thermal-Coal.");
+            ProjectType pt2 = new ProjectType("2","Thermal-Lignite");
+            ProjectType pt3 = new ProjectType("3","Thermal-Gas");
+            ProjectType pt4 = new ProjectType("4","Renewable-Hydro");
+            ProjectType pt5 = new ProjectType("5","Renewable-Solar");
+            ProjectType pt6 = new ProjectType("6","Renewable-Wind");
+            ProjectType pt7 = new ProjectType("7","Renewable-Biomass");
+            ProjectType pt8 = new ProjectType("8","Renewable-Co-Gen.");
+            ProjectType pt9 = new ProjectType("9","Railway Siding");
             ProjectType pt10 = new ProjectType("10","Railway Wagons/Coach");
             ProjectType pt11 = new ProjectType("11","Railway Terminals");
             ProjectType pt12 = new ProjectType("12","Smart City");
@@ -251,7 +251,7 @@ public class Initializer implements CommandLineRunner {
                     pt65, pt66,pt67, pt68, pt69
 
                     ));
-            log.info("Added project type sample data");
+            log.info("Added project types ");
         }
 
         projectTypeCoreSectorRepository.deleteAll();
