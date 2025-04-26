@@ -35,6 +35,10 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
                 private _matSnackBar: MatSnackBar,
                 public _enquiryActionService: EnquiryActionService) { 
 
+        this.disableSubmitButton = !(_enquiryActionService.enquiryActionAuthorization 
+            && _enquiryActionService.enquiryActionAuthorization.authorizationObject === 'Execute Enquiry'
+            && _enquiryActionService.enquiryActionAuthorization.accessAllowed);
+            
         this._dealGuaranteeTimelineForm = this._formBuilder.group({
             dealTransactionStructure: new FormControl(''),
             statusOfPBGAndMABG: new FormControl(''),
@@ -50,6 +54,10 @@ export class DealGuaranteeTimelineUpdateComponent implements OnDestroy {
             environmentalSystemCategory: new FormControl('')
         });
         
+        if (this.disableSubmitButton) {
+            this._dealGuaranteeTimelineForm.disable();
+        }
+
         this.initializeFormValues();
     }
 

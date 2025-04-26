@@ -8,6 +8,8 @@ import {UserModel} from './main/content/model/user.model';
 @Injectable()
 export class AppService implements CanActivate {
 
+    authorization: any;
+
     /**
      * Currently logged in user.
      */
@@ -54,5 +56,9 @@ export class AppService implements CanActivate {
 
     getUserMenu(): Observable<any> {
         return this._http.get<any>('enquiry/api/menu?userRole=' + this.currentUser.role);
+    }
+
+    getAuthorization(): Observable<any> {
+        return this._http.get<any>('enquiry/api/authorization?userRole=' + this.currentUser.role);
     }
 }

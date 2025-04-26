@@ -19,6 +19,7 @@ import { ApplicationFeeService } from '../applicationFee/applicationFee.service'
 import { DocumentationService } from '../documentation/documentation.service';
 import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service';
 import { BMCApprovalService } from '../bmcIccApproval/bmcIccApproval.service';
+import { FunctionalStatusModel } from '../../model/functionalStatus.model';
 
 @Component({
     selector: 'fuse-loancontracts-search',
@@ -378,11 +379,13 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToEnquiryAction()
      */
     redirectToEnquiryAction(): void {
-        if (this._service.selectedEnquiry.value.loanContractId === undefined) {
+
+        if (this._service.selectedEnquiry.value.functionalStatus >= 1 || this._service.selectedEnquiry.value.loanContractId === undefined) {
             this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
                 this._enquiryActionService._enquiryAction.next(response);
                 this.redirect('/enquiryAction');
-            }, (error: HttpErrorResponse) => {
+            }, 
+            (error: HttpErrorResponse) => {
                 if (error.status === 404) {
                     this._enquiryActionService._enquiryAction.next({ id: '' });
                     this.redirect('/enquiryAction');

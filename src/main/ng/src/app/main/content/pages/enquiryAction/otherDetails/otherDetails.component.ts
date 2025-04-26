@@ -31,7 +31,7 @@ export class OtherDetailsComponent {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 private _activatedRoute: ActivatedRoute,
-                _enquiryActionService: EnquiryActionService, 
+                public _enquiryActionService: EnquiryActionService, 
                 public datepipe: DatePipe) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;

@@ -29,6 +29,7 @@ export class ProjectProposalUpdateComponent {
     private _loanApplication: any;
     
     disableSubmitButton = false;
+    operation: string;
 
     @ViewChild(ProjectDetailUpdateComponent) projectDetailUpdateComponent: ProjectDetailUpdateComponent;
     @ViewChild(ProjectCostUpdateComponent) projectCostUpdateComponent: ProjectCostUpdateComponent;
@@ -49,7 +50,8 @@ export class ProjectProposalUpdateComponent {
 
         // Fetch selected project proposal details from the dialog's data attribute
         this.projectProposal = Object.assign({}, _dialogData.projectProposal);
-        if (JSON.stringify(this.projectProposal) !== JSON.stringify({})) {
+        
+        if (_dialogData.operation !== 'addProjectProposal') {
             this.displayTabs = true;
         }
 
@@ -63,6 +65,11 @@ export class ProjectProposalUpdateComponent {
             additionalDetails: [ this.projectProposal.additionalDetails || '' ]
         });
 
+        this.disableSubmitButton = _dialogData.operation === 'viewProjectProposal';
+        if (this.disableSubmitButton) {
+            this.projectProposalForm.disable();
+        }
+        
         this._loanApplication = _enquiryActionService._loanApplication;
         console.log('***** loan application in project proposal update is', this._loanApplication);
     }

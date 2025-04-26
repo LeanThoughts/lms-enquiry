@@ -1,11 +1,19 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addProjectProposal')">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addProjectProposal')"
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">
             New Proposal
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyProjectProposal')"
-                [disabled]="!_selectedProjectProposal"> Modify Proposal
+                [disabled]="!_selectedProjectProposal"
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">
+            Modify Proposal
         </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('viewProjectProposal')"
+                [disabled]="!_selectedProjectProposal">
+            View Proposal
+        </button>
+
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="generateTeaser()"
                 [disabled]="!_selectedProjectProposal"> Generate Teaser
         </button>

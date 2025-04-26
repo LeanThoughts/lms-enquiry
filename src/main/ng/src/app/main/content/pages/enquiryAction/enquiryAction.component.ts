@@ -56,8 +56,14 @@ export class EnquiryActionComponent implements OnInit, OnDestroy {
                 public _enquiryActionService: EnquiryActionService,
                 private _matSnackBar: MatSnackBar, 
                 private _location: Location,
-                private _datepipe: DatePipe
+                private _datepipe: DatePipe,
             ) {
+
+        
+        _appService.authorization.forEach(element => {
+            if (element.authorizationObject === 'Execute Enquiry')
+                _enquiryActionService.enquiryActionAuthorization = element;
+        });
 
         this.unitOfMeasures = _activatedRoute.snapshot.data.routeResolvedData[6]._embedded.unitOfMeasures;
 

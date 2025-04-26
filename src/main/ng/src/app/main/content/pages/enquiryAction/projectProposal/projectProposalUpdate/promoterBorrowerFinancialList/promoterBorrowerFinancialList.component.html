@@ -1,13 +1,20 @@
 <div class="content p-8" style="background-color: lightgrey !important;">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addFinancial')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addFinancial')"
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">  
             Add
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyFinancial')" 
-                [disabled]="!_selectedFinancial"> Modify 
+                [disabled]="!_selectedFinancial" *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed"> 
+            Modify 
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyFinancial')" 
-                [disabled]="!_selectedFinancial"> Delete 
+                [disabled]="!_selectedFinancial" *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed"> 
+            Delete 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('viewFinancial')" 
+                [disabled]="!_selectedFinancial"> 
+            View 
         </button>
     </div>
 

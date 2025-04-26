@@ -22,7 +22,7 @@ export class CollateralDetailUpdateComponent {
      * constructor()
      */
     constructor(_formBuilder: FormBuilder, 
-                private _enquiryActionService: EnquiryActionService,
+                public _enquiryActionService: EnquiryActionService,
                 public _dialogRef: MatDialogRef<CollateralDetailUpdateComponent>,
                 @Inject(MAT_DIALOG_DATA) private _dialogData: any,
                 private _matSnackBar: MatSnackBar) { 
@@ -31,10 +31,16 @@ export class CollateralDetailUpdateComponent {
         console.log('_dialogData', _dialogData);
         this._collateralDetail = Object.assign({}, _dialogData.collateralDetail);
 
+        this.disableSubmitButton = _dialogData.operation === 'viewCollateralDetail';
+
         this._collateralDetailUpdateForm = _formBuilder.group({
             collateralType: [ this._collateralDetail.collateralType || '' ],
             details: [ this._collateralDetail.details || '' ]
         });
+
+        if (this.disableSubmitButton) {
+            this._collateralDetailUpdateForm.disable();
+        }
     }
 
     /**

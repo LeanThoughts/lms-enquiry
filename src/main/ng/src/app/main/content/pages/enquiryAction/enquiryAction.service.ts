@@ -7,6 +7,8 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 @Injectable()
 export class EnquiryActionService implements Resolve<any> {
 
+    enquiryActionAuthorization: any;
+    
     _enquiryAction: BehaviorSubject<any> = new BehaviorSubject({});
 
     _loanApplication: any;

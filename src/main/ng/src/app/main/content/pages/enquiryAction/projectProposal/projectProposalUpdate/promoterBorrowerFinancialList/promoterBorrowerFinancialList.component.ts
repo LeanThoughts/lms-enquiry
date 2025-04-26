@@ -41,7 +41,7 @@ export class PromoterBorrowerFinancialListComponent {
      * constructor()
      */
     constructor(private _dialogRef: MatDialog, 
-                private _enquiryActionService: EnquiryActionService) {
+                public _enquiryActionService: EnquiryActionService) {
     }
 
     /**
@@ -59,7 +59,8 @@ export class PromoterBorrowerFinancialListComponent {
         var data = {
             'projectProposalId': this._projectProposal.id,
             'financial': {},
-            'financials': this._financials
+            'financials': this._financials,
+            'operation': operation
         };
         if (operation === 'modifyFinancial') {
             data.financial = this._selectedFinancial;

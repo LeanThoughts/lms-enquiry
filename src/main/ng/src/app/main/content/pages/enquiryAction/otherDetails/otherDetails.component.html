@@ -1,6 +1,7 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openOtherDetailsDialog()"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openOtherDetailsDialog()"
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed"> 
             Update Other Details
         </button>
     </div>

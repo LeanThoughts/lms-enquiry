@@ -33,7 +33,7 @@ export class ProjectProposalListComponent implements OnDestroy {
     constructor(private _dialogRef: MatDialog, 
                 _loanEnquiryService: LoanEnquiryService,
                 _activatedRoute: ActivatedRoute,
-                private _enquiryActionService: EnquiryActionService) {
+                public _enquiryActionService: EnquiryActionService) {
 
         this._loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this._enquiryActionId = _enquiryActionService._enquiryAction.value.id;
@@ -69,7 +69,8 @@ export class ProjectProposalListComponent implements OnDestroy {
         var data = {
             'loanApplicationId': this._loanApplicationId,
             'enquiryActionId': this._enquiryActionId,
-            'projectProposal': {}
+            'projectProposal': {},
+            'operation': operation
         };
         if (operation === 'modifyProjectProposal') {
             data.projectProposal = this._selectedProjectProposal;

@@ -880,12 +880,16 @@ public class LoanApplicationContoller {
                             Integer.parseInt(resource.getAccountStatus())).
                     collect(Collectors.toList());
 
-        if (resource.getEnquiryNumber() != null ) {
-            if (resource.getEnquiryNumber().length() > 0) {
-                loanApplications = loanApplications.stream().filter(loanApplication ->
-                                loanApplication.getEnquiryNo().getId().toString().equals(resource.getEnquiryNumber())).
-                        collect(Collectors.toList());
+        try {
+            if (resource.getEnquiryNumber() != null ) {
+                if (resource.getEnquiryNumber().length() > 0) {
+                    loanApplications = loanApplications.stream().filter(loanApplication ->
+                                    loanApplication.getEnquiryNo().getId().toString().equals(resource.getEnquiryNumber())).
+                            collect(Collectors.toList());
+                }
             }
+        }
+        catch(Exception ex) {
         }
 
         if(resource.getEnquiryDate() != null) {

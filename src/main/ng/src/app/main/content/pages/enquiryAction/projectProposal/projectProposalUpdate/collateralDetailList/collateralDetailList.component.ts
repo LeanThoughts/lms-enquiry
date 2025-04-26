@@ -55,7 +55,8 @@ export class CollateralDetailListComponent {
         // Open the dialog.
         var data = {
             'projectProposalId': this._projectProposal.id,
-            'collateralDetail': {}
+            'collateralDetail': {},
+            'operation': operation
         };
         if (operation === 'modifyCollateralDetail') {
             data.collateralDetail = this._selectedCollateralDetail;
