@@ -38,7 +38,7 @@ export class CollateralDetailListComponent {
      * constructor()
      */
     constructor(private _dialogRef: MatDialog, 
-                private _enquiryActionService: EnquiryActionService) {
+                public _enquiryActionService: EnquiryActionService) {
     }
 
     /**
