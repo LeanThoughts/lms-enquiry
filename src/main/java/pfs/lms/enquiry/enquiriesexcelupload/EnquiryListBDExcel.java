@@ -80,7 +80,7 @@ public class EnquiryListBDExcel {
         createSXSSCell(row, 13, "Remarks on ICC Readiness", style);
         createSXSSCell(row, 14, "Presented in ICC", style);
         createSXSSCell(row, 15, "ICC Status", style);
-        createSXSSCell(row, 16, "Remarks for ICC Status", style);
+        //createSXSSCell(row, 16, "Remarks for ICC Status", style);
         createSXSSCell(row, 17, "ICC Clearance Date", style);
         createSXSSCell(row, 18, "ICC Meeting Number", style);
         createSXSSCell(row, 19, "Amount Approved (Cr)", style);
@@ -235,11 +235,11 @@ public class EnquiryListBDExcel {
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
-                //Reason for ICC Status
-                if (excelEnquiry.getReasonForIccStatus() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
-                else
-                    createSXSSCell(row, columnCount++, "", style);
+//                //Reason for ICC Status
+//                if (excelEnquiry.getReasonForIccStatus() != null)
+//                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
+//                else
+//                    createSXSSCell(row, columnCount++, "", style);
 
                 //ICC Clearance Date
                 if (excelEnquiry.getIccClearanceDate() != null) {
