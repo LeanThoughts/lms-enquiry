@@ -294,7 +294,7 @@ public class EnquiryListBDExcel {
 
                 //Remarks for ICC Approval / Rejection
                 if (excelEnquiry.getRemarksForIccApproval() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getRemarksForIccApproval(), style);
+                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
                 else
                     createSXSSCell(row, columnCount++, "", style);
 

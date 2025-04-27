@@ -258,6 +258,11 @@ public class EnquiriesExcelDownloadController {
                     excelEnquiry.setPresentedInIcc("Yes");
                 }
 
+                //Earlier logic of setting "Cleared", "Approved by ICC", "
+                if (loanApplication.getiCCStatus() != null){
+                    excelEnquiry.setIccStatus(loanApplication.getiCCStatus());
+                }
+
                 excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
                 excelEnquiry.setAmountApproved(loanApplication.getAmountApproved());
                 excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
