@@ -255,8 +255,9 @@ public class EnquiriesExcelDownloadController {
                     excelEnquiry.setPresentedInIcc("Yes");
                 }
 
-//                excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
-//                excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
+                excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
+                excelEnquiry.setAmountApproved(loanApplication.getAmountApproved());
+                excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
 
                 //Business Development Officer
                 LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication, loanApplication.getbusPartnerNumber(), "ZLM034");

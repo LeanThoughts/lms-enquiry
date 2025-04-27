@@ -85,7 +85,7 @@ public class EnquiryListBDExcel {
         createSXSSCell(row, 18, "ICC Meeting Number", style);
         createSXSSCell(row, 19, "Amount Approved (Cr)", style);
         createSXSSCell(row, 20, "ICC Approved ROI", style);
-        createSXSSCell(row, 21, "Remarks for ICC Approval / Rejection", style);
+        createSXSSCell(row, 21, "ICC Approved Fee %", style);
         createSXSSCell(row, 22, "Remarks for ICC Approval / Rejection", style);
         createSXSSCell(row, 23, "Dealing/Nodal Officer BD", style);
      }
