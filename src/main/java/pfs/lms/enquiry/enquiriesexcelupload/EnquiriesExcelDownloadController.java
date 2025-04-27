@@ -205,11 +205,15 @@ public class EnquiriesExcelDownloadController {
 
 
                 excelEnquiry.setIccReadinessStatus("Under Process");
+
                 EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplicationId(loanApplication.getId());
+
                 if (enquiryAction != null && enquiryAction.getWorkFlowStatusCode() == 3)
                     excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
 
+
                 excelEnquiry.setPresentedInIcc("No");
+
                 if (enquiryAction != null && enquiryAction.getWorkFlowStatusCode() == 3) {
                     ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
                     if (iccApproval != null) {
@@ -245,6 +249,10 @@ public class EnquiriesExcelDownloadController {
                             }
                         }
                     }
+                }
+                if (loanApplication.getFunctionalStatus().equals("11")){
+                    excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
+                    excelEnquiry.setPresentedInIcc("Yes");
                 }
 
 //                excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
