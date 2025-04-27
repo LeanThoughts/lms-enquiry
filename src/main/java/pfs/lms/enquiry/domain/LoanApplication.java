@@ -16,8 +16,8 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Setter
-@Getter
+//@Setter
+//@Getter
 @ToString
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -430,13 +430,18 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
         this.projectType = projectType;
         this.financingType = financingType;
         this.assistanceType = assistanceType;
+        this.term = term;
+        this.loanType = loanType;
         this.projectCapacity = projectCapacity;
         this.projectCapacityUnit = projectCapacityUnit;
         this.projectLocationState = projectLocationState;
         this.projectDistrict = projectDistrict;
         this.tenorYear = tenorYear;
         this.tenorMonth = tenorMonth;
-        this.term = term;
+
+        this.purposeOfLoan = purposeOfLoan;
+        this.projectTypeCoreSector = projectTypeCoreSector;
+
         this.projectCost = projectCost;
         this.projectDebtAmount = projectDebtAmount;
         this.loanRevisedSanctionAmount = loanRevisedSanctionAmount;
@@ -772,6 +777,439 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
         return loanDisbursedAmount;
     }
 
+    public void setLoanType(String loanType) {
+        this.loanType = loanType;
+    }
+
+    public void setPurposeOfLoan(String purposeOfLoan) {
+        this.purposeOfLoan = purposeOfLoan;
+    }
+
+    public void setLoanClass(String loanClass) {
+        this.loanClass = loanClass;
+    }
+
+    public void setLoanPurpose(String loanPurpose) {
+        this.loanPurpose = loanPurpose;
+    }
+
+    public void setEnquiryNo(EnquiryNo enquiryNo) {
+        this.enquiryNo = enquiryNo;
+    }
+
+    public void setLoanEnquiryDate(LocalDate loanEnquiryDate) {
+        this.loanEnquiryDate = loanEnquiryDate;
+    }
+
+    public void setLoanEnquiryId(Long loanEnquiryId) {
+        this.loanEnquiryId = loanEnquiryId;
+    }
+
+    public void setLoanContractId(String loanContractId) {
+        this.loanContractId = loanContractId;
+    }
+
+    public void setLoanApplicant(UUID loanApplicant) {
+        this.loanApplicant = loanApplicant;
+    }
+
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
+    }
+
+    public void setProjectTypeCoreSector(String projectTypeCoreSector) {
+        this.projectTypeCoreSector = projectTypeCoreSector;
+    }
+
+    public void setFinancingType(String financingType) {
+        this.financingType = financingType;
+    }
+
+    public void setAssistanceType(String assistanceType) {
+        this.assistanceType = assistanceType;
+    }
+
+    public void setProjectCapacity(Double projectCapacity) {
+        this.projectCapacity = projectCapacity;
+    }
+
+    public void setProjectCapacityUnit(String projectCapacityUnit) {
+        this.projectCapacityUnit = projectCapacityUnit;
+    }
+
+    public void setProjectLocationState(String projectLocationState) {
+        this.projectLocationState = projectLocationState;
+    }
+
+    public void setProjectDistrict(String projectDistrict) {
+        this.projectDistrict = projectDistrict;
+    }
+
+    public void setTenorYear(Integer tenorYear) {
+        this.tenorYear = tenorYear;
+    }
+
+    public void setTenorMonth(Integer tenorMonth) {
+        this.tenorMonth = tenorMonth;
+    }
+
+    public void setProjectCost(Double projectCost) {
+        this.projectCost = projectCost;
+    }
+
+    public void setProjectDebtAmount(Double projectDebtAmount) {
+        this.projectDebtAmount = projectDebtAmount;
+    }
+
+    public void setLoanContractAmount(Double loanContractAmount) {
+        this.loanContractAmount = loanContractAmount;
+    }
+
+    public void setLoanRevisedSanctionAmount(Double loanRevisedSanctionAmount) {
+        this.loanRevisedSanctionAmount = loanRevisedSanctionAmount;
+    }
+
+    public void setLoanCurrentContractAmount(Double loanCurrentContractAmount) {
+        this.loanCurrentContractAmount = loanCurrentContractAmount;
+    }
+
+    public void setLoanDisbursedAmount(Double loanDisbursedAmount) {
+        this.loanDisbursedAmount = loanDisbursedAmount;
+    }
+
+    public Double getGrantSubsidyAmount() {
+        return grantSubsidyAmount;
+    }
+
+    public void setGrantSubsidyAmount(Double grantSubsidyAmount) {
+        this.grantSubsidyAmount = grantSubsidyAmount;
+    }
+
+    public Double getDebtEquityRatioWithGrant() {
+        return debtEquityRatioWithGrant;
+    }
+
+    public void setDebtEquityRatioWithGrant(Double debtEquityRatioWithGrant) {
+        this.debtEquityRatioWithGrant = debtEquityRatioWithGrant;
+    }
+
+    public Double getDebtEquityRatio() {
+        return debtEquityRatio;
+    }
+
+    public void setDebtEquityRatio(Double debtEquityRatio) {
+        this.debtEquityRatio = debtEquityRatio;
+    }
+
+    public void setEquity(Double equity) {
+        this.equity = equity;
+    }
+
+    public void setProjectAmountCurrency(String projectAmountCurrency) {
+        this.projectAmountCurrency = projectAmountCurrency;
+    }
+
+    public void setExpectedSubDebt(Double expectedSubDebt) {
+        this.expectedSubDebt = expectedSubDebt;
+    }
+
+    public void setPfsDebtAmount(Double pfsDebtAmount) {
+        this.pfsDebtAmount = pfsDebtAmount;
+    }
+
+    public void setPfsSubDebtAmount(Double pfsSubDebtAmount) {
+        this.pfsSubDebtAmount = pfsSubDebtAmount;
+    }
+
+    public void setLeadFIName(String leadFIName) {
+        this.leadFIName = leadFIName;
+    }
+
+    public void setLeadFILoanAmount(Double leadFILoanAmount) {
+        this.leadFILoanAmount = leadFILoanAmount;
+    }
+
+    public void setExpectedInterestRate(Double expectedInterestRate) {
+        this.expectedInterestRate = expectedInterestRate;
+    }
+
+    public void setScheduledCOD(LocalDate scheduledCOD) {
+        this.scheduledCOD = scheduledCOD;
+    }
+
+    public void setPromoterName(String promoterName) {
+        this.promoterName = promoterName;
+    }
+
+    public void setPromoterNetWorthAmount(Double promoterNetWorthAmount) {
+        this.promoterNetWorthAmount = promoterNetWorthAmount;
+    }
+
+    public void setPromoterPATAmount(Double promoterPATAmount) {
+        this.promoterPATAmount = promoterPATAmount;
+    }
+
+    public void setPromoterAreaOfBusinessNature(String promoterAreaOfBusinessNature) {
+        this.promoterAreaOfBusinessNature = promoterAreaOfBusinessNature;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setPromoterKeyDirector(String promoterKeyDirector) {
+        this.promoterKeyDirector = promoterKeyDirector;
+    }
+
+    public void setKeyPromoter(String keyPromoter) {
+        this.keyPromoter = keyPromoter;
+    }
+
+    public void setTechnicalStatus(Integer technicalStatus) {
+        this.technicalStatus = technicalStatus;
+    }
+
+    public void setTechnicalStatusDescription(String technicalStatusDescription) {
+        this.technicalStatusDescription = technicalStatusDescription;
+    }
+
+    public void setFunctionalStatus(Integer functionalStatus) {
+        this.functionalStatus = functionalStatus;
+    }
+
+    public void setFinalDecisionStatus(Integer finalDecisionStatus) {
+        this.finalDecisionStatus = finalDecisionStatus;
+    }
+
+    public void setRejectionCategory(Integer rejectionCategory) {
+        this.rejectionCategory = rejectionCategory;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    public void setRejectionDate(LocalDateTime rejectionDate) {
+        this.rejectionDate = rejectionDate;
+    }
+
+    public void setDecisionDate(LocalDate decisionDate) {
+        this.decisionDate = decisionDate;
+    }
+
+    public void setUserBPNumber(String userBPNumber) {
+        this.userBPNumber = userBPNumber;
+    }
+
+    public void setGroupCompany(String groupCompany) {
+        this.groupCompany = groupCompany;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+//    public String getBusPartnerNumber() {
+//        return busPartnerNumber;
+//    }
+
+    public void setBusPartnerNumber(String busPartnerNumber) {
+        this.busPartnerNumber = busPartnerNumber;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public void setProjectDepartmentInitiator(String projectDepartmentInitiator) {
+        this.projectDepartmentInitiator = projectDepartmentInitiator;
+    }
+
+    public void setMonitoringDepartmentInitiator(String monitoringDepartmentInitiator) {
+        this.monitoringDepartmentInitiator = monitoringDepartmentInitiator;
+    }
+
+    public void setRiskDepartmentInitiator(String riskDepartmentInitiator) {
+        this.riskDepartmentInitiator = riskDepartmentInitiator;
+    }
+
+    public void setPostedInSAP(@Nullable Integer postedInSAP) {
+        this.postedInSAP = postedInSAP;
+    }
+
+    public void setContactBranchAddress(@Nullable String contactBranchAddress) {
+        this.contactBranchAddress = contactBranchAddress;
+    }
+
+    public void setContactDesignation(@Nullable String contactDesignation) {
+        this.contactDesignation = contactDesignation;
+    }
+
+    public void setContactDepartment(@Nullable String contactDepartment) {
+        this.contactDepartment = contactDepartment;
+    }
+
+    public void setContactTelePhone(@Nullable String contactTelePhone) {
+        this.contactTelePhone = contactTelePhone;
+    }
+
+    public void setContactLandLinePhone(@Nullable String contactLandLinePhone) {
+        this.contactLandLinePhone = contactLandLinePhone;
+    }
+
+    public void setContactEmail(@Nullable String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public void setContactFaxNumber(@Nullable String contactFaxNumber) {
+        this.contactFaxNumber = contactFaxNumber;
+    }
+
+    public void setSourceAndCashFlow(String sourceAndCashFlow) {
+        this.sourceAndCashFlow = sourceAndCashFlow;
+    }
+
+    public void setOptimumDateOfLoan(LocalDate optimumDateOfLoan) {
+        this.optimumDateOfLoan = optimumDateOfLoan;
+    }
+
+    public void setConsolidatedGroupLeverage(String consolidatedGroupLeverage) {
+        this.consolidatedGroupLeverage = consolidatedGroupLeverage;
+    }
+
+    public void setTotalDebtTNW(Double totalDebtTNW) {
+        this.totalDebtTNW = totalDebtTNW;
+    }
+
+    public void setTolTNW(Double tolTNW) {
+        this.tolTNW = tolTNW;
+    }
+
+    public void setTotalDebtTNWPercentage(Double totalDebtTNWPercentage) {
+        this.totalDebtTNWPercentage = totalDebtTNWPercentage;
+    }
+
+    public void setTolTNWPercentage(Double tolTNWPercentage) {
+        this.tolTNWPercentage = tolTNWPercentage;
+    }
+
+    public void setDelayInDebtServicing(String delayInDebtServicing) {
+        this.delayInDebtServicing = delayInDebtServicing;
+    }
+
+    public void setEnquiryCompletionDate(LocalDate enquiryCompletionDate) {
+        this.enquiryCompletionDate = enquiryCompletionDate;
+    }
+
+    public void setEnquiryRemarks(String enquiryRemarks) {
+        this.enquiryRemarks = enquiryRemarks;
+    }
+
+    public void setTermSheetAcceptance(LocalDate termSheetAcceptance) {
+        this.termSheetAcceptance = termSheetAcceptance;
+    }
+
+    public void setFeeRemarks(String feeRemarks) {
+        this.feeRemarks = feeRemarks;
+    }
+
+    public void setBoardMeetingNumber(String boardMeetingNumber) {
+        this.boardMeetingNumber = boardMeetingNumber;
+    }
+
+    public void setBoardApprovalDate(LocalDate boardApprovalDate) {
+        this.boardApprovalDate = boardApprovalDate;
+    }
+
+    public void setBoardApprovalRemarks(String boardApprovalRemarks) {
+        this.boardApprovalRemarks = boardApprovalRemarks;
+    }
+
+    public void setbODStatus(String bODStatus) {
+        this.bODStatus = bODStatus;
+    }
+
+    public void setiCCClearanceDate(LocalDate iCCClearanceDate) {
+        this.iCCClearanceDate = iCCClearanceDate;
+    }
+
+    public void setiCCMeetNumber(String iCCMeetNumber) {
+        this.iCCMeetNumber = iCCMeetNumber;
+    }
+
+    public void setiCCStatus(String iCCStatus) {
+        this.iCCStatus = iCCStatus;
+    }
+
+    public void setiCCRemarks(String iCCRemarks) {
+        this.iCCRemarks = iCCRemarks;
+    }
+
+    public String getIccReadinessStatus() {
+        return iccReadinessStatus;
+    }
+
+    public void setIccReadinessStatus(String iccReadinessStatus) {
+        this.iccReadinessStatus = iccReadinessStatus;
+    }
+
+    public String getRemarksOnIccReadiness() {
+        return remarksOnIccReadiness;
+    }
+
+    public void setRemarksOnIccReadiness(String remarksOnIccReadiness) {
+        this.remarksOnIccReadiness = remarksOnIccReadiness;
+    }
+
+    public String getPresentedInIcc() {
+        return presentedInIcc;
+    }
+
+    public void setPresentedInIcc(String presentedInIcc) {
+        this.presentedInIcc = presentedInIcc;
+    }
+
+    public String getReasonForIccStatus() {
+        return reasonForIccStatus;
+    }
+
+    public void setReasonForIccStatus(String reasonForIccStatus) {
+        this.reasonForIccStatus = reasonForIccStatus;
+    }
+
+    public Double getIccApprovedRoi() {
+        return iccApprovedRoi;
+    }
+
+    public void setIccApprovedRoi(Double iccApprovedRoi) {
+        this.iccApprovedRoi = iccApprovedRoi;
+    }
+
+    public String getProposalType() {
+        return proposalType;
+    }
+
+    public void setProposalType(String proposalType) {
+        this.proposalType = proposalType;
+    }
+
+    public Double getBorrowerRequestedROI() {
+        return borrowerRequestedROI;
+    }
+
+    public void setBorrowerRequestedROI(Double borrowerRequestedROI) {
+        this.borrowerRequestedROI = borrowerRequestedROI;
+    }
+
+    public Double getAmountApproved() {
+        return amountApproved;
+    }
+
+    public void setAmountApproved(Double amountApproved) {
+        this.amountApproved = amountApproved;
+    }
+
+
 
     public Double getPfsSubDebtAmount() {
         return this.pfsSubDebtAmount;
@@ -937,9 +1375,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
         return contactFaxNumber;
     }
 
-//    public String getBusPartnerNumber() {
-//        return busPartnerNumber;
-//    }
+
 
     public String getSourceAndCashFlow() {
         return sourceAndCashFlow;
@@ -1032,6 +1468,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
     public String getiCCRemarks() {
         return iCCRemarks;
     }
+
+
 
     @Value
     @RequiredArgsConstructor(staticName = "of")

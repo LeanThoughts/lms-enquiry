@@ -131,7 +131,7 @@ public class BoardApprovalService implements IBoardApprovalService {
                 loanApplication.setBoardApprovalDate(approvalByBoard.getMeetingDate());
             if (approvalByBoard.getDetails() != null)
                 loanApplication.setBoardApprovalRemarks(approvalByBoard.getDetails());
-            loanApplication.setBODStatus("4"); //Approved by Board
+            loanApplication.setbODStatus("4"); //Approved by Board
             return loanApplication;
         }
         if (rejectedByBoard != null) {
@@ -140,10 +140,10 @@ public class BoardApprovalService implements IBoardApprovalService {
                 loanApplication.setBoardApprovalDate(rejectedByBoard.getMeetingDate());
             if (rejectedByBoard.getDetails() != null)
                 loanApplication.setBoardApprovalRemarks(rejectedByBoard.getDetails());
-            loanApplication.setBODStatus("3"); //Rejected by Board
+            loanApplication.setbODStatus("3"); //Rejected by Board
         }
         if (boardApprovalRejectedByCustomer != null) {
-            loanApplication.setBODStatus("5"); //Rejected by Customer
+            loanApplication.setbODStatus("5"); //Rejected by Customer
             return loanApplication;
         }
 
@@ -166,7 +166,7 @@ public class BoardApprovalService implements IBoardApprovalService {
 
             if (deferredByBoard.getDetails() != null)
                 loanApplication.setBoardApprovalRemarks(deferredByBoard.getDetails());
-            loanApplication.setBODStatus("1"); //Deferred by Board
+            loanApplication.setbODStatus("1"); //Deferred by Board
             return loanApplication;
         }
         return loanApplication;

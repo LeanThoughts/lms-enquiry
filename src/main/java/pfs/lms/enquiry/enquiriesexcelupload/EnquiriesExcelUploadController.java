@@ -241,15 +241,15 @@ public class EnquiriesExcelUploadController {
                 loanApplication.setPresentedInIcc(pi == null ? null : pi.getCode());
 
                 ICCStatus is = iccStatusRepository.findByValue(enquiry.getIccStatus());
-                loanApplication.setICCStatus(is == null ? null : is.getCode());
+                loanApplication.setiCCStatus(is == null ? null : is.getCode());
 
                 loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
                 loanApplication.setRemarksOnIccReadiness(enquiry.getRemarksOnIccReadiness());
                 loanApplication.setReasonForIccStatus(enquiry.getReasonForIccStatus());
-                loanApplication.setICCMeetNumber(enquiry.getIccMeetingNumber());
-                loanApplication.setICCRemarks(enquiry.getRemarksForIccApproval());
+                loanApplication.setiCCMeetNumber(enquiry.getIccMeetingNumber());
+                loanApplication.setiCCRemarks(enquiry.getRemarksForIccApproval());
                 loanApplication.setLoanEnquiryDate(enquiry.getDateOfLeadGeneration());
-                loanApplication.setICCClearanceDate(enquiry.getIccClearanceDate());
+                loanApplication.setiCCClearanceDate(enquiry.getIccClearanceDate());
                 loanApplication.setLoanContractAmount(enquiry.getAmountRequested());
                 loanApplication.setBorrowerRequestedROI(enquiry.getBorrowerRequestedROI());
                 loanApplication.setAmountApproved(enquiry.getAmountApproved());

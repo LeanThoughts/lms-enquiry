@@ -692,6 +692,33 @@ public class LoanApplicationService implements ILoanApplicationService {
             if (loanApplication.getPfsDebtAmount() != null)
                 loanApplicationExisting.setPfsDebtAmount(loanApplication.getPfsDebtAmount());
 
+            if (loanApplication.getLoanType() != null)
+                loanApplicationExisting.setLoanType(loanApplication.getLoanType());
+
+            //ZPFS_T_VDARL > ICC_STATUS
+            if (loanApplication.getiCCStatus() != null)
+                loanApplicationExisting.setiCCStatus(loanApplication.getiCCStatus());
+            //ZPFS_T_VDARL > ZZICC_REMARKS
+            if (loanApplication.getiCCRemarks() != null)
+                loanApplicationExisting.setiCCRemarks(loanApplication.getiCCRemarks());
+            //ZPFS_T_VDARL > ICC_CLEARANCE
+            if (loanApplication.getiCCClearanceDate() != null)
+                loanApplicationExisting.setiCCClearanceDate(loanApplication.getiCCClearanceDate());
+            //ZPFS_T_VDARL > ICC_MEET_NUMBER
+            if(loanApplication.getiCCMeetNumber() != null)
+                loanApplicationExisting.setiCCMeetNumber(loanApplication.getiCCMeetNumber());
+            //VDARL >  ZZSANCTIONED_AMT
+            if(loanApplication.getAmountApproved() != null)
+                loanApplicationExisting.setAmountApproved(loanApplication.getAmountApproved());
+            //VDARL >  ZZROI_SANCTION_DATE
+            if (loanApplication.getIccApprovedRoi() != null)
+                loanApplicationExisting.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
+            //VDARL > ZZTOTAL_FEE_PCT
+            if (loanApplication.getFees() != null)
+                loanApplicationExisting.setFees(loanApplication.getFees());
+
+
+
             if (loanApplication.getLoanContractAmount() != null)
                 loanApplicationExisting.setLoanContractAmount(loanApplication.getLoanContractAmount());
             if (loanApplication.getLoanCurrentContractAmount() != null)
@@ -794,12 +821,12 @@ public class LoanApplicationService implements ILoanApplicationService {
 
 //            loanApplication.applicant(applicant);
 //            loanApplication.created(applicant);
-            log.info("Loan Application : Creating  Record : " + loanApplicationExisting.getLoanContractId());
-            log.info("Loan Application : Enquiry ID : " + loanApplicationExisting.getEnquiryNo().getId());
+            log.info("Loan Application : Creating  Record : " + loanApplication.getLoanContractId());
+            log.info("Loan Application : Enquiry ID : " + loanApplication.getEnquiryNo().getId());
             //Save and return the Loan Application
             log.info("Loan Enquiry Date: " + loanApplication.getLoanEnquiryDate().toString());
             loanApplication = loanApplicationRepository.save(loanApplication);
-            log.info("Loan Application : Enquiry ID : After Save : " + loanApplicationExisting.getEnquiryNo().getId());
+            log.info("Loan Application : Enquiry ID : After Save : " + loanApplication.getEnquiryNo().getId());
 
         }
 

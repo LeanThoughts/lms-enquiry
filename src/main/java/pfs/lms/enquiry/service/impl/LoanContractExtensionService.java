@@ -60,6 +60,8 @@ public class LoanContractExtensionService implements ILoanContractExtensionServi
         loanContractExtension.setScheduledCOD(resource.getLoanContractExtension().getScheduledCOD());
         loanContractExtension = loanContractExtensionRepository.save(loanContractExtension);
 
+
+
         log.info("Loan Partner List for Update");
         for ( LoanPartner loanPartner: resource.getLoanPartners()) {
             log.info("Partner : " + loanPartner.getBusinessPartnerId() + " : "+ loanPartner.getRoleType() + " : " + loanPartner.getBusinessPartnerName());
