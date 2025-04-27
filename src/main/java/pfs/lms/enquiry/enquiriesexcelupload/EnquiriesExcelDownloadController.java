@@ -220,7 +220,7 @@ public class EnquiriesExcelDownloadController {
                         ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
                         if (approvalByICC != null) {
                             excelEnquiry.setPresentedInIcc("Yes");
-                            excelEnquiry.setIccStatus("Cleared");
+                            excelEnquiry.setIccStatus("Approved by ICC");
                             excelEnquiry.setReasonForIccStatus(approvalByICC.getRemarks());
                             excelEnquiry.setIccClearanceDate(approvalByICC.getMeetingDate());
                             excelEnquiry.setIccMeetingNumber(approvalByICC.getMeetingNumber());
@@ -258,7 +258,7 @@ public class EnquiriesExcelDownloadController {
                     excelEnquiry.setPresentedInIcc("Yes");
                 }
 
-                //Earlier logic of setting "Cleared", "Approved by ICC", "
+                //Earlier logic of setting "Cleared", "Approved by ICC", "Rejected" not needed any more
                 if (loanApplication.getiCCStatus() != null){
                     excelEnquiry.setIccStatus(loanApplication.getiCCStatus());
                 }
@@ -267,6 +267,17 @@ public class EnquiriesExcelDownloadController {
                 excelEnquiry.setAmountApproved(loanApplication.getAmountApproved());
                 excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
                 excelEnquiry.setIccApprovedFeePct(loanApplication.getFees());
+
+                if ( excelEnquiry.getIccMeetingNumber() != null)
+                    excelEnquiry.setPresentedInIcc("Yes");
+                else
+                    excelEnquiry.setPresentedInIcc("No");
+                if (excelEnquiry.getAmountApproved() != null) {
+                    excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
+                }
+                else {
+                    excelEnquiry.setIccReadinessStatus("Under Process");
+                }
 
                 //Business Development Officer
                 LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication, loanApplication.getbusPartnerNumber(), "ZLM034");

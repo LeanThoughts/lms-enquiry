@@ -80,13 +80,13 @@ public class EnquiryListBDExcel {
         createSXSSCell(row, 13, "Remarks on ICC Readiness", style);
         createSXSSCell(row, 14, "Presented in ICC", style);
         createSXSSCell(row, 15, "ICC Status", style);
-        createSXSSCell(row, 16, "Reason for ICC Status", style);
+        createSXSSCell(row, 16, "Remarks for ICC Status", style);
         createSXSSCell(row, 17, "ICC Clearance Date", style);
         createSXSSCell(row, 18, "ICC Meeting Number", style);
         createSXSSCell(row, 19, "Amount Approved (Cr)", style);
         createSXSSCell(row, 20, "ICC Approved ROI", style);
         createSXSSCell(row, 21, "ICC Approved Fee %", style);
-        createSXSSCell(row, 22, "Remarks for ICC Approval / Rejection", style);
+        //createSXSSCell(row, 22, "Remarks for ICC Approval / Rejection", style);
         createSXSSCell(row, 23, "Dealing/Nodal Officer BD", style);
      }
 
@@ -293,10 +293,10 @@ public class EnquiryListBDExcel {
                     createSXSSCell(row, columnCount++, "", style);
 
                 //Remarks for ICC Approval / Rejection
-                if (excelEnquiry.getRemarksForIccApproval() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
-                else
-                    createSXSSCell(row, columnCount++, "", style);
+//                if (excelEnquiry.getRemarksForIccApproval() != null)
+//                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
+//                else
+//                    createSXSSCell(row, columnCount++, "", style);
 
 
                 //Dealing/Nodal Officer BD
