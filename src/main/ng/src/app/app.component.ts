@@ -70,6 +70,12 @@ export class AppComponent implements OnInit, OnDestroy {
                     });
                 });
 
+                // Get authorization.
+                _appService.getAuthorization().subscribe(response => {
+                    _appService.authorization = response;
+                });
+
+                
                 // Get default navigation
                 this.navigation = navigation;
                 // Register the navigation to the service

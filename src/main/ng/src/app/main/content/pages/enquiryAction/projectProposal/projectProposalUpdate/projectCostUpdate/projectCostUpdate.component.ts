@@ -56,6 +56,10 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
                 private _matSnackBar: MatSnackBar,
                 public _enquiryActionService: EnquiryActionService) { 
 
+        this.disableSubmitButton = !(_enquiryActionService.enquiryActionAuthorization 
+            && _enquiryActionService.enquiryActionAuthorization.authorizationObject === 'Execute Enquiry'
+            && _enquiryActionService.enquiryActionAuthorization.accessAllowed);
+
         this._projectCostForm = this._formBuilder.group({
             projectCost: new FormControl('', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
             debt: new FormControl(0.00, [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
@@ -67,6 +71,10 @@ export class ProjectCostUpdateComponent implements OnInit, OnDestroy {
             debtEquityRatioWithGrant: new FormControl('')
         });
         
+        if (this.disableSubmitButton) {
+            this._projectCostForm.disable();
+        }
+
         console.log('loan application in constructor is', this._loanApplication);
     }
     ngOnInit(): void {

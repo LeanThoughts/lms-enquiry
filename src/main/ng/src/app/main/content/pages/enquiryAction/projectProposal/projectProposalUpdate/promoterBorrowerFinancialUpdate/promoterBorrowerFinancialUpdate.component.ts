@@ -32,6 +32,8 @@ export class PromoterBorrowerFinancialUpdateComponent {
         this._financials = _dialogData.financials;
         console.log('_financials', this._financials);
         
+        this.disableSubmitButton = _dialogData.operation === 'viewFinancial';
+        
         this._financialUpdateForm = _formBuilder.group({
             fiscalPeriod: [ this._financial.fiscalPeriod || '' ],
 
@@ -69,6 +71,10 @@ export class PromoterBorrowerFinancialUpdateComponent {
             cashDscr: [ this._financial.cashDscr || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ],
             dscr: [ this._financial.dscr || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)] ]
         });
+
+        if (this.disableSubmitButton) {
+            this._financialUpdateForm.disable();
+        }
     }
 
     /**

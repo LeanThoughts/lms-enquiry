@@ -5,7 +5,7 @@
 
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
         <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()"
-                [disabled]="disableSubmitButton">
+                [disabled]="disableSubmitButton" *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">
             Submit
         </button>
     </div>
@@ -45,14 +45,17 @@
     </div>
 
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addShareHolder')">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('addShareHolder')"
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">
             Add
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="openUpdateDialog('modifyShareHolder')"
-                [disabled]="!_selectedShareHolder"> Modify
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">
+            Modify
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()"
-                [disabled]="!_selectedShareHolder"> Delete
+                *ngIf="_enquiryActionService.enquiryActionAuthorization?.accessAllowed">
+            Delete
         </button>
     </div>
 

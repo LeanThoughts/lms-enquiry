@@ -63,6 +63,11 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
                 public _enquiryActionService: EnquiryActionService,
                 public _enquiryApplicationService: LoanEnquiryService, _loanEnquiryService: LoanEnquiryService) {
 
+                    
+        this.disableSubmitButton = !(_enquiryActionService.enquiryActionAuthorization 
+            && _enquiryActionService.enquiryActionAuthorization.authorizationObject === 'Execute Enquiry'
+            && _enquiryActionService.enquiryActionAuthorization.accessAllowed);
+
         // Initialize dropdown values
         this._enquiryApplicationService.getUnitOfMeasures().subscribe(response => {
             this.unitOfMeasures = response._embedded.unitOfMeasures;
@@ -130,6 +135,10 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
             policyExposure: new FormControl(this._enquiryActionService._loanApplication.loanApplication.policyExposure,
                 [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]),
         });
+        
+        if (this.disableSubmitButton) {
+            this._projectDetailForm.disable();
+        }
 
         // console.log('this._projectDetail', this._projectDetail);
         // console.log('JSON.stringify(this._projectDetail) !== JSON.stringify({})', JSON.stringify(this._projectDetail) !== JSON.stringify({}));

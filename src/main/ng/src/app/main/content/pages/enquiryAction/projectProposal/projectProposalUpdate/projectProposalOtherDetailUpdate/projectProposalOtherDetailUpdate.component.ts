@@ -52,6 +52,10 @@ export class ProjectProposalOtherDetailUpdateComponent {
                 public _enquiryActionService: EnquiryActionService,
                 public _enquiryApplicationService: LoanEnquiryService) { 
 
+        this.disableSubmitButton = !(_enquiryActionService.enquiryActionAuthorization 
+            && _enquiryActionService.enquiryActionAuthorization.authorizationObject === 'Execute Enquiry'
+            && _enquiryActionService.enquiryActionAuthorization.accessAllowed);
+                        
         this._otherDetailForm = this._formBuilder.group({
             sourceAndCashFlow: new FormControl(''),
             optimumDateOfLoan: new FormControl(''),
@@ -63,6 +67,10 @@ export class ProjectProposalOtherDetailUpdateComponent {
             delayInDebtServicing: new FormControl('')
         });
         
+        if (this.disableSubmitButton) {
+            this._otherDetailForm.disable();
+        }
+
         this.initializeFormValues();
     }
 
