@@ -250,14 +250,18 @@ public class EnquiriesExcelDownloadController {
                         }
                     }
                 }
-                if (loanApplication.getFunctionalStatus().equals("11")){
+                if (loanApplication.getFunctionalStatus().equals("11")  ){
                     excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
+                }
+
+                if (excelEnquiry.getIccMeetingNumber() != null){
                     excelEnquiry.setPresentedInIcc("Yes");
                 }
 
                 excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
                 excelEnquiry.setAmountApproved(loanApplication.getAmountApproved());
                 excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
+                excelEnquiry.setIccApprovedFeePct(loanApplication.getFees());
 
                 //Business Development Officer
                 LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication, loanApplication.getbusPartnerNumber(), "ZLM034");

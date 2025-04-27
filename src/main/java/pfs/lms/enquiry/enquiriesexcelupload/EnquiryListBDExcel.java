@@ -80,7 +80,7 @@ public class EnquiryListBDExcel {
         createSXSSCell(row, 13, "Remarks on ICC Readiness", style);
         createSXSSCell(row, 14, "Presented in ICC", style);
         createSXSSCell(row, 15, "ICC Status", style);
-        createSXSSCell(row, 16, "ICC Status-Remarks", style);
+        createSXSSCell(row, 16, "Reason for ICC Status", style);
         createSXSSCell(row, 17, "ICC Clearance Date", style);
         createSXSSCell(row, 18, "ICC Meeting Number", style);
         createSXSSCell(row, 19, "Amount Approved (Cr)", style);
@@ -257,18 +257,39 @@ public class EnquiryListBDExcel {
 
                 // Amount Approved (Cr)
                 if (excelEnquiry.getAmountApproved() != null) {
-                    String amountApproved = new DecimalFormat("#.00#").format(excelEnquiry.getAmountApproved()); // rounded to 2 decimal places
-                    createSXSSCell(row, columnCount++, amountApproved, style);
+                    if (excelEnquiry.getAmountApproved() > 0) {
+                        String amountApproved = new DecimalFormat("#.00#").format(excelEnquiry.getAmountApproved()); // rounded to 2 decimal places
+                        createSXSSCell(row, columnCount++, amountApproved, style);
+                    }
+                    else {
+                        createSXSSCell(row, columnCount++, "", style);
+                    }
                 }
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
                 // ICC Approved ROI
                 if (excelEnquiry.getIccApprovedRoi() != null) {
-                    String iccApprovedRoi = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedRoi()); // rounded to 2 decimal places
-                    createSXSSCell(row, columnCount++, iccApprovedRoi, style);
+                    if ((excelEnquiry.getIccApprovedRoi()) > 0) {
+                        String iccApprovedRoi = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedRoi()); // rounded to 2 decimal places
+                        createSXSSCell(row, columnCount++, iccApprovedRoi, style);
+                    }else {
+                        createSXSSCell(row, columnCount++, "", style);
+                    }
                 }
                  else
+                    createSXSSCell(row, columnCount++, "", style);
+
+                // ICC Approved ROI
+                if (excelEnquiry.getIccApprovedFeePct() != null) {
+                    if ((excelEnquiry.getIccApprovedFeePct()) > 0) {
+                        String iccApprovedFeePct = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedFeePct()); // rounded to 2 decimal places
+                        createSXSSCell(row, columnCount++, iccApprovedFeePct, style);
+                    }else {
+                        createSXSSCell(row, columnCount++, "", style);
+                    }
+                }
+                else
                     createSXSSCell(row, columnCount++, "", style);
 
                 //Remarks for ICC Approval / Rejection
