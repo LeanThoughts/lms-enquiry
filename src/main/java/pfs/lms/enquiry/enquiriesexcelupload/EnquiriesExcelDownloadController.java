@@ -130,25 +130,23 @@ public class EnquiriesExcelDownloadController {
                     if (partner != null) {
                         excelEnquiry.setBorrowerName((partner.getPartyName()));
                         excelEnquiry.setGroupName(partner.getGroupCompany());
-                    }
-                    else {
+                    } else {
                         excelEnquiry.setBorrowerName(loanApplication.getProjectName());
                         excelEnquiry.setGroupName("---");
                     }
-                }
-                else {
+                } else {
                     excelEnquiry.setBorrowerName(loanApplication.getProjectName());
                     excelEnquiry.setGroupName("--");
                 }
-                if (loanApplication.getGroupCompany() != null){
+                if (loanApplication.getGroupCompany() != null) {
                     excelEnquiry.setGroupName(loanApplication.getGroupCompany());
                 }
                 if (loanApplication.getProjectType() == null || loanApplication.getProjectType().length() == 0)
                     excelEnquiry.setProjectType("--");
                 else {
                     ProjectType projectType = projectTypeRepository.findByCode(loanApplication.getProjectType());
-                    log.info("Project Type : " + loanApplication.getProjectType()) ;
-                    log.info("Project Type Config : " + projectType.toString()) ;
+                    log.info("Project Type : " + loanApplication.getProjectType());
+                    log.info("Project Type Config : " + projectType.toString());
                     if (projectType != null)
                         excelEnquiry.setProjectType(projectType.getValue());
                     else
@@ -224,8 +222,7 @@ public class EnquiriesExcelDownloadController {
                             excelEnquiry.setReasonForIccStatus(approvalByICC.getRemarks());
                             excelEnquiry.setIccClearanceDate(approvalByICC.getMeetingDate());
                             excelEnquiry.setIccMeetingNumber(approvalByICC.getMeetingNumber());
-                        }
-                        else {
+                        } else {
                             RejectedByICC rejectedByICC = rejectedByICCRepository.findByIccApprovalId(iccApproval.getId());
                             if (rejectedByICC != null) {
                                 excelEnquiry.setPresentedInIcc("Yes");
@@ -250,16 +247,16 @@ public class EnquiriesExcelDownloadController {
                         }
                     }
                 }
-                if (loanApplication.getFunctionalStatus().equals("11")  ){
+                if (loanApplication.getFunctionalStatus().equals("11")) {
                     excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
                 }
 
-                if (excelEnquiry.getIccMeetingNumber() != null){
+                if (excelEnquiry.getIccMeetingNumber() != null) {
                     excelEnquiry.setPresentedInIcc("Yes");
                 }
 
                 //Earlier logic of setting "Cleared", "Approved by ICC", "Rejected" not needed any more
-                if (loanApplication.getiCCStatus() != null){
+                if (loanApplication.getiCCStatus() != null) {
                     excelEnquiry.setIccStatus(loanApplication.getiCCStatus());
                 }
 
@@ -268,12 +265,21 @@ public class EnquiriesExcelDownloadController {
                 excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
                 excelEnquiry.setIccApprovedFeePct(loanApplication.getFees());
 
-                if ( excelEnquiry.getIccMeetingNumber() != null)
-                    excelEnquiry.setPresentedInIcc("Yes");
+                if (excelEnquiry.getIccMeetingNumber() != null)
+                    if (excelEnquiry.getIccMeetingNumber().length() > 0) {
+                        excelEnquiry.setPresentedInIcc("Yes");
+                    }else{
+                        excelEnquiry.setPresentedInIcc("No");
+                        excelEnquiry.setIccReadinessStatus("Under Process");
+                    }
                 else
                     excelEnquiry.setPresentedInIcc("No");
+
                 if (excelEnquiry.getAmountApproved() != null) {
+                    if (excelEnquiry.getAmountApproved() > 0)
                     excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
+                    else
+                        excelEnquiry.setIccReadinessStatus("Under Process");
                 }
                 else {
                     excelEnquiry.setIccReadinessStatus("Under Process");
