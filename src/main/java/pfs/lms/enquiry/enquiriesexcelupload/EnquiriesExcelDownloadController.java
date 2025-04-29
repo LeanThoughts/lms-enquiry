@@ -242,7 +242,7 @@ public class EnquiriesExcelDownloadController {
                                 if (reasonForDelays != null && reasonForDelays.size() > 0)
                                     excelEnquiry.setIccStatus("On Hold");
                                 else
-                                    excelEnquiry.setIccStatus("Ready for ICC-In Principle");
+                                    excelEnquiry.setIccStatus("Under Process");
                             }
                         }
                     }
