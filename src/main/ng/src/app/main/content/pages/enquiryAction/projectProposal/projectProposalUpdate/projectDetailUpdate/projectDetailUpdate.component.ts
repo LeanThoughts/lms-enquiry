@@ -101,7 +101,7 @@ export class ProjectDetailUpdateComponent implements OnInit, OnDestroy {
             borrowerName: new FormControl(this.getBorrowerName()),
             promoterName: new FormControl(this._enquiryActionService._loanApplication.loanApplication.groupCompany),
             loanPurpose: new FormControl(this._enquiryActionService._loanApplication.loanApplication.loanPurpose),
-            projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity,
+            projectCapacity: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacity === 0 ? '' : this._enquiryActionService._loanApplication.loanApplication.projectCapacity,
                 [Validators.pattern(MonitoringRegEx.sevenCommaTwo)]),
             // projectCapacityUnit: new FormControl(this._enquiryActionService._loanApplication.loanApplication.projectCapacityUnit),
             projectCapacityUnit: new FormControl(''),

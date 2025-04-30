@@ -53,7 +53,7 @@ public class EnquiryListBDExcel {
         }
 
         sxssfSheet.setRandomAccessWindowSize(50);
-        short fontHeight = 300;
+        short fontHeight = 250;
         Row row = sxssfSheet.createRow(0);
 
         CellStyle style = sxssfWorkbook.createCellStyle();
