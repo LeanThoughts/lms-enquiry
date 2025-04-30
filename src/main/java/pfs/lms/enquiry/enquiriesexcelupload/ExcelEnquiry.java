@@ -41,6 +41,8 @@ public class ExcelEnquiry extends AggregateRoot<ExcelEnquiry> {
     private Double borrowerRequestedROI;
     private Double amountApproved;
     private Double iccApprovedRoi;
+    private Double iccApprovedFeePct;
+
 
     private String nodalOfficerBD;
 

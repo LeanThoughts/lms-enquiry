@@ -80,14 +80,14 @@ public class EnquiryListBDExcel {
         createSXSSCell(row, 13, "Remarks on ICC Readiness", style);
         createSXSSCell(row, 14, "Presented in ICC", style);
         createSXSSCell(row, 15, "ICC Status", style);
-        createSXSSCell(row, 16, "ICC Status-Remarks", style);
-        createSXSSCell(row, 17, "ICC Clearance Date", style);
-        createSXSSCell(row, 18, "ICC Meeting Number", style);
-        createSXSSCell(row, 19, "Amount Approved (Cr)", style);
-        createSXSSCell(row, 20, "ICC Approved ROI", style);
-        createSXSSCell(row, 21, "Remarks for ICC Approval / Rejection", style);
-        createSXSSCell(row, 22, "Remarks for ICC Approval / Rejection", style);
-        createSXSSCell(row, 23, "Dealing/Nodal Officer BD", style);
+        //createSXSSCell(row, 16, "Remarks for ICC Status", style);
+        createSXSSCell(row, 16, "ICC Clearance Date", style);
+        createSXSSCell(row, 17, "ICC Meeting Number", style);
+        createSXSSCell(row, 18, "Amount Approved (Cr)", style);
+        createSXSSCell(row, 19, "ICC Approved ROI", style);
+        createSXSSCell(row, 20, "ICC Approved Fee %", style);
+        //createSXSSCell(row, 22, "Remarks for ICC Approval / Rejection", style);
+        createSXSSCell(row, 21, "Dealing/Nodal Officer BD", style);
      }
 
 
@@ -235,11 +235,11 @@ public class EnquiryListBDExcel {
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
-                //Reason for ICC Status
-                if (excelEnquiry.getReasonForIccStatus() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
-                else
-                    createSXSSCell(row, columnCount++, "", style);
+//                //Reason for ICC Status
+//                if (excelEnquiry.getReasonForIccStatus() != null)
+//                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
+//                else
+//                    createSXSSCell(row, columnCount++, "", style);
 
                 //ICC Clearance Date
                 if (excelEnquiry.getIccClearanceDate() != null) {
@@ -257,25 +257,46 @@ public class EnquiryListBDExcel {
 
                 // Amount Approved (Cr)
                 if (excelEnquiry.getAmountApproved() != null) {
-                    String amountApproved = new DecimalFormat("#.00#").format(excelEnquiry.getAmountApproved()); // rounded to 2 decimal places
-                    createSXSSCell(row, columnCount++, amountApproved, style);
+                    if (excelEnquiry.getAmountApproved() > 0) {
+                        String amountApproved = new DecimalFormat("#.00#").format(excelEnquiry.getAmountApproved()); // rounded to 2 decimal places
+                        createSXSSCell(row, columnCount++, amountApproved, style);
+                    }
+                    else {
+                        createSXSSCell(row, columnCount++, "", style);
+                    }
                 }
                 else
                     createSXSSCell(row, columnCount++, "", style);
 
                 // ICC Approved ROI
                 if (excelEnquiry.getIccApprovedRoi() != null) {
-                    String iccApprovedRoi = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedRoi()); // rounded to 2 decimal places
-                    createSXSSCell(row, columnCount++, iccApprovedRoi, style);
+                    if ((excelEnquiry.getIccApprovedRoi()) > 0) {
+                        String iccApprovedRoi = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedRoi()); // rounded to 2 decimal places
+                        createSXSSCell(row, columnCount++, iccApprovedRoi, style);
+                    }else {
+                        createSXSSCell(row, columnCount++, "", style);
+                    }
                 }
                  else
                     createSXSSCell(row, columnCount++, "", style);
 
-                //Remarks for ICC Approval / Rejection
-                if (excelEnquiry.getRemarksForIccApproval() != null)
-                    createSXSSCell(row, columnCount++, excelEnquiry.getRemarksForIccApproval(), style);
+                // ICC Approved ROI
+                if (excelEnquiry.getIccApprovedFeePct() != null) {
+                    if ((excelEnquiry.getIccApprovedFeePct()) > 0) {
+                        String iccApprovedFeePct = new DecimalFormat("#.00#").format(excelEnquiry.getIccApprovedFeePct()); // rounded to 2 decimal places
+                        createSXSSCell(row, columnCount++, iccApprovedFeePct, style);
+                    }else {
+                        createSXSSCell(row, columnCount++, "", style);
+                    }
+                }
                 else
                     createSXSSCell(row, columnCount++, "", style);
+
+                //Remarks for ICC Approval / Rejection
+//                if (excelEnquiry.getRemarksForIccApproval() != null)
+//                    createSXSSCell(row, columnCount++, excelEnquiry.getReasonForIccStatus(), style);
+//                else
+//                    createSXSSCell(row, columnCount++, "", style);
 
 
                 //Dealing/Nodal Officer BD
