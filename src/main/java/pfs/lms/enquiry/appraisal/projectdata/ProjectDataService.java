@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
@@ -17,7 +15,6 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.UUID;
 
 @Slf4j
@@ -115,11 +112,6 @@ public class ProjectDataService implements IProjectDataService {
         //<String> response = restTemplate.getForEntity(resourceUrl, String.class);
 
         return projectData;
-    }
-
-    public String getAuthorizationBearer(Principal user) {
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) ((OAuth2Authentication) user).getDetails();
-        return "Bearer " + details.getTokenValue();
     }
 
 }

@@ -1,4 +1,18 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          audiences: api://f97a56c0-c602-4417-847f-6abadb8a542c
+          issuer-uri: https://sts.windows.net/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/
+          # For jwk-set-uri refer to https://login.microsoftonline.com/<your-tenant-id>/v2.0/.well-known/openid-configuration
+          jwk-set-uri: https://login.microsoftonline.com/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/discovery/v2.0/keys
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        tenant-id: 9d006416-b9a8-44de-b8e2-44ae5a7b4a63
+        client-id: f97a56c0-c602-4417-847f-6abadb8a542c
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true
@@ -77,17 +91,17 @@ sap:
   client: 300
   userName: sajeev
   password: sapsap
-security:
-  oauth2:
-    client:
-      client-id: pfs-client
-      client-secret: pfs-secret
-      access-token-uri: http://localhost:9999/auth/oauth/token
-      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
-    resource:
-      user-info-uri: http://localhost:9999/time
-      jwt:
-        keyValue: PfS$$$98567
+#security:
+#  oauth2:
+#    client:
+#      client-id: pfs-client
+#      client-secret: pfs-secret
+#      access-token-uri: http://localhost:9999/auth/oauth/token
+#      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+#    resource:
+#      user-info-uri: http://localhost:9999/time
+#      jwt:
+#        keyValue: PfS$$$98567
 server:
   port: 8080
 riskRating:
@@ -106,4 +120,5 @@ logging:
   level:
     org:
       springframework:
+        security: DEBUG
         web=DEBUG:
