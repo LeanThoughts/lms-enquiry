@@ -24,6 +24,8 @@ export class ICCFurtherDetailUpdateDialogComponent {
 
     enquiryCompletion: any;
 
+    loanApplicationId: any;
+
     today = new Date();
     public selectedLoanEnquiry: any;
 
@@ -36,7 +38,8 @@ export class ICCFurtherDetailUpdateDialogComponent {
 
         this.selectedLoanEnquiry = this._loanEnquiryService.selectedEnquiry.value;
         this.enquiryCompletion = _dialogData.enquiryCompletion;
-        
+        this.loanApplicationId = _dialogData.loanApplicationId;
+
         // Fetch selected user details from the dialog's data attribute.
         if (_dialogData.selectedICCFurtherDetail !== undefined) {
             this.selectedICCFurtherDetail = Object.assign({}, _dialogData.selectedICCFurtherDetail);
@@ -67,6 +70,9 @@ export class ICCFurtherDetailUpdateDialogComponent {
         if (this._dialogData.operation === 'addICCFurtherDetail') {
             furtherDetail.loanApplicationId = this._dialogData.loanApplicationId;
             this._iccApprovalService.createFurtherDetail(furtherDetail).subscribe(() => {
+                this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                    this._iccApprovalService._iccApproval.next(data);
+                });
                 this._matSnackBar.open('Further details added successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });
@@ -76,6 +82,9 @@ export class ICCFurtherDetailUpdateDialogComponent {
             this.selectedICCFurtherDetail.iccMeetingDate = furtherDetail.iccMeetingDate;
             this.selectedICCFurtherDetail.detailsRequired = furtherDetail.detailsRequired;
             this._iccApprovalService.updateFurtherDetail(this.selectedICCFurtherDetail).subscribe(() => {
+                this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                    this._iccApprovalService._iccApproval.next(data);
+                });
                 this._matSnackBar.open('Further details updated successfully.', 'OK', { duration: 7000 });
                 this._dialogRef.close({ 'refresh': true });
             });

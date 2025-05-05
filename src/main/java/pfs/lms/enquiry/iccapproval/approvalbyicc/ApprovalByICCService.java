@@ -61,6 +61,8 @@ public class ApprovalByICCService implements IApprovalByICCService {
         approvalByIcc.setFileReference2(approvalByIccResource.getFileReference2());
         approvalByIcc.setDocumentTypeMinutes(approvalByIccResource.getDocumentTypeMinutes());
         approvalByIcc.setDocumentTypeMailFromCS(approvalByIccResource.getDocumentTypeMailFromCS());
+        approvalByIcc.setAmountApproved(approvalByIccResource.getAmountApproved());
+        approvalByIcc.setIccApprovedRoi(approvalByIccResource.getIccApprovedRoi());
         approvalByIcc = approvalByIccRepository.save(approvalByIcc);
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
@@ -94,7 +96,8 @@ public class ApprovalByICCService implements IApprovalByICCService {
         approvalByIcc.setFileReference2(approvalByIccResource.getFileReference2());
         approvalByIcc.setDocumentTypeMinutes(approvalByIccResource.getDocumentTypeMinutes());
         approvalByIcc.setDocumentTypeMailFromCS(approvalByIccResource.getDocumentTypeMailFromCS());
-
+        approvalByIcc.setAmountApproved(approvalByIccResource.getAmountApproved());
+        approvalByIcc.setIccApprovedRoi(approvalByIccResource.getIccApprovedRoi());
         approvalByIcc = approvalByIccRepository.save(approvalByIcc);
 
         ICCApproval iccApproval = iccApprovalRepository.getOne(approvalByIcc.getIccApproval().getId());

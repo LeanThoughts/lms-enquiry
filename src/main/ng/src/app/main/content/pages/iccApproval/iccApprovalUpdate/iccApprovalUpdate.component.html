@@ -20,6 +20,14 @@
                 </mat-form-field>
             </div>
             <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <input matInput type="number" placeholder="Approved Amount" formControlName="amountApproved" maxlength="18" required>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <input matInput type="number" placeholder="ICC Approved ROI" formControlName="iccApprovedRoi" maxlength="5" required>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
                 <mat-form-field fxFlex="100">
                     <input matInput placeholder="Remarks" formControlName="remarks" maxlength="200" required>
                 </mat-form-field>

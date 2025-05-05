@@ -34,7 +34,10 @@ public class ApprovalByICC extends AggregateRoot<ApprovalByICC> implements Clone
 
     private String documentTypeMailFromCS;
     private String fileReference2;
-    
+
+    private Double iccApprovedRoi;
+    private Double amountApproved;
+
     public Object clone () throws CloneNotSupportedException {
         return super.clone();
     }

@@ -29,7 +29,7 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple [@animate]="{value:'*',params:{y:'100%'}}"
-                    (click)="onSelect(obj.reasonForDelay)" [ngClass]="{'highlight':obj == selectedReasonForDelay}">
+                    (click)="onSelect(obj)" [ngClass]="{'highlight':obj == selectedReasonForDelay}">
             </mat-row>
 
         </mat-table>

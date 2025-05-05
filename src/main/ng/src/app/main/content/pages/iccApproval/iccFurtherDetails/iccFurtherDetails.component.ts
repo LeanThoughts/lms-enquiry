@@ -83,9 +83,9 @@ export class ICCFurtherDetailsComponent implements OnInit {
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
-                this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
-                    this._iccApprovalService._iccApproval.next(data);
-                });
+                // this._iccApprovalService.getICCApproval(this.loanApplicationId).subscribe(data => {
+                //     this._iccApprovalService._iccApproval.next(data);
+                // });
                 this.refreshTable();
             }
         });
