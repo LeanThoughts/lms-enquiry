@@ -64,6 +64,12 @@ public class ApprovalByICCService implements IApprovalByICCService {
         approvalByIcc.setAmountApproved(approvalByIccResource.getAmountApproved());
         approvalByIcc.setIccApprovedRoi(approvalByIccResource.getIccApprovedRoi());
         approvalByIcc = approvalByIccRepository.save(approvalByIcc);
+
+        if (!iccApproval.isModified()) {
+            iccApproval.setModified(true);
+            iccApprovalRepository.save(iccApproval);
+        }
+
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),
