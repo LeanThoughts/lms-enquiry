@@ -9,6 +9,7 @@ import { LoanEnquiryService } from '../enquiry/enquiryApplication.service';
 export class ICCApprovalService {
 
     _iccApproval: BehaviorSubject<any> = new BehaviorSubject({});
+    iccApprovalAuthorization: any;
 
     /**
      * constructor()

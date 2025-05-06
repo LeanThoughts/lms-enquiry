@@ -56,6 +56,12 @@ public class RejectedByICCService implements IRejectedByICCService {
         rejectedByIcc.setMeetingNumber(rejectedByIccResource.getMeetingNumber());
         rejectedByIcc.setReasonForRejection(rejectedByIccResource.getReasonForRejection());
         rejectedByIcc = rejectedByIccRepository.save(rejectedByIcc);
+
+        if (!iccApproval.isModified()) {
+            iccApproval.setModified(true);
+            iccApprovalRepository.save(iccApproval);
+        }
+
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),

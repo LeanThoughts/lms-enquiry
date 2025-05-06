@@ -1,10 +1,15 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()">
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed">
             Add
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedReasonForDelay"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
             Modify 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="view()" [disabled]="!selectedReasonForDelay">
+            View
         </button>
     </div>
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">
@@ -29,7 +34,7 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
             <mat-row *matRowDef="let obj; columns: displayedColumns;" class="obj" matRipple [@animate]="{value:'*',params:{y:'100%'}}"
-                    (click)="onSelect(obj.reasonForDelay)" [ngClass]="{'highlight':obj == selectedReasonForDelay}">
+                    (click)="onSelect(obj)" [ngClass]="{'highlight':obj == selectedReasonForDelay}">
             </mat-row>
 
         </mat-table>

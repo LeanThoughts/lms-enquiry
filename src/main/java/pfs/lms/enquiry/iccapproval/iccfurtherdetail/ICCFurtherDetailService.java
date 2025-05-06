@@ -57,6 +57,12 @@ public class ICCFurtherDetailService implements IICCFurtherDetailService {
         iccFurtherDetail.setIccMeetingNumber(iccFurtherDetailResource.getIccMeetingNumber());
         iccFurtherDetail.setIccMeetingDate(iccFurtherDetailResource.getIccMeetingDate());
         iccFurtherDetail = iccFurtherDetailRepository.save(iccFurtherDetail);
+
+        if (!iccApproval.isModified()) {
+            iccApproval.setModified(true);
+            iccApprovalRepository.save(iccApproval);
+        }
+
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),

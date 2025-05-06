@@ -56,6 +56,11 @@ public class ICCReasonForDelayService implements IICCReasonForDelayService {
         iccReasonForDelay.setDate(iccReasonForDelayResource.getDate());
         iccReasonForDelay = iccReasonForDelayRepository.save(iccReasonForDelay);
 
+        if (!iccApproval.isModified()) {
+            iccApproval.setModified(true);
+            iccApprovalRepository.save(iccApproval);
+        }
+
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),

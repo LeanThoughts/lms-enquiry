@@ -27,7 +27,7 @@ export class ICCReasonForDelayComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
+    constructor(_loanEnquiryService: LoanEnquiryService, public _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar, _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -60,6 +60,7 @@ export class ICCReasonForDelayComponent {
             width: '750px',
             data: {
                 loanApplicationId: this.loanApplicationId,
+                operation: 'addReasonForDelay'
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
@@ -81,13 +82,29 @@ export class ICCReasonForDelayComponent {
             width: '750px',
             data: {
                 loanApplicationId: this.loanApplicationId,
-                selectedReasonForDelay: this.selectedReasonForDelay
+                selectedReasonForDelay: this.selectedReasonForDelay,
+                operation: 'updateReasonForDelay'
             }
         });
         // Subscribe to the dialog close event to intercept the action taken.
         dialogRef.afterClosed().subscribe((result) => { 
             if (result.refresh) {
                 this.refreshTable();
+            }
+        });
+    }
+
+    /**
+     * view()
+     */
+    view(): void {
+        this._matDialog.open(ICCReasonForDelayUpdateDialogComponent, {
+            panelClass: 'fuse-icc-reason-for-delay-update-dialog',
+            width: '750px',
+            data: {
+                loanApplicationId: this.loanApplicationId,
+                selectedReasonForDelay: this.selectedReasonForDelay,
+                operation: 'viewReasonForDelay'
             }
         });
     }

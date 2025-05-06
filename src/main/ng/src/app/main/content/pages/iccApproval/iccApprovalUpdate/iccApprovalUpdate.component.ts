@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ICCApprovalService } from '../iccApproval.service';
 import { LoanMonitoringConstants } from 'app/main/content/model/loanMonitoringConstants';
 import { LoanEnquiryService } from '../../enquiry/enquiryApplication.service';
+import { MonitoringRegEx } from 'app/main/content/others/monitoring.regEx';
 
 @Component({
     selector: 'fuse-icc-approval-update-dialog',
@@ -60,7 +61,9 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
             documentTypeMinutes: [this.selectedICCApproval.documentTypeMinutes || ''],
             documentTypeMailFromCS: [this.selectedICCApproval.documentTypeMailFromCS || ''],
             file1: [''],
-            file2: ['']
+            file2: [''],
+            amountApproved: [this.selectedICCApproval.amountApproved || '', [Validators.pattern(MonitoringRegEx.fifteenCommaTwo)]],
+            iccApprovedRoi: [this.selectedICCApproval.iccApprovedRoi || '', [Validators.pattern(MonitoringRegEx.fiveCommaTwo)]]
         });
     }
 
@@ -152,6 +155,8 @@ export class ICCApprovalUpdateDialogComponent implements OnInit {
                 this.selectedICCApproval.cfoApprovalDate = iccApproval.cfoApprovalDate;
                 this.selectedICCApproval.documentTypeMinutes = iccApproval.documentTypeMinutes;
                 this.selectedICCApproval.documentTypeMailFromCS = iccApproval.documentTypeMailFromCS;
+                this.selectedICCApproval.amountApproved = iccApproval.amountApproved;
+                this.selectedICCApproval.iccApprovedRoi = iccApproval.iccApprovedRoi;
                 if (this.fileReference1 !== '') {
                     this.selectedICCApproval.fileReference1 = this.fileReference1;
                 }

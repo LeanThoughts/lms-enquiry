@@ -46,6 +46,11 @@ export class ICCReasonForDelayUpdateDialogComponent implements OnInit {
         });
 
         this.selectedEnquiry = this._loanEnquiryService.selectedEnquiry.value;
+        
+        this.disableSubmitButton = _dialogData.operation === 'viewReasonForDelay';
+        if (this.disableSubmitButton) {
+            this.reasonForDelayForm.disable();
+        }
     }
 
     /**

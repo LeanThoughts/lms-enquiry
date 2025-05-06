@@ -31,9 +31,10 @@ export class RiskNotificationUpdateDialogComponent {
         private _matSnackBar: MatSnackBar) {
 
         // Fetch selected user details from the dialog's data attribute.
-        if (_dialogData.selectedRiskNotification !== undefined) {
+        if (_dialogData.operation !== 'addRiskNotification') {
             this.selectedRiskNotification = Object.assign({}, _dialogData.selectedRiskNotification);
-            this.dialogTitle = 'Modify Risk Notification';
+            this.disableSubmitButton = _dialogData.operation === 'viewRiskNotification';
+            this.dialogTitle = _dialogData.operation === 'updateRiskNotification' ? 'Modify Risk Notification' : 'View Risk Notification';
         }
         else {
             this.selectedRiskNotification = {};
@@ -44,6 +45,9 @@ export class RiskNotificationUpdateDialogComponent {
             notificationDate: [this.selectedRiskNotification.notificationDate],
             remarks: [this.selectedRiskNotification.remarks || '']
         });
+        if (this.disableSubmitButton) {
+            this.riskNotificationUpdateForm.disable();
+        }
     }
 
     /**

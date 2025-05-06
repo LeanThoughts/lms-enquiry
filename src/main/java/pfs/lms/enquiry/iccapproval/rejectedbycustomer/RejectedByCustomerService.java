@@ -57,6 +57,12 @@ public class RejectedByCustomerService implements IRejectedByCustomerService {
         rejectedByCustomer.setRemarks(rejectedByCustomerResource.getRemarks());
         rejectedByCustomer.setRejectionCategory(rejectedByCustomerResource.getRejectionCategory());
         rejectedByCustomer = rejectedByCustomerRepository.save(rejectedByCustomer);
+
+        if (!iccApproval.isModified()) {
+            iccApproval.setModified(true);
+            iccApprovalRepository.save(iccApproval);
+        }
+
 //        changeDocumentService.createChangeDocument(
 //                loanAppraisalForPartner.getId(),
 //                loanPartner.getId().toString(),

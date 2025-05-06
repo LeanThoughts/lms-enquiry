@@ -1,14 +1,21 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateRiskNotification('addRiskNotification')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateRiskNotification('addRiskNotification')"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
             Add
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateRiskNotification('updateRiskNotification')" 
-                [disabled]="!selectedRiskNotification"> 
+                [disabled]="!selectedRiskNotification"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
             Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteRiskNotification()" [disabled]="!selectedRiskNotification"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteRiskNotification()" [disabled]="!selectedRiskNotification"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
             Delete
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateRiskNotification('viewRiskNotification')"
+                [disabled]="!selectedRiskNotification"> 
+            View
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="sendNotification()" [disabled]="!selectedRiskNotification"> 
             Send Notification

@@ -28,7 +28,7 @@ export class RejectedByICCComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
+    constructor(_loanEnquiryService: LoanEnquiryService, public _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar, private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;

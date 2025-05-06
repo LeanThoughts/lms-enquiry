@@ -29,4 +29,6 @@ public class ApprovalByICCResource {
     private String fileReference1;
     private String fileReference2;
 
+    private Double iccApprovedRoi;
+    private Double amountApproved;
 }
