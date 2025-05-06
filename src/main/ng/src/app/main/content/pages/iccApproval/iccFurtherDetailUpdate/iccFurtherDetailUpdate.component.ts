@@ -41,7 +41,8 @@ export class ICCFurtherDetailUpdateDialogComponent {
         this.loanApplicationId = _dialogData.loanApplicationId;
 
         // Fetch selected user details from the dialog's data attribute.
-        if (_dialogData.selectedICCFurtherDetail !== undefined) {
+        if (_dialogData.operation !== 'addICCFurtherDetail') {
+            this.disableSubmitButton = _dialogData.operation === 'viewICCFurtherDetail';
             this.selectedICCFurtherDetail = Object.assign({}, _dialogData.selectedICCFurtherDetail);
             this.dialogTitle = 'Modify Further Details';
         }
@@ -56,6 +57,9 @@ export class ICCFurtherDetailUpdateDialogComponent {
             detailsRequired: [this.selectedICCFurtherDetail.detailsRequired || ''],
         });
 
+        if (this.disableSubmitButton) {
+            this.iccFurtherDetailUpdateForm.disable();
+        }
     }
 
     /**

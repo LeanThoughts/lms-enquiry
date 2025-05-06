@@ -28,9 +28,10 @@ export class LoanEnhancementUpdateDialogComponent {
         private _matSnackBar: MatSnackBar) {
 
         // Fetch selected user details from the dialog's data attribute.
-        if (_dialogData.selectedLoanEnhancement !== undefined) {
+        if (_dialogData.operation !== 'addLoanEnhancement') {
             this.selectedLoanEnhancement = Object.assign({}, _dialogData.selectedLoanEnhancement);
-            this.dialogTitle = 'Modify Loan Enhancement Details';
+            this.disableSubmitButton = _dialogData.operation === 'viewLoanEnhancement';
+            this.dialogTitle = _dialogData.operation === 'updateLoanEnhancement' ? 'Modify Loan Enhancement Details' : 'View Loan Enhancement Details';
         }
         else {
             this.selectedLoanEnhancement = {};
@@ -47,6 +48,9 @@ export class LoanEnhancementUpdateDialogComponent {
             reviseRepaymentStartDate: [this.selectedLoanEnhancement.reviseRepaymentStartDate || ''],
             remarks: [this.selectedLoanEnhancement.remarks || '']
         });
+        if (this.disableSubmitButton) {
+            this.loanEnhancementForm.disable();
+        }
     }
 
     /**

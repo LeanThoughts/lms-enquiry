@@ -30,7 +30,7 @@ export class LoanEnhancementComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
+    constructor(_loanEnquiryService: LoanEnquiryService, public _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
             private _activatedRoute: ActivatedRoute) {
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
         this.dataSource = new MatTableDataSource(_activatedRoute.snapshot.data.routeResolvedData[1]);
@@ -69,7 +69,7 @@ export class LoanEnhancementComponent implements OnInit {
             'loanApplicationId': this.loanApplicationId,
             'selectedLoanEnhancement': undefined
         };
-        if (operation === 'updateLoanEnhancement') {
+        if (operation !== 'addLoanEnhancement') {
             data.selectedLoanEnhancement = this.selectedLoanEnhancement;
         }
         const dialogRef = this._dialog.open(LoanEnhancementUpdateDialogComponent, {

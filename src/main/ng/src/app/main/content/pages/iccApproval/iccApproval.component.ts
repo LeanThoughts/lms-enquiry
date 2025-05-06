@@ -38,6 +38,12 @@ export class ICCApprovalComponent implements OnInit, OnDestroy {
                 public _loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService,
                 private _location: Location, private _datepipe: DatePipe) {
 
+
+        _appService.authorization.forEach(element => {
+            if (element.authorizationObject === 'Execute ICCApproval')
+                _iccApprovalService.iccApprovalAuthorization = element;
+        });
+            
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {
             this.selectedEnquiry = data;
             console.log('this.selectedEnquiry', this.selectedEnquiry);

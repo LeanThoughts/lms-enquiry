@@ -32,7 +32,7 @@ export class RiskNotificationComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
+    constructor(_loanEnquiryService: LoanEnquiryService, public _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
                 _activatedRoute: ActivatedRoute, private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -75,7 +75,7 @@ export class RiskNotificationComponent implements OnInit {
             'loanApplicationId': this.loanApplicationId,
             'selectedRiskNotification': undefined
         };
-        if (operation === 'updateRiskNotification') {
+        if (operation !== 'addRiskNotification') {
             data.selectedRiskNotification = this.selectedRiskNotification;
         }
         const dialogRef = this._dialog.open(RiskNotificationUpdateDialogComponent, {

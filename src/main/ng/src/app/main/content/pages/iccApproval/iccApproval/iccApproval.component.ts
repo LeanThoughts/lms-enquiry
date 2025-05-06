@@ -33,7 +33,7 @@ export class ICCApprovalMeetingComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
+    constructor(_loanEnquiryService: LoanEnquiryService, public _iccApprovalService: ICCApprovalService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar, private _datePipe: DatePipe, private _activatedRoute: ActivatedRoute) {
 
         console.log('activated route', _activatedRoute);

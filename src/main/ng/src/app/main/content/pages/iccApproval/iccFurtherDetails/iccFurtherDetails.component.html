@@ -1,16 +1,23 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateICCFurtherDetail('addICCFurtherDetail')"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateICCFurtherDetail('addICCFurtherDetail')"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
             Add
         </button>
         <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateICCFurtherDetail('updateICCFurtherDetail')" 
-                [disabled]="!selectedICCFurtherDetail"> 
+                [disabled]="!selectedICCFurtherDetail"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
             Modify
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteICCFurtherDetail()" [disabled]="!selectedICCFurtherDetail"> 
-            Delete
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="updateICCFurtherDetail('viewICCFurtherDetail')"
+                [disabled]="!selectedICCFurtherDetail">
+            View
         </button>
 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="deleteICCFurtherDetail()" [disabled]="!selectedICCFurtherDetail"
+                *ngIf="_iccApprovalService.iccApprovalAuthorization?.accessAllowed"> 
+            Delete
+        </button>
     </div>
 
     <div class="mat-table-container" mat-white-bg style="width: 100%">

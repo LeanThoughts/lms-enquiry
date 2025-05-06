@@ -30,7 +30,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
+    constructor(_loanEnquiryService: LoanEnquiryService, public _iccApprovalService: ICCApprovalService, private _dialog: MatDialog, 
                 _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -72,7 +72,7 @@ export class ICCFurtherDetailsComponent implements OnInit {
             'selectedICCFurtherDetail': undefined,
             'enquiryCompletion': this.enquiryCompletion
         };
-        if (operation === 'updateICCFurtherDetail') {
+        if (operation !== 'addICCFurtherDetail') {
             data.selectedICCFurtherDetail = this.selectedICCFurtherDetail;
         }
         const dialogRef = this._dialog.open(ICCFurtherDetailUpdateDialogComponent, {
