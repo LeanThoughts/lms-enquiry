@@ -49,6 +49,11 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
                 private _matSnackBar: MatSnackBar,
                 private _location: Location) {
 
+        _appService.authorization.forEach(element => {
+            if (element.authorizationObject === 'Execute RiskAssessment')
+                _riskAssessmentService.riskAssessmentAuthorization = element;
+        });            
+        
         this.riskAssessment = _riskAssessmentService._riskAssessment;
         console.log('riskAssessment in riskAssesment component constructor is', this.riskAssessment);
 

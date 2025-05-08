@@ -30,6 +30,7 @@ export class TermSheetUpdateDialogComponent implements OnInit {
         private _matSnackBar: MatSnackBar) {
 
         // Fetch selected reason details from the dialog's data attribute.
+        this.disableSubmitButton = (_dialogData.operation === 'viewDraft' || _dialogData.operation === 'viewAcceptance');
         this.selectedTermSheet = Object.assign({}, _dialogData.selectedTermSheet);
         this.loanApplicationId = _dialogData.loanApplicationId;
         this.preliminaryRiskAssessment = _dialogData.preliminaryRiskAssessment;
@@ -40,11 +41,17 @@ export class TermSheetUpdateDialogComponent implements OnInit {
             status: [this.selectedTermSheet.status || ''],
             file: ['']
         });
-
+        if (this.disableSubmitButton)
+            this.issuanceForm.disable();
+        
         if (_dialogData.operation === 'modifyDraft')
             this.dialogTitle = 'Modify Draft Term Sheet';
         else if (_dialogData.operation === 'modifyAcceptance')
             this.dialogTitle = "Modify Acceptance of Term Sheet";
+        else if (_dialogData.operation === 'viewDraft')
+            this.dialogTitle = 'View Draft Term Sheet';
+        else if (_dialogData.operation === 'viewAcceptance')
+            this.dialogTitle = 'View Acceptance of Term Sheet';
         else if (_dialogData.operation === 'newDraft') {
             this.dialogTitle = 'New Draft Term Sheet';
             this.issuanceForm.controls.status.setValue('Draft');

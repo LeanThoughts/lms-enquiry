@@ -1,11 +1,19 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"> Add  </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedFormalRequest"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add()"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
+            Add 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedFormalRequest"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
             Modify 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedFormalRequest"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedFormalRequest"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
             Delete
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="view()" [disabled]="!selectedFormalRequest"> 
+            View
         </button>
     </div>
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">

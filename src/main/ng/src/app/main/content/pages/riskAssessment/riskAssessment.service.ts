@@ -7,6 +7,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 export class RiskAssessmentService implements Resolve<any> {
 
     _riskAssessment: BehaviorSubject<any> = new BehaviorSubject({});
+    riskAssessmentAuthorization: any;
         
     /**
      * constructor()

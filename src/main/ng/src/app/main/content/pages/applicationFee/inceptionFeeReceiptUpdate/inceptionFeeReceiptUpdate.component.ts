@@ -35,6 +35,10 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
             if (_dialogData.operation === 'updateInceptionFee') {
                 this.dialogTitle = 'Modify Inception Fee';
             }
+            else if (_dialogData.operation === 'viewInceptionFee') {
+                this.dialogTitle = 'View Inception Fee';
+                this.disableSubmitButton = true;
+            }
         }
 
         this.inceptionFeeForm = this._formBuilder.group({
@@ -51,6 +55,8 @@ export class InceptionFeeReceiptUpdateDialogComponent implements OnInit {
             remarks: [this.selectedInceptionFee.remarks || ''],
             referenceNumber: [this.selectedInceptionFee.referenceNumber || '']
         });
+        if (this.disableSubmitButton)
+            this.inceptionFeeForm.disable();
     }
 
     /**

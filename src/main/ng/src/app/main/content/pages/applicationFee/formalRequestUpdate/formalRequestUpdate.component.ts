@@ -34,9 +34,14 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
         // Fetch selected reason details from the dialog's data attribute.
         this.selectedFormalRequest = Object.assign({}, _dialogData.selectedFormalRequest);
         this.loanApplicationId = _dialogData.loanApplicationId;
+        this.disableSubmitButton = (_dialogData.operation === 'viewFormalRequest');
+
         if (_dialogData.selectedFormalRequest !== undefined) {
             if (_dialogData.operation === 'updateFormalRequest') {
                 this.dialogTitle = 'Modify Formal Request';
+            }
+            else if (_dialogData.operation === 'viewFormalRequest') {
+                this.dialogTitle = 'View Formal Request';
             }
         }
 
@@ -47,6 +52,8 @@ export class FormalRequestUpdateDialogComponent implements OnInit {
             documentReceivedDate: [this.selectedFormalRequest.documentReceivedDate || ''],
             file: ['']
         });
+        if (this.disableSubmitButton)
+            this.formalRequestForm.disable();
     }
 
     /**

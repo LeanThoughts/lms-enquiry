@@ -29,7 +29,7 @@ export class InceptionFeeReceiptComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _applicationFeeService: ApplicationFeeService, private _matDialog: MatDialog,
+    constructor(_loanEnquiryService: LoanEnquiryService, public _applicationFeeService: ApplicationFeeService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;
@@ -127,6 +127,22 @@ export class InceptionFeeReceiptComponent {
                 (error) => {
                     this._matSnackBar.open('Unable to delete selected inception fee details.', 'OK', { duration: 7000 });
                 });
+            }
+        });
+    }
+
+    /**
+     * view()
+     */
+    view(): void {
+        // Open the dialog.
+        this._matDialog.open(InceptionFeeReceiptUpdateDialogComponent, {
+            panelClass: 'fuse-inception-fee-receipt-update-dialog',
+            width: '850px',
+            data: {
+                operation: 'viewInceptionFee',
+                loanApplicationId: this.loanApplicationId,
+                selectedInceptionFee: this.selectedInceptionFee
             }
         });
     }

@@ -44,7 +44,7 @@ export class InvoicingDetailsComponent implements OnInit {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, 
-                private _applicationFeeService: ApplicationFeeService,
+                public _applicationFeeService: ApplicationFeeService,
                 _enquiryService: LoanEnquiryService, 
                 private _matSnackBar: MatSnackBar, 
                 _activatedRoute: ActivatedRoute, 

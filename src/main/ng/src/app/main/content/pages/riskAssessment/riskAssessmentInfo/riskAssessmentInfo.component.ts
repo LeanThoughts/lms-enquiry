@@ -28,7 +28,7 @@ export class PreliminaryRiskAssessmentComponent {
     /**
      * constructor()
      */
-    constructor(_loanEnquiryService: LoanEnquiryService, private _riskAssessmentService: RiskAssessmentService, private _matDialog: MatDialog,
+    constructor(_loanEnquiryService: LoanEnquiryService, public _riskAssessmentService: RiskAssessmentService, private _matDialog: MatDialog,
                     private _matSnackBar: MatSnackBar, private _datePipe: DatePipe) {
 
         this.loanApplicationId = _loanEnquiryService.selectedLoanApplicationId.value;

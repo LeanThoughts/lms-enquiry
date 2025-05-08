@@ -41,6 +41,11 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
                 public _loanEnquiryService: LoanEnquiryService, private _applicationFeeService: ApplicationFeeService,
                 private _location: Location, private _activatedRoute: ActivatedRoute) {
 
+        _appService.authorization.forEach(element => {
+            if (element.authorizationObject === 'Execute ApplicationFee')
+                _applicationFeeService.applicationFeeAuthorization = element;
+        });
+            
         this.meetingNumbers = _activatedRoute.snapshot.data.routeResolvedData[3];
 
         this.subscriptions.add(this._loanEnquiryService.selectedEnquiry.subscribe(data => {

@@ -31,7 +31,7 @@ export class TermSheetComponent {
      * constructor()
      */
     constructor(_loanEnquiryService: LoanEnquiryService, 
-                private _applicationFeeService: ApplicationFeeService, 
+                public _applicationFeeService: ApplicationFeeService, 
                 private _matDialog: MatDialog,
                 private _matSnackBar: MatSnackBar,
                 private _activatedRoute: ActivatedRoute) {
@@ -149,4 +149,26 @@ export class TermSheetComponent {
             }
         });
     }
+
+    /**
+     * view()
+     */
+    view(): void {
+        let mode = '';
+        if (this.selectedTermSheet.status === 'Draft')
+            mode = 'viewDraft';
+        else
+            mode = 'viewAcceptance';
+        // Open the dialog.
+        this._matDialog.open(TermSheetUpdateDialogComponent, {
+            panelClass: 'fuse-term-sheet-update-dialog',
+            width: '750px',
+            data: {
+                operation: mode,
+                loanApplicationId: this.loanApplicationId,
+                selectedTermSheet: this.selectedTermSheet,
+                preliminaryRiskAssessment: this.preliminaryRiskAssessment
+            }
+        });
+    }    
 }

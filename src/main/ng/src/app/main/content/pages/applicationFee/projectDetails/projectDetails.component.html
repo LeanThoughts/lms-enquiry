@@ -6,7 +6,7 @@
                 <span><b>Project Details</b></span>
             </div>
 
-            <div mat-dialog-actions fxLayout="row" class="mb-16">
+            <div mat-dialog-actions fxLayout="row" class="mb-16" *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed">
                 <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()"
                         [disabled]="disableSubmitButton">
                     Submit
