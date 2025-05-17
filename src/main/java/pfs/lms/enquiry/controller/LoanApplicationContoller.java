@@ -11,10 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.action.teaser.ITeaserService;
+import pfs.lms.enquiry.config.JWTUserDetails;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.mail.service.LoanNotificationService;
 import pfs.lms.enquiry.process.LoanApplicationEngine;
@@ -31,13 +31,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.security.Principal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -71,7 +73,7 @@ public class LoanApplicationContoller {
     private final FinancingTypeRepository financingTypeRepository;
 
     private final PartnerService partnerService;
-
+    private final JWTUserDetails jwtUserDetails;
 
 
 
@@ -897,7 +899,7 @@ public class LoanApplicationContoller {
         }
         
         User user;
-        String email = getUserInfo(request.getUserPrincipal());
+        String email = jwtUserDetails.getUserInfo(request.getUserPrincipal());
         if (email.equals("gopinath@synapseware.io")) {
             user = userRepository.findByEmail("admin@gmail.com");
         } else {
@@ -1028,21 +1030,6 @@ public class LoanApplicationContoller {
         }
 
         return resources;
-    }
-
-    private String getUserInfo(Principal principal) {
-        if (principal instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken jwtPrincipal = (JwtAuthenticationToken) principal;
-            Map<String, Object> claims = jwtPrincipal.getTokenAttributes();
-            String username = (String) claims.get("unique_name"); // Replace "preferred_username" with the actual claim name
-
-            if (username != null) {
-                return username;
-            } else {
-                return "Username claim not found in JWT";
-            }
-        }
-        return "Could not retrieve username";
     }
 
     private LoanApplicationResource fetchAttributeDescriptions(LoanApplicationResource resource) {

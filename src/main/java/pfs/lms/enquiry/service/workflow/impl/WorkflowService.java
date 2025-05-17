@@ -27,6 +27,7 @@ import pfs.lms.enquiry.boardapproval.BoardApproval;
 import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
 import pfs.lms.enquiry.boardapproval.BoardApprovalService;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerService;
+import pfs.lms.enquiry.config.JWTUserDetails;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
@@ -111,6 +112,8 @@ public class WorkflowService implements IWorkflowService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private final JWTUserDetails jwtUserDetails;
 
     private final RiskNotificationRepository riskNotificationRepository;
     private final RiskAssessmentRepository riskAssessmentRepository;
@@ -903,14 +906,14 @@ public class WorkflowService implements IWorkflowService {
     public List<WorkflowTaskDTO> getTasks(HttpServletRequest httpServletRequest) {
 
         TaskService taskService = processEngine.getTaskService();
-        String userName = httpServletRequest.getUserPrincipal().getName();
-
+        // String email = httpServletRequest.getUserPrincipal().getName();
+        String email = jwtUserDetails.getUserInfo(httpServletRequest.getUserPrincipal());
         List<WorkflowTaskDTO> workflowTaskDTOList = new ArrayList<>();
 
         log.info(LocalDateTime.now() + ": USER NAME: " + httpServletRequest.getUserPrincipal().getName());
 
         List<Task> tasks = taskService.createTaskQuery()
-                .taskAssignee(userName)
+                .taskAssignee(email)
                 .includeProcessVariables()
                 .orderByTaskCreateTime()
                 .desc()
