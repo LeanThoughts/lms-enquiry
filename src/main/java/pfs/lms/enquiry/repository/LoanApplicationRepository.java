@@ -14,7 +14,7 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
     Page<LoanApplication> findByFunctionalStatus(Integer status, Pageable pageable);
 //    Page<LoanApplication> findByFunctionalStatusOrderByLoanEnquiryId(Integer status, Pageable pageable);
-    Page<LoanApplication> findAllOrderByEnquiryNoId(Pageable pageable);
+//    Page<LoanApplication> findAllOrderByEnquiryNoId(Pageable pageable);
 
 
     Page<LoanApplication> findByLoanApplicant(UUID id, Pageable pageable);

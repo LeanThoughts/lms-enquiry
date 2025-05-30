@@ -1,6 +1,5 @@
 package pfs.lms.enquiry.sapintegrationservice.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -16,22 +15,19 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.UnknownHttpStatusCodeException;
-import pfs.lms.enquiry.monitoring.resource.SAPLIEResourceDetails;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResource;
+import pfs.lms.enquiry.monitoring.resource.SAPLIEResourceDetails;
 import pfs.lms.enquiry.sapintegrationservice.ISAPLoanProcessesIntegrationService;
 
 import javax.xml.ws.http.HTTPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesIntegrationService {
 
 

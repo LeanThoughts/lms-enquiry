@@ -1,14 +1,8 @@
 package pfs.lms.enquiry.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.javers.core.metamodel.annotation.DiffIgnore;
-import sun.security.x509.SerialNumber;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
 
 /**
  * Created by sajeev on 08-Apr-21.

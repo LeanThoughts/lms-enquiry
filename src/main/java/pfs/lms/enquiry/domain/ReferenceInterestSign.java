@@ -1,6 +1,5 @@
 package pfs.lms.enquiry.domain;
 
-import com.sun.org.apache.xpath.internal.operations.Minus;
 import lombok.*;
 
 import javax.persistence.Entity;
