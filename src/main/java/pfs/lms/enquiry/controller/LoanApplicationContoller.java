@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.action.teaser.ITeaserService;
-import pfs.lms.enquiry.config.JWTUserDetails;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.mail.service.LoanNotificationService;
 import pfs.lms.enquiry.process.LoanApplicationEngine;
@@ -73,7 +72,6 @@ public class LoanApplicationContoller {
     private final FinancingTypeRepository financingTypeRepository;
 
     private final PartnerService partnerService;
-    private final JWTUserDetails jwtUserDetails;
 
 
 
@@ -899,11 +897,11 @@ public class LoanApplicationContoller {
         }
         
         User user;
-        String email = jwtUserDetails.getUserInfo(request.getUserPrincipal());
+        String email = request.getUserPrincipal().getName();
         if (email.equals("gopinath@synapseware.io")) {
             user = userRepository.findByEmail("admin@gmail.com");
         } else {
-            user = userRepository.findByEmail(request.getUserPrincipal().getName());
+            user = userRepository.findByEmail(email);
         }
 
         if (user.getRole().equals("TR0100")) {

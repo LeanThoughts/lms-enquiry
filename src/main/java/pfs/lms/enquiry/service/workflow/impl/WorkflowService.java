@@ -27,7 +27,6 @@ import pfs.lms.enquiry.boardapproval.BoardApproval;
 import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
 import pfs.lms.enquiry.boardapproval.BoardApprovalService;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerService;
-import pfs.lms.enquiry.config.JWTUserDetails;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
@@ -113,7 +112,7 @@ public class WorkflowService implements IWorkflowService {
     @Autowired
     private UserRepository userRepository;
 
-    private final JWTUserDetails jwtUserDetails;
+//    private final JWTUserDetails jwtUserDetails;
 
     private final RiskNotificationRepository riskNotificationRepository;
     private final RiskAssessmentRepository riskAssessmentRepository;
@@ -907,7 +906,7 @@ public class WorkflowService implements IWorkflowService {
 
         TaskService taskService = processEngine.getTaskService();
         // String email = httpServletRequest.getUserPrincipal().getName();
-        String email = jwtUserDetails.getUserInfo(httpServletRequest.getUserPrincipal());
+        String email = httpServletRequest.getUserPrincipal().getName();
         List<WorkflowTaskDTO> workflowTaskDTOList = new ArrayList<>();
 
         log.info(LocalDateTime.now() + ": USER NAME: " + httpServletRequest.getUserPrincipal().getName());

@@ -16,12 +16,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsConfigurationSource corsConfigurationSource; // Use constructor injection
     private final OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver; // 1. Inject the custom resolver
+    private final CustomOidcUserService customOidcUserService; // Inject your custom service
 
     // Constructor injection is preferred to avoid the "might not have been initialized" error
     public WebSecurityConfig(CorsConfigurationSource corsConfigurationSource,
-                             OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver) {
+                             OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver,
+                             CustomOidcUserService customOidcUserService) {
+
         this.corsConfigurationSource = corsConfigurationSource;
         this.pkceAuthorizationRequestResolver = pkceAuthorizationRequestResolver;
+        this.customOidcUserService = customOidcUserService;
     }
 
     @Override
@@ -51,14 +55,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 // 3. Use your custom resolver here
                                 authorizationEndpoint.authorizationRequestResolver(pkceAuthorizationRequestResolver)
                         )
+                        .userInfoEndpoint(userInfoEndpoint -> // Configure user info endpoint
+                                userInfoEndpoint.oidcUserService(customOidcUserService) // <--- THIS IS KEY!
+                        )
                         // Specify the default redirect after successful login
-                        .defaultSuccessUrl("http://localhost:4200/home", true)
+                        .defaultSuccessUrl("http://localhost:4200/homepage", true)
                         .failureUrl("/login?error")
                 )
                 .oauth2Client() // Simply call it, no 'withDefaults()' needed for 5.1.x
                 .and() // End of oauth2Client() chain
                 .logout()
-                .logoutSuccessUrl("/") // Redirect to application root after logout
+                .logoutSuccessUrl("http://localhost:4200/login") // Redirect to application root after logout
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID");
