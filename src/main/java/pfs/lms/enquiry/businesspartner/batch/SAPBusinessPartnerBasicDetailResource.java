@@ -102,12 +102,15 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getPostalCode() != null) {
             detailsResource.setPostalCode(partner.getPostalCode());
         }
+        //STREET
         if (partner.getAddressLine1() != null) {
             detailsResource.setAddressLine1(partner.getAddressLine1());
         }
+        //STR_SUPPL1
         if (partner.getAddressLine2() != null) {
             detailsResource.setAddressLine2(partner.getAddressLine2());
         }
+        //STR_SUPPL2
         if (partner.getAddressLine3() != null) {
             detailsResource.setAddressLine3(partner.getAddressLine3());
         }

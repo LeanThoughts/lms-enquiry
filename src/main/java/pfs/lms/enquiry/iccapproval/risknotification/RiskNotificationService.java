@@ -119,13 +119,13 @@ public class RiskNotificationService implements IRiskNotificationService {
         LoanApplication loanApplication = loanApplicationRepository.getOne(riskNotificationResource.getLoanApplicationId());
 
         //Get Risk Department Head
-         WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName("PrelimRiskAssessment");
+         WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName("Prelim Risk Notification");
          if (workflowApprover == null ){
-             throw new Exception("Workflow approver email not maintained for process name PrelimRiskAssessment");
+             throw new Exception("Workflow approver email not maintained for process name Prelim Risk Notification");
         }
         User user = userRepository.findByEmail(workflowApprover.getApproverEmail());
          if (user == null) {
-             throw new Exception("PrelimRiskAssessment: User not found for email : " + workflowApprover.getApproverEmail());
+             throw new Exception("Prelim Risk Notification: User not found for email : " + workflowApprover.getApproverEmail());
          }
 
         riskNotificationEmailService.sendPremlimRiskNotification(user,loanApplication,riskNotificationResource.getRemarks());

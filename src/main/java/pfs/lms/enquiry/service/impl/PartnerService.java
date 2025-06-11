@@ -515,6 +515,9 @@ public class PartnerService implements IPartnerService {
 
           existingPartner.setAddressLine1(partner.getAddressLine1());
           existingPartner.setAddressLine2(partner.getAddressLine2());
+          existingPartner.setAddressLine3(partner.getAddressLine3());
+          existingPartner.setStreet(partner.getAddressLine3());
+
           existingPartner.setCity(partner.getCity());
           existingPartner.setState(partner.getState());
           existingPartner.setPostalCode(partner.getPostalCode());
