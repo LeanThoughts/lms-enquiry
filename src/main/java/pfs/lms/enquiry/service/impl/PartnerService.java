@@ -96,6 +96,9 @@ public class PartnerService implements IPartnerService {
             existing.setMsmeRegisterNumber(partner.getMsmeRegisterNumber());
             existing.setPan(partner.getPan());
             existing.setExternalBPNumber(partner.getExternalBPNumber());
+            existing.setLegalEntity(partner.getLegalEntity());
+            existing.setLegalForm(partner.getLegalForm());
+            existing.setHouseBank(partner.getHouseBank());
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -205,6 +208,9 @@ public class PartnerService implements IPartnerService {
         partner.setMsmeRegisterNumber(partnerResource.getMsmeRegisterNumber());
         partner.setPan(partnerResource.getPan());
         partner.setExternalBPNumber(partnerResource.getExternalBPNumber());
+        partner.setLegalForm(partnerResource.getLegalForm());
+        partner.setLegalEntity(partnerResource.getLegalEntity());
+        partner.setHouseBank(partnerResource.getHouseBank());
         partner = partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
@@ -531,7 +537,10 @@ public class PartnerService implements IPartnerService {
 
           existingPartner.setIndustrySector(partner.getIndustrySector());
           existingPartner.setPan(partner.getPan());
-
+          existingPartner.setHouseBank(partner.getHouseBank());
+          existingPartner.setLegalEntity(partner.getLegalEntity());
+          existingPartner.setLegalForm(partner.getLegalForm());
+          existingPartner.setTitle(partner.getTitle());
 
           boolean addPartnerRole = true;
 

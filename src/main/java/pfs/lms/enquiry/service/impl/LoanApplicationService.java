@@ -390,6 +390,12 @@ public class LoanApplicationService implements ILoanApplicationService {
         partner.setPostalCode(resource.getPartner().getPostalCode());
         partner.setState(resource.getPartner().getState());
         partner.setStreet(resource.getPartner().getStreet());
+        partner.setAddressLine1(resource.getPartner().getAddressLine1());
+        partner.setAddressLine2(resource.getPartner().getAddressLine2());
+        partner.setAddressLine3(resource.getPartner().getAddressLine3());
+        partner.setTitle(resource.getPartner().getTitle());
+        partner.setLegalEntity(resource.getPartner().getLegalEntity());
+        partner.setLegalForm(resource.getPartner().getLegalForm());
         partner = partnerService.migrate(partner);
 
         //Set it to the Loan Application

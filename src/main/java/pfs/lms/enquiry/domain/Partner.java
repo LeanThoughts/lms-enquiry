@@ -116,6 +116,10 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
 
     private String title;
 
+    private String legalForm;
+    private String legalEntity;
+    private String houseBank;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;
 
@@ -129,7 +133,7 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
 
     private String defaultPartnerRole;
 
-    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber, String partnerCategory, String defaultPartnerRole) {
+    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber, String partnerCategory, String defaultPartnerRole, String title, String legalEntity, String legalForm, String houseBank) {
         this.partyNumber = partyNumber;
         this.partyCategory = partyCategory;
         this.partnerGroup = partnerGroup;
@@ -159,6 +163,10 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
         this.mobileNumber = mobileNumber;
         this.partnerCategory = partnerCategory;
         this.defaultPartnerRole = defaultPartnerRole;
+        this.title = title;
+        this.legalEntity = legalEntity;
+        this.legalForm = legalForm;
+        this.houseBank = houseBank;
         registerEvent(PartnerCreated.of(this));
     }
 
