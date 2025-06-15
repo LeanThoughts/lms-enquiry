@@ -16,7 +16,7 @@ import pfs.lms.enquiry.mail.service.EmailService;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.SignupResource;
 import pfs.lms.enquiry.resource.UserResource;
-import pfs.lms.enquiry.service.IPartnerService;
+import pfs.lms.enquiry.businesspartner.service.IPartnerService;
 import pfs.lms.enquiry.service.ISignupService;
 
 import java.util.concurrent.CompletableFuture;

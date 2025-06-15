@@ -54,8 +54,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
         if (partner.getPartnerType() != null)
             detailsResource.setPartnerType(partner.getPartnerType());
-        else
-            detailsResource.setPartnerType("1");
+
 
 
         switch (partner.getPartnerCategory()) {
@@ -150,14 +149,25 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getLegalForm() != null){
             detailsResource.setLegalForm(partner.getLegalForm());
         }
+        if (partner.getTitle() != null){
+            detailsResource.setTitle(partner.getTitle());
+        }
+        if(partner.getPartnerType() != null){
+            detailsResource.setPartnerType(partner.getPartnerType());
+        }
 
+        if(partner.getDefaultPartnerRole() == null) {
+            detailsResource.setPartnerRole("TR0100");
+        }else{
+            detailsResource.setPartnerRole(partner.getDefaultPartnerRole());
+        }
 
 //        if (customerRejection.getDate() != null){
 //            detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(customerRejection.getDate()));
 //        } else
 //            detailsResource.setDate(null);
 
-
+        detailsResource.setRole(partner.getPartyRole());
         detailsResource.setEntityId(partner.getId().toString());
 
         return detailsResource;

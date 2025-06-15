@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.LegalEntity;
+import pfs.lms.enquiry.businesspartner.domain.LegalForm;
 import pfs.lms.enquiry.businesspartner.repository.LegalEntityRepository;
 
 @Slf4j
@@ -19,16 +20,19 @@ public class LegalEntityConfig implements CommandLineRunner {
 
         LegalEntity legalEntity = new LegalEntity();
 
-        legalEntity = legalEntityRepository.findByCode("");if (legalEntity == null){ legalEntity = new LegalEntity( "",""); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode(" ");if (legalEntity == null){ legalEntity = new LegalEntity( " ",""); legalEntityRepository.save(legalEntity); }
 
-        legalEntity = legalEntityRepository.findByCode("1");if (legalEntity == null){ legalEntity = new LegalEntity( "01","Proprietorship"); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("2");if (legalEntity == null){ legalEntity = new LegalEntity( "02","Pvt. Ltd."    ); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("3");if (legalEntity == null){ legalEntity = new LegalEntity( "03","Partnership Firm"     ); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("4");if (legalEntity == null){ legalEntity = new LegalEntity( "04","Co. Op"); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("5");if (legalEntity == null){ legalEntity = new LegalEntity( "05","Pub. Ltd. Co"    ); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("6");if (legalEntity == null){ legalEntity = new LegalEntity( "06","Joint Hindu Family"     ); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("7");if (legalEntity == null){ legalEntity = new LegalEntity( "07","LLP"     ); legalEntityRepository.save(legalEntity); }
-        legalEntity = legalEntityRepository.findByCode("8");if (legalEntity == null){ legalEntity = new LegalEntity( "08","Others"     ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("01");if (legalEntity == null){ legalEntity = new LegalEntity( "01","Public Sec Bank"); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("02");if (legalEntity == null){ legalEntity = new LegalEntity( "02","Pvt Sec Bank"    ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("03");if (legalEntity == null){ legalEntity = new LegalEntity( "03","Insurance Comp"     ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("04");if (legalEntity == null){ legalEntity = new LegalEntity( "04","Industry"); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("05");if (legalEntity == null){ legalEntity = new LegalEntity( "05","Other Body"    ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("06");if (legalEntity == null){ legalEntity = new LegalEntity( "06","Municipal Body"     ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("07");if (legalEntity == null){ legalEntity = new LegalEntity( "07","Mutual Fund"     ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("08");if (legalEntity == null){ legalEntity = new LegalEntity( "08","NBFC"     ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("09");if (legalEntity == null){ legalEntity = new LegalEntity( "09","Fin Instn"    ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("10");if (legalEntity == null){ legalEntity = new LegalEntity( "10","Trading Comp"     ); legalEntityRepository.save(legalEntity); }
+        legalEntity = legalEntityRepository.findByCode("11");if (legalEntity == null){ legalEntity = new LegalEntity( "11","Others"     ); legalEntityRepository.save(legalEntity); }
 
 
         return;

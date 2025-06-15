@@ -14,6 +14,7 @@ import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetailRepository;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetailRepository;
+import pfs.lms.enquiry.businesspartner.service.impl.PartnerService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;

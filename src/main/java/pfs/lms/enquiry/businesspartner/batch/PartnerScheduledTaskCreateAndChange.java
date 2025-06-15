@@ -116,6 +116,9 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerBasicDetailResource sapBusinessPartnerBasicDetailResource = new SAPBusinessPartnerBasicDetailResource();
                     sapBusinessPartnerBasicDetailResource.setSAPBusinessPartnerBasicDetailsResourceDetails(sapBusinessPartnerBasicDetailsResourceDetail);
 
+                    if (partner.getPartyNumber() == null)
+                        sapIntegrationPointer.setMode("C");
+
                     resource = (Object) sapBusinessPartnerBasicDetailResource;
                     serviceUri = businessPartnerServiceUri + "BasicDetailSet";
 

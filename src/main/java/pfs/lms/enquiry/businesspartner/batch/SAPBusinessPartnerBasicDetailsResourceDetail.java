@@ -101,7 +101,7 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value ="LegalForm")
     private String legalForm;
 
-    @JsonProperty(value ="LegalEntity")
+    @JsonProperty(value ="LegalOrg")
     private String legalEntity;
 
 

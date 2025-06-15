@@ -22,7 +22,7 @@ import pfs.lms.enquiry.resource.EmailId;
 import pfs.lms.enquiry.resource.LoanNumberResource;
 import pfs.lms.enquiry.resource.SignupResource;
 import pfs.lms.enquiry.resource.UserResource;
-import pfs.lms.enquiry.service.IPartnerService;
+import pfs.lms.enquiry.businesspartner.service.IPartnerService;
 import pfs.lms.enquiry.service.ISignupService;
 import pfs.lms.enquiry.service.IUserService;
 
