@@ -60,33 +60,6 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
             this.houseBanks = response._embedded.houseBanks;
         });
 
-        this.partnerDetailsForm = this._formBuilder.group({
-            title: [this.selectedPartner.title || null],
-            partyName1: [this.selectedPartner.partyName1 || null, Validators.required],
-            partyName2: [this.selectedPartner.partyName2 || null],
-            searchTerm1: [this.selectedPartner.searchTerm1 || null],
-            searchTerm2: [this.selectedPartner.searchTerm2 || null],
-            addressLine1: [this.selectedPartner.addressLine1 || null],
-            addressLine2: [this.selectedPartner.addressLine2 || null],
-            addressLine3: [this.selectedPartner.addressLine3 || null],
-            postalCode: [this.selectedPartner.postalCode || null, [Validators.pattern(EnquiryApplicationRegEx.numbersOnly)]],
-            state: [this.selectedPartner.state || null],
-            country: [this.selectedPartner.country || 'India'],
-            city: [this.selectedPartner.city || null],
-            contactNumber: [this.selectedPartner.contactNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
-            email: [this.selectedPartner.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]],
-            mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
-            faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
-            partnerCategory: [this.selectedPartner.partnerCategory || this.businessPartnerCategoryAndRole.partnerCategory],
-            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || 
-                (this.businessPartnerCategoryAndRole.defaultPartnerRole ? this.businessPartnerCategoryAndRole.defaultPartnerRole.code : null)],
-            addressValidFromDate: [this.selectedPartner.addressValidFromDate || null],
-            externalBPNumber: [this.selectedPartner.externalBPNumber || null],
-            legalForm: [this.selectedPartner.legalForm || null],
-            legalEntity: [this.selectedPartner.legalEntity || null],
-            houseBank: [this.selectedPartner.houseBank || null]
-        });
-
         if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
             this._businessPartnerService.getTitles(this.selectedPartner.partnerCategory).subscribe(response => {
                 this.partnerTitles = response._embedded.titles;
@@ -116,6 +89,32 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
      * ngOnInit()
      */
     ngOnInit(): void {
+        this.partnerDetailsForm = this._formBuilder.group({
+            title: [this.selectedPartner.title || null],
+            partyName1: [this.selectedPartner.partyName1 || null, Validators.required],
+            partyName2: [this.selectedPartner.partyName2 || null],
+            searchTerm1: [this.selectedPartner.searchTerm1 || null],
+            searchTerm2: [this.selectedPartner.searchTerm2 || null],
+            addressLine1: [this.selectedPartner.addressLine1 || null],
+            addressLine2: [this.selectedPartner.addressLine2 || null],
+            addressLine3: [this.selectedPartner.addressLine3 || null],
+            postalCode: [this.selectedPartner.postalCode || null, [Validators.pattern(EnquiryApplicationRegEx.numbersOnly)]],
+            state: [this.selectedPartner.state || null],
+            country: [this.selectedPartner.country || 'India'],
+            city: [this.selectedPartner.city || null],
+            contactNumber: [this.selectedPartner.contactNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            email: [this.selectedPartner.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]],
+            mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            partnerCategory: [this.selectedPartner.partnerCategory || this.businessPartnerCategoryAndRole.partnerCategory],
+            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || 
+                (this.businessPartnerCategoryAndRole.defaultPartnerRole ? this.businessPartnerCategoryAndRole.defaultPartnerRole.code : null)],
+            addressValidFromDate: [this.selectedPartner.addressValidFromDate || null],
+            externalBPNumber: [this.selectedPartner.externalBPNumber || null],
+            legalForm: [this.selectedPartner.legalForm || null],
+            legalEntity: [this.selectedPartner.legalEntity || null],
+            houseBank: [this.selectedPartner.houseBank || null]
+        });
     }
 
     /**

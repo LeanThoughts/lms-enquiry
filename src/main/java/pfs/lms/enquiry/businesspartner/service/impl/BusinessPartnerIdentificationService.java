@@ -81,6 +81,8 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
+        businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
+        businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         changeDocumentService.createChangeDocument(
@@ -141,6 +143,8 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
+        businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
+        businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         changeDocumentService.createChangeDocument(

@@ -99,6 +99,10 @@ public class PartnerService implements IPartnerService {
             existing.setLegalEntity(partner.getLegalEntity());
             existing.setLegalForm(partner.getLegalForm());
             existing.setHouseBank(partner.getHouseBank());
+            existing.setLegalEntity(partner.getLegalEntity());
+            existing.setLegalForm(partner.getLegalForm());
+            existing.setHouseBank(partner.getHouseBank());
+
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -210,6 +214,9 @@ public class PartnerService implements IPartnerService {
         partner.setExternalBPNumber(partnerResource.getExternalBPNumber());
         partner.setLegalForm(partnerResource.getLegalForm());
         partner.setLegalEntity(partnerResource.getLegalEntity());
+        partner.setHouseBank(partnerResource.getHouseBank());
+        partner.setLegalEntity(partnerResource.getLegalEntity());
+        partner.setLegalForm(partnerResource.getLegalForm());
         partner.setHouseBank(partnerResource.getHouseBank());
         partner = partnerRepository.save(partner);
 

@@ -36,7 +36,7 @@ export class EnquiryActionService implements Resolve<any> {
     }
 
     public getProductTypes(): Observable<any> {
-        return this._http.get('enquiry/api/products');
+        return this._http.get('enquiry/api/products?sort=code');
     }
 
     public sendEnquiryActionForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {

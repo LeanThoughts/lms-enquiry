@@ -45,6 +45,24 @@
                     <mat-datepicker #validToPicker></mat-datepicker>
                 </mat-form-field>
             </div>
+
+            <div fxLayout="row">
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Country" formControlName="country" (selectionChange)="onCountrySelect($event)">
+                        <mat-option *ngFor="let country of countries" [value]="country.countryCode">
+                            {{ country.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                    <mat-select placeholder="Region" formControlName="region">
+                        <mat-option *ngFor="let region of regions" [value]="region.regionCode">
+                            {{ region.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
             <div fxLayout="row">
                 <mat-form-field fxFlex="50">
                     <input matInput placeholder="Document Name" formControlName="documentName" maxlength="100">
