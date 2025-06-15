@@ -35,6 +35,10 @@ export class EnquiryActionService implements Resolve<any> {
         ]);
     }
 
+    public getProductTypes(): Observable<any> {
+        return this._http.get('enquiry/api/products');
+    }
+
     public sendEnquiryActionForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
         let requestObj = {
             'businessProcessId': businessProcessId,
