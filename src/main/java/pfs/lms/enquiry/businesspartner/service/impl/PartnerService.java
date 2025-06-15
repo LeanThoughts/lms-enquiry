@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.businesspartner.service.impl;
+package pfs.lms.enquiry.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.PartnerResourceByAlphabet;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
-import pfs.lms.enquiry.businesspartner.service.IPartnerService;
+import pfs.lms.enquiry.service.IPartnerService;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,7 +99,6 @@ public class PartnerService implements IPartnerService {
             existing.setLegalEntity(partner.getLegalEntity());
             existing.setLegalForm(partner.getLegalForm());
             existing.setHouseBank(partner.getHouseBank());
-            existing.setPartnerType(partner.getPartnerType());
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -212,7 +211,6 @@ public class PartnerService implements IPartnerService {
         partner.setLegalForm(partnerResource.getLegalForm());
         partner.setLegalEntity(partnerResource.getLegalEntity());
         partner.setHouseBank(partnerResource.getHouseBank());
-        partner.setPartnerType(partnerResource.getPartnerType());
         partner = partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
@@ -543,7 +541,6 @@ public class PartnerService implements IPartnerService {
           existingPartner.setLegalEntity(partner.getLegalEntity());
           existingPartner.setLegalForm(partner.getLegalForm());
           existingPartner.setTitle(partner.getTitle());
-          existingPartner.setPartnerType(partner.getPartnerType());
 
           boolean addPartnerRole = true;
 

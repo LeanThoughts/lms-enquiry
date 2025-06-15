@@ -25,6 +25,9 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
     identificationCategories: any;
     identificationDetailsUpdateForm: FormGroup;
 
+    countries: any;
+    regions: any;
+
     /**
      * constructor()
      */
@@ -45,7 +48,20 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
         else {
             this.selectedIdentificationDetails = {};
         }
-        console.log(_dialogData.operation);
+
+        this._businessPartnerService.getCountries().subscribe(response => {
+            this.countries = response._embedded.countries;
+        });
+
+        this._businessPartnerService.getRegions(this.selectedIdentificationDetails.country).subscribe(response => { 
+            this.regions = response._embedded.regions;
+        });
+    }
+
+    onCountrySelect(event) {
+        this._businessPartnerService.getRegions(event.value).subscribe(response => {
+            this.regions = response._embedded.regions;
+        });
     }
 
     /**
@@ -63,6 +79,8 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
             documentName: [this.selectedIdentificationDetails.documentName || null],
             documentType: [this.selectedIdentificationDetails.documentType || null],
             file: [''],
+            country: [this.selectedIdentificationDetails.country || null],
+            region: [this.selectedIdentificationDetails.region || null]
         });
     }
 
@@ -158,6 +176,8 @@ export class BusinessPartnerIdentificationUpdateComponent implements OnInit {
                 this.selectedIdentificationDetails.idValidToDate = identificationDetails.idValidToDate;
                 this.selectedIdentificationDetails.documentName = identificationDetails.documentName;
                 this.selectedIdentificationDetails.documentType = identificationDetails.documentType;
+                this.selectedIdentificationDetails.country = identificationDetails.country;
+                this.selectedIdentificationDetails.region = identificationDetails.region;
                 this._businessPartnerService.updateBusinessPartnerIdentificationDetails(this.selectedIdentificationDetails).subscribe(() => {
                     this._matSnackBar.open('Identification details updated successfully.', 'OK', { duration: 7000 });
                     this._dialogRef.close({ 'refresh': true });

@@ -83,6 +83,10 @@ export class PartnerModel {
         this.addressValidFromDate = _partner && _partner.addressValidFromDate || null;
         this.externalBPNumber = _partner && _partner.externalBPNumber || '';
         this._links = _partner && _partner._links || '';
+
+        this.legalForm = _partner && _partner.legalForm || null;
+        this.legalEntity = _partner && _partner.legalEntity || null;
+        this.houseBank = _partner && _partner.houseBank || null;
     }
 
     get partyName(): string {
