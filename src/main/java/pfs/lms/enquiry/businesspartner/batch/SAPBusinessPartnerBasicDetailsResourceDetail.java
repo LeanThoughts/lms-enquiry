@@ -104,6 +104,9 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value ="LegalOrg")
     private String legalEntity;
 
+    @JsonProperty(value = "HouseBank")
+    private String houseBank;
+
 
     @JsonProperty(value = "EntityId")
     private String entityId;
