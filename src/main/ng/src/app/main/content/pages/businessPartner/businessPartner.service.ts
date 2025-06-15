@@ -58,6 +58,27 @@ export class BusinessPartnerService {
     }
 
     /**
+     * getLegalForms()
+     */
+    getLegalForms(): Observable<any> {
+        return this._http.get<any>('enquiry/api/legalForms');
+    }
+
+    /**
+     * getLegalEntities()
+     */
+    getLegalEntities(): Observable<any> {
+        return this._http.get<any>('enquiry/api/legalEntities');
+    }
+
+    /**
+     * getHouseBanks()
+     */
+    getHouseBanks(): Observable<any> {
+        return this._http.get<any>('enquiry/api/houseBanks');
+    }
+
+    /**
      * getCountryCodes()
      */
     getCountryCodes(): Observable<any> {

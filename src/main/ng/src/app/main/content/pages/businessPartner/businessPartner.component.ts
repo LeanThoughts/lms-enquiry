@@ -139,6 +139,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             next: response => {
                 if (response._embedded.businessPartnerBankDetails.length === 0) {
                     this._matSnackBar.open('Please add at least one bank details before sending for approval', 'OK', { duration: 7000 });
+                    this.disableSendForApproval = false;
                     return;
                 }
 
@@ -150,6 +151,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                         if (!identificationCategory) {
                             this._matSnackBar.open('Please add PAN in identification details before sending for approval', 'OK', 
                                 { duration: 7000 });
+                            this.disableSendForApproval = false;
                             return;
                         }
 
@@ -168,7 +170,6 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                                 this.disableSendForApproval = false;
                                 this._matSnackBar.open('Error occurred. Please try again later or contact your system administrator',
                                     'OK', { duration: 7000 });
-                                this.disableSendForApproval = false;
                             }
                         });
                     },

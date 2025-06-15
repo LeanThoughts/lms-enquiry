@@ -26,6 +26,11 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
     partnerTitles: any;
     businessPartnerRoles: any;
     businessPartnerCategoryAndRole: any;
+
+    legalForms: any;
+    legalEntities: any;
+    houseBanks: any;
+
     /**
      * constructor()
      */
@@ -42,6 +47,18 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
         this.states = this._activatedRoute.snapshot.data['routeResolvedData'][1];
         this.businessPartnerCategoryAndRole = _businessPartnerService.businessPartnerCategoryAndRole.value;
         console.log('businessPartnerCategoryAndRole', this.businessPartnerCategoryAndRole);
+
+        this._businessPartnerService.getLegalForms().subscribe(response => {
+            this.legalForms = response._embedded.legalForms;
+        });
+
+        this._businessPartnerService.getLegalEntities().subscribe(response => {
+            this.legalEntities = response._embedded.legalEntities;
+        });
+
+        this._businessPartnerService.getHouseBanks().subscribe(response => {
+            this.houseBanks = response._embedded.houseBanks;
+        });
 
         this.partnerDetailsForm = this._formBuilder.group({
             title: [this.selectedPartner.title || null],
@@ -64,7 +81,10 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
             defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || 
                 (this.businessPartnerCategoryAndRole.defaultPartnerRole ? this.businessPartnerCategoryAndRole.defaultPartnerRole.code : null)],
             addressValidFromDate: [this.selectedPartner.addressValidFromDate || null],
-            externalBPNumber: [this.selectedPartner.externalBPNumber || null]
+            externalBPNumber: [this.selectedPartner.externalBPNumber || null],
+            legalForm: [this.selectedPartner.legalForm || null],
+            legalEntity: [this.selectedPartner.legalEntity || null],
+            houseBank: [this.selectedPartner.houseBank || null]
         });
 
         if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {

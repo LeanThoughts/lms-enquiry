@@ -21,6 +21,10 @@ export class PartnerModel {
     userName: string;
     industrySector: string;
 
+    legalForm: string;
+    legalEntity: string;
+    houseBank: string;
+
     _links: Object;
     mobileNumber: null;
     faxNumber: null;
