@@ -85,6 +85,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
+
         changeDocumentService.createChangeDocument(
                 businessPartnerIdentification.getId(),
                 businessPartnerIdentification.getId().toString(),
@@ -146,6 +149,11 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
         businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        Partner partner = businessPartnerIdentification.getPartner();
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
+        partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerIdentification.getId(),

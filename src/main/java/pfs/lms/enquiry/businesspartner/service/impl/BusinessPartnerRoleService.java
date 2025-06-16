@@ -52,8 +52,10 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
 
         if (businessPartnerRoleResource.isDefaultRole()) {
             partner.setPartyRole(roleType.getCode());
-            partner = partnerRepository.save(partner);
         }
+
+        partner.setWorkFlowStatusCode(11); //Updated
+        partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerRole.getId(),

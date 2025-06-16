@@ -116,8 +116,10 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 //        if (partner.getStreet() != null) {
 //            detailsResource.setStreet(partner.getStreet());
 //        }
+
         if(partner.getAddressValidFromDate() != null)
             detailsResource.setAddressValidFromDate(partner.getAddressValidFromDate().toString());
+
 
         if (partner.getCountry() == null || partner.getCountry().length() == 0) {
             detailsResource.setCountry("IN");
@@ -165,10 +167,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
             detailsResource.setPartnerRole(partner.getDefaultPartnerRole());
         }
 
-//        if (customerRejection.getDate() != null){
-//            detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(customerRejection.getDate()));
-//        } else
-//            detailsResource.setDate(null);
+
 
         detailsResource.setRole(partner.getPartyRole());
         detailsResource.setEntityId(partner.getId().toString());

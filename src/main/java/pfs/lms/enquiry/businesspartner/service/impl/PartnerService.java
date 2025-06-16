@@ -213,6 +213,10 @@ public class PartnerService implements IPartnerService {
         partner.setLegalEntity(partnerResource.getLegalEntity());
         partner.setHouseBank(partnerResource.getHouseBank());
         partner.setPartnerType(partnerResource.getPartnerType());
+
+        //Reset Workflow Status to Updated
+        partner.setWorkFlowStatusCode(11);
+
         partner = partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(

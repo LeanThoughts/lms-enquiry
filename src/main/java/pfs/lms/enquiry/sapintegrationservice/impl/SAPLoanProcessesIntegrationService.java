@@ -1,5 +1,7 @@
 package pfs.lms.enquiry.sapintegrationservice.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.UnknownHttpStatusCodeException;
+import pfs.lms.enquiry.businesspartner.batch.SAPBusinessPartnerIdentificationResource;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResourceDetails;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResource;
 import pfs.lms.enquiry.sapintegrationservice.ISAPLoanProcessesIntegrationService;
@@ -221,7 +224,9 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         HttpEntity<Object> requestToPost = new HttpEntity<Object>(resource, headers);
 
         log.info("THE REQUEST : " + requestToPost.toString());
-        log.info("THE PAYLOAD : " + resource.toString());
+        Class<?> resourceObjectClass = resource.getClass();
+        Object object = resourceObjectClass.cast(resource);
+        printObject(resource,resourceObjectClass);
 
         ResponseEntity responseEntity; // = new ResponseEntity();
 
@@ -272,7 +277,11 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
 
     }
 
-
+    public void printObject(Object obj, Class<?> classToCast) {
+        Gson gson = new GsonBuilder().create();
+        String json = gson.toJson(obj, classToCast);
+        log.info("PAYLOAD OBJECT AS JSON:\n" + json);
+    }
 
     @Override
     public Object deleteResourceFromSAP(String serviceUri, String objectId,    MediaType mediaType) {

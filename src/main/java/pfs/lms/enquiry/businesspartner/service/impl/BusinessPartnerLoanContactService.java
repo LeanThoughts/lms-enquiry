@@ -49,6 +49,9 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
         businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
 
+        partner.setWorkFlowStatusCode(11); //Updated
+        partnerRepository.save(partner);
+
         changeDocumentService.createChangeDocument(
                 businessPartnerLoanContact.getId(),
                 businessPartnerLoanContact.getId().toString(),
@@ -81,6 +84,11 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
         businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
+
+        Partner partner = businessPartnerLoanContact.getPartner();
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
+        partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerLoanContact.getId(),

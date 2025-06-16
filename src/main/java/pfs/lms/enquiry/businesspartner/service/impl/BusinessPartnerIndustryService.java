@@ -48,6 +48,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
         businessPartnerIndustry = businessPartnerIndustryRepository.save(businessPartnerIndustry);
 
+        partner.setWorkFlowStatusCode(11); //Updated
+        partnerRepository.save(partner);
+
         changeDocumentService.createChangeDocument(
                 businessPartnerIndustry.getId(),
                 businessPartnerIndustry.getId().toString(),
@@ -74,6 +77,10 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
         businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
 
+        Partner partner = businessPartnerIndustry.getPartner();
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
+        partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerIndustry.getId(),
