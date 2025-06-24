@@ -145,12 +145,12 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getPartyRole() != null) {
             detailsResource.setRole(partner.getPartyRole());
         }
-//        if (partner.getLegalEntity() != null){
-//            detailsResource.setLegalEntity(partner.getLegalEntity());
-//        }
-//        if (partner.getLegalForm() != null){
-//            detailsResource.setLegalForm(partner.getLegalForm());
-//        }
+        if (partner.getLegalEntity() != null){
+            detailsResource.setLegalEntity(partner.getLegalEntity());
+        }
+        if (partner.getLegalForm() != null){
+            detailsResource.setLegalForm(partner.getLegalForm());
+        }
         if (partner.getHouseBank() != null){
             detailsResource.setHouseBank(partner.getHouseBank());
         }
