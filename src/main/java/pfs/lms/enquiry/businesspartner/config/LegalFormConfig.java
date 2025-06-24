@@ -23,7 +23,7 @@ public class LegalFormConfig implements CommandLineRunner {
         LegalForm legalForm = new LegalForm();
 
 
-        legalForm = legalFormRepository.findByCode("");if (legalForm == null){ legalForm = new LegalForm( "",""); legalFormRepository.save(legalForm); }
+        //legalForm = legalFormRepository.findByCode("");if (legalForm == null){ legalForm = new LegalForm( "",""); legalFormRepository.save(legalForm); }
 
         legalForm = legalFormRepository.findByCode("01");if (legalForm == null){ legalForm = new LegalForm( "01","Proprietorship"); legalFormRepository.save(legalForm); }
         legalForm = legalFormRepository.findByCode("02");if (legalForm == null){ legalForm = new LegalForm( "02","Pvt. Ltd."    ); legalFormRepository.save(legalForm); }

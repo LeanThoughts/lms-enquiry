@@ -20,7 +20,7 @@ public class LegalEntityConfig implements CommandLineRunner {
 
         LegalEntity legalEntity = new LegalEntity();
 
-        legalEntity = legalEntityRepository.findByCode(" ");if (legalEntity == null){ legalEntity = new LegalEntity( " ",""); legalEntityRepository.save(legalEntity); }
+        //legalEntity = legalEntityRepository.findByCode(" ");if (legalEntity == null){ legalEntity = new LegalEntity( " ",""); legalEntityRepository.save(legalEntity); }
 
         legalEntity = legalEntityRepository.findByCode("01");if (legalEntity == null){ legalEntity = new LegalEntity( "01","Public Sec Bank"); legalEntityRepository.save(legalEntity); }
         legalEntity = legalEntityRepository.findByCode("02");if (legalEntity == null){ legalEntity = new LegalEntity( "02","Pvt Sec Bank"    ); legalEntityRepository.save(legalEntity); }

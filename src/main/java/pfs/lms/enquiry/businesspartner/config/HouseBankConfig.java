@@ -22,7 +22,7 @@ public class HouseBankConfig implements CommandLineRunner {
         HouseBank houseBank = new HouseBank();
 
 
-        houseBank  = houseBank = houseBankRepository.findByHouseBankId("01");if (houseBank == null){ houseBank = new HouseBank( "","", "", "","","", "",""); houseBankRepository.save(houseBank); }
+        //houseBank  = houseBank = houseBankRepository.findByHouseBankId("01");if (houseBank == null){ houseBank = new HouseBank( "","", "", "","","", "",""); houseBankRepository.save(houseBank); }
 
         houseBank = houseBankRepository.findByHouseBankId("HDF10");if (houseBank == null){ houseBank = new HouseBank( "HDF10", "IN", "40024000201", "", "", "", "EN", "HDFC Sandoz CA#18040039004"); houseBankRepository.save(houseBank); }
         houseBank = houseBankRepository.findByHouseBankId("HDF11");if (houseBank == null){ houseBank = new HouseBank( "HDF11", "IN", "40024000301", "", "", "", "EN", "HDFC Backbay CA#13700929054"); houseBankRepository.save(houseBank); }
