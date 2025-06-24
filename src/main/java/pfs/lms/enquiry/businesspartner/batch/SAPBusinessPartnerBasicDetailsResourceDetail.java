@@ -98,14 +98,14 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value ="Role")
     private String role;
 
-    @JsonProperty(value ="LegalForm")
-    private String legalForm;
-
-    @JsonProperty(value ="LegalOrg")
-    private String legalEntity;
-
-    @JsonProperty(value = "HouseBank")
-    private String houseBank;
+//    @JsonProperty(value ="LegalForm")
+//    private String legalForm;
+//
+//    @JsonProperty(value ="LegalOrg")
+//    private String legalEntity;
+//
+//    @JsonProperty(value = "HouseBank")
+//    private String houseBank;
 
 
     @JsonProperty(value = "EntityId")
