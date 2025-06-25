@@ -164,7 +164,7 @@ import java.util.List;
         detailsResource.setCity(partner.getCity());
         detailsResource.setState(partner.getState());
         detailsResource.setPostalCode(partner.getPostalCode());
-        detailsResource.setHouseNo(partner.getAddressLine1());
+        //detailsResource.setHouseNo(partner.getAddressLine1());
         detailsResource.setStreet(partner.getStreet());
         detailsResource.setCountry("IN");
         detailsResource.setPanNumber(partner.getPan());
