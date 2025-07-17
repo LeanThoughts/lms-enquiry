@@ -132,6 +132,8 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
+        this.partnerUpdateComponent.submit();
+
         if (!this.businessPartner) {
             this._matSnackBar.open('Please save the business partner details before sending for approval', 'OK', { duration: 7000 });
             return;

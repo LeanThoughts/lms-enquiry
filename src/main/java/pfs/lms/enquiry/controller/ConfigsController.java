@@ -36,8 +36,11 @@ public class ConfigsController {
     public ResponseEntity getTechnicalStatus() {
           List<TechnicalStatusResource> technicalStatusResources = new ArrayList<>();
 
+          TechnicalStatusResource technicalStatusResource = new TechnicalStatusResource("1", "Created");
+          technicalStatusResources.add(technicalStatusResource);
+
         //technicalStatusResources.add(new TechnicalStatusResource("",""));
-        technicalStatusResources.add(new TechnicalStatusResource("1","Created"));
+//        technicalStatusResources.add(new TechnicalStatusResource("1","Created"));
         technicalStatusResources.add(new TechnicalStatusResource("2","Changed"));
         technicalStatusResources.add(new TechnicalStatusResource("3","Submitted"));
         technicalStatusResources.add(new TechnicalStatusResource("4","Taken up for Processing"));
