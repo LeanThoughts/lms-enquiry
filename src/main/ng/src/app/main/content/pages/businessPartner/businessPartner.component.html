@@ -54,7 +54,7 @@
             </mat-expansion-panel>
         </div>
 
-        <mat-tab-group class="mt-16">
+        <mat-tab-group class="mt-16" (selectedTabChange)="onTabChange($event)">
             <mat-tab label="Partner Details">
                 <fuse-partner-update></fuse-partner-update>
             </mat-tab>
