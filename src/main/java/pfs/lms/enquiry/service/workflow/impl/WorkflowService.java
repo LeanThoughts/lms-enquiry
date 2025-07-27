@@ -260,6 +260,8 @@ public class WorkflowService implements IWorkflowService {
                 // Set the Work Flow Status Code "02" - Sent for Approval
                 partner.setWorkFlowStatusCode(02);
                 partner.setWorkFlowStatusDescription("Sent for Approval");
+                if(partner.getPartyName1() == null) partner.setPartyName1("");
+                if(partner.getPartyName2() == null) partner.setPartyName2("");
                 objectId = partner.getPartyName1() + partner.getPartyName2();
                 processDescription = "BusinessPartner";
                 break;

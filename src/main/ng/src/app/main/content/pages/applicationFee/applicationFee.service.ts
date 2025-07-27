@@ -9,6 +9,7 @@ import { RiskAssessmentService } from '../riskAssessment/riskAssessment.service'
 export class ApplicationFeeService {
 
     _applicationFee: BehaviorSubject<any> = new BehaviorSubject({});
+    applicationFeeAuthorization: any;
 
     /**
      * constructor()

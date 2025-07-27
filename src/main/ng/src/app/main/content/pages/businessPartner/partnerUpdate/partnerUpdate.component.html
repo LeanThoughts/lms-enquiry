@@ -2,7 +2,13 @@
     <div class="content-card mat-white-bg mat-elevation-z4 p-16" fusePerfectScrollbar style="width: 100%">
         <form [formGroup]="partnerDetailsForm">
 
-            <div fxLayout="row">
+            <div mat-dialog-actions fxLayout="row">
+                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
+                    Submit
+                </button>
+            </div>
+
+            <div fxLayout="row" class="mt-16">
                 <span><b>Identification</b></span>
             </div>
 
@@ -113,10 +119,35 @@
                     <input matInput placeholder="Fax" formControlName="faxNumber" maxlength="10" >
                 </mat-form-field>
             </div>
-            <div mat-dialog-actions fxLayout="row">
-                <button class="mr-8" mat-raised-button type="submit" color="accent" (click)="submit()">
-                    Submit
-                </button>
+
+            <div fxLayout="row">
+                <span><b>Other Details</b></span>
+            </div>
+            <div fxLayout="row">
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Legal Form" formControlName="legalForm" >
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let legalForm of legalForms" [value]="legalForm.code">
+                            {{ legalForm.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="Legal Entity" formControlName="legalEntity" >
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let legalEntity of legalEntities" [value]="legalEntity.code">
+                            {{ legalEntity.value }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="33">
+                    <mat-select placeholder="House Bank" formControlName="houseBank" >
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let houseBank of houseBanks" [value]="houseBank.houseBankId">
+                            {{ houseBank.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
         </form>
     </div>

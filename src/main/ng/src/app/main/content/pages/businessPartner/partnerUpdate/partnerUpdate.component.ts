@@ -26,6 +26,11 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
     partnerTitles: any;
     businessPartnerRoles: any;
     businessPartnerCategoryAndRole: any;
+
+    legalForms: any;
+    legalEntities: any;
+    houseBanks: any;
+
     /**
      * constructor()
      */
@@ -43,28 +48,16 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
         this.businessPartnerCategoryAndRole = _businessPartnerService.businessPartnerCategoryAndRole.value;
         console.log('businessPartnerCategoryAndRole', this.businessPartnerCategoryAndRole);
 
-        this.partnerDetailsForm = this._formBuilder.group({
-            title: [this.selectedPartner.title || null],
-            partyName1: [this.selectedPartner.partyName1 || null, Validators.required],
-            partyName2: [this.selectedPartner.partyName2 || null],
-            searchTerm1: [this.selectedPartner.searchTerm1 || null],
-            searchTerm2: [this.selectedPartner.searchTerm2 || null],
-            addressLine1: [this.selectedPartner.addressLine1 || null],
-            addressLine2: [this.selectedPartner.addressLine2 || null],
-            addressLine3: [this.selectedPartner.addressLine3 || null],
-            postalCode: [this.selectedPartner.postalCode || null, [Validators.pattern(EnquiryApplicationRegEx.numbersOnly)]],
-            state: [this.selectedPartner.state || null],
-            country: [this.selectedPartner.country || 'India'],
-            city: [this.selectedPartner.city || null],
-            contactNumber: [this.selectedPartner.contactNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
-            email: [this.selectedPartner.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]],
-            mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
-            faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
-            partnerCategory: [this.selectedPartner.partnerCategory || this.businessPartnerCategoryAndRole.partnerCategory],
-            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || 
-                (this.businessPartnerCategoryAndRole.defaultPartnerRole ? this.businessPartnerCategoryAndRole.defaultPartnerRole.code : null)],
-            addressValidFromDate: [this.selectedPartner.addressValidFromDate || null],
-            externalBPNumber: [this.selectedPartner.externalBPNumber || null]
+        this._businessPartnerService.getLegalForms().subscribe(response => {
+            this.legalForms = response._embedded.legalForms;
+        });
+
+        this._businessPartnerService.getLegalEntities().subscribe(response => {
+            this.legalEntities = response._embedded.legalEntities;
+        });
+
+        this._businessPartnerService.getHouseBanks().subscribe(response => {
+            this.houseBanks = response._embedded.houseBanks;
         });
 
         if (this._activatedRoute.routeConfig.path === 'updateBusinessPartner') {
@@ -96,6 +89,32 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
      * ngOnInit()
      */
     ngOnInit(): void {
+        this.partnerDetailsForm = this._formBuilder.group({
+            title: [this.selectedPartner.title || null],
+            partyName1: [this.selectedPartner.partyName1 || null, Validators.required],
+            partyName2: [this.selectedPartner.partyName2 || null],
+            searchTerm1: [this.selectedPartner.searchTerm1 || null],
+            searchTerm2: [this.selectedPartner.searchTerm2 || null],
+            addressLine1: [this.selectedPartner.addressLine1 || null],
+            addressLine2: [this.selectedPartner.addressLine2 || null],
+            addressLine3: [this.selectedPartner.addressLine3 || null],
+            postalCode: [this.selectedPartner.postalCode || null, [Validators.pattern(EnquiryApplicationRegEx.numbersOnly)]],
+            state: [this.selectedPartner.state || null],
+            country: [this.selectedPartner.country || 'India'],
+            city: [this.selectedPartner.city || null],
+            contactNumber: [this.selectedPartner.contactNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            email: [this.selectedPartner.email || null, [Validators.pattern(EnquiryApplicationRegEx.email)]],
+            mobileNumber: [this.selectedPartner.mobileNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            faxNumber: [this.selectedPartner.faxNumber || null, [Validators.pattern(EnquiryApplicationRegEx.telephoneNumber)]],
+            partnerCategory: [this.selectedPartner.partnerCategory || this.businessPartnerCategoryAndRole.partnerCategory],
+            defaultPartnerRole: [this.selectedPartner.defaultPartnerRole || 
+                (this.businessPartnerCategoryAndRole.defaultPartnerRole ? this.businessPartnerCategoryAndRole.defaultPartnerRole.code : null)],
+            addressValidFromDate: [this.selectedPartner.addressValidFromDate || null],
+            externalBPNumber: [this.selectedPartner.externalBPNumber || null],
+            legalForm: [this.selectedPartner.legalForm || null],
+            legalEntity: [this.selectedPartner.legalEntity || null],
+            houseBank: [this.selectedPartner.houseBank || null]
+        });
     }
 
     /**
@@ -133,6 +152,9 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                     this._matSnackBar.open(error.error.message, 'Close', {duration: 7000});
                 });
             }
+        }
+        else {
+            this._matSnackBar.open('Please fill in all the required fields', 'Close', {duration: 7000});
         }
     }
 }

@@ -44,7 +44,7 @@ export class InvoicingDetailsComponent implements OnInit {
      * constructor()
      */
     constructor(private _formBuilder: FormBuilder, 
-                private _applicationFeeService: ApplicationFeeService,
+                public _applicationFeeService: ApplicationFeeService,
                 _enquiryService: LoanEnquiryService, 
                 private _matSnackBar: MatSnackBar, 
                 _activatedRoute: ActivatedRoute, 
@@ -61,6 +61,7 @@ export class InvoicingDetailsComponent implements OnInit {
 
         this.invoicingDetailForm = this._formBuilder.group({
             companyName: [''],
+            businessPartnerNumber: [''],
             cinNumber: [''],
             gstNumber: [''],
             pan: [''],
@@ -73,7 +74,9 @@ export class InvoicingDetailsComponent implements OnInit {
             postalCode: [''],
             landline: [''],
             mobile: [''],
-            email: ['']
+            email: [''],
+            leiNumber: [''],
+            cKYCRefNumber: ['']
         });
 
         if (this.selectedInvoicingDetail.id !== undefined) {
@@ -84,6 +87,10 @@ export class InvoicingDetailsComponent implements OnInit {
                 this.selectedPartnerId = data.id;
                 console.log('loading partner form with this data', data);
                 this.loadPartnerForm(data);
+                this._businessPartnerService.getBusinessPartnerIdentificationDetails(this.selectedPartnerId).subscribe(data => {
+                    this.loadOtherDetails(data._embedded.businessPartnerIdentifications);
+                    this.submit();
+                });
             });
         }
     }
@@ -100,6 +107,7 @@ export class InvoicingDetailsComponent implements OnInit {
     loadPartnerForm(partner: any): void {
         this.invoicingDetailForm.patchValue({
             companyName: partner.partyName1,
+            businessPartnerNumber: partner.partyNumber,
             cinNumber: partner.CINNumber,
             gstNumber: partner.gstNumber,
             pan: partner.pan,
@@ -131,7 +139,9 @@ export class InvoicingDetailsComponent implements OnInit {
             'Z00004': 'cinNumber',
             'Z00011': 'gstNumber', 
             'Z00002': 'pan',
-            'Z00009': 'msmeRegistrationNumber'
+            'Z00009': 'msmeRegistrationNumber',
+            'Z00012': 'leiNumber',
+            'Z00013': 'cKYCRefNumber'
         };
 
         const formValues = {};

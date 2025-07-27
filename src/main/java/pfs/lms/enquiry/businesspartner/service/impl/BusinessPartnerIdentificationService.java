@@ -81,7 +81,12 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
+        businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
+        businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerIdentification.getId(),
@@ -141,7 +146,14 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
+        businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
+        businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
+
+        Partner partner = businessPartnerIdentification.getPartner();
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
+        partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
                 businessPartnerIdentification.getId(),

@@ -58,6 +58,41 @@ export class BusinessPartnerService {
     }
 
     /**
+     * getCountries()
+     */
+    getCountries(): Observable<any> {
+        return this._http.get<any>('enquiry/api/countries?sort=countryCode&size=300');
+    }
+
+    /**
+     * getRegions()
+     */
+    getRegions(countryCode: string): Observable<any> {
+        return this._http.get<any>('enquiry/api/regions/search/findByCountryCode?countryCode=' + countryCode + '&sort=regionCode&size=300');
+    }
+
+    /**
+     * getLegalForms()
+     */
+    getLegalForms(): Observable<any> {
+        return this._http.get<any>('enquiry/api/legalForms?sort=code&size=300');
+    }
+
+    /**
+     * getLegalEntities()
+     */
+    getLegalEntities(): Observable<any> {
+        return this._http.get<any>('enquiry/api/legalEntities?sort=code&size=300');
+    }
+
+    /**
+     * getHouseBanks()
+     */
+    getHouseBanks(): Observable<any> {
+        return this._http.get<any>('enquiry/api/houseBanks?sort=houseBankId&size=300');
+    }
+
+    /**
      * getCountryCodes()
      */
     getCountryCodes(): Observable<any> {

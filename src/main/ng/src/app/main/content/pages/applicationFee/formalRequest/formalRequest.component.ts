@@ -31,7 +31,7 @@ export class FormalRequestComponent {
      */
     constructor(_loanEnquiryService: LoanEnquiryService, 
                 _activatedRoute: ActivatedRoute,
-                private _applicationFeeService: ApplicationFeeService, 
+                public _applicationFeeService: ApplicationFeeService, 
                 private _matDialog: MatDialog,
                 private _matSnackBar: MatSnackBar) {
 
@@ -137,5 +137,21 @@ export class FormalRequestComponent {
                 });
             }
         });
+    }
+
+    /**
+     * view()
+     */
+    view(): void {
+        // Open the dialog.
+        this._matDialog.open(FormalRequestUpdateDialogComponent, {
+            panelClass: 'fuse-formal-request-update-dialog',
+            width: '750px',
+            data: {
+                operation: 'viewFormalRequest',
+                loanApplicationId: this.loanApplicationId,
+                selectedFormalRequest: this.selectedFormalRequest
+            }
+        });                
     }
 }

@@ -3,6 +3,10 @@ spring:
     active: oauth
   application:
       name: lms-enquiry
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
 server:
   servlet:
     context-path: /enquiry

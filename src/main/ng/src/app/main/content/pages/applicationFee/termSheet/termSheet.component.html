@@ -1,12 +1,23 @@
 <div class="content">
     <div class="toolbar" fxLayout="row" class="mt-16 mb-16">
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add('newDraft')"> Issue Draft Term Sheet </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add('newAcceptance')"> Acceptance of Term Sheet </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedTermSheet"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add('newDraft')"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
+            Issue Draft Term Sheet 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="add('newAcceptance')"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
+            Acceptance of Term Sheet 
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="update()" [disabled]="!selectedTermSheet"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
             Modify 
         </button>
-        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedTermSheet"> 
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="delete()" [disabled]="!selectedTermSheet"
+                *ngIf="_applicationFeeService.applicationFeeAuthorization?.accessAllowed"> 
             Delete
+        </button>
+        <button class="mr-8 btn" mat-raised-button color="accent" (click)="view()" [disabled]="!selectedTermSheet">
+            View
         </button>
     </div>
     <div class="mat-table-container mt-16" mat-white-bg style="width: 100%">

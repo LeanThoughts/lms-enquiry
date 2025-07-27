@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.controller;
+package pfs.lms.enquiry.businesspartner.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
-import pfs.lms.enquiry.service.impl.PartnerService;
+import pfs.lms.enquiry.businesspartner.service.impl.PartnerService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;

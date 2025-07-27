@@ -54,8 +54,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
         if (partner.getPartnerType() != null)
             detailsResource.setPartnerType(partner.getPartnerType());
-        else
-            detailsResource.setPartnerType("1");
+
 
 
         switch (partner.getPartnerCategory()) {
@@ -102,20 +101,25 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getPostalCode() != null) {
             detailsResource.setPostalCode(partner.getPostalCode());
         }
+        //STREET
         if (partner.getAddressLine1() != null) {
             detailsResource.setAddressLine1(partner.getAddressLine1());
         }
+        //STR_SUPPL1
         if (partner.getAddressLine2() != null) {
             detailsResource.setAddressLine2(partner.getAddressLine2());
         }
+        //STR_SUPPL2
         if (partner.getAddressLine3() != null) {
             detailsResource.setAddressLine3(partner.getAddressLine3());
         }
 //        if (partner.getStreet() != null) {
 //            detailsResource.setStreet(partner.getStreet());
 //        }
+
         if(partner.getAddressValidFromDate() != null)
             detailsResource.setAddressValidFromDate(partner.getAddressValidFromDate().toString());
+
 
         if (partner.getCountry() == null || partner.getCountry().length() == 0) {
             detailsResource.setCountry("IN");
@@ -141,13 +145,31 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getPartyRole() != null) {
             detailsResource.setRole(partner.getPartyRole());
         }
+//        if (partner.getLegalEntity() != null){
+//            detailsResource.setLegalEntity(partner.getLegalEntity());
+//        }
+//        if (partner.getLegalForm() != null){
+//            detailsResource.setLegalForm(partner.getLegalForm());
+//        }
+//        if (partner.getHouseBank() != null){
+//            detailsResource.setHouseBank(partner.getHouseBank());
+//        }
+        if (partner.getTitle() != null){
+            detailsResource.setTitle(partner.getTitle());
+        }
+        if(partner.getPartnerType() != null){
+            detailsResource.setPartnerType(partner.getPartnerType());
+        }
 
-//        if (customerRejection.getDate() != null){
-//            detailsResource.setDate(dataConversionUtility.convertDateToSAPFormat(customerRejection.getDate()));
-//        } else
-//            detailsResource.setDate(null);
+        if(partner.getDefaultPartnerRole() == null) {
+            detailsResource.setPartnerRole("TR0100");
+        }else{
+            detailsResource.setPartnerRole(partner.getDefaultPartnerRole());
+        }
 
 
+
+        detailsResource.setRole(partner.getPartyRole());
         detailsResource.setEntityId(partner.getId().toString());
 
         return detailsResource;

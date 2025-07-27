@@ -442,20 +442,6 @@ public class Initializer implements CommandLineRunner {
 //            userRepository.save(user3);
         }
 
-        productRepository.deleteAll();
-        if (productRepository.count() == 0) {
-            Product pr1 = new Product("301", "Bridge Loan");
-            Product pr2 = new Product("302", "Short Term Loan");
-            Product pr3 = new Product("303", "Term Loan");
-            Product pr4 = new Product("304", "Debentures");
-            Product pr5 = new Product("305", "Non Fund Based Loan");
-            Product pr6 = new Product("30F", "Facilities");
-            Product pr7 = new Product("310", "Facilities Drawdown-NFB Loan");
-            Product pr8 = new Product("311", "Facilities Drawdown-Term Loan");
-            Product pr9 = new Product("991", "Short Term Loan for Vehicle");
-            productRepository.saveAll(Arrays.asList(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9));
-            log.info("Added products sample data");
-        }
 
         sanctionTypeRepository.deleteAll();
         if(sanctionTypeRepository.count() == 0){

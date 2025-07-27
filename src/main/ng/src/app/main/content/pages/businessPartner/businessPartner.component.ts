@@ -1,13 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { BusinessPartnerService } from './businessPartner.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatTabChangeEvent } from '@angular/material';
 import { ConfirmationDialogComponent } from '../appraisal/confirmationDialog/confirmationDialog.component';
 import { Subscription } from 'rxjs';
 import { PartnerService } from '../administration/partner/partner.service';
 import { AppService } from 'app/app.service';
+import { PartnerUpdateComponent } from './partnerUpdate/partnerUpdate.component';
+import { BusinessPartnerContactDetailsUpdateDialogComponent } from './contactDetailsUpdate/contactDetailsUpdate.component';
 
 @Component({
     selector: 'fuse-business-partner',
@@ -32,6 +34,8 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
     subscriptions: Subscription = new Subscription();
 
     disableSendForApproval: boolean;
+    
+    @ViewChild(PartnerUpdateComponent) partnerUpdateComponent: PartnerUpdateComponent;
     
     /**
      * constructor()
@@ -128,6 +132,8 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
      * sendForApproval()
      */
     sendForApproval(): void {
+        this.partnerUpdateComponent.submit();
+
         if (!this.businessPartner) {
             this._matSnackBar.open('Please save the business partner details before sending for approval', 'OK', { duration: 7000 });
             return;
@@ -139,6 +145,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
             next: response => {
                 if (response._embedded.businessPartnerBankDetails.length === 0) {
                     this._matSnackBar.open('Please add at least one bank details before sending for approval', 'OK', { duration: 7000 });
+                    this.disableSendForApproval = false;
                     return;
                 }
 
@@ -150,6 +157,7 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                         if (!identificationCategory) {
                             this._matSnackBar.open('Please add PAN in identification details before sending for approval', 'OK', 
                                 { duration: 7000 });
+                            this.disableSendForApproval = false;
                             return;
                         }
 
@@ -168,7 +176,6 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                                 this.disableSendForApproval = false;
                                 this._matSnackBar.open('Error occurred. Please try again later or contact your system administrator',
                                     'OK', { duration: 7000 });
-                                this.disableSendForApproval = false;
                             }
                         });
                     },
@@ -183,5 +190,28 @@ export class BusinessPartnerComponent implements OnInit, OnDestroy {
                 this.disableSendForApproval = false;
             }
         });
+    }
+
+    /**
+     * onTabChange()
+     */
+    onTabChange(event: MatTabChangeEvent): void {
+        // Check if the partner detail form has changes
+        if (this.partnerUpdateComponent.partnerDetailsForm.dirty && this.partnerUpdateComponent.partnerDetailsForm.touched) {
+
+            const currentFormValue = this.partnerUpdateComponent.partnerDetailsForm.value;
+            const initialFormValue = this.partnerUpdateComponent.selectedPartner;
+            
+            const hasChanges = Object.keys(currentFormValue).some(key => 
+                JSON.stringify(currentFormValue[key]) !== JSON.stringify(initialFormValue[key])
+            );
+
+            if (hasChanges) {
+                console.warn('Partner detail form has changes, submitting');
+                this.partnerUpdateComponent.submit();
+            } else {
+                console.log('No actual changes in the form');
+            }
+        }
     }
 }

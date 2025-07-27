@@ -6,4 +6,5 @@ import pfs.lms.enquiry.domain.Product;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
+    Product findByCode(String code);
 }

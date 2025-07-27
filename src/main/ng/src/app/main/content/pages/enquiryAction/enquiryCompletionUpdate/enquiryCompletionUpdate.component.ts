@@ -23,6 +23,8 @@ export class EnquiryCompletionUpdateComponent implements OnDestroy {
 
     today = new Date();
     
+    productTypes: any;
+
     /**
      * constructor()
      */
@@ -34,6 +36,10 @@ export class EnquiryCompletionUpdateComponent implements OnDestroy {
                 private _loanEnquiryService: LoanEnquiryService) {
 
         this._enquiry = this._loanEnquiryService.selectedEnquiry.value;
+
+        this._enquiryActionService.getProductTypes().subscribe(response => {
+            this.productTypes = response._embedded.products;
+        });
 
         // Fetch selected loan officer details from the dialog's data attribute
         console.log('_dialogData', _dialogData);

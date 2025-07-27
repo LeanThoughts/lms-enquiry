@@ -24,7 +24,7 @@ import pfs.lms.enquiry.resource.*;
 import pfs.lms.enquiry.service.ILoanApplicationService;
 import pfs.lms.enquiry.service.ILoanContractExtensionService;
 import pfs.lms.enquiry.service.ISAPIntegrationService;
-import pfs.lms.enquiry.service.impl.PartnerService;
+import pfs.lms.enquiry.businesspartner.service.impl.PartnerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

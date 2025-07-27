@@ -1,9 +1,10 @@
-package pfs.lms.enquiry.service.impl;
+package pfs.lms.enquiry.businesspartner.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.service.IPartnerService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.PartnerContact;
 import pfs.lms.enquiry.domain.PartnerRoleType;
@@ -14,8 +15,7 @@ import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.PartnerResourceByAlphabet;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
-import pfs.lms.enquiry.service.IPartnerService;
-import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
+ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -96,6 +96,10 @@ public class PartnerService implements IPartnerService {
             existing.setMsmeRegisterNumber(partner.getMsmeRegisterNumber());
             existing.setPan(partner.getPan());
             existing.setExternalBPNumber(partner.getExternalBPNumber());
+            existing.setLegalEntity(partner.getLegalEntity());
+            existing.setLegalForm(partner.getLegalForm());
+            existing.setHouseBank(partner.getHouseBank());
+            existing.setPartnerType(partner.getPartnerType());
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -205,6 +209,14 @@ public class PartnerService implements IPartnerService {
         partner.setMsmeRegisterNumber(partnerResource.getMsmeRegisterNumber());
         partner.setPan(partnerResource.getPan());
         partner.setExternalBPNumber(partnerResource.getExternalBPNumber());
+        partner.setLegalForm(partnerResource.getLegalForm());
+        partner.setLegalEntity(partnerResource.getLegalEntity());
+        partner.setHouseBank(partnerResource.getHouseBank());
+        partner.setPartnerType(partnerResource.getPartnerType());
+
+        //Reset Workflow Status to Updated
+        partner.setWorkFlowStatusCode(11);
+
         partner = partnerRepository.save(partner);
 
         changeDocumentService.createChangeDocument(
@@ -515,6 +527,9 @@ public class PartnerService implements IPartnerService {
 
           existingPartner.setAddressLine1(partner.getAddressLine1());
           existingPartner.setAddressLine2(partner.getAddressLine2());
+          existingPartner.setAddressLine3(partner.getAddressLine3());
+          existingPartner.setStreet(partner.getAddressLine3());
+
           existingPartner.setCity(partner.getCity());
           existingPartner.setState(partner.getState());
           existingPartner.setPostalCode(partner.getPostalCode());
@@ -528,8 +543,11 @@ public class PartnerService implements IPartnerService {
 
           existingPartner.setIndustrySector(partner.getIndustrySector());
           existingPartner.setPan(partner.getPan());
-
-
+          existingPartner.setHouseBank(partner.getHouseBank());
+          existingPartner.setLegalEntity(partner.getLegalEntity());
+          existingPartner.setLegalForm(partner.getLegalForm());
+          existingPartner.setTitle(partner.getTitle());
+          existingPartner.setPartnerType(partner.getPartnerType());
           boolean addPartnerRole = true;
 
           for (PartnerRoleType partnerRoleType: partner.getPartnerRoleTypes()  ) {

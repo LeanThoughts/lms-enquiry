@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.service;
+package pfs.lms.enquiry.businesspartner.service;
 
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;

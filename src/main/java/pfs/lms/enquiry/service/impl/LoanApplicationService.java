@@ -14,6 +14,7 @@ import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetailRepository;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetailRepository;
+import pfs.lms.enquiry.businesspartner.service.impl.PartnerService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.User;
@@ -390,6 +391,12 @@ public class LoanApplicationService implements ILoanApplicationService {
         partner.setPostalCode(resource.getPartner().getPostalCode());
         partner.setState(resource.getPartner().getState());
         partner.setStreet(resource.getPartner().getStreet());
+        partner.setAddressLine1(resource.getPartner().getAddressLine1());
+        partner.setAddressLine2(resource.getPartner().getAddressLine2());
+        partner.setAddressLine3(resource.getPartner().getAddressLine3());
+        partner.setTitle(resource.getPartner().getTitle());
+        partner.setLegalEntity(resource.getPartner().getLegalEntity());
+        partner.setLegalForm(resource.getPartner().getLegalForm());
         partner = partnerService.migrate(partner);
 
         //Set it to the Loan Application

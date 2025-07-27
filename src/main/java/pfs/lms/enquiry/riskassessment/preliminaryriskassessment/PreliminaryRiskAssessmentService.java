@@ -107,7 +107,7 @@ public class PreliminaryRiskAssessmentService implements IPreliminaryRiskAssessm
                 preliminaryRiskAssessment,
                 "Updated",
                 username,
-                "Appraisal", "Loan Partner");
+                "Risk Assessment", "Prelim Risk Assessment");
 
         return preliminaryRiskAssessment;
     }

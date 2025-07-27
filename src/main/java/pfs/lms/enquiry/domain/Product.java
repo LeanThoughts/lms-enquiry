@@ -9,11 +9,14 @@ import javax.persistence.Entity;
 @Setter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Product extends AggregateRoot<Product> {
 
     private String code;
 
     private String name;
+
+    public Product() {
+
+    }
 }

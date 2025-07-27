@@ -39,7 +39,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
     /**
      * constructor()
      */
-    constructor(private _formBuilder: FormBuilder, private _applicationFeeService: ApplicationFeeService,
+    constructor(private _formBuilder: FormBuilder, public _applicationFeeService: ApplicationFeeService,
         _enquiryService: LoanEnquiryService, private _matSnackBar: MatSnackBar, private _activatedRoute: ActivatedRoute) {
 
         this.loanApplicationId = _enquiryService.selectedLoanApplicationId.value;
@@ -186,6 +186,9 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             // this.projectDetailForm.controls['tenorMonths'].setValue(this.projectDetails.tenorMonth);
         }
         console.log('projectDetailForm', this.projectDetailForm.value);
+        if (!this._applicationFeeService.applicationFeeAuthorization.accessAllowed) {
+            this.projectDetailForm.disable();
+        }
     }
 
     /**

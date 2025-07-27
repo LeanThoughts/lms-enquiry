@@ -23,7 +23,8 @@ export class EnquiryCompletionComponent {
     ];
 
     private _enquiryCompletion: any;
-    
+    productTypes: any;
+
     /**
      * constructor()
      */
@@ -37,8 +38,11 @@ export class EnquiryCompletionComponent {
         this._enquiryActionId = _enquiryActionService._enquiryAction.value.id;
 
         this._enquiryCompletion = _activatedRoute.snapshot.data.routeResolvedData[3];
-        
-        this.populateDisplayTable();
+
+        this._enquiryActionService.getProductTypes().subscribe(response => {
+            this.productTypes = response._embedded.products;
+            this.populateDisplayTable();
+        });
     }
  
     /**
@@ -91,24 +95,7 @@ export class EnquiryCompletionComponent {
      * getProductTypeDescription()
      */
     getProductTypeDescription(productType: string): string {
-        if (productType === '301') {
-            return 'Bridge Loan';
-        }
-        else if (productType === '302') {
-            return 'Short Term Loan';
-        }
-        else if (productType === '303') {
-            return 'Term Loan';
-        }
-        else if (productType === '304') {
-            return 'Debentures';
-        }
-        else if (productType === '305') {
-            return 'Non Fund Based Loan';
-        }
-        else {
-            return '';
-        }
+        return this.productTypes.find(product => product.code === productType).name;
     }
 
     /**

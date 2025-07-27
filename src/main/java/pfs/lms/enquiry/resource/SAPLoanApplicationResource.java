@@ -164,7 +164,7 @@ import java.util.List;
         detailsResource.setCity(partner.getCity());
         detailsResource.setState(partner.getState());
         detailsResource.setPostalCode(partner.getPostalCode());
-        detailsResource.setHouseNo(partner.getAddressLine1());
+        //detailsResource.setHouseNo(partner.getAddressLine1());
         detailsResource.setStreet(partner.getStreet());
         detailsResource.setCountry("IN");
         detailsResource.setPanNumber(partner.getPan());
@@ -271,7 +271,29 @@ import java.util.List;
             detailsResource.setBoardApprovalDate(null);
 
         //ICC
-        detailsResource.setiCCStatus(loanApplication.getiCCStatus());
+        //detailsResource.setiCCStatus(loanApplication.getiCCStatus());
+
+        switch (loanApplication.getiCCStatus()){
+            case "Further details requested by ICC":
+                detailsResource.setiCCStatus("1");
+                break;
+            case "Deferred by ICC":
+                detailsResource.setiCCStatus("2");
+                break;
+            case "Rejected":
+                detailsResource.setiCCStatus("3");
+                break;
+            case "Approved by ICC":
+                detailsResource.setiCCStatus("4");
+                break;
+            case "Rejected by Customer":
+                detailsResource.setiCCStatus("5");
+                break;
+            default :
+                detailsResource.setiCCStatus("");
+        }
+
+
         detailsResource.setiCCMeetNumber(loanApplication.getiCCMeetNumber());
         detailsResource.setiCCRemarks(loanApplication.getiCCRemarks());
         if (loanApplication.getiCCClearanceDate() != null)

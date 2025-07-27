@@ -24,6 +24,7 @@ public class TitleConfig implements CommandLineRunner {
         title = titleRepository.findByCode("0002");if (title == null){ title = new Title(null,"0002","Mr." ,"1"  ); titleRepository.save(title); }
         title = titleRepository.findByCode("0003");if (title == null){ title = new Title(null,"0003","Company", "2"   ); titleRepository.save(title); }
         title = titleRepository.findByCode("0004");if (title == null){ title = new Title(null,"0004","Mr. and Mrs.","3"   ); titleRepository.save(title); }
+        title = titleRepository.findByCode("0005");if (title == null){ title = new Title(null,"0005","Group","3"   ); titleRepository.save(title); }
 
         return;
     }
