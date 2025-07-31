@@ -153,5 +153,8 @@ export class PartnerUpdateComponent implements OnInit, OnDestroy {
                 });
             }
         }
+        else {
+            this._matSnackBar.open('Please fill in all the required fields', 'Close', {duration: 7000});
+        }
     }
 }
