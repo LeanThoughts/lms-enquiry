@@ -23,7 +23,7 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
 
     @Override
     public LoanEnquiryDashboardDTO getLoanEnquiryDashboardData(LocalDate reportDate, HttpServletRequest request, Pageable pageable) {
-
+        Double loanAmount = 0D;
         LocalDate dateFrom = LocalDate.of(2000, 01, 01);
 
         LoanEnquiryDashboardDTO loanEnquiryDashboardDTO = new LoanEnquiryDashboardDTO();
@@ -32,33 +32,37 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
         log.info("EnquiryDashBoardService" + reportDate.toString());
 
 
+
         // Get Applications by Enquiry Date
         List<LoanApplication> loanApplications = loanApplicationService.getLoanEnquiries(dateFrom, reportDate,request,pageable);
 
         for (LoanApplication loanApplication: loanApplications
              ) {
+            if (loanApplication.getPfsDebtAmount() != null)
+                loanAmount = loanApplication.getPfsDebtAmount();
 
             log.info("Loan Enquiry No   : " + loanApplication.getEnquiryNo().getId());
             log.info("Functional Status : " + loanApplication.getFunctionalStatus());
 
             switch ( loanApplication.getFunctionalStatus()) {
                 case 1: //Enquiry Stage
+                    log.info( "Pending ICC Count : " + loanEnquiryDashboardDTO.getEnquiryPendingICCCount().toString() );
+
                     loanEnquiryDashboardDTO.setEnquiryPendingICCCount(loanEnquiryDashboardDTO.getEnquiryPendingICCCount() + 1 );
-                    loanEnquiryDashboardDTO.setEnquiryPendingICCAmount(loanEnquiryDashboardDTO.getEnquiryPendingICCAmount() +
-                            loanApplication.getPfsDebtAmount()
-                            );
+                    loanEnquiryDashboardDTO.setEnquiryPendingICCAmount(loanEnquiryDashboardDTO.getEnquiryPendingICCAmount() + loanAmount );
+
+                    log.info( "Pending ICC Count : " + loanEnquiryDashboardDTO.getEnquiryPendingICCCount().toString() );
+                    log.info( "Pending ICC Amount : " + loanEnquiryDashboardDTO.getEnquiryPendingICCCount().toString() );
                     break;
                 case 2: //ICC In-Principle Approved
                     loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1 );
-                    loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() +
-                            loanApplication.getPfsDebtAmount()
-                    );
+                    loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + loanAmount );
+                    break;
                 case 11: //Application Fee
                     loanEnquiryDashboardDTO.setEnquiryApprovedByBoardCount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardCount() + 1 );
-                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardAmount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardAmount() +
-                            loanApplication.getPfsDebtAmount()
-                    );
-                default:
+                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardAmount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardAmount() + loanAmount );
+                    break;
+                    default:
                     log.info("Functional Status Others : " + loanApplication.getFunctionalStatus());
 
             }
