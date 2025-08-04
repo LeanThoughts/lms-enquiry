@@ -28,11 +28,19 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
 
         LoanEnquiryDashboardDTO loanEnquiryDashboardDTO = new LoanEnquiryDashboardDTO();
 
+        log.info("EnquiryDashBoardService" + dateFrom.toString());
+        log.info("EnquiryDashBoardService" + reportDate.toString());
+
+
         // Get Applications by Enquiry Date
         List<LoanApplication> loanApplications = loanApplicationService.getLoanEnquiries(dateFrom, reportDate,request,pageable);
 
         for (LoanApplication loanApplication: loanApplications
              ) {
+
+            log.info("Loan Enquiry No   : " + loanApplication.getEnquiryNo().getId());
+            log.info("Functional Status : " + loanApplication.getFunctionalStatus());
+
             switch ( loanApplication.getFunctionalStatus()) {
                 case 1: //Enquiry Stage
                     loanEnquiryDashboardDTO.setEnquiryPendingICCCount(loanEnquiryDashboardDTO.getEnquiryPendingICCCount() + 1 );
