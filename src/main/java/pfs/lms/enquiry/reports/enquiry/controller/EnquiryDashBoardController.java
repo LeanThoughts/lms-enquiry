@@ -35,9 +35,14 @@ public class EnquiryDashBoardController {
         LoanEnquiryDashboardDTO loanEnquiryDashboardDTO  = new LoanEnquiryDashboardDTO();
 
         LocalDate reportingDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
+        log.info("Reporting Date : " + reportingDate.toString());
 
-        loanEnquiryDashboardDTO = enquiryDashboardService.getLoanEnquiryDashboardData(reportingDate, request, pageable ) ;
-
+        try {
+            loanEnquiryDashboardDTO = enquiryDashboardService.getLoanEnquiryDashboardData(reportingDate, request, pageable);
+        } catch (Exception ex){
+            log.error("Exception in enquiryDashboardService " + ex.getMessage());
+        }
+        log.info("Output : " +loanEnquiryDashboardDTO.toString());
 
         return ResponseEntity.ok(loanEnquiryDashboardDTO);
     }
