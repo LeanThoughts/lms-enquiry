@@ -1,15 +1,15 @@
-package pfs.lms.enquiry.reports;
+package pfs.lms.enquiry.reports.enquiry.formats;
 
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.reports.enquiry.formats.PDFFooter;
 import pfs.lms.enquiry.resource.LoanApplicationResource;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j

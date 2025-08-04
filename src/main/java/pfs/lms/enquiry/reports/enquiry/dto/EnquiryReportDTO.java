@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.reports;
+package pfs.lms.enquiry.reports.enquiry.dto;
 
 import lombok.Data;
 import org.joda.time.DateTime;

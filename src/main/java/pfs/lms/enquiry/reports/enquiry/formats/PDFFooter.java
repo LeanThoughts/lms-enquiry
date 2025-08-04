@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.reports;
+package pfs.lms.enquiry.reports.enquiry.formats;
 
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 
