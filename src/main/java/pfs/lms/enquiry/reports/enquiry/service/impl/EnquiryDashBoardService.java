@@ -58,6 +58,9 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
                     loanEnquiryDashboardDTO.setEnquiryApprovedByBoardAmount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardAmount() +
                             loanApplication.getPfsDebtAmount()
                     );
+                default:
+                    log.info("Functional Status Others : " + loanApplication.getFunctionalStatus());
+
             }
         }
 
