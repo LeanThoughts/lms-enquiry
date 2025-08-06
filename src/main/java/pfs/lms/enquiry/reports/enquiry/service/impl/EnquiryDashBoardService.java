@@ -4,7 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.iccapproval.ICCApproval;
+import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICC;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICCRepository;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.IApprovalByICCService;
 import pfs.lms.enquiry.reports.enquiry.dto.LoanEnquiryDashboardDTO;
 import pfs.lms.enquiry.reports.enquiry.service.IEnquiryDashboardService;
 import pfs.lms.enquiry.service.ILoanApplicationService;
@@ -18,23 +24,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EnquiryDashBoardService implements IEnquiryDashboardService {
 
-    private  final ILoanApplicationService loanApplicationService;
+    private final ILoanApplicationService loanApplicationService;
+    private final IApprovalByICCService approvalByICCService;
+    private final ApprovalByICCRepository approvalByICCRepository;
+    private final ICCApprovalRepository iccApprovalRepository;
 
 
     @Override
-    public LoanEnquiryDashboardDTO getLoanEnquiryDashboardData(LocalDate reportDate, HttpServletRequest request, Pageable pageable) {
+    public LoanEnquiryDashboardDTO getLoanEnquiryDashboardData(LocalDate reportDate,
+                                                               LocalDate enquiryCutOffDate,
+                                                               LocalDate fYearStartDate,
+                                                               LocalDate fYearEndDate,
+                                                               HttpServletRequest request, Pageable pageable) {
         Double loanAmount = 0D;
-        LocalDate dateFrom = LocalDate.of(2000, 01, 01);
+
 
         LoanEnquiryDashboardDTO loanEnquiryDashboardDTO = new LoanEnquiryDashboardDTO();
 
-        log.info("EnquiryDashBoardService" + dateFrom.toString());
-        log.info("EnquiryDashBoardService" + reportDate.toString());
+        log.info("EnquiryDashBoardService : Cutoff Date :" + enquiryCutOffDate.toString());
+        log.info("EnquiryDashBoardService : Report Date :" + reportDate.toString());
 
 
 
         // Get Applications by Enquiry Date
-        List<LoanApplication> loanApplications = loanApplicationService.getLoanEnquiries(dateFrom, reportDate,request,pageable);
+        List<LoanApplication> loanApplications = loanApplicationService.getLoanEnquiries(reportDate, enquiryCutOffDate ,request,pageable);
 
         for (LoanApplication loanApplication: loanApplications
              ) {
@@ -55,13 +68,31 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
                     log.info( "Pending ICC Amount : " + loanEnquiryDashboardDTO.getEnquiryPendingICCCount().toString() );
                     break;
                 case 2: //ICC In-Principle Approved
-                    loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1 );
-                    loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + loanAmount );
+                    ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+                    if ( iccApproval != null) {
+
+                        ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
+                        if (approvalByICC != null){
+                            if ( ( approvalByICC.getMeetingDate().isEqual(fYearStartDate) || approvalByICC.getMeetingDate().isAfter(fYearStartDate ) )
+                                    &&
+                                    ( approvalByICC.getMeetingDate().isEqual(fYearEndDate) || approvalByICC.getMeetingDate().isBefore(fYearEndDate ) )
+                                    ) {
+
+                                loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1 );
+
+                                if (approvalByICC.getAmountApproved() != null){
+                                    loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + approvalByICC.getAmountApproved() );
+                                }
+                            }
+                        }
+                    }
+
                     break;
-                case 11: //Application Fee
-                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardCount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardCount() + 1 );
-                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardAmount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardAmount() + loanAmount );
+                case 12: //BMC Approval
+//                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardCount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardCount() + 1 );
+//                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardAmount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardAmount() + loanAmount );
                     break;
+
                     default:
                     log.info("Functional Status Others : " + loanApplication.getFunctionalStatus());
 

@@ -29,16 +29,31 @@ public class EnquiryDashBoardController {
 
     @GetMapping("/enquiryDashBoard/{reportDate}")
     public ResponseEntity<LoanEnquiryDashboardDTO> getDashBoardData(
-            @PathVariable("reportDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reportDate, HttpServletRequest request,
+            @PathVariable("reportDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reportDate,
+            @PathVariable("enquiryStartDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date enquiryStartDate,
+            @PathVariable("fiscalYearStartDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fiscalYearStartDate,
+            @PathVariable("fiscalYearEndDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fiscalYearEndDate,
+
+            HttpServletRequest request,
             @PageableDefault(sort = "UNSORTED", size = 9999, direction = Sort.Direction.DESC) Pageable pageable) {
 
         LoanEnquiryDashboardDTO loanEnquiryDashboardDTO  = new LoanEnquiryDashboardDTO();
 
         LocalDate reportingDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
+        LocalDate enquiryCutOffDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(enquiryStartDate) );
+        LocalDate fYearStartDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
+        LocalDate fYearEndDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
+
         log.info("Reporting Date : " + reportingDate.toString());
 
         try {
-            loanEnquiryDashboardDTO = enquiryDashboardService.getLoanEnquiryDashboardData(reportingDate, request, pageable);
+            loanEnquiryDashboardDTO = enquiryDashboardService.getLoanEnquiryDashboardData(
+                    reportingDate,
+                    enquiryCutOffDate,
+                    fYearStartDate,
+                    fYearEndDate,
+                    request,
+                    pageable);
         } catch (Exception ex){
             log.error("Exception in enquiryDashboardService " + ex.getMessage());
         }

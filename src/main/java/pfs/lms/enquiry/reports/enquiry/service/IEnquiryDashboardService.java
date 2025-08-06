@@ -8,6 +8,10 @@ import java.time.LocalDate;
 
 public interface IEnquiryDashboardService {
 
-        LoanEnquiryDashboardDTO getLoanEnquiryDashboardData(LocalDate reportDate, HttpServletRequest request, Pageable pageable);
+        LoanEnquiryDashboardDTO getLoanEnquiryDashboardData(LocalDate reportDate,
+                                                            LocalDate enquiryCutOffDate,
+                                                            LocalDate fYearStartDate,
+                                                            LocalDate fYearEndDate,
+                                                            HttpServletRequest request, Pageable pageable);
 
 }
