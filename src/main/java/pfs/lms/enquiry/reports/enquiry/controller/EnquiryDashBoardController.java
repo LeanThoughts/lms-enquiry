@@ -27,7 +27,7 @@ public class EnquiryDashBoardController {
      private final IEnquiryDashboardService enquiryDashboardService;
 
 
-    @GetMapping("/enquiryDashBoard/{reportDate}")
+    @GetMapping("/enquiryDashBoard/{reportDate}/{enquiryStartDate}/{fiscalYearStartDate}/{fiscalYearEndDate}")
     public ResponseEntity<LoanEnquiryDashboardDTO> getDashBoardData(
             @PathVariable("reportDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date reportDate,
             @PathVariable("enquiryStartDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date enquiryStartDate,
