@@ -49,6 +49,8 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
         // Get Applications by Enquiry Date
         List<LoanApplication> loanApplications = loanApplicationService.getLoanEnquiries(reportDate, enquiryCutOffDate ,request,pageable);
 
+        log.info("Total Loan Applications Found : ", loanApplications.size());
+
         for (LoanApplication loanApplication: loanApplications
              ) {
             if (loanApplication.getPfsDebtAmount() != null)

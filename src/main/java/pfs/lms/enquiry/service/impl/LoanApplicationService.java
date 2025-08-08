@@ -851,6 +851,7 @@ public class LoanApplicationService implements ILoanApplicationService {
             List<LoanApplication> loanApplicationList = loanApplicationRepository.findByLoanEnquiryDateBetweenOrderByEnquiryNoAsc(
                     enquiryDateForm, enquiryDateTo);
             loanApplications = loanApplicationList;
+            log.info("Get Loan Enquiries Method : " +loanApplicationList.size());
         }
         catch (Exception e) {
             e.printStackTrace();
