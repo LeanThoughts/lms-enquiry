@@ -41,8 +41,8 @@ public class EnquiryDashBoardController {
 
         LocalDate reportingDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
         LocalDate enquiryCutOffDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(enquiryStartDate) );
-        LocalDate fYearStartDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
-        LocalDate fYearEndDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(reportDate) );
+        LocalDate fYearStartDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(fiscalYearStartDate) );
+        LocalDate fYearEndDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(fiscalYearEndDate) );
 
         log.info("Reporting Date : " + reportingDate.toString());
 

@@ -69,27 +69,6 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
                     log.info( "Pending ICC Count : " + loanEnquiryDashboardDTO.getEnquiryPendingICCCount().toString() );
                     log.info( "Pending ICC Amount : " + loanEnquiryDashboardDTO.getEnquiryPendingICCCount().toString() );
                     break;
-                case 2: //ICC In-Principle Approved
-                    ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
-                    if ( iccApproval != null) {
-
-                        ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
-                        if (approvalByICC != null){
-                            if ( ( approvalByICC.getMeetingDate().isEqual(fYearStartDate) || approvalByICC.getMeetingDate().isAfter(fYearStartDate ) )
-                                    &&
-                                    ( approvalByICC.getMeetingDate().isEqual(fYearEndDate) || approvalByICC.getMeetingDate().isBefore(fYearEndDate ) )
-                                    ) {
-
-                                loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1 );
-
-                                if (approvalByICC.getAmountApproved() != null){
-                                    loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + approvalByICC.getAmountApproved() );
-                                }
-                            }
-                        }
-                    }
-
-                    break;
                 case 12: //BMC Approval
 //                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardCount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardCount() + 1 );
 //                    loanEnquiryDashboardDTO.setEnquiryApprovedByBoardAmount(loanEnquiryDashboardDTO.getEnquiryApprovedByBoardAmount() + loanAmount );
@@ -99,6 +78,29 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
                     log.info("Functional Status Others : " + loanApplication.getFunctionalStatus());
 
             }
+
+            //ICC Approval
+            ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+            if ( iccApproval != null) {
+
+                ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
+                if (approvalByICC != null){
+                    if (approvalByICC.getMeetingDate() != null) {
+                        if ((approvalByICC.getMeetingDate().isEqual(fYearStartDate) || approvalByICC.getMeetingDate().isAfter(fYearStartDate))
+                                &&
+                                (approvalByICC.getMeetingDate().isEqual(fYearEndDate) || approvalByICC.getMeetingDate().isBefore(fYearEndDate))
+                        ) {
+
+                            loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1);
+
+                            if (approvalByICC.getAmountApproved() != null) {
+                                loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + approvalByICC.getAmountApproved());
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         return loanEnquiryDashboardDTO;
