@@ -7,6 +7,8 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry; // Import CorsRegistry
 
 import javax.persistence.EntityManager;
+import javax.persistence.metamodel.Type;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -15,19 +17,23 @@ public class RepositoryRestConfig implements RepositoryRestConfigurer {
 
     private final EntityManager entityManager;
 
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        Class<?>[] entities = entityManager.getMetamodel().getEntities().stream()
-                .map(e -> e.getJavaType()).collect(Collectors.toList()).toArray(new Class[0]);
-        config.exposeIdsFor(entities);
-    }
+    @Override
+    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
+        System.out.println("Exposing ids ~~~~~~~~~~~");
 
-    // ADD THIS NEW METHOD TO CONFIGURE CORS
-    public void configureCors(CorsRegistry cors) {
-        cors.addMapping("/**") // Apply to all paths exposed by Spring Data REST
+        List<Class<?>> entityClasses = entityManager.getMetamodel()
+                .getEntities()
+                .stream()
+                .map(Type::getJavaType)
+                .collect(Collectors.toList());
+
+        config.exposeIdsFor(entityClasses.toArray(new Class[0]));
+
+        cors.addMapping("/**")
                 .allowedOrigins("http://localhost:4200")
-                .allowedHeaders("x-requested-with", "authorization", "content-Type") // Use correct casing for Content-Type
+                .allowedHeaders("x-requested-with", "authorization", "content-type")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-                .allowCredentials(true) // Crucial for session-based authentication (like with BFF)
-                .maxAge(3600); // Cache preflight response for 1 hour
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }
