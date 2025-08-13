@@ -23,8 +23,14 @@ public class LoanContractExtension extends AggregateRoot<LoanContractExtension> 
     private LoanApplication loanApplication;
 
     private String boardMeetingNumber;
-
     private LocalDate boardApprovalDate;
+    private String boardApprovalRemark;
+    private Integer boardApprovalStatus;
+
+    private LocalDate enquiryCompletionDate;
+    private String enquiryRemarks;
+    private String borrowerKYCCompletionDate;
+
 
     private String loanNumber;
 
@@ -69,5 +75,9 @@ public class LoanContractExtension extends AggregateRoot<LoanContractExtension> 
 //    Interest Rate Post Sanc
     private Double interestRatePostSanction;
 
+    private LocalDate iCCClearanceDate;
+    private String iCCMeetingNumber;
+    private Integer iCCApprovalStatus;
+    private String iCCRemarks;
 
 }

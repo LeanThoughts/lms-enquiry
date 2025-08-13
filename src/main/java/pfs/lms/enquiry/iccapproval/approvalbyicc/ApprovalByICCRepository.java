@@ -7,4 +7,5 @@ import java.util.UUID;
 public interface ApprovalByICCRepository extends JpaRepository<ApprovalByICC, UUID> {
 
     ApprovalByICC findByIccApprovalId(UUID iccApprovalId);
+
 }

@@ -17,7 +17,7 @@ public interface ILoanApplicationService {
     LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException;
 
 
-    LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException;
+    LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException;
     LoanApplication migrateUpdate(LoanApplication loanApplication, Partner partner, String username);
     List<LoanApplication> searchLoans(HttpServletRequest request, Pageable pageable);
 

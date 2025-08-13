@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.domain.LoanApplication;
+import pfs.lms.enquiry.domain.LoanContractExtension;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.monitoring.npa.NPA;
 import pfs.lms.enquiry.monitoring.npa.NPADetail;
@@ -28,4 +29,5 @@ public class LoanApplicationResource {
     private List<SubLocationDetail> subLocationDetailList;
     private NPA npa;
     private List<NPADetail> npaDetailList;
+    private LoanContractExtension loanContractExtension;
  }

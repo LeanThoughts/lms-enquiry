@@ -71,7 +71,7 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
     }
 
     @Override
-    public EnquiryCompletion update(EnquiryCompletionResource resource, String username)
+    public EnquiryCompletion update(EnquiryCompletionResource resource,  String username)
             throws CloneNotSupportedException {
         EnquiryCompletion enquiryCompletion =
                 enquiryCompletionRepository.findById(resource.getId())
@@ -82,7 +82,10 @@ public class EnquiryCompletionService implements IEnquiryCompletionService {
         enquiryCompletion.setProductType(resource.getProductType());
         enquiryCompletion.setTerm(resource.getTerm());
         enquiryCompletion.setRemarks(resource.getRemarks());
-        enquiryCompletion.setDate(resource.getDate());
+        if (resource.getDate() != null) {
+            enquiryCompletion.setDate(resource.getDate());
+        }
+
         enquiryCompletion = enquiryCompletionRepository.save(enquiryCompletion);
 
         // Change Documents for Enquiry Completion

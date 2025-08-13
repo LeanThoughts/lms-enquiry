@@ -80,26 +80,32 @@ public class EnquiryDashBoardService implements IEnquiryDashboardService {
             }
 
             //ICC Approval
-            ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
-            if ( iccApproval != null) {
-
-                ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
-                if (approvalByICC != null){
-                    if (approvalByICC.getMeetingDate() != null) {
-                        if ((approvalByICC.getMeetingDate().isEqual(fYearStartDate) || approvalByICC.getMeetingDate().isAfter(fYearStartDate))
-                                &&
-                                (approvalByICC.getMeetingDate().isEqual(fYearEndDate) || approvalByICC.getMeetingDate().isBefore(fYearEndDate))
-                        ) {
-
-                            loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1);
-
-                            if (approvalByICC.getAmountApproved() != null) {
-                                loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + approvalByICC.getAmountApproved());
-                            }
-                        }
-                    }
-                }
+            if (loanApplication.getiCCStatus() == "Approved by ICC"){
+                loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() +  loanApplication.getPfsDebtAmount());
+                loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1);
             }
+
+//            ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+//
+//            if ( iccApproval != null) {
+//
+//                ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
+//                if (approvalByICC != null){
+//                    if (approvalByICC.getMeetingDate() != null) {
+//                        if ((approvalByICC.getMeetingDate().isEqual(fYearStartDate) || approvalByICC.getMeetingDate().isAfter(fYearStartDate))
+//                                &&
+//                                (approvalByICC.getMeetingDate().isEqual(fYearEndDate) || approvalByICC.getMeetingDate().isBefore(fYearEndDate))
+//                        ) {
+//
+//                            loanEnquiryDashboardDTO.setEnquiryClearedByICCCount(loanEnquiryDashboardDTO.getEnquiryClearedByICCCount() + 1);
+//
+//                            if (approvalByICC.getAmountApproved() != null) {
+//                                loanEnquiryDashboardDTO.setEnquiryClearedByICCAmount(loanEnquiryDashboardDTO.getEnquiryClearedByICCAmount() + approvalByICC.getAmountApproved());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
         }
 

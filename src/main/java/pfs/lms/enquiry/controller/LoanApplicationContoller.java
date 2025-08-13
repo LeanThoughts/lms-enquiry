@@ -138,7 +138,7 @@ public class LoanApplicationContoller {
                         log.info("Loan Applicant is   NULL for Loan : " + loanApplication.getLoanContractId());
                         Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
                         resources.add(loanApplicationResource);
 
@@ -147,7 +147,7 @@ public class LoanApplicationContoller {
                         Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).orElse(null);
 //                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                         resources.add(loanApplicationResource);
@@ -231,6 +231,7 @@ public class LoanApplicationContoller {
         loanApplicationResource.setSubLocationDetailList(resource.getSubLocationDetailList());
         loanApplicationResource.setNpa(resource.getNpa());
         loanApplicationResource.setNpaDetailList(resource.getNpaDetailList());
+        loanApplicationResource.setLoanContractExtension(resource.getLoanContractExtension());
         LoanApplication loanApplication = loanApplicationService.migrate(loanApplicationResource, request.getUserPrincipal().getName());
 
 
@@ -775,7 +776,7 @@ public class LoanApplicationContoller {
                             break;
                     }
                 }
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
 
@@ -1012,7 +1013,7 @@ public class LoanApplicationContoller {
                     }
                 }
 
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                 resources.add(loanApplicationResource);
