@@ -27,10 +27,7 @@ import pfs.lms.enquiry.boardapproval.BoardApproval;
 import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
 import pfs.lms.enquiry.boardapproval.BoardApprovalService;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerService;
-import pfs.lms.enquiry.domain.LoanApplication;
-import pfs.lms.enquiry.domain.Partner;
-import pfs.lms.enquiry.domain.User;
-import pfs.lms.enquiry.domain.WorkflowApprover;
+import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.dto.WorkflowTaskDTO;
 import pfs.lms.enquiry.exception.HandledException;
 import pfs.lms.enquiry.iccapproval.ICCApproval;
@@ -43,10 +40,7 @@ import pfs.lms.enquiry.monitoring.service.ILoanMonitoringService;
 import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
 import pfs.lms.enquiry.referenceinterest.repository.ReferenceInterestRateValueRepository;
 import pfs.lms.enquiry.referenceinterest.service.IReferenceInterestRateValueService;
-import pfs.lms.enquiry.repository.LoanApplicationRepository;
-import pfs.lms.enquiry.repository.PartnerRepository;
-import pfs.lms.enquiry.repository.UserRepository;
-import pfs.lms.enquiry.repository.WorkflowApproverRepository;
+import pfs.lms.enquiry.repository.*;
 import pfs.lms.enquiry.riskassessment.IRiskAssessmentService;
 import pfs.lms.enquiry.riskassessment.RiskAssessment;
 import pfs.lms.enquiry.riskassessment.RiskAssessmentRepository;
@@ -131,6 +125,8 @@ public class WorkflowService implements IWorkflowService {
     private final IReferenceInterestRateValueService referenceInterestRateValueService;
     @Autowired
     private ReferenceInterestRateValueRepository referenceInterestRateValueRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
 
     @Override
@@ -294,15 +290,17 @@ public class WorkflowService implements IWorkflowService {
                 break;
         }
 
-
-            //Deterimine Approver Name and Email
-            WorkflowApprover workflowApprover = workflowApproverRepository.findByProcessName(processName);
-            if (workflowApprover == null) {
-                throw new HandledException("000", "Workflow approver not maintained for process : " + processName);
-            }
-
         User user = userRepository.findByEmail(requestorEmail);
         String requestorFullName = user.getFirstName() + " " + user.getLastName();
+        Department userDepartment = departmentRepository.findByCode(user.getRiskDepartment());
+
+            //Determine Approver Name and Email
+            WorkflowApprover workflowApprover = workflowApproverRepository.findByDepartmentCodeAndProcessName( user.getRiskDepartment(), processName);
+            if (workflowApprover == null) {
+                throw new HandledException("000", "Workflow Approver not maintained for process : " + processName + " Department : " + userDepartment.getValue());
+            }
+
+
 
         //Fill the process Variables
         variables.put("LoanProcessId", businessProcessId);

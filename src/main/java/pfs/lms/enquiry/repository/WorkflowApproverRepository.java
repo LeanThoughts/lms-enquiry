@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface WorkflowApproverRepository extends JpaRepository<WorkflowApprover, Long> {
 
     public WorkflowApprover findByProcessName(String processName);
+    public WorkflowApprover findByDepartmentCodeAndProcessName(String departmentCode, String processName );
 }

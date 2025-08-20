@@ -26,6 +26,8 @@ public class WorkflowApprover  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String departmentCode;
+
     private String processName;
 
     private String approverName;
