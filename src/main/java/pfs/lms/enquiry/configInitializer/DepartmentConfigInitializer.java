@@ -141,10 +141,10 @@ public class DepartmentConfigInitializer implements CommandLineRunner {
         }
 //        department = departmentRepository.findByCode("14");
 //        if (department != null) {
-//            department.setValue("SME & FI Appraisal");
+//            department.setValue("Operations");
 //            departmentRepository.save(department);
 //        } else {
-//            department = new Department("14", "SME & FI Appraisal");
+//            department = new Department("14", "Operations");
 //            departmentRepository.save(department);
 //        }
 
