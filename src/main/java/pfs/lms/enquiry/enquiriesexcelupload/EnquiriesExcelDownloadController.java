@@ -189,7 +189,7 @@ public class EnquiriesExcelDownloadController {
 
                     if (loanApplication.getAmountApproved() > 0) {
                         Double approvedAmountInCR = loanApplication.getAmountApproved(); // 10000000;
-                        excelEnquiry.setAmountRequested(approvedAmountInCR);
+                        excelEnquiry.setAmountApproved(approvedAmountInCR);
                     }
                 }
 
@@ -204,81 +204,10 @@ public class EnquiriesExcelDownloadController {
                     excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
 
 
-//                excelEnquiry.setPresentedInIcc("No");
-//
-//                if (enquiryAction != null && enquiryAction.getWorkFlowStatusCode() == 3) {
-//                    ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
-//                    if (iccApproval != null) {
-//                        ApprovalByICC approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
-//                        if (approvalByICC != null) {
-//                            excelEnquiry.setPresentedInIcc("Yes");
-//                            excelEnquiry.setIccStatus("Approved by ICC");
-//                            excelEnquiry.setReasonForIccStatus(approvalByICC.getRemarks());
-//                            excelEnquiry.setIccClearanceDate(approvalByICC.getMeetingDate());
-//                            excelEnquiry.setIccMeetingNumber(approvalByICC.getMeetingNumber());
-//                        } else {
-//                            RejectedByICC rejectedByICC = rejectedByICCRepository.findByIccApprovalId(iccApproval.getId());
-//                            if (rejectedByICC != null) {
-//                                excelEnquiry.setPresentedInIcc("Yes");
-//                                excelEnquiry.setIccStatus("Dropped");
-//                                excelEnquiry.setReasonForIccStatus(rejectedByICC.getReasonForRejection());
-//                                excelEnquiry.setIccMeetingNumber(rejectedByICC.getMeetingNumber());
-//                            }
-//                        }
-//                    }
-//                    if (excelEnquiry.getIccStatus() != null) {
-//                        if (!(excelEnquiry.getIccStatus().equals("Cleared") || excelEnquiry.getIccStatus().equals("Dropped"))) {
-//                            List<ICCFurtherDetail> furtherDetails = iccFurtherDetailRepository.findByIccApprovalId(iccApproval.getId());
-//                            if (furtherDetails != null && furtherDetails.size() > 0)
-//                                excelEnquiry.setIccStatus("Deferred");
-//                            else {
-//                                List<ICCReasonForDelay> reasonForDelays = iccReasonForDelayRepository.findByIccApprovalId(iccApproval.getId());
-//                                if (reasonForDelays != null && reasonForDelays.size() > 0)
-//                                    excelEnquiry.setIccStatus("On Hold");
-//                                else
-//                                    excelEnquiry.setIccStatus("Under Process");
-//                            }
-//                        }
-//                    }
-//                }
-
                 if (loanApplication.getFunctionalStatus() == 11) {
                     excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
                 }
 
-//                if (excelEnquiry.getIccMeetingNumber() != null) {
-//                    excelEnquiry.setPresentedInIcc("Yes");
-//                }
-
-                //Earlier logic of setting "Cleared", "Approved by ICC", "Rejected" not needed any more
-//                if (loanApplication.getiCCStatus() != null) {
-//                    excelEnquiry.setIccStatus(loanApplication.getiCCStatus());
-//                }
-//
-//                excelEnquiry.setIccApprovedRoi(loanApplication.getIccApprovedRoi());
-//                excelEnquiry.setAmountApproved(loanApplication.getAmountApproved());
-//                excelEnquiry.setComments(loanApplication.getEnquiryRemarks());
-//                excelEnquiry.setIccApprovedFeePct(loanApplication.getFees());
-//
-//                if (excelEnquiry.getIccMeetingNumber() != null)
-//                    if (excelEnquiry.getIccMeetingNumber().length() > 0) {
-//                        excelEnquiry.setPresentedInIcc("Yes");
-//                    }else{
-//                        excelEnquiry.setPresentedInIcc("No");
-//                        excelEnquiry.setIccReadinessStatus("Under Process");
-//                    }
-//                else
-//                    excelEnquiry.setPresentedInIcc("No");
-//
-//                if (excelEnquiry.getAmountApproved() != null) {
-//                    if (excelEnquiry.getAmountApproved() > 0)
-//                    excelEnquiry.setIccReadinessStatus("Ready for ICC-In Principle");
-//                    else
-//                        excelEnquiry.setIccReadinessStatus("Under Process");
-//                }
-//                else {
-//                    excelEnquiry.setIccReadinessStatus("Under Process");
-//                }
 
                 //Business Development Officer
                 LoanPartner loanPartner = loanPartnerRepository.findByLoanApplicationAndBusinessPartnerIdAndRoleType(loanApplication, loanApplication.getbusPartnerNumber(), "ZLM034");
