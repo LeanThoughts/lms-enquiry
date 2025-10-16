@@ -7,30 +7,30 @@ spring:
         registration:
           azure: # <--- This is your client registration ID (e.g., 'azure')
             provider: azure # <--- ADD THIS LINE: Explicitly link to the 'azure' provider
-            client-id: f97a56c0-c602-4417-847f-6abadb8a542c
-            client-secret: wof8Q~YuCt9ZHugrh9i4mijY4ORKD.K2wvE2Ba1b # Ensure this is present and correct if needed
+            client-id: 102af103-0208-40fe-97db-4c18325eeca1
+            client-secret: jge8Q~vVwJ_AorEfC41UsCdxFc442TakFaWLpc-G # Ensure this is present and correct if needed
             authorization-grant-type: authorization_code # Common for web apps (BFF)
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}" # Standard Spring Security default
             scope: openid,profile,offline_access # Common minimal scopes for OIDC
         provider: # <--- This block is for provider (Authorization Server) definitions
           azure: # <--- This is your provider ID (e.g., 'azure')
-            issuer-uri: https://sts.windows.net/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/ # <--- Make sure this has the trailing slash
-            jwk-set-uri: https://login.microsoftonline.com/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/discovery/v2.0/keys
+            issuer-uri: https://sts.windows.net/b94a5e24-22c4-4af5-82eb-554731d35dbc/ # <--- Make sure this has the trailing slash
+            jwk-set-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/discovery/v2.0/keys
             # If you are using Spring Boot 2.1.x, you might also need:
-            # authorization-uri: https://login.microsoftonline.com/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/oauth2/v2.0/authorize
-            # token-uri: https://login.microsoftonline.com/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/oauth2/v2.0/token
+            # authorization-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/oauth2/v2.0/authorize
+            # token-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/oauth2/v2.0/token
             # user-info-uri: https://graph.microsoft.com/oidc/userinfo # Less common for AD, but if needed
       resourceserver: # <--- This block is for resource server (JWT validation)
         jwt:
           # audiences: api://f97a56c0-c602-4417-847f-6abadb8a542c
-          issuer-uri: https://sts.windows.net/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/ # <--- This should also have the trailing slash
-          jwk-set-uri: https://login.microsoftonline.com/9d006416-b9a8-44de-b8e2-44ae5a7b4a63/discovery/v2.0/keys
+          issuer-uri: https://sts.windows.net/b94a5e24-22c4-4af5-82eb-554731d35dbc/ # <--- This should also have the trailing slash
+          jwk-set-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/discovery/v2.0/keys
   cloud:
     azure:
       active-directory:
         enabled: true
-        tenant-id: 9d006416-b9a8-44de-b8e2-44ae5a7b4a63
-        client-id: f97a56c0-c602-4417-847f-6abadb8a542c
+        tenant-id: b94a5e24-22c4-4af5-82eb-554731d35dbc
+        client-id: 7d2d1dc5-1509-4814-9c35-abac0cac0373
         # If you explicitly define client-secret in the client.registration block,
         # you might not need it here or ensure consistency.
         # client-secret: YOUR_AZURE_AD_APP_SECRET
