@@ -21,7 +21,9 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -162,5 +164,30 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
                     "Partner", "BusinessPartnerIndustry");
         }
         return  businessPartnerIndustry;
+    }
+
+    @Override
+    public List<BusinessPartnerIndustryResource> findByPartnerId(UUID partnerId) {
+        List<BusinessPartnerIndustry> businessPartnerIndustries = businessPartnerIndustryRepository.findByPartnerIdOrderBySerialNumberDesc(partnerId);
+        List<BusinessPartnerIndustryResource> businessPartnerIndustryResources = new ArrayList<>();
+        for (BusinessPartnerIndustry businessPartnerIndustry : businessPartnerIndustries) {
+
+            BusinessPartnerIndustryResource businessPartnerIndustryResource = new BusinessPartnerIndustryResource();
+
+            businessPartnerIndustryResource.setId(businessPartnerIndustry.getId());
+            businessPartnerIndustryResource.setPartnerId(businessPartnerIndustry.getPartner().getId());
+            businessPartnerIndustryResource.setSerialNumber(businessPartnerIndustry.getSerialNumber());
+
+            businessPartnerIndustryResource.setIndustrySystemId(businessPartnerIndustry.getIndustrySystemId());
+            businessPartnerIndustryResource.setIndustrySystem(industrySystemRepository.
+                    getReferenceById(businessPartnerIndustry.getIndustrySystemId()).getValue());
+
+            businessPartnerIndustryResource.setIndustryTypeId(businessPartnerIndustry.getIndustryTypeId());
+            businessPartnerIndustryResource.setIndustryType(industryTypeRepository.
+                    getReferenceById(businessPartnerIndustry.getIndustryTypeId()).getValue());
+
+            businessPartnerIndustryResources.add(businessPartnerIndustryResource);
+        }
+        return businessPartnerIndustryResources;
     }
 }

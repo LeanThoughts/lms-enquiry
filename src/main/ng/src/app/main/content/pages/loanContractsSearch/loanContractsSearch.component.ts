@@ -217,6 +217,26 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
      * redirectToICCApprovalStage()
      */
     redirectToICCApprovalStage(): void {
+        if (this._service.selectedEnquiry.value.functionalStatus >= 1) {
+            console.log('inside if for icc approval');
+            this._iccApprovalService.getICCApproval(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(response => {
+                this._iccApprovalService._iccApproval.next(response);
+                this.redirect('/iccApprovalStage');
+                return;
+            },
+            (error: HttpErrorResponse) => {
+                console.log('inside error handler for icc approval', error);
+
+                if (error.status === 404) {
+                    this._iccApprovalService._iccApproval.next({ id: '' });
+                    this.redirect('/iccApprovalStage');
+                    return;
+                }
+            })
+        }
+
+        console.log('inside else for icc approval');
+
         this._enquiryActionService.getEnquiryAction(this._loanEnquiryService.selectedLoanApplicationId.value).subscribe(enquiryAction => {
             this._enquiryActionService.getEnquiryCompletion(enquiryAction.id).subscribe(enquiryCompletion => {
                 console.log('inside enquiry completion', enquiryCompletion);

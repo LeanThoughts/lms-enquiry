@@ -10,18 +10,24 @@ import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
+import pfs.lms.enquiry.businesspartner.repository.CountryCodeRepository;
+import pfs.lms.enquiry.businesspartner.repository.DocumentTypeRepository;
 import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.domain.Partner;
+import pfs.lms.enquiry.repository.CountryRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.repository.RegionRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +41,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
     private final LoanPartnerRepository loanPartnerRepository;
     private final LoanApplicationRepository loanApplicationRepository;
     private final KnowYourCustomerRepository knowYourCustomerRepository;
+    private final CountryRepository countryRepository;
+    private final RegionRepository regionRepository;
+    private final DocumentTypeRepository documentTypeRepository;
 
     public BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) {
         Partner partner = partnerRepository.findById(businessPartnerIdentificationResource.getPartnerId())
@@ -316,5 +325,47 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
         return businessPartnerIdentification;
 
+    }
+
+    @Override
+    public List<BusinessPartnerIdentificationResource> findByPartnerId(UUID partnerId) {
+        List<BusinessPartnerIdentification> businessPartnerIdentifications = businessPartnerIdentificationRepository.findByPartnerIdOrderBySerialNumberDesc(partnerId);
+        List<BusinessPartnerIdentificationResource> businessPartnerIdentificationResources = new ArrayList<>();
+        for (BusinessPartnerIdentification businessPartnerIdentification : businessPartnerIdentifications) {
+            BusinessPartnerIdentificationResource businessPartnerIdentificationResource = new BusinessPartnerIdentificationResource();
+            businessPartnerIdentificationResource.setId(businessPartnerIdentification.getId());
+            businessPartnerIdentificationResource.setSerialNumber(businessPartnerIdentification.getSerialNumber());
+            businessPartnerIdentificationResource.setPartnerId(businessPartnerIdentification.getPartner().getId());
+            businessPartnerIdentificationResource.setIdentificationCategoryCode(businessPartnerIdentification.getIdentificationCategoryCode());
+            businessPartnerIdentificationResource.setIdentificationNumber(businessPartnerIdentification.getIdentificationNumber());
+            businessPartnerIdentificationResource.setIdInstitute(businessPartnerIdentification.getIdInstitute());
+            businessPartnerIdentificationResource.setIdEntryDate(businessPartnerIdentification.getIdEntryDate());
+            businessPartnerIdentificationResource.setIdValidFromDate(businessPartnerIdentification.getIdValidFromDate());
+            businessPartnerIdentificationResource.setIdValidToDate(businessPartnerIdentification.getIdValidToDate());
+            businessPartnerIdentificationResource.setDocumentName(businessPartnerIdentification.getDocumentName());
+            businessPartnerIdentificationResource.setFileReference(businessPartnerIdentification.getFileReference());
+            businessPartnerIdentificationResource.setDocumentType(businessPartnerIdentification.getDocumentType());
+            businessPartnerIdentificationResource.setCountry(businessPartnerIdentification.getCountry());
+            businessPartnerIdentificationResource.setRegion(businessPartnerIdentification.getRegion());
+
+            businessPartnerIdentificationResource.setIdentificationCategory(identificationCategoryRepository.
+                    findByCode(businessPartnerIdentification.getIdentificationCategoryCode()).get().getValue());
+
+            if (businessPartnerIdentification.getCountry() != null)
+                businessPartnerIdentificationResource.setCountryName(countryRepository.
+                        findByCountryCode(businessPartnerIdentification.getCountry()).getValue());
+
+            if (businessPartnerIdentification.getRegion() != null)
+                businessPartnerIdentificationResource.setRegionName(regionRepository.
+                        findByCountryCodeAndRegionCode(businessPartnerIdentification.getCountry(),
+                                businessPartnerIdentification.getRegion()).getValue());
+
+            if (businessPartnerIdentification.getDocumentType() != null)
+                businessPartnerIdentificationResource.setDocumentTypeName(documentTypeRepository.
+                        findByCode(businessPartnerIdentification.getDocumentType()).getDescription());
+
+            businessPartnerIdentificationResources.add(businessPartnerIdentificationResource);
+        }
+        return businessPartnerIdentificationResources;
     }
 }

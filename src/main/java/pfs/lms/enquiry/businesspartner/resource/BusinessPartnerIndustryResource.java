@@ -17,4 +17,7 @@ public class BusinessPartnerIndustryResource {
 
     private Long industrySystemId;    
     private Long industryTypeId;
+
+    private String industrySystem;
+    private String industryType;
 }

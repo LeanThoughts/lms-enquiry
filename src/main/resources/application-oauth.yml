@@ -143,3 +143,8 @@ logging:
       springframework:
         security: DEBUG
         web=DEBUG:
+
+
+# leanthoughts
+# client secret value : jge8Q~vVwJ_AorEfC41UsCdxFc442TakFaWLpc-G
+# client secret id : 7d2d1dc5-1509-4814-9c35-abac0cac0373
