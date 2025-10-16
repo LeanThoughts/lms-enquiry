@@ -274,6 +274,8 @@ public class LoanApplicationContoller {
             log.info("Finished Migrating Extension : ");
             log.info("-----------------------------------------------------");
         }
+        log.info("Functional Status After Migration: " + loanApplication.getFunctionalStatus() + ":" + loanApplication.getFunctionalStatusDescription() ) ;
+
         return ResponseEntity.ok(loanApplication);
     }
 

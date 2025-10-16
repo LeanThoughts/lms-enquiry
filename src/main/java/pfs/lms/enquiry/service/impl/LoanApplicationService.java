@@ -19,10 +19,7 @@ import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetailRepository;
 import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.businesspartner.service.impl.PartnerService;
-import pfs.lms.enquiry.domain.LoanApplication;
-import pfs.lms.enquiry.domain.LoanContractExtension;
-import pfs.lms.enquiry.domain.Partner;
-import pfs.lms.enquiry.domain.User;
+import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.iccapproval.ICCApproval;
 import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
 import pfs.lms.enquiry.iccapproval.ICCApprovalService;
@@ -36,6 +33,7 @@ import pfs.lms.enquiry.monitoring.npa.NPADetail;
 import pfs.lms.enquiry.monitoring.npa.NPADetailRepository;
 import pfs.lms.enquiry.monitoring.npa.NPARepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
+import pfs.lms.enquiry.repository.FunctionalStatusRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -54,6 +52,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class LoanApplicationService implements ILoanApplicationService {
+    private final FunctionalStatusRepository functionalStatusRepository;
 
     private final PartnerService partnerService;
 
@@ -792,6 +791,9 @@ public class LoanApplicationService implements ILoanApplicationService {
         if (loanApplicationExisting != null) {
 
             loanApplicationExisting.setFunctionalStatus(loanApplication.getFunctionalStatus());
+            loanApplicationExisting.setFunctionalStatusDescription
+                    (functionalStatusRepository.findByCode( Integer.parseInt(String.valueOf(loanApplication.getFunctionalStatus()))).getValue());
+
 
             if (loanApplication.getTechnicalStatus() != null)
                 loanApplicationExisting.setTechnicalStatus(loanApplication.getTechnicalStatus());
@@ -982,6 +984,10 @@ public class LoanApplicationService implements ILoanApplicationService {
             log.info("Loan Application : Enquiry ID : " + loanApplication.getEnquiryNo().getId());
             //Save and return the Loan Application
             log.info("Loan Enquiry Date: " + loanApplication.getLoanEnquiryDate().toString());
+            Integer functionStatusCode = Integer.parseInt(String.valueOf(loanApplication.getFunctionalStatus())) ;
+            FunctionalStatus functionalStatus = functionalStatusRepository.findByCode(functionStatusCode);
+            loanApplication.setFunctionalStatusDescription( functionalStatus.getValue());
+
             loanApplication = loanApplicationRepository.save(loanApplication);
             log.info("Loan Application : Enquiry ID : After Save : " + loanApplication.getEnquiryNo().getId());
 
