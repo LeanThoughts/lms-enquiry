@@ -11,6 +11,7 @@ public class ProcessorResource {
     private String monitoringDepartmentInitiator;
     private String riskDepartmentInitiator;
     private String riskDepartmentHead;
+    private String sarcDepartmentInitiator;
 
 
 }

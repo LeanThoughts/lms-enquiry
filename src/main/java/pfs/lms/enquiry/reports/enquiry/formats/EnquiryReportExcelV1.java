@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.reports;
+package pfs.lms.enquiry.reports.enquiry.formats;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;

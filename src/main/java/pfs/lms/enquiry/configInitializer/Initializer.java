@@ -112,7 +112,7 @@ public class Initializer implements CommandLineRunner {
             LoanClass lc5 = new LoanClass("5", "Roads");
             LoanClass lc6 = new LoanClass("6", "Ports");
             LoanClass lc7 = new LoanClass("7", "Oil&Gas");
-            LoanClass lc8 = new LoanClass("8", "Infrastructure");
+            LoanClass lc8 = new LoanClass("8", "Water Infrastructure");
             LoanClass lc9 = new LoanClass("9", "Airport");
             LoanClass lc10 = new LoanClass("10", "ElectrcMobility");
             LoanClass lc11 = new LoanClass("11", "WasteManagement");
@@ -146,10 +146,20 @@ public class Initializer implements CommandLineRunner {
             LoanClass lc39 = new LoanClass("38", "NBFC");
             LoanClass lc40 = new LoanClass("31", "Defence");
 
+            LoanClass lc41 = new LoanClass("27", "Datacenters");
+            LoanClass lc61 = new LoanClass("61", "Storage-Oil Gas LNG");
+            LoanClass lc62 = new LoanClass("62", "Energy StorageSys");
+            LoanClass lc63 = new LoanClass("63", "Communication");
+            LoanClass lc64 = new LoanClass("64", "Storage WH for Agricultural Products");
+            LoanClass lc65 = new LoanClass("65", "Cold Chain");
+            LoanClass lc66 = new LoanClass("66", "Tourism Facility");
+
+
 
             loanClassRepository.saveAll(Arrays.asList(lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10,
                     lc11, lc12, lc13, lc14, lc15, lc16, lc17, lc18, lc19, lc20, lc21, lc22,
-                    lc23, lc24, lc25, lc26, lc27, lc28, lc29, lc30, lc31,lc32
+                    lc23, lc24, lc25, lc26, lc27, lc28, lc29, lc30, lc31,lc32,
+                    lc41,lc61,lc62,lc63,lc64,lc65,lc66
             ));
             log.info("Added loan class sample data");
         }
@@ -157,15 +167,15 @@ public class Initializer implements CommandLineRunner {
         projectTypeRepository.deleteAll();
 
         if (projectTypeRepository.count() == 0) {
-            ProjectType pt1 = new ProjectType("1","Thermal-Coal.");
-            ProjectType pt2 = new ProjectType("2","Thermal-Lignite");
-            ProjectType pt3 = new ProjectType("3","Thermal-Gas");
-            ProjectType pt4 = new ProjectType("4","Renewable-Hydro");
-            ProjectType pt5 = new ProjectType("5","Renewable-Solar");
-            ProjectType pt6 = new ProjectType("6","Renewable-Wind");
-            ProjectType pt7 = new ProjectType("7","Renewable-Biomass");
-            ProjectType pt8 = new ProjectType("8","Renewable-Co-Gen.");
-            ProjectType pt9 = new ProjectType("9","Railway Siding");
+            ProjectType pt1 = new ProjectType("01","Thermal-Coal.");
+            ProjectType pt2 = new ProjectType("02","Thermal-Lignite");
+            ProjectType pt3 = new ProjectType("03","Thermal-Gas");
+            ProjectType pt4 = new ProjectType("04","Renewable-Hydro");
+            ProjectType pt5 = new ProjectType("05","Renewable-Solar");
+            ProjectType pt6 = new ProjectType("06","Renewable-Wind");
+            ProjectType pt7 = new ProjectType("07","Renewable-Biomass");
+            ProjectType pt8 = new ProjectType("08","Renewable-Co-Gen.");
+            ProjectType pt9 = new ProjectType("09","Railway Siding");
             ProjectType pt10 = new ProjectType("10","Railway Wagons/Coach");
             ProjectType pt11 = new ProjectType("11","Railway Terminals");
             ProjectType pt12 = new ProjectType("12","Smart City");
@@ -219,7 +229,7 @@ public class Initializer implements CommandLineRunner {
             ProjectType pt59 = new ProjectType("59","State Power Utility");
             ProjectType pt60 = new ProjectType("60","Steel");
             ProjectType pt61 = new ProjectType("61","Renewable-O&M");
-            ProjectType pt62 = new ProjectType("62","Waste to Energy");
+            ProjectType pt62 = new ProjectType("62","Energy Storage System");
             ProjectType pt63 = new ProjectType("63","NBFC");
             ProjectType pt64 = new ProjectType("64","Infrastructure-EPC");
 
@@ -263,11 +273,11 @@ public class Initializer implements CommandLineRunner {
 
         purposeOfLoanRepository.deleteAll();
 
-        PurposeOfLoan p1 = new PurposeOfLoan("1","Term Loan");
-        PurposeOfLoan p2 = new PurposeOfLoan("10","Term Loan/Sub Debt");
+//        PurposeOfLoan p1 = new PurposeOfLoan("1","Term Loan");
+//        PurposeOfLoan p2 = new PurposeOfLoan("10","Term Loan/Sub Debt");
         PurposeOfLoan p3 = new PurposeOfLoan("1a","TL-Term Loan");
-        PurposeOfLoan p4 = new PurposeOfLoan("1b","TL - Term Loan & Non-fund bas");
-        PurposeOfLoan p5 = new PurposeOfLoan("1c","TL Cost Overrun Funding");
+        PurposeOfLoan p4 = new PurposeOfLoan("1b","TL-Term Loan & Non-fund bas");
+        PurposeOfLoan p5 = new PurposeOfLoan("1c","TL-Cost Overrun Funding");
         PurposeOfLoan p6 = new PurposeOfLoan("1d","TL-Refinancing");
         PurposeOfLoan p7 = new PurposeOfLoan("1e","TL-Acquisition Financing");
         PurposeOfLoan p8 = new PurposeOfLoan("1f","TL-Refinancing/Top up");
@@ -306,7 +316,7 @@ public class Initializer implements CommandLineRunner {
         PurposeOfLoan p41 = new PurposeOfLoan("8","Term Loan/Take out financing");
         PurposeOfLoan p42 = new PurposeOfLoan("9","Term Loan/Top Up Loan");
 
-        purposeOfLoanRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42));
+        purposeOfLoanRepository.saveAll(Arrays.asList(p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42));
         log.info("Loan Purposes  ");
 
 

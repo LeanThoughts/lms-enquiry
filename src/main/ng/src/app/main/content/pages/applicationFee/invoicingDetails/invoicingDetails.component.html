@@ -70,15 +70,16 @@
             </div>
 
             <div fxLayout="row">
-                <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Door Number" formControlName="doorNumber" maxlength="100" [readonly]="readonlyFields">
-                </mat-form-field>
                 <mat-form-field fxFlex="34">
-                    <input matInput placeholder="Address" formControlName="address" maxlength="100" [readonly]="readonlyFields">
+                    <input matInput placeholder="Street2" formControlName="address" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
                 <mat-form-field fxFlex="33">
-                    <input matInput placeholder="Street" formControlName="street" maxlength="100" [readonly]="readonlyFields">
+                    <input matInput placeholder="Street3" formControlName="street" maxlength="100" [readonly]="readonlyFields">
                 </mat-form-field>
+
+              <mat-form-field fxFlex="33">
+                <input matInput placeholder="Door Number" formControlName="doorNumber" maxlength="100" [readonly]="readonlyFields">
+              </mat-form-field>
             </div>
 
             <div fxLayout="row">

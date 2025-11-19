@@ -1,4 +1,4 @@
-package pfs.lms.enquiry.reports;
+package pfs.lms.enquiry.reports.enquiry.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -223,6 +223,8 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
 
     private String riskDepartmentInitiator;
 
+    private String sarcDepartmentInitiator;
+
     //0 - Not Posted
     //1 - Attempted to Post
     //2 - Errors
@@ -364,6 +366,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
                            @JsonProperty("projectDepartmentInitiator") String projectDepartmentInitiator ,
                            @JsonProperty("monitoringDepartmentInitiator") String monitoringDepartmentInitiator ,
                            @JsonProperty("riskDepartmentInitiator") String riskDepartmentInitiator,
+                           @JsonProperty("sarcDepartmentInitiator") String sarcDepartmentInitiator,
                            @JsonProperty("postedInSAP") Integer postedInSAP,
 
                            @JsonProperty("contactBranchAddress") String contactBranchAddress,
@@ -488,6 +491,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
         this.projectDepartmentInitiator  = projectDepartmentInitiator;
         this.monitoringDepartmentInitiator = monitoringDepartmentInitiator;
         this.riskDepartmentInitiator = riskDepartmentInitiator;
+        this.sarcDepartmentInitiator = sarcDepartmentInitiator;
 
         this.postedInSAP = postedInSAP;
 
@@ -590,10 +594,12 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
 
     public LoanApplication updateProcessors(String projectDepartmentInitiator,
                                             String monitoringDepartmentInitiator,
-                                            String riskDepartmentInitiator) {
+                                            String riskDepartmentInitiator,
+                                            String sarcDepartmentInitiator) {
         this.projectDepartmentInitiator = projectDepartmentInitiator;
         this.monitoringDepartmentInitiator = monitoringDepartmentInitiator;
         this.riskDepartmentInitiator = riskDepartmentInitiator;
+        this.sarcDepartmentInitiator = sarcDepartmentInitiator;
         return this;
     }
 
@@ -1031,6 +1037,14 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
 
     public void setRiskDepartmentInitiator(String riskDepartmentInitiator) {
         this.riskDepartmentInitiator = riskDepartmentInitiator;
+    }
+
+    public String getSarcDepartmentInitiator() {
+        return sarcDepartmentInitiator;
+    }
+
+    public void setSarcDepartmentInitiator(String sarcDepartmentInitiator) {
+        this.sarcDepartmentInitiator = sarcDepartmentInitiator;
     }
 
     public void setPostedInSAP(@Nullable Integer postedInSAP) {

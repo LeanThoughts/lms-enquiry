@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.action.EnquiryAction;
+import pfs.lms.enquiry.action.EnquiryActionRepository;
+import pfs.lms.enquiry.action.enquirycompletion.*;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.loanpartner.ILoanPartnerService;
@@ -14,16 +17,23 @@ import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.MainLocationDetailRepository;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetail;
 import pfs.lms.enquiry.appraisal.projectlocation.SubLocationDetailRepository;
+import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
 import pfs.lms.enquiry.businesspartner.service.impl.PartnerService;
-import pfs.lms.enquiry.domain.LoanApplication;
-import pfs.lms.enquiry.domain.Partner;
-import pfs.lms.enquiry.domain.User;
+import pfs.lms.enquiry.domain.*;
+import pfs.lms.enquiry.iccapproval.ICCApproval;
+import pfs.lms.enquiry.iccapproval.ICCApprovalRepository;
+import pfs.lms.enquiry.iccapproval.ICCApprovalService;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICC;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICCRepository;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.ApprovalByICCResource;
+import pfs.lms.enquiry.iccapproval.approvalbyicc.IApprovalByICCService;
 import pfs.lms.enquiry.monitoring.domain.LoanMonitor;
 import pfs.lms.enquiry.monitoring.npa.NPA;
 import pfs.lms.enquiry.monitoring.npa.NPADetail;
 import pfs.lms.enquiry.monitoring.npa.NPADetailRepository;
 import pfs.lms.enquiry.monitoring.npa.NPARepository;
 import pfs.lms.enquiry.monitoring.repository.LoanMonitorRepository;
+import pfs.lms.enquiry.repository.FunctionalStatusRepository;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -42,6 +52,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class LoanApplicationService implements ILoanApplicationService {
+    private final FunctionalStatusRepository functionalStatusRepository;
 
     private final PartnerService partnerService;
 
@@ -60,9 +71,20 @@ public class LoanApplicationService implements ILoanApplicationService {
     private final NPARepository npaRepository;
     private final NPADetailRepository npaDetailRepository;
     private final IChangeDocumentService changeDocumentService;
+    private final ICCApprovalService iccApprovalService;
+    private final ICCApprovalRepository iccApprovalRepository;
+    private final IApprovalByICCService iApprovalByICCService;
+    private final ApprovalByICCRepository approvalByICCRepository;
+    private final EnquiryCompletionRepository enquiryCompletionRepository;
+    private final EnquiryActionRepository enquiryActionRepository;
+    private final IEnquiryCompletionService enquiryCompletionService;
+
+    private String username;
 
     @Override
     public LoanApplication save(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException {
+
+        this.username = username;
 
         //Set PostedInSAP to "Not Posted" - "0"
         //if (resource.getLoanApplication().getPostedInSAP() == null)
@@ -345,8 +367,9 @@ public class LoanApplicationService implements ILoanApplicationService {
     }
 
     @Override
-    public LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException {
+    public LoanApplication migrate(LoanApplicationResource resource, String username) throws InterruptedException, CloneNotSupportedException {
 
+        this.username = username;
 
         System.out.println("-------------- Migrating Loan number : " + resource.getLoanApplication().getLoanContractId() + "-----------------------------------------------------------");
         System.out.println("-------------- BusinessPartner ID    : " + resource.getPartner().getPartyNumber() + "-----------------------------------------------------------");
@@ -409,6 +432,22 @@ public class LoanApplicationService implements ILoanApplicationService {
 
         //Save and return the Loan Application
         loanApplication = this.migrateUpdate(loanApplication, partner, username);
+
+        if (resource.getLoanContractExtension()!= null){
+            log.info("Enquiry Completion: " + resource.getMainLocationDetail().getLocation());
+
+            this.migrateLoanEnquiryAction(loanApplication, resource.getLoanContractExtension() );
+        }
+
+        if (resource.getLoanContractExtension()!= null){
+            log.info("ICC Approval: " + resource.getMainLocationDetail().getLocation());
+
+            this.migrateICCApproval(resource.getLoanContractExtension(), loanApplication);
+        }
+
+        //TODO - Application Fee
+
+        //TODO - Board Approval
 
         System.out.println("-------------Finished Migrating Loan number : " + resource.getLoanApplication().getLoanContractId() + "-----------------------------------------------------------");
 
@@ -484,12 +523,122 @@ public class LoanApplicationService implements ILoanApplicationService {
                 npa = this.migrateNPA(resource.getNpa(), loanMonitor);
 
                 if (resource.getNpaDetailList() != null) {
-                    log.info("Migrating NPA Items: " + resource.getMainLocationDetail().getLocation());
+                    log.info("Migrating NPA Items: " + resource.getNpa().getAssetClass());
                     this.migrateNPADetails(resource.getNpaDetailList(), loanMonitor, npa);
                 }
             }
+
+
+
+
+
+
         }
         return loanApplication;
+    }
+
+    private ICCApproval migrateICCApproval(LoanContractExtension loanContractExtension, LoanApplication loanApplication) throws CloneNotSupportedException {
+       // sss
+                ApprovalByICCResource approvalByICCResource = new ApprovalByICCResource();
+        if (loanContractExtension.getICCApprovalStatus() == null){
+            return null;
+        }
+
+        ICCApproval iccApproval = iccApprovalRepository.findByLoanApplicationId(loanApplication.getId());
+
+        //TODO - OTher ICC Statuses
+        switch (loanContractExtension.getICCApprovalStatus() ){
+            case 1:  //Further Details required by ICC
+
+
+            case 2: //On Hold
+                break;
+            case 3: //Rejected by ICC
+                break;
+            case 4: //Approved by ICC
+                ApprovalByICC approvalByICC = new ApprovalByICC();
+                if ( iccApproval != null) {
+                    approvalByICC = approvalByICCRepository.findByIccApprovalId(iccApproval.getId());
+                }
+                approvalByICCResource = getApprovalByICC(loanContractExtension,loanApplication,approvalByICC);
+                if (approvalByICC == null)
+                    approvalByICC = iApprovalByICCService.create( approvalByICCResource, username );
+                else
+                    approvalByICC = iApprovalByICCService.update(approvalByICCResource, username);
+                loanApplication.setiCCStatus("Approved by ICC");
+                loanApplication.setFunctionalStatus(2);
+                loanApplication.setFunctionalStatusDescription("ICC In-Principle Approved");
+                break;
+
+
+            case 5: //Rejected by Customer
+                break;
+        }
+
+        loanApplicationRepository.save(loanApplication);
+
+        return iccApproval;
+    }
+
+    private ApprovalByICCResource getApprovalByICC( LoanContractExtension loanContractExtension, LoanApplication loanApplication , ApprovalByICC approvalByICC){
+
+        ApprovalByICCResource approvalByICCResource = new ApprovalByICCResource();
+
+        if (approvalByICC == null) {
+            approvalByICCResource.setLoanApplicationId(loanApplication.getId());
+        }else{
+            approvalByICCResource.setEdApprovalDate(approvalByICC.getEdApprovalDate());
+            approvalByICCResource.setCfoApprovalDate(approvalByICC.getCfoApprovalDate());
+            approvalByICCResource.setDocumentTypeMinutes(approvalByICC.getDocumentTypeMinutes());
+            approvalByICCResource.setDocumentTypeMailFromCS(approvalByICC.getDocumentTypeMailFromCS());
+            approvalByICCResource.setFileReference1(approvalByICC.getFileReference1());
+            approvalByICCResource.setIccApprovedRoi(approvalByICC.getIccApprovedRoi());
+            approvalByICCResource.setAmountApproved(approvalByICC.getAmountApproved());
+            approvalByICCResource.setMeetingNumber(approvalByICC.getMeetingNumber());
+            approvalByICCResource.setRemarks(approvalByICC.getRemarks());
+            approvalByICCResource.setMeetingDate(approvalByICC.getMeetingDate());
+        }
+
+        if (loanContractExtension.getICCClearanceDate() != null)
+            approvalByICCResource.setMeetingDate(loanContractExtension.getICCClearanceDate());
+        if (loanContractExtension.getICCMeetingNumber() != null) {
+            approvalByICCResource.setMeetingNumber(loanContractExtension.getICCMeetingNumber());
+        }
+        if (loanContractExtension.getICCRemarks() != null) {
+            approvalByICCResource.setRemarks(loanContractExtension.getICCRemarks());
+        }
+
+        return  approvalByICCResource;
+    }
+
+    private EnquiryCompletionResource migrateLoanEnquiryAction( LoanApplication loanApplication, LoanContractExtension loanContractExtension) throws CloneNotSupportedException {
+        EnquiryCompletionResource enquiryCompletionResource = new EnquiryCompletionResource();
+        enquiryCompletionResource.setLoanApplicationId(loanApplication.getId());
+        enquiryCompletionResource.setProductType(loanApplication.getProductCode());
+        enquiryCompletionResource.setRemarks(loanContractExtension.getEnquiryRemarks());
+        if (loanContractExtension.getEnquiryCompletionDate() != null)
+            enquiryCompletionResource.setDate(loanContractExtension.getEnquiryCompletionDate());
+        else
+            enquiryCompletionResource.setDate(loanApplication.getDecisionDate());
+
+        enquiryCompletionResource.setTerm(loanApplication.getTerm());
+
+        EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplicationId(loanApplication.getId());
+        if (enquiryAction == null){
+            enquiryCompletionService.create(enquiryCompletionResource, username);
+        }else {
+             EnquiryCompletion enquiryCompletion = enquiryCompletionRepository.findByEnquiryActionId(enquiryAction.getId());
+             if (enquiryCompletion != null) {
+                 enquiryCompletionResource.setId(enquiryCompletion.getId());
+                 enquiryCompletionService.update(enquiryCompletionResource, username);
+             }else {
+                 enquiryCompletionService.create(enquiryCompletionResource, username);
+             }
+
+        }
+
+        return enquiryCompletionResource;
+
     }
 
 @Override
@@ -642,6 +791,9 @@ public class LoanApplicationService implements ILoanApplicationService {
         if (loanApplicationExisting != null) {
 
             loanApplicationExisting.setFunctionalStatus(loanApplication.getFunctionalStatus());
+            loanApplicationExisting.setFunctionalStatusDescription
+                    (functionalStatusRepository.findByCode( Integer.parseInt(String.valueOf(loanApplication.getFunctionalStatus()))).getValue());
+
 
             if (loanApplication.getTechnicalStatus() != null)
                 loanApplicationExisting.setTechnicalStatus(loanApplication.getTechnicalStatus());
@@ -832,6 +984,10 @@ public class LoanApplicationService implements ILoanApplicationService {
             log.info("Loan Application : Enquiry ID : " + loanApplication.getEnquiryNo().getId());
             //Save and return the Loan Application
             log.info("Loan Enquiry Date: " + loanApplication.getLoanEnquiryDate().toString());
+            Integer functionStatusCode = Integer.parseInt(String.valueOf(loanApplication.getFunctionalStatus())) ;
+            FunctionalStatus functionalStatus = functionalStatusRepository.findByCode(functionStatusCode);
+            loanApplication.setFunctionalStatusDescription( functionalStatus.getValue());
+
             loanApplication = loanApplicationRepository.save(loanApplication);
             log.info("Loan Application : Enquiry ID : After Save : " + loanApplication.getEnquiryNo().getId());
 
@@ -851,6 +1007,7 @@ public class LoanApplicationService implements ILoanApplicationService {
             List<LoanApplication> loanApplicationList = loanApplicationRepository.findByLoanEnquiryDateBetweenOrderByEnquiryNoAsc(
                     enquiryDateForm, enquiryDateTo);
             loanApplications = loanApplicationList;
+            log.info("Get Loan Enquiries Method : " +loanApplicationList.size());
         }
         catch (Exception e) {
             e.printStackTrace();

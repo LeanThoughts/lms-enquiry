@@ -122,6 +122,32 @@ public class DepartmentConfigInitializer implements CommandLineRunner {
             department = new Department("11", "Audit Dept");
             departmentRepository.save(department);
         }
+        department = departmentRepository.findByCode("12");
+        if (department != null) {
+            department.setValue("SARC Dept");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("12", "SARC Dept");
+            departmentRepository.save(department);
+        }
+
+        department = departmentRepository.findByCode("13");
+        if (department != null) {
+            department.setValue("SME & FI");
+            departmentRepository.save(department);
+        } else {
+            department = new Department("13", "SME & FI");
+            departmentRepository.save(department);
+        }
+//        department = departmentRepository.findByCode("14");
+//        if (department != null) {
+//            department.setValue("Operations");
+//            departmentRepository.save(department);
+//        } else {
+//            department = new Department("14", "Operations");
+//            departmentRepository.save(department);
+//        }
+
 
         log.info("Added Departments");
 

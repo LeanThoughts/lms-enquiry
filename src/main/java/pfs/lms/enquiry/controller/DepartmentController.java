@@ -29,6 +29,7 @@ public class DepartmentController {
     public ResponseEntity<List<Department>> getDepartments(HttpServletRequest request) {
 
         List<Department> departmentList = departmentRepository.findAll();
+        departmentList.sort((n1,n2) -> n1.getValue().compareTo(n2.getValue()));
 
         return ResponseEntity.ok(departmentList);
     }

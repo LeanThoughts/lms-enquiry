@@ -17,8 +17,8 @@ import pfs.lms.enquiry.action.teaser.ITeaserService;
 import pfs.lms.enquiry.domain.*;
 import pfs.lms.enquiry.mail.service.LoanNotificationService;
 import pfs.lms.enquiry.process.LoanApplicationEngine;
-import pfs.lms.enquiry.reports.EnquiryReportExcelV1;
-import pfs.lms.enquiry.reports.EnquiryReportPDF;
+import pfs.lms.enquiry.reports.enquiry.formats.EnquiryReportExcelV1;
+import pfs.lms.enquiry.reports.enquiry.formats.EnquiryReportPDF;
 import pfs.lms.enquiry.repository.*;
 import pfs.lms.enquiry.resource.*;
 import pfs.lms.enquiry.service.ILoanApplicationService;
@@ -137,7 +137,7 @@ public class LoanApplicationContoller {
                         log.info("Loan Applicant is   NULL for Loan : " + loanApplication.getLoanContractId());
                         Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
                         resources.add(loanApplicationResource);
 
@@ -146,7 +146,7 @@ public class LoanApplicationContoller {
                         Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).orElse(null);
 //                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                         resources.add(loanApplicationResource);
@@ -230,6 +230,7 @@ public class LoanApplicationContoller {
         loanApplicationResource.setSubLocationDetailList(resource.getSubLocationDetailList());
         loanApplicationResource.setNpa(resource.getNpa());
         loanApplicationResource.setNpaDetailList(resource.getNpaDetailList());
+        loanApplicationResource.setLoanContractExtension(resource.getLoanContractExtension());
         LoanApplication loanApplication = loanApplicationService.migrate(loanApplicationResource, request.getUserPrincipal().getName());
 
 
@@ -272,6 +273,8 @@ public class LoanApplicationContoller {
             log.info("Finished Migrating Extension : ");
             log.info("-----------------------------------------------------");
         }
+        log.info("Functional Status After Migration: " + loanApplication.getFunctionalStatus() + ":" + loanApplication.getFunctionalStatusDescription() ) ;
+
         return ResponseEntity.ok(loanApplication);
     }
 
@@ -774,7 +777,7 @@ public class LoanApplicationContoller {
                             break;
                     }
                 }
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
 
@@ -1012,7 +1015,7 @@ public class LoanApplicationContoller {
                     }
                 }
 
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                 resources.add(loanApplicationResource);
