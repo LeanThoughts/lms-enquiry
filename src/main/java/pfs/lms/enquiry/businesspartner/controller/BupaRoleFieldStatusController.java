@@ -26,7 +26,7 @@ public class BupaRoleFieldStatusController {
 
     private final IBupaRoleFieldStatusService bupaRoleFieldStatusService;
 
-     @GetMapping("/bupaRoleFieldStatus/{businessPartnerRole}")
+     @GetMapping("/api/bupaRoleFieldStatus/{businessPartnerRole}")
     public ResponseEntity<BupaRoleFieldStatusResource> getFieldStatusByRole(@PathVariable String businessPartnerRole) {
 
          BupaRoleFieldStatusResource bupaRoleFieldStatusResource = bupaRoleFieldStatusService.getFieldStatusByBupaRole(businessPartnerRole);
