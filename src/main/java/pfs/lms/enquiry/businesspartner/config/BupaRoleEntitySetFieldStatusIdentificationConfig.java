@@ -4,15 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.businesspartner.domain.BupaRoleEntityFieldStatus;
 import pfs.lms.enquiry.businesspartner.domain.BupaRoleEntitySetFieldStatus;
-import pfs.lms.enquiry.businesspartner.repository.BupaRoleEntityFieldStatusRepository;
 import pfs.lms.enquiry.businesspartner.repository.BupaRoleEntitySetFieldStatusRepository;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BupaRoleEntitySetFieldStatusConfig implements CommandLineRunner {
+public class BupaRoleEntitySetFieldStatusIdentificationConfig implements CommandLineRunner {
 
     private final BupaRoleEntitySetFieldStatusRepository bupaRoleEntitySetFieldStatusRepository;
 
