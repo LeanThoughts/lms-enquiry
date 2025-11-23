@@ -119,6 +119,13 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     private String legalForm;
     private String legalEntity;
     private String houseBank;
+    private String planningGroup;
+    private String reconAccount;
+    private String sortKey;
+    private String dunningProcedure;
+    private String paymentTerms;
+    private String paymentMethod;
+    private String checkDoubleInvoice;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;
