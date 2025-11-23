@@ -29,6 +29,8 @@ public  class BupaRoleEntitySetFieldStatus {
 
     private boolean isKeyField;
 
+    private Integer minimumEntries;
+
     //0-Display Only
     //1 - Optional
     //2 - Mandatory
