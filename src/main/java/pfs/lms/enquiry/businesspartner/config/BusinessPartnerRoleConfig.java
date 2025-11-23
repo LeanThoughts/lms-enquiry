@@ -251,6 +251,29 @@ public class BusinessPartnerRoleConfig implements CommandLineRunner {
             role = new BusinessPartnerRoleType(null, "ZLM039", "Valuer");
             businessPartnerRoleTypeRepository.save(role);
         }
+        role = businessPartnerRoleTypeRepository.findBusinessPartnerRoleByCode("BUP001");
+        if (role == null) {
+            role = new BusinessPartnerRoleType(null, "BUP001", "Contact Person");
+            businessPartnerRoleTypeRepository.save(role);
+        }
+        role = businessPartnerRoleTypeRepository.findBusinessPartnerRoleByCode("BUP003");
+        if (role == null) {
+            role = new BusinessPartnerRoleType(null, "BUP003", "Employee New");
+            businessPartnerRoleTypeRepository.save(role);
+        }
+        role = businessPartnerRoleTypeRepository.findBusinessPartnerRoleByCode("FLCU00");
+        if (role == null) {
+            role = new BusinessPartnerRoleType(null, "FLCU00", "FI Customer");
+            businessPartnerRoleTypeRepository.save(role);
+        }
+        role = businessPartnerRoleTypeRepository.findBusinessPartnerRoleByCode("FLVN00");
+        if (role == null) {
+            role = new BusinessPartnerRoleType(null, "FLVN00", "FI Vendor");
+            businessPartnerRoleTypeRepository.save(role);
+        }
+
+
+
 
         return;
     }
