@@ -125,7 +125,7 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     private String dunningProcedure;
     private String paymentTerms;
     private String paymentMethod;
-    private String checkDoubleInvoice;
+    private boolean checkDoubleInvoice;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;
