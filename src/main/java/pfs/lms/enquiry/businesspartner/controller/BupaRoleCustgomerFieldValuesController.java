@@ -18,7 +18,7 @@ public class BupaRoleCustgomerFieldValuesController {
 
     private final BupaRoleCustomerFieldValuesRepository bupaRoleCustomerFieldValuesRepository;
 
-     @GetMapping("/buparolecustomerfieldvalues/{businessPartnerRole}")
+     @GetMapping("/api/buparolecustomerfieldvalues/{businessPartnerRole}")
     public ResponseEntity<BupaRoleCustomerFieldValues> getFieldStatusByRole(@PathVariable String businessPartnerRole) {
 
          BupaRoleCustomerFieldValues bupaRoleCustomerFieldValues = bupaRoleCustomerFieldValuesRepository.findByBupaRoleCode(businessPartnerRole);
