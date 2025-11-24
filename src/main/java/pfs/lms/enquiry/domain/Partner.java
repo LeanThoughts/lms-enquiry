@@ -125,7 +125,7 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
     private String dunningProcedure;
     private String paymentTerms;
     private String paymentMethod;
-    private boolean checkDoubleInvoice;
+    private Boolean checkDoubleInvoice;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PartnerRoleType> partnerRoleTypes;
@@ -140,7 +140,9 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
 
     private String defaultPartnerRole;
 
-    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber, String partnerCategory, String defaultPartnerRole, String title, String legalEntity, String legalForm, String houseBank) {
+    public Partner(Integer partyNumber, String partnerGroup,String partnerType, String partnerExternalNumber,Integer partyCategory, String partyRole, @Size(max = 100) String partyName1, @Size(max = 100) String partyName2, @Size(max = 100) String contactPersonName, String addressLine1, String addressLine2, String street, String city, String state, @Size(max = 8) String postalCode, @Size(max = 2) String country, String email, @Size(max = 15) String contactNumber, @Size(max = 100) String groupCompany, String userName, @Size(max = 100) String password, String pan, String industrySector,String msmeRegisterNumber,String gstNumber,String cinNumber,String mobileNumber, String partnerCategory, String defaultPartnerRole, String title, String legalEntity,
+                   String legalForm, String houseBank, String planningGroup, String reconAccount, String sortKey, String dunningProcedure, String paymentTerms,  String paymentMethod,
+                   Boolean checkDoubleInvoice) {
         this.partyNumber = partyNumber;
         this.partyCategory = partyCategory;
         this.partnerGroup = partnerGroup;
@@ -174,6 +176,13 @@ public class Partner extends AggregateRoot<Partner> implements Cloneable{
         this.legalEntity = legalEntity;
         this.legalForm = legalForm;
         this.houseBank = houseBank;
+        this.planningGroup = planningGroup;
+        this.reconAccount = reconAccount;
+        this.sortKey = sortKey;
+        this.dunningProcedure = dunningProcedure;
+        this.paymentTerms = paymentTerms;
+        this.paymentMethod = paymentMethod;
+        this.checkDoubleInvoice = checkDoubleInvoice;
         registerEvent(PartnerCreated.of(this));
     }
 

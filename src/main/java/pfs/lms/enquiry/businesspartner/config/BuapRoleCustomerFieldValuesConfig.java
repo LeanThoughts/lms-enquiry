@@ -22,6 +22,7 @@ public class BuapRoleCustomerFieldValuesConfig implements CommandLineRunner {
         BupaRoleCustomerFieldValues bupaRoleCustomerFieldValues = new BupaRoleCustomerFieldValues();
 
         bupaRoleCustomerFieldValues = bupaRoleCustomerFieldValuesRepository.findByBupaRoleCode("BUP001");if (bupaRoleCustomerFieldValues == null){ bupaRoleCustomerFieldValues = new BupaRoleCustomerFieldValues("BUP001","21000000","PFS","A1","T","SBI01",false,"001","001","001");}
+        bupaRoleCustomerFieldValues = bupaRoleCustomerFieldValuesRepository.findByBupaRoleCode("TR0100");if (bupaRoleCustomerFieldValues == null){ bupaRoleCustomerFieldValues = new BupaRoleCustomerFieldValues("BUP001","21000000","PFS","A1","T","SBI01",false,"001","001","001");}
 
 
     }
