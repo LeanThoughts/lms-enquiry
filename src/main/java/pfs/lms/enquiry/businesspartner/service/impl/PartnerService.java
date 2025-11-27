@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.businesspartner.service.IPartnerService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.PartnerContact;
@@ -17,6 +18,7 @@ import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
  import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,6 +36,7 @@ public class PartnerService implements IPartnerService {
     private final PartnerRoleTypeRepository partnerRoleTypeRepository;
     private final UserRepository userRepository;
     private final IChangeDocumentService changeDocumentService;
+
 
     @Override
     public Partner getOne(String username) {
@@ -609,6 +612,22 @@ public class PartnerService implements IPartnerService {
         return updatedPartner;
     }
 
+    @Override
+    public Partner updateFICustomerVendorDetails(BupaFICustomerVendorDetailResource bupaFICustomerVendorDetailResource,
+                                                 HttpServletRequest httpServletRequest) {
+        Partner partner = partnerRepository.findById(bupaFICustomerVendorDetailResource.getPartnerId())
+                .orElseThrow(() -> new EntityNotFoundException(bupaFICustomerVendorDetailResource.getPartnerId().toString()));
+        partner.setHouseBank(bupaFICustomerVendorDetailResource.getHouseBank());
+        partner.setPlanningGroup(bupaFICustomerVendorDetailResource.getPlanningGroup());
+        partner.setReconAccount(bupaFICustomerVendorDetailResource.getReconAccount());
+        partner.setSortKey(bupaFICustomerVendorDetailResource.getSortKey());
+        partner.setDunningProcedure(bupaFICustomerVendorDetailResource.getDunningProcedure());
+        partner.setPaymentMethod(bupaFICustomerVendorDetailResource.getPaymentMethods());
+        partner.setPaymentTerms(bupaFICustomerVendorDetailResource.getPaymentTerms());
+        partner.setCheckDoubleInvoice(bupaFICustomerVendorDetailResource.getCheckDoubleInvoice());
+        partner = partnerRepository.save(partner);
+        return partner;
+    }
 
     private void userMaintenance (Partner partner) {
 

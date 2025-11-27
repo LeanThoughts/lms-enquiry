@@ -3,6 +3,7 @@ package pfs.lms.enquiry.businesspartner.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerAutoCompleteProjection;
@@ -38,6 +39,12 @@ public class PartnerController {
     @PutMapping("/partners/update")
     public ResponseEntity<Partner> updatePartner(@RequestBody Partner partner, HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(partnerService.update(partner,request.getUserPrincipal().getName()));
+    }
+
+    @PutMapping("/partners/updateFICustomerVendorDetails")
+    public ResponseEntity<Partner> updateFICustomerVendorDetails(@RequestBody BupaFICustomerVendorDetailResource bupaFICustomerVendorDetailResource,
+                                                                 HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(partnerService.updateFICustomerVendorDetails(bupaFICustomerVendorDetailResource, request));
     }
 
     @GetMapping("/me")

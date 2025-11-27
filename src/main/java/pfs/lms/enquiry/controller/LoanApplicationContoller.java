@@ -901,7 +901,7 @@ public class LoanApplicationContoller {
         
         User user;
         String email = request.getUserPrincipal().getName();
-        if (email.equals("gopinath@synapseware.io")) {
+        if (email.equals("gopinath.guptha@leanthoughts.com")) {
             user = userRepository.findByEmail("admin@gmail.com");
         } else {
             user = userRepository.findByEmail(email);
