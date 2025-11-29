@@ -16,7 +16,6 @@ public class PaymentMethodConfig implements CommandLineRunner {
  
     @Override
     public void run(String... strings) throws Exception {
-
         PaymentTerms paymentTerms = new PaymentTerms();
         paymentTerms = paymentTermsRepository.findById("A");if (paymentTerms == null){ paymentTerms = new PaymentTerms("A","Cheque-Incomming(Received)"); paymentTermsRepository.save(paymentTerms); }
         paymentTerms = paymentTermsRepository.findById("B");if (paymentTerms == null){ paymentTerms = new PaymentTerms("B","Demand Draft-Incomming"); paymentTermsRepository.save(paymentTerms); }

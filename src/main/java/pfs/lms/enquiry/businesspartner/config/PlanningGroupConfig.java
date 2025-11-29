@@ -18,6 +18,7 @@ public class PlanningGroupConfig implements CommandLineRunner {
     public void run(String... strings) throws Exception {
 
         PlanningGroup planningGroup = new PlanningGroup();
+
         planningGroup = planningGroupRepository.findById(" ");if (planningGroup == null){ planningGroup = new PlanningGroup(" "," "); planningGroupRepository.save(planningGroup); }
         planningGroup = planningGroupRepository.findById("A1");if (planningGroup == null){ planningGroup = new PlanningGroup("A1","PFS-LoanCustomer"); planningGroupRepository.save(planningGroup); }
         planningGroup = planningGroupRepository.findById("A2");if (planningGroup == null){ planningGroup = new PlanningGroup("A2","PFS-TreasuryCustomers"); planningGroupRepository.save(planningGroup); }

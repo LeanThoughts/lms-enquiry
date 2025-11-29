@@ -98,14 +98,30 @@ public class SAPBusinessPartnerBasicDetailsResourceDetail {
     @JsonProperty(value ="Role")
     private String role;
 
-//    @JsonProperty(value ="LegalForm")
-//    private String legalForm;
-//
-//    @JsonProperty(value ="LegalOrg")
-//    private String legalEntity;
-//
-//    @JsonProperty(value = "HouseBank")
-//    private String houseBank;
+    @JsonProperty(value ="LegalForm")
+    private String legalForm;
+
+    @JsonProperty(value ="LegalOrg")
+    private String legalEntity;
+
+    @JsonProperty(value = "HouseBank")
+    private String houseBank;
+
+
+    @JsonProperty(value = "Planninggroup")
+    private String planninggroup;
+    @JsonProperty(value = "Reconaccount")
+    private String reconaccount;
+    @JsonProperty(value = "Sortkey")
+    private String sortkey;
+    @JsonProperty(value = "Paymentterms")
+    private String paymentterms;
+    @JsonProperty(value = "Paymentmethod")
+    private String paymentmethod;
+    @JsonProperty(value = "Dunningprocedure")
+    private String dunningprocedure;
+    @JsonProperty(value = "Checkdoubleinvoice")
+    private String checkdoubleinvoice;
 
 
     @JsonProperty(value = "EntityId")
