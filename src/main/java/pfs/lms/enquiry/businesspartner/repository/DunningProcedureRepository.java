@@ -6,6 +6,6 @@ import pfs.lms.enquiry.businesspartner.domain.SortKey;
 
 public interface DunningProcedureRepository extends JpaRepository<DunningProcedure, Long> {
 
-    SortKey findById(String id);
+    DunningProcedure findById(String id);
 
 }
