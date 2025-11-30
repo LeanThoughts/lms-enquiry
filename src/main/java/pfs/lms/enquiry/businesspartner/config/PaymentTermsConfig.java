@@ -18,6 +18,7 @@ public class PaymentTermsConfig implements CommandLineRunner {
     public void run(String... strings) throws Exception {
 
         PaymentTerms paymentTerms = new PaymentTerms();
+
         paymentTerms = paymentTermsRepository.findById("");if (paymentTerms == null){ paymentTerms = new PaymentTerms(" "," "); paymentTermsRepository.save(paymentTerms); }
         paymentTerms = paymentTermsRepository.findById("0001");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0001","Allocationnumber"); paymentTermsRepository.save(paymentTerms); }
         paymentTerms = paymentTermsRepository.findById("0002");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0002","Postingdate"); paymentTermsRepository.save(paymentTerms); }

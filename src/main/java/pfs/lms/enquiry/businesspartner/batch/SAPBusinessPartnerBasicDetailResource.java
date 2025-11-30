@@ -145,15 +145,7 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         if (partner.getPartyRole() != null) {
             detailsResource.setRole(partner.getPartyRole());
         }
-//        if (partner.getLegalEntity() != null){
-//            detailsResource.setLegalEntity(partner.getLegalEntity());
-//        }
-//        if (partner.getLegalForm() != null){
-//            detailsResource.setLegalForm(partner.getLegalForm());
-//        }
-//        if (partner.getHouseBank() != null){
-//            detailsResource.setHouseBank(partner.getHouseBank());
-//        }
+
         if (partner.getTitle() != null){
             detailsResource.setTitle(partner.getTitle());
         }
@@ -167,7 +159,37 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
             detailsResource.setPartnerRole(partner.getDefaultPartnerRole());
         }
 
+        if (partner.getLegalEntity() != null){
+            detailsResource.setLegalEntity(partner.getLegalEntity());
+        }
+        if (partner.getLegalForm() != null){
+            detailsResource.setLegalForm(partner.getLegalForm());
+        }
+        if (partner.getHouseBank() != null){
+            detailsResource.setHouseBank(partner.getHouseBank());
+        }
 
+        if (partner.getDunningProcedure() != null){
+            detailsResource.setDunningprocedure(partner.getDunningProcedure());
+        }
+        if (partner.getCheckDoubleInvoice() != null){
+            detailsResource.setCheckdoubleinvoice("X");
+        }
+        if (partner.getPaymentMethod() != null){
+            detailsResource.setPaymentmethod(partner.getPaymentMethod());
+        }
+        if (partner.getPaymentTerms() != null){
+            detailsResource.setPaymentterms(partner.getPaymentTerms());
+        }
+        if (partner.getSortKey() != null){
+            detailsResource.setSortkey(partner.getSortKey());
+        }
+        if (partner.getPlanningGroup() != null){
+            detailsResource.setPlanninggroup(partner.getPlanningGroup());
+        }
+        if (partner.getReconAccount() != null){
+            detailsResource.setReconaccount(partner.getReconAccount());
+        }
 
         detailsResource.setRole(partner.getPartyRole());
         detailsResource.setEntityId(partner.getId().toString());
