@@ -6,6 +6,6 @@ import pfs.lms.enquiry.businesspartner.domain.SortKey;
 
 public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Long> {
 
-    SortKey findById(String id);
+    PaymentMethod findById(String id);
 
 }

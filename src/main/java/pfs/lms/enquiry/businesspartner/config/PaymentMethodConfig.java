@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.businesspartner.domain.PaymentTerms;
+import pfs.lms.enquiry.businesspartner.domain.PaymentMethod;
+import pfs.lms.enquiry.businesspartner.repository.PaymentMethodRepository;
 import pfs.lms.enquiry.businesspartner.repository.PaymentTermsRepository;
 
 @Slf4j
@@ -12,24 +13,24 @@ import pfs.lms.enquiry.businesspartner.repository.PaymentTermsRepository;
 @RequiredArgsConstructor
 public class PaymentMethodConfig implements CommandLineRunner {
 
-    private final PaymentTermsRepository paymentTermsRepository;
- 
+    private final PaymentMethodRepository paymentMethodRepository;
+
     @Override
     public void run(String... strings) throws Exception {
-        PaymentTerms paymentTerms = new PaymentTerms();
-        paymentTerms = paymentTermsRepository.findById("A");if (paymentTerms == null){ paymentTerms = new PaymentTerms("A","Cheque-Incomming(Received)"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("B");if (paymentTerms == null){ paymentTerms = new PaymentTerms("B","Demand Draft-Incomming"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("N");if (paymentTerms == null){ paymentTerms = new PaymentTerms("N","Bank Transfer-Incomming"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("C");if (paymentTerms == null){ paymentTerms = new PaymentTerms("C","Cheque  payment(Others) "); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("D");if (paymentTerms == null){ paymentTerms = new PaymentTerms("D","Demand Draft-Outgoing "); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("E");if (paymentTerms == null){ paymentTerms = new PaymentTerms("E"," "); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("H");if (paymentTerms == null){ paymentTerms = new PaymentTerms("H","Cheque Payment HDFC Bank"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("I");if (paymentTerms == null){ paymentTerms = new PaymentTerms("I","ICICI Bank Payment"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("P");if (paymentTerms == null){ paymentTerms = new PaymentTerms("P","Cheque Payment PNB Bank"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("S");if (paymentTerms == null){ paymentTerms = new PaymentTerms("S","SBI Bank Payment"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("T");if (paymentTerms == null){ paymentTerms = new PaymentTerms("T","Bank Transfer-Outgoing"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("Y");if (paymentTerms == null){ paymentTerms = new PaymentTerms("Y","Yes Bank Payment"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("  ");if (paymentTerms == null){ paymentTerms = new PaymentTerms("","  "); paymentTermsRepository.save(paymentTerms); }
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod = paymentMethodRepository.findById("A");if (paymentMethod == null){ paymentMethod = new PaymentMethod("A","Cheque-Incomming(Received)"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("B");if (paymentMethod == null){ paymentMethod = new PaymentMethod("B","Demand Draft-Incomming"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("N");if (paymentMethod == null){ paymentMethod = new PaymentMethod("N","Bank Transfer-Incomming"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("C");if (paymentMethod == null){ paymentMethod = new PaymentMethod("C","Cheque  payment(Others) "); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("D");if (paymentMethod == null){ paymentMethod = new PaymentMethod("D","Demand Draft-Outgoing "); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("E");if (paymentMethod == null){ paymentMethod = new PaymentMethod("E"," "); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("H");if (paymentMethod == null){ paymentMethod = new PaymentMethod("H","Cheque Payment HDFC Bank"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("I");if (paymentMethod == null){ paymentMethod = new PaymentMethod("I","ICICI Bank Payment"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("P");if (paymentMethod == null){ paymentMethod = new PaymentMethod("P","Cheque Payment PNB Bank"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("S");if (paymentMethod == null){ paymentMethod = new PaymentMethod("S","SBI Bank Payment"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("T");if (paymentMethod == null){ paymentMethod = new PaymentMethod("T","Bank Transfer-Outgoing"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("Y");if (paymentMethod == null){ paymentMethod = new PaymentMethod("Y","Yes Bank Payment"); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("  ");if (paymentMethod == null){ paymentMethod = new PaymentMethod("","  "); paymentMethodRepository.save(paymentMethod); }
 
         return;
     }
