@@ -87,5 +87,10 @@
     "tslint": "5.9.1",
     "typescript": "2.7.2",
     "webpack-bundle-analyzer": "2.13.1"
+  },
+  "resolutions": {
+    "minimatch": "3.0.4",
+    "glob": "7.1.7",
+    "graceful-fs": "4.2.11"
   }
 }
