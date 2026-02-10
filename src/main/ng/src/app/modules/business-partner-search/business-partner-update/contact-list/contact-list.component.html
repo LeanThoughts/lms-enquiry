@@ -1,0 +1,114 @@
+<fd-panel [fixed]="true" [style.margin-top.rem]="1">
+    <h5 fd-panel-title class="fd-panel-title">Contacts</h5>
+    <button fd-button fdType="transparent" glyph="add" title="Add Contact" (click)="openCreateDialog()"></button>
+
+    <div fd-panel-content ariaLabel="Panel Content" id="panel-content-2">
+        <fd-layout-grid class="tab-component-grid">
+            <div fdLayoutGridRow>
+                @for (contact of businessPartnerContacts; track contact.id) {
+                <div [fdLayoutGridCol]="3" [style.margin-right.rem]="1">
+                    <fd-quick-view [id]="contact.id">
+                        <fd-quick-view-subheader>
+
+                            <fd-avatar 
+                                [circle]="true" 
+                                size="m" 
+                                [label]="contact.name" 
+                                [colorAccent]="1"
+                                zoomGlyph="edit" 
+                                (zoomGlyphClicked)="onZoomGlyphClick(contact)">
+                            </fd-avatar>
+                            
+                            <fd-quick-view-subheader-title>
+                                {{ contact.name }}
+                            </fd-quick-view-subheader-title>
+                            <fd-quick-view-subheader-subtitle>
+                                {{ contact.designation }}
+                            </fd-quick-view-subheader-subtitle>
+                            <fd-quick-view-subheader-subtitle>
+                                {{ contact.department }}
+                            </fd-quick-view-subheader-subtitle>
+                        </fd-quick-view-subheader>
+
+                        <!-- Contact Details Group -->
+                        <fd-quick-view-group>
+                            <fd-quick-view-group-title>
+                                Contact Details
+                            </fd-quick-view-group-title>
+
+                            <!-- Landline Item -->
+                            <fd-quick-view-group-item>
+                                <fd-quick-view-group-item-label>
+                                    Landline:                            
+                                </fd-quick-view-group-item-label>
+                                <fd-quick-view-group-item-content>
+                                    <a [href]="" fd-link fd-quick-view-group-item-content-element>{{ contact.landLineNumber || '--' }}</a>
+                                </fd-quick-view-group-item-content>
+                            </fd-quick-view-group-item>
+
+                            <!-- Mobile Item -->
+                            <fd-quick-view-group-item>
+                                <fd-quick-view-group-item-label>
+                                    Mobile:
+                                </fd-quick-view-group-item-label>
+                                <fd-quick-view-group-item-content>
+                                    <a [href]="" fd-link fd-quick-view-group-item-content-element>{{ contact.telephoneNumber || '--' }}</a>
+                                </fd-quick-view-group-item-content>
+                            </fd-quick-view-group-item>
+
+                            <!-- Fax Item -->
+                            <fd-quick-view-group-item>
+                                <fd-quick-view-group-item-label>
+                                    Fax:
+                                </fd-quick-view-group-item-label>
+                                <fd-quick-view-group-item-content>
+                                    <a [href]="" fd-link fd-quick-view-group-item-content-element>{{ contact.faxNumber || '--' }}</a>
+                                </fd-quick-view-group-item-content>
+                            </fd-quick-view-group-item>
+
+                            <!-- Email Item -->
+                            <fd-quick-view-group-item>
+                                <fd-quick-view-group-item-label>
+                                    Email:
+                                </fd-quick-view-group-item-label>
+                                <fd-quick-view-group-item-content>
+                                    <a [href]="'mailto:' + contact.email" fd-link fd-quick-view-group-item-content-element>
+                                        {{ contact.email || '--' }}
+                                    </a>
+                                </fd-quick-view-group-item-content>
+                            </fd-quick-view-group-item>                        
+                        </fd-quick-view-group>
+
+                        <!-- Other Details Group -->
+                        <fd-quick-view-group>
+                            <fd-quick-view-group-title>
+                                Other Details
+                            </fd-quick-view-group-title>
+
+                            <!-- Loan Number Item -->
+                            <fd-quick-view-group-item>
+                                <fd-quick-view-group-item-label>
+                                    Loan Number:
+                                </fd-quick-view-group-item-label>
+                                <fd-quick-view-group-item-content>
+                                    {{ contact.loanNumber || '--' }}
+                                </fd-quick-view-group-item-content>
+                            </fd-quick-view-group-item>
+
+                            <!-- Mobile Item -->
+                            <fd-quick-view-group-item>
+                                <fd-quick-view-group-item-label>
+                                    Address:
+                                </fd-quick-view-group-item-label>
+                                <fd-quick-view-group-item-content>
+                                    {{ contact.branchAddress || '--' }}
+                                </fd-quick-view-group-item-content>
+                            </fd-quick-view-group-item>
+                        </fd-quick-view-group>                    
+                    </fd-quick-view>
+                </div>
+                }
+            </div>
+        </fd-layout-grid>
+    </div>
+</fd-panel>

@@ -1,0 +1,166 @@
+<div class="generic-update-component-grid">
+    @if (operation !== 'View') {
+        <form [formGroup]="genericForm">
+            <!-- 
+                Render the form fields dynamically based on the config object.
+                For each row in config.rows, create a grid row.
+                For each column in that row, create a grid column and render its fields.
+                Each field is rendered with its label, input, and validation messages as specified in the config.
+            -->
+            @for (row of config.rows; track row) {
+                <div fdLayoutGridRow style="height: auto;">
+                    @for (field of row.fields; track field.name) {
+                        <div [fdLayoutGridCol]="field.span" style="padding-right: 1rem !important;">
+                            <div fd-form-set>
+                                <!-- @for (field of row.fields; track field.name) { -->
+                                <div fd-form-item [style.margin-top.rem]="0.2">
+                                    @if (field.type !== '' && field.type !== 'header') {
+                                        <label fd-form-label [for]="field.name" [required]="field.required === true" [colon]="true">
+                                            {{ field.label }}
+                                        </label>
+                                        @if (field.type === 'text' || field.type === 'number') {
+                                            <input
+                                                fd-form-control
+                                                [id]="field.name"
+                                                [formControlName]="field.name"
+                                                [type]="field.type"
+                                                [readonly]="field.readOnly"
+                                                [attr.maxLength]="field.maxLength"
+                                                [required]="field.required"
+                                                [attr.tabindex]="field.tabindex"
+                                            />
+                                        }
+                                        @if (field.type === 'date') {
+                                            <fd-date-picker
+                                                type="single"
+                                                [inputId]="field.name"
+                                                [formControlName]="field.name"
+                                                [required]="field.required"
+                                                [attr.tabindex]="field.tabindex"
+                                                [disableFunction]="disableFunction.bind(this, field)"
+                                            />
+                                        }
+                                        @if (field.type === 'select') {
+                                            <fd-select 
+                                                [id]="field.name" 
+                                                [formControlName]="field.name" 
+                                                [placeholder]="field.placeholder" 
+                                                [attr.tabindex]="field.tabindex">
+                                                    <!-- <li fd-option [value]=""></li> -->
+                                                    @if (field.nullOption) {
+                                                        <li fd-option [value]="null"></li>
+                                                    }
+                                                    @for (option of field.options; track option) {
+                                                        <li fd-option [value]="option[field.valueKey]">
+                                                            {{ option[field.displayKey] }}
+                                                        </li>
+                                                    }
+                                            </fd-select>
+                                        }
+                                        @if (field.type === 'combobox') {
+                                            <fd-combobox
+                                                [formControlName]="field.name"
+                                                placeholder="Type some text..."
+                                                [dropdownValues]="field.options"
+                                                [width]="'100%'"
+                                                (itemClicked)="comboboxItemClickedEventHandler($event, field.name)"
+                                                [attr.tabindex]="field.tabindex"
+                                                [communicateByObject]="false"
+                                                [itemTemplate]="field.itemTemplate"
+                                                [displayFn]="field.displayFunction"
+                                                [includes]="true"
+                                            />
+                                        }
+                                        @if (field.type === 'file') {
+                                            <fd-file-uploader
+                                                #fileUploaderComponentRef
+                                                [placeholder]="field.label"
+                                                buttonLabel="Browse"
+                                                accept=".xls,.xlsx,.pdf"
+                                                [required]="field.required"
+                                                [formControlName]="field.name"
+                                                [multiple]="false"
+                                                (selectedFilesChanged)="handleFileSelection($event)"
+                                            >
+                                            </fd-file-uploader>
+                                        }
+                                        @if (genericForm.get(field.name)?.errors?.['required'] && genericForm.get(field.name)?.touched) {
+                                            <fd-form-message type="error" id="name-form-message">
+                                                Please provide valid input for {{ field.label }}. It is a mandatory field.
+                                            </fd-form-message>
+                                        }
+                                        @if (genericForm.get(field.name)?.errors?.['pattern'] && genericForm.get(field.name)?.touched) {
+                                            <fd-form-message type="error" id="name-form-message">
+                                                Please provide valid input for {{ field.label }}
+                                            </fd-form-message>
+                                        }
+                                    }
+                                    @else {
+                                        <h5 fd-title>{{ field.label }}</h5>
+                                    }
+                                </div>
+                                <!-- } -->
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            <!-- } -->
+            <div fdLayoutGridRow style="height: auto;" [style.padding-top.rem]="1">
+                <div fdLayoutGridCol>
+                    @if (operation !== 'View') {
+                        <button
+                            fd-button
+                            label="Submit"
+                            (click)="submit()"
+                            fdType="emphasized"
+                            glyph="save"
+                        >
+                        </button>
+                    }
+                </div>
+            </div>
+        </form>
+    }
+    @else {
+        @for (row of config.rows; track row) {
+            <div fdLayoutGridRow style="height: auto;">
+                @for (field of row.fields; track field.name) {
+                    <div [fdLayoutGridCol]="field.span">
+                        <div fd-form-set>
+                            <div fd-form-item [style.margin-bottom.rem]="1">
+                                @if (field.type !== '' && field.type !== 'header') {
+                                    <label fd-form-label [for]="field.name" [required]="field.required">{{ field.label }}</label>
+                                    @if (field.type === 'text' || field.type === 'number') {
+                                        <label>{{ selectedObject[field.name] || '--' }}</label>
+                                    }
+                                    @if (field.type === 'date') {
+                                        <label>
+                                            {{ selectedObject[field.name] ? (selectedObject[field.name] | date: 'dd/MM/yyyy') : '--' }}
+                                        </label>
+                                    }
+                                    @if (field.type === 'select') {
+                                        <label>
+                                            {{
+                                                field.viewOperationKey ? (selectedObject['formatted_' + field.viewOperationKey])
+                                                    : selectedObject['formatted_' + field.name] ? selectedObject['formatted_' + field.name] : '--'
+                                            }}
+                                        </label>
+                                    }
+                                    @if (field.type === 'file') {
+                                        <a href="http://localhost:8080/enquiry/api/download/{{ selectedObject[field.name] }}">
+                                            <fd-icon [glyph]="'download-from-cloud'"></fd-icon>
+                                        </a>
+                                    }
+                                }
+                                @else {
+                                    <h5 fd-title>{{ field.label }}</h5>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

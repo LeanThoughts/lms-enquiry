@@ -1,0 +1,148 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="8">
+                <h2>{{ title }}</h2>
+            </div>
+            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button 
+                    fd-button 
+                    (click)="back()" 
+                    fdType="emphasized"
+                >
+                    Back
+                </button>
+                <button 
+                    [style.margin-left.rem]="0.5"
+                    fd-button 
+                    fdType="emphasized"
+                    [disabled]="(!selectedEnquiryAction || selectedEnquiryAction.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    (click)="sendForApproval()"
+                >
+                    Send for Approval
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div fdLayoutGridCol colGrow style="background-color: white;">
+                <app-generic-update 
+                    [entity]="'projectProposal'"
+                    [searchString1]="loanApplicationId"
+                    [searchString2]="enquiryActionId"
+                    [loanEnquiryNumber]="selectedEnquiry.enquiryNo.id"
+                    [operation]="projectProposalOperation"
+                    (onCreateSuccess)="onProjectProposalCreateSuccess($event)"
+                    [selectedObject]="selectedProjectProposal"
+                />
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    @if (projectProposalOperation === 'Update') {
+        <fd-layout-grid [noGap]="true" class="component-grid" [style.margin-top.rem]="1">
+            <div fdLayoutGridRow>
+                <div fdLayoutGridCol colGrow style="background-color: white;">
+                    <fdp-icon-tab-bar 
+                        [layoutMode]="'row'"
+                        [enableTabReordering]="false"
+                        iconTabSize="sm"
+                    >
+                        <!-- Project Proposals Tab -->
+                        <fdp-icon-tab-bar-tab label="Project Details">
+                            <app-generic-update 
+                                [entity]="'projectProposalProjectDetails'"
+                                [searchString1]="selectedProjectProposal.id"
+                                [operation]="projectDetailOperation"
+                                [selectedObject]="selectedProjectDetail"
+                                (onCreateSuccess)="onProjectDetailCreateSuccess($event)"
+                                (onUpdateSuccess)="onProjectDetailUpdateSuccess($event)"
+                            />
+
+                            <div style="background-color: #f7f7f7; height: 1rem;"></div>
+                            
+                            <div style="background-color: white;">
+                                <app-generic-list
+                                    [entity]="'projectProposalCreditRating'" 
+                                    [searchString1]="selectedProjectProposal.id"
+                                />
+                            </div>
+                        </fdp-icon-tab-bar-tab>
+
+                        <!-- Project Cost and Share Holding Tab -->
+                        <fdp-icon-tab-bar-tab label="Project Cost and Share Holding">
+                            <app-generic-update 
+                                [entity]="'projectProposalProjectCostDetails'"
+                                [searchString1]="selectedProjectProposal.id"
+                                [operation]="projectCostOperation"
+                                [selectedObject]="selectedProjectCost"
+                                (onCreateSuccess)="onProjectCostCreateSuccess($event)"
+                                (onUpdateSuccess)="onProjectCostUpdateSuccess($event)"
+                            />
+
+                            <div style="background-color: #f7f7f7; height: 1rem;"></div>
+                            
+                            <div style="background-color: white;">
+                                <app-generic-list
+                                    [entity]="'projectProposalShareHolding'" 
+                                    [searchString1]="selectedProjectProposal.id"
+                                />
+                            </div>
+                        </fdp-icon-tab-bar-tab>
+
+                        <!-- Other Loan Details Tab -->
+                        <fdp-icon-tab-bar-tab label="Other Loan Details">
+                            <app-generic-update 
+                                [entity]="'projectProposalOtherLoanDetails'"
+                                [searchString1]="selectedProjectProposal.id"
+                                [operation]="otherLoanDetailsOperation"
+                                [selectedObject]="selectedOtherLoanDetails"
+                                (onCreateSuccess)="onOtherLoanDetailsCreateSuccess($event)"
+                                (onUpdateSuccess)="onOtherLoanDetailsUpdateSuccess($event)"
+                            />
+
+                            <div style="background-color: #f7f7f7; height: 1rem;"></div>
+                            
+                            <div style="background-color: white;">
+                                <app-generic-list
+                                    [entity]="'projectProposalOtherLoanDetailsDocuments'" 
+                                    [searchString1]="selectedProjectProposal.id"
+                                />
+                            </div>
+                        </fdp-icon-tab-bar-tab>
+
+                        <!-- Promoter/Borrower Group Financials Tab -->
+                        <fdp-icon-tab-bar-tab label="Promoter/Borrower Group Financials">
+                            <app-generic-list
+                                [entity]="'projectProposalPromoterFinancials'" 
+                                [searchString1]="selectedProjectProposal.id"
+                            />
+                        </fdp-icon-tab-bar-tab>
+
+                        <!-- Collateral Details Tab -->
+                        <fdp-icon-tab-bar-tab label="Collateral Details">
+                            <app-generic-list
+                                [entity]="'projectProposalCollateralDetails'" 
+                                [searchString1]="selectedProjectProposal.id"
+                            />
+                        </fdp-icon-tab-bar-tab>
+
+                        <!-- Deal Guarantee, Timelines Tab -->
+                        <fdp-icon-tab-bar-tab label="Deal Guarantee, Timeline and Terms">
+                            <app-generic-update 
+                                [entity]="'projectProposalDealGuarantee'"
+                                [searchString1]="selectedProjectProposal.id"
+                                [operation]="dealGuaranteeOperation"
+                                [selectedObject]="selectedDealGuarantee"
+                                (onCreateSuccess)="onDealGuaranteeCreateSuccess($event)"
+                                (onUpdateSuccess)="onDealGuaranteeUpdateSuccess($event)"
+                            />
+                        </fdp-icon-tab-bar-tab>
+                    </fdp-icon-tab-bar>
+                </div>
+            </div>
+        </fd-layout-grid>
+    }
+</component-ngx>

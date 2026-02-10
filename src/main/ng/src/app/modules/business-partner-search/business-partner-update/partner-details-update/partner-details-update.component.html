@@ -1,0 +1,471 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="8">
+                <h2>{{ title }}</h2>
+            </div>
+            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button 
+                    fd-button 
+                    fdType="emphasized"
+                    (click)="operation === 'create' ? router.navigate(['/business-partners']) 
+                        : router.navigate(['/business-partners', operation, selectedBusinessPartner.id, selectedBusinessPartner.defaultPartnerRole])"
+                >
+                    Back
+                </button>
+                <!-- <button 
+                    [style.margin-left.rem]="0.5"
+                    fd-button 
+                    fdType="emphasized"
+                    [disabled]="disableSendForApproval"
+                >
+                    Send for Approval
+                </button> -->
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <form [formGroup]="partnerDetailsForm" (ngSubmit)="submit()">
+        <fd-layout-grid [noGap]="true" class="component-grid">
+            <div fdLayoutGridRow style="background-color: white" [style.padding.rem]="1">
+                <div fdLayoutGridCol [style.padding-right.rem]="1">
+                    <button fd-button
+                        fdType="emphasized"
+                        label="Submit"
+                        type="submit"
+                    >
+                    </button>
+                    @if (operation === 'create') {
+                    <button fd-button
+                        [style.margin-left.rem]="0.5"
+                        fdType="emphasized"
+                        label="Clear"
+                        type="button"
+                        (click)="partnerDetailsForm.reset()"
+                    >
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Row 1 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="12">
+                    <div fd-form-set>
+                        <div fd-form-item>
+                            <h5 fd-title>Category & Role Details</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="defaultPartnerRole" [required]="true">Default Partner Role:</label>
+                            <fd-select id="defaultPartnerRole" formControlName="defaultPartnerRole" placeholder="Select Default Partner Role"
+                                    (valueChange)="onDefaultPartnerRoleChange($event)">
+                                @for (businessPartnerRoleType of businessPartnerRoleTypes; track businessPartnerRoleType.code) {
+                                    <li fd-option [value]="businessPartnerRoleType.code">{{ businessPartnerRoleType.value }}</li>
+                                }
+                            </fd-select>
+                            @if (partnerDetailsForm.get('defaultPartnerRole')?.errors?.['required'] && partnerDetailsForm.get('defaultPartnerRole')?.touched) {
+                                <fd-form-message type="error" id="defaultPartnerRole-form-message">
+                                    Please provide valid input for Default Partner Role. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.partyCategory !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="partnerCategory" [required]="formFieldsConfig?.partyCategory == 2">Partner Category:</label>
+                            <fd-select id="partnerCategory" formControlName="partnerCategory" placeholder="Select Partner Category"
+                                    (valueChange)="onPartnerCategoryChange($event)">
+                                <li fd-option [value]="'1'">Person</li>
+                                <li fd-option [value]="'2'">Organization</li>
+                                <li fd-option [value]="'3'">Group</li>
+                            </fd-select>
+                            @if (partnerDetailsForm.get('partnerCategory')?.errors?.['required'] && partnerDetailsForm.get('partnerCategory')?.touched) {
+                                <fd-form-message type="error" id="partnerCategory-form-message">
+                                    Please provide valid input for Partner Category. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!-- @if (operation === 'update') {
+                <div [fdLayoutGridCol]="6">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <label fd-form-label>Business Partner Roles:</label> -->
+                            <!-- <fd-multi-combobox
+                                [autoResize]="true"
+                                name="array-of-roles"
+                                inputId="array-of-roles"
+                                placeholder="Select Business Partner Roles"
+                                [dataSource]="businessPartnerRoleTypes"
+                                displayKey="value"
+                                lookupKey="value"
+                                [selectedItems]="selectedBusinessPartnerRoles"
+                                (selectionChange)="onBusinessPartnerRoleSelect($event)"
+                            >
+                            </fd-multi-combobox> -->
+                            <!-- <fd-multi-input
+                                formControlName="businessPartnerRoles"
+                                [dropdownValues]="businessPartnerRoleTypes"
+                                [displayFn]="businessPartnerRoleTypeDisplayFn"
+                                [valueFn]="businessPartnerRoleTypeValueFn"
+                                placeholder="Select Business Partner Roles"
+                                optionItemIdentifier="code"
+                            >
+                            </fd-multi-input>
+                        </div>
+                    </div>
+                </div>
+                } -->
+            </div>
+
+            <!-- Row 3 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="12">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <h5 fd-title>Identification Details</h5>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.partnerExternalNumber !== 3">
+                    <div fd-form-set [style.margin-top.rem]="0.3">
+                        <div fd-form-item>
+                            <label fd-form-label for="externalBPNumber">External BP Id:</label>
+                            <input id="externalBPNumber" formControlName="externalBPNumber" fd-form-control type="text" maxlength="40"
+                                [readonly]="formFieldsConfig?.partnerExternalNumber === 0"/>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.title !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="title" [required]="formFieldsConfig?.title == 2">Title:</label>
+                            <fd-select id="title" formControlName="title" placeholder="Select Title">
+                                <li fd-option [value]=""></li>
+                                @for (title of partnerTitles; track title.code) {
+                                    <li fd-option [value]="title.code">{{ title.value }}</li>
+                                }
+                            </fd-select>
+                            @if (partnerDetailsForm.get('partyName1')?.errors?.['required'] && partnerDetailsForm.get('partyName1')?.touched) {
+                                <fd-form-message type="error" id="title-form-message">
+                                    Please provide valid input for Title. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="partyName1" [required]="formFieldsConfig?.partyName1 == 2">Name 1:</label>
+                            <input id="partyName1" formControlName="partyName1" fd-form-control type="text" maxlength="40"/>
+                            @if (partnerDetailsForm.get('partyName1')?.errors?.['required'] && partnerDetailsForm.get('partyName1')?.touched) {
+                                <fd-form-message type="error" id="partyName1-form-message">
+                                    Please provide valid input for Name 1. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="partyName2" [required]="formFieldsConfig?.partyName2 == 2">Name 2:</label>
+                            <input id="partyName2" formControlName="partyName2" fd-form-control type="text" maxlength="40"/>
+                            @if (partnerDetailsForm.get('partyName2')?.errors?.['required'] && partnerDetailsForm.get('partyName2')?.touched) {
+                                <fd-form-message type="error" id="partyName2-form-message">
+                                    Please provide valid input for Name 2. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-set [style.margin-top.rem]="0.2">
+                        <div fd-form-item>
+                            <label fd-form-label for="searchTerm1">Search Term 1</label>
+                            <input id="searchTerm1" formControlName="searchTerm1" fd-form-control type="text" maxlength="10"/>
+                            @if (partnerDetailsForm.get('searchTerm1')?.errors?.['required'] && partnerDetailsForm.get('searchTerm1')?.touched) {
+                                <fd-form-message type="error" id="searchTerm1-form-message">
+                                    Please provide valid input for Search Term 1. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <label fd-form-label for="searchTerm2">Search Term 2</label>
+                            <input id="searchTerm2" formControlName="searchTerm2" fd-form-control type="text" maxlength="10"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 5 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="12">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <h5 fd-title>Contact Details</h5>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.addressLine1 !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="addressLine1" [required]="formFieldsConfig?.addressLine1 == 2">Street/House No.:</label>
+                            <input id="addressLine1" formControlName="addressLine1" fd-form-control type="text" maxlength="60"/>
+                            @if (partnerDetailsForm.get('addressLine1')?.errors?.['required'] && partnerDetailsForm.get('addressLine1')?.touched) {
+                                <fd-form-message type="error" id="addressLine1-form-message">
+                                    Please provide valid input for Street/House No. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.addressLine2 !== 3">
+                    <div fd-form-set [style.margin-top.rem]="0.3">
+                        <div fd-form-item>
+                            <label fd-form-label for="addressLine2" [required]="formFieldsConfig?.addressLine2 == 2">Street2:</label>
+                            <input id="addressLine2" formControlName="addressLine2" fd-form-control type="text" maxlength="60"/>
+                            @if (partnerDetailsForm.get('addressLine2')?.errors?.['required'] && partnerDetailsForm.get('addressLine2')?.touched) {
+                                <fd-form-message type="error" id="addressLine2-form-message">
+                                    Please provide valid input for Street2. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="addressLine3">Street3:</label>
+                            <input id="addressLine3" formControlName="addressLine3" fd-form-control type="text" maxlength="60"/>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" *ngIf="formFieldsConfig?.city !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="city" [required]="formFieldsConfig?.city == 2">City:</label>
+                            <input id="city" formControlName="city" fd-form-control type="text" maxlength="40"/>
+                            @if (partnerDetailsForm.get('city')?.errors?.['required'] && partnerDetailsForm.get('city')?.touched) {
+                                <fd-form-message type="error" id="city-form-message">
+                                    Please provide valid input for City. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 6 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.postalCode !== 3">
+                    <div fd-form-set [style.margin-top.rem]="0.2">
+                        <div fd-form-item>
+                            <label fd-form-label for="postalCode" [required]="formFieldsConfig?.postalCode == 2">Postal Code:</label>
+                            <input id="postalCode" formControlName="postalCode" fd-form-control type="text" maxlength="6"/>
+                            @if (partnerDetailsForm.get('postalCode')?.errors?.['required'] && partnerDetailsForm.get('postalCode')?.touched) {
+                                <fd-form-message type="error" id="postalCode-form-message">
+                                    Please provide valid input for Postal Code. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.state !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="state" [required]="formFieldsConfig?.state == 2">State/Region:</label>
+                            <fd-select id="state" formControlName="state" placeholder="Select State/Region">
+                                <li fd-option [value]=""></li>
+                                @for (state of statesOfIndia; track state.code) {
+                                    <li fd-option [value]="state.code">{{ state.value }}</li>
+                                }
+                            </fd-select>
+                            @if (partnerDetailsForm.get('state')?.errors?.['required'] && partnerDetailsForm.get('state')?.touched) {
+                                <fd-form-message type="error" id="state-form-message">
+                                    Please provide valid input for State/Region. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.country !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="country" [required]="formFieldsConfig?.country == 2">Country:</label>
+                            <input id="country" formControlName="country" fd-form-control type="text" maxlength="60"/>
+                            @if (partnerDetailsForm.get('country')?.errors?.['required'] && partnerDetailsForm.get('country')?.touched) {
+                                <fd-form-message type="error" id="country-form-message">
+                                    Please provide valid input for Country. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="addressValidFromDate">Valid From Date:</label>
+                            <fd-date-picker 
+                                type="single" 
+                                inputId="addressValidFromDate" 
+                                formControlName="addressValidFromDate">
+                            </fd-date-picker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 7 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
+                <div [fdLayoutGridCol]="12">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <h5 fd-title>Communication Details</h5>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.contactNumber !== 3">
+                    <div fd-form-set [style.margin-top.rem]="0.3">
+                        <div fd-form-item>
+                            <label fd-form-label for="telephone" [required]="formFieldsConfig?.contactNumber == 2">Telephone:</label>
+                            <input id="telephone" formControlName="contactNumber" fd-form-control type="text" maxlength="11"/>
+                            @if (partnerDetailsForm.get('contactNumber')?.errors?.['pattern'] && partnerDetailsForm.get('contactNumber')?.touched) {
+                                <fd-form-message type="error" id="telephone-form-message">
+                                    Please provide a valid telephone/contact number.
+                                </fd-form-message>
+                            }
+                            @if (partnerDetailsForm.get('contactNumber')?.errors?.['required'] && partnerDetailsForm.get('contactNumber')?.touched) {
+                                <fd-form-message type="error" id="telephone-form-message">
+                                    Please provide a valid telephone/contact number. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.email !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="email" [required]="formFieldsConfig?.email == 2">Email:</label>
+                            <input id="email" formControlName="email" fd-form-control type="email" maxlength="60"/>
+                            @if (partnerDetailsForm.get('email')?.errors?.['required'] && partnerDetailsForm.get('email')?.touched) {
+                                <fd-form-message type="error" id="email-form-message">
+                                    Please provide valid input for Email. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                            @if (partnerDetailsForm.get('email')?.errors?.['email'] && partnerDetailsForm.get('email')?.touched) {  
+                                <fd-form-message type="error" id="email-form-message">
+                                    Please provide a valid email address
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.mobileNumber !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="mobile">Mobile:</label>
+                            <input id="mobile" formControlName="mobileNumber" fd-form-control type="text" maxlength="10"
+                                [readonly]="formFieldsConfig?.mobileNumber === 0"/>
+                            @if (partnerDetailsForm.get('mobile')?.errors?.['pattern'] && partnerDetailsForm.get('mobile')?.touched) {
+                                <fd-form-message type="error" id="mobile-form-message">
+                                    Please provide a valid mobile number
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="fax">Fax:</label>
+                            <input id="fax" formControlName="faxNumber" fd-form-control type="text" maxlength="11"/>
+                            @if (partnerDetailsForm.get('faxNumber')?.errors?.['pattern'] && partnerDetailsForm.get('faxNumber')?.touched) {
+                                <fd-form-message type="error" id="fax-form-message">
+                                    Please provide a valid fax number
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 8 -->
+            <div fdLayoutGridRow style="background-color: white" [style.padding-left.rem]="1" [style.padding-right.rem]="1"
+                    [style.padding-bottom.rem]="1.5">
+                <div [fdLayoutGridCol]="12">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <h5 fd-title>Other Details</h5>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.legalForm !== 3">
+                    <div fd-form-set [style.margin-top.rem]="0.3">
+                        <div fd-form-item>
+                            <label fd-form-label for="legalForm">Legal Form:</label>
+                            <fd-select
+                                id="legalForm"
+                                formControlName="legalForm"
+                                placeholder="Select Legal Form">
+                                @for (legalForm of legalForms; track legalForm.code) {
+                                    <li fd-option [value]="legalForm.code">{{ legalForm.value }}</li>
+                                }
+                            </fd-select>
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.legalEntity !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="legalEntity">Legal Entity:</label>
+                            <fd-select
+                                id="legalEntity"
+                                formControlName="legalEntity"
+                                placeholder="Select Legal Entity">
+                                @for (legalEntity of legalEntities; track legalEntity.code) {
+                                    <li fd-option [value]="legalEntity.code">{{ legalEntity.value }}</li>
+                                }
+                            </fd-select>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.houseBank !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="houseBank">House Bank:</label>
+                            <fd-select
+                                id="houseBank"
+                                formControlName="houseBank"
+                                placeholder="Select House Bank">
+                                @for (houseBank of houseBanks; track houseBank.bankKey) {
+                                    <li fd-option [value]="houseBank.bankKey">{{ houseBank.description }}</li>
+                                }
+                            </fd-select>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </fd-layout-grid>
+    </form>
+</component-ngx>

@@ -1,0 +1,109 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="2">
+                <h2>Reference Interest Rate</h2>
+            </div>
+            <div [fdLayoutGridCol]="10" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button fd-button
+                    fdType="emphasized"
+                    label="Send For Approval"
+                    (click)="sendForApproval()"
+                    [disabled]="selectedReferenceInterestValueId.selected.length === 0"
+                >
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow style="height: auto;">
+            <div fdLayoutGridCol style="background-color: white;" [style.padding.rem]="1" colGrow>
+                <div fd-form-item [style.width.rem]="30">
+                    <label fd-form-label for="referenceRateType">Reference Rate Type:</label>
+                    <fd-select id="referenceRateType" [(value)]="selectedReferenceRateType" (valueChange)="getReferenceInterestValues()">
+                        @for (option of referenceRateTypes; track option) {
+                            <li fd-option [value]="option">{{ option.description }}</li>
+                        }
+                    </fd-select>
+                </div>
+                <!-- <button fd-button
+                    label="Search"
+                    (click)="getReferenceInterestValues()"
+                >
+                </button> -->
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow [style.margin-top.rem]="1" >
+            <div fdLayoutGridCol colGrow>
+                <button fd-button 
+                    (click)="openReferenceInterestRateDialog('Create')"
+                    [disabled]="!selectedReferenceRateType"
+                >
+                    <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
+                    Create
+                </button>
+                <button fd-button
+                    (click)="openReferenceInterestRateDialog('Update')"
+                    label="Update"
+                    style="margin-left: 0.5rem;"
+                    glyph="edit-outside"
+                    [disabled]="selectedReferenceInterestValueId.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    (click)="deleteReferenceInterestRateValue()"
+                    label="Delete"
+                    style="margin-left: 0.5rem;"
+                    glyph="delete"
+                    [disabled]="selectedReferenceInterestValueId.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    (click)="openReferenceInterestRateDialog('View')"
+                    label="View"
+                    style="margin-left: 0.5rem;"
+                    glyph="detail-view"
+                    [disabled]="selectedReferenceInterestValueId.selected.length === 0"
+                >
+                </button>
+            </div>
+        </div>
+
+        <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="1">
+            <div [fdLayoutGridCol]="12">
+                <div style="width: 100%">
+                    <table fd-table aria-label="Default">
+                        <thead fd-table-header>
+                            <tr fd-table-row>
+                                @for (column of displayedColumns; track column) {
+                                    <th fd-table-cell>{{ column }}</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody fd-table-body>
+                            @for (value of referenceInterestValues; track value) {
+                            <tr fd-table-row
+                                [hoverable]="true"
+                                [active]="selectedReferenceInterestValueId.isSelected(value.id)"
+                                (click)="selectedReferenceInterestValueId.select(value.id);
+                                    selectedReferenceInterestValue = value;"
+                            >
+                                <td fd-table-cell>{{ value.referenceInterestRate.code }}</td>
+                                <td fd-table-cell>{{ value.referenceInterestRate.description }}</td>
+                                <td fd-table-cell>{{ value.validFromDate | date:'dd/MM/yyyy' }}</td>
+                                <td fd-table-cell>{{ value.interestRate }}</td>
+                                <td fd-table-cell>{{ getModificationStatusDescription(value.modificationStatus) }}</td>
+                                <td fd-table-cell>{{ value.workFlowStatusDescription }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </fd-layout-grid>
+</component-ngx>

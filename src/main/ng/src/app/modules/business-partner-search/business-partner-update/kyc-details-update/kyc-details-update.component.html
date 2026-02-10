@@ -1,0 +1,128 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 id="fd-dialog-header-c" fd-title class="fd-dialog-header-title">{{ title }}</h1>
+        <button fd-dialog-close-button (click)="dialogRef.close('Closed')"></button>
+    </fd-dialog-header>
+    <fd-dialog-body>
+        @if (dialogRef.data.operation !== 'view') {
+        <form [formGroup]="kycDetailsForm">
+            <fd-layout-grid class="component-grid">
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="true">KYC Completion Date:</label>
+                                <fd-date-picker type="single" formControlName="kycDate"></fd-date-picker>
+                                @if (kycDetailsForm.get('kycDate')?.errors?.['required'] && kycDetailsForm.get('kycDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for KYC Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="true">KYC Risk Category:</label>
+                                <fd-select formControlName="kycRiskCategory" placeholder="Select KYC Risk Category">
+                                    <li fd-option [value]="'LOW'">Low</li>
+                                    <li fd-option [value]="'MEDIUM'">Medium</li>
+                                    <li fd-option [value]="'HIGH'">High</li>
+                                </fd-select>
+                                @if (kycDetailsForm.get('kycRiskCategory')?.errors?.['required'] && kycDetailsForm.get('kycRiskCategory')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for KYC Risk Category. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label>Re KYC Date:</label>
+                                <fd-date-picker type="single" formControlName="reKYCDate"></fd-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label>Re KYC Risk Category:</label>
+                                <fd-select formControlName="reKYCRiskCategory" placeholder="Select Re KYC Risk Category">
+                                    <li fd-option [value]="'LOW'">Low</li>
+                                    <li fd-option [value]="'MEDIUM'">Medium</li>
+                                    <li fd-option [value]="'HIGH'">High</li>
+                                </fd-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </fd-layout-grid>
+        </form>
+        }
+        @else {
+            <fd-layout-grid class="component-grid">
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <label fd-form-label>KYC Completion Date:</label>
+                        <label>{{ selectedKYCDetails.formatted_kycDate || selectedKYCDetails.kycDate || '--' }}</label>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <label fd-form-label>KYC Risk Category:</label>
+                        <label>{{ selectedKYCDetails.formatted_kycRiskCategory || selectedKYCDetails.kycRiskCategory || '--' }}</label>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <label fd-form-label>Re KYC Date:</label>
+                        <label>{{ selectedKYCDetails.formatted_reKYCDate || selectedKYCDetails.reKYCDate || '--' }}</label>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <label fd-form-label>Re KYC Risk Category:</label>
+                        <label>{{ selectedKYCDetails.formatted_reKYCRiskCategory || selectedKYCDetails.reKYCRiskCategory || '--' }}</label>
+                    </div>
+                </div>
+
+            </fd-layout-grid>
+        }
+    </fd-dialog-body>
+    <fd-dialog-footer>
+        @if (dialogRef.data.operation !== 'view') {
+            <fd-button-bar
+                label="Save"
+                (click)="submit()"
+                fdType="emphasized"
+                ariaLabel="Save"
+            >
+            </fd-button-bar>        
+            <fd-button-bar
+                label="Cancel"
+                (click)="dialogRef.close('Cancelled')"
+                fdType="ghost"
+                ariaLabel="Cancel"
+            >
+            </fd-button-bar>
+        }
+        @else {
+            <fd-button-bar
+                label="Close"
+                (click)="dialogRef.close('Closed')"
+                fdType="emphasized"
+                ariaLabel="Close"
+            >
+            </fd-button-bar>
+        }
+    </fd-dialog-footer>
+</fd-dialog>

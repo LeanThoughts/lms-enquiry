@@ -1,0 +1,94 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="8">
+                <h2>{{ title }}</h2>
+            </div>
+            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button 
+                    fd-button 
+                    (click)="router.navigate(['/loan-contract-search'])" 
+                    fdType="emphasized"
+                >
+                    Back
+                </button>
+                <button 
+                    [style.margin-left.rem]="0.5"
+                    fd-button 
+                    (click)="sendForApproval()" 
+                    fdType="emphasized"
+                    [disabled]="(!selectedEnquiryAction || selectedEnquiryAction.workFlowStatusCode === 2) || disableSendForApproval === true"
+                >
+                    Send for Approval
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div fdLayoutGridCol colGrow>
+                <fdp-icon-tab-bar 
+                    [layoutMode]="'row'"
+                    [enableTabReordering]="false"
+                    iconTabSize="sm"
+                >
+                    <!-- Project Proposals Tab -->
+                    <fdp-icon-tab-bar-tab label="Project Proposals">
+                        <app-generic-list 
+                            [entity]="'processEnquiryProjectProposal'" 
+                            [searchString1]="enquiryActionId" 
+                            [searchString2]="loanApplicationId"
+                            (onUpdateClick)="onUpdateProjectProposalClick($event)"
+                        />
+                    </fdp-icon-tab-bar-tab>
+                
+                    <!-- Rejected By PFS Tab -->
+                    <fdp-icon-tab-bar-tab label="Rejected By PFS">
+                        <app-generic-list 
+                            [entity]="'processEnquiryRejectedByPFS'" 
+                            [searchString1]="enquiryActionId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Other Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Other Details">
+                        <app-generic-list 
+                            [entity]="'processEnquiryOtherDetails'" 
+                            [searchString1]="enquiryActionId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Reason For Delay Tab -->
+                    <fdp-icon-tab-bar-tab label="Reason For Delay">
+                        <app-generic-list 
+                            [entity]="'processEnquiryReasonForDelay'" 
+                            [searchString1]="enquiryActionId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Enquiry Completion Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Enquiry Completion">
+                        <app-generic-list 
+                            [entity]="'processEnquiryEnquiryCompletion'" 
+                            [searchString1]="enquiryActionId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Rejected By Customer Tab -->
+                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
+                        <app-generic-list 
+                            [entity]="'processEnquiryRejectedByCustomer'" 
+                            [searchString1]="enquiryActionId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+                </fdp-icon-tab-bar>
+            </div>
+        </div>
+    </fd-layout-grid>
+</component-ngx>

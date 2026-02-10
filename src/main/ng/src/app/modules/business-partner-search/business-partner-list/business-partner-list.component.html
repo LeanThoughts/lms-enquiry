@@ -1,0 +1,77 @@
+<!-- <fd-grid-list>
+    <fd-grid-list-title-bar title="Business Partners">
+        <span fd-grid-list-title-bar-additional-title-item>{{  ' - (' + businessPartners.length + ')'  }} results found</span>
+        <fd-grid-list-title-bar-spacer></fd-grid-list-title-bar-spacer>
+        <button
+            fd-button
+            fdType="transparent"
+            glyph="add"
+            aria-labelledby="grid-list-title-bar-1 grid-list-button-1"
+            aria-label="Sort"
+            title="Sort"
+            fdCompact
+        ></button>
+    </fd-grid-list-title-bar>
+
+    <fd-grid-list-item *ngFor="let businessPartner of businessPartners" 
+        [status]="getStatus(businessPartner.partnerCategory)" 
+        [title]="businessPartner.partyName" 
+        [description]="getPartnerCategoryDescription(businessPartner.partnerCategory, businessPartner.partyNumber)"
+        [style.padding.rem]="0.5"
+        type="navigation" 
+        (navigate)="navigateToBusinessPartner(businessPartner.id)"
+    >
+
+        <fd-grid-list-item-toolbar>PAN: {{ businessPartner.pan }} </fd-grid-list-item-toolbar>
+
+        <ng-template fd-grid-list-item-body>
+            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                <fd-icon glyph="addresses" style="font-size: 1.25rem;" />
+                <div>
+                    <p style="margin: 0px;">{{ businessPartner.addressLine1 }}, {{ businessPartner.addressLine2 }}</p>
+                    <p style="margin: 0px;">{{ businessPartner.city }}, {{ businessPartner.country }}</p>        
+                </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.5rem;">
+                <fd-icon glyph="email" style="font-size: 1.25rem;" />
+                <div>
+                    <a fd-link tabindex="0">{{ businessPartner.email }}</a>
+                </div>
+            </div>
+        </ng-template>
+    </fd-grid-list-item>
+
+</fd-grid-list> -->
+
+<table fd-table aria-label="Default">
+    <thead fd-table-header>
+        <th fd-table-cell fd-table-status-indicator></th>
+        @for (column of displayedColumns; track column) {
+            <th fd-table-cell>{{ column }}</th>
+        }
+    </thead>
+    <tbody fd-table-body>
+        @for (value of businessPartners; track value) {
+            <tr fd-table-row
+                [hoverable]="true"
+                [active]="selectedBusinessPartnerId.isSelected(value.id)"
+                (click)="selectedBusinessPartnerId.select(value.id); businessPartnerService.selectedEntity$.next(value);"
+            >
+                <td fd-table-cell fd-table-status-indicator [status]="getStatus(value.partnerCategory)"></td>
+                <td fd-table-cell>{{ value.partyNumber }}</td>
+                <td fd-table-cell>{{ value.defaultPartnerRole }}</td>
+                <td fd-table-cell [style.padding-top.rem]="0.5" [style.padding-bottom.rem]="0.5">
+                    <div style="display: flex; flex-direction: column;">
+                        <span [style.font-size.rem]="1" [style.font-weight]="'bold'">{{ value.partyName }}</span>
+                        <span [style.margin-top.rem]="0.25">{{ value.addressLine1 + ', ' + value.addressLine2 + ', ' + value.city }}</span>
+                    </div>
+                </td>
+                <td fd-table-cell>{{ value.pan }}</td>
+                <td fd-table-cell>{{ getPartnerCategoryDescription(value.partnerCategory) }}</td>
+                <td fd-table-cell><a fd-link tabindex="0">{{ value.email }}</a></td>
+                <td fd-table-cell>{{ value.contactPersonName }}</td>
+                <!-- <td fd-table-cell>{{ value.addressLine1 + ',' + value.addressLine2 + ',' + value.city }}</td> -->
+            </tr>
+        }
+    </tbody>
+</table>

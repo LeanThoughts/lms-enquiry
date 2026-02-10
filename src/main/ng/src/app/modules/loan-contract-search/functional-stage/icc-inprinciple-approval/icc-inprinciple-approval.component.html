@@ -1,0 +1,75 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="8">
+                <h2>{{ title }}</h2>
+            </div>
+            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button 
+                    fd-button 
+                    (click)="router.navigate(['/loan-contract-search'])" 
+                    fdType="emphasized"
+                >
+                    Back
+                </button>
+                <button 
+                    [style.margin-left.rem]="0.5"
+                    fd-button 
+                    (click)="sendForApproval()" 
+                    fdType="emphasized"
+                    [disabled]="(!selectedIccInprincipleApproval || selectedIccInprincipleApproval.workFlowStatusCode === 2) || disableSendForApproval === true"
+                >
+                    Send for Approval
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div fdLayoutGridCol colGrow>
+                <fdp-icon-tab-bar 
+                    [layoutMode]="'row'"
+                    [enableTabReordering]="false"
+                    iconTabSize="sm"
+                >
+                    <!-- Project Proposals Tab -->
+                    <fdp-icon-tab-bar-tab label="Further Details">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalFurtherDetails'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Reasons For Delay Tab -->
+                    <fdp-icon-tab-bar-tab label="Reasons For Delay">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalReasonsForDelay'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Rejected By ICC Tab -->
+                    <fdp-icon-tab-bar-tab label="Rejected By ICC">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalRejectedByIcc'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Approval By ICC Tab -->
+                    <fdp-icon-tab-bar-tab label="Approval By ICC">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalApprovalByIcc'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+                </fdp-icon-tab-bar>
+            </div>
+        </div>
+    </fd-layout-grid>
+</component-ngx>

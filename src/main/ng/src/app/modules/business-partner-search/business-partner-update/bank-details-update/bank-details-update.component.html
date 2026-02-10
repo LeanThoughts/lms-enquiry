@@ -1,0 +1,331 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 id="fd-dialog-header-c" fd-title class="fd-dialog-header-title">{{ title }}</h1>
+        <button fd-dialog-close-button (click)="dialogRef.close('Closed')"></button>
+    </fd-dialog-header>
+    <fd-dialog-body>
+        @if (dialogRef.data.operation !== 'view') {
+        <form [formGroup]="bankDetailsForm">
+            <fd-layout-grid class="component-grid">
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label>Serial Number:</label>
+                                <input formControlName="serialNumber" fd-form-control type="text" maxlength="10" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="5" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.s === 2">Bank Key Search Text:</label>
+                                <input formControlName="bankKeySearchText" fd-form-control type="text" maxlength="40"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="1" [style.padding-top.rem]="1.2" [style.padding-left.rem]="0.25">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <button fd-button (click)="searchBankKeys()">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.bankName === 2">Bank Key:</label>
+                                <fd-select 
+                                    formControlName="bankKey" 
+                                    placeholder="Select Bank Key"
+                                    (valueChange)="onBankKeySelectionChange($event)"
+                                >
+                                    @for (bankKey of filteredBankKeys; track bankKey.id) {
+                                    <li fd-option [value]="bankKey.bankKey">{{ bankKeyDisplayFunction(bankKey) }}</li>
+                                    }
+                                </fd-select>
+                                @if (bankDetailsForm.get('bankKey')?.errors?.['required'] && bankDetailsForm.get('bankKey')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Bank Key. It is a mandatory field.
+                                </fd-form-message>
+                                }    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.bankName === 2">Bank Name:</label>
+                                <input formControlName="bankName" fd-form-control type="text" maxlength="40"/>
+                                @if (bankDetailsForm.get('bankName')?.errors?.['required'] && bankDetailsForm.get('bankName')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Bank Name. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.ifscCode === 2">IFSC Code:</label>
+                                <input formControlName="ifscCode" fd-form-control type="text" maxlength="15"/>
+                                @if (bankDetailsForm.get('ifscCode')?.errors?.['required'] && bankDetailsForm.get('ifscCode')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for IFSC Code. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.accountNumber === 2">Account Number:</label>
+                                <input formControlName="accountNumber" fd-form-control type="text" maxlength="18"/>
+                                @if (bankDetailsForm.get('accountNumber')?.errors?.['required'] && bankDetailsForm.get('accountNumber')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Account Number. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.entryDate === 2">Entry Date:</label>
+                                <fd-date-picker type="single" formControlName="entryDate"></fd-date-picker>
+                                @if (bankDetailsForm.get('entryDate')?.errors?.['required'] && bankDetailsForm.get('entryDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Entry Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.validFromDate === 2">Valid From:</label>
+                                <fd-date-picker type="single" formControlName="validFromDate"></fd-date-picker>
+                                @if (bankDetailsForm.get('idValidFromDate')?.errors?.['required'] && 
+                                        bankDetailsForm.get('validFromDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Valid From Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.validToDate === 2">Valid To:</label>
+                                <fd-date-picker type="single" formControlName="validToDate"></fd-date-picker>
+                                @if (bankDetailsForm.get('validToDate')?.errors?.['required'] && bankDetailsForm.get('validToDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Valid To Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.bankCountry === 2">Bank Country:</label>
+                                <fd-select formControlName="bankCountry" placeholder="Select Bank Country">
+                                    @for (bankCountry of bankCountries; track bankCountry.code) {
+                                    <li fd-option [value]="bankCountry.code">{{ bankCountry.value }}</li>
+                                    }
+                                </fd-select>
+                                @if (bankDetailsForm.get('bankCountry')?.errors?.['required'] && bankDetailsForm.get('bankCountry')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Bank Country. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.referenceNumber === 2">Reference Number:</label>
+                                <input formControlName="referenceNumber" fd-form-control type="text" maxlength="20"/>
+                                @if (bankDetailsForm.get('referenceNumber')?.errors?.['required'] && bankDetailsForm.get('referenceNumber')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Reference Number. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Begin New Row -->
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.accountHolderName === 2">Account Holder Name:</label>
+                                <input formControlName="accountHolderName" fd-form-control type="text" maxlength="60"/>
+                                @if (bankDetailsForm.get('accountHolderName')?.errors?.['required'] && bankDetailsForm.get('accountHolderName')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Account Holder Name. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.bankAccountName === 2">Bank Account Name:</label>
+                                <input formControlName="bankAccountName" fd-form-control type="text" maxlength="40"/>
+                                @if (bankDetailsForm.get('bankAccountName')?.errors?.['required'] && bankDetailsForm.get('bankAccountName')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Bank Account Name. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fd-layout-grid>
+        </form>
+        }
+        @else {
+        <fd-layout-grid>
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Serial Number:</label>
+                    <label>{{ selectedBankDetails.serialNumber }}</label>
+                </div>
+            </div>
+
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Bank Key:</label>
+                    <label>{{ selectedBankDetails.bankKey || selectedBankDetails.formatted_bankKey || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Bank Name:</label>
+                    <label>{{ selectedBankDetails.bankName || selectedBankDetails.formatted_bankName || '--' }}</label>
+                </div>
+            </div>
+
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>IFSC Code:</label>
+                    <label>{{ selectedBankDetails.ifscCode || selectedBankDetails.formatted_ifscCode || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Account Number:</label>
+                    <label>{{ selectedBankDetails.accountNumber || selectedBankDetails.formatted_accountNumber || '--' }}</label>
+                </div>
+            </div>
+            
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Entry Date:</label>
+                    <label>{{ selectedBankDetails.entryDate || selectedBankDetails.formatted_entryDate || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Valid From:</label>
+                    <label>{{ selectedBankDetails.validFromDate || selectedBankDetails.formatted_validFromDate || '--' }}</label>
+                </div>
+            </div>
+            
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Valid To:</label>
+                    <label>{{ selectedBankDetails.validToDate || selectedBankDetails.formatted_validToDate || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Bank Country:</label>
+                    <label>{{ selectedBankDetails.bankCountry || selectedBankDetails.formatted_bankCountry || '--' }}</label>
+                </div>
+            </div>
+            
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Reference Number:</label>
+                    <label>{{ selectedBankDetails.referenceNumber || selectedBankDetails.formatted_referenceNumber || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Account Holder Name:</label>
+                    <label>{{ selectedBankDetails.accountHolderName || selectedBankDetails.formatted_accountHolderName || '--' }}</label>
+                </div>
+            </div>
+
+            <!-- Begin New Row -->
+            <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Bank Account Name:</label>
+                    <label>{{ selectedBankDetails.bankAccountName || selectedBankDetails.formatted_bankAccountName || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Bank Account Name:</label>
+                    <label>{{ selectedBankDetails.bankAccountName || selectedBankDetails.formatted_bankAccountName || '--' }}</label>
+                </div>
+            </div>
+            
+        </fd-layout-grid>
+        }
+    </fd-dialog-body>
+    <fd-dialog-footer>
+        @if (dialogRef.data.operation !== 'view') {
+        <fd-button-bar
+            label="Save"
+            (click)="submit()"
+            fdType="emphasized"
+            ariaLabel="Save"
+        >
+        </fd-button-bar>        
+        <fd-button-bar
+            label="Cancel"
+            (click)="dialogRef.close('Cancelled')"
+            fdType="ghost"
+            ariaLabel="Cancel"
+        >
+        </fd-button-bar>
+        }
+        @else {
+        <fd-button-bar
+            label="Close"
+            (click)="dialogRef.close('Closed')"
+            fdType="emphasized"
+            ariaLabel="Close"
+        >
+        </fd-button-bar>
+        }
+    </fd-dialog-footer>
+</fd-dialog>

@@ -1,0 +1,94 @@
+<fd-layout-grid [noGap]="true" [style.padding.rem]="0">
+    <!-- Shellbar -->
+    <div fdLayoutGridRow>
+        <div [fdLayoutGridCol]="12">
+            <fd-shellbar
+                    [showNavigationButton]="true"
+                    (navigationButtonClicked)="toggleSideNavigation()"
+            >
+                <fd-shellbar-branding [interactiveBranding]="true">
+                    <fd-shellbar-logo class="pfs-logo">
+                        <a href="#" class="pfs-logo" aria-label="PFS"></a>
+                    </fd-shellbar-logo>        
+                    <fd-shellbar-title [style.margin-left.rem]="0.5">LMS Enquiry Backoffice</fd-shellbar-title>
+                </fd-shellbar-branding>
+
+                <fd-shellbar-actions [closePopoverOnSelect]="true">
+
+                    <!-- Theme Selector -->
+                    <button fd-button [fdMenu]="true" fdType="emphasized" glyph="palette" ariaLabel="Palette Menu" title="Palette Menu"
+                            [style.margin-right.rem]="1" [fdMenuTrigger]="themeMenu">
+                    </button>
+                    <fd-menu #themeMenu>
+                        @for (theme of themes; track theme.id) {
+                        <li fd-menu-item>
+                            <a fd-menu-interactive (click)="switchTheme(theme.id)">
+                                <span fd-menu-title>{{ theme.name }}</span>
+                            </a>
+                        </li>
+                        }
+                    </fd-menu>
+
+                    <!-- Product Switcher -->
+                    <fd-product-switch [closeOnNavigation]="true" [closeOnOutsideClick]="true" [closeOnEscapeKey]="true">
+                        <fd-product-switch-body [products]="productSwitcher"></fd-product-switch-body>
+                    </fd-product-switch>    
+
+                    <!-- User Menu -->
+                    <fd-user-menu (isOpenChange)="isOpenChange($event)">
+                        <fd-user-menu-control>
+                            <fd-avatar
+                                fd-user-menu-control-element
+                                size="xs"
+                                [circle]="true"
+                                [interactive]="true"
+                            ></fd-avatar>
+                        </fd-user-menu-control>
+            
+                        <fd-user-menu-body>
+                            <div fd-user-menu-header>
+                                <fd-avatar
+                                    [circle]="true"
+                                    size="l"
+                                    label="Lisa Miller"
+                                ></fd-avatar>
+                                <div fd-user-menu-header-container>
+                                    <div fd-user-menu-user-name>Lisa Miller</div>
+                                    <div fd-user-menu-subline>lisa.miller&#64;test.com</div>
+                                    <div fd-user-menu-subline>User Experience Designer</div>
+                                </div>
+                                <!-- <button fd-button label="Manage Account" glyph="user-settings" ariaLabel="Manage Account"></button> -->
+                            </div>
+                        </fd-user-menu-body>
+            
+                        <fd-user-menu-footer>
+                            <div fd-bar barDesign="footer">
+                                <div fd-bar-right>
+                                    <button
+                                        fd-button
+                                        label="Sign Out"
+                                        fdType="transparent"
+                                        glyph="filter"
+                                        ariaLabel="Transparent Filter"
+                                        (click)="signOut()"
+                                    ></button>
+                                </div>
+                            </div>
+                        </fd-user-menu-footer>
+                    </fd-user-menu>
+                </fd-shellbar-actions>
+
+            </fd-shellbar>        
+        </div>
+    </div>
+
+    <!-- Side Navigation and Content (Main Router Outlet) -->
+    <div fdLayoutGridRow>
+        <div [fdLayoutGridCol]="0" [colMd]="2" *ngIf="sideNavigationExpanded">
+            <fd-side-nav [sideNavigationConfiguration]="sideNavigationConfiguration"></fd-side-nav>
+        </div>
+        <div [fdLayoutGridCol]="sideNavigationExpanded ? 10 : 12">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</fd-layout-grid>

@@ -1,0 +1,131 @@
+<div class="content">
+    <fd-layout-grid [noGap]="true" class="header-content">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="2">
+                <h2>Business Partners</h2>
+            </div>
+            <div [fdLayoutGridCol]="10" [style.text-align]="'right'">
+                <button fd-button 
+                    fdType="emphasized"
+                    (click)="createBusinessPartner()"
+                >
+                    <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
+                    Create
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    (click)="updateBusinessPartner()"
+                    label="Update"
+                    style="margin-left: 0.5rem;"
+                    glyph="edit-outside"
+                    [disabled]="!selectedBusinessPartner"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    (click)="viewBusinessPartner()"
+                    label="View"
+                    style="margin-left: 0.5rem;"
+                    glyph="detail-view"
+                    [disabled]="!selectedBusinessPartner"
+                >
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+    <component-ngx>
+        <form [formGroup]="businessPartnerSearchForm" (ngSubmit)="searchBusinessPartners()">
+            <fd-layout-grid [noGap]="true" class="component-grid">
+                <div fdLayoutGridRow style="height: auto;">
+                    <div [fdLayoutGridCol]="4" [style.padding-top.rem]="1" [style.padding-right.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label for="partnerName">Business Partner Name:</label>
+                                <input id="partnerName" formControlName="partnerName" fd-form-control type="text" tabindex="1"/>
+                            </div>
+                            <div fd-form-item>
+                                <label fd-form-label for="partnerNumberFrom">Business Partner Number From:</label>
+                                <input id="partnerNumberFrom" formControlName="partnerNumberFrom" fd-form-control type="text" tabindex="4"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="4" [style.padding.rem]="1" [style.padding-right.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label for="email">Registered Email:</label>
+                                <input id="email" formControlName="email" fd-form-control type="email" tabindex="2"/>
+                            </div>
+                            <div fd-form-item>
+                                <label fd-form-label for="partnerNumberTo">Business Partner Number To:</label>
+                                <input id="partnerNumberTo" formControlName="partnerNumberTo" fd-form-control type="text" tabindex="5"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="4" [style.padding.rem]="1">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label for="panNumber">PAN Number:</label>
+                                <input id="panNumber" formControlName="panNumber" fd-form-control type="text" maxlength="10" tabindex="3"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fdLayoutGridRow>
+                    <div [fdLayoutGridCol]="12" [style.padding-left.rem]="1" [style.padding-bottom.rem]="1">
+                        <button fd-button
+                            fdType="emphasized"
+                            label="Search"
+                            type="submit"
+                        >
+                        </button>
+                        <button fd-button
+                            fdType="emphasized"
+                            label="Clear"
+                            style="margin-left: 0.5rem;"
+                            (click)="clearSearch()"
+                        >
+                        </button>
+                    </div>
+                </div>
+            </fd-layout-grid>
+        </form>
+
+        <fd-layout-grid [noGap]="true" class="component-grid">
+            <!-- <div fdLayoutGridRow [style.margin-top.rem]="1" >
+                <div fdLayoutGridCol colGrow>
+                    <button fd-button 
+                        fdType="emphasized"
+                        (click)="createBusinessPartner()"
+                    >
+                        <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
+                        Create
+                    </button>
+                    <button fd-button
+                        fdType="emphasized"
+                        (click)="updateBusinessPartner()"
+                        label="Update"
+                        style="margin-left: 0.5rem;"
+                        glyph="edit-outside"
+                        [disabled]="selectedBusinessPartnerId.selected.length === 0"
+                    >
+                    </button>
+                    <button fd-button
+                        fdType="emphasized"
+                        (click)="viewBusinessPartner()"
+                        label="View"
+                        style="margin-left: 0.5rem;"
+                        glyph="detail-view"
+                        [disabled]="selectedBusinessPartnerId.selected.length === 0"
+                    >
+                    </button>
+                </div>
+            </div> -->
+
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="1">
+                <div [fdLayoutGridCol]="12">
+                    <app-business-partner-list [businessPartners]="businessPartners"></app-business-partner-list>
+                </div>
+            </div>
+        </fd-layout-grid>
+    </component-ngx>
+</div>

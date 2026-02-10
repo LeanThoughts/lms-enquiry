@@ -1,0 +1,98 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 id="fd-dialog-header-c" fd-title>{{ title }}</h1>
+        <button fd-dialog-close-button (click)="dialogRef.close('Closed')"></button>
+    </fd-dialog-header>
+    <fd-dialog-body>
+        <div fdLayoutGridRow style="height: auto;">
+            <div [fdLayoutGridCol]="12" [style.background-color]="'white'">
+                @if (dialogRef.data.operation !== 'View') {
+                    <form [formGroup]="referenceInterestRateForm">
+                        <!-- Reference Interest Rate Type -->
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <label fd-form-label for="referenceInterestRateType">Reference Interest Rate Type:</label>
+                            <input id="referenceInterestRateType" formControlName="referenceRateType" fd-form-control type="text" readonly/>
+                        </div>
+                        <!-- Valid From Date -->
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <label fd-form-label for="validFromDate" [required]="true">Valid From Date:</label>
+                            <fd-date-picker 
+                                type="single" 
+                                inputId="validFromDate" 
+                                formControlName="validFromDate"
+                                [allowNull]="false" 
+                                [useValidation]="true"
+                                aria-required="true">
+                            </fd-date-picker>
+                            @if (referenceInterestRateForm.get('validFromDate')?.errors?.['required'] && referenceInterestRateForm.get('validFromDate')?.touched) {
+                                <fd-form-message type="error" id="validFromDate-form-message">
+                                    Valid from date cannot be empty, please enter a valid date
+                                </fd-form-message>
+                            }
+                        </div>
+                        <!-- Interest Rate -->
+                        <div fd-form-item [style.margin-top.rem]="0.2">
+                            <label fd-form-label for="interestRate" [required]="true">Interest Rate:</label>
+                            <input id="interestRate" formControlName="interestRate" fd-form-control type="number" aria-required="true"/>
+                            @if (referenceInterestRateForm.get('interestRate')?.errors?.['pattern']) {
+                                <fd-form-message type="error" id="interestRate-form-message">
+                                    Please enter a valid interest rate between 1 and 99.99
+                                </fd-form-message>
+                            }
+                            @if (referenceInterestRateForm.get('interestRate')?.errors?.['required'] && referenceInterestRateForm.get('interestRate')?.touched) {
+                                <fd-form-message type="error" id="interestRate-form-message">
+                                    Interest rate cannot be empty, please enter a valid interest rate between 1 and 99.99
+                                </fd-form-message>
+                            }
+                        </div>
+                    </form>
+                }
+                @else {
+                    <div fd-form-item [style.margin-top.rem]="0.7">
+                        <label fd-form-label for="referenceInterestRateType">Reference Interest Rate Type:</label>
+                        <label>{{ selectedReferenceRateType.code }}</label>
+                    </div>
+                    <div fd-form-item [style.margin-top.rem]="0.7">
+                        <label fd-form-label for="referenceInterestRateType">Reference Interest Rate Type Description:</label>
+                        <label>{{ selectedReferenceRateType.description }}</label>
+                    </div>
+                    <div fd-form-item [style.margin-top.rem]="0.7">
+                        <label fd-form-label for="referenceInterestRateType">Valid From Date:</label>
+                        <label>{{ selectedReferenceInterestValue.validFromDate | date:'dd/MM/yyyy' }}</label>
+                    </div>
+                    <div fd-form-item [style.margin-top.rem]="0.7">
+                        <label fd-form-label for="referenceInterestRateType">Interest Rate:</label>
+                        <label>{{ selectedReferenceInterestValue.interestRate }}</label>
+                    </div>
+                }
+            </div>
+        </div>
+    </fd-dialog-body>
+    <fd-dialog-footer>
+        @if (dialogRef.data.operation !== 'View') {
+            <fd-button-bar
+                label="Save"
+                fdType="emphasized"
+                (click)="confirmReferenceInterestRateUpdate()"
+                ariaLabel="Save"
+            >
+            </fd-button-bar>        
+            <fd-button-bar
+                label="Cancel"
+                fdType="transparent"
+                (click)="dialogRef.dismiss('Cancel')"
+                ariaLabel="Cancel"
+            >
+            </fd-button-bar>
+        }
+        @else {
+            <fd-button-bar
+                label="Close"
+                fdType="emphasized"
+                (click)="dialogRef.dismiss('Close')"
+                ariaLabel="Close"
+            >
+            </fd-button-bar>
+        }
+    </fd-dialog-footer>
+</fd-dialog>

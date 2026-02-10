@@ -1,0 +1,141 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="8">
+                <h2>{{ title }}</h2>
+            </div>
+            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button 
+                    fd-button 
+                    (click)="router.navigate(['/business-partners'])" 
+                    fdType="emphasized"
+                >
+                    Back
+                </button>
+                <button 
+                    [style.margin-left.rem]="0.5"
+                    fd-button 
+                    (click)="sendForApproval()" 
+                    fdType="emphasized"
+                    [disabled]="!selectedBusinessPartner || selectedBusinessPartner.workFlowStatusCode === 2 || disableSendForApproval"
+                >
+                    Send for Approval
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="12">
+                <fdp-icon-tab-bar iconTabType="icon" iconTabSize="sm">
+                    <!-- Business Partner Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Partner Details">
+                        <fd-layout-grid [noGap]="false" class="component-grid">
+                            <div fdLayoutGridRow>
+                                <div [fdLayoutGridCol]="12">
+                                    <!-- Business Partner Details -->
+                                    <fd-panel [fixed]="true">
+                                        <h5 fd-panel-title class="fd-panel-title">Basic Information</h5>
+                                        <button fd-button fdType="transparent" glyph="edit" title="Edit Basic Information"
+                                            (click)="editBasicInformation()">
+                                        </button>
+                        
+                                        <div fd-panel-content ariaLabel="Panel Content" id="panel-content-2">
+                        
+                                            <fd-layout-grid [noGap]="true" class="tab-component-grid" [style.margin-top.rem]="0.5">
+                                                <div fdLayoutGridRow>
+                                                    <div fdLayoutGridCol style="background-color: white;">
+                                                        <app-generic-update 
+                                                            [entity]="'businessPartnerBasicInformation'"
+                                                            [operation]="'View'"
+                                                            [selectedObject]="selectedBusinessPartner"
+                                                        />            
+                                                    </div>
+                                                </div>
+                                            </fd-layout-grid>
+                                        
+                                        </div>
+                                    </fd-panel>
+                                </div>
+
+                                <!-- Contact Details -->
+                                <div [fdLayoutGridCol]="12" [style.margin-top.rem]="0.50">  
+                                    <app-contact-list></app-contact-list>
+                                </div>
+                            </div>
+
+                        </fd-layout-grid>
+                    </fdp-icon-tab-bar-tab>
+                    
+                    @if (operation !== 'create') {
+
+                    <!-- Business Partner Roles Tab -->
+                    <fdp-icon-tab-bar-tab label="Business Partner Roles">
+                        <app-generic-list [entity]="'businessPartnerRoles'" [searchString1]="selectedBusinessPartnerId"/>
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- FI Customer/Vendor Tab -->
+                    <fdp-icon-tab-bar-tab label="FI Customer/Vendor">
+                        <app-generic-list 
+                            [entity]="'businessPartnerFICustomerVendor'" 
+                            [searchString1]="selectedBusinessPartnerId"
+                            (onCreateClick)="openCustomerDetailsUpdateDialog()"
+                            (onUpdateClick)="openCustomerDetailsUpdateDialog($event)"
+                            (onViewClick)="openCustomerDetailsViewDialog($event)"
+                            #customerDetailsList
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- KYC Tab -->
+                    <fdp-icon-tab-bar-tab label="KYC">
+                        <app-generic-list 
+                            [entity]="'businessPartnerKYCDetails'" 
+                            [searchString1]="selectedBusinessPartnerId"
+                            (onCreateClick)="openKYCDetailsUpdateDialog()"
+                            (onUpdateClick)="openKYCDetailsUpdateDialog($event)"
+                            (onViewClick)="openKYCDetailsViewDialog($event)"
+                            #kycDetailsList
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Financials Tab -->
+                    <fdp-icon-tab-bar-tab label="Financials">
+                        <app-generic-list [entity]="'businessPartnerFinancials'" [searchString1]="selectedBusinessPartnerId"/>
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Industry Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Industry Details">
+                        <app-generic-list [entity]="'businessPartnerIndustryDetails'" [searchString1]="selectedBusinessPartnerId"/>
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Identification Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Identification Details">
+                        <app-generic-list 
+                            [entity]="'businessPartnerIdentificationDetails'" 
+                            [searchString1]="selectedBusinessPartnerId"
+                            (onCreateClick)="openIdentificationDetailsUpdateDialog()"
+                            (onUpdateClick)="openIdentificationDetailsUpdateDialog($event)"
+                            (onViewClick)="openIdentificationDetailsViewDialog($event)"
+                            #identificationDetailsList
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Bank Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Bank Details">
+                        <app-generic-list 
+                            [entity]="'businessPartnerBankDetails'" 
+                            [searchString1]="selectedBusinessPartnerId"
+                            (onCreateClick)="openBankDetailsUpdateDialog()"
+                            (onUpdateClick)="openBankDetailsUpdateDialog($event)"
+                            (onViewClick)="openBankDetailsViewDialog($event)"
+                            #bankDetailsList
+                        />
+                    </fdp-icon-tab-bar-tab>
+                    }
+                </fdp-icon-tab-bar>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+</component-ngx>

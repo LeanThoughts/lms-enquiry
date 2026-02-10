@@ -1,0 +1,97 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" [style.width.rem]="98">
+        <div fdLayoutGridRow [style.margin-top.rem]="-0.5" [style.margin-bottom.rem]="-1">
+            <div [fdLayoutGridCol]="12" >
+                <h2>Loan Contract Search</h2>
+            </div>
+        </div>
+        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
+            <div [fdLayoutGridCol]="12" [style.text-align]="'right'">
+                <button fd-button
+                    fdType="emphasized"
+                    label="Process Enquiry"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                    (click)="redirectToProcessEnquiry()"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="ICC Approval"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                    (click)="redirectToICCApproval()"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Prelim Risk Assessment"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Application Fee"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Appraisal"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="BMC Approval"
+                    [style.margin-left.rem]="0.3"   
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Board Approval"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Sanction"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Documentation"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Monitoring"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+                <button fd-button
+                    fdType="emphasized"
+                    label="Recovery"
+                    [style.margin-left.rem]="0.3"
+                    [disabled]="selectedEnquiry.selected.length === 0"
+                >
+                </button>
+            </div>
+        </div>
+
+        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
+            <div [fdLayoutGridCol]="12">
+                <app-loan-contract-list></app-loan-contract-list>
+            </div>
+        </div>
+    </fd-layout-grid>
+</component-ngx>

@@ -1,0 +1,309 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 id="fd-dialog-header-c" fd-title class="fd-dialog-header-title">{{ title }}</h1>
+        <button fd-dialog-close-button (click)="dialogRef.close('Closed')"></button>
+    </fd-dialog-header>
+    <fd-dialog-body>
+        @if (dialogRef.data.operation !== 'view') {
+        <form [formGroup]="identificationDetailsForm">
+            <fd-layout-grid class="component-grid">
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="true">Identification Category:</label>
+                                <fd-select formControlName="identificationCategoryCode" placeholder="Select Identification Category"
+                                        (valueChange)="onIdentificationCategoryChange($event)">
+                                    @for (category of identificationCategories; track category.code) {
+                                    <li fd-option [value]="category.code">{{ category.value }}</li>
+                                    }
+                                </fd-select>
+                                @if (identificationDetailsForm.get('identificationCategoryCode')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('identificationCategoryCode')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Identification Category. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.BusinessPartnerIdentificationNumber === 2">
+                                    Identification Number:
+                                </label>
+                                <input formControlName="identificationNumber" fd-form-control type="text" maxlength="60"/>
+                                @if (identificationDetailsForm.get('identificationNumber')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('identificationNumber')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Identification Number. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.idInstitute === 2">Institute:</label>
+                                <input formControlName="idInstitute" fd-form-control type="text" maxlength="40"/>
+                                @if (identificationDetailsForm.get('idInstitute')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('idInstitute')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Institute. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.idEntryDate === 2">Entry Date:</label>
+                                <fd-date-picker type="single" formControlName="idEntryDate"></fd-date-picker>
+                                @if (identificationDetailsForm.get('idEntryDate')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('idEntryDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Entry Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.idValidFromDate === 2">Valid From:</label>
+                                <fd-date-picker type="single" formControlName="idValidFromDate"></fd-date-picker>
+                                @if (identificationDetailsForm.get('idValidFromDate')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('idValidFromDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Valid From Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.idValidToDate === 2">Valid To:</label>
+                                <fd-date-picker type="single" formControlName="idValidToDate"></fd-date-picker>
+                                @if (identificationDetailsForm.get('idValidToDate')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('idValidToDate')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Valid To Date. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.country === 2">Country:</label>
+                                <fd-select formControlName="country" placeholder="Select Country" (valueChange)="onCountryChange($event)">
+                                    @for (country of countries; track country.countryCode) {
+                                    <li fd-option [value]="country.countryCode">{{ country.value }}</li>
+                                    }
+                                </fd-select>
+                                @if (identificationDetailsForm.get('country')?.errors?.['required'] 
+                                        && identificationDetailsForm.get('country')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Country. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.region === 2">Region:</label>
+                                <fd-select formControlName="region" placeholder="Select Region">
+                                    @for (region of regions; track region.regionCode) {
+                                    <li fd-option [value]="region.code">{{ region.value }}</li>
+                                    }
+                                </fd-select>
+                                @if (identificationDetailsForm.get('region')?.errors?.['required'] 
+                                        && identificationDetailsForm.get('region')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Region. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.documentName === 2">Document Name:</label>
+                                <input formControlName="documentName" fd-form-control type="text" maxlength="100"/>
+                                @if (identificationDetailsForm.get('documentName')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('documentName')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Document Name. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.documentType === 2">Document Type:</label>
+                                <fd-select formControlName="documentType" placeholder="Select Document Type">
+                                    @for (documentType of documentTypes; track documentType.code) {
+                                    <li fd-option [value]="documentType.code">{{ documentType.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (identificationDetailsForm.get('documentType')?.errors?.['required'] && 
+                                        identificationDetailsForm.get('documentType')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Document Type. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div fdLayoutGridRow style="height: auto;"  [style.margin-top.rem]="0.2">
+                    <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig.fileReference === 2 && operation === 'create'">
+                                    Select file to upload:
+                                </label>
+                                <fd-file-uploader
+                                    #fileUploaderComponentRef
+                                    placeholder="Select file to upload"
+                                    buttonLabel="Browse"
+                                    accept=".xls,.xlsx,.pdf"
+                                    [required]="filteredFormFieldsConfig.fileReference === 2 && operation === 'create'"
+                                    formControlName="file"
+                                    [multiple]="false"
+                                    (selectedFilesChanged)="handleFileSelection($event)"
+                                >
+                                </fd-file-uploader>
+                                @if (identificationDetailsForm.get('file')?.errors?.['required'] 
+                                        && identificationDetailsForm.get('file')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for File. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fd-layout-grid>
+        </form>
+        }
+        @else {
+        <fd-layout-grid class="component-grid">
+            <div fdLayoutGridRow [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Identification Category:</label>
+                    <label>{{ selectedIdentification.formatted_identificationCategoryCode || 
+                        selectedIdentification.identificationCategoryCode || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Identification Number:</label>
+                    <label>{{ selectedIdentification.formatted_identificationNumber || 
+                        selectedIdentification.identificationNumber || '--' }}</label>
+                </div>
+            </div>
+            <div fdLayoutGridRow [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.idInstitute === 2">Institute:</label>
+                    <label>{{ selectedIdentification.formatted_idInstitute || selectedIdentification.idInstitute || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.idEntryDate === 2">Entry Date:</label>
+                    <label>{{ selectedIdentification.idEntryDate || selectedIdentification.formatted_idEntryDate || '--' }}</label>
+                </div>
+            </div>
+            <div fdLayoutGridRow [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.idValidFromDate === 2">Valid From:</label>
+                    <label>{{ selectedIdentification.idValidFromDate || selectedIdentification.formatted_idValidFromDate || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.idValidToDate === 2">Valid To:</label>
+                    <label>{{ selectedIdentification.idValidToDate || selectedIdentification.formatted_idValidToDate || '--' }}</label>
+                </div>
+            </div>
+            <div fdLayoutGridRow [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.country === 2">Country:</label>
+                    <label>{{ selectedIdentification.formatted_countryName || selectedIdentification.country || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.region === 2">Region:</label>
+                    <label>{{ selectedIdentification.formatted_regionName || selectedIdentification.region || '--' }}</label>
+                </div>
+            </div>
+            <div fdLayoutGridRow [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.documentName === 2">Document Name:</label>
+                    <label>{{ selectedIdentification.formatted_documentName || selectedIdentification.documentName || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label [required]="filteredFormFieldsConfig.documentType === 2">Document Type:</label>
+                    <label>{{ selectedIdentification.formatted_documentType || selectedIdentification.documentType || '--' }}</label>
+                </div>
+            </div>
+
+            <div fdLayoutGridRow [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>File:</label>
+                    <ng-container *ngIf="selectedIdentification.fileReference; else noFile">
+                        <a [href]="selectedIdentification.fileReference"
+                                target="_blank">
+                            <fd-icon [glyph]="'download-from-cloud'"></fd-icon>
+                        </a>
+                    </ng-container>
+                    <ng-template #noFile>
+                        <label>--</label>
+                    </ng-template>
+                </div>
+            </div>
+        </fd-layout-grid>
+        }
+    </fd-dialog-body>
+    <fd-dialog-footer>
+        @if (dialogRef.data.operation !== 'view') {
+            <fd-button-bar
+                label="Save"
+                (click)="submit()"
+                fdType="emphasized"
+                ariaLabel="Save"
+            >
+            </fd-button-bar>        
+            <fd-button-bar
+                label="Cancel"
+                (click)="dialogRef.close('Cancelled')"
+                fdType="ghost"
+                ariaLabel="Cancel"
+            >
+            </fd-button-bar>
+        }
+        @else {
+            <fd-button-bar
+                label="Close"
+                (click)="dialogRef.close('Closed')"
+                fdType="emphasized"
+                ariaLabel="Close"
+            >
+            </fd-button-bar>
+        }
+    </fd-dialog-footer>
+</fd-dialog>

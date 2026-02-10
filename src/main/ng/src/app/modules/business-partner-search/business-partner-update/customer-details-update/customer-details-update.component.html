@@ -1,0 +1,249 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 id="fd-dialog-header-c" fd-title class="fd-dialog-header-title">{{ title }}</h1>
+        <button fd-dialog-close-button (click)="dialogRef.close('Closed')"></button>
+    </fd-dialog-header>
+    <fd-dialog-body>
+        @if (dialogRef.data.operation !== 'view') {
+        <form [formGroup]="customerDetailsForm">
+            <fd-layout-grid [noGap]="true" class="component-grid">
+                <!-- New Row -->
+                <div fdLayoutGridRow style="height: auto;">
+                    <div [fdLayoutGridCol]="6">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.houseBank === 2">House Bank:</label>
+                                <fd-select
+                                    formControlName="houseBank"
+                                    placeholder="Select House Bank">
+                                    @for (houseBank of houseBanks; track houseBank.bankKey) {
+                                        <li fd-option [value]="houseBank.bankKey.trim()">{{ houseBank.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (customerDetailsForm.get('houseBank')?.errors?.['required'] && customerDetailsForm.get('houseBank')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for House Bank. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.planningGroup === 2">Planning Group:</label>
+                                <fd-select
+                                    formControlName="planningGroup"
+                                    placeholder="Select Planning Group">
+                                    @for (planningGroup of planningGroups; track planningGroup.id) {
+                                        <li fd-option [value]="planningGroup.id.trim()">{{ planningGroup.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (customerDetailsForm.get('planningGroup')?.errors?.['required'] && customerDetailsForm.get('planningGroup')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Planning Group. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Row -->
+                <div fdLayoutGridRow style="height: auto;">
+                    <div [fdLayoutGridCol]="6">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.reconAccount === 2">Recon Account:</label>
+                                <input formControlName="reconAccount" fd-form-control type="text" maxlength="20" placeholder="Enter Recon Account"/>
+                                @if (customerDetailsForm.get('reconAccount')?.errors?.['required'] && customerDetailsForm.get('reconAccount')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Recon Account. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.sortKey === 2">Sort Key:</label>
+                                <fd-select
+                                    formControlName="sortKey"
+                                    placeholder="Select Sort Key">
+                                    @for (sortKey of sortKeys; track sortKey.id) {
+                                        <li fd-option [value]="sortKey.id.trim()">{{ sortKey.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (customerDetailsForm.get('sortKey')?.errors?.['required'] && customerDetailsForm.get('sortKey')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Sort Key. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Row -->
+                <div fdLayoutGridRow style="height: auto;">
+                    <div [fdLayoutGridCol]="6">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.dunningProcedure === 2">Dunning Procedure:</label>
+                                <fd-select
+                                    formControlName="dunningProcedure"
+                                    placeholder="Select Dunning Procedure">
+                                    @for (dunningProcedure of dunningProcedures; track dunningProcedure.id) {
+                                        <li fd-option [value]="dunningProcedure.id.trim()">{{ dunningProcedure.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (customerDetailsForm.get('dunningProcedure')?.errors?.['required'] && customerDetailsForm.get('dunningProcedure')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Dunning Procedure. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.paymentTerms === 2">Payment Terms:</label>
+                                <fd-select
+                                    formControlName="paymentTerms"
+                                    placeholder="Select Payment Terms">
+                                    @for (paymentTerm of paymentTerms; track paymentTerm.id) {
+                                        <li fd-option [value]="paymentTerm.id.trim()">{{ paymentTerm.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (customerDetailsForm.get('paymentTerms')?.errors?.['required'] && customerDetailsForm.get('paymentTerms')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Payment Terms. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New Row -->
+                <div fdLayoutGridRow style="height: auto;">
+                    <div [fdLayoutGridCol]="6">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <label fd-form-label [required]="filteredFormFieldsConfig?.paymentMethod === 2">Payment Methods:</label>
+                                <fd-select
+                                    formControlName="paymentMethod"
+                                    placeholder="Select Payment Method">
+                                    @for (paymentMethod of paymentMethods; track paymentMethod.id) {
+                                        <li fd-option [value]="paymentMethod.id.trim()">{{ paymentMethod.description }}</li>
+                                    }
+                                </fd-select>
+                                @if (customerDetailsForm.get('paymentMethod')?.errors?.['required'] && customerDetailsForm.get('paymentMethod')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Payment Method. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="6" [style.margin-top.rem]="0.3" [style.padding-left.rem]="0.75">
+                        <div fd-form-set>
+                            <div fd-form-item>
+                                <fd-checkbox formControlName="checkDoubleInvoice" [required]="filteredFormFieldsConfig?.checkDoubleInvoice === 2" 
+                                        label="Check Double Invoice"></fd-checkbox>
+                                @if (customerDetailsForm.get('checkDoubleInvoice')?.errors?.['required'] && customerDetailsForm.get('checkDoubleInvoice')?.touched) {
+                                <fd-form-message type="error">
+                                    Please provide valid input for Check Double Invoice. It is a mandatory field.
+                                </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fd-layout-grid>
+        </form>
+        }
+        @else {
+        <fd-layout-grid [noGap]="true" class="component-grid">
+            <!-- New Row -->
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>House Bank:</label>
+                    <label>{{ selectedBusinessPartner.formatted_houseBank || selectedBusinessPartner.houseBank || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Planning Group:</label>
+                    <label>{{ selectedBusinessPartner.formatted_planningGroup || selectedBusinessPartner.planningGroup || '--' }}</label>
+                </div>
+            </div>
+
+            <!-- New Row -->
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Recon Account:</label>
+                    <label>{{ selectedBusinessPartner.formatted_reconAccount || selectedBusinessPartner.reconAccount || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Sort Key:</label>
+                    <label>{{ selectedBusinessPartner.formatted_sortKey || selectedBusinessPartner.sortKey || '--' }}</label>
+                </div>
+            </div>
+            
+            <!-- New Row -->
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Dunning Procedure:</label>
+                    <label>{{ selectedBusinessPartner.formatted_dunningProcedure || selectedBusinessPartner.dunningProcedure || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Payment Terms:</label>
+                    <label>{{ selectedBusinessPartner.formatted_paymentTerms || selectedBusinessPartner.paymentTerms || '--' }}</label>
+                </div>
+            </div>
+            
+            <!-- New Row -->
+            <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="0.75">
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Payment Methods:</label>
+                    <label>{{ selectedBusinessPartner.formatted_paymentMethod || selectedBusinessPartner.paymentMethod || '--' }}</label>
+                </div>
+                <div [fdLayoutGridCol]="6" [style.padding.rem]="0">
+                    <label fd-form-label>Check Double Invoice:</label>
+                    <label>{{ selectedBusinessPartner.formatted_checkDoubleInvoice || selectedBusinessPartner.checkDoubleInvoice || '--' }}</label>
+                </div>
+            </div>
+        </fd-layout-grid>
+        }
+
+    </fd-dialog-body>
+
+    <fd-dialog-footer>
+        @if (dialogRef.data.operation !== 'view') {
+            <fd-button-bar
+                label="Save"
+                (click)="submit()"
+                fdType="emphasized"
+                ariaLabel="Save"
+            >
+            </fd-button-bar>        
+            <fd-button-bar
+                label="Cancel"
+                (click)="dialogRef.close('Cancelled')"
+                fdType="ghost"
+                ariaLabel="Cancel"
+            >
+            </fd-button-bar>
+        }
+        @else {
+            <fd-button-bar
+                label="Close"
+                (click)="dialogRef.close('Closed')"
+                fdType="emphasized"
+                ariaLabel="Close"
+            >
+            </fd-button-bar>
+        }
+    </fd-dialog-footer>
+</fd-dialog>

@@ -1,0 +1,90 @@
+<fd-layout-grid [noGap]="true" class="tab-component-grid">
+
+    @if (config.header) {
+        <div fdLayoutGridRow>
+            <div fdLayoutGridCol style="background-color: white;" class="generic-list-header">
+                <h5 fd-title>{{ config.header }}</h5>
+            </div>
+        </div>
+    }
+    
+    <div fdLayoutGridRow>
+        <div fdLayoutGridCol [style.padding.rem]="1" style="background-color: white;">
+            @if (config.createButton) {
+                <!-- Create button -->
+                <button fd-button 
+                    fdType="emphasized"
+                    (click)="openCreateDialog()"
+                    [disabled]="disableCreateButton"
+                    style="margin-right: 0.5rem;"
+                >
+                    <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
+                    Create
+                </button>
+            }
+            @if (config.updateButton) {
+            <!-- Update button -->
+                <button fd-button
+                    fdType="emphasized"
+                    (click)="openUpdateDialog()"
+                    label="Update"
+                    style="margin-right: 0.5rem;"
+                    glyph="edit-outside"
+                    [disabled]="selectedObjectId.isEmpty()"
+                >
+                </button>
+            }
+            @if (config.viewButton) {
+                <!-- View button -->
+                <button fd-button
+                    fdType="emphasized"
+                    (click)="openViewDialog()"
+                    label="View"
+                    glyph="detail-view"
+                    [disabled]="selectedObjectId.isEmpty()"
+                >
+                </button>
+            }
+        </div>
+    </div>
+
+    <div fdLayoutGridRow style="height: auto;">
+        <div [fdLayoutGridCol]="12">
+            <table fd-table>
+                <thead fd-table-header>
+                    <tr fd-table-row>
+                        @for (column of config.displayedColumns; track column.header) {
+                            <th fd-table-cell>{{ column.header }}</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody fd-table-body>
+                    @for (item of data; track item) {
+                        <tr fd-table-row
+                            [hoverable]="true"
+                            [active]="selectedObjectId.isSelected(item.id)"
+                            (click)="selectedObjectId.select(item.id); selectedObject = item;"
+                        >
+                            @for (col of config.displayedColumns; track col) {
+                                <td fd-table-cell>
+                                    @if (col.name === 'fileReference' || col.name === 'fileReference1' || col.name === 'fileReference2') {
+                                        @if (item[col.name]) {
+                                            <a href="http://localhost:8080/enquiry/api/download/{{ item[col.name] }}" target="_blank" download>
+                                                <fd-icon [glyph]="'download-from-cloud'"></fd-icon>
+                                            </a>
+                                        } 
+                                        @else {
+                                            <span>--</span>
+                                        }
+                                    } @else {
+                                        {{ item['formatted_' + col.name] || '--' }}
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</fd-layout-grid>

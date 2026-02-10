@@ -1,0 +1,63 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" [style.width.rem]="98">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="2">
+                <h2>Inbox</h2>
+            </div>
+            <div [fdLayoutGridCol]="10" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button fd-button
+                    fdType="emphasized"
+                    label="Refresh"
+                    (click)="refreshTasks()"
+                >
+                </button>
+            </div>
+        </div>
+
+        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
+            <div [fdLayoutGridCol]="12">
+                <div fd-card-list style="display: flex; gap: 1rem; flex-wrap: wrap">
+                    @for (task of tasks; track task.id) {
+                    <fd-card [interactive]="true" role="listitem" style="max-width: 25%">
+                        <fd-card-header>
+                            <fd-card-main-header [style.text-align]="'right'">
+                                <h2 fd-card-title>{{ task.processName }}</h2>
+                                <h3 fd-card-subtitle>Enquiry No: {{ task.lanContractId }}</h3>
+                                <span fd-card-counter satus="positive">
+                                    Requestor Details: <br>
+                                    {{ task.requestorEmail }} <br>
+                                    {{ task.requestorName }}
+                                </span>
+                                <!-- <button
+                                    fd-button
+                                    fd-card-header-action
+                                    fdType="transparent"
+                                    glyph="overflow"
+                                    ariaLabel="More"
+                                    title="More"
+                                ></button> -->
+                            </fd-card-main-header>
+                            <fd-card-extended-header>
+                                <div fd-card-header-column>
+                                    <div fd-card-header-row>
+                                        <span [style.font-size.rem]="1">{{ task.projectName }}</span>
+                                    </div>
+                                    <div fd-card-header-row>
+                                        <span [style.font-size.rem]="0.8">Requested Date: {{ task.requestDate | date:'dd/MM/yyyy' }}</span>
+                                    </div>
+                                </div>
+                            </fd-card-extended-header>
+                        </fd-card-header>
+                        <fd-card-footer style="border-top: none;">
+                            <button *fdCardFooterActionItem fd-button fdType="positive" [disabled]="isApproveDisabled" 
+                                (click)="approveTask(task)">Approve</button>
+                            <button *fdCardFooterActionItem fd-button fdType="standard">Review</button>
+                            <button *fdCardFooterActionItem fd-button fdType="negative" (click)="rejectTask(task)">Reject</button>
+                        </fd-card-footer>
+                    </fd-card>
+                    }
+                </div>
+            </div>
+        </div>
+    </fd-layout-grid>
+</component-ngx>
