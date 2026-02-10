@@ -1,30 +1,15 @@
-import {enableProdMode} from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
+import { ApplicationRef } from '@angular/core';
+import { ThemingService } from '@fundamental-ngx/core/theming';
 
-import {AppModule} from 'app/app.module';
-import {environment} from 'environments/environment';
-import {hmrBootstrap} from 'hmr';
+async function main() {
+    // Now bootstrap Angular app after MSAL is fully initialized
+    await bootstrapApplication(AppComponent, {
+      providers: [
+        ...appConfig.providers, 
+      ]
+    }).then((appRef: ApplicationRef) => appRef.injector.get(ThemingService).init());}
 
-if ( environment.production )
-{
-    enableProdMode();
-}
-
-const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
-
-if ( environment.hmr )
-{
-    if ( module['hot'] )
-    {
-        hmrBootstrap(module, bootstrap);
-    }
-    else
-    {
-        console.error('HMR is not enabled for webpack-dev-server!');
-        console.log('Are you using the --hmr flag for ng serve?');
-    }
-}
-else
-{
-    bootstrap().catch(err => console.log(err));
-}
+main().catch((err) => console.error('Error during bootstrap:', err));

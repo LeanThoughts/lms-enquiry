@@ -199,11 +199,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-test</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -232,11 +232,89 @@
                     <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.15.0</version>
+                <configuration>
+                    <nodeVersion>v22.12.0</nodeVersion>
+                    <workingDirectory>src/main/ng</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install --legacy-peer-deps</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build -- --configuration production</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- This is needed to copy all angular files to /classes/static/enquiry folder -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>  <!-- safe legacy version; change to your existing one if different -->
+                <executions>
+                    <execution>
+                        <id>copy-angular-to-static-enquiry</id>
+                        <phase>process-resources</phase>  <!-- runs after frontend build, before packaging -->
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <!-- IMPORTANT: adjust this path to match your actual ng build output -->
+                                    <!-- Most common cases: -->
+                                    <!-- 1. If angular.json → "outputPath": "dist/enquiry"          → use: src/main/ng/dist/enquiry -->
+                                    <!-- 2. If angular.json → "outputPath": "dist/my-app"           → use: src/main/ng/dist/my-app -->
+                                    <!-- 3. If angular.json → "outputPath": "../resources/static/enquiry" → use: src/main/ng/../resources/static/enquiry -->
+                                    <directory>src/main/ng/dist/lms-enquiry-bo/</directory>
+                                </resource>
+                            </resources>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
+            <!-- Filtered resources (configs only) -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>static/**</exclude>
+                </excludes>
+            </resource>
+
+            <!-- Angular build output (NO filtering) -->
+            <resource>
+                <directory>src/main/resources/static</directory>
+                <filtering>false</filtering>
             </resource>
         </resources>
     </build>

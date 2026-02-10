@@ -1,48 +1,85 @@
-// Import Fuse core library
-@import "@fuse/scss/core";
-
-// -----------------------------------------------------------------------------------------------------
-// @ Multiple material themes example
-// -----------------------------------------------------------------------------------------------------
-
-// Define the Material palettes
-$yellow-theme-primary: mat-palette($mat-fusedark);
-$yellow-theme-accent: mat-palette($mat-yellow, 600, 400, 700);
-$yellow-theme-warn: mat-palette($mat-red);
-
-// Create the Material theme object
-$yellow-theme: mat-light-theme($yellow-theme-primary, $yellow-theme-accent, $yellow-theme-warn);
-
-// Add ".yellow-theme" class to the body to activate this theme
-.yellow-theme {
-
-    // Generate the Angular Material theme
-    @include angular-material-theme($yellow-theme);
-
-    // Generate the fuse color classes with the new colors...
-    @include generateFuseColorClasses($yellow-theme-primary, $yellow-theme-accent, $yellow-theme-warn);
-}
-
-.mat-dialog-container {
-
-    padding: 0 !important;
-
-}
-
-.mat-dialog-content {
+body {
+    width: 99.1% !important;
     margin: 0 !important;
-    padding: 16px !important;
 }
 
-.mat-toolbar.mat-accent {
-  background: #e68d40 !important;
-  color: #fff;
+.content {
+    flex-grow: 1;
+    background-color: var(--sapBaseColor);
+    &:focus {
+        outline: none;
+    }
 }
 
-.mat-tab-group{
-  font-family: "Helvetica Neue",sans-serif !important;
+.header-content {
+    padding: 1rem !important;
+    padding-bottom: 0 !important;
+    padding-right: 2rem !important;
 }
 
-.success-snackbar {
-    white-space: pre-wrap
+.component-grid {
+    width: 99% !important;
+}
+
+.generic-update-component-grid {
+    width: 97.5% !important;
+    padding: 1rem;
+}
+
+.tab-component-grid {
+    width: 99% !important;
+    padding: 0 !important;
+}
+
+.title-row {
+    height: 1rem !important;
+}
+
+.generic-update-title-row {
+    height: 1.5rem !important;
+}
+
+::ng-deep .fd-file-uploader__container {
+    width: 38.5% !important;
+}
+
+.fd-bar.fd-bar--footer.fd-dialog__footer.is-compact {
+    height: 3.5rem !important;
+    padding: 10px;
+}
+
+.app-generic-list-project-proposal-credit-rating {
+    margin-top: 2rem !important;
+}
+
+.fd-title.fd-title--h5 {
+    font-weight: bold;
+    font-style: italic;
+    // margin-bottom: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.fd-dialog-header-title {
+    margin-bottom: 0.5rem !important;
+}
+
+.generic-list-header {
+    padding-left: 1rem !important;
+}
+
+.fd-panel-title {
+    font-size: 1rem !important;
+    width: 100% !important;
+}
+
+.pfs-logo {
+    display: block !important;
+    width: 34px !important;
+    height: 34px !important;
+    background-image: url('assets/logo.jpg') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: left center !important;
+    text-indent: -9999px; /* hide text, accessibility */
+    overflow: hidden;
 }

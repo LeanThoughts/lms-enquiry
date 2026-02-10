@@ -2,45 +2,42 @@ my-custom-setting: "I_AM_LOADING_THIS_FILE"
 
 spring:
   security:
-    user:
-      name: user
-      password: password
     oauth2:
       client: # <--- This block is for client registrations
         registration:
           azure: # <--- This is your client registration ID (e.g., 'azure')
             provider: azure # <--- ADD THIS LINE: Explicitly link to the 'azure' provider
-            client-id: 102af103-0208-40fe-97db-4c18325eeca1
-            client-secret: jge8Q~vVwJ_AorEfC41UsCdxFc442TakFaWLpc-G # Ensure this is present and correct if needed
+            client-id: cb4a1715-c35b-496f-ae5b-32b7d68a0cf6
+            client-secret: pZF8Q~_jGPul0JYzu_MKH8rrfaygQLPFggP1dbL7 # Ensure this is present and correct if needed
             authorization-grant-type: authorization_code # Common for web apps (BFF)
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}" # Standard Spring Security default
+            redirect-uri: "https://bp-tst.pfs-ess.com/enquiry/login/oauth2/code/{registrationId}" # Standard Spring Security default
             scope: openid,profile,offline_access # Common minimal scopes for OIDC
         provider: # <--- This block is for provider (Authorization Server) definitions
           azure: # <--- This is your provider ID (e.g., 'azure')
-            issuer-uri: https://sts.windows.net/b94a5e24-22c4-4af5-82eb-554731d35dbc/ # <--- Make sure this has the trailing slash
-            jwk-set-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/discovery/v2.0/keys
+            issuer-uri: https://sts.windows.net/4a160a20-e11d-4299-ac9a-1b40a7396f46/ # <--- Make sure this has the trailing slash
+            jwk-set-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/discovery/v2.0/keys
             # If you are using Spring Boot 2.1.x, you might also need:
-            # authorization-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/oauth2/v2.0/authorize
-            # token-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/oauth2/v2.0/token
+            # authorization-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/oauth2/v2.0/authorize
+            # token-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/oauth2/v2.0/token
             # user-info-uri: https://graph.microsoft.com/oidc/userinfo # Less common for AD, but if needed
       resourceserver: # <--- This block is for resource server (JWT validation)
         jwt:
           # audiences: api://f97a56c0-c602-4417-847f-6abadb8a542c
-          issuer-uri: https://sts.windows.net/b94a5e24-22c4-4af5-82eb-554731d35dbc/ # <--- This should also have the trailing slash
-          jwk-set-uri: https://login.microsoftonline.com/b94a5e24-22c4-4af5-82eb-554731d35dbc/discovery/v2.0/keys
+          issuer-uri: https://sts.windows.net/4a160a20-e11d-4299-ac9a-1b40a7396f46/ # <--- This should also have the trailing slash
+          jwk-set-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/discovery/v2.0/keys
   cloud:
     azure:
       active-directory:
         enabled: true
-        tenant-id: b94a5e24-22c4-4af5-82eb-554731d35dbc
-        client-id: 7d2d1dc5-1509-4814-9c35-abac0cac0373
+        tenant-id: 4a160a20-e11d-4299-ac9a-1b40a7396f46
+        client-id: cb4a1715-c35b-496f-ae5b-32b7d68a0cf6
         # If you explicitly define client-secret in the client.registration block,
         # you might not need it here or ensure consistency.
         # client-secret: YOUR_AZURE_AD_APP_SECRET
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true
-  profiles: oauth
+  profiles: pfsdevoauth
   rest:
     basePath: /api
   content:
@@ -49,9 +46,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Marines1@
+    password: Dn47gh3y@
     maximum-pool-size: 40
-    url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
+    url: jdbc:mysql://192.168.1.205:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
     validation-query: select 1
     connection-test-query: select 1
     test-while-idle: true
@@ -127,7 +124,7 @@ sap:
 #      jwt:
 #        keyValue: PfS$$$98567
 server:
-  port: 9000
+  port: 9010
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:
