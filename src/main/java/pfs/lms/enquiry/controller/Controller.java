@@ -38,6 +38,7 @@ public class Controller {
         log.info("Monitoring Officer: " + processorResource.getMonitoringDepartmentInitiator());
         log.info("Risk Officer      : " + processorResource.getRiskDepartmentInitiator());
         log.info("SARC Officer      : " + processorResource.getSarcDepartmentInitiator());
+        log.info("SME Officer      : " + processorResource.getSmeDepartmentInitiator());
 
 
 
@@ -46,11 +47,14 @@ public class Controller {
         User monitoringOfficer = userRepository.findByEmail(processorResource.getMonitoringDepartmentInitiator());
         User riskOfficer = userRepository.findByEmail(processorResource.getRiskDepartmentInitiator());
         User sarcOfficer = userRepository.findByEmail(processorResource.getSarcDepartmentInitiator());
+        User smeOfficer = userRepository.findByEmail(processorResource.getSmeDepartmentInitiator());
+
 
         Boolean sendNotificationToProjectOfficer = false;
         Boolean sendNotificationToMonitoringOfficer = false;
         Boolean sendNotificationToRiskOfficer = false;
         Boolean sendNotificationToSarcOfficer = false;
+        Boolean sendNotificationToSmeOfficer = false;
 
 
         // Set Empty strings in case of null values
@@ -65,6 +69,9 @@ public class Controller {
 
         if (processorResource.getSarcDepartmentInitiator() == null)
             processorResource.setSarcDepartmentInitiator("");
+
+        if (processorResource.getSmeDepartmentInitiator() == null)
+            processorResource.setSmeDepartmentInitiator("");
 
         // Has the project officer changed?
         if (processorResource.getProjectDepartmentInitiator() != "") {
@@ -88,16 +95,24 @@ public class Controller {
         }
 
         // Has the Sarc officer changed?
-        if (processorResource.getRiskDepartmentInitiator() != "") {
+        if (processorResource.getSarcDepartmentInitiator() != "") {
             if (processorResource.getSarcDepartmentInitiator().equals(loanApplication.getSarcDepartmentInitiator()) == false) {
                 sendNotificationToSarcOfficer = true;
             }
         }
 
+
+        // Has the SME officer changed?
+        if (processorResource.getSmeDepartmentInitiator() != "") {
+            if (processorResource.getSmeDepartmentInitiator().equals(loanApplication.getSmeDepartmentInitiator()) == false) {
+                sendNotificationToSmeOfficer = true;
+            }
+        }
         loanApplication.updateProcessors(processorResource.getProjectDepartmentInitiator(),
                                          processorResource.getMonitoringDepartmentInitiator(),
                                          processorResource.getRiskDepartmentInitiator(),
-                                         processorResource.getSarcDepartmentInitiator());
+                                         processorResource.getSarcDepartmentInitiator(),
+                                         processorResource.getSmeDepartmentInitiator());
 
 
         loanApplication = loanApplicationRepository.save(loanApplication);
@@ -119,6 +134,11 @@ public class Controller {
         if (sendNotificationToSarcOfficer == true) {
             riskNotificationEmailService.sendOfficerAssignmentNotification(sarcOfficer,loanApplication,"SARC Officer");
         }
+        // Send Notification to Monitoring Officer
+        if (sendNotificationToSmeOfficer == true) {
+            riskNotificationEmailService.sendOfficerAssignmentNotification(smeOfficer,loanApplication,"SME Officer");
+        }
+
         // Send Notification to Risk Department Head if Risk Officer is not assigned yet
         if (loanApplication.getRiskDepartmentInitiator() == null ||loanApplication.getRiskDepartmentInitiator().equals("")) {
             riskNotificationEmailService.sendRiskOfficerAssignmentNotification(riskDeptHeadUser, loanApplication);

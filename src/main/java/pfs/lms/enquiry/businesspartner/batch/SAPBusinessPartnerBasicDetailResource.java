@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
+import pfs.lms.enquiry.businesspartner.repository.BupaRoleCustomerFieldValuesRepository;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
@@ -16,11 +17,14 @@ import java.text.ParseException;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 
+
+
+
 public class SAPBusinessPartnerBasicDetailResource implements Serializable {
 
     public SAPBusinessPartnerBasicDetailResource() {
         sapBusinessPartnerBasicDetailsResourceDetail = new SAPBusinessPartnerBasicDetailsResourceDetail();
-    }
+     }
 
     @JsonProperty(value = "d")
     private SAPBusinessPartnerBasicDetailsResourceDetail sapBusinessPartnerBasicDetailsResourceDetail;
@@ -39,6 +43,8 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
     mapBupaBasicDetails(Partner partner) throws ParseException {
 
         SAPBusinessPartnerBasicDetailsResourceDetail detailsResource = new SAPBusinessPartnerBasicDetailsResourceDetail();
+
+
 
         detailsResource.setPartnerGroup("0001");
 
@@ -189,6 +195,8 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         }
         if (partner.getReconAccount() != null){
             detailsResource.setReconaccount(partner.getReconAccount());
+        } else{
+
         }
 
         detailsResource.setRole(partner.getPartyRole());
