@@ -8,4 +8,6 @@ public interface BupaRoleCustomerFieldValuesRepository extends JpaRepository<Bup
 
 
    BupaRoleCustomerFieldValues findByBupaRoleCode(String code);
+   BupaRoleCustomerFieldValues findByBupaRoleCodeAndPartnerGroup(String roleType, String partnerGroup);
+
 }
