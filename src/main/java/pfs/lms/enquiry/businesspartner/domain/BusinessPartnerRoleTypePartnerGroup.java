@@ -11,18 +11,15 @@ import javax.persistence.*;
 @EqualsAndHashCode
 //@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class BusinessPartnerRoleType {
+public class BusinessPartnerRoleTypePartnerGroup {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
-    private String code;
-
-    private String value;
+    private String roleType;
 
     private String partnerGroup;
 
-    public BusinessPartnerRoleType() {
+    public BusinessPartnerRoleTypePartnerGroup() {
     }
 }

@@ -16,7 +16,10 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public  class BupaRoleCustomerFieldValues {
     @Id
+    private Integer id;
+
     private String bupaRoleCode;
+    private String partnerGroup;
 
     private String reconAccount;
     private String dunningProcedure;
