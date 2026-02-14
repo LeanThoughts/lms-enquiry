@@ -45,3 +45,5 @@ documents/
 .history
 
 ng_tobedeleted
+
+src/main/resources/static

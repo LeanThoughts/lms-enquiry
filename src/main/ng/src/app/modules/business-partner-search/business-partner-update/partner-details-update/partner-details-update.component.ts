@@ -136,6 +136,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
         // Initialize partner details form
         this.partnerDetailsForm = new FormGroup({
             partnerCategory: new FormControl(this.selectedBusinessPartner?.partnerCategory?.trim() || null),
+            partnerGroup: new FormControl(this.selectedBusinessPartner?.partnerGroup?.trim() || null, [Validators.required]),
             defaultPartnerRole: new FormControl(this.selectedBusinessPartner?.defaultPartnerRole?.trim() || '', [Validators.required]),
             partyName1: new FormControl(this.selectedBusinessPartner?.partyName1?.trim() || null),
             partyName2: new FormControl(this.selectedBusinessPartner?.partyName2?.trim() || null),

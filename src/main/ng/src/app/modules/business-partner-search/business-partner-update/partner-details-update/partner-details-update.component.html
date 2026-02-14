@@ -82,6 +82,23 @@
                 <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.partyCategory !== 3">
                     <div fd-form-set>
                         <div fd-form-item [style.margin-top.rem]="0.3">
+                            <label fd-form-label for="partnerCategory" [required]="formFieldsConfig?.partnerGroup == 2">Partner Group:</label>
+                            <fd-select id="partnerGroup" formControlName="partnerGroup" placeholder="Select Partner Group">
+                                <li fd-option [value]="'1'">Person</li>
+                                <li fd-option [value]="'2'">Organization</li>
+                                <li fd-option [value]="'3'">Group</li>
+                            </fd-select>
+                            @if (partnerDetailsForm.get('partnerGroup')?.errors?.['required'] && partnerDetailsForm.get('partnerGroup')?.touched) {
+                                <fd-form-message type="error" id="partnerGroup-form-message">
+                                    Please provide valid input for Partner Group. It is a mandatory field.
+                                </fd-form-message>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.partyCategory !== 3">
+                    <div fd-form-set>
+                        <div fd-form-item [style.margin-top.rem]="0.3">
                             <label fd-form-label for="partnerCategory" [required]="formFieldsConfig?.partyCategory == 2">Partner Category:</label>
                             <fd-select id="partnerCategory" formControlName="partnerCategory" placeholder="Select Partner Category"
                                     (valueChange)="onPartnerCategoryChange($event)">

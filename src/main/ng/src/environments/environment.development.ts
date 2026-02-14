@@ -1,6 +1,6 @@
 export const environment = {
     // Primary Host
-    primaryHost: 'http://localhost:8080/enquiry',
+    primaryHost: 'http://localhost:9000/enquiry',
     // Primary API Host
-    primaryApiHost: 'http://localhost:8080/enquiry/api'
+    primaryApiHost: 'http://localhost:9000/enquiry/api'
 };
