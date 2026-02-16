@@ -43,6 +43,7 @@ export class BusinessPartnerSearchService implements Resolve<any> {
             forkJoinObjects.paymentTerms = this.getPaymentTerms();         
             forkJoinObjects.paymentMethods = this.getPaymentMethods();         
             forkJoinObjects.businessPartner = this.getBusinesPartner(route.params['id']);
+            forkJoinObjects.partnerGroups = this.getPartnerGroups();
         }
         else {
             forkJoinObjects.businessPartnerContacts = of(null);
@@ -50,6 +51,7 @@ export class BusinessPartnerSearchService implements Resolve<any> {
             forkJoinObjects.legalForms = this.getLegalForms();
             forkJoinObjects.legalEntities = this.getLegalEntities();
             forkJoinObjects.houseBanks = this.getHouseBanks();
+            forkJoinObjects.partnerGroups = this.getPartnerGroups();
         }
         return forkJoin(forkJoinObjects);
     }
@@ -296,7 +298,7 @@ export class BusinessPartnerSearchService implements Resolve<any> {
     /**
      * Create business partner
      */
-    createPartner(partner: any): Observable<any> {
+    createBusinessPartner(partner: any): Observable<any> {
         return this.http.post<any>(environment.primaryApiHost + '/partners/create', partner);
     }
 
@@ -499,5 +501,19 @@ export class BusinessPartnerSearchService implements Resolve<any> {
             'processName': 'BusinessPartner'
         }
         return this.http.put<any>(environment.primaryApiHost + '/startprocess', requestObj);
-    }    
+    }
+
+    /**
+     * Get partner groups
+     */
+    getPartnerGroups(): Observable<any> {
+        return this.http.get<any>(environment.primaryApiHost + '/partnerGroups?size=1000&sort=value,asc');
+    }
+
+    /**
+     * Get partner groups for role type
+     */
+    getPartnerGroupsForRoleType(roleType: string): Observable<any> {
+        return this.http.get<any>(environment.primaryApiHost + '/businessPartnerRoleTypePartnerGroups/search/findByRoleType', { params: { roleType } });
+    }
 }

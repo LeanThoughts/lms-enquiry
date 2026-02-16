@@ -186,6 +186,7 @@ export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, On
                         }
                         
                         const currentUser = this.authService.currentUser;
+                        console.log('currentUser', currentUser);
                         const name = `${currentUser.firstName} ${currentUser.lastName}`;
                         const email = currentUser.email;
                         this.disableSendForApproval = true;

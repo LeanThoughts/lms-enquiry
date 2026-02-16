@@ -92,7 +92,7 @@ export class BankDetailsUpdateDialogComponent implements OnInit {
                 entryDate: new FormControl(this.selectedBankDetails?.entryDate || null),
                 validFromDate: new FormControl(this.selectedBankDetails?.validFromDate || null),
                 validToDate: new FormControl(this.selectedBankDetails?.validToDate || null),
-                bankCountry: new FormControl(this.selectedBankDetails?.bankCountry || null),
+                bankCountry: new FormControl(this.selectedBankDetails?.bankCountry || 'IN'),
                 referenceNumber: new FormControl(this.selectedBankDetails?.referenceNumber || null),
                 accountHolderName: new FormControl(this.selectedBankDetails?.accountHolderName || null),
                 bankAccountName: new FormControl(this.selectedBankDetails?.bankAccountName || null),

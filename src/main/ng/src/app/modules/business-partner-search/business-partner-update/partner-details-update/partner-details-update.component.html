@@ -8,8 +8,7 @@
                 <button 
                     fd-button 
                     fdType="emphasized"
-                    (click)="operation === 'create' ? router.navigate(['/business-partners']) 
-                        : router.navigate(['/business-partners', operation, selectedBusinessPartner.id, selectedBusinessPartner.defaultPartnerRole])"
+                    (click)="goBack()"
                 >
                     Back
                 </button>
@@ -84,9 +83,9 @@
                         <div fd-form-item [style.margin-top.rem]="0.3">
                             <label fd-form-label for="partnerCategory" [required]="formFieldsConfig?.partnerGroup == 2">Partner Group:</label>
                             <fd-select id="partnerGroup" formControlName="partnerGroup" placeholder="Select Partner Group">
-                                <li fd-option [value]="'1'">Person</li>
-                                <li fd-option [value]="'2'">Organization</li>
-                                <li fd-option [value]="'3'">Group</li>
+                                @for (partnerGroup of partnerGroupsPerRoleType; track partnerGroup.code) {
+                                    <li fd-option [value]="partnerGroup.code">{{ partnerGroup.value }}</li>
+                                }
                             </fd-select>
                             @if (partnerDetailsForm.get('partnerGroup')?.errors?.['required'] && partnerDetailsForm.get('partnerGroup')?.touched) {
                                 <fd-form-message type="error" id="partnerGroup-form-message">

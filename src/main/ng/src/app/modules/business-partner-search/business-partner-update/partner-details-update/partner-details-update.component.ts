@@ -4,6 +4,7 @@ import { BusinessPartnerSearchService } from '../../business-partner-search.serv
 import { 
     ButtonComponent, 
     DatePickerComponent, 
+    DialogService, 
     FormModule, 
     LayoutGridModule, 
     SelectModule, 
@@ -18,6 +19,7 @@ import { DatePipe, JsonPipe } from '@angular/common';
 import { ComponentNgxComponent } from '../../../../common/component-ngx/component-ngx.component';
 import { MultiComboboxModule } from '@fundamental-ngx/core';
 import { NgIf } from '@angular/common';
+import { CustomDialogComponent } from '../../../../custom-dialog.component';
 
 @Component({
     selector: 'app-partner-details-update',
@@ -31,7 +33,8 @@ import { NgIf } from '@angular/common';
         TitleComponent,
         ComponentNgxComponent,
         MultiComboboxModule,
-        NgIf
+        NgIf,
+        CustomDialogComponent
     ],
     templateUrl: './partner-details-update.component.html'
 })
@@ -47,6 +50,9 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
     houseBanks: any[] = [];
     partnerTitles: any[] = [];
     statesOfIndia: any[] = statesOfIndia;
+    partnerGroups: any[] = [];
+
+    partnerGroupsPerRoleType: any[] = [];
 
     // disableSendForApproval: boolean = false;
 
@@ -64,7 +70,9 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
         private businessPartnerService: BusinessPartnerSearchService, 
         private route: ActivatedRoute,
         public router: Router,
-        private messageService: MessageService) 
+        private messageService: MessageService,
+        private dialog: DialogService
+    ) 
     {
         // Determine selected business partner and also subscribe to changes
         // this.selectedBusinessPartner = this.businessPartnerService.selectedEntity$.getValue();
@@ -88,6 +96,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             this.legalEntities = resolvedData['legalEntities'] ? resolvedData['legalEntities']._embedded.legalEntities : [];
             this.houseBanks = resolvedData['houseBanks'] ? resolvedData['houseBanks']._embedded.houseBanks : [];
             this.businessPartnerRoleTypes = resolvedData['businessPartnerRoleTypes'];
+            this.partnerGroups = resolvedData['partnerGroups'] ? resolvedData['partnerGroups']._embedded.partnerGroups : [];
         }
 
         // Get title
@@ -207,11 +216,25 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
                     });    
                 this.formFieldsConfig = { ...formFieldsConfig };
                 this.resetFormValidators();
-                console.log('formFieldsConfig', this.formFieldsConfig);
             },
             error: (err) => {
                 console.error('Failed to load field config', err);
                 this.formFieldsConfig = {}; // optional fallback
+            }
+        });
+
+        this.businessPartnerService.getPartnerGroupsForRoleType(event).subscribe({
+            next: (result: any) => {
+                const array = result._embedded.businessPartnerRoleTypePartnerGroups;
+                this.partnerGroupsPerRoleType = [];
+                array.forEach((item: any) => {
+                    this.partnerGroupsPerRoleType.push(this.partnerGroups.filter((partnerGroup: any) => partnerGroup.code === item.partnerGroup)[0]);
+                });
+                if(this.partnerGroupsPerRoleType.length === 1)
+                    this.partnerDetailsForm.get('partnerGroup')?.setValue(this.partnerGroupsPerRoleType[0].code);
+            },
+            error: (err) => {
+                console.error('Failed to load partner groups', err);
             }
         });
     }
@@ -220,6 +243,8 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
      * Reset form validators
      */
     resetFormValidators() {
+        // Partner Group
+        this.formFieldsConfig
         // Partner Category
         this.formFieldsConfig.partyCategory === 2 ? this.partnerDetailsForm.get('partnerCategory')?.setValidators([Validators.required]) 
             : this.partnerDetailsForm.get('partnerCategory')?.removeValidators([Validators.required]);
@@ -292,7 +317,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             // There is a server side error when country is passed to the server, hence pass empty string for country
             partnerDetails.country = '';
             if (this.operation === 'create') {
-                this.businessPartnerService.createPartner(partnerDetails).subscribe({
+                this.businessPartnerService.createBusinessPartner(partnerDetails).subscribe({
                     next: (result) => {
                         this.createDefaultBusinessPartnerRole(result.id, true, () => {
                             this.messageService.showSuccess('Business partner created successfully');
@@ -372,5 +397,32 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    /**
+     * Go back
+     */
+    goBack() {
+        if(this.partnerDetailsForm.dirty) {
+            const dialogRef = this.dialog.open(CustomDialogComponent, {
+                data: {
+                    description: 'Are you sure you want to leave this page? All unsaved changes will be lost.',
+                    title: 'Confirm Leave'
+                },
+                width: '30rem'
+            });
+            dialogRef.afterClosed.subscribe((result: any) => {
+                if(result.continue) {
+                    this.operation === 'create' ? this.router.navigate(['/business-partners']) 
+                        : this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id, 
+                            this.selectedBusinessPartner.defaultPartnerRole]);
+                }
+            });
+        }
+        else {
+            this.operation === 'create' ? this.router.navigate(['/business-partners']) 
+                : this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id, 
+                    this.selectedBusinessPartner.defaultPartnerRole]);
+        }
     }
 }

@@ -68,6 +68,7 @@ public class PartnerService implements IPartnerService {
         //If exists return the existing partner
         if (existing != null) {
             Object oldPartner = existing.clone();
+            existing.setPartnerGroup(partner.getPartnerGroup());
             existing.setAddressLine1(partner.getAddressLine1());
             existing.setAddressLine2(partner.getAddressLine2());
             existing.setAddressLine3(partner.getAddressLine3());
@@ -187,6 +188,7 @@ public class PartnerService implements IPartnerService {
         Partner partner = partnerRepository.findById(partnerResource.getId()).orElseThrow(() ->
                 new RuntimeException("Partner not found"));
         Object oldPartner = partner.clone();
+        partner.setPartnerGroup(partnerResource.getPartnerGroup());
         partner.setPartyName1(partnerResource.getPartyName1());
         partner.setPartyName2(partnerResource.getPartyName2());
         partner.setSearchTerm1(partnerResource.getSearchTerm1());

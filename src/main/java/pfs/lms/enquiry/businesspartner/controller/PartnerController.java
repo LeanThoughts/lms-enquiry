@@ -51,8 +51,9 @@ public class PartnerController {
     public ResponseEntity getLoggedinPartner(HttpServletRequest request) {
 
         System.out.println("----------- Get Logged in Partner ----------");
+        System.out.println(request.getUserPrincipal().getName());
         if (request.getUserPrincipal() != null) {
-            if (request.getUserPrincipal().getName().equals("admin")) {
+            if (request.getUserPrincipal().getName().equals("gopinath.guptha@leanthoughts.com")) {
                 System.out.println("----------- Partner Name ---------- : " + request.getUserPrincipal().getName());
                 return ResponseEntity.ok(userRepository.findByEmail("admin@gmail.com"));
             } else
