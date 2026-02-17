@@ -19,4 +19,11 @@ public  class PartnerGroup {
     private String code;
 
     private String value;
+
+    private Boolean externalNumberRange;
+
+    private String startingId;
+
+    private String endingId;
+
 }
