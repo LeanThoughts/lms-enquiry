@@ -29,7 +29,7 @@ export class BusinessPartnerSearchService implements Resolve<any> {
             forkJoinObjects.bankCountry = this.getCountryCodes();
             forkJoinObjects.identificationCategoryCode = this.getIdentificationCategories();
             forkJoinObjects.documentType = this.getDocumentTypes();
-            forkJoinObjects.country = this.getCountries();
+            forkJoinObjects.country = this.getCountryCodes();
             forkJoinObjects.industrySystemId = this.getIndustrySystems();
             forkJoinObjects.businessPartnerRoleTypes = this.getBusinessPartnerRoleTypes();
             forkJoinObjects.legalForms = this.getLegalForms();
@@ -138,9 +138,9 @@ export class BusinessPartnerSearchService implements Resolve<any> {
     /**
      * Get business partner customer details
      */
-    getBusinessPartnerCustomerDetailsFieldConfig(defaultPartnerRole: string): Observable<any> {
-        return this.http.get<any>(environment.primaryApiHost + '/bupaRoleCustomerFieldValueses/search/findByBupaRoleCode', 
-            { params: { code: defaultPartnerRole } });
+    getBusinessPartnerCustomerDetailsFieldConfig(defaultPartnerRole: string, partnerGroup: string): Observable<any> {
+        return this.http.get<any>(environment.primaryApiHost + '/bupaRoleCustomerFieldValueses/search/findByBupaRoleCodeAndPartnerGroup', 
+            { params: { roleType: defaultPartnerRole, partnerGroup: partnerGroup } });
     }
 
     /**
@@ -257,15 +257,15 @@ export class BusinessPartnerSearchService implements Resolve<any> {
     /**
      * Get countries
      */
-    getCountries(): Observable<any> {
-        return new Observable(observer => {
-            this.http.get<any>(environment.primaryApiHost + '/countries?sort=countryCode&size=300').subscribe(result => {
-                const countries = result._embedded.countries;
-                observer.next(countries);
-                observer.complete();
-            });
-        });
-    }
+    // getCountries(): Observable<any> {
+    //     return new Observable(observer => {
+    //         this.http.get<any>(environment.primaryApiHost + '/countries?sort=countryCode&size=300').subscribe(result => {
+    //             const countries = result._embedded.countries;
+    //             observer.next(countries);
+    //             observer.complete();
+    //         });
+    //     });
+    // }
     
     /**
      * Get countries
@@ -515,5 +515,12 @@ export class BusinessPartnerSearchService implements Resolve<any> {
      */
     getPartnerGroupsForRoleType(roleType: string): Observable<any> {
         return this.http.get<any>(environment.primaryApiHost + '/businessPartnerRoleTypePartnerGroups/search/findByRoleType', { params: { roleType } });
+    }
+
+    /**
+     * Get partners by role type
+     */
+    getPartnersByRoleType(roleType: string): Observable<any> {
+        return this.http.get<any>(environment.primaryApiHost + '/partners/role/' + roleType);
     }
 }

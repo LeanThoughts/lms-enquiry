@@ -624,7 +624,7 @@ public class PartnerService implements IPartnerService {
         partner.setReconAccount(bupaFICustomerVendorDetailResource.getReconAccount());
         partner.setSortKey(bupaFICustomerVendorDetailResource.getSortKey());
         partner.setDunningProcedure(bupaFICustomerVendorDetailResource.getDunningProcedure());
-        partner.setPaymentMethod(bupaFICustomerVendorDetailResource.getPaymentMethods());
+        partner.setPaymentMethod(bupaFICustomerVendorDetailResource.getPaymentMethod());
         partner.setPaymentTerms(bupaFICustomerVendorDetailResource.getPaymentTerms());
         partner.setCheckDoubleInvoice(bupaFICustomerVendorDetailResource.getCheckDoubleInvoice());
         partner = partnerRepository.save(partner);

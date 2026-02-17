@@ -9,6 +9,7 @@ import {
     LayoutGridModule, 
     SelectModule, 
     TitleComponent,
+    MultiComboboxComponent
 } from '@fundamental-ngx/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from '../../../../message.service';
@@ -24,7 +25,8 @@ import { MessageService } from '../../../../message.service';
         TitleComponent,
         DialogModule,
         DialogCloseButtonComponent,
-        CheckboxComponent
+        CheckboxComponent,
+        MultiComboboxComponent
     ]
 })
 export class CustomerDetailsUpdateDialogComponent implements OnInit {
@@ -42,6 +44,7 @@ export class CustomerDetailsUpdateDialogComponent implements OnInit {
     operation: string = '';
     defaultPartnerRole: string = '';
     selectedBusinessPartner: any;
+    selectedPaymentMethods: any[] = [];
 
     formFieldsDefaultValues: any = {};
     formFieldsConfig: any = {};
@@ -90,6 +93,18 @@ export class CustomerDetailsUpdateDialogComponent implements OnInit {
             return;
         }
 
+        console.log('formFieldsDefaultValues in customer details update', this.formFieldsDefaultValues);
+        let paymentMethods = [];
+        console.log('this.selectedBusinessPartner', this.selectedBusinessPartner);
+        if (this.selectedBusinessPartner?.paymentMethod) {
+            paymentMethods = this.selectedBusinessPartner?.paymentMethod.split('');
+        }
+        console.log('paymentMethods', paymentMethods);
+        paymentMethods.forEach((pmId: any) => {
+            this.selectedPaymentMethods.push(this.paymentMethods.find((paymentMethod: any) => paymentMethod.id === pmId));
+        });
+        console.log('selectedPaymentMethods', this.selectedPaymentMethods);
+
         // Initialize partner details form
         this.customerDetailsForm = new FormGroup({
             houseBank: new FormControl(
@@ -110,9 +125,11 @@ export class CustomerDetailsUpdateDialogComponent implements OnInit {
             paymentTerms: new FormControl(
                 this.selectedBusinessPartner?.paymentTerms ?? this.formFieldsDefaultValues?.paymentTerms ?? null
             ),
-            paymentMethod: new FormControl(
-                this.selectedBusinessPartner?.paymentMethod ?? this.formFieldsDefaultValues?.paymentMethod ?? null
-            ),
+            // paymentMethod: new FormControl(
+            //     this.selectedBusinessPartner?.paymentMethod ?? this.formFieldsDefaultValues?.paymentMethod ?? null
+            // ),
+            paymentMethod: new FormControl(null),
+
             checkDoubleInvoice: new FormControl(
                 this.selectedBusinessPartner?.checkDoubleInvoice ?? this.formFieldsDefaultValues?.checkDoubleInvoice ?? null
             ),
@@ -147,6 +164,13 @@ export class CustomerDetailsUpdateDialogComponent implements OnInit {
 
         var customerDetails: any = { ...this.customerDetailsForm.value };
         customerDetails.partnerId = this.selectedBusinessPartner.id;
+
+        let paymentMethods = '';
+        this.selectedPaymentMethods.forEach((paymentMethod: any) => {
+            paymentMethods += paymentMethod.id;
+        });
+        customerDetails.paymentMethod = paymentMethods;
+
         if (this.operation === 'update') {
             this.businessPartnerService.updateBusinessPartnerCustomerDetails(customerDetails).subscribe({
                 next: (result: any) => {
@@ -210,5 +234,13 @@ export class CustomerDetailsUpdateDialogComponent implements OnInit {
             }
             control.updateValueAndValidity();
         });
+    }
+
+    /**
+     * On payment method selection change
+     */
+    onPaymentMethodSelectionChange(event: any) {
+        console.log('onPaymentMethodSelectionChange', event);
+        this.selectedPaymentMethods = event.selectedItems;
     }
 }

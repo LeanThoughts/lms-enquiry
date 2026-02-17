@@ -98,7 +98,7 @@ export class IdentificationDetailsUpdateDialogComponent implements OnInit {
                 idEntryDate: new FormControl(this.selectedIdentification?.idEntryDate || null),
                 idValidFromDate: new FormControl(this.selectedIdentification?.idValidFromDate || null),
                 idValidToDate: new FormControl(this.selectedIdentification?.idValidToDate || null),
-                country: new FormControl(this.selectedIdentification?.country || null),
+                country: new FormControl(this.selectedIdentification?.country || 'IN'),
                 region: new FormControl(this.selectedIdentification?.region || null),
                 documentName: new FormControl(this.selectedIdentification?.documentName || null),
                 documentType: new FormControl(this.selectedIdentification?.documentType || null),

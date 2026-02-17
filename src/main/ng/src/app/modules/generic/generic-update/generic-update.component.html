@@ -148,7 +148,7 @@
                                         </label>
                                     }
                                     @if (field.type === 'file') {
-                                        <a href="http://localhost:8080/enquiry/api/download/{{ selectedObject[field.name] }}">
+                                        <a href="{{ apiUrl }}/download/{{ selectedObject[field.name] }}">
                                             <fd-icon [glyph]="'download-from-cloud'"></fd-icon>
                                         </a>
                                     }

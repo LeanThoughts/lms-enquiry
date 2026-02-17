@@ -133,13 +133,21 @@
                         <div fd-form-set>
                             <div fd-form-item>
                                 <label fd-form-label [required]="filteredFormFieldsConfig?.paymentMethod === 2">Payment Methods:</label>
-                                <fd-select
+                                <!-- <fd-select
                                     formControlName="paymentMethod"
                                     placeholder="Select Payment Method">
                                     @for (paymentMethod of paymentMethods; track paymentMethod.id) {
                                         <li fd-option [value]="paymentMethod.id.trim()">{{ paymentMethod.description }}</li>
                                     }
-                                </fd-select>
+                                </fd-select> -->
+                                <fd-multi-combobox
+                                    (selectionChange)="onPaymentMethodSelectionChange($event)"
+                                    [dataSource]="paymentMethods"
+                                    displayKey="description"
+                                    [selectedItems]="selectedPaymentMethods"
+                                    lookupKey="id"
+                                >
+                                </fd-multi-combobox>
                                 @if (customerDetailsForm.get('paymentMethod')?.errors?.['required'] && customerDetailsForm.get('paymentMethod')?.touched) {
                                 <fd-form-message type="error">
                                     Please provide valid input for Payment Method. It is a mandatory field.

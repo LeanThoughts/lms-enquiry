@@ -110,8 +110,8 @@
                             <div fd-form-item>
                                 <label fd-form-label [required]="filteredFormFieldsConfig.country === 2">Country:</label>
                                 <fd-select formControlName="country" placeholder="Select Country" (valueChange)="onCountryChange($event)">
-                                    @for (country of countries; track country.countryCode) {
-                                    <li fd-option [value]="country.countryCode">{{ country.value }}</li>
+                                    @for (country of countries; track country.code) {
+                                    <li fd-option [value]="country.code">{{ country.value }}</li>
                                     }
                                 </fd-select>
                                 @if (identificationDetailsForm.get('country')?.errors?.['required'] 

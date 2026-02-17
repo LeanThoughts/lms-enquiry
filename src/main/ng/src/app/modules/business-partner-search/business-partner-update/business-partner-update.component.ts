@@ -49,6 +49,7 @@ export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, On
     houseBanks: any[] = [];
     businessPartnerRoleTypes: any[] = [];
     formFieldsConfig: any = {};
+    partnerGroups: any[] = [];
 
     private destroy$ = new Subject<void>();
 
@@ -120,6 +121,7 @@ export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, On
             this.legalEntities = resolvedData['legalEntities'] ? resolvedData['legalEntities']._embedded.legalEntities : [];
             this.houseBanks = resolvedData['houseBanks'] ? resolvedData['houseBanks']._embedded.houseBanks : [];
             this.businessPartnerRoleTypes = resolvedData['businessPartnerRoleTypes'];
+            this.partnerGroups = resolvedData['partnerGroups'] ? resolvedData['partnerGroups']._embedded.partnerGroups : [];
         }
 
         // Set title based on operation
@@ -235,6 +237,8 @@ export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, On
         this.selectedBusinessPartner['formatted_houseBank'] = this.houseBanks.find(b => b.bankKey === this.selectedBusinessPartner.houseBank)?.description || '--';
         this.selectedBusinessPartner['formatted_defaultPartnerRole'] = 
             this.businessPartnerRoleTypes.find(r => r.code === this.selectedBusinessPartner.defaultPartnerRole)?.value || '--';
+        this.selectedBusinessPartner['formatted_partnerGroup'] = 
+            this.partnerGroups.find(g => g.code === this.selectedBusinessPartner.partnerGroup)?.value || '--';
     }
 
     /**
@@ -334,7 +338,9 @@ export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, On
      * Open the customer details update dialog
      */
     openCustomerDetailsUpdateDialog(selectedCustomerDetails?: any) {
-        this.businessPartnerService.getBusinessPartnerCustomerDetailsFieldConfig(this.selectedBusinessPartner.defaultPartnerRole).subscribe({
+        this.businessPartnerService.getBusinessPartnerCustomerDetailsFieldConfig(this.selectedBusinessPartner.defaultPartnerRole, 
+            this.selectedBusinessPartner.partnerGroup).subscribe({
+            
             next: (response) => {
                 const routeResolvedData = this.route.snapshot.data['routeResolvedData'];
                 console.log('routeResolvedData', routeResolvedData);

@@ -8,6 +8,7 @@ import { GenericUpdateDialogComponent } from '../generic-update-dialog/generic-u
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { entityComponentConfigs } from '../generic-list-component-map.config';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-generic-list',
@@ -40,6 +41,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     private _searchString1: string = '';
     private _searchString2: string = '';
     private _entity: string = '';
+
+    apiUrl: string = environment.primaryApiHost;
 
     // Search String 1
     @Input()

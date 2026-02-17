@@ -18,6 +18,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { DatePipe } from '@angular/common';
 import { Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-generic-update-dialog',
@@ -50,6 +51,8 @@ export class GenericUpdateDialogComponent implements OnInit {
 
     @ViewChild('bankKeyTemplate', { static: true }) bankKeyTemplate!: TemplateRef<any>;
     
+    apiUrl: string = environment.primaryApiHost;
+
     /**
      * Constructor
      */

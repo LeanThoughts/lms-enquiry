@@ -69,7 +69,7 @@
                                 <td fd-table-cell>
                                     @if (col.name === 'fileReference' || col.name === 'fileReference1' || col.name === 'fileReference2') {
                                         @if (item[col.name]) {
-                                            <a href="http://localhost:8080/enquiry/api/download/{{ item[col.name] }}" target="_blank" download>
+                                            <a href="{{ apiUrl }}/download/{{ item[col.name] }}" target="_blank" download>
                                                 <fd-icon [glyph]="'download-from-cloud'"></fd-icon>
                                             </a>
                                         } 

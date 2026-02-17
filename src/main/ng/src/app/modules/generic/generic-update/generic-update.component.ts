@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 import { Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-generic-update',
@@ -66,6 +67,8 @@ export class GenericUpdateComponent implements OnInit {
     
     today: Date = new Date();
 
+    apiUrl: string = environment.primaryApiHost;
+
     /**
      * Constructor
      */
@@ -82,6 +85,7 @@ export class GenericUpdateComponent implements OnInit {
      */
     ngOnInit(): void {
 
+        console.log('this.selectedObject', this.selectedObject);
         // Throw an error if the entity is not provided.
         if (!this.entity) {
             throw new Error('entity is mandatory and was not provided.');

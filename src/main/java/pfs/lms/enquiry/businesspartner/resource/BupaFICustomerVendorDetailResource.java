@@ -16,7 +16,7 @@ public class BupaFICustomerVendorDetailResource {
     private String reconAccount;
     private String dunningProcedure;
     private String planningGroup;
-    private String paymentMethods;
+    private String paymentMethod;
     private String houseBank;
     private Boolean checkDoubleInvoice;
     private String paymentTerms;

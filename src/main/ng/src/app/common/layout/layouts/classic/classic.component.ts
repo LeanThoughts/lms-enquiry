@@ -87,8 +87,9 @@ export class ClassicLayoutComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private sideNavigationService: SideNavigationService,
-        private authService: AuthService,
-        public themingService: ThemingService)
+        public authService: AuthService,
+        public themingService: ThemingService,
+    )
     {
         this.productSwitcher = this.sideNavigationService.productSwitcher;
         this.sideNavigationConfiguration = this.sideNavigationService.sideNavigationConfiguration;

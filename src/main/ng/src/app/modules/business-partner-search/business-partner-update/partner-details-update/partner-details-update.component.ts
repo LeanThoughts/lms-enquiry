@@ -42,6 +42,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
 
     operation: string = '';
     selectedBusinessPartner: any;
+    selectedPartnerGroup: any;
     partnerDetailsForm!: FormGroup;
 
     businessPartnerRoleTypes: any[] = [];
@@ -53,6 +54,10 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
     partnerGroups: any[] = [];
 
     partnerGroupsPerRoleType: any[] = [];
+
+    partnersByRoleType: any[] = [];
+
+    inlineHelpContent: string = '';
 
     // disableSendForApproval: boolean = false;
 
@@ -149,7 +154,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             defaultPartnerRole: new FormControl(this.selectedBusinessPartner?.defaultPartnerRole?.trim() || '', [Validators.required]),
             partyName1: new FormControl(this.selectedBusinessPartner?.partyName1?.trim() || null),
             partyName2: new FormControl(this.selectedBusinessPartner?.partyName2?.trim() || null),
-            externalBPNumber: new FormControl(this.selectedBusinessPartner?.externalBPNumber?.trim() || null),
+            partyNumber: new FormControl(this.selectedBusinessPartner?.partyNumber?.trim() || null),
             title: new FormControl(this.selectedBusinessPartner?.title?.trim() || ''),
             searchTerm1: new FormControl(this.selectedBusinessPartner?.searchTerm1?.trim() || null),
             searchTerm2: new FormControl(this.selectedBusinessPartner?.searchTerm2?.trim() || null),
@@ -225,16 +230,29 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
 
         this.businessPartnerService.getPartnerGroupsForRoleType(event).subscribe({
             next: (result: any) => {
-                const array = result._embedded.businessPartnerRoleTypePartnerGroups;
-                this.partnerGroupsPerRoleType = [];
-                array.forEach((item: any) => {
-                    this.partnerGroupsPerRoleType.push(this.partnerGroups.filter((partnerGroup: any) => partnerGroup.code === item.partnerGroup)[0]);
-                });
-                if(this.partnerGroupsPerRoleType.length === 1)
-                    this.partnerDetailsForm.get('partnerGroup')?.setValue(this.partnerGroupsPerRoleType[0].code);
+                const groups = result._embedded.businessPartnerRoleTypePartnerGroups.map((item: any) =>
+                    this.partnerGroups.find((partnerGroup: any) => partnerGroup.code === item.partnerGroup)
+                ).filter(Boolean);
+
+                this.partnerGroupsPerRoleType = groups;
+
+                this.partnerDetailsForm.get('partnerGroup')?.setValue(
+                    groups.length === 1 ? groups[0].code : null
+                );
+                this.onPartnerGroupChange(groups.length === 1 ? groups[0].code : null);
             },
             error: (err) => {
                 console.error('Failed to load partner groups', err);
+            }
+        });
+
+        this.businessPartnerService.getPartnersByRoleType(event).subscribe({
+            next: (result: any) => {
+                this.partnersByRoleType = result.sort((a: any, b: any) => a.partyNumber > b.partyNumber ? 1 : -1);
+                console.log('partnersByRoleType', this.partnersByRoleType);
+            },
+            error: (err) => {
+                console.error('Failed to load partners', err);
             }
         });
     }
@@ -423,6 +441,29 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             this.operation === 'create' ? this.router.navigate(['/business-partners']) 
                 : this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id, 
                     this.selectedBusinessPartner.defaultPartnerRole]);
+        }
+    }
+
+    /**
+     * On partner group change event
+     */
+    onPartnerGroupChange(event: any) {
+        if (event) {
+            this.selectedPartnerGroup = this.partnerGroups.find(role => role.code === event);
+            console.log('selectedPartnerGroup', this.selectedPartnerGroup);
+            if (this.selectedPartnerGroup.externalNumberRange) {
+                const startingId = this.selectedPartnerGroup.startingId;
+                const endingId = this.selectedPartnerGroup.endingId;
+                this.inlineHelpContent = 'Business partner number must be between ' + startingId + ' and ' + endingId + '.';
+                const partyNumberControl = this.partnerDetailsForm.get('partyNumber');
+                if (partyNumberControl) {
+                    partyNumberControl.setValidators([
+                        Validators.min(startingId),
+                        Validators.max(endingId)
+                    ]);
+                    partyNumberControl.updateValueAndValidity();
+                }
+            }
         }
     }
 }

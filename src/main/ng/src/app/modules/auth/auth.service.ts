@@ -38,7 +38,6 @@ export class AuthService {
         // The BFF will respond with 200 OK if authenticated, or 401 Unauthorized if not.
         return this.http.get<any>(meUrl, { observe: 'response' }).pipe(
             map(response => {
-                console.log('BFF response:', response);
                 this.currentUser = response.body;
                 // If the BFF returns a 200 OK, the user is authenticated.
                 return response.status === 200;
