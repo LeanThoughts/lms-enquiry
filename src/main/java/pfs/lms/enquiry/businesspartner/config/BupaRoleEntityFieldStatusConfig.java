@@ -3,6 +3,7 @@ package pfs.lms.enquiry.businesspartner.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.BupaRoleEntityFieldStatus;
 import pfs.lms.enquiry.businesspartner.domain.Title;
@@ -12,6 +13,7 @@ import pfs.lms.enquiry.businesspartner.repository.TitleRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Order(4)
 public class BupaRoleEntityFieldStatusConfig implements CommandLineRunner {
 
     private final BupaRoleEntityFieldStatusRepository bupaRoleEntityFieldStatusRepository;

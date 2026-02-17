@@ -3,6 +3,7 @@ package pfs.lms.enquiry.businesspartner.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRoleTypePartnerGroup;
 import pfs.lms.enquiry.businesspartner.domain.PartnerGroup;
@@ -12,6 +13,7 @@ import pfs.lms.enquiry.businesspartner.repository.PartnerGroupRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Order(3)
 public class BusinessPartnerRoleTypePartnerGroupConfig implements CommandLineRunner {
 
     private final BusinessPartnerRoleTypePartnerGroupRepository businessPartnerRoleTypePartnerGroupRepository;
