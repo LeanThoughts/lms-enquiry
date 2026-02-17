@@ -23,7 +23,7 @@ public class PaymentMethodConfig implements CommandLineRunner {
         paymentMethod = paymentMethodRepository.findById("N");if (paymentMethod == null){ paymentMethod = new PaymentMethod("N","Bank Transfer-Incomming"); paymentMethodRepository.save(paymentMethod); }
         paymentMethod = paymentMethodRepository.findById("C");if (paymentMethod == null){ paymentMethod = new PaymentMethod("C","Cheque  payment(Others) "); paymentMethodRepository.save(paymentMethod); }
         paymentMethod = paymentMethodRepository.findById("D");if (paymentMethod == null){ paymentMethod = new PaymentMethod("D","Demand Draft-Outgoing "); paymentMethodRepository.save(paymentMethod); }
-        paymentMethod = paymentMethodRepository.findById("E");if (paymentMethod == null){ paymentMethod = new PaymentMethod("E"," "); paymentMethodRepository.save(paymentMethod); }
+        paymentMethod = paymentMethodRepository.findById("E");if (paymentMethod == null){ paymentMethod = new PaymentMethod("E","Payment Method E"); paymentMethodRepository.save(paymentMethod); }
         paymentMethod = paymentMethodRepository.findById("H");if (paymentMethod == null){ paymentMethod = new PaymentMethod("H","Cheque Payment HDFC Bank"); paymentMethodRepository.save(paymentMethod); }
         paymentMethod = paymentMethodRepository.findById("I");if (paymentMethod == null){ paymentMethod = new PaymentMethod("I","ICICI Bank Payment"); paymentMethodRepository.save(paymentMethod); }
         paymentMethod = paymentMethodRepository.findById("P");if (paymentMethod == null){ paymentMethod = new PaymentMethod("P","Cheque Payment PNB Bank"); paymentMethodRepository.save(paymentMethod); }
