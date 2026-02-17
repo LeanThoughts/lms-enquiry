@@ -45,8 +45,11 @@ public class SAPBusinessPartnerBasicDetailResource implements Serializable {
         SAPBusinessPartnerBasicDetailsResourceDetail detailsResource = new SAPBusinessPartnerBasicDetailsResourceDetail();
 
 
+        if ( partner.getPartnerGroup() != null)
+            detailsResource.setPartnerGroup(partner.getPartnerGroup());
+        else
+            detailsResource.setPartnerGroup("0001");
 
-        detailsResource.setPartnerGroup("0001");
 
         if (partner.getPartyNumber() != null)
             detailsResource.setBusPartnerNumber(partner.getPartyNumber().toString());

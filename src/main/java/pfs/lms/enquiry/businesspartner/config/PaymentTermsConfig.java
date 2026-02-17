@@ -19,22 +19,21 @@ public class PaymentTermsConfig implements CommandLineRunner {
 
         PaymentTerms paymentTerms = new PaymentTerms();
 
-        paymentTerms = paymentTermsRepository.findById("");if (paymentTerms == null){ paymentTerms = new PaymentTerms(" "," "); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0001");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0001","Allocationnumber"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0002");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0002","Postingdate"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0003");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0003","Documentdate"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0004");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0004","Doc.currencyamount"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0005");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0005","Costcenter"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0006");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0006","Purchaseorderno."); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0007");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0007","Purchaseorder"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0008");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0008","One-timename/"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0009");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0008","Costcenter"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("0010");if (paymentTerms == null){ paymentTerms = new PaymentTerms("0010","Currencykey"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("NT00");if (paymentTerms == null){ paymentTerms = new PaymentTerms("NT00","Projectnumber"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("NT15");if (paymentTerms == null){ paymentTerms = new PaymentTerms("NT15","Fiscalyear,month"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("NT30");if (paymentTerms == null){ paymentTerms = new PaymentTerms("NT30","Test0"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("NT45");if (paymentTerms == null){ paymentTerms = new PaymentTerms("NT45","Test1"); paymentTermsRepository.save(paymentTerms); }
-        paymentTerms = paymentTermsRepository.findById("NT60");if (paymentTerms == null){ paymentTerms = new PaymentTerms("NT60","Test5"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0001");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Payable immediately Due net, "); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0002");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"within 14 days 2 % cash discount, within 30 days Due net"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0003");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"within 14 days 3 % cash discount, within 14 days 3 % cash discount"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0004");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,", within 20 days 2 % cash discount,within 30 days Due net,within 30 days Due net"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0005");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Payable immediately Due net, Baseline date on End of the month"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0006");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Payable immediately Due net, Baseline date on 10 of next month"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0007");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Before End of the month 4 % cash discount, Before 15 of the next month ;; 2 % cash discountBefore End of the next month ;; Due net"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0008");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"For incoming invoices until 15 of the month, within 14 days 2 % cash discount,within 30 days 1.5 % cash discount"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0009");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Payable in 3 partial amounts"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("0010");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Payable immediately Due net"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("NT00");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Payable upon receipt"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("NT15");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Net due in 15 days"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("NT30");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Net due in 30 days"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("NT45");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Net due in 45 days"); paymentTermsRepository.save(paymentTerms); }
+        paymentTerms = paymentTermsRepository.findById("NT60");if (paymentTerms == null){ paymentTerms = new PaymentTerms(null,"Net due in 60 days"); paymentTermsRepository.save(paymentTerms); }
 
         return;
     }
