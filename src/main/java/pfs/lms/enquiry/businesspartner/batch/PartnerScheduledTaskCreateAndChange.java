@@ -106,7 +106,7 @@ public class PartnerScheduledTaskCreateAndChange {
                     log.info("Attempting to Post Business Partner Header to SAP AT :" + dateFormat.format(new Date())
                             + "Partner Name: " + partner.getPartyName1() );
 
-                    //Set Status as in progressNot found for upload to SAP
+                    //Set Status as in progress
                     sapIntegrationPointer.setStatus(1); // In Posting Process
                     sapIntegrationRepository.save(sapIntegrationPointer);
 
@@ -116,8 +116,8 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerBasicDetailResource sapBusinessPartnerBasicDetailResource = new SAPBusinessPartnerBasicDetailResource();
                     sapBusinessPartnerBasicDetailResource.setSAPBusinessPartnerBasicDetailsResourceDetails(sapBusinessPartnerBasicDetailsResourceDetail);
 
-                    if (partner.getPartyNumber() == null)
-                        sapIntegrationPointer.setMode("C");
+//                    if (partner.getPartyNumber() == null)
+//                        sapIntegrationPointer.setMode("C");
 
                     resource = (Object) sapBusinessPartnerBasicDetailResource;
                     serviceUri = businessPartnerServiceUri + "BasicDetailSet";
