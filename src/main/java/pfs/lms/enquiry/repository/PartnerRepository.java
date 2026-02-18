@@ -33,4 +33,9 @@ public interface PartnerRepository extends JpaRepository<Partner, UUID>, JpaSpec
     List<Partner> findBySearchString(@Param("searchString") String searchString);
 
     List<Partner> findByPartyName1Containing(String partyName1);
+
+    @Query("SELECT MAX(p.partyNumber) FROM Partner p WHERE p.defaultPartnerRole = :partnerRoleType AND p.partnerGroup = " +
+            ":partnerGroup")
+        Integer findMaxPartyNumberByPartnerRoleTypeAndPartnerGroup(@Param("partnerRoleType") String partnerRoleType,
+                                                               @Param("partnerGroup") String partnerGroup);
 }

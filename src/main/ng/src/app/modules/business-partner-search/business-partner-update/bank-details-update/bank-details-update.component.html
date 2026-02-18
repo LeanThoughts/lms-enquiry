@@ -45,8 +45,8 @@
                                     placeholder="Select Bank Key"
                                     (valueChange)="onBankKeySelectionChange($event)"
                                 >
-                                    @for (bankKey of filteredBankKeys; track bankKey.id) {
-                                    <li fd-option [value]="bankKey.bankKey">{{ bankKeyDisplayFunction(bankKey) }}</li>
+                                    @for (bk of filteredBankKeys; track bk.id) {
+                                    <li fd-option [value]="bk.bankKey">{{ bankKeyDisplayFunction(bk) }}</li>
                                     }
                                 </fd-select>
                                 @if (bankDetailsForm.get('bankKey')?.errors?.['required'] && bankDetailsForm.get('bankKey')?.touched) {

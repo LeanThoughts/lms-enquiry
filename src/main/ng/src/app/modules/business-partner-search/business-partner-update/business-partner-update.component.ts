@@ -309,7 +309,7 @@ export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, On
                 selectedBankDetails: selectedBankDetails,
                 defaultPartnerRole: this.selectedBusinessPartner.defaultPartnerRole
             },
-            width: '55rem'
+            width: '60rem'
         });
         dialogRef.afterClosed.pipe(takeUntil(this.destroy$)).subscribe({
             next: (result: any) => {

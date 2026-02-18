@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { BusinessPartnerSearchService } from '../../business-partner-search.service';
 import { 
@@ -7,6 +7,8 @@ import {
     DialogService, 
     FormModule, 
     LayoutGridModule, 
+    MessageToastModule, 
+    MessageToastService, 
     SelectModule, 
     TitleComponent,
 } from '@fundamental-ngx/core';
@@ -34,7 +36,8 @@ import { CustomDialogComponent } from '../../../../custom-dialog.component';
         ComponentNgxComponent,
         MultiComboboxModule,
         NgIf,
-        CustomDialogComponent
+        CustomDialogComponent,
+        MessageToastModule
     ],
     templateUrl: './partner-details-update.component.html'
 })
@@ -68,6 +71,10 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
     previousDefaultPartnerRole: string = '';
     formFieldsConfig: any = {}
 
+    Validators: any = Validators; // Required to access Validators in the html template
+
+    @ViewChild('template') template!: TemplateRef<any>;
+
     /**
      * Constructor
      */
@@ -76,6 +83,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         public router: Router,
         private messageService: MessageService,
+        private messageToastService: MessageToastService,
         private dialog: DialogService
     ) 
     {
@@ -154,7 +162,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             defaultPartnerRole: new FormControl(this.selectedBusinessPartner?.defaultPartnerRole?.trim() || '', [Validators.required]),
             partyName1: new FormControl(this.selectedBusinessPartner?.partyName1?.trim() || null),
             partyName2: new FormControl(this.selectedBusinessPartner?.partyName2?.trim() || null),
-            partyNumber: new FormControl(this.selectedBusinessPartner?.partyNumber?.trim() || null),
+            partyNumber: new FormControl(this.selectedBusinessPartner?.partyNumber || null),
             title: new FormControl(this.selectedBusinessPartner?.title?.trim() || ''),
             searchTerm1: new FormControl(this.selectedBusinessPartner?.searchTerm1?.trim() || null),
             searchTerm2: new FormControl(this.selectedBusinessPartner?.searchTerm2?.trim() || null),
@@ -236,26 +244,31 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
 
                 this.partnerGroupsPerRoleType = groups;
 
-                this.partnerDetailsForm.get('partnerGroup')?.setValue(
-                    groups.length === 1 ? groups[0].code : null
-                );
-                this.onPartnerGroupChange(groups.length === 1 ? groups[0].code : null);
+                const singleGroup = groups.length === 1 ? groups[0] : null;
+                if (singleGroup) {
+                    this.onPartnerGroupChange(singleGroup.code);
+                    this.selectedPartnerGroup = singleGroup;
+                    this.partnerDetailsForm.get('partnerGroup')?.setValue(singleGroup.code);
+                }
             },
             error: (err) => {
                 console.error('Failed to load partner groups', err);
             }
         });
-
-        this.businessPartnerService.getPartnersByRoleType(event).subscribe({
-            next: (result: any) => {
-                this.partnersByRoleType = result.sort((a: any, b: any) => a.partyNumber > b.partyNumber ? 1 : -1);
-                console.log('partnersByRoleType', this.partnersByRoleType);
-            },
-            error: (err) => {
-                console.error('Failed to load partners', err);
-            }
-        });
     }
+
+    /**
+     * Display inline help content
+     */
+    // displayInlineHelpContent() {
+    //     this.messageToastService.hideAll();
+    //     this.messageToastService.open(this.template, {
+    //         duration: 7000,
+    //         data: {
+    //             content: this.inlineHelpContent
+    //         }
+    //     });
+    // }
 
     /**
      * Reset form validators
@@ -448,21 +461,39 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
      * On partner group change event
      */
     onPartnerGroupChange(event: any) {
+
+        const partyNumberControl = this.partnerDetailsForm.get('partyNumber');
+        if (partyNumberControl) {   
+            partyNumberControl.clearValidators();
+            partyNumberControl.updateValueAndValidity();
+        }
         if (event) {
-            this.selectedPartnerGroup = this.partnerGroups.find(role => role.code === event);
-            console.log('selectedPartnerGroup', this.selectedPartnerGroup);
+            this.selectedPartnerGroup = this.partnerGroups.find((partnerGroup: any) => partnerGroup.code === event);        
             if (this.selectedPartnerGroup.externalNumberRange) {
                 const startingId = this.selectedPartnerGroup.startingId;
                 const endingId = this.selectedPartnerGroup.endingId;
-                this.inlineHelpContent = 'Business partner number must be between ' + startingId + ' and ' + endingId + '.';
-                const partyNumberControl = this.partnerDetailsForm.get('partyNumber');
+                const inlineHelpContent1 = `${this.selectedPartnerGroup.value} has external number assignment, enter a number. ` +
+                    `Business partner number must be between ${startingId} and ${endingId}.`;
                 if (partyNumberControl) {
                     partyNumberControl.setValidators([
+                        Validators.required,
                         Validators.min(startingId),
                         Validators.max(endingId)
                     ]);
                     partyNumberControl.updateValueAndValidity();
                 }
+
+                this.businessPartnerService.getMaxPartyNumberByRoleType(this.partnerDetailsForm.get('defaultPartnerRole')?.value, event).subscribe({
+                    next: (result: any) => {
+                        this.inlineHelpContent = 'Last id entered for this type of business partner is "' + result + '". ' + inlineHelpContent1;
+                    },
+                    error: (err) => {
+                        this.inlineHelpContent = 'There is no last id entered for this type of business partner. ' + inlineHelpContent1;
+                    }
+                });    
+            }
+            else {
+                this.inlineHelpContent = '';
             }
         }
     }

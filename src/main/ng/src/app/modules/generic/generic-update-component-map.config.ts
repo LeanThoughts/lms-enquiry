@@ -45,7 +45,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateComponentConfi
             {row: 2, span: 3, name: 'defaultPartnerRole', label: 'Default Partner Role', type: 'select', required: true },
             {row: 2, span: 3, name: 'partnerGroup', label: 'Partner Group', type: 'select', required: true },
             {row: 2, span: 3, name: 'partnerCategory', label: 'Partner Category', type: 'select', required: true },
-            {row: 3, span: 3, name: 'externalBPNumber', label: 'External BP Id', type: 'text' },
+            {row: 3, span: 3, name: 'partyNumber', label: 'Business Partner Number', type: 'text' },
             {row: 3, span: 3, name: 'title', label: 'Title', type: 'select' },
             {row: 3, span: 3, name: 'partyName1', label: 'Name 1', type: 'text'},
             {row: 3, span: 3, name: 'partyName2', label: 'Name 2', type: 'text'},

@@ -17,5 +17,7 @@ export class HomepageComponent {
      * Constructor
      */
     constructor(private authService: AuthService) {
+        authService.isAuthenticated().subscribe(isAuthenticated => {
+        });
     }
 }

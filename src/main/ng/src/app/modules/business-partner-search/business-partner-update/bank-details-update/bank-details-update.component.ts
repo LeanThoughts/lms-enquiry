@@ -112,6 +112,7 @@ export class BankDetailsUpdateDialogComponent implements OnInit {
             (bankKey.bankKey && bankKey.bankKey.toLowerCase().includes(searchText?.toLowerCase())) ||
             (bankKey.bankName && bankKey.bankName.toLowerCase().includes(searchText?.toLowerCase()))
         );
+        console.log('filteredBankKeys', this.filteredBankKeys);
     }
 
     /**
@@ -150,12 +151,8 @@ export class BankDetailsUpdateDialogComponent implements OnInit {
             );
         };
 
-        console.log('this.bankDetailsForm.value', this.bankDetailsForm.value);
         var bankDetails: any = {};
         Object.assign(bankDetails, this.bankDetailsForm.value);
-        bankDetails.bankKey = bankDetails.bankKey.bankKey;
-        console.log('bankDetails', bankDetails);
-
         // Fix data related issues
         if (bankDetails.entryDate) {
             const dt = new Date(bankDetails.entryDate);

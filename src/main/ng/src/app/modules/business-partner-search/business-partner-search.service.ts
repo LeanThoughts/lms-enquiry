@@ -520,7 +520,8 @@ export class BusinessPartnerSearchService implements Resolve<any> {
     /**
      * Get partners by role type
      */
-    getPartnersByRoleType(roleType: string): Observable<any> {
-        return this.http.get<any>(environment.primaryApiHost + '/partners/role/' + roleType);
+    getMaxPartyNumberByRoleType(partnerRoleType: string, partnerGroup: string): Observable<any> {
+        return this.http.get<any>(environment.primaryApiHost + '/partners/search/findMaxPartyNumberByPartnerRoleTypeAndPartnerGroup', 
+            { params: { partnerRoleType, partnerGroup } });
     }
 }

@@ -50,12 +50,12 @@
                                 <fd-avatar
                                     [circle]="true"
                                     size="l"
-                                    label="{{ authService.currentUser.firstName }} {{ authService.currentUser.lastName }}"
+                                    label="{{ authService.currentUser?.firstName }} {{ authService.currentUser?.lastName }}"
                                 ></fd-avatar>
                                 <div fd-user-menu-header-container>
-                                    <div fd-user-menu-user-name>{{ authService.currentUser.firstName }} {{ authService.currentUser.lastName }}</div>
-                                    <div fd-user-menu-subline>{{ authService.currentUser.email }}</div>
-                                    <div fd-user-menu-subline>{{ authService.currentUser.roleDescription }}</div>
+                                    <div fd-user-menu-user-name>{{ authService.currentUser?.firstName }} {{ authService.currentUser?.lastName }}</div>
+                                    <div fd-user-menu-subline>{{ authService.currentUser?.email }}</div>
+                                    <div fd-user-menu-subline>{{ authService.currentUser?.roleDescription }}</div>
                                 </div>
                                 <!-- <button fd-button label="Manage Account" glyph="user-settings" ariaLabel="Manage Account"></button> -->
                             </div>

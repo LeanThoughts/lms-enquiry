@@ -158,17 +158,24 @@
                 <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;" *ngIf="formFieldsConfig?.partyNumber !== 3">
                     <div fd-form-set [style.margin-top.rem]="0.3">
                         <div fd-form-item>
-                            <label fd-form-label for="partyNumber" [required]="formFieldsConfig?.partyNumber == 2"
-                                    [inlineHelpContent]="inlineHelpContent">Business Partner Number:</label>
+                            <label fd-form-label 
+                                for="partyNumber" 
+                                [required]="partnerDetailsForm.get('partyNumber')?.hasValidator?.(Validators.required) ? true : false"
+                                [inlineHelpContent]="inlineHelpContent"
+                            >
+                                Business Partner Number:
+                            </label>
                             <input id="partyNumber" formControlName="partyNumber" fd-form-control type="text" maxlength="40">
                                 <!-- [readonly]="formFieldsConfig?.partyNumber === 0"/> -->
                         </div>
-                        @if (partnerDetailsForm.get('partyNumber')?.errors?.['min'] && partnerDetailsForm.get('partyNumber')?.touched) {
-                            <fd-form-message type="error" id="partyNumber-form-message">
-                                Please provide a valid business partner number.
-                            </fd-form-message>
-                        }
-                        @if (partnerDetailsForm.get('partyNumber')?.errors?.['max'] && partnerDetailsForm.get('partyNumber')?.touched) {
+                        @if (
+                            partnerDetailsForm.get('partyNumber')?.touched &&
+                            (
+                                partnerDetailsForm.get('partyNumber')?.errors?.['required'] ||
+                                partnerDetailsForm.get('partyNumber')?.errors?.['min'] ||
+                                partnerDetailsForm.get('partyNumber')?.errors?.['max']
+                            )
+                        ) {
                             <fd-form-message type="error" id="partyNumber-form-message">
                                 Please provide a valid business partner number.
                             </fd-form-message>
@@ -211,7 +218,7 @@
                         <div fd-form-item [style.margin-top.rem]="0.3">
                             <label fd-form-label for="partyName2" [required]="formFieldsConfig?.partyName2 == 2">Name 2:</label>
                             <input id="partyName2" formControlName="partyName2" fd-form-control type="text" maxlength="40"/>
-                            @if (partnerDetailsForm.get('partyName2')?.errors?.['rsequired'] && partnerDetailsForm.get('partyName2')?.touched) {
+                            @if (partnerDetailsForm.get('partyName2')?.errors?.['required'] && partnerDetailsForm.get('partyName2')?.touched) {
                                 <fd-form-message type="error" id="partyName2-form-message">
                                     Please provide valid input for Name 2. It is a mandatory field.
                                 </fd-form-message>
@@ -497,3 +504,8 @@
         </fd-layout-grid>
     </form>
 </component-ngx>
+
+<!-- Defining a template to open -->
+<!-- <ng-template [fdMessageBoxTemplate] let-messageToast #template>
+    {{ messageToast.data.content }}
+</ng-template> -->
