@@ -70,6 +70,7 @@ public class PartnerService implements IPartnerService {
             existing.setAddressLine1(partner.getAddressLine1());
             existing.setAddressLine2(partner.getAddressLine2());
             existing.setAddressLine3(partner.getAddressLine3());
+            existing.setPartnerGroup(partner.getPartnerGroup());
             existing.setAddressValidFromDate(partner.getAddressValidFromDate());
             existing.setCity(partner.getCity());
             existing.setContactNumber(partner.getContactNumber());
@@ -225,6 +226,8 @@ public class PartnerService implements IPartnerService {
         partner.setChangedAt(LocalTime.now());
         partner.setChangedOn(LocalDate.now());
         partner.setChangedByUserName(username);
+        partner.setPartnerGroup(partnerResource.getPartnerGroup());
+
         //Reset Workflow Status to Updated
         partner.setWorkFlowStatusCode(11);
 
@@ -533,6 +536,7 @@ public class PartnerService implements IPartnerService {
           existingPartner.setPartyCategory(partner.getPartyCategory());
           existingPartner.setGroupCompany(partner.getGroupCompany());
           existingPartner.setPartyRole(partner.getPartyRole());
+            existingPartner.setPartnerGroup(partner.getPartnerGroup());
 
           existingPartner.setEmail(partner.getEmail());
 
