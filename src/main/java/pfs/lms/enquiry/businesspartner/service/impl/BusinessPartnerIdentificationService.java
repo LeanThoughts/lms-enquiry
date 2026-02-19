@@ -40,12 +40,12 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
     public BusinessPartnerIdentification create(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) {
         Partner partner = partnerRepository.findById(businessPartnerIdentificationResource.getPartnerId())
-                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getPartnerId().toString() 
-                + " : Business partner not found"));
+                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getPartnerId().toString()
+                        + " : Business partner not found"));
 
         IdentificationCategory identificationCategory = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategoryCode())
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getIdentificationCategoryCode()
-                + " : Identification category not found"));
+                        + " : Identification category not found"));
 
         if (identificationCategory.isDuplicateCheckRequired()) {
             List<BusinessPartnerIdentification> existingIdentifications = businessPartnerIdentificationRepository
@@ -103,7 +103,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 username,
                 "Partner", "BusinessPartnerIdentification");
 
-       // updateLoanPartnerKYC(businessPartnerIdentification);
+        // updateLoanPartnerKYC(businessPartnerIdentification);
 
 
         return businessPartnerIdentification;
@@ -112,8 +112,8 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
     @Override
     public BusinessPartnerIdentification update(BusinessPartnerIdentificationResource businessPartnerIdentificationResource, String username) throws CloneNotSupportedException {
         BusinessPartnerIdentification businessPartnerIdentification = businessPartnerIdentificationRepository.findById(businessPartnerIdentificationResource.getId())
-                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getId().toString() 
-                + " : Business partner Industry not found"));
+                .orElseThrow(() -> new EntityNotFoundException(businessPartnerIdentificationResource.getId().toString()
+                        + " : Business partner Industry not found"));
 
         Object oldObject = businessPartnerIdentification.clone();
 
@@ -186,11 +186,10 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 //        Object idCat = identificationCategoryRepository.findByCode(businessPartnerIdentificationResource.getIdentificationCategory());
 //        IdentificationCategory identificationCategory = (IdentificationCategory) idCat;
 
-        if (identificationCategory == null){
+        if (identificationCategory == null) {
             log.error("Identification Category Not Found: " + businessPartnerIdentificationResource.getIdentificationCategory());
             return null;
         }
-
 
 
         Boolean update = false;
@@ -199,22 +198,22 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         if (partner != null) {
             List<BusinessPartnerIdentification> businessPartnerIdentifications =
                     businessPartnerIdentificationRepository.findByPartnerIdAndIdentificationCategoryCodeAndIdentificationNumber(
-                            partner.getId() , identificationCategory.getCode(), businessPartnerIdentificationResource.getIdentificationNumber());
-            if (businessPartnerIdentifications.size() > 0 ){
+                            partner.getId(), identificationCategory.getCode(), businessPartnerIdentificationResource.getIdentificationNumber());
+            if (businessPartnerIdentifications.size() > 0) {
                 businessPartnerIdentification = businessPartnerIdentifications.get(0);
                 oldObject = businessPartnerIdentification.clone();
                 update = true;
             } else {
                 businessPartnerIdentification = new BusinessPartnerIdentification();
             }
-        } else{
+        } else {
             log.error("Business Partner Master Data Not Found for ID: " + businessPartnerIdentificationResource.getPartnerId());
             return null;
         }
 
         List<BusinessPartnerIdentification> businessPartnerIdentificationList = businessPartnerIdentificationRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
-        if ( businessPartnerIdentification.getId() == null){
-            businessPartnerIdentification.setSerialNumber(businessPartnerIdentificationList.size()+1);
+        if (businessPartnerIdentification.getId() == null) {
+            businessPartnerIdentification.setSerialNumber(businessPartnerIdentificationList.size() + 1);
         }
 
         businessPartnerIdentification.setIdentificationCategoryCode(identificationCategory.getCode());
@@ -228,9 +227,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setPartner(partner);
-        businessPartnerIdentification.setCreatedAt(LocalTime.now());
-        businessPartnerIdentification.setCreatedOn(LocalDate.now());
-        businessPartnerIdentification.setCreatedByUserName(username);
+
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         if (update == true) {
@@ -244,6 +241,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                     "Updated",
                     username,
                     "Partner", "BusinessPartnerIdentification");
+            businessPartnerIdentification.setChangedAt(LocalTime.now());
+            businessPartnerIdentification.setChangedOn(LocalDate.now());
+            businessPartnerIdentification.setChangedByUserName(username);
         } else {
             changeDocumentService.createChangeDocument(
                     businessPartnerIdentification.getId(),
@@ -255,6 +255,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                     "Created",
                     username,
                     "Partner", "BusinessPartnerIdentification");
+            businessPartnerIdentification.setCreatedAt(LocalTime.now());
+            businessPartnerIdentification.setCreatedOn(LocalDate.now());
+            businessPartnerIdentification.setCreatedByUserName(username);
         }
         log.info("Finished Migrating BusinessPartnerIdentification");
 
@@ -264,7 +267,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 
     }
 
-    public BusinessPartnerIdentification updateLoanPartnerKYC( BusinessPartnerIdentification businessPartnerIdentification  ){
+    public BusinessPartnerIdentification updateLoanPartnerKYC(BusinessPartnerIdentification businessPartnerIdentification) {
         Boolean addKycDocument = false;
 
 //        ZPFSBP0002 PAN Card
@@ -275,40 +278,40 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
 //        ZPFSBP0006 Certification of Incorporation
 //        ZPFSBP0004 Address Proof
         try {
-        if (
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0002")) ||
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0008")) ||
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0003")) ||
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0019")) ||
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0005")) ||
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0006")) ||
-            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0004"))
-                    ){
-            addKycDocument = true;
-        } else {
-            return null;
-        }
-        } catch (Exception ex ){
+            if (
+                    (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0002")) ||
+                            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0008")) ||
+                            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0003")) ||
+                            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0019")) ||
+                            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0005")) ||
+                            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0006")) ||
+                            (businessPartnerIdentification.getDocumentType().equals("ZPFSBP0004"))
+            ) {
+                addKycDocument = true;
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
             log.error("Document Type is empty in Business Partner Identification Number :" + businessPartnerIdentification.getIdentificationNumber()
-                       + " Partner Name " + businessPartnerIdentification.getPartner().getPartyName1() +  businessPartnerIdentification.getPartner().getPartyName2() );
+                    + " Partner Name " + businessPartnerIdentification.getPartner().getPartyName1() + businessPartnerIdentification.getPartner().getPartyName2());
         }
 
-        List<LoanApplication> loanApplications =   loanApplicationRepository.findByLoanApplicant(businessPartnerIdentification.getPartner().getId());
+        List<LoanApplication> loanApplications = loanApplicationRepository.findByLoanApplicant(businessPartnerIdentification.getPartner().getId());
 
-        for (LoanApplication loanApplication: loanApplications) {
+        for (LoanApplication loanApplication : loanApplications) {
             List<LoanPartner> loanPartnerList = loanPartnerRepository.findByLoanApplication(loanApplication);
-            for(LoanPartner loanPartner: loanPartnerList){
-                if (loanPartner.getRoleType().equals("TR0100")){
+            for (LoanPartner loanPartner : loanPartnerList) {
+                if (loanPartner.getRoleType().equals("TR0100")) {
                     if (loanPartner.getBusinessPartnerId() != null) {
                         List<KnowYourCustomer> knowYourCustomerList = knowYourCustomerRepository.findByLoanPartnerId(loanPartner.getBusinessPartnerId());
                         KnowYourCustomer knowYourCustomer = new KnowYourCustomer();
-                        knowYourCustomer = knowYourCustomerRepository.findByLoanPartnerIdAndDocumentType( loanPartner.getId().toString(), businessPartnerIdentification.getDocumentType());
+                        knowYourCustomer = knowYourCustomerRepository.findByLoanPartnerIdAndDocumentType(loanPartner.getId().toString(), businessPartnerIdentification.getDocumentType());
                         if (knowYourCustomer != null) {
                             knowYourCustomer.setDateOfCompletion(businessPartnerIdentification.getIdEntryDate());
                             knowYourCustomer.setDocumentName(businessPartnerIdentification.getDocumentName());
                             knowYourCustomer.setFileReference(businessPartnerIdentification.getFileReference());
                             knowYourCustomer = knowYourCustomerRepository.save(knowYourCustomer);
-                        }else {
+                        } else {
                             knowYourCustomer = new KnowYourCustomer();
                             knowYourCustomer.setLoanPartnerId(loanPartner.getId().toString());
                             knowYourCustomer.setDateOfCompletion(businessPartnerIdentification.getIdEntryDate());
