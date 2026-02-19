@@ -564,6 +564,14 @@ public class PartnerService implements IPartnerService {
           existingPartner.setLegalEntity(partner.getLegalEntity());
           existingPartner.setLegalForm(partner.getLegalForm());
           existingPartner.setTitle(partner.getTitle());
+
+          existingPartner.setReconAccount(partner.getReconAccount());
+          existingPartner.setPlanningGroup(partner.getPlanningGroup());
+          existingPartner.setPaymentMethod(partner.getPaymentMethod());
+          existingPartner.setPaymentTerms(partner.getPaymentTerms());
+          existingPartner.setSortKey(partner.getSortKey());
+          existingPartner.setCheckDoubleInvoice(partner.getCheckDoubleInvoice());
+
           existingPartner.setPartnerType(partner.getPartnerType());
           boolean addPartnerRole = true;
 
