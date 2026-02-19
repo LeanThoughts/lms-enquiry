@@ -144,6 +144,7 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         }
         businessPartnerBankDetail.setSerialNumber(businessPartnerBankDetailResource.getSerialNumber());
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
+        businessPartnerBankDetail.setBankDetailId(businessPartnerBankDetailResource.getSerialNumber().toString());
         businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());
         businessPartnerBankDetail.setAccountNumber(businessPartnerBankDetailResource.getAccountNumber());
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
