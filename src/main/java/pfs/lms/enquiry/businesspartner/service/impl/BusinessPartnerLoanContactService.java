@@ -14,6 +14,8 @@ import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -48,6 +50,9 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
         businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
+        businessPartnerLoanContact.setCreatedAt(LocalTime.now());
+        businessPartnerLoanContact.setCreatedOn(LocalDate.now());
+        businessPartnerLoanContact.setCreatedByUserName(username);
 
         partner.setWorkFlowStatusCode(11); //Updated
         partnerRepository.save(partner);
@@ -83,6 +88,9 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setLandLineNumber(businessPartnerLoanContactResource.getLandLineNumber());
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
+        businessPartnerLoanContact.setChangedAt(LocalTime.now());
+        businessPartnerLoanContact.setChangedOn(LocalDate.now());
+        businessPartnerLoanContact.setChangedByUserName(username);
         businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
 
         Partner partner = businessPartnerLoanContact.getPartner();
@@ -145,6 +153,9 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
         businessPartnerLoanContact.setPartner(partner);
+        businessPartnerLoanContact.setCreatedAt(LocalTime.now());
+        businessPartnerLoanContact.setCreatedOn(LocalDate.now());
+        businessPartnerLoanContact.setCreatedByUserName(username);
         businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
 
         if (update == true) {

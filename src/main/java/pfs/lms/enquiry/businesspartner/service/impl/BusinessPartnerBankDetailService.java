@@ -19,6 +19,8 @@ import pfs.lms.enquiry.repository.BankMasterRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -52,6 +54,11 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
         businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
         businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
+        businessPartnerBankDetail.setCreatedAt(LocalTime.now());
+        businessPartnerBankDetail.setCreatedOn(LocalDate.now());
+        businessPartnerBankDetail.setCreatedByUserName(username);
+
+
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
 
@@ -90,7 +97,9 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
         businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
         businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
-
+        businessPartnerBankDetail.setChangedAt(LocalTime.now());
+        businessPartnerBankDetail.setChangedOn(LocalDate.now());
+        businessPartnerBankDetail.setChangedByUserName(username);
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
         changeDocumentService.createChangeDocument(
@@ -141,6 +150,9 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
         businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
         businessPartnerBankDetail.setPartner(partner);
+        businessPartnerBankDetail.setCreatedAt(LocalTime.now());
+        businessPartnerBankDetail.setCreatedOn(LocalDate.now());
+        businessPartnerBankDetail.setCreatedByUserName(username);
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
         if (update == true) {

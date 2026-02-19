@@ -18,6 +18,8 @@ import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
  import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -100,6 +102,10 @@ public class PartnerService implements IPartnerService {
             existing.setLegalForm(partner.getLegalForm());
             existing.setHouseBank(partner.getHouseBank());
             existing.setPartnerType(partner.getPartnerType());
+            existing.setChangedAt(LocalTime.now());
+            existing.setChangedOn(LocalDate.now());
+            existing.setChangedByUserName(username);
+
             existing = partnerRepository.saveAndFlush(existing);
 
             changeDocumentService.createChangeDocument(
@@ -116,6 +122,9 @@ public class PartnerService implements IPartnerService {
         else {
             try {
                 partner.setUserName(partner.getEmail());
+                partner.setCreatedAt(LocalTime.now());
+                partner.setCreatedOn(LocalDate.now());
+                partner.setCreatedByUserName(username);
                 partner = partnerRepository.save(partner);
 
                 changeDocumentService.createChangeDocument(
@@ -213,7 +222,9 @@ public class PartnerService implements IPartnerService {
         partner.setLegalEntity(partnerResource.getLegalEntity());
         partner.setHouseBank(partnerResource.getHouseBank());
         partner.setPartnerType(partnerResource.getPartnerType());
-
+        partner.setChangedAt(LocalTime.now());
+        partner.setChangedOn(LocalDate.now());
+        partner.setChangedByUserName(username);
         //Reset Workflow Status to Updated
         partner.setWorkFlowStatusCode(11);
 

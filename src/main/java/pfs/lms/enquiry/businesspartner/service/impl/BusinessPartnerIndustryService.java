@@ -21,6 +21,8 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -47,7 +49,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
         businessPartnerIndustry = businessPartnerIndustryRepository.save(businessPartnerIndustry);
-
+        businessPartnerIndustry.setCreatedAt(LocalTime.now());
+        businessPartnerIndustry.setCreatedOn(LocalDate.now());
+        businessPartnerIndustry.setCreatedByUserName(username);
         partner.setWorkFlowStatusCode(11); //Updated
         partnerRepository.save(partner);
 
@@ -76,7 +80,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
         businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
-
+        businessPartnerIndustry.setChangedAt(LocalTime.now());
+        businessPartnerIndustry.setChangedOn(LocalDate.now());
+        businessPartnerIndustry.setChangedByUserName(username);
         Partner partner = businessPartnerIndustry.getPartner();
         // Set Partner Workflow Status Code to Updated
         partner.setWorkFlowStatusCode(11);
@@ -131,7 +137,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
             businessPartnerIndustry.setSerialNumber(businessPartnerIndustryList.size() + 1);
         }
 
-
+        businessPartnerIndustry.setCreatedAt(LocalTime.now());
+        businessPartnerIndustry.setCreatedOn(LocalDate.now());
+        businessPartnerIndustry.setCreatedByUserName(username);
 
         businessPartnerIndustry.setIndustrySystemId(industrySystem.getId());
         businessPartnerIndustry.setIndustryTypeId(industryType.getId());
