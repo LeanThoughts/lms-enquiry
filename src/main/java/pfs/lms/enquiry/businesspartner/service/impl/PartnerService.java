@@ -536,7 +536,8 @@ public class PartnerService implements IPartnerService {
           existingPartner.setPartyCategory(partner.getPartyCategory());
           existingPartner.setGroupCompany(partner.getGroupCompany());
           existingPartner.setPartyRole(partner.getPartyRole());
-            existingPartner.setPartnerGroup(partner.getPartnerGroup());
+            existingPartner.setDefaultPartnerRole(partner.getPartyRole());
+          existingPartner.setPartnerGroup(partner.getPartnerGroup());
 
           existingPartner.setEmail(partner.getEmail());
 
@@ -544,6 +545,7 @@ public class PartnerService implements IPartnerService {
           existingPartner.setAddressLine2(partner.getAddressLine2());
           existingPartner.setAddressLine3(partner.getAddressLine3());
           existingPartner.setStreet(partner.getAddressLine3());
+
 
           existingPartner.setCity(partner.getCity());
           existingPartner.setState(partner.getState());
@@ -569,7 +571,7 @@ public class PartnerService implements IPartnerService {
               addPartnerRole = true;
               //Check if Partner Role exists
               for (PartnerRoleType partnerRoleTypeExisting: existingPartner.getPartnerRoleTypes()) {
-                  if (partnerRoleType.getRoleCode() == partnerRoleTypeExisting.getRoleCode()){
+                  if (partnerRoleType.getRoleCode().equals(partnerRoleTypeExisting.getRoleCode())){
                       addPartnerRole = false;
                   }
               }
