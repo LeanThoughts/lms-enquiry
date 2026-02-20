@@ -2,6 +2,7 @@ package pfs.lms.enquiry.businesspartner.service;
 
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerFinancial;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
+import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerFinancialMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerFinancialResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationResource;
@@ -13,4 +14,6 @@ public interface IBusinessPartnerFinancialService {
 
     BusinessPartnerFinancial create(BusinessPartnerFinancialResource businessPartnerFinancialResource, String username);
     BusinessPartnerFinancial update(BusinessPartnerFinancialResource businessPartnerFinancialResource, String username) throws CloneNotSupportedException;
+    public BusinessPartnerFinancial migrate(BusinessPartnerFinancialMigrationResource businessPartnerFinancialMigrationResource, String username) throws CloneNotSupportedException  ;
+
 }

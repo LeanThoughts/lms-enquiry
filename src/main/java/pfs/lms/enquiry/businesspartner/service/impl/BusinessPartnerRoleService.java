@@ -16,6 +16,9 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -48,6 +51,9 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
         businessPartnerRole.setAllPartnerRoles(businessPartnerRoleResource.getAllPartnerRoles());
         businessPartnerRole.setValidFromDate(businessPartnerRoleResource.getValidFromDate());
         businessPartnerRole.setValidToDate(businessPartnerRoleResource.getValidToDate());
+        businessPartnerRole.setCreatedAt(LocalTime.now());
+        businessPartnerRole.setCreatedOn(LocalDate.now());
+        businessPartnerRole.setCreatedByUserName(username);
         businessPartnerRole =  businessPartnerRoleRepository.save(businessPartnerRole);
 
         if (businessPartnerRoleResource.isDefaultRole()) {
@@ -101,6 +107,11 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
         businessPartnerRole.setAllPartnerRoles(businessPartnerRoleResource.getAllPartnerRoles());
         businessPartnerRole.setValidFromDate(businessPartnerRoleResource.getValidFromDate());
         businessPartnerRole.setValidToDate(businessPartnerRoleResource.getValidToDate());
+
+        businessPartnerRole.setCreatedAt(LocalTime.now());
+        businessPartnerRole.setCreatedOn(LocalDate.now());
+        businessPartnerRole.setCreatedByUserName(username);
+
         businessPartnerRole =  businessPartnerRoleRepository.save(businessPartnerRole);
 
         if (businessPartnerRoleResource.getDefaultRole().length() > 0) {

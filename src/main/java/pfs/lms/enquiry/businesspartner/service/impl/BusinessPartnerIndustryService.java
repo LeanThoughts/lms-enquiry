@@ -21,6 +21,8 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +50,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setSerialNumber(lastSerialNumber + 1);
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
+        businessPartnerIndustry.setCreatedAt(LocalTime.now());
+        businessPartnerIndustry.setCreatedOn(LocalDate.now());
+        businessPartnerIndustry.setCreatedByUserName(username);
         businessPartnerIndustry = businessPartnerIndustryRepository.save(businessPartnerIndustry);
 
         partner.setWorkFlowStatusCode(11); //Updated
@@ -77,6 +82,9 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
 
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
+        businessPartnerIndustry.setChangedAt(LocalTime.now());
+        businessPartnerIndustry.setChangedOn(LocalDate.now());
+        businessPartnerIndustry.setChangedByUserName(username);
         businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
 
         Partner partner = businessPartnerIndustry.getPartner();
@@ -131,6 +139,13 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         if (update == false){
             List<BusinessPartnerIndustry> businessPartnerIndustryList = businessPartnerIndustryRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
             businessPartnerIndustry.setSerialNumber(businessPartnerIndustryList.size() + 1);
+            businessPartnerIndustry.setCreatedAt(LocalTime.now());
+            businessPartnerIndustry.setCreatedOn(LocalDate.now());
+            businessPartnerIndustry.setCreatedByUserName(username);
+        }else{
+            businessPartnerIndustry.setChangedAt(LocalTime.now());
+            businessPartnerIndustry.setChangedOn(LocalDate.now());
+            businessPartnerIndustry.setChangedByUserName(username);
         }
 
 

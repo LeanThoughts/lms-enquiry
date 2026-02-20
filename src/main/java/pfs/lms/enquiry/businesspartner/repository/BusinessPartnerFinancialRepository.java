@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface BusinessPartnerFinancialRepository extends JpaRepository<BusinessPartnerFinancial, UUID> {
 
     List<BusinessPartnerFinancial> findByPartnerIdOrderByFiscalYearAsc(UUID partnerId);
+    BusinessPartnerFinancial findByPartnerIdAndFiscalYear(UUID partnerId, String fiscalYear);
 }

@@ -25,6 +25,8 @@ import pfs.lms.enquiry.repository.RegionRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -92,6 +94,10 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
         businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
+
+        businessPartnerIdentification.setCreatedAt(LocalTime.now());
+        businessPartnerIdentification.setCreatedOn(LocalDate.now());
+        businessPartnerIdentification.setCreatedByUserName(username);
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         // Set Partner Workflow Status Code to Updated
@@ -157,6 +163,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setCountry(businessPartnerIdentificationResource.getCountry());
         businessPartnerIdentification.setRegion(businessPartnerIdentificationResource.getRegion());
+        businessPartnerIdentification.setChangedAt(LocalTime.now());
+        businessPartnerIdentification.setChangedOn(LocalDate.now());
+        businessPartnerIdentification.setChangedByUserName(username);
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         Partner partner = businessPartnerIdentification.getPartner();
@@ -231,6 +240,9 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
         businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
         businessPartnerIdentification.setPartner(partner);
+        businessPartnerIdentification.setCreatedAt(LocalTime.now());
+        businessPartnerIdentification.setCreatedOn(LocalDate.now());
+        businessPartnerIdentification.setCreatedByUserName(username);
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         if (update == true) {

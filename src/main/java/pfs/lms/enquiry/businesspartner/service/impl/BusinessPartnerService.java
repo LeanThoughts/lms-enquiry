@@ -10,6 +10,8 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -23,13 +25,27 @@ public class BusinessPartnerService implements IBusinessPartnerService {
     @Override
     public Partner updatePartnerAfterApproval(Partner partner, String username) throws CloneNotSupportedException {
 
-        //TODO Trigger SAP Integration
+
+        Partner oldPartner = partnerRepository.getOne(partner.getId());
+        // Change Documents
+        changeDocumentService.createChangeDocument(
+                partner.getId(), partner.getId().toString(), null,
+                partner.getId().toString(),
+                oldPartner,
+                partner,
+                "Updated",
+                username,
+                "Partner", "Partner");
+        partner.setCreatedAt(LocalTime.now());
+        partner.setCreatedOn(LocalDate.now());
+        partner.setCreatedByUserName(username);
+        partnerRepository.save(partner);
 
         //Update KYC with the Identification
         List<BusinessPartnerIdentification> businessPartnerIdentificationLIst
                 = businessPartnerIdentificationRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
         for (BusinessPartnerIdentification businessPartnerIdentification:businessPartnerIdentificationLIst
-             ) {
+        ) {
             businessPartnerIdentificationService.updateLoanPartnerKYC(businessPartnerIdentification);
         }
 
@@ -42,8 +58,11 @@ public class BusinessPartnerService implements IBusinessPartnerService {
         Object oldPartner = partner.clone();
         partner.setWorkFlowStatusCode(04);
         partner.setWorkFlowStatusDescription("Rejected");
+        partner.setChangedAt(LocalTime.now());
+        partner.setChangedOn(LocalDate.now());
+        partner.setChangedByUserName(username);
 
-        // Change Documents for Monitoring Header
+        // Change Documents
         changeDocumentService.createChangeDocument(
                 partner.getId(), partner.getId().toString(), null,
                 partner.getId().toString(),
@@ -55,6 +74,6 @@ public class BusinessPartnerService implements IBusinessPartnerService {
         partnerRepository.save(partner);
 
         return partner;
-     }
+    }
 }
 

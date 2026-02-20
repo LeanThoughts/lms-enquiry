@@ -9,13 +9,17 @@ import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerKYCDetailResource
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerKYCDetailService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class BusinessPartnerKYCDetailService implements IBusinessPartnerKYCDetailService {
+    private final IChangeDocumentService changeDocumentService;
 
     private final BusinessPartnerKYCDetailRepository businessPartnerKYCDetailRepository;
     private final PartnerRepository partnerRepository;
@@ -32,21 +36,24 @@ public class BusinessPartnerKYCDetailService implements IBusinessPartnerKYCDetai
         businessPartnerKYCDetail.setKycRiskCategory(businessPartnerKYCDetailResource.getKycRiskCategory());
         businessPartnerKYCDetail.setReKYCDate(businessPartnerKYCDetailResource.getReKYCDate());
         businessPartnerKYCDetail.setReKYCRiskCategory(businessPartnerKYCDetailResource.getReKYCRiskCategory());
+        businessPartnerKYCDetail.setCreatedAt(LocalTime.now());
+        businessPartnerKYCDetail.setCreatedOn(LocalDate.now());
+        businessPartnerKYCDetail.setCreatedByUserName(username);
         businessPartnerKYCDetail = businessPartnerKYCDetailRepository.save(businessPartnerKYCDetail);
 
         // Set Partner Workflow Status Code to Updated
 //        partner.setWorkFlowStatusCode(11);
 
-//        changeDocumentService.createChangeDocument(
-//                businessPartnerFinancial.getId(),
-//                businessPartnerFinancial.getId().toString(),
-//                businessPartnerFinancial.getPartner().getId().toString(),
-//                businessPartnerFinancial.getPartner().getId().toString(),
-//                null,
-//                businessPartnerFinancial,
-//                "Created",
-//                username,
-//                "Partner", "BusinessPartnerIdentification");
+        changeDocumentService.createChangeDocument(
+                businessPartnerKYCDetail.getId(),
+                businessPartnerKYCDetail.getId().toString(),
+                businessPartnerKYCDetail.getPartner().getId().toString(),
+                businessPartnerKYCDetail.getPartner().getId().toString(),
+                null,
+                businessPartnerKYCDetail,
+                "Created",
+                username,
+                "Partner", "BusinessPartnerIdentification");
 
        // updateLoanPartnerKYC(businessPartnerFinancial);
 
@@ -60,30 +67,35 @@ public class BusinessPartnerKYCDetailService implements IBusinessPartnerKYCDetai
                 .orElseThrow(() -> new EntityNotFoundException(businessPartnerKYCDetailResource.getId().toString()
                 + " : Business partner kyc detail not found"));
 
-//        Object oldObject = businessPartnerFinancial.clone();
+        Object oldObject = businessPartnerKYCDetail.clone();
 
         businessPartnerKYCDetail.setKycDate(businessPartnerKYCDetailResource.getKycDate());
         businessPartnerKYCDetail.setKycRiskCategory(businessPartnerKYCDetailResource.getKycRiskCategory());
         businessPartnerKYCDetail.setReKYCDate(businessPartnerKYCDetailResource.getReKYCDate());
         businessPartnerKYCDetail.setReKYCRiskCategory(businessPartnerKYCDetailResource.getReKYCRiskCategory());
+
+        businessPartnerKYCDetail.setChangedAt(LocalTime.now());
+        businessPartnerKYCDetail.setChangedOn(LocalDate.now());
+        businessPartnerKYCDetail.setChangedByUserName(username);
         businessPartnerKYCDetail = businessPartnerKYCDetailRepository.save(businessPartnerKYCDetail);
 
-//        Partner partner = businessPartnerFinancial.getPartner();
-//        // Set Partner Workflow Status Code to Updated
-//        partner.setWorkFlowStatusCode(11);
-//        partnerRepository.save(partner);
-//
-//        changeDocumentService.createChangeDocument(
-//                businessPartnerFinancial.getId(),
-//                businessPartnerFinancial.getId().toString(),
-//                businessPartnerFinancial.getPartner().getId().toString(),
-//                businessPartnerFinancial.getPartner().getId().toString(),
-//                oldObject,
-//                businessPartnerFinancial,
-//                "Updated",
-//                username,
-//                "Partner", "BusinessPartnerIdentification");
-        //updateLoanPartnerKYC(businessPartnerFinancial);
+        Partner partner = businessPartnerKYCDetail.getPartner();
+        // Set Partner Workflow Status Code to Updated
+        partner.setWorkFlowStatusCode(11);
+        partnerRepository.save(partner);
+
+        changeDocumentService.createChangeDocument(
+                businessPartnerKYCDetail.getId(),
+                businessPartnerKYCDetail.getId().toString(),
+                businessPartnerKYCDetail.getPartner().getId().toString(),
+                businessPartnerKYCDetail.getPartner().getId().toString(),
+                oldObject,
+                businessPartnerKYCDetail,
+                "Updated",
+                username,
+                "Partner", "BusinessPartnerKYCDetail");
+
+        //updateLoanPartnerKYC(businessPartnerKYCDetail);
 
         return businessPartnerKYCDetail;
     }

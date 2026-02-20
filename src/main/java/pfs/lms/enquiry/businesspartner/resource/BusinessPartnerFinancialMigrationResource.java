@@ -1,25 +1,21 @@
-package pfs.lms.enquiry.businesspartner.domain;
+package pfs.lms.enquiry.businesspartner.resource;
 
-import lombok.*;
-import pfs.lms.enquiry.domain.AggregateRoot;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRoleType;
 import pfs.lms.enquiry.domain.Partner;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
 
-@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-public class BusinessPartnerFinancial extends AggregateRoot<BusinessPartnerFinancial> implements Cloneable {
+public class BusinessPartnerFinancialMigrationResource {
+    private String partnerId;
 
-    @ManyToOne
-    @JoinColumn(name = "partner_id")
-    Partner partner;
 
     private String fiscalYear;
 
@@ -56,8 +52,4 @@ public class BusinessPartnerFinancial extends AggregateRoot<BusinessPartnerFinan
     private BigDecimal dscr;
     private BigDecimal totalDebtTnw;
     private BigDecimal tolTnw;
-
-    public Object clone () throws CloneNotSupportedException {
-        return super.clone();
-    }
 }
