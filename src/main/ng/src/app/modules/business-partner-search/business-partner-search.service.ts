@@ -80,7 +80,8 @@ export class BusinessPartnerSearchService implements Resolve<any> {
      */
     getBusinessPartnerKYCDetails(partnerId: string): Observable<any> {
         return new Observable(observer => {
-            this.http.get<any>(environment.primaryApiHost + '/businessPartnerKYCDetails', { params: { partnerId } }).subscribe(result => {
+            this.http.get<any>(environment.primaryApiHost + '/businessPartnerKYCDetails/search/findByPartnerId', 
+                    { params: { partnerId } }).subscribe(result => {
                 observer.next(result._embedded.businessPartnerKYCDetails);
                 observer.complete();
             });
