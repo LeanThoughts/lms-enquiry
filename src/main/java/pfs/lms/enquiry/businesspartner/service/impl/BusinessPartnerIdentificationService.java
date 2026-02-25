@@ -215,9 +215,16 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
             if (businessPartnerIdentifications.size() > 0 ){
                 businessPartnerIdentification = businessPartnerIdentifications.get(0);
                 oldObject = businessPartnerIdentification.clone();
+                businessPartnerIdentification.setChangedAt(LocalTime.now());
+                businessPartnerIdentification.setChangedOn(LocalDate.now());
+                businessPartnerIdentification.setChangedByUserName(username);
                 update = true;
             } else {
                 businessPartnerIdentification = new BusinessPartnerIdentification();
+                businessPartnerIdentification.setPartner(partner);
+                businessPartnerIdentification.setCreatedAt(LocalTime.now());
+                businessPartnerIdentification.setCreatedOn(LocalDate.now());
+                businessPartnerIdentification.setCreatedByUserName(username);
             }
         } else{
             log.error("Business Partner Master Data Not Found for ID: " + businessPartnerIdentificationResource.getPartnerId());
@@ -232,17 +239,25 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
         businessPartnerIdentification.setIdentificationCategoryCode(identificationCategory.getCode());
         businessPartnerIdentification.setIdentificationNumber(businessPartnerIdentificationResource.
                 getIdentificationNumber());
+        if (businessPartnerIdentificationResource.getIdInstitute() != null && businessPartnerIdentificationResource.getIdInstitute().length() > 0)
         businessPartnerIdentification.setIdInstitute(businessPartnerIdentificationResource.getIdInstitute());
+        if (businessPartnerIdentificationResource.getIdEntryDate() != null)
         businessPartnerIdentification.setIdEntryDate(businessPartnerIdentificationResource.getIdEntryDate());
+        if (businessPartnerIdentificationResource.getIdValidFromDate() != null)
         businessPartnerIdentification.setIdValidFromDate(businessPartnerIdentificationResource.getIdValidFromDate());
+        if (businessPartnerIdentificationResource.getIdValidToDate() != null)
         businessPartnerIdentification.setIdValidToDate(businessPartnerIdentificationResource.getIdValidToDate());
+
+        if ( businessPartnerIdentificationResource.getDocumentName() != null && businessPartnerIdentificationResource.getDocumentName().length() > 0 )
         businessPartnerIdentification.setDocumentName(businessPartnerIdentificationResource.getDocumentName());
+
         businessPartnerIdentification.setFileReference(businessPartnerIdentificationResource.getFileReference());
-        businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
+
+        if (businessPartnerIdentificationResource.getDocumentType() !=null  && businessPartnerIdentificationResource.getDocumentType().length() > 0 )
+            businessPartnerIdentification.setDocumentType(businessPartnerIdentificationResource.getDocumentType());
+
         businessPartnerIdentification.setPartner(partner);
-        businessPartnerIdentification.setCreatedAt(LocalTime.now());
-        businessPartnerIdentification.setCreatedOn(LocalDate.now());
-        businessPartnerIdentification.setCreatedByUserName(username);
+
         businessPartnerIdentification = businessPartnerIdentificationRepository.save(businessPartnerIdentification);
 
         if (update == true) {
@@ -268,7 +283,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                     username,
                     "Partner", "BusinessPartnerIdentification");
         }
-        log.info("Finished Migrating BusinessPartnerIdentification");
+        log.info("Finished Migrating BusinessPartnerIdentification Partner Number: " + partner.getPartyNumber() + "ID Number:" + businessPartnerIdentification.getIdentificationNumber() );
 
         //updateLoanPartnerKYC(businessPartnerIdentification);
 
@@ -372,7 +387,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                         findByCountryCodeAndRegionCode(businessPartnerIdentification.getCountry(),
                                 businessPartnerIdentification.getRegion()).getValue());
 
-            if (businessPartnerIdentification.getDocumentType() != null)
+            if (businessPartnerIdentification.getDocumentType() != null && businessPartnerIdentification.getDocumentType().length() > 0 )
                 businessPartnerIdentificationResource.setDocumentTypeName(documentTypeRepository.
                         findByCode(businessPartnerIdentification.getDocumentType()).getDescription());
 
