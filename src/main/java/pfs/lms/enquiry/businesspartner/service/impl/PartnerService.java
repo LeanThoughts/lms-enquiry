@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.domain.BupaRoleCustomerFieldValues;
+import pfs.lms.enquiry.businesspartner.repository.BupaRoleCustomerFieldValuesRepository;
+import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerKYCDetailRepository;
+import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.businesspartner.service.IPartnerService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.domain.PartnerContact;
@@ -15,8 +19,9 @@ import pfs.lms.enquiry.repository.UserRepository;
 import pfs.lms.enquiry.resource.PartnerResourceByAlphabet;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
- import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
+import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,6 +41,7 @@ public class PartnerService implements IPartnerService {
     private final PartnerRoleTypeRepository partnerRoleTypeRepository;
     private final UserRepository userRepository;
     private final IChangeDocumentService changeDocumentService;
+    private final BupaRoleCustomerFieldValuesRepository bupaRoleCustomerFieldValuesRepository;
 
     @Override
     public Partner getOne(String username) {
@@ -117,7 +123,7 @@ public class PartnerService implements IPartnerService {
                     "Updated",
                     username,
                     "Partner", "Partner");
-             return existing;
+            return existing;
         }
         //If not create a new partner and return
         else {
@@ -127,6 +133,16 @@ public class PartnerService implements IPartnerService {
                 partner.setCreatedOn(LocalDate.now());
                 partner.setCreatedByUserName(username);
                 partner = partnerRepository.save(partner);
+
+                BupaRoleCustomerFieldValues bupaRoleCustomerFieldValues = bupaRoleCustomerFieldValuesRepository.
+                        findByBupaRoleCodeAndPartnerGroup(partner.getDefaultPartnerRole(), partner.getPartnerGroup());
+                partner.setHouseBank(bupaRoleCustomerFieldValues.getHouseBank());
+                partner.setPlanningGroup(bupaRoleCustomerFieldValues.getPlanningGroup());
+                partner.setReconAccount(bupaRoleCustomerFieldValues.getReconAccount());
+                partner.setSortKey(bupaRoleCustomerFieldValues.getSortKey());
+                partner.setDunningProcedure(bupaRoleCustomerFieldValues.getDunningProcedure());
+                partner.setPaymentTerms(bupaRoleCustomerFieldValues.getPaymentTerms());
+                partner.setCheckDoubleInvoice(bupaRoleCustomerFieldValues.getCheckDoubleInvoice());
 
                 changeDocumentService.createChangeDocument(
                         partner.getId(), partner.getId().toString(),
@@ -317,7 +333,7 @@ public class PartnerService implements IPartnerService {
         List<PartnerResourceByEmail> partnerResourceByEmails = new ArrayList<>();
 
         List<Partner> partners = partnerRepository.findAll();
-      //  Collections.sort(partners, Collections.reverseOrder());
+        //  Collections.sort(partners, Collections.reverseOrder());
 
         partners = partners.stream().filter(partner -> partner.getEmail() != null).collect(Collectors.toList());
         partners.sort(Comparator.comparing(Partner::getEmail));
@@ -329,10 +345,10 @@ public class PartnerService implements IPartnerService {
 
             String partnerString =
                     partner.getPartyName1() + " " +
-                    partner.getPartyName2() + " ," +
-                    partner.getAddressLine1() + "," +
-                    partner.getAddressLine2() + "," +
-                    partner.getCity();
+                            partner.getPartyName2() + " ," +
+                            partner.getAddressLine1() + "," +
+                            partner.getAddressLine2() + "," +
+                            partner.getCity();
 
             partnerResourceByEmail.setNameAndAddress(partnerString);
 
@@ -400,7 +416,7 @@ public class PartnerService implements IPartnerService {
 
         // Get Partners by UpperCase and LoweCase
         List<Partner> partners = partnerRepository.findByPartyName1StartingWith(alphabet);
-       // List<Partner> partners1 = partnerRepository.findByPartyName1StartingWith(alphabet.toLowerCase());
+        // List<Partner> partners1 = partnerRepository.findByPartyName1StartingWith(alphabet.toLowerCase());
         //Merge Partner
         //partners.addAll(partners1);
 
@@ -421,12 +437,12 @@ public class PartnerService implements IPartnerService {
 
 
             String partnerString = "Bus.Partner Number:" + partner.getPartyNumber() + " ," +
-                                   partner.getPartyName1() + " " +
-                                   partner.getPartyName2() + " ," +
-                                   partner.getEmail() + " , " +
-                                   partner.getAddressLine1() + "," +
-                                   partner.getAddressLine2() + "," +
-                                   partner.getCity();
+                    partner.getPartyName1() + " " +
+                    partner.getPartyName2() + " ," +
+                    partner.getEmail() + " , " +
+                    partner.getAddressLine1() + "," +
+                    partner.getAddressLine2() + "," +
+                    partner.getCity();
 
             partnersString.add(partnerString);
 
@@ -525,72 +541,72 @@ public class PartnerService implements IPartnerService {
         }
 
         // Check if the Partner already exists
-          Partner existingPartner =  partnerRepository.findByPartyNumber(partner.getPartyNumber());
-          if (existingPartner == null) {
-             Partner savedPartner = partnerRepository.save(partner);
-              log.info("Finished Migration of NEW Business Partner Number :" + partner.getPartyNumber() + partner.getPartyName1());
+        Partner existingPartner =  partnerRepository.findByPartyNumber(partner.getPartyNumber());
+        if (existingPartner == null) {
+            Partner savedPartner = partnerRepository.save(partner);
+            log.info("Finished Migration of NEW Business Partner Number :" + partner.getPartyNumber() + partner.getPartyName1());
 
-              return savedPartner;
-          }
+            return savedPartner;
+        }
 
-          existingPartner.setPartyCategory(partner.getPartyCategory());
-          existingPartner.setGroupCompany(partner.getGroupCompany());
-          existingPartner.setPartyRole(partner.getPartyRole());
-            existingPartner.setDefaultPartnerRole(partner.getPartyRole());
-          existingPartner.setPartnerGroup(partner.getPartnerGroup());
+        existingPartner.setPartyCategory(partner.getPartyCategory());
+        existingPartner.setGroupCompany(partner.getGroupCompany());
+        existingPartner.setPartyRole(partner.getPartyRole());
+        existingPartner.setDefaultPartnerRole(partner.getDefaultPartnerRole());
+        existingPartner.setPartnerGroup(partner.getPartnerGroup());
 
-          existingPartner.setEmail(partner.getEmail());
+        existingPartner.setEmail(partner.getEmail());
 
-          existingPartner.setAddressLine1(partner.getAddressLine1());
-          existingPartner.setAddressLine2(partner.getAddressLine2());
-          existingPartner.setAddressLine3(partner.getAddressLine3());
-          existingPartner.setStreet(partner.getAddressLine3());
+        existingPartner.setAddressLine1(partner.getAddressLine1());
+        existingPartner.setAddressLine2(partner.getAddressLine2());
+        existingPartner.setAddressLine3(partner.getAddressLine3());
+        existingPartner.setStreet(partner.getAddressLine3());
 
 
-          existingPartner.setCity(partner.getCity());
-          existingPartner.setState(partner.getState());
-          existingPartner.setPostalCode(partner.getPostalCode());
-          existingPartner.setCountry(partner.getCountry());
+        existingPartner.setCity(partner.getCity());
+        existingPartner.setState(partner.getState());
+        existingPartner.setPostalCode(partner.getPostalCode());
+        existingPartner.setCountry(partner.getCountry());
 
-          existingPartner.setContactPersonName(partner.getContactPersonName());
-          existingPartner.setContactNumber(partner.getContactNumber());
-          existingPartner.setPartyRole(partner.getPartyRole());
-          existingPartner.setPartyName1(partner.getPartyName1());
-          existingPartner.setPartyName2(partner.getPartyName2());
+        existingPartner.setContactPersonName(partner.getContactPersonName());
+        existingPartner.setContactNumber(partner.getContactNumber());
+        existingPartner.setPartyRole(partner.getPartyRole());
+        existingPartner.setPartyName1(partner.getPartyName1());
+        existingPartner.setPartyName2(partner.getPartyName2());
 
-          existingPartner.setIndustrySector(partner.getIndustrySector());
-          existingPartner.setPan(partner.getPan());
-          existingPartner.setHouseBank(partner.getHouseBank());
-          existingPartner.setLegalEntity(partner.getLegalEntity());
-          existingPartner.setLegalForm(partner.getLegalForm());
-          existingPartner.setTitle(partner.getTitle());
+        existingPartner.setIndustrySector(partner.getIndustrySector());
+        existingPartner.setPan(partner.getPan());
+        existingPartner.setHouseBank(partner.getHouseBank());
+        existingPartner.setLegalEntity(partner.getLegalEntity());
+        existingPartner.setLegalForm(partner.getLegalForm());
+        existingPartner.setTitle(partner.getTitle());
 
-          existingPartner.setReconAccount(partner.getReconAccount());
-          existingPartner.setPlanningGroup(partner.getPlanningGroup());
-          existingPartner.setPaymentMethod(partner.getPaymentMethod());
-          existingPartner.setPaymentTerms(partner.getPaymentTerms());
-          existingPartner.setSortKey(partner.getSortKey());
-          existingPartner.setCheckDoubleInvoice(partner.getCheckDoubleInvoice());
+        existingPartner.setReconAccount(partner.getReconAccount());
+        existingPartner.setPlanningGroup(partner.getPlanningGroup());
+        existingPartner.setPaymentMethod(partner.getPaymentMethod());
+        existingPartner.setPaymentTerms(partner.getPaymentTerms());
+        existingPartner.setSortKey(partner.getSortKey());
+        existingPartner.setCheckDoubleInvoice(partner.getCheckDoubleInvoice());
 
-          existingPartner.setPartnerType(partner.getPartnerType());
-          boolean addPartnerRole = true;
+        existingPartner.setPartnerType(partner.getPartnerType());
+        boolean addPartnerRole = true;
 
-          for (PartnerRoleType partnerRoleType: partner.getPartnerRoleTypes()  ) {
-              addPartnerRole = true;
-              //Check if Partner Role exists
-              for (PartnerRoleType partnerRoleTypeExisting: existingPartner.getPartnerRoleTypes()) {
-                  if (partnerRoleType.getRoleCode().equals(partnerRoleTypeExisting.getRoleCode())){
-                      addPartnerRole = false;
-                  }
-              }
+        for (PartnerRoleType partnerRoleType: partner.getPartnerRoleTypes()  ) {
+            addPartnerRole = true;
+            //Check if Partner Role exists
+            for (PartnerRoleType partnerRoleTypeExisting: existingPartner.getPartnerRoleTypes()) {
+                if (partnerRoleType.getRoleCode().equals(partnerRoleTypeExisting.getRoleCode())){
+                    addPartnerRole = false;
+                }
+            }
 
-              if (addPartnerRole == true) {
-                  existingPartner.addPartnerRole(partnerRoleType);
-              }
+            if (addPartnerRole == true) {
+                existingPartner.addPartnerRole(partnerRoleType);
+            }
 
-          }
+        }
 
-          boolean addPartnerContact = true;
+        boolean addPartnerContact = true;
 
 
         if (partner.getPartnerContacts() != null){
@@ -634,6 +650,23 @@ public class PartnerService implements IPartnerService {
         return updatedPartner;
     }
 
+    @Override
+    public Partner updateFICustomerVendorDetails(BupaFICustomerVendorDetailResource bupaFICustomerVendorDetailResource,
+                                                 HttpServletRequest httpServletRequest) {
+        Partner partner = partnerRepository.findById(bupaFICustomerVendorDetailResource.getPartnerId())
+                .orElseThrow(() -> new EntityNotFoundException(bupaFICustomerVendorDetailResource.getPartnerId().toString()));
+        partner.setHouseBank(bupaFICustomerVendorDetailResource.getHouseBank());
+        partner.setPlanningGroup(bupaFICustomerVendorDetailResource.getPlanningGroup());
+        partner.setReconAccount(bupaFICustomerVendorDetailResource.getReconAccount());
+        partner.setSortKey(bupaFICustomerVendorDetailResource.getSortKey());
+        partner.setDunningProcedure(bupaFICustomerVendorDetailResource.getDunningProcedure());
+        partner.setPaymentMethod(bupaFICustomerVendorDetailResource.getPaymentMethod());
+        partner.setPaymentTerms(bupaFICustomerVendorDetailResource.getPaymentTerms());
+        partner.setCheckDoubleInvoice(bupaFICustomerVendorDetailResource.getCheckDoubleInvoice());
+        partner = partnerRepository.save(partner);
+        return partner;
+    }
+
 
     private void userMaintenance (Partner partner) {
 
@@ -644,7 +677,7 @@ public class PartnerService implements IPartnerService {
         if (loanProspectRoleExisting == false) {
 
             // Create User for Loan Applicants - Main Loan Partner  (TR0100)
-           Boolean loanPartnerRoleExisting =
+            Boolean loanPartnerRoleExisting =
                     partner.getPartnerRoleTypes().stream()
                             .anyMatch(partnerRoleType -> partnerRoleType.getRoleCode().equals("TR0100"));
             if (loanPartnerRoleExisting == false) {

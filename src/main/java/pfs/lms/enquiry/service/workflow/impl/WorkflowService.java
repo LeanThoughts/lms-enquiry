@@ -106,6 +106,8 @@ public class WorkflowService implements IWorkflowService {
     @Autowired
     private UserRepository userRepository;
 
+//    private final JWTUserDetails jwtUserDetails;
+
     private final RiskNotificationRepository riskNotificationRepository;
     private final RiskAssessmentRepository riskAssessmentRepository;
 
@@ -397,13 +399,13 @@ public class WorkflowService implements IWorkflowService {
             case "BusinessPartner":
                 //Save entity with the Process Instance and workflow status code
                 partner.setProcessInstanceId(processInstanceId);
-                partner.setWorkFlowStatusCode(01);
+                partner.setWorkFlowStatusCode(02);
                 partner = partnerRepository.save(partner);
                 return partner;
             case "ReferenceInterestRateValue":
                 //Save entity with the Process Instance and workflow status code
                 referenceInterestRateValue.setProcessInstanceId(processInstanceId);
-                referenceInterestRateValue.setWorkFlowStatusCode(01);
+                referenceInterestRateValue.setWorkFlowStatusCode(02);
                 referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
                 return referenceInterestRateValue;
         }
@@ -903,14 +905,14 @@ public class WorkflowService implements IWorkflowService {
     public List<WorkflowTaskDTO> getTasks(HttpServletRequest httpServletRequest) {
 
         TaskService taskService = processEngine.getTaskService();
-        String userName = httpServletRequest.getUserPrincipal().getName();
-
+        // String email = httpServletRequest.getUserPrincipal().getName();
+        String email = httpServletRequest.getUserPrincipal().getName();
         List<WorkflowTaskDTO> workflowTaskDTOList = new ArrayList<>();
 
         log.info(LocalDateTime.now() + ": USER NAME: " + httpServletRequest.getUserPrincipal().getName());
 
         List<Task> tasks = taskService.createTaskQuery()
-                .taskAssignee(userName)
+                .taskAssignee(email)
                 .includeProcessVariables()
                 .orderByTaskCreateTime()
                 .desc()

@@ -139,7 +139,7 @@ public class PartnerScheduledTaskCreateAndChange {
                                businessPartnerID = responseKeyValueI.get("d").get("BusPartnerNumber");
                              partner.setPartyNumber(Integer.parseInt(businessPartnerID));
                              partnerRepository.save(partner);
-                             log.info("Business Partner Created in SAP: " + businessPartnerID);
+                             log.info("Business Partner Created/Updated in SAP: " + businessPartnerID);
                          } catch ( Exception ex ){
                              log.info("Exception from SAP Business Partner Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
                          }

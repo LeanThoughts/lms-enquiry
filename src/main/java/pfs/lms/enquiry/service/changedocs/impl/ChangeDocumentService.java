@@ -1180,6 +1180,17 @@ public class ChangeDocumentService implements IChangeDocumentService {
                     result.put("id", bmcRejectedByIcc.getId().toString());
                     result.put("description", bmcRejectedByIcc.getBmcICCApproval().getLoanApplication().getLoanContractId().toString());
                     return result;
+                case "BusinessPartnerFinancial":
+                    BusinessPartnerFinancial businessPartnerFinancial = (BusinessPartnerFinancial) object;
+                    result.put("id", businessPartnerFinancial.getId().toString());
+                    result.put("description", businessPartnerFinancial.getPartner().getPartyNumber().toString());
+                    return result;
+
+                case "BusinessPartnerKYCDetail":
+                    BusinessPartnerKYCDetail businessPartnerKYCDetail = (BusinessPartnerKYCDetail) object;
+                    result.put("id", businessPartnerKYCDetail.getId().toString());
+                    result.put("description", businessPartnerKYCDetail.getPartner().getPartyNumber().toString());
+                    return result;
             }
 
         } catch (Exception ex) {
