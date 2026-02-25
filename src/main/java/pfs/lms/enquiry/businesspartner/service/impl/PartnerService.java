@@ -552,7 +552,7 @@ public class PartnerService implements IPartnerService {
         existingPartner.setPartyCategory(partner.getPartyCategory());
         existingPartner.setGroupCompany(partner.getGroupCompany());
         existingPartner.setPartyRole(partner.getPartyRole());
-        existingPartner.setDefaultPartnerRole(partner.getPartyRole());
+        existingPartner.setDefaultPartnerRole(partner.getDefaultPartnerRole());
         existingPartner.setPartnerGroup(partner.getPartnerGroup());
 
         existingPartner.setEmail(partner.getEmail());
