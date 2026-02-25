@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import pfs.lms.enquiry.businesspartner.domain.BupaRoleCustomerFieldValues;
+import pfs.lms.enquiry.businesspartner.repository.BupaRoleCustomerFieldValuesRepository;
+import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerKYCDetailRepository;
 import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.businesspartner.service.IPartnerService;
 import pfs.lms.enquiry.domain.Partner;
@@ -38,6 +41,7 @@ public class PartnerService implements IPartnerService {
     private final PartnerRoleTypeRepository partnerRoleTypeRepository;
     private final UserRepository userRepository;
     private final IChangeDocumentService changeDocumentService;
+    private final BupaRoleCustomerFieldValuesRepository bupaRoleCustomerFieldValuesRepository;
 
     @Override
     public Partner getOne(String username) {
@@ -129,6 +133,16 @@ public class PartnerService implements IPartnerService {
                 partner.setCreatedOn(LocalDate.now());
                 partner.setCreatedByUserName(username);
                 partner = partnerRepository.save(partner);
+
+                BupaRoleCustomerFieldValues bupaRoleCustomerFieldValues = bupaRoleCustomerFieldValuesRepository.
+                        findByBupaRoleCodeAndPartnerGroup(partner.getDefaultPartnerRole(), partner.getPartnerGroup());
+                partner.setHouseBank(bupaRoleCustomerFieldValues.getHouseBank());
+                partner.setPlanningGroup(bupaRoleCustomerFieldValues.getPlanningGroup());
+                partner.setReconAccount(bupaRoleCustomerFieldValues.getReconAccount());
+                partner.setSortKey(bupaRoleCustomerFieldValues.getSortKey());
+                partner.setDunningProcedure(bupaRoleCustomerFieldValues.getDunningProcedure());
+                partner.setPaymentTerms(bupaRoleCustomerFieldValues.getPaymentTerms());
+                partner.setCheckDoubleInvoice(bupaRoleCustomerFieldValues.getCheckDoubleInvoice());
 
                 changeDocumentService.createChangeDocument(
                         partner.getId(), partner.getId().toString(),

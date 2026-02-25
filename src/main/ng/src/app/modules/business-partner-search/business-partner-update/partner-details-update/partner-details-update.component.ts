@@ -462,39 +462,110 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
      */
     onPartnerGroupChange(event: any) {
 
+        if (!event) {
+            return;
+        }
+        
+        this.selectedPartnerGroup = this.partnerGroups.find(
+            (partnerGroup: any) => partnerGroup.code === event
+        );
+        
+        if (!this.selectedPartnerGroup?.externalNumberRange) {
+            this.inlineHelpContent = '';
+            return;
+        }
+        
+        const { startingId, endingId, value } = this.selectedPartnerGroup;
         const partyNumberControl = this.partnerDetailsForm.get('partyNumber');
         if (partyNumberControl) {   
             partyNumberControl.clearValidators();
             partyNumberControl.updateValueAndValidity();
         }
-        if (event) {
-            this.selectedPartnerGroup = this.partnerGroups.find((partnerGroup: any) => partnerGroup.code === event);        
-            if (this.selectedPartnerGroup.externalNumberRange) {
-                const startingId = this.selectedPartnerGroup.startingId;
-                const endingId = this.selectedPartnerGroup.endingId;
-                const inlineHelpContent1 = `${this.selectedPartnerGroup.value} has external number assignment, enter a number. ` +
-                    `Business partner number must be between ${startingId} and ${endingId}.`;
-                if (partyNumberControl) {
-                    partyNumberControl.setValidators([
-                        Validators.required,
-                        Validators.min(startingId),
-                        Validators.max(endingId)
-                    ]);
-                    partyNumberControl.updateValueAndValidity();
-                }
+        
+        const inlineHelpContentBase = `${value} has external number assignment, enter a number. ` +
+            `Business partner number must be between ${startingId} and ${endingId}.`;
+        
+        // Set initial min value
+        let minValue = startingId;
+        
+        // Fetch last used number
+        this.businessPartnerService.getMaxPartyNumberByRoleType(this.partnerDetailsForm.get('defaultPartnerRole')?.value, event).subscribe({
+            next: (result: number) => {
+                minValue = this.operation === 'create' ? result + 1 : result;
+                this.inlineHelpContent = `Last id entered for this type of business partner is "${result}". ` + inlineHelpContentBase;
+                applyValidators();
+            },
+            error: () => {
+                this.inlineHelpContent = `There is no last id entered for this type of business partner. ` + inlineHelpContentBase;
+                applyValidators();
+            }
+        });
+        
+        const applyValidators = () => {
+            if (!partyNumberControl) return;
+            partyNumberControl.setValidators([
+                Validators.required,
+                Validators.min(minValue),
+                Validators.max(endingId)
+            ]);
+            partyNumberControl.updateValueAndValidity();
+        };
 
-                this.businessPartnerService.getMaxPartyNumberByRoleType(this.partnerDetailsForm.get('defaultPartnerRole')?.value, event).subscribe({
-                    next: (result: any) => {
-                        this.inlineHelpContent = 'Last id entered for this type of business partner is "' + result + '". ' + inlineHelpContent1;
-                    },
-                    error: (err) => {
-                        this.inlineHelpContent = 'There is no last id entered for this type of business partner. ' + inlineHelpContent1;
-                    }
-                });    
-            }
-            else {
-                this.inlineHelpContent = '';
-            }
-        }
+        // if (event) {
+        //     this.selectedPartnerGroup = this.partnerGroups.find(
+        //         (partnerGroup: any) => partnerGroup.code === event
+        //     );
+            
+        //     if (!this.selectedPartnerGroup?.externalNumberRange) {
+        //         this.inlineHelpContent = '';
+        //         return;
+        //     }
+            
+      //     const { startingId, endingId, value } = this.selectedPartnerGroup;
+        //     const partyNumberControl = this.partnerDetailsForm.get('partyNumber');  
+            
+        //     const inlineHelpContentBase =
+        //         `${value} has external number assignment, enter a number. ` +
+        //         `Business partner number must be between ${startingId} and ${endingId}.`;
+            
+        //     // Set initial min value
+        //     let minValue = startingId;
+            
+        //     // Fetch last used number
+        //     this.businessPartnerService
+        //         .getMaxPartyNumberByRoleType(
+        //             this.partnerDetailsForm.get('defaultPartnerRole')?.value,
+        //             event
+        //         )
+        //         .subscribe({
+        //             next: (result: number) => {
+        //                 minValue = result;
+        //                 this.inlineHelpContent =
+        //                     `Last id entered for this type of business partner is "${result}". ` +
+        //                     inlineHelpContentBase;
+            
+        //                 applyValidators();
+        //             },
+        //             error: () => {
+        //                 this.inlineHelpContent =
+        //                     `There is no last id entered for this type of business partner. ` +
+        //                     inlineHelpContentBase;
+            
+        //                 applyValidators();
+        //             }
+        //         });
+            
+        //     const applyValidators = () => {
+        //         if (!partyNumberControl) return;
+            
+        //         partyNumberControl.setValidators([
+        //             Validators.required,
+        //             Validators.min(minValue),
+        //             Validators.max(endingId)
+        //         ]);
+            
+        //         partyNumberControl.updateValueAndValidity();
+        //     };
+        // }
     }
 }

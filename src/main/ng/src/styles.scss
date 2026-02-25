@@ -83,3 +83,8 @@ body {
     text-indent: -9999px; /* hide text, accessibility */
     overflow: hidden;
 }
+
+.fd-icon-tab-bar__label {
+    font-size: 0.7rem !important;
+    font-weight: bold !important;
+}

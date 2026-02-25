@@ -30,7 +30,7 @@
             <div [fdLayoutGridCol]="12">
                 <fdp-icon-tab-bar iconTabType="icon" iconTabSize="sm">
                     <!-- Business Partner Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Partner Details">
+                    <fdp-icon-tab-bar-tab label="Partner Details" icon="group">
                         <fd-layout-grid [noGap]="false" class="component-grid">
                             <div fdLayoutGridRow>
                                 <div [fdLayoutGridCol]="12">
@@ -71,12 +71,12 @@
                     @if (operation !== 'create') {
 
                     <!-- Business Partner Roles Tab -->
-                    <fdp-icon-tab-bar-tab label="Business Partner Roles">
+                    <fdp-icon-tab-bar-tab label="Business Partner Roles" icon="role">
                         <app-generic-list [entity]="'businessPartnerRoles'" [searchString1]="selectedBusinessPartnerId"/>
                     </fdp-icon-tab-bar-tab>
 
                     <!-- FI Customer/Vendor Tab -->
-                    <fdp-icon-tab-bar-tab label="FI Customer/Vendor">
+                    <fdp-icon-tab-bar-tab label="FI Customer/Vendor" icon="customer">
                         <app-generic-list 
                             [entity]="'businessPartnerFICustomerVendor'" 
                             [searchString1]="selectedBusinessPartnerId"
@@ -88,7 +88,8 @@
                     </fdp-icon-tab-bar-tab>
 
                     <!-- KYC Tab -->
-                    <fdp-icon-tab-bar-tab label="KYC">
+                    <fdp-icon-tab-bar-tab label="KYC" icon="work-history
+                    ">
                         <app-generic-list 
                             [entity]="'businessPartnerKYCDetails'" 
                             [searchString1]="selectedBusinessPartnerId"
@@ -100,17 +101,17 @@
                     </fdp-icon-tab-bar-tab>
 
                     <!-- Financials Tab -->
-                    <fdp-icon-tab-bar-tab label="Financials">
+                    <fdp-icon-tab-bar-tab label="Financials" icon="monitor-payments">
                         <app-generic-list [entity]="'businessPartnerFinancials'" [searchString1]="selectedBusinessPartnerId"/>
                     </fdp-icon-tab-bar-tab>
 
                     <!-- Industry Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Industry Details">
+                    <fdp-icon-tab-bar-tab label="Industry Details" icon="vertical-bullet-chart">
                         <app-generic-list [entity]="'businessPartnerIndustryDetails'" [searchString1]="selectedBusinessPartnerId"/>
                     </fdp-icon-tab-bar-tab>
 
                     <!-- Identification Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Identification Details">
+                    <fdp-icon-tab-bar-tab label="Identification Details" icon="documents">
                         <app-generic-list 
                             [entity]="'businessPartnerIdentificationDetails'" 
                             [searchString1]="selectedBusinessPartnerId"
@@ -122,7 +123,7 @@
                     </fdp-icon-tab-bar-tab>
 
                     <!-- Bank Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Bank Details">
+                    <fdp-icon-tab-bar-tab label="Bank Details" icon="money-bills">
                         <app-generic-list 
                             [entity]="'businessPartnerBankDetails'" 
                             [searchString1]="selectedBusinessPartnerId"
