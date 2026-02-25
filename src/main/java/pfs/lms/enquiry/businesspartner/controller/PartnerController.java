@@ -3,6 +3,7 @@ package pfs.lms.enquiry.businesspartner.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerAutoCompleteProjection;
@@ -40,12 +41,19 @@ public class PartnerController {
         return ResponseEntity.ok(partnerService.update(partner,request.getUserPrincipal().getName()));
     }
 
+    @PutMapping("/partners/updateFICustomerVendorDetails")
+    public ResponseEntity<Partner> updateFICustomerVendorDetails(@RequestBody BupaFICustomerVendorDetailResource bupaFICustomerVendorDetailResource,
+                                                                 HttpServletRequest request) throws CloneNotSupportedException {
+        return ResponseEntity.ok(partnerService.updateFICustomerVendorDetails(bupaFICustomerVendorDetailResource, request));
+    }
+
     @GetMapping("/me")
     public ResponseEntity getLoggedinPartner(HttpServletRequest request) {
 
         System.out.println("----------- Get Logged in Partner ----------");
+        System.out.println(request.getUserPrincipal().getName());
         if (request.getUserPrincipal() != null) {
-            if (request.getUserPrincipal().getName().equals("admin")) {
+            if (request.getUserPrincipal().getName().equals("gopinath.guptha@leanthoughts.com")) {
                 System.out.println("----------- Partner Name ---------- : " + request.getUserPrincipal().getName());
                 return ResponseEntity.ok(userRepository.findByEmail("admin@gmail.com"));
             } else

@@ -29,4 +29,9 @@ public class BusinessPartnerIdentificationResource {
     private String fileReference;
     private String documentName;
     private String documentType;
+
+    private String identificationCategory;
+    private String countryName;
+    private String regionName;
+    private String documentTypeName;
 }

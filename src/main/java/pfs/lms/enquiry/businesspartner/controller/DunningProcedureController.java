@@ -18,7 +18,7 @@ import java.util.List;
 public class DunningProcedureController {
 
     private final DunningProcedureRepository dunningProcedureRepository;
-    @GetMapping("/dunningprocedure")
+    @GetMapping("/api/dunningprocedure")
     public ResponseEntity<List<DunningProcedure>> findAll(HttpServletRequest request) {
 
         List<DunningProcedure> dunningProcedures = dunningProcedureRepository.findAll();

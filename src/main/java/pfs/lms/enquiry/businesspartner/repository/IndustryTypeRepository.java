@@ -5,10 +5,12 @@ import pfs.lms.enquiry.businesspartner.domain.IndustrySystem;
 import pfs.lms.enquiry.businesspartner.domain.IndustryType;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IndustryTypeRepository extends JpaRepository<IndustryType, Long> {
 
     IndustryType findIndustryTypeByCode(String code);
     IndustryType findIndustryTypeByCodeAndIndustrySystem(String code, IndustrySystem industrySystem);
     List<IndustryType> findByIndustrySystemId(Long industrySystemId);
+    IndustryType findIndustryTypeById(Long industryTypeId);
 }

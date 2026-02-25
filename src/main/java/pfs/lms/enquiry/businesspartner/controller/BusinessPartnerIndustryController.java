@@ -3,16 +3,14 @@ package pfs.lms.enquiry.businesspartner.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIndustry;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryMigrationResource;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryResource;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIndustryService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 @RepositoryRestController
@@ -45,5 +43,12 @@ public class BusinessPartnerIndustryController {
             HttpServletRequest request) throws CloneNotSupportedException {
                 
         return ResponseEntity.ok(businessPartnerIndustryService.migrate(businessPartnerIndustryResource, request.getUserPrincipal().getName()));
+    }
+
+    @GetMapping("/businessPartnerIndustries/findByPartnerId")
+    public ResponseEntity<List<BusinessPartnerIndustryResource>> findByPartnerId(
+            @RequestParam UUID partnerId)
+    {
+        return ResponseEntity.ok(businessPartnerIndustryService.findByPartnerId(partnerId));
     }
 }

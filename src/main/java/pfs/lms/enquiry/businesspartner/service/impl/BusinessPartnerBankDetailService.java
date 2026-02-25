@@ -54,10 +54,10 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         businessPartnerBankDetail.setReferenceNumber(businessPartnerBankDetailResource.getReferenceNumber());
         businessPartnerBankDetail.setAccountHolderName(businessPartnerBankDetailResource.getAccountHolderName());
         businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
+        businessPartnerBankDetail.setBankAccountName(businessPartnerBankDetailResource.getBankAccountName());
         businessPartnerBankDetail.setCreatedAt(LocalTime.now());
         businessPartnerBankDetail.setCreatedOn(LocalDate.now());
         businessPartnerBankDetail.setCreatedByUserName(username);
-
 
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
@@ -144,16 +144,22 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
         }
         businessPartnerBankDetail.setSerialNumber(businessPartnerBankDetailResource.getSerialNumber());
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
-        businessPartnerBankDetail.setBankDetailId(businessPartnerBankDetailResource.getSerialNumber().toString());
         businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());
         businessPartnerBankDetail.setAccountNumber(businessPartnerBankDetailResource.getAccountNumber());
         businessPartnerBankDetail.setValidFromDate(businessPartnerBankDetailResource.getValidFromDate());
         businessPartnerBankDetail.setValidToDate(businessPartnerBankDetailResource.getValidToDate());
         businessPartnerBankDetail.setEntryDate(businessPartnerBankDetailResource.getEntryDate());
         businessPartnerBankDetail.setPartner(partner);
-        businessPartnerBankDetail.setCreatedAt(LocalTime.now());
-        businessPartnerBankDetail.setCreatedOn(LocalDate.now());
-        businessPartnerBankDetail.setCreatedByUserName(username);
+        if ( businessPartnerBankDetail.getId() == null) {
+            businessPartnerBankDetail.setCreatedAt(LocalTime.now());
+            businessPartnerBankDetail.setCreatedOn(LocalDate.now());
+            businessPartnerBankDetail.setCreatedByUserName(username);
+        }else{
+            businessPartnerBankDetail.setChangedAt(LocalTime.now());
+            businessPartnerBankDetail.setChangedOn(LocalDate.now());
+            businessPartnerBankDetail.setChangedByUserName(username);
+        }
+
         businessPartnerBankDetail = businessPartnerBankDetailRepository.save(businessPartnerBankDetail);
 
         if (update == true) {

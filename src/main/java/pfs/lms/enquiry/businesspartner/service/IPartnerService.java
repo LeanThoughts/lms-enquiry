@@ -1,5 +1,6 @@
 package pfs.lms.enquiry.businesspartner.service;
 
+import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.resource.PartnerResourceByEmail;
 import pfs.lms.enquiry.resource.PartnerResourcesOrderByAlphabet;
@@ -36,4 +37,7 @@ public interface IPartnerService {
     List<Partner> findByPartyRole(String roleType);
 
     Partner migratePartner(Partner partner, HttpServletRequest httpServletRequest);
+
+    Partner updateFICustomerVendorDetails(BupaFICustomerVendorDetailResource bupaFICustomerVendorDetailResource,
+                                          HttpServletRequest httpServletRequest);
 }

@@ -45,7 +45,7 @@ public class BusinessPartnerService implements IBusinessPartnerService {
         List<BusinessPartnerIdentification> businessPartnerIdentificationLIst
                 = businessPartnerIdentificationRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
         for (BusinessPartnerIdentification businessPartnerIdentification:businessPartnerIdentificationLIst
-             ) {
+        ) {
             businessPartnerIdentificationService.updateLoanPartnerKYC(businessPartnerIdentification);
         }
 
@@ -58,6 +58,9 @@ public class BusinessPartnerService implements IBusinessPartnerService {
         Object oldPartner = partner.clone();
         partner.setWorkFlowStatusCode(04);
         partner.setWorkFlowStatusDescription("Rejected");
+        partner.setChangedAt(LocalTime.now());
+        partner.setChangedOn(LocalDate.now());
+        partner.setChangedByUserName(username);
 
         // Change Documents
         changeDocumentService.createChangeDocument(
@@ -71,6 +74,6 @@ public class BusinessPartnerService implements IBusinessPartnerService {
         partnerRepository.save(partner);
 
         return partner;
-     }
+    }
 }
 

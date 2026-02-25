@@ -51,10 +51,10 @@ public class BusinessPartnerRoleService implements IBusinessPartnerRoleService {
         businessPartnerRole.setAllPartnerRoles(businessPartnerRoleResource.getAllPartnerRoles());
         businessPartnerRole.setValidFromDate(businessPartnerRoleResource.getValidFromDate());
         businessPartnerRole.setValidToDate(businessPartnerRoleResource.getValidToDate());
-        businessPartnerRole =  businessPartnerRoleRepository.save(businessPartnerRole);
         businessPartnerRole.setCreatedAt(LocalTime.now());
         businessPartnerRole.setCreatedOn(LocalDate.now());
         businessPartnerRole.setCreatedByUserName(username);
+        businessPartnerRole =  businessPartnerRoleRepository.save(businessPartnerRole);
 
         if (businessPartnerRoleResource.isDefaultRole()) {
             partner.setPartyRole(roleType.getCode());

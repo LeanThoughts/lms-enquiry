@@ -23,7 +23,9 @@ import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +50,11 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         businessPartnerIndustry.setSerialNumber(lastSerialNumber + 1);
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
-        businessPartnerIndustry = businessPartnerIndustryRepository.save(businessPartnerIndustry);
         businessPartnerIndustry.setCreatedAt(LocalTime.now());
         businessPartnerIndustry.setCreatedOn(LocalDate.now());
         businessPartnerIndustry.setCreatedByUserName(username);
+        businessPartnerIndustry = businessPartnerIndustryRepository.save(businessPartnerIndustry);
+
         partner.setWorkFlowStatusCode(11); //Updated
         partnerRepository.save(partner);
 
@@ -79,10 +82,11 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
 
         businessPartnerIndustry.setIndustrySystemId(businessPartnerIndustryResource.getIndustrySystemId());
         businessPartnerIndustry.setIndustryTypeId(businessPartnerIndustryResource.getIndustryTypeId());
-        businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
         businessPartnerIndustry.setChangedAt(LocalTime.now());
         businessPartnerIndustry.setChangedOn(LocalDate.now());
         businessPartnerIndustry.setChangedByUserName(username);
+        businessPartnerIndustry= businessPartnerIndustryRepository.save(businessPartnerIndustry);
+
         Partner partner = businessPartnerIndustry.getPartner();
         // Set Partner Workflow Status Code to Updated
         partner.setWorkFlowStatusCode(11);
@@ -135,11 +139,16 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
         if (update == false){
             List<BusinessPartnerIndustry> businessPartnerIndustryList = businessPartnerIndustryRepository.findByPartnerIdOrderBySerialNumberDesc(partner.getId());
             businessPartnerIndustry.setSerialNumber(businessPartnerIndustryList.size() + 1);
+            businessPartnerIndustry.setCreatedAt(LocalTime.now());
+            businessPartnerIndustry.setCreatedOn(LocalDate.now());
+            businessPartnerIndustry.setCreatedByUserName(username);
+        }else{
+            businessPartnerIndustry.setChangedAt(LocalTime.now());
+            businessPartnerIndustry.setChangedOn(LocalDate.now());
+            businessPartnerIndustry.setChangedByUserName(username);
         }
 
-        businessPartnerIndustry.setCreatedAt(LocalTime.now());
-        businessPartnerIndustry.setCreatedOn(LocalDate.now());
-        businessPartnerIndustry.setCreatedByUserName(username);
+
 
         businessPartnerIndustry.setIndustrySystemId(industrySystem.getId());
         businessPartnerIndustry.setIndustryTypeId(industryType.getId());
@@ -170,5 +179,30 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
                     "Partner", "BusinessPartnerIndustry");
         }
         return  businessPartnerIndustry;
+    }
+
+    @Override
+    public List<BusinessPartnerIndustryResource> findByPartnerId(UUID partnerId) {
+        List<BusinessPartnerIndustry> businessPartnerIndustries = businessPartnerIndustryRepository.findByPartnerIdOrderBySerialNumberDesc(partnerId);
+        List<BusinessPartnerIndustryResource> businessPartnerIndustryResources = new ArrayList<>();
+        for (BusinessPartnerIndustry businessPartnerIndustry : businessPartnerIndustries) {
+
+            BusinessPartnerIndustryResource businessPartnerIndustryResource = new BusinessPartnerIndustryResource();
+
+            businessPartnerIndustryResource.setId(businessPartnerIndustry.getId());
+            businessPartnerIndustryResource.setPartnerId(businessPartnerIndustry.getPartner().getId());
+            businessPartnerIndustryResource.setSerialNumber(businessPartnerIndustry.getSerialNumber());
+
+            businessPartnerIndustryResource.setIndustrySystemId(businessPartnerIndustry.getIndustrySystemId());
+            businessPartnerIndustryResource.setIndustrySystem(industrySystemRepository.
+                    getReferenceById(businessPartnerIndustry.getIndustrySystemId()).getValue());
+
+            businessPartnerIndustryResource.setIndustryTypeId(businessPartnerIndustry.getIndustryTypeId());
+            businessPartnerIndustryResource.setIndustryType(industryTypeRepository.
+                    getReferenceById(businessPartnerIndustry.getIndustryTypeId()).getValue());
+
+            businessPartnerIndustryResources.add(businessPartnerIndustryResource);
+        }
+        return businessPartnerIndustryResources;
     }
 }

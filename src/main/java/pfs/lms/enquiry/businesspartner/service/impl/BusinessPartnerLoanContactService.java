@@ -49,10 +49,10 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setLandLineNumber(businessPartnerLoanContactResource.getLandLineNumber());
         businessPartnerLoanContact.setEmail(businessPartnerLoanContactResource.getEmail());
         businessPartnerLoanContact.setFaxNumber(businessPartnerLoanContactResource.getFaxNumber());
-        businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
         businessPartnerLoanContact.setCreatedAt(LocalTime.now());
         businessPartnerLoanContact.setCreatedOn(LocalDate.now());
         businessPartnerLoanContact.setCreatedByUserName(username);
+        businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
 
         partner.setWorkFlowStatusCode(11); //Updated
         partnerRepository.save(partner);
@@ -91,6 +91,7 @@ public class BusinessPartnerLoanContactService implements IBusinessPartnerLoanCo
         businessPartnerLoanContact.setChangedAt(LocalTime.now());
         businessPartnerLoanContact.setChangedOn(LocalDate.now());
         businessPartnerLoanContact.setChangedByUserName(username);
+
         businessPartnerLoanContact = businessPartnerLoanContactRepository.save(businessPartnerLoanContact);
 
         Partner partner = businessPartnerLoanContact.getPartner();

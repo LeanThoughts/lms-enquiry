@@ -12,6 +12,11 @@ import pfs.lms.enquiry.businesspartner.service.IBupaRoleFieldStatusService;
 
 import java.util.List;
 
+// Field Status Values
+// 0 - Readonly
+// 1 - Optional
+// 2 - Mandatory
+// 3 - Hidden
 @Service
 @Slf4j
 @RequiredArgsConstructor

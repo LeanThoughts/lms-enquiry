@@ -43,3 +43,4 @@ yarn.lock
 documents/
 
 .history
+/src/main/ng/ng.zip

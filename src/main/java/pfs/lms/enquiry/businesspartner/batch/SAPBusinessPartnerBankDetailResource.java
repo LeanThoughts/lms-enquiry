@@ -4,7 +4,6 @@ package pfs.lms.enquiry.businesspartner.batch;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerBankDetail;
 import pfs.lms.enquiry.domain.Partner;
@@ -13,12 +12,10 @@ import pfs.lms.enquiry.utils.DataConversionUtility;
 import java.io.Serializable;
 import java.text.ParseException;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
-
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Slf4j
+
 public class SAPBusinessPartnerBankDetailResource implements Serializable {
 
     public SAPBusinessPartnerBankDetailResource() {
@@ -42,8 +39,7 @@ public class SAPBusinessPartnerBankDetailResource implements Serializable {
             detailsResource.setBusPartnerNumber(businessPartnerBankDetail.getPartner().getPartyNumber().toString());
         else
             detailsResource.setBusPartnerNumber("");
-        log.info("Bank Detail Id: " + businessPartnerBankDetail.getBankDetailId());
-        log.info("Bank Key: " +  businessPartnerBankDetail.getBankKey());
+
         if (businessPartnerBankDetail.getBankDetailId() != null)
             detailsResource.setBankDetailId(businessPartnerBankDetail.getBankDetailId());
         else
