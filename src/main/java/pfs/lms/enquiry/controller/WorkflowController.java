@@ -78,6 +78,17 @@ public class WorkflowController {
                 return ResponseEntity.ok(processObject);
             case "BoardApproval" :
                 return ResponseEntity.ok(processObject);
+            case "Board Approval" :
+                return ResponseEntity.ok(processObject);
+            case "BusinessPartner" :
+                return ResponseEntity.ok(processObject);
+            case "Partner" :
+                return ResponseEntity.ok(processObject);
+            case "ApplicationFee":
+                return ResponseEntity.ok(processObject);
+            case "Sanction":
+                return ResponseEntity.ok(processObject);
+
 
         }
 

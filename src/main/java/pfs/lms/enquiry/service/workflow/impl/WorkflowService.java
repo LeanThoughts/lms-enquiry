@@ -399,13 +399,13 @@ public class WorkflowService implements IWorkflowService {
             case "BusinessPartner":
                 //Save entity with the Process Instance and workflow status code
                 partner.setProcessInstanceId(processInstanceId);
-                partner.setWorkFlowStatusCode(01);
+                partner.setWorkFlowStatusCode(02);
                 partner = partnerRepository.save(partner);
                 return partner;
             case "ReferenceInterestRateValue":
                 //Save entity with the Process Instance and workflow status code
                 referenceInterestRateValue.setProcessInstanceId(processInstanceId);
-                referenceInterestRateValue.setWorkFlowStatusCode(01);
+                referenceInterestRateValue.setWorkFlowStatusCode(02);
                 referenceInterestRateValue = referenceInterestRateValueRepository.save(referenceInterestRateValue);
                 return referenceInterestRateValue;
         }
