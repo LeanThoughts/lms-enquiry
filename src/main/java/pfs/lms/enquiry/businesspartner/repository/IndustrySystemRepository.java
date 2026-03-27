@@ -8,4 +8,5 @@ public interface IndustrySystemRepository extends JpaRepository<IndustrySystem, 
 
     IndustrySystem findIndustrySystemByCode(String code);
 
+
 }
