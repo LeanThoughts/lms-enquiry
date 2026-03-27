@@ -11,6 +11,7 @@ public interface RegionRepository extends JpaRepository<Region, UUID> {
 
     Region findById(Integer id);
     List<Region> findByCountryCode(String countryCode);
+    Region findByCountryCodeAnAndRegionCode(String countryCode, String regionCode);
 
 
 }

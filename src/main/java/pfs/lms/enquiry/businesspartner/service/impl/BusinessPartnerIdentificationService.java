@@ -383,8 +383,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                         findByCountryCode(businessPartnerIdentification.getCountry()).getValue());
 
             if (businessPartnerIdentification.getRegion() != null)
-                businessPartnerIdentificationResource.setRegionName(regionRepository.
-                        findByCountryCodeAndRegionCode(businessPartnerIdentification.getCountry(),
+                businessPartnerIdentificationResource.setRegionName(regionRepository.findByCountryCodeAnAndRegionCode(businessPartnerIdentification.getCountry(),
                                 businessPartnerIdentification.getRegion()).getValue());
 
             if (businessPartnerIdentification.getDocumentType() != null && businessPartnerIdentification.getDocumentType().length() > 0 )
