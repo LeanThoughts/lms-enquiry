@@ -521,7 +521,7 @@ public class PartnerScheduledTaskCreateAndChange {
             }
 
             } catch (Exception ex){
-                log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
+//                log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
             }
 
         }
