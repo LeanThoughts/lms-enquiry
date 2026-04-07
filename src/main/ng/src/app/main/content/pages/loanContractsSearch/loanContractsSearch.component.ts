@@ -97,7 +97,8 @@ export class LoanContractsSearchComponent implements OnInit, OnDestroy {
         this.states = _route.snapshot.data.routeResolvedData[3];
         this.assistanceTypes = _route.snapshot.data.routeResolvedData[4]._embedded.assistanceTypes;
         this.technicalStatuses = _route.snapshot.data.routeResolvedData[5];
-        this.functionalStatuses = _route.snapshot.data.routeResolvedData[7]._embedded.functionalStatuses;
+        // this.functionalStatuses = _route.snapshot.data.routeResolvedData[7]._embedded.functionalStatuses;
+        this.functionalStatuses = LoanMonitoringConstants.functionalStatuses;
 
         _route.snapshot.data.routeResolvedData[6].forEach(element => {
             if (element.authorizationObject === 'Execute Appraisal')

@@ -1062,14 +1062,17 @@ export class LoanMonitoringConstants {
     ];
 
     public static functionalStatuses = [
-        {code: "01", value:"Enquiry Stage"},
-        {code: "02", value:"ICC ApprovalStage"},
-        {code: "03", value:"Appraisal Stage"},
-        {code: "04", value:"Board Approval Stage"},
-        {code: "05", value:"Loan Documentation Stage"},
-        {code: "06", value:"Loan Disbursement Stage"},
-        {code: "07", value:"Approved"},
-        {code: "08", value:"Rejected"}
+        {code: "1", value:"Enquiry Stage"},
+        {code: "2", value:"ICC In-Principle Approval Stage"},
+        {code: "10", value:"Prelim Risk Assessment Stage"},
+        {code: "11", value:"Application Fee Stage"},
+        {code: "3", value:"Appraisal Stage"},
+        {code: "12", value:"BMC Approval Stage"},
+        {code: "4", value:"Board Approval Stage"},
+        {code: "5", value:"Sanction Stage"},
+        {code: "6", value:"Documentation Stage"},
+        {code: "8", value:"Loan Monitoring Stage"},
+        {code: "9", value:"Recovery Stage"}
     ];
   public static documentationTypes = [
     {code: "1", value:"Facility Agreement"},
