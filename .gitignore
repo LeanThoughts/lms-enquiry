@@ -43,7 +43,4 @@ yarn.lock
 documents/
 
 .history
-
-ng_tobedeleted
-
-src/main/resources/static
+/src/main/ng/ng.zip

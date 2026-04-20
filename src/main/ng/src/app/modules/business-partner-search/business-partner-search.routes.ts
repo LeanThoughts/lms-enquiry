@@ -31,7 +31,7 @@ export default [
         }
     },
     {
-        path: 'business-partners/:operation/:id/:defaultPartnerRole',
+        path: 'business-partners/:operation/:id',
         component: BusinessPartnerUpdateComponent,
         canActivate: [routeInterceptor],
         resolve: {

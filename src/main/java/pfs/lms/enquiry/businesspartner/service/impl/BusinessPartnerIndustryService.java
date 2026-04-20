@@ -1,14 +1,9 @@
 package pfs.lms.enquiry.businesspartner.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.persistence.EntityNotFoundException;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIndustry;
-import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerLoanContact;
 import pfs.lms.enquiry.businesspartner.domain.IndustrySystem;
 import pfs.lms.enquiry.businesspartner.domain.IndustryType;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIndustryRepository;
@@ -21,6 +16,7 @@ import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -194,12 +190,12 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
             businessPartnerIndustryResource.setSerialNumber(businessPartnerIndustry.getSerialNumber());
 
             businessPartnerIndustryResource.setIndustrySystemId(businessPartnerIndustry.getIndustrySystemId());
-            businessPartnerIndustryResource.setIndustrySystem(industrySystemRepository.
-                    getReferenceById(businessPartnerIndustry.getIndustrySystemId()).getValue());
+//            businessPartnerIndustryResource.setIndustrySystem(industrySystemRepository.
+//                    getReferenceById(businessPartnerIndustry.getIndustrySystemId()).getValue());
 
             businessPartnerIndustryResource.setIndustryTypeId(businessPartnerIndustry.getIndustryTypeId());
-            businessPartnerIndustryResource.setIndustryType(industryTypeRepository.
-                    getReferenceById(businessPartnerIndustry.getIndustryTypeId()).getValue());
+//            businessPartnerIndustryResource.setIndustryType(industryTypeRepository.
+//                    getReferenceById(businessPartnerIndustry.getIndustryTypeId()).getValue());
 
             businessPartnerIndustryResources.add(businessPartnerIndustryResource);
         }

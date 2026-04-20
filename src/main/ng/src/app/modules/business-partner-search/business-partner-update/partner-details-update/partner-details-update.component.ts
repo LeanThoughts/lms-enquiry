@@ -36,7 +36,6 @@ import { CustomDialogComponent } from '../../../../custom-dialog.component';
         ComponentNgxComponent,
         MultiComboboxModule,
         NgIf,
-        CustomDialogComponent,
         MessageToastModule
     ],
     templateUrl: './partner-details-update.component.html'
@@ -445,15 +444,13 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             dialogRef.afterClosed.subscribe((result: any) => {
                 if(result.continue) {
                     this.operation === 'create' ? this.router.navigate(['/business-partners']) 
-                        : this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id, 
-                            this.selectedBusinessPartner.defaultPartnerRole]);
+                        : this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id]);
                 }
             });
         }
         else {
-            this.operation === 'create' ? this.router.navigate(['/business-partners']) 
-                : this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id, 
-                    this.selectedBusinessPartner.defaultPartnerRole]);
+            this.operation === 'create' ? this.router.navigate(['/business-partners']) : 
+                this.router.navigate(['/business-partners', this.operation, this.selectedBusinessPartner.id]);
         }
     }
 

@@ -67,7 +67,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                                                                 Resource location) throws IOException {
                                      Resource requestedResource = location.createRelative(resourcePath);
                                      return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
-                                             : new ClassPathResource("/static/index.html");
+                                             : new ClassPathResource("/enquiry/homepage");
                                  }
                              }
                 );

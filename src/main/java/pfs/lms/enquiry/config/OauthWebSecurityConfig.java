@@ -62,13 +62,13 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 userInfoEndpoint.oidcUserService(customOidcUserService) // <--- THIS IS KEY!
                         )
                         // Specify the default redirect after successful login
-                        .defaultSuccessUrl("http://localhost:4200/homepage", true)
+                        .defaultSuccessUrl("http://localhost:9000/enquiry/homepage", true)
                         .failureUrl("/login?error")
                 )
                 .oauth2Client() // Simply call it, no 'withDefaults()' needed for 5.1.x
                 .and() // End of oauth2Client() chain
                 .logout()
-                .logoutSuccessUrl("http://localhost:4200/login") // Redirect to application root after logout
+                .logoutSuccessUrl("http://localhost:9000/enquiry/login") // Redirect to application root after logout
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID");

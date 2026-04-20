@@ -15,7 +15,7 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from '../../../../message.service';
 import { MultiComboboxModule } from '@fundamental-ngx/core';
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-identification-details-update',
@@ -33,7 +33,6 @@ import { NgIf, NgTemplateOutlet } from '@angular/common';
         FileUploaderComponent,
         IconComponent,
         NgIf,
-        NgTemplateOutlet
     ]
 })
 export class IdentificationDetailsUpdateDialogComponent implements OnInit {

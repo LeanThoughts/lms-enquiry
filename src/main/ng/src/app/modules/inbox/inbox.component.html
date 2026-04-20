@@ -51,7 +51,7 @@
                         <fd-card-footer style="border-top: none;">
                             <button *fdCardFooterActionItem fd-button fdType="positive" [disabled]="isApproveDisabled" 
                                 (click)="approveTask(task)">Approve</button>
-                            <button *fdCardFooterActionItem fd-button fdType="standard">Review</button>
+                            <button *fdCardFooterActionItem fd-button fdType="standard" (click)="reviewTask(task)">Review</button>
                             <button *fdCardFooterActionItem fd-button fdType="negative" (click)="rejectTask(task)">Reject</button>
                         </fd-card-footer>
                     </fd-card>

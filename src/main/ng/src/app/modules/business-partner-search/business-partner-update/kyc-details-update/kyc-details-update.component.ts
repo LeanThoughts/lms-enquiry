@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BusinessPartnerSearchService } from '../../business-partner-search.service';
 import { 
-    ButtonComponent, 
     DatePickerComponent, 
     DialogCloseButtonComponent, 
     DialogModule, 
@@ -19,7 +18,6 @@ import { MultiComboboxModule } from '@fundamental-ngx/core';
     selector: 'app-kyc-details-update',
     templateUrl: './kyc-details-update.component.html',
     imports: [
-        ButtonComponent,
         LayoutGridModule,
         ReactiveFormsModule,
         FormModule,

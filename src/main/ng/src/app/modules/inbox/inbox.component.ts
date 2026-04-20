@@ -4,11 +4,12 @@ import { LayoutGridModule, CardModule, DialogService } from '@fundamental-ngx/co
 import { ButtonComponent } from '@fundamental-ngx/core';
 import { ComponentNgxComponent } from '../../common/component-ngx/component-ngx.component';
 import { InboxService } from './inbox.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { MessageService } from '../../message.service';
 import { CustomDialogComponent } from '../../custom-dialog.component';
+import { BusinessPartnerSearchService } from '../business-partner-search/business-partner-search.service';
 
 @Component({
     selector: 'app-inbox',
@@ -36,7 +37,9 @@ export class InboxComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private dialogService: DialogService,
         private inboxService: InboxService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private router: Router,
+        private businessPartnerService: BusinessPartnerSearchService
     ) {
     }
 
@@ -84,7 +87,20 @@ export class InboxComponent implements OnInit, OnDestroy {
         });
     }
 
-    // TODO: Implement review task feature
+    /**
+     * Review task
+     */
+    reviewTask(task: any): void {
+        console.log('Review task', task);
+        if (task.processName === 'BusinessPartner') {
+            this.businessPartnerService.getBusinesPartner(task.businessProcessId).subscribe((data: any) => {
+                console.log('data', data);
+                const businessPartner = data[0];
+                this.businessPartnerService.selectedEntity$.next(businessPartner);
+                this.router.navigate(['/business-partners/update', businessPartner.id, businessPartner.defaultPartnerRole]);
+            });
+        }
+    }
     
     /**
      * Reject task

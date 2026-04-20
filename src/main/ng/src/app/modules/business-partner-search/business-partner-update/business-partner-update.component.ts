@@ -15,7 +15,6 @@ import { IdentificationDetailsUpdateDialogComponent } from './identification-det
 import { BankDetailsUpdateDialogComponent } from './bank-details-update/bank-details-update.component';
 import { CustomerDetailsUpdateDialogComponent } from './customer-details-update/customer-details-update.component';
 import { KycDetailsUpdateDialogComponent } from './kyc-details-update/kyc-details-update.component';
-import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'app-business-partner-update',
@@ -28,11 +27,9 @@ import { NgTemplateOutlet } from '@angular/common';
         GenericUpdateComponent,
         GenericListComponent,
         PanelComponent,
-        ContactListComponent,
-        NgTemplateOutlet,
+        ContactListComponent
     ],
-    templateUrl: './business-partner-update.component.html',
-    styleUrls: ['./business-partner-update.component.scss']
+    templateUrl: './business-partner-update.component.html'
 })
 export class BusinessPartnerUpdateComponent implements OnInit, AfterViewInit, OnDestroy { // implements AfterViewInit {
 

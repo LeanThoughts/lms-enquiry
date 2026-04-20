@@ -10,7 +10,6 @@ import pfs.lms.enquiry.appraisal.loanpartner.LoanPartnerRepository;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
-import pfs.lms.enquiry.businesspartner.repository.CountryCodeRepository;
 import pfs.lms.enquiry.businesspartner.repository.DocumentTypeRepository;
 import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIdentificationMigrationResource;
@@ -382,10 +381,10 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
                 businessPartnerIdentificationResource.setCountryName(countryRepository.
                         findByCountryCode(businessPartnerIdentification.getCountry()).getValue());
 
-            if (businessPartnerIdentification.getRegion() != null)
-                businessPartnerIdentificationResource.setRegionName(regionRepository.
-                        findByCountryCodeAndRegionCode(businessPartnerIdentification.getCountry(),
-                                businessPartnerIdentification.getRegion()).getValue());
+//            if (businessPartnerIdentification.getRegion() != null)
+//                businessPartnerIdentificationResource.setRegionName(regionRepository.
+//                        findByCountryCodeAndRegionCode(businessPartnerIdentification.getCountry(),
+//                                businessPartnerIdentification.getRegion()).getValue());
 
             if (businessPartnerIdentification.getDocumentType() != null && businessPartnerIdentification.getDocumentType().length() > 0 )
                 businessPartnerIdentificationResource.setDocumentTypeName(documentTypeRepository.

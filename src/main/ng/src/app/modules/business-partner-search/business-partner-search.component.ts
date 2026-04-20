@@ -1,9 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ButtonComponent, FormModule, IconModule, LayoutGridModule, TableModule } from '@fundamental-ngx/core';
-import { SelectModule } from '@fundamental-ngx/core';
+import { 
+    BreadcrumbModule, 
+    ButtonComponent, 
+    DeprecatedToolbarSizeDirective, 
+    DynamicPageModule, 
+    FormModule, 
+    IconModule, 
+    LayoutGridModule, 
+    ToolbarComponent, 
+    ToolbarSeparatorComponent 
+} from '@fundamental-ngx/core';
 import { BusinessPartnerSearchService } from './business-partner-search.service';
-import { ComponentNgxComponent } from '../../common/component-ngx/component-ngx.component';
 import { MessageService } from '../../message.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
@@ -15,12 +23,16 @@ import { BusinessPartnerListComponent } from './business-partner-list/business-p
     selector: 'app-business-partner-search',
     imports: [
         ButtonComponent,
-        ComponentNgxComponent,
         FormModule,
         IconModule,
         LayoutGridModule,
         ReactiveFormsModule,
-        BusinessPartnerListComponent
+        BusinessPartnerListComponent,
+        BreadcrumbModule,
+        DynamicPageModule,
+        ToolbarComponent,
+        DeprecatedToolbarSizeDirective,
+        ToolbarSeparatorComponent
     ],
     templateUrl: './business-partner-search.component.html'
 })
@@ -127,8 +139,9 @@ export class BusinessPartnerSearchComponent implements OnInit, OnDestroy {
      * Update business partner
      */
     updateBusinessPartner(): void {
+        console.log('this.selectedBusinessPartner', this.selectedBusinessPartner);
         this.businessPartnerService.selectedEntity$.next(this.selectedBusinessPartner);
-        this.router.navigate(['/business-partners/update', this.selectedBusinessPartner.id, this.selectedBusinessPartner.defaultPartnerRole]);
+        this.router.navigate(['/business-partners/update', this.selectedBusinessPartner.id]);
     }
 
     /**

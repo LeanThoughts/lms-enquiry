@@ -1,89 +1,75 @@
-<div class="content">
-    <fd-layout-grid [noGap]="true" class="header-content">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="2">
-                <h2>Business Partners</h2>
-            </div>
-            <div [fdLayoutGridCol]="10" [style.text-align]="'right'">
-                <button fd-button 
-                    fdType="emphasized"
-                    (click)="createBusinessPartner()"
-                >
-                    <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
-                    Create
-                </button>
-                <button fd-button
-                    fdType="emphasized"
-                    (click)="updateBusinessPartner()"
-                    label="Update"
-                    style="margin-left: 0.5rem;"
-                    glyph="edit-outside"
-                    [disabled]="!selectedBusinessPartner"
-                >
-                </button>
-                <button fd-button
-                    fdType="emphasized"
-                    (click)="viewBusinessPartner()"
-                    label="View"
-                    style="margin-left: 0.5rem;"
-                    glyph="detail-view"
-                    [disabled]="!selectedBusinessPartner"
-                >
-                </button>
-            </div>
-        </div>
-    </fd-layout-grid>
-    <component-ngx>
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Search Business Partners"
+        subtitle="Search Business Partners by Name, Email, Business Partner Number, PAN Number">
+        <fd-dynamic-page-breadcrumb>
+            <fd-breadcrumb>
+                <fd-breadcrumb-item>
+                    <a fd-link href="business-partners">Business Partners</a>
+                </fd-breadcrumb-item>
+            </fd-breadcrumb>
+        </fd-dynamic-page-breadcrumb>
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true" [size]="'compact'">
+                <ng-container [fdCompact]="'compact'">
+                    <button fd-toolbar-item fd-button fdCompact fdType="positive" (click)="createBusinessPartner()"
+                        label="Create" title="Create">
+                    </button>
+                    <button fd-toolbar-item fd-button fdCompact fdType="negative" (click)="updateBusinessPartner()"
+                        label="Update" title="Update" [disabled]="!selectedBusinessPartner">
+                    </button>
+                    <button fd-toolbar-item fd-button fdCompact fdType="negative" (click)="viewBusinessPartner()"
+                        label="View" title="View" [disabled]="!selectedBusinessPartner">
+                    </button>
+                    <fd-toolbar-separator></fd-toolbar-separator>
+                    <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['homepage'])">
+                        <i class="sap-icon--decline"></i>
+                    </button>
+                </ng-container>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fd-dynamic-page-content cdkScrollable>
         <form [formGroup]="businessPartnerSearchForm" (ngSubmit)="searchBusinessPartners()">
-            <fd-layout-grid [noGap]="true" class="component-grid">
+            <fd-layout-grid [noGap]="true">
                 <div fdLayoutGridRow style="height: auto;">
-                    <div [fdLayoutGridCol]="4" [style.padding-top.rem]="1" [style.padding-right.rem]="0">
+                    <div [fdLayoutGridCol]="4">
                         <div fd-form-set>
                             <div fd-form-item>
                                 <label fd-form-label for="partnerName">Business Partner Name:</label>
-                                <input id="partnerName" formControlName="partnerName" fd-form-control type="text" tabindex="1"/>
+                                <input id="partnerName" formControlName="partnerName" fd-form-control type="text" tabindex="1" />
                             </div>
                             <div fd-form-item>
                                 <label fd-form-label for="partnerNumberFrom">Business Partner Number From:</label>
-                                <input id="partnerNumberFrom" formControlName="partnerNumberFrom" fd-form-control type="text" tabindex="4"/>
+                                <input id="partnerNumberFrom" formControlName="partnerNumberFrom" fd-form-control type="text" tabindex="4" />
                             </div>
                         </div>
                     </div>
-                    <div [fdLayoutGridCol]="4" [style.padding.rem]="1" [style.padding-right.rem]="0">
+                    <div [fdLayoutGridCol]="4" [style.padding-left.rem]="1">
                         <div fd-form-set>
                             <div fd-form-item>
                                 <label fd-form-label for="email">Registered Email:</label>
-                                <input id="email" formControlName="email" fd-form-control type="email" tabindex="2"/>
+                                <input id="email" formControlName="email" fd-form-control type="email" tabindex="2" />
                             </div>
                             <div fd-form-item>
                                 <label fd-form-label for="partnerNumberTo">Business Partner Number To:</label>
-                                <input id="partnerNumberTo" formControlName="partnerNumberTo" fd-form-control type="text" tabindex="5"/>
+                                <input id="partnerNumberTo" formControlName="partnerNumberTo" fd-form-control type="text" tabindex="5" />
                             </div>
                         </div>
                     </div>
-                    <div [fdLayoutGridCol]="4" [style.padding.rem]="1">
+                    <div [fdLayoutGridCol]="4" [style.padding-left.rem]="1" [style.padding-right.rem]="1">
                         <div fd-form-set>
                             <div fd-form-item>
                                 <label fd-form-label for="panNumber">PAN Number:</label>
-                                <input id="panNumber" formControlName="panNumber" fd-form-control type="text" maxlength="10" tabindex="3"/>
+                                <input id="panNumber" formControlName="panNumber" fd-form-control type="text" maxlength="10" tabindex="3" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div fdLayoutGridRow>
-                    <div [fdLayoutGridCol]="12" [style.padding-left.rem]="1" [style.padding-bottom.rem]="1">
-                        <button fd-button
-                            fdType="emphasized"
-                            label="Search"
-                            type="submit"
-                        >
-                        </button>
-                        <button fd-button
-                            fdType="emphasized"
-                            label="Clear"
-                            style="margin-left: 0.5rem;"
-                            (click)="clearSearch()"
-                        >
+                    <div [fdLayoutGridCol]="12" [style.margin-top.rem]="1">
+                        <button fd-button fdType="emphasized" label="Search" type="submit"></button>
+                        <button fd-button fdType="emphasized" label="Clear" style="margin-left: 0.5rem;"
+                            (click)="clearSearch()">
                         </button>
                     </div>
                 </div>
@@ -91,41 +77,11 @@
         </form>
 
         <fd-layout-grid [noGap]="true" class="component-grid">
-            <!-- <div fdLayoutGridRow [style.margin-top.rem]="1" >
-                <div fdLayoutGridCol colGrow>
-                    <button fd-button 
-                        fdType="emphasized"
-                        (click)="createBusinessPartner()"
-                    >
-                        <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
-                        Create
-                    </button>
-                    <button fd-button
-                        fdType="emphasized"
-                        (click)="updateBusinessPartner()"
-                        label="Update"
-                        style="margin-left: 0.5rem;"
-                        glyph="edit-outside"
-                        [disabled]="selectedBusinessPartnerId.selected.length === 0"
-                    >
-                    </button>
-                    <button fd-button
-                        fdType="emphasized"
-                        (click)="viewBusinessPartner()"
-                        label="View"
-                        style="margin-left: 0.5rem;"
-                        glyph="detail-view"
-                        [disabled]="selectedBusinessPartnerId.selected.length === 0"
-                    >
-                    </button>
-                </div>
-            </div> -->
-
             <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="1">
                 <div [fdLayoutGridCol]="12">
                     <app-business-partner-list [businessPartners]="businessPartners"></app-business-partner-list>
                 </div>
             </div>
         </fd-layout-grid>
-    </component-ngx>
-</div>
+    </fd-dynamic-page-content>
+</fd-dynamic-page>
