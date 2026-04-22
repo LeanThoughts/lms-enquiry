@@ -39,7 +39,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LoanContractListComponent implements OnInit {
 
-    functionalStatuses!: any[];
     technicalStatuses!: any[];
     states = statesOfIndia.sort((a: any, b: any) => a.value.localeCompare(b.value)); // Sort the states by value
     loanClasses!: any[];
@@ -64,6 +63,20 @@ export class LoanContractListComponent implements OnInit {
 
     loanContractSearchForm!: FormGroup;
 
+    functionalStatuses = [
+        {code: "1", value:"Enquiry Stage"},
+        {code: "2", value:"ICC In-Principle Approval Stage"},
+        {code: "10", value:"Prelim Risk Assessment Stage"},
+        {code: "11", value:"Application Fee Stage"},
+        {code: "3", value:"Appraisal Stage"},
+        {code: "12", value:"BMC Approval Stage"},
+        {code: "4", value:"Board Approval Stage"},
+        {code: "5", value:"Sanction Stage"},
+        {code: "6", value:"Documentation Stage"},
+        {code: "8", value:"Loan Monitoring Stage"},
+        {code: "9", value:"Recovery Stage"}
+    ];
+
     private readonly destroy$ = new Subject<void>();
 
     constructor(
@@ -86,7 +99,7 @@ export class LoanContractListComponent implements OnInit {
         
         // Subscribe to the route resolver to get the data for dropdowns and sort the technical statuses by description as the api does not support sorting
         this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
-            this.functionalStatuses = data.routeResolver.functionalStatuses._embedded.functionalStatuses;
+            // this.functionalStatuses = data.routeResolver.functionalStatuses._embedded.functionalStatuses;
             this.loanClasses = data.routeResolver.loanClasses._embedded.loanClasses;
             this.projectTypes = data.routeResolver.projectTypes._embedded.projectTypes;
             this.financingTypes = data.routeResolver.financingTypes._embedded.financingTypes;
@@ -99,7 +112,7 @@ export class LoanContractListComponent implements OnInit {
         this.loanContractSearchForm = this.formBuilder.group({
             functionalStatus: [null],
             technicalStatus: [null],
-            projectName: [null],
+            partyName: [null],
             projectLocationState: [null],
             loanClass: [null],
             projectType: [null],

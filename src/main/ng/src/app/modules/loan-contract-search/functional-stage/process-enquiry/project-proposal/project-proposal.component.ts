@@ -11,7 +11,6 @@ import { Subject } from 'rxjs';
 import { GenericListComponent } from '../../../../generic/generic-list/generic-list.component';
 import { ProjectProposalService } from './project-proposal.service';
 import { AuthService } from '../../../../auth/auth.service';
-// import { TitleComponent } from '@fundamental-ngx/core';
 
 @Component({
     selector: 'app-project-proposal',
@@ -23,40 +22,34 @@ import { AuthService } from '../../../../auth/auth.service';
         IconTabBarTabComponent,
         GenericUpdateComponent,
         GenericListComponent,
-        // TitleComponent
     ],
     templateUrl: './project-proposal.component.html'
 })
 export class ProjectProposalComponent implements OnInit, OnDestroy {
 
-    disableSendForApproval: boolean = false;
+    // State variables
+    disableSendForApproval = false;
+    title = '';
+    loanApplicationId = '';
+    enquiryActionId = '';
 
-    title: string = '';
-
-    loanApplicationId: string = '';
-    enquiryActionId: string = '';
-
-    projectProposalOperation: string = 'Update';
-    projectDetailOperation: string = 'Create';
-    projectCostOperation: string = 'Create';
-    otherLoanDetailsOperation: string = 'Create';
-    dealGuaranteeOperation: string = 'Create';
+    projectProposalOperation = 'Update';
+    projectDetailOperation = 'Create';
+    projectCostOperation = 'Create';
+    otherLoanDetailsOperation = 'Create';
+    dealGuaranteeOperation = 'Create';
 
     selectedProjectProposal: any = {};
     selectedProjectDetail: any = {};
     selectedProjectCost: any = {};
     selectedOtherLoanDetails: any = {};
     selectedDealGuarantee: any = {};
-
     selectedEnquiry: any;
     selectedPartner: any;
     selectedEnquiryAction: any;
 
     private destroy$ = new Subject<void>();
 
-    /**
-     * Constructor
-     */
     constructor(
         private route: ActivatedRoute,
         public router: Router,
@@ -65,227 +58,251 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         private projectProposalService: ProjectProposalService,
         private authService: AuthService
     ) {
+        this.initializeRouteParams();
+        this.subscribeToEnquiryAction();
+        this.initializeDataBasedOnUrl();
+    }
+
+    private initializeRouteParams(): void {
         this.loanApplicationId = this.route.snapshot.params['loanApplicationId'];
         this.enquiryActionId = this.route.snapshot.params['enquiryActionId'];
-        console.log('loanApplicationId is', this.loanApplicationId);
-        console.log('enquiryActionId is', this.enquiryActionId);
-        
-        // Set the selected enquiry and enquiry action
         this.selectedEnquiry = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
         this.selectedPartner = this.loanContractSearchService.selectedEnquiry$.value.partner;
-        console.log('selectedEnquiry is', this.selectedEnquiry);
-        this.processEnquiryService.selectedEntity$.pipe(takeUntil(this.destroy$)).subscribe((entity) => {
-            this.selectedEnquiryAction = entity;
-            console.log('selectedEnquiryAction is', this.selectedEnquiryAction);
-        });
+    }
 
-        // Determine the operation and selected project proposal based on the current url
-        let currentUrl = this.route.snapshot.url.join('/');
-        console.log('Current URL:', currentUrl);
+    private subscribeToEnquiryAction(): void {
+        this.processEnquiryService.selectedEntity$.pipe(takeUntil(this.destroy$)).subscribe((entity) => {
+            console.log('updating selectedEnquiryAction in project proposal', entity);
+            this.selectedEnquiryAction = entity;
+        });
+    }
+
+    private initializeDataBasedOnUrl(): void {
+        const currentUrl = this.route.snapshot.url.join('/');
+        const resolvedData = this.route.snapshot.data['routeResolvedData'];
+
         if (currentUrl.includes('create-project-proposal')) {
             this.projectProposalOperation = 'Create';
-            this.selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo.id;
+            this.selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
         } 
         else {
-            // Set the selected project proposal
-            var selectedProjectProposal = this.route.snapshot.data['routeResolvedData'].projectProposal;
-            selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo.id;
+            // Project Proposal
+            const selectedProjectProposal = { ...resolvedData.projectProposal };
+            selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
             this.selectedProjectProposal = selectedProjectProposal;
-            if (currentUrl.includes('update-project-proposal')) {
-                this.projectProposalOperation = 'Update';
-            } 
-            else {
-                this.projectProposalOperation = 'View';
-            }
+            this.projectProposalOperation =
+                currentUrl.includes('update-project-proposal') ? 'Update' : 'View';
 
-            // Set the selected project details
-            var selectedProjectDetail = this.route.snapshot.data['routeResolvedData'].projectDetail;
+            // Project Details
+            let selectedProjectDetail = resolvedData.projectDetail;
             if (!selectedProjectDetail) {
-                selectedProjectDetail['projectName'] = this.selectedEnquiry.projectName;
-                selectedProjectDetail['borrowerName'] = this.getBorrowerName();
-                selectedProjectDetail['promoterName'] = this.selectedEnquiry.groupCompany;
-                selectedProjectDetail['loanPurpose'] = this.selectedEnquiry.loanPurpose;
-                selectedProjectDetail['projectCapacity'] = this.selectedEnquiry.projectCapacity;
-                selectedProjectDetail['projectCapacityUnit'] = (this.selectedEnquiry.projectCapacityUnit && this.selectedEnquiry.projectCapacityUnit.trim())
-                        ? this.selectedEnquiry.projectCapacityUnit : null;
-                selectedProjectDetail['state'] = this.selectedEnquiry.projectLocationState;
-                selectedProjectDetail['district'] = this.selectedEnquiry.projectDistrict;
-                selectedProjectDetail['loanType'] = this.selectedEnquiry.loanType;
-                selectedProjectDetail['loanClass'] = this.selectedEnquiry.loanClass;
-                selectedProjectDetail['assistanceType'] = this.selectedEnquiry.assistanceType;
-                selectedProjectDetail['financingType'] = this.selectedEnquiry.financingType;
-                selectedProjectDetail['endUseOfFunds'] = this.selectedEnquiry.endUseOfFunds;
-                selectedProjectDetail['roi'] = Number(this.selectedEnquiry.expectedInterestRate).toFixed(2);
-                selectedProjectDetail['fees'] = this.selectedEnquiry.fees;
-                selectedProjectDetail['tenorYear'] = this.selectedEnquiry.tenorYear;
-                selectedProjectDetail['tenorMonths'] = this.selectedEnquiry.tenorMonth;
-                selectedProjectDetail['moratoriumPeriod'] = this.selectedEnquiry.moratoriumPeriod;
-                selectedProjectDetail['moratoriumPeriodUnit'] = (this.selectedEnquiry.moratoriumPeriodUnit && this.selectedEnquiry.moratoriumPeriodUnit.trim())
-                        ? this.selectedEnquiry.moratoriumPeriodUnit : null;
-                selectedProjectDetail['constructionPeriod'] = this.selectedEnquiry.constructionPeriod;
-                selectedProjectDetail['constructionPeriodUnit'] = (this.selectedEnquiry.constructionPeriodUnit 
-                        && this.selectedEnquiry.constructionPeriodUnit.trim()) ? this.selectedEnquiry.constructionPeriodUnit : null;
-                selectedProjectDetail['projectTypeCoreSector'] = this.selectedEnquiry.projectTypeCoreSector;
-                selectedProjectDetail['purposeOfLoan'] = this.selectedEnquiry.purposeOfLoan;
-                selectedProjectDetail['projectType'] = this.selectedEnquiry.projectType;
-                selectedProjectDetail['loanEnquiryDate'] = this.selectedEnquiry.loanEnquiryDate;
-                selectedProjectDetail['policyExposure'] = this.selectedEnquiry.policyExposure;
-                selectedProjectDetail['status'] = this.selectedProjectProposal.proposalStatus;
-                this.selectedProjectDetail = selectedProjectDetail;
-            } 
-            else {
+                selectedProjectDetail = this.mapEnquiryToProjectDetail();
+            } else {
                 this.projectDetailOperation = 'Update';
-                this.selectedProjectDetail = selectedProjectDetail;
             }
+            this.selectedProjectDetail = selectedProjectDetail;
 
-            // Set the selected project cost details
-            if (this.route.snapshot.data['routeResolvedData'].projectCost) {
+            // Project Cost
+            if (resolvedData.projectCost) {
                 this.projectCostOperation = 'Update';
-                this.selectedProjectCost = this.route.snapshot.data['routeResolvedData'].projectCost;
+                this.selectedProjectCost = resolvedData.projectCost;
             }
 
-            // Set the other loan details
-            if (this.route.snapshot.data['routeResolvedData'].otherLoanDetails) {
+            // Other Loan Details
+            if (resolvedData.otherLoanDetails) {
                 this.otherLoanDetailsOperation = 'Update';
-                this.selectedOtherLoanDetails = this.route.snapshot.data['routeResolvedData'].otherLoanDetails;
+                this.selectedOtherLoanDetails = resolvedData.otherLoanDetails;
             }
 
-            // Set the deal guarantee timeline
-            if (this.route.snapshot.data['routeResolvedData'].dealGuaranteeTimeline) {
+            // Deal Guarantee Timeline
+            if (resolvedData.dealGuaranteeTimeline) {
                 this.dealGuaranteeOperation = 'Update';
-                this.selectedDealGuarantee = this.route.snapshot.data['routeResolvedData'].dealGuaranteeTimeline;
+                this.selectedDealGuarantee = resolvedData.dealGuaranteeTimeline;
             }
         }
     }
 
-    /**
-     * On init
-     */
+    private mapEnquiryToProjectDetail(): any {
+        const enquiry = this.selectedEnquiry || {};
+        return {
+            projectName: enquiry.projectName,
+            borrowerName: this.getBorrowerName(),
+            promoterName: enquiry.groupCompany,
+            loanPurpose: enquiry.loanPurpose,
+            projectCapacity: enquiry.projectCapacity,
+            projectCapacityUnit: enquiry.projectCapacityUnit?.trim() ? enquiry.projectCapacityUnit : null,
+            state: enquiry.projectLocationState,
+            district: enquiry.projectDistrict,
+            loanType: enquiry.loanType,
+            loanClass: enquiry.loanClass,
+            assistanceType: enquiry.assistanceType,
+            financingType: enquiry.financingType,
+            endUseOfFunds: enquiry.endUseOfFunds,
+            roi: enquiry.expectedInterestRate ? Number(enquiry.expectedInterestRate).toFixed(2) : undefined,
+            fees: enquiry.fees,
+            tenorYear: enquiry.tenorYear,
+            tenorMonths: enquiry.tenorMonth,
+            moratoriumPeriod: enquiry.moratoriumPeriod,
+            moratoriumPeriodUnit: enquiry.moratoriumPeriodUnit?.trim()
+                ? enquiry.moratoriumPeriodUnit
+                : null,
+            constructionPeriod: enquiry.constructionPeriod,
+            constructionPeriodUnit: enquiry.constructionPeriodUnit?.trim()
+                ? enquiry.constructionPeriodUnit
+                : null,
+            projectTypeCoreSector: enquiry.projectTypeCoreSector,
+            purposeOfLoan: enquiry.purposeOfLoan,
+            projectType: enquiry.projectType,
+            loanEnquiryDate: enquiry.loanEnquiryDate,
+            policyExposure: enquiry.policyExposure,
+            status: this.selectedProjectProposal?.proposalStatus,
+        };
+    }
+
     ngOnInit(): void {
-        // Set the title
         this.title = this.getTitle();
     }
 
-    /**
-     * Get the title for the page
-     */
     private getTitle(): string {
-        let title = `${this.projectProposalOperation} Project Proposal`;
-        title += ' (Enquiry';
-        title += (this.selectedEnquiry.loanContractId) ? ` : ${this.selectedEnquiry.loanContractId}` : 
-            ` : ${this.selectedEnquiry.enquiryNo}`;
-        title += ` / ${this.selectedEnquiry.projectName}`;
-        title += ')';
-        return title;
+        const enquiry = this.selectedEnquiry || {};
+        const proposalOp = this.projectProposalOperation;
+        const contractId = enquiry.loanContractId
+            ? ` : ${enquiry.loanContractId}`
+            : ` : ${enquiry.enquiryNo}`;
+        return `${proposalOp} Project Proposal (Enquiry${contractId} / ${enquiry.projectName})`;
     }
 
-    /**
-     * Go back
-     */
     back(): void {
-        this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId]);
+        this.router.navigate([
+            '/process-enquiry',
+            this.enquiryActionId,
+            'loanApplication',
+            this.loanApplicationId,
+        ]);
     }
 
-    /**
-     * Get the borrower name
-     */
     getBorrowerName(): string {
-        let name = this.selectedPartner.partyName1 + ' ';
-        if (this.selectedPartner.partyName2) {
-            name += this.selectedPartner.partyName2;
-        }
+        const partner = this.selectedPartner || {};
+        let name = partner.partyName1 || '';
+        if (partner.partyName2) name += ' ' + partner.partyName2;
         return name.trim();
     }
-    
+
     /**
-     * On project proposal create success
+     * Handle successful project proposal create
      */
     onProjectProposalCreateSuccess(response: any): void {
-        // Redirect to the update project proposal route
-        this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId, 'update-project-proposal', response.id]);
+        this.router.navigate([
+            '/process-enquiry',
+            this.enquiryActionId,
+            'loanApplication',
+            this.loanApplicationId,
+            'update-project-proposal',
+            response.id,
+        ]);
     }
 
     /**
-     * On project detail create success
+     * Handle successful project proposal update
      */
+    onProjectProposalUpdateSuccess(response: any): void {
+        this.projectProposalService.selectedEntity$.next(response.projectProposal);
+    }
+
     onProjectDetailCreateSuccess(response: any): void {
-        // Set the selected project detail to the response and set project detail operation to update
         this.selectedProjectDetail = response;
         this.projectDetailOperation = 'Update';
     }
 
     /**
-     * On project detail update success
+     * Handle successful project detail update
      */
     onProjectDetailUpdateSuccess(response: any): void {
-        // Set the selected project detail to the response
-        console.log('response is', response);
         this.selectedProjectDetail = response;
-        this.projectProposalService.selectedEntity$.next(response.projectProposal);
-        this.projectProposalService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        // Is it really correct to call next() twice? Consider refactoring in future.
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
-     * On project cost create success
+     * Handle successful project cost create
      */
     onProjectCostCreateSuccess(response: any): void {
-        // Set the selected project cost to the response
         this.selectedProjectCost = response;
         this.projectCostOperation = 'Update';
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
-     * On project cost update success
+     * Handle successful project cost update
      */
     onProjectCostUpdateSuccess(response: any): void {
-        // Set the selected project cost to the response
-        this.selectedProjectCost = response;
+        console.log('updating project cost', response);
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
-     * On other loan details create success
+     * Handle successful other loan details create
      */
     onOtherLoanDetailsCreateSuccess(response: any): void {
-        // Set the selected other loan details to the response
         this.selectedOtherLoanDetails = response;
         this.otherLoanDetailsOperation = 'Update';
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
-     * On other loan details update success
+     * Handle successful other loan details update
      */
     onOtherLoanDetailsUpdateSuccess(response: any): void {
-        // Set the selected other loan details to the response
         this.selectedOtherLoanDetails = response;
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
-     * On deal guarantee create success
+     * Handle successful deal guarantee create
      */
     onDealGuaranteeCreateSuccess(response: any): void {
-        // Set the selected deal guarantee to the response
         this.selectedDealGuarantee = response;
         this.dealGuaranteeOperation = 'Update';
-    }
-    /**
-     * On deal guarantee update success
-     */
-    onDealGuaranteeUpdateSuccess(response: any): void {
-        // Set the selected deal guarantee to the response
-        this.selectedDealGuarantee = response;
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
-     * On destroy
+     * Handle successful deal guarantee update
+     */
+    onDealGuaranteeUpdateSuccess(response: any): void {
+        this.selectedDealGuarantee = response;
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+        }
+    }
+
+    /**
+     * Handle destroy
      */
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
     }
 
-    /**
-     * Send for approval
-     */
     sendForApproval(): void {
         console.log(this.authService.currentUser);
         // this.disableSendForApproval = true;

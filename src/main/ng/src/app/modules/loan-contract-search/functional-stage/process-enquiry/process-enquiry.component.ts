@@ -37,20 +37,16 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
     /**
      * Constructor
      */
-    constructor(
-        private route: ActivatedRoute,
-        public router: Router,
-        private loanContractSearchService: LoanContractSearchService,
-        private processEnquiryService: ProcessEnquiryService
-    ) 
+    constructor(private route: ActivatedRoute,
+                public router: Router,
+                private loanContractSearchService: LoanContractSearchService,
+                private processEnquiryService: ProcessEnquiryService) 
     {
         this.loanApplicationId = this.route.snapshot.params['loanApplicationId'];
         this.enquiryActionId = this.route.snapshot.params['enquiryActionId'];
-        console.log('loanApplicationId is', this.loanApplicationId);
-        console.log('enquiryActionId is', this.enquiryActionId);
-        
         this.selectedEnquiry = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
         this.processEnquiryService.selectedEntity$.pipe(takeUntil(this.destroy$)).subscribe((entity) => {
+            console.log('selectedEnquiryAction is', entity);
             this.selectedEnquiryAction = entity;
         });
     }
@@ -83,10 +79,10 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
     /**
      * On update project proposal click
      */
-    onUpdateProjectProposalClick(projectProposalId: string) {
-        console.log('redirecting to update project proposal with projectProposalId is', projectProposalId);
+    onUpdateProjectProposalClick(projectProposal: any) {
+        console.log('redirecting to update project proposal with projectProposal is', projectProposal);
         this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId, 'update-project-proposal', 
-            projectProposalId]);
+            projectProposal.id]);
     }
 
     /**

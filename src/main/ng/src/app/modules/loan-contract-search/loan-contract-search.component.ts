@@ -2,13 +2,22 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComponentNgxComponent } from '../../common/component-ngx/component-ngx.component';
 import { 
+    BreadcrumbComponent,
+    BreadcrumbItemComponent,
     ButtonComponent, 
     DatePickerModule, 
+    DynamicPageBreadcrumbComponent, 
+    DynamicPageComponent, 
+    DynamicPageContentComponent, 
+    DynamicPageGlobalActionsComponent, 
+    DynamicPageHeaderComponent, 
     LayoutGridModule, 
     PaginationModule, 
     PanelModule,
     SelectModule,
-    TableModule
+    TableModule,
+    ToolbarComponent,
+    ToolbarSeparatorComponent
 } from '@fundamental-ngx/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -24,6 +33,17 @@ import { IccInprincipleApprovalService } from './functional-stage/icc-inprincipl
 @Component({
     selector: 'app-loan-contract-search',
     imports: [
+        // Dynamic Page Components
+        DynamicPageHeaderComponent,
+        DynamicPageComponent,
+        DynamicPageBreadcrumbComponent,
+        BreadcrumbComponent,
+        BreadcrumbItemComponent,
+        DynamicPageGlobalActionsComponent,
+        ToolbarComponent,
+        ToolbarSeparatorComponent,
+        DynamicPageContentComponent,
+        // Other Components and Modules
         ButtonComponent,
         CommonModule,
         ComponentNgxComponent,
@@ -49,20 +69,18 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
     /**
      * Constructor
      */
-    constructor(
-
-        private loanContractSearchService: LoanContractSearchService,
-        private processEnquiryService: ProcessEnquiryService,
-        private iccInprincipleApprovalService: IccInprincipleApprovalService,
-        private router: Router,
-        private messageService: MessageService,
-    ) {}
+    constructor(private loanContractSearchService: LoanContractSearchService,
+                private processEnquiryService: ProcessEnquiryService,
+                private iccInprincipleApprovalService: IccInprincipleApprovalService,
+                public router: Router,
+                private messageService: MessageService)
+    {
+    }
 
     /**
      * On init
      */
     ngOnInit(): void {
-
         this.loanContractSearchService.selectedEnquiry$.pipe(takeUntil(this.destroy$)).subscribe((enquiry) => {
             if (enquiry) {
                 this.selectedEnquiry.select(enquiry.loanApplication.enquiryNo.id);
@@ -77,22 +95,15 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
      * Redirect to process enquiry
      */
     redirectToProcessEnquiry(): void {
-        // Check if the loan contract id is not set, then redirect to process enquiry, 
-        // else do not redirect and show error message that the loan has already completed the enquiry phase
-        if (!this.loanContractSearchService.selectedEnquiry$.value.loanApplication.loanContractId) {
-            this.processEnquiryService.getEnquiryAction(this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id).subscribe({
-                next: (enquiryAction) => {
-                    this.router.navigate(['/process-enquiry', enquiryAction.id, 'loanApplication', 
-                        this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id]);
-                },
-                error: (error) => {
-                    this.router.navigate(['/process-enquiry', '', 'loanApplication', this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id]);
-                }
-            });
-        }
-        else {
-            this.messageService.showError('Selected loan has already completed the enquiry phase !');
-        }
+        this.processEnquiryService.getEnquiryAction(this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id).subscribe({
+            next: (enquiryAction) => {
+                this.router.navigate(['/process-enquiry', enquiryAction.id, 'loanApplication', 
+                    this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id]);
+            },
+            error: (error) => {
+                this.router.navigate(['/process-enquiry', '', 'loanApplication', this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id]);
+            }
+        });
     }
 
     /**

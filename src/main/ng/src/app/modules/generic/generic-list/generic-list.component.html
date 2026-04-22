@@ -12,13 +12,13 @@
         <div fdLayoutGridCol [style.padding.rem]="1" style="background-color: white;">
             @if (config.createButton) {
                 <!-- Create button -->
-                <button fd-button 
+                <button fd-button
                     fdType="emphasized"
                     (click)="openCreateDialog()"
                     [disabled]="disableCreateButton"
                     style="margin-right: 0.5rem;"
                 >
-                    <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon>
+                    <!-- <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon> -->
                     Create
                 </button>
             }
@@ -29,7 +29,6 @@
                     (click)="openUpdateDialog()"
                     label="Update"
                     style="margin-right: 0.5rem;"
-                    glyph="edit-outside"
                     [disabled]="selectedObjectId.isEmpty()"
                 >
                 </button>
@@ -40,7 +39,6 @@
                     fdType="emphasized"
                     (click)="openViewDialog()"
                     label="View"
-                    glyph="detail-view"
                     [disabled]="selectedObjectId.isEmpty()"
                 >
                 </button>

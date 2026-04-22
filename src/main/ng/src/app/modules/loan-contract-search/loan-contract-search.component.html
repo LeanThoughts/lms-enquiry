@@ -1,4 +1,43 @@
-<component-ngx>
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Search Loan Contracts"
+        subtitle="Search Loan contracts by Functional Status, Project Name, State, Enquiry Number, etc.">
+        <fd-dynamic-page-breadcrumb>
+            <fd-breadcrumb [style.margin-top.rem]="0.2">
+                <fd-breadcrumb-item>
+                    <a fd-link href="loan-contract-search">Loan Contracts</a>
+                </fd-breadcrumb-item>
+            </fd-breadcrumb>
+        </fd-dynamic-page-breadcrumb>
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <ng-container [fdCompact]="'compact'">
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="positive"
+                        label="Process Enquiry"
+                        [disabled]="selectedEnquiry.selected.length === 0"
+                        (click)="redirectToProcessEnquiry()"
+                    >
+                    </button>
+
+                    <fd-toolbar-separator></fd-toolbar-separator>
+
+                    <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['homepage'])">
+                        <i class="sap-icon--decline"></i>
+                    </button>
+                </ng-container>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fd-dynamic-page-content cdkScrollable>
+
+        <app-loan-contract-list></app-loan-contract-list>
+    
+    </fd-dynamic-page-content>
+</fd-dynamic-page>
+
+<!-- <component-ngx>
     <fd-layout-grid [noGap]="true" [style.width.rem]="98">
         <div fdLayoutGridRow [style.margin-top.rem]="-0.5" [style.margin-bottom.rem]="-1">
             <div [fdLayoutGridCol]="12" >
@@ -7,13 +46,6 @@
         </div>
         <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
             <div [fdLayoutGridCol]="12" [style.text-align]="'right'">
-                <button fd-button
-                    fdType="emphasized"
-                    label="Process Enquiry"
-                    [disabled]="selectedEnquiry.selected.length === 0"
-                    (click)="redirectToProcessEnquiry()"
-                >
-                </button>
                 <button fd-button
                     fdType="emphasized"
                     label="ICC Approval"
@@ -88,10 +120,5 @@
             </div>
         </div>
 
-        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
-            <div [fdLayoutGridCol]="12">
-                <app-loan-contract-list></app-loan-contract-list>
-            </div>
-        </div>
     </fd-layout-grid>
-</component-ngx>
+</component-ngx> -->
