@@ -17,7 +17,7 @@
                     fd-button 
                     (click)="sendForApproval()" 
                     fdType="emphasized"
-                    [disabled]="(!selectedEnquiryAction || selectedEnquiryAction.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    [disabled]="!selectedEnquiryAction || selectedEnquiryAction?.workFlowStatusCode === 2 || disableSendForApproval"
                 >
                     Send for Approval
                 </button>

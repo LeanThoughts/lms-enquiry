@@ -394,6 +394,9 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
+    /**
+     * Send processed enquiry for approval
+     */
     sendForApproval(): void {
         console.log(this.authService.currentUser);
         // this.disableSendForApproval = true;

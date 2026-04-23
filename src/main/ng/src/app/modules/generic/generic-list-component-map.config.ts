@@ -192,7 +192,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         disableCreateButtonAfterCreate: true,
         updateDialogWidth: '35rem',
         viewDialogWidth: '30rem',
-        routeResolvedData: ['rejectionCategory'],
+        routeResolvedData: ['rejectionCategory']
     },
     
     // Process Enquiry - Other Details
