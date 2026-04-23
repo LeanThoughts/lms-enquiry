@@ -68,6 +68,8 @@
                                 <app-generic-list
                                     [entity]="'projectProposalCreditRating'" 
                                     [searchString1]="selectedProjectProposal.id"
+                                    (onCreateSuccess)="onCreditRatingCreateSuccess()"
+                                    (onUpdateSuccess)="onCreditRatingUpdateSuccess()"
                                 />
                             </div>
                         </fdp-icon-tab-bar-tab>
@@ -89,6 +91,8 @@
                                 <app-generic-list
                                     [entity]="'projectProposalShareHolding'" 
                                     [searchString1]="selectedProjectProposal.id"
+                                    (onCreateSuccess)="onShareHoldingCreateSuccess()"
+                                    (onUpdateSuccess)="onShareHoldingUpdateSuccess()"
                                 />
                             </div>
                         </fdp-icon-tab-bar-tab>
@@ -110,6 +114,8 @@
                                 <app-generic-list
                                     [entity]="'projectProposalOtherLoanDetailsDocuments'" 
                                     [searchString1]="selectedProjectProposal.id"
+                                    (onCreateSuccess)="onOtherLoanDetailsDocumentCreateSuccess()"
+                                    (onUpdateSuccess)="onOtherLoanDetailsDocumentUpdateSuccess()"
                                 />
                             </div>
                         </fdp-icon-tab-bar-tab>
@@ -119,6 +125,8 @@
                             <app-generic-list
                                 [entity]="'projectProposalPromoterFinancials'" 
                                 [searchString1]="selectedProjectProposal.id"
+                                (onCreateSuccess)="onPromoterFinancialsCreateSuccess()"
+                                (onUpdateSuccess)="onPromoterFinancialsUpdateSuccess()"
                             />
                         </fdp-icon-tab-bar-tab>
 
@@ -127,6 +135,8 @@
                             <app-generic-list
                                 [entity]="'projectProposalCollateralDetails'" 
                                 [searchString1]="selectedProjectProposal.id"
+                                (onCreateSuccess)="onCollateralDetailsCreateSuccess()"
+                                (onUpdateSuccess)="onCollateralDetailsUpdateSuccess()"
                             />
                         </fdp-icon-tab-bar-tab>
 

@@ -322,7 +322,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateFunction: ProjectProposalService.prototype.updateProjectProposalCreditRating,
         createSuccessMessage: 'Credit rating details created successfully',
         updateSuccessMessage: 'Credit rating details updated successfully',
-        trackObjectAfterCreateAndUpdate: 'enquiryAction',
+        trackObjectAfterCreateAndUpdate: 'projectProposal',
         fieldsConfig: [
             {row: 1, span: 12, name: 'creditRating', label: 'Credit Rating', type: 'select', required: true, displayKey: 'value', valueKey: 'code',
                 viewOperationKey: 'creditRatingDescription' },
@@ -344,7 +344,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateFunction: ProjectProposalService.prototype.updateProjectProposalShareHolder,
         createSuccessMessage: 'Share holding details created successfully',
         updateSuccessMessage: 'Share holding details updated successfully',
-        trackObjectAfterCreateAndUpdate: 'enquiryAction',
+        trackObjectAfterCreateAndUpdate: 'projectProposal',
         fieldsConfig: [
             {row: 1, span: 12, name: 'companyName', label: 'Company Name', type: 'text', maxLength: 200, required: true},
             {row: 2, span: 12, name: 'equityCapital', label: 'Capital (Crores)', type: 'number', maxLength: 18, pattern: FIFTEEN_COMMA_TWO},
@@ -363,7 +363,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateFunction: ProjectProposalService.prototype.updateOtherLoanDetailsDocument,
         createSuccessMessage: 'Document created successfully',
         updateSuccessMessage: 'Document updated successfully',
-        trackObjectAfterCreateAndUpdate: 'enquiryAction',
+        trackObjectAfterCreateAndUpdate: 'projectProposal',
         fieldsConfig: [
             {row: 2, span: 12, name: 'documentType', label: 'Document Type', type: 'select', displayKey: 'description', valueKey: 'code', 
                 viewOperationKey: 'documentTypeName', required: true },
@@ -383,7 +383,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateFunction: ProjectProposalService.prototype.updatePromoterFinancials,
         createSuccessMessage: 'Promoter financial details created successfully',
         updateSuccessMessage: 'Promoter financial details updated successfully',
-        trackObjectAfterCreateAndUpdate: 'enquiryAction',
+        trackObjectAfterCreateAndUpdate: 'projectProposal',
         fieldsConfig: [
             // Section: Financials of Previous Fiscal Periods
             { row: 1, span: 12, name: 'header1', type: 'header', label: 'Financials of Previous Fiscal Periods' },
@@ -445,7 +445,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateFunction: ProjectProposalService.prototype.updateCollateralDetails,
         createSuccessMessage: 'Collateral details created successfully',
         updateSuccessMessage: 'Collateral details updated successfully',
-        trackObjectAfterCreateAndUpdate: 'enquiryAction',
+        trackObjectAfterCreateAndUpdate: 'projectProposal',
         fieldsConfig: [
             { row: 1, span: 12, name: 'collateralType', label: 'Collateral Type', type: 'select', displayKey: 'value', valueKey: 'code', 
                 viewOperationKey: 'collateralTypeDescription', required: true },

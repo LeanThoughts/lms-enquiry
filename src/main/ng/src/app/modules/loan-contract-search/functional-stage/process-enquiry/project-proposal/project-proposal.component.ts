@@ -50,14 +50,13 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
-    constructor(
-        private route: ActivatedRoute,
-        public router: Router,
-        private loanContractSearchService: LoanContractSearchService,
-        private processEnquiryService: ProcessEnquiryService,
-        private projectProposalService: ProjectProposalService,
-        private authService: AuthService
-    ) {
+    constructor(private route: ActivatedRoute,
+                public router: Router,
+                private loanContractSearchService: LoanContractSearchService,
+                private processEnquiryService: ProcessEnquiryService,
+                private projectProposalService: ProjectProposalService,
+                private authService: AuthService)
+    {
         this.initializeRouteParams();
         this.subscribeToEnquiryAction();
         this.initializeDataBasedOnUrl();
@@ -192,9 +191,14 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
      * Handle successful project proposal create
      */
     onProjectProposalCreateSuccess(response: any): void {
+        this.projectProposalService.selectedEntity$.next(response.projectProposal);
+        if (response.enquiryAction) {
+            this.updateEnquiryAction(response.enquiryAction);
+        }
+        // Navigate to update project proposal
         this.router.navigate([
             '/process-enquiry',
-            this.enquiryActionId,
+            response.enquiryAction.id,
             'loanApplication',
             this.loanApplicationId,
             'update-project-proposal',
@@ -207,11 +211,21 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
      */
     onProjectProposalUpdateSuccess(response: any): void {
         this.projectProposalService.selectedEntity$.next(response.projectProposal);
+        if (response.enquiryAction) {
+            this.updateEnquiryAction(response.enquiryAction);
+        }
     }
 
+    /**
+     * Handle successful project detail create
+     */
     onProjectDetailCreateSuccess(response: any): void {
         this.selectedProjectDetail = response;
         this.projectDetailOperation = 'Update';
+        if (response.projectProposal) {
+            this.projectProposalService.selectedEntity$.next(response.projectProposal);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
+        }
     }
 
     /**
@@ -222,7 +236,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         // Is it really correct to call next() twice? Consider refactoring in future.
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
     }
 
@@ -234,7 +248,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.projectCostOperation = 'Update';
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
     }
 
@@ -245,7 +259,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         console.log('updating project cost', response);
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
     }
 
@@ -257,7 +271,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.otherLoanDetailsOperation = 'Update';
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
     }
 
@@ -268,7 +282,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.selectedOtherLoanDetails = response;
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
     }
 
@@ -280,7 +294,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.dealGuaranteeOperation = 'Update';
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
     }
 
@@ -291,8 +305,85 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.selectedDealGuarantee = response;
         if (response.projectProposal) {
             this.projectProposalService.selectedEntity$.next(response.projectProposal);
-            this.processEnquiryService.selectedEntity$.next(response.projectProposal.enquiryAction);
+            this.updateEnquiryAction(response.projectProposal.enquiryAction);
         }
+    }
+
+    /**
+     * Handle successful credit rating create
+     */
+    onCreditRatingCreateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+    
+    /**
+     * Handle successful credit rating update
+     */
+    onCreditRatingUpdateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+
+
+    /**
+     * Handle successful share holding create
+     */
+    onShareHoldingCreateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+    
+    /**
+     * Handle successful share holding update
+     */
+    onShareHoldingUpdateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+
+
+    /**
+     * Handle successful other loan details document create
+     */
+    onOtherLoanDetailsDocumentCreateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+    
+    /**
+     * Handle successful other loan details document update
+     */
+    onOtherLoanDetailsDocumentUpdateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+
+
+    /**
+     * Handle successful promoter financials create
+     */
+    onPromoterFinancialsCreateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+    
+    /**
+     * Handle successful promoter financials update
+     */
+    onPromoterFinancialsUpdateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+
+    /**
+     * Handle successful collateral details create
+     */
+    onCollateralDetailsCreateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+    
+    /**
+     * Handle successful collateral details update
+     */
+    onCollateralDetailsUpdateSuccess(): void {
+        this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
+    }
+
+    updateEnquiryAction(enquiryAction: any): void {
+        this.processEnquiryService.selectedEntity$.next(enquiryAction);
     }
 
     /**

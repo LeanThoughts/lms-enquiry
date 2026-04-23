@@ -182,8 +182,10 @@ export class ProjectProposalService implements Resolve<any> {
             map(({ creditRatings, creditRatingAgencies, responses }: any) => {
                 responses._embedded.creditRatings.forEach((response: any) => {
                     response.creditRatingDescription = creditRatings.find((creditRating: any) => creditRating.code === response.creditRating).value;
-                    response.creditRatingAgencyDescription = creditRatingAgencies.find((creditRatingAgency: any) => creditRatingAgency.code === 
-                        response.creditRatingAgency).value;
+                    if (response.creditRatingAgency) {
+                        response.creditRatingAgencyDescription = creditRatingAgencies.find((creditRatingAgency: any) => creditRatingAgency.code === 
+                            response.creditRatingAgency).value;
+                    }
                 });
                 return responses._embedded.creditRatings;
             })

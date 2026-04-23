@@ -82,6 +82,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
     @Output() onCreateClick: EventEmitter<void> = new EventEmitter<void>();
     @Output() onUpdateClick: EventEmitter<any> = new EventEmitter<string>();
     @Output() onViewClick: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onCreateSuccess: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onUpdateSuccess: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * Constructor
@@ -140,7 +142,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
         console.log('fetchData is called for entity', this.entity);
         // If the searchString1 is not provided, set the data to an empty array and return
         if (!this.searchString1) {
-            console.warn('searchString1 is not provided');
             this.data = [];
             this.cdr.markForCheck();
             return;
@@ -148,14 +149,12 @@ export class GenericListComponent implements OnInit, OnDestroy {
         // Fetch data to display in the table from the service
         this.config.fetchFunction.call(this.service$, this.searchString1).subscribe({
             next: (response: any) => {
-                // console.log('fetch response is', response);
                 this.data = (response || []).map((item: any) => {
                     const formattedItem: any = { ...item };
                     this.config.displayedColumns.forEach((col: any) => {
                         formattedItem[`formatted_${col.name}`] = this.getFormattedValue(item, col.name);
                         // console.log('formattedItem[`formatted_${col.name}`]', formattedItem[`formatted_${col.name}`]);
                     });
-                    // console.log('formattedItem is', formattedItem);
                     return formattedItem;
                 });
                 // console.log('formattedData', this.data);
@@ -281,6 +280,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
                 }
                 // Fetch data to update the table
                 if (result === 'Updated' || result === 'Created') {
+                    this.config.emitOnCreateSuccess && this.onCreateSuccess.emit();
                     this.fetchData();
                 }
             }
@@ -329,6 +329,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
                 if (result === 'Updated' || result === 'Created') {
                     this.selectedObject = null;
                     this.selectedObjectId.clear();
+                    this.config.emitOnUpdateSuccess && this.onUpdateSuccess.emit();
                     this.fetchData();
                 }
             }

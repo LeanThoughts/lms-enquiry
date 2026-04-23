@@ -16,6 +16,8 @@ interface EntityUpdateDialogComponentConfig {
     onlyEmitCreateEvent?: boolean;
     onlyEmitUpdateEvent?: boolean;
     onlyEmitViewEvent?: boolean;
+    emitOnCreateSuccess?: boolean;
+    emitOnUpdateSuccess?: boolean;
     updateDialogWidth?: string;
     viewDialogWidth?: string;
     routeResolvedData?: string[],
@@ -286,6 +288,8 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateDialogWidth: '40rem',
         viewDialogWidth: '35rem',
         routeResolvedData: ['creditRating', 'creditRatingAgency'],
+        emitOnCreateSuccess: true,
+        emitOnUpdateSuccess: true,
     },
 
     // Project Proposal - Share Holding
@@ -302,6 +306,8 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         viewButton: true,
         updateDialogWidth: '40rem',
         viewDialogWidth: '35rem',
+        emitOnCreateSuccess: true,
+        emitOnUpdateSuccess: true,
     },
 
     // Project Proposal - Other Loan Details Documents
@@ -320,6 +326,8 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateDialogWidth: '40rem',
         viewDialogWidth: '35rem',
         routeResolvedData: ['documentType'],
+        emitOnCreateSuccess: true,
+        emitOnUpdateSuccess: true,
     },
 
     // Project Proposal - Promoter Financials
@@ -333,6 +341,8 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         viewButton: true,
         updateDialogWidth: '80rem',
         viewDialogWidth: '70rem',
+        emitOnCreateSuccess: true,
+        emitOnUpdateSuccess: true,
     },
 
     // Project Proposal - Collateral Details
@@ -349,6 +359,8 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateDialogWidth: '35rem',
         viewDialogWidth: '30rem',
         routeResolvedData: ['collateralType'],
+        emitOnCreateSuccess: true,
+        emitOnUpdateSuccess: true,
     },
 
     // ICC In-principle Approval - ICC Further Details
