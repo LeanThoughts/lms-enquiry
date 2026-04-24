@@ -552,7 +552,7 @@ export class GenericUpdateDialogComponent implements OnInit {
             },
             error: (error: any) => {
                 console.log('error', error);
-                this.messageService.showError(error?.message || errorMsg);
+                this.messageService.showError(error?.error?.message || errorMsg);
             }
         });
     }

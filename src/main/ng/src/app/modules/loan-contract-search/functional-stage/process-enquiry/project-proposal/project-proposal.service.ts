@@ -150,13 +150,6 @@ export class ProjectProposalService implements Resolve<any> {
     }
     
     /**
-     * Send project proposal for approval
-     */
-    public sendProjectProposalForApproval(projectProposalId: string): Observable<any> {
-        return this.http.post(environment.primaryApiHost + '/projectProposals/sendForApproval/' + projectProposalId, {});
-    }
-
-    /**
      * Get credit ratings
      */
     public getCreditRatings(): Observable<any> {

@@ -287,5 +287,26 @@ export class ProcessEnquiryService implements Resolve<any> {
                 }
             });
         });
-    }    
+    }
+
+    /**
+     * Get project proposal by status
+     */
+    public getProjectProposalByStatus(enquiryActionId: string, proposalStatus: string): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/projectProposals/search/findByEnquiryActionIdAndProposalStatus?enquiryActionId=' + enquiryActionId
+                + '&proposalStatus=' + proposalStatus);
+    }
+
+    /**
+     * Send enquiry action for approval
+     */
+    public sendEnquiryActionForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        let requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'EnquiryAction'
+        }
+        return this.http.put<any>(environment.primaryApiHost + '/startprocess', requestObj);
+    }
 }

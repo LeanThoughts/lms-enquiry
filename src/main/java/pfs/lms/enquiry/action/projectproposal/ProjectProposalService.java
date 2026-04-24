@@ -2,7 +2,10 @@ package pfs.lms.enquiry.action.projectproposal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pfs.lms.enquiry.action.EnquiryAction;
 import pfs.lms.enquiry.action.EnquiryActionRepository;
 import pfs.lms.enquiry.action.enquirycompletion.EnquiryCompletion;
@@ -63,7 +66,7 @@ public class ProjectProposalService implements IProjectProposalService {
 //    }
 
     @Override
-    public ProjectProposal create(ProjectProposalResource resource, String username) throws Exception {
+    public ProjectProposal create(ProjectProposalResource resource, String username) {
         LoanApplication loanApplication = loanApplicationRepository.getOne(resource.getLoanApplicationId());
         EnquiryAction enquiryAction = enquiryActionRepository.findByLoanApplication(loanApplication)
                 .orElseGet(() -> {
@@ -86,7 +89,10 @@ public class ProjectProposalService implements IProjectProposalService {
             List<ProjectProposal> projectProposals = projectProposalRepository.
                     findByEnquiryActionIdAndProposalStatus(enquiryAction.getId(), "Final");
             if (projectProposals.size() > 0)
-                throw new Exception("Only one project proposal with status Final can exist in the system");
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Only one project proposal with status Final can exist in the system"
+                );
         }
 
         ProjectProposal projectProposal = new ProjectProposal();

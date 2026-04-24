@@ -97,10 +97,12 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
     redirectToProcessEnquiry(): void {
         this.processEnquiryService.getEnquiryAction(this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id).subscribe({
             next: (enquiryAction) => {
+                this.processEnquiryService.selectedEntity$.next(enquiryAction);
                 this.router.navigate(['/process-enquiry', enquiryAction.id, 'loanApplication', 
                     this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id]);
             },
             error: (error) => {
+                this.processEnquiryService.selectedEntity$.next(null);
                 this.router.navigate(['/process-enquiry', '', 'loanApplication', this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id]);
             }
         });

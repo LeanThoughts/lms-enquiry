@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 import { GenericListComponent } from '../../../../generic/generic-list/generic-list.component';
 import { ProjectProposalService } from './project-proposal.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { MessageService } from '../../../../../message.service';
 
 @Component({
     selector: 'app-project-proposal',
@@ -55,7 +56,9 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
                 private loanContractSearchService: LoanContractSearchService,
                 private processEnquiryService: ProcessEnquiryService,
                 private projectProposalService: ProjectProposalService,
-                private authService: AuthService)
+                private authService: AuthService,
+                private messageService: MessageService
+            )
     {
         this.initializeRouteParams();
         this.subscribeToEnquiryAction();
@@ -382,6 +385,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         this.updateEnquiryAction(this.projectProposalService.selectedEntity$.value.enquiryAction);
     }
 
+
     updateEnquiryAction(enquiryAction: any): void {
         this.processEnquiryService.selectedEntity$.next(enquiryAction);
     }
@@ -398,45 +402,43 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
      * Send processed enquiry for approval
      */
     sendForApproval(): void {
-        console.log(this.authService.currentUser);
-        // this.disableSendForApproval = true;
-        // this.processEnquiryService.getEnquiryCompletionDetails(this.enquiryActionId).subscribe(data => {
-        //     if (Object.keys(data).length > 0) {
-        //         this.projectProposalService.getProjectProposalByStatus(this.enquiryActionId, 'Final').subscribe(pp => {
-        //             if (pp._embedded.projectProposals.length > 0) {
-        //                 let name = this._appService.currentUser.firstName + ' ' + this._appService.currentUser.lastName;
-        //                 let email = this._appService.currentUser.email;
-        //                 this._matSnackBar.open('Please wait while attempting to send enquiry for approval.', 'OK', { duration: 25000 });
-        //                 this._enquiryActionService.sendEnquiryActionForApproval(this.enquiryAction.id, name, email).subscribe(
-        //                     response => {
-        //                         this.enquiryAction = response;
-        //                         this._matSnackBar.dismiss();
-        //                         this._matSnackBar.open('Enquiry is sent for approval.', 'OK', { duration: 7000 });
-        //                     },
-        //                     error => {
-        //                         this.disableSendForApproval = false;
-        //                         this._matSnackBar.open('Errors occured. Pls try again after sometime or contact your system administrator',
-        //                             'OK', { duration: 7000 });
-        //                         this.disableSendForApproval = false;
-        //                     });
-        //                 this.disableSendForApproval = true;
-        //                 this._location.back();
-        //             }
-        //             else {
-        //                 this._matSnackBar.open('Project Proposal with status Final not found. Cannot send enquiry for approval.',
-        //                 'OK', { duration: 7000 });
-        //                 this.disableSendForApproval = false;
-        //             }
-        //         });
-        //     }
-        //     else {
-        //         // Activate the 5th tab (index 4) before showing the snackbar
-        //         if (this.tabGroup) {
-        //             this.tabGroup.selectedIndex = 4;
-        //         }
-        //         this._matSnackBar.open('Data for enquiry completion is missing. Cannot send enquiry for approval.',
-        //             'OK', { duration: 7000 });
-        //     }
-        // })
+        this.disableSendForApproval = true;
+        this.processEnquiryService.getEnquiryCompletionDetails(this.enquiryActionId).subscribe({
+            next: (enquiryCompletion) => {
+                this.projectProposalService.getProjectProposalByStatus(this.enquiryActionId, 'Final').subscribe({
+                    next: (projectProposals) => {
+                        const proposals = projectProposals?._embedded?.projectProposals || [];
+                        if (proposals.length > 0) {
+                            const { firstName = '', lastName = '', email = '' } = this.authService.currentUser;
+                            const name = `${firstName} ${lastName}`.trim();
+                            this.messageService.showInfo('Please wait while attempting to send enquiry for approval.', 25000);
+
+                            this.processEnquiryService.sendEnquiryActionForApproval(this.enquiryActionId, name, email).subscribe({
+                                next: (response) => {
+                                    this.processEnquiryService.selectedEntity$.next(response);
+                                    this.messageService.showSuccess('Enquiry is sent for approval.');
+                                },
+                                error: () => {
+                                    this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+                                    this.disableSendForApproval = false;
+                                }
+                            });
+                        } else {
+                            this.messageService.showError('Project Proposal with status Final not found. Cannot send enquiry for approval.');
+                            this.disableSendForApproval = false;
+                        }
+                    },
+                    error: () => {
+                        this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+                        this.disableSendForApproval = false;
+                    }
+                });
+           
+            },
+            error: () => {
+                this.messageService.showError('Enquiry completion details not found. Cannot send enquiry for approval.');
+                this.disableSendForApproval = false;
+            }
+        });
     }
 }

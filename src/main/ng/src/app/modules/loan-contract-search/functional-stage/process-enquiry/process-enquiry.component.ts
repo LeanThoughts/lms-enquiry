@@ -43,12 +43,14 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
                 private processEnquiryService: ProcessEnquiryService) 
     {
         this.loanApplicationId = this.route.snapshot.params['loanApplicationId'];
-        this.enquiryActionId = this.route.snapshot.params['enquiryActionId'];
         this.selectedEnquiry = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+
         this.processEnquiryService.selectedEntity$.pipe(takeUntil(this.destroy$)).subscribe((entity) => {
             console.log('selectedEnquiryAction is', entity);
             this.selectedEnquiryAction = entity;
         });
+
+        this.enquiryActionId = this.route.snapshot.params['enquiryActionId'];
     }
 
     /**

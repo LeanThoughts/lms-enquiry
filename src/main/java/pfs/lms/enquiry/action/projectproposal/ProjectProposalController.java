@@ -2,6 +2,7 @@ package pfs.lms.enquiry.action.projectproposal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpException;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.http.HTTPException;
 
 @Slf4j
 @RepositoryRestController
@@ -19,7 +21,7 @@ public class ProjectProposalController {
 
     @PostMapping("/projectProposals/create")
     public ResponseEntity<ProjectProposal> createProjectProposal(@RequestBody ProjectProposalResource resource,
-                                                                HttpServletRequest request) throws Exception {
+                                                                HttpServletRequest request) {
         return ResponseEntity.ok(projectProposalService.create(resource,request.getUserPrincipal().getName()));
     }
 

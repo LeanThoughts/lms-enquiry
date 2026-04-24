@@ -139,7 +139,6 @@ export class GenericListComponent implements OnInit, OnDestroy {
      * Fetch data from the service and format the data
      */
     public fetchData() {
-        console.log('fetchData is called for entity', this.entity);
         // If the searchString1 is not provided, set the data to an empty array and return
         if (!this.searchString1) {
             this.data = [];
