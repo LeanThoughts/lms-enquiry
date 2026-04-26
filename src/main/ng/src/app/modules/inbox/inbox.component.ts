@@ -10,6 +10,8 @@ import { Subject } from 'rxjs';
 import { MessageService } from '../../message.service';
 import { CustomDialogComponent } from '../../custom-dialog.component';
 import { BusinessPartnerSearchService } from '../business-partner-search/business-partner-search.service';
+import { ProcessEnquiryService } from '../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service';
+import { LoanContractSearchService } from '../loan-contract-search/loan-contract-search.service';
 
 @Component({
     selector: 'app-inbox',
@@ -33,14 +35,14 @@ export class InboxComponent implements OnInit, OnDestroy {
     /**
      * Constructor
      */
-    constructor(
-        private activatedRoute: ActivatedRoute,
-        private dialogService: DialogService,
-        private inboxService: InboxService,
-        private messageService: MessageService,
-        private router: Router,
-        private businessPartnerService: BusinessPartnerSearchService
-    ) {
+    constructor(private activatedRoute: ActivatedRoute,
+                private dialogService: DialogService,
+                private inboxService: InboxService,
+                private messageService: MessageService,
+                private router: Router,
+                private businessPartnerService: BusinessPartnerSearchService,
+                private loanContractSearchService: LoanContractSearchService,
+                private processEnquiryService: ProcessEnquiryService) {
     }
 
     /**
@@ -100,8 +102,23 @@ export class InboxComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/business-partners/update', businessPartner.id, businessPartner.defaultPartnerRole]);
             });
         }
+        else if (task.processName === 'Process Enquiry') {
+            this.reviewProcessEnquiry(task);
+        }
     }
     
+    /**
+     * Review process enquiry
+     */
+    reviewProcessEnquiry(task: any): void {
+        this.processEnquiryService.getEnquiryActionByEnquiryActionId(task.businessProcessId).subscribe((data: any) => {
+            this.inboxService.getLoanApplicationBySelfLink(data._links.loanApplication.href).subscribe((loanApplication: any) => {
+                this.loanContractSearchService.selectedEnquiry$.next({ loanApplication: loanApplication });
+                this.router.navigate(['/process-enquiry', task.businessProcessId, 'loanApplication', loanApplication.id]);
+            });
+        });
+    }
+
     /**
      * Reject task
      */

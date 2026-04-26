@@ -31,12 +31,19 @@ export class ProcessEnquiryService implements Resolve<any> {
     }
 
     /**
-     * Get Enquiry Action
+     * Get Enquiry Action by Loan Application Id
      */
     public getEnquiryAction(loanApplicationId: string): Observable<any> {
         return this.http.get(environment.primaryApiHost + '/enquiryActions/search/findByLoanApplicationId?loanApplicationId=' + loanApplicationId);
     }
     
+    /**
+     * Get Enquiry Action by Enquiry Action Id
+     */
+    public getEnquiryActionByEnquiryActionId(enquiryActionId: string): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/enquiryActions/' + enquiryActionId);
+    }
+
     /**
      * Get PFS Rejection Category Values
      */

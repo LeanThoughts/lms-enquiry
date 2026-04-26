@@ -16,6 +16,13 @@ export class InboxService implements Resolve<any> {
     }
 
     /**
+     * Get loan application by self link
+     */
+    getLoanApplicationBySelfLink(selfLink: string): Observable<any> {
+        return this.http.get(selfLink);
+    }
+
+    /**
      * Resolve
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -43,5 +50,5 @@ export class InboxService implements Resolve<any> {
      */
     rejectTask(workFlowProcessRequestResource: any): Observable<any> {
         return this.http.put(environment.primaryApiHost + '/rejecttask', workFlowProcessRequestResource);
-    }    
+    }
 }
