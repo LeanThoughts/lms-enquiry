@@ -170,6 +170,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         createButton: true,
         updateButton: true,
         onlyEmitUpdateEvent: true,
+        onlyEmitViewEvent: true,
         viewButton: true,
         disableCreateButtonAfterCreate: false,
         routeResolvedData: [],

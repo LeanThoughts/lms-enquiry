@@ -343,6 +343,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             this.onViewClick.emit(this.selectedObject);
             return;
         }
+        
         this.dialog.open(GenericUpdateDialogComponent, {
             data: {
                 entity: this.entity,

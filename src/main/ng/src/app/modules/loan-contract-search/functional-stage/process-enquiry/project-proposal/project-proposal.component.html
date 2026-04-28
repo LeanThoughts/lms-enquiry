@@ -42,7 +42,7 @@
         </div>
     </fd-layout-grid>
 
-    @if (projectProposalOperation === 'Update') {
+    @if (projectProposalOperation === 'Update' || projectProposalOperation === 'View') {
         <fd-layout-grid [noGap]="true" class="component-grid" [style.margin-top.rem]="1">
             <div fdLayoutGridRow>
                 <div fdLayoutGridCol colGrow style="background-color: white;">

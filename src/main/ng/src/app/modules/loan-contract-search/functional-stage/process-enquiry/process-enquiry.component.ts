@@ -46,8 +46,7 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
                 private processEnquiryService: ProcessEnquiryService,
                 private projectProposalService: ProjectProposalService,
                 private messageService: MessageService,
-                private authService: AuthService
-            ) 
+                private authService: AuthService) 
     {
         this.loanApplicationId = this.route.snapshot.params['loanApplicationId'];
         this.selectedEnquiry = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
@@ -132,6 +131,15 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
             projectProposal.id]);
     }
 
+    /**
+     * On view project proposal click
+     */
+    onViewProjectProposalClick(projectProposal: any) {
+        console.log('redirecting to view project proposal with projectProposal is', projectProposal);
+        this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId, 'view-project-proposal', 
+            projectProposal.id]);
+    }
+    
     /**
      * On destroy
      */

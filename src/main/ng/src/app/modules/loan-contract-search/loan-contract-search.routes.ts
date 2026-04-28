@@ -43,6 +43,14 @@ export default [
         canActivate: [routeInterceptor],
     },
     {
+        path: 'process-enquiry/:enquiryActionId/loanApplication/:loanApplicationId/view-project-proposal/:projectProposalId',
+        component: ProjectProposalComponent,
+        resolve: {
+            routeResolvedData: ProjectProposalService
+        },
+        canActivate: [routeInterceptor],
+    },
+    {
         path: 'icc-inprinciple-approval/:iccInprincipleApprovalId/loanApplication/:loanApplicationId',
         component: ICCInprincipleApprovalComponent,
         canActivate: [routeInterceptor],

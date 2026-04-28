@@ -119,7 +119,7 @@
                     @for (field of row.fields; track field.name) {
                         <div [fdLayoutGridCol]="field.span">
                             <div fd-form-set>
-                                <div fd-form-item [style.margin-top.rem]="0.5">
+                                <div fd-form-item [style.margin-top.rem]="0.7">
                                     @if (field.type !== '' && field.type !== 'header') {
                                         <label fd-form-label [for]="field.name" [required]="field.required">{{ field.label }}</label>
                                         @if (field.type === 'text' || field.type === 'number') {

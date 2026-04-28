@@ -92,8 +92,7 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
             const selectedProjectProposal = { ...resolvedData.projectProposal };
             selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
             this.selectedProjectProposal = selectedProjectProposal;
-            this.projectProposalOperation =
-                currentUrl.includes('update-project-proposal') ? 'Update' : 'View';
+            this.projectProposalOperation = currentUrl.includes('update-project-proposal') ? 'Update' : 'View';
 
             // Project Details
             let selectedProjectDetail = resolvedData.projectDetail;
