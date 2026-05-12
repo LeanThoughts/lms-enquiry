@@ -117,7 +117,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
 
     private Double pfsSubDebtAmount;
 
-    @Size(max = 100)
+    @Size(max = 200)
     private String loanPurpose;
 
     @Size(max = 100)
@@ -1242,7 +1242,7 @@ public class LoanApplication extends AggregateRoot<LoanApplication>  implements 
         return this.pfsSubDebtAmount;
     }
 
-    public @Size(max = 100) String getLoanPurpose() {
+    public @Size(max = 200) String getLoanPurpose() {
         return this.loanPurpose;
     }
 
