@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class PromoterBorrowerFinancialController {
 
     @PostMapping("/promoterBorrowerFinancials/create")
     public ResponseEntity<PromoterBorrowerFinancial> create(@RequestBody PromoterBorrowerFinancialResource resource,
-                                                            HttpServletRequest request) {
+                                                            HttpServletRequest request) throws Exception {
         return ResponseEntity.ok(promoterBorrowerFinancialService.create(resource, request.getUserPrincipal().getName()));
     }
 

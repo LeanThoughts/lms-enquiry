@@ -23,7 +23,6 @@ public class PromoterBorrowerFinancial extends AggregateRoot<PromoterBorrowerFin
     @ManyToOne(fetch = FetchType.EAGER)
     private ProjectProposal projectProposal;
 
-    @Column(unique=true)
     private String fiscalPeriod;
 
     private Double revenue;

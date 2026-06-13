@@ -164,7 +164,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
             },
             error: (error: any) => {
-                this.messageService.showError(error.message);
+                console.log('error in fetchData', error.message);
+                // this.messageService.showError(error.message);
                 this.cdr.markForCheck();
             },
         });

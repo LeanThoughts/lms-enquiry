@@ -335,6 +335,13 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
     projectProposalPromoterFinancials: {
         displayedColumns: [
             {name: 'fiscalPeriod', header: 'Fiscal Period', type: 'text'},
+            {name: 'revenue', header: 'Revenue', type: 'number'},
+            {name: 'depreciation', header: 'Depreciation', type: 'number'},
+            {name: 'pbt', header: 'PBT', type: 'number'},
+            {name: 'netCashAccruals', header: 'Net Cash Accruals', type: 'number'},
+            {name: 'ebitda', header: 'EBITDA', type: 'number'},
+            {name: 'interestExpenses', header: 'Interest Expenses', type: 'number'},
+            {name: 'pat', header: 'PAT', type: 'number'}
         ],
         fetchFunction: ProjectProposalService.prototype.getPromoterFinancials,
         createButton: true,

@@ -38,7 +38,7 @@ export class LoanContractSearchService implements Resolve<any> {
     getFunctionalStatuses(removeEmbedded?: boolean): Observable<any> {
         if (removeEmbedded) {
             return new Observable((observer) => {
-                this.http.get(environment.primaryApiHost + '/functionalStatuses?sort=value').subscribe({
+                this.http.get(environment.primaryApiHost + '/functionalStatuses?sort=value&size=200').subscribe({
                     next: (response: any) => {
                         observer.next(response._embedded.functionalStatuses);
                         observer.complete();
@@ -50,7 +50,7 @@ export class LoanContractSearchService implements Resolve<any> {
                 });
             });    
         }
-        return this.http.get(environment.primaryApiHost + '/functionalStatuses?sort=value');
+        return this.http.get(environment.primaryApiHost + '/functionalStatuses?sort=value&size=200');
     }
 
     /**
@@ -59,7 +59,7 @@ export class LoanContractSearchService implements Resolve<any> {
     getTechnicalStatuses(removeEmbedded?: boolean): Observable<any> {
         if (removeEmbedded) {
             return new Observable((observer) => {
-                this.http.get(environment.primaryApiHost + '/technicalStatuses?sort=value').subscribe({
+                this.http.get(environment.primaryApiHost + '/technicalStatus').subscribe({
                     next: (response: any) => {
                         const technicalStatuses = response._embedded.technicalStatuses.sort((a: any, b: any) => a.description.localeCompare(b.description));
                         observer.next(technicalStatuses);
@@ -81,7 +81,7 @@ export class LoanContractSearchService implements Resolve<any> {
     getLoanClasses(removeEmbedded?: boolean): Observable<any> {
         if (removeEmbedded) {
             return new Observable((observer) => {
-                this.http.get(environment.primaryApiHost + '/loanClasses?sort=value').subscribe({
+                this.http.get(environment.primaryApiHost + '/loanClasses?sort=value&size=200').subscribe({
                     next: (response: any) => {
                         observer.next(response._embedded.loanClasses);
                         observer.complete();
@@ -93,7 +93,7 @@ export class LoanContractSearchService implements Resolve<any> {
                 });
             });    
         }
-        return this.http.get(environment.primaryApiHost + '/loanClasses?sort=value');
+        return this.http.get(environment.primaryApiHost + '/loanClasses?sort=value&size=200');
     }
 
     /**
@@ -102,7 +102,7 @@ export class LoanContractSearchService implements Resolve<any> {
     getProjectTypes(removeEmbedded?: boolean): Observable<any> {
         if (removeEmbedded) {
             return new Observable((observer) => {
-                this.http.get(environment.primaryApiHost + '/projectTypes?sort=value').subscribe({
+                this.http.get(environment.primaryApiHost + '/projectTypes?sort=value&size=200').subscribe({
                     next: (response: any) => {
                         observer.next(response._embedded.projectTypes);
                         observer.complete();
@@ -114,7 +114,7 @@ export class LoanContractSearchService implements Resolve<any> {
                 });
             });    
         }
-        return this.http.get(environment.primaryApiHost + '/projectTypes?sort=value');
+        return this.http.get(environment.primaryApiHost + '/projectTypes?sort=value&size=200');
     }
 
     /**
@@ -123,7 +123,7 @@ export class LoanContractSearchService implements Resolve<any> {
     getFinancingTypes(removeEmbedded?: boolean): Observable<any> {
         if (removeEmbedded) {
             return new Observable((observer) => {
-                this.http.get(environment.primaryApiHost + '/financingTypes?sort=value').subscribe({
+                this.http.get(environment.primaryApiHost + '/financingTypes?sort=value&size=100').subscribe({
                     next: (response: any) => {
                         observer.next(response._embedded.financingTypes);
                         observer.complete();
@@ -135,7 +135,7 @@ export class LoanContractSearchService implements Resolve<any> {
                 });
             });    
         }
-        return this.http.get(environment.primaryApiHost + '/financingTypes?sort=value');
+        return this.http.get(environment.primaryApiHost + '/financingTypes?sort=value&size=100');
     }
 
     /**
@@ -144,7 +144,7 @@ export class LoanContractSearchService implements Resolve<any> {
     getAssistanceTypes(removeEmbedded?: boolean): Observable<any> {
         if (removeEmbedded) {
             return new Observable((observer) => {
-                this.http.get(environment.primaryApiHost + '/assistanceTypes?sort=value').subscribe({
+                this.http.get(environment.primaryApiHost + '/assistanceTypes?sort=value&size=100').subscribe({
                     next: (response: any) => {
                         observer.next(response._embedded.assistanceTypes);
                         observer.complete();
@@ -156,7 +156,7 @@ export class LoanContractSearchService implements Resolve<any> {
                 });
             });    
         }
-        return this.http.get(environment.primaryApiHost + '/assistanceTypes?sort=value');
+        return this.http.get(environment.primaryApiHost + '/assistanceTypes?sort=value&size=100');
     }
 
     /**

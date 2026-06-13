@@ -8,6 +8,7 @@ import pfs.lms.enquiry.action.projectproposal.ProjectProposalRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -20,7 +21,13 @@ public class PromoterBorrowerFinancialService implements IPromoterBorrowerFinanc
     private final PromoterBorrowerFinancialRepository promoterBorrowerFinancialRepository;
 
     @Override
-    public PromoterBorrowerFinancial create(PromoterBorrowerFinancialResource resource, String username) {
+    public PromoterBorrowerFinancial create(PromoterBorrowerFinancialResource resource, String username) throws Exception {
+
+        List<PromoterBorrowerFinancial> promoterBorrowerFinancials = promoterBorrowerFinancialRepository.
+                findByProjectProposalIdAndFiscalPeriod(resource.getProjectProposalId(), resource.getFiscalPeriod());
+        if (promoterBorrowerFinancials.size() > 0)
+            throw new Exception("Promoter/Borrower Financial details for fiscal period is already available.");
+
         ProjectProposal projectProposal = projectProposalRepository.getOne(resource.getProjectProposalId());
         PromoterBorrowerFinancial promoterBorrowerFinancial = new PromoterBorrowerFinancial();
         promoterBorrowerFinancial.setProjectProposal(projectProposal);

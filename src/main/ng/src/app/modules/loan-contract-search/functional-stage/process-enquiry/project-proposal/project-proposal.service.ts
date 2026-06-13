@@ -50,6 +50,7 @@ export class ProjectProposalService implements Resolve<any> {
                 collateralType: this.getCollateralTypes(),
                 dealGuaranteeTimeline: this.getDealGuaranteeTimeline(route.params['projectProposalId']),
                 environmentalSystemCategory: this.getEnvironmentalSystemCategories(),
+                policyExposure: this.getPolicyExposures(),
             });
         }
         else {
@@ -58,6 +59,17 @@ export class ProjectProposalService implements Resolve<any> {
                 proposalStatus: this.getProposalStatuses()
             });
         }
+    }
+
+    /**
+     * Get policy exposures
+     */
+    public getPolicyExposures(): Observable<any> {
+        const policyExposures = [
+            { code: 'E', value: 'EV' },
+            { code: 'N', value: 'NEV' }
+        ];
+        return of(policyExposures);
     }
 
     /**

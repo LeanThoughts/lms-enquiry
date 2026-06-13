@@ -147,7 +147,8 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateComponentConfi
             {row: 8, span: 3, name: 'loanType', label: 'Loan Type (Type of Loan)', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
             {row: 8, span: 3, name: 'purposeOfLoan', label: 'Purpose of Loan', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
 
-            {row: 9, span: 3, name: 'policyExposure', label: 'Policy Exposure', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            // {row: 9, span: 3, name: 'policyExposure', label: 'Policy Exposure', type: 'select', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            {row: 9, span: 3, name: 'policyExposure', label: 'Policy Exposure', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true},
             {row: 9, span: 9, name: 'endUseOfFunds', label: 'End use of the funds to be availed from PFS', type: 'text', maxLength: 100 },
 
             {row: 10, span: 3, name: 'roi', label: 'Rate of Interest', type: 'text', maxLength: 5, pattern: TAX_PERCENTAGE_REGEX },
@@ -181,8 +182,12 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateComponentConfi
             { row: 2, span: 3, name: 'equity', label: 'Promoter Contribution (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
             { row: 2, span: 3, name: 'pfsDebtAmount', label: 'PFS Debt Amount (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
             
-            { row: 3, span: 3, name: 'debtEquityRatio', label: 'Debt/Equity Ratio without Grant', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
-            { row: 3, span: 3, name: 'grantAmount', label: 'Grant/Subsidy Amount', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            { row: 3, span: 3, name: 'debtEquityRatio', label: 'Debt/Equity Ratio without Grant', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO,
+                readOnly: true
+            },
+            { row: 3, span: 3, name: 'grantAmount', label: 'Grant/Subsidy Amount', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO,
+                readOnly: true
+            },
             { row: 3, span: 3, name: 'debtEquityRatioWithGrant', label: 'Debt/Equity Ratio with Grant', type: 'text', maxLength: 18, 
                 pattern: FIFTEEN_COMMA_TWO }
         ]

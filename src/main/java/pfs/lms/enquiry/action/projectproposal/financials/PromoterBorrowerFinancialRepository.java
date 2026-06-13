@@ -9,4 +9,6 @@ public interface PromoterBorrowerFinancialRepository extends JpaRepository<Promo
 
     List<PromoterBorrowerFinancial> findByProjectProposalIdOrderByFiscalPeriod(UUID projectProposalId);
     List<PromoterBorrowerFinancial> findByProjectProposalId(UUID projectProposalId);
+
+    List<PromoterBorrowerFinancial> findByProjectProposalIdAndFiscalPeriod(UUID projectProposalId, String fiscalPeriod);
 }
