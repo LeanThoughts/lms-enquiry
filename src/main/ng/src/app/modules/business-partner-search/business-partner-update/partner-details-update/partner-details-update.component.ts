@@ -17,7 +17,6 @@ import { MOBILE_NUMBER_REGEX, NUMERIC_ONLY_REGEX, PHONE_NUMBER_REGEX } from '../
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from '../../../../message.service';
 import { statesOfIndia } from '../../../../app.constants';
-import { DatePipe, JsonPipe } from '@angular/common';
 import { ComponentNgxComponent } from '../../../../common/component-ngx/component-ngx.component';
 import { MultiComboboxModule } from '@fundamental-ngx/core';
 import { NgIf } from '@angular/common';
@@ -257,19 +256,6 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Display inline help content
-     */
-    // displayInlineHelpContent() {
-    //     this.messageToastService.hideAll();
-    //     this.messageToastService.open(this.template, {
-    //         duration: 7000,
-    //         data: {
-    //             content: this.inlineHelpContent
-    //         }
-    //     });
-    // }
-
-    /**
      * Reset form validators
      */
     resetFormValidators() {
@@ -329,6 +315,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
      * Submit
      */
     submit() {
+        this.partnerDetailsForm.markAllAsTouched();
         if (this.partnerDetailsForm.valid) {
             var partnerDetails = this.partnerDetailsForm.value;
             
@@ -353,7 +340,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
                             this.messageService.showSuccess('Business partner created successfully');
                             // Navigate to the update page for the newly created business partner with the id
                             this.businessPartnerService.selectedEntity$.next(result);
-                            this.router.navigate(['/business-partners/update', result.id, result.defaultPartnerRole]);
+                            this.router.navigate(['/business-partners/update', result.id]);
                         });
                     },
                     error: handleError('creating')
@@ -366,7 +353,7 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
                         this.createDefaultBusinessPartnerRole(this.selectedBusinessPartner.id, true, () => {
                             this.messageService.showSuccess('Business partner details updated successfully');
                             this.businessPartnerService.selectedEntity$.next(result);
-                            this.router.navigate(['/business-partners/update', result.id, result.defaultPartnerRole]);
+                            this.router.navigate(['/business-partners/update', result.id]);
                         });
                     },
                     error: handleError('updating')
@@ -374,30 +361,6 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             }
         } 
         else {
-            // console.log('partnerDetailsForm', this.partnerDetailsForm.valid);
-            // // Log all form errors in a detailed manner
-            // const collectErrors = (formGroup: FormGroup, parentKey: string = ''): any => {
-            //     let errors: any = {};
-            //     Object.keys(formGroup.controls).forEach(key => {
-            //         const control = formGroup.get(key);
-            //         const controlPath = parentKey ? `${parentKey}.${key}` : key;
-            //         if (control instanceof FormGroup) {
-            //             const childErrors = collectErrors(control, controlPath);
-            //             if (Object.keys(childErrors).length > 0) {
-            //                 errors[key] = childErrors;
-            //             }
-            //         } else {
-            //             if (control && control.errors) {
-            //                 errors[controlPath] = control.errors;
-            //             }
-            //         }
-            //     });
-            //     return errors;
-            // };
-            // const allErrors = collectErrors(this.partnerDetailsForm);
-            // console.log('partnerDetailsForm errors', allErrors);
-            this.partnerDetailsForm.markAllAsTouched();
-            this.partnerDetailsForm.updateValueAndValidity();
         }
     }
 
@@ -484,7 +447,6 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
         
         // Set initial min value
         let minValue = startingId;
-        
         // Fetch last used number
         this.businessPartnerService.getMaxPartyNumberByRoleType(this.partnerDetailsForm.get('defaultPartnerRole')?.value, event).subscribe({
             next: (result: number) => {
@@ -507,62 +469,5 @@ export class PartnerDetailsUpdateComponent implements OnInit, OnDestroy {
             ]);
             partyNumberControl.updateValueAndValidity();
         };
-
-        // if (event) {
-        //     this.selectedPartnerGroup = this.partnerGroups.find(
-        //         (partnerGroup: any) => partnerGroup.code === event
-        //     );
-            
-        //     if (!this.selectedPartnerGroup?.externalNumberRange) {
-        //         this.inlineHelpContent = '';
-        //         return;
-        //     }
-            
-      //     const { startingId, endingId, value } = this.selectedPartnerGroup;
-        //     const partyNumberControl = this.partnerDetailsForm.get('partyNumber');  
-            
-        //     const inlineHelpContentBase =
-        //         `${value} has external number assignment, enter a number. ` +
-        //         `Business partner number must be between ${startingId} and ${endingId}.`;
-            
-        //     // Set initial min value
-        //     let minValue = startingId;
-            
-        //     // Fetch last used number
-        //     this.businessPartnerService
-        //         .getMaxPartyNumberByRoleType(
-        //             this.partnerDetailsForm.get('defaultPartnerRole')?.value,
-        //             event
-        //         )
-        //         .subscribe({
-        //             next: (result: number) => {
-        //                 minValue = result;
-        //                 this.inlineHelpContent =
-        //                     `Last id entered for this type of business partner is "${result}". ` +
-        //                     inlineHelpContentBase;
-            
-        //                 applyValidators();
-        //             },
-        //             error: () => {
-        //                 this.inlineHelpContent =
-        //                     `There is no last id entered for this type of business partner. ` +
-        //                     inlineHelpContentBase;
-            
-        //                 applyValidators();
-        //             }
-        //         });
-            
-        //     const applyValidators = () => {
-        //         if (!partyNumberControl) return;
-            
-        //         partyNumberControl.setValidators([
-        //             Validators.required,
-        //             Validators.min(minValue),
-        //             Validators.max(endingId)
-        //         ]);
-            
-        //         partyNumberControl.updateValueAndValidity();
-        //     };
-        // }
     }
 }

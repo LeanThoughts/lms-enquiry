@@ -29,6 +29,9 @@ public class ProjectProposal extends AggregateRoot<ProjectProposal> implements C
     private String documentName;
     private String documentType;
     private String documentVersion;
+
+    private String fileReference;
+
     private String proposalStatus;
 
     private String lastChangedByUser;

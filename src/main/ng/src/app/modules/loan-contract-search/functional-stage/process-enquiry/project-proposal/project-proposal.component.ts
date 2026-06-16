@@ -82,26 +82,25 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
     private initializeDataBasedOnUrl(): void {
         const currentUrl = this.route.snapshot.url.join('/');
         const resolvedData = this.route.snapshot.data['routeResolvedData'];
-
+        
         if (currentUrl.includes('create-project-proposal')) {
             this.projectProposalOperation = 'Create';
             this.selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
         } 
         else {
+            // Optimized block for initializing resolved data
+
             // Project Proposal
-            const selectedProjectProposal = { ...resolvedData.projectProposal };
-            selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
-            this.selectedProjectProposal = selectedProjectProposal;
+            this.selectedProjectProposal = { 
+                ...resolvedData.projectProposal, 
+                loanEnquiryNumber: this.selectedEnquiry.enquiryNo?.id 
+            };
             this.projectProposalOperation = currentUrl.includes('update-project-proposal') ? 'Update' : 'View';
 
             // Project Details
-            let selectedProjectDetail = resolvedData.projectDetail;
-            if (!selectedProjectDetail) {
-                selectedProjectDetail = this.mapEnquiryToProjectDetail();
-            } else {
-                this.projectDetailOperation = 'Update';
-            }
-            this.selectedProjectDetail = selectedProjectDetail;
+            this.selectedProjectDetail = resolvedData.projectDetail 
+                ? (this.projectDetailOperation = 'Update', resolvedData.projectDetail) 
+                : this.mapEnquiryToProjectDetail();
 
             // Project Cost
             if (resolvedData.projectCost) {

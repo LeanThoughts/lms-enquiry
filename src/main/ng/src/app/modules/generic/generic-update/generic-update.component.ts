@@ -85,7 +85,6 @@ export class GenericUpdateComponent implements OnInit {
      */
     ngOnInit(): void {
 
-        console.log('this.selectedObject', this.selectedObject);
         // Throw an error if the entity is not provided.
         if (!this.entity) {
             throw new Error('entity is mandatory and was not provided.');
@@ -108,7 +107,6 @@ export class GenericUpdateComponent implements OnInit {
         // Convert fieldsConfig to rows format if present
         if (this.config.fieldsConfig && !this.config.rows) {
             this.config.rows = this.convertFieldsConfigToRows(this.config.fieldsConfig);
-            console.log('this.config.rows', this.config.rows);
         }
 
         // Initialize layout grid columns
@@ -116,7 +114,6 @@ export class GenericUpdateComponent implements OnInit {
         // console.log('layoutGridColumns', this.layoutGridColumns);
 
         // Initialize form only for create and update operations
-        console.log('selectedObject in generic update', this.selectedObject);
 
         if (this.operation === 'Create' || this.operation === 'Update') {
             this.initializeForm();
@@ -183,6 +180,11 @@ export class GenericUpdateComponent implements OnInit {
                         }
                     });
                 }
+                if (field.onValueChange) {
+                    this.genericForm.get(field.name)?.valueChanges.subscribe(() => {
+                        this.config.genericOnValueChangeFunction(this.genericForm, field.name);
+                    });
+                }
             });
         });
 
@@ -203,7 +205,6 @@ export class GenericUpdateComponent implements OnInit {
                                 );
                             }
                             else {
-                                console.log('hello');
                                 this.genericForm.get(field.name)?.valueChanges.pipe().subscribe(value => 
                                     this.handleValueChangeForSelectField(field, value)
                                 );
@@ -349,6 +350,7 @@ export class GenericUpdateComponent implements OnInit {
      * Save the entity details
      */
     saveEntityDetails(fileReference: string) {
+        console.log('fileReference', fileReference);
         var formData = this.genericForm.value;
         const operation = this.operation;
         const isCreate = operation === 'Create';
@@ -392,7 +394,7 @@ export class GenericUpdateComponent implements OnInit {
             //     this.selectedObject[this.config.searchString1ForUpdate] = this.dialogRef.data.searchString1;
             // }
             if (fileReference) {
-                this.selectedObject.fileReference = fileReference;
+                this.selectedObject = { ...this.selectedObject, fileReference };
             }
             args.push(this.selectedObject);
         }

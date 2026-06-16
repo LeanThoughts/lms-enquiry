@@ -1,3 +1,4 @@
+import { FormGroup } from "@angular/forms";
 import { FIFTEEN_COMMA_TWO, FIVE_COMMA_TWO, NUMERIC_ONLY_REGEX, SEVEN_COMMA_TWO, SHARE_HOLDING_PERCENTAGE_REGEX, TAX_PERCENTAGE_REGEX } from "../../common/common.regex";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
 
@@ -12,6 +13,7 @@ interface EntityUpdateComponentConfig {
     searchString2ForCreate?: string;
     passSearchString1Via?: string;
     passSearchString2Via?: string;
+    genericOnValueChangeFunction?: (formGroup?: FormGroup, fieldName?: string) => void;
     fieldsConfig: {
         row: number;        
         span: number;
@@ -32,6 +34,7 @@ interface EntityUpdateComponentConfig {
         dependsOn?: string; // Name of the field that the dependent select field depends on
         viewOperationKey?: string; // Key to be used to display the value in the view mode
         maxValue?: any; // Maximum value for numeric or date fields
+        onValueChange?: boolean;
     }[];
 }
 
@@ -103,7 +106,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateComponentConfi
             {row: 2, span: 3, name: 'documentType', label: 'Document Type', type: 'select', displayKey: 'description', valueKey: 'code', 
                 viewOperationKey: 'documentTypeName' },
             {row: 2, span: 3, name: 'documentVersion', label: 'Document Version', type: 'text', maxLength: 10 },
-            {row: 2, span: 3, name: 'file', label: 'Select file to upload', type: 'file', required: false },
+            {row: 2, span: 3, name: 'file', displayKey: 'fileReference', label: 'Select file to upload', type: 'file', required: false },
             {row: 2, span: 3, name: 'additionalDetails', label: 'Additional Details', type: 'text', maxLength: 100 }
         ]
     },
@@ -174,22 +177,44 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateComponentConfi
         createSuccessMessage: 'Project cost details created successfully',
         updateSuccessMessage: 'Project cost details updated successfully',
         trackObjectAfterCreateAndUpdate: 'enquiryAction',
+        genericOnValueChangeFunction: (formGroup?: FormGroup, fieldName?: string) => {
+            // Calculate debt equity ratio without grant
+            var debt = isNaN(Number(formGroup?.get('debt')?.value)) ? 0 : Number(formGroup?.get('debt')?.value);
+            var equity = isNaN(Number(formGroup?.get('equity')?.value)) ? 0 : Number(formGroup?.get('equity')?.value);
+            if (equity > 0)
+                formGroup?.get('debtEquityRatio')?.setValue((debt/equity).toFixed(2));
+            else if (equity == 0)
+                formGroup?.get('debtEquityRatio')?.setValue(0);
+
+            // Calculate debt equity ratio with grant
+            const grantAmount = isNaN(Number(formGroup?.get('grantAmount')?.value)) ? 0 : Number(formGroup?.get('grantAmount')?.value);
+            if (debt && equity && grantAmount && equity > 0) {
+                const ratioWithGrant = (grantAmount + debt) / equity;
+                formGroup?.get('debtEquityRatioWithGrant')?.setValue(ratioWithGrant.toFixed(2));
+            } else {
+                formGroup?.get('debtEquityRatioWithGrant')?.setValue('');
+            }
+        },
         fieldsConfig: [
             { row: 1, span: 12, name: 'header1', type: 'header', label: 'Project Cost Details' },
 
             { row: 2, span: 3, name: 'projectCost', label: 'Project Cost', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
-            { row: 2, span: 3, name: 'debt', label: 'Debt (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
-            { row: 2, span: 3, name: 'equity', label: 'Promoter Contribution (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            { row: 2, span: 3, name: 'debt', label: 'Debt (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO,
+                onValueChange: true 
+            },
+            { row: 2, span: 3, name: 'equity', label: 'Promoter Contribution (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO,
+                onValueChange: true 
+            },
             { row: 2, span: 3, name: 'pfsDebtAmount', label: 'PFS Debt Amount (Crores)', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
-            
             { row: 3, span: 3, name: 'debtEquityRatio', label: 'Debt/Equity Ratio without Grant', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO,
                 readOnly: true
             },
             { row: 3, span: 3, name: 'grantAmount', label: 'Grant/Subsidy Amount', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO,
-                readOnly: true
+                onValueChange: true
             },
             { row: 3, span: 3, name: 'debtEquityRatioWithGrant', label: 'Debt/Equity Ratio with Grant', type: 'text', maxLength: 18, 
-                pattern: FIFTEEN_COMMA_TWO }
+                pattern: FIFTEEN_COMMA_TWO, readOnly: true 
+            }
         ]
     },
 

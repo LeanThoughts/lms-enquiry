@@ -104,6 +104,7 @@ public class ProjectProposalService implements IProjectProposalService {
         projectProposal.setDocumentName(resource.getDocumentName());
         projectProposal.setDocumentType(resource.getDocumentType());
         projectProposal.setDocumentVersion(resource.getDocumentVersion());
+        projectProposal.setFileReference(resource.getFileReference());
         projectProposal.setProposalStatus(resource.getProposalStatus());
         projectProposal.setLastChangedByUser(username);
         projectProposal = projectProposalRepository.save(projectProposal);
@@ -144,6 +145,7 @@ public class ProjectProposalService implements IProjectProposalService {
         projectProposal.setDocumentName(resource.getDocumentName());
         projectProposal.setDocumentType(resource.getDocumentType());
         projectProposal.setDocumentVersion(resource.getDocumentVersion());
+        projectProposal.setFileReference(resource.getFileReference());
         projectProposal.setProposalStatus(resource.getProposalStatus());
         projectProposal.setLastChangedByUser(username);
         projectProposal = projectProposalRepository.save(projectProposal);

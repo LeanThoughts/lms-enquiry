@@ -108,16 +108,16 @@
             <!-- } -->
             <div fdLayoutGridRow style="height: auto;" [style.padding-top.rem]="1">
                 <div fdLayoutGridCol>
-                    @if (operation !== 'View') {
-                        <button
-                            fd-button
-                            label="Submit"
-                            (click)="submit()"
-                            fdType="emphasized"
-                            glyph="save"
-                        >
-                        </button>
-                    }
+                    <!-- @if (operation !== 'View') { -->
+                    <button
+                        fd-button
+                        label="Submit"
+                        (click)="submit()"
+                        fdType="emphasized"
+                        glyph="save"
+                    >
+                    </button>
+                    <!-- } -->
                 </div>
             </div>
         </form>
@@ -148,7 +148,7 @@
                                         </label>
                                     }
                                     @if (field.type === 'file') {
-                                        <a href="{{ apiUrl }}/download/{{ selectedObject[field.name] }}">
+                                        <a href="{{ apiUrl }}/download/{{ selectedObject[field.displayKey] }}">
                                             <fd-icon [glyph]="'download-from-cloud'"></fd-icon>
                                         </a>
                                     }

@@ -27,5 +27,7 @@ public class ProjectProposalResource {
     private String documentVersion;
     private String proposalStatus;
 
+    private String fileReference;
+
     private DealGuaranteeTimeline dealGuaranteeTimeline;
 }

@@ -165,6 +165,10 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
             {name: 'serialNumber', header: 'Serial Number', type: 'text'},
             {name: 'proposalFormSharingDate', header: 'Proposal Date', type: 'date'},
             {name: 'proposalStatus', header: 'Status', type: 'text'},
+            {name: 'documentType', header: 'Document Type', type: 'text'},
+            {name: 'documentTypeName', header: 'Document Type Description', type: 'text'},
+            {name: 'documentName', header: 'Document Name', type: 'text'},
+            {name: 'fileReference', header: 'File Reference', type: 'file'}
         ],
         fetchFunction: ProcessEnquiryService.prototype.getProjectProposals,
         createButton: true,

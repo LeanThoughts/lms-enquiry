@@ -56,7 +56,8 @@ export class ProjectProposalService implements Resolve<any> {
         else {
             return forkJoin({
                 documentType: this.getDocumentTypes(),
-                proposalStatus: this.getProposalStatuses()
+                proposalStatus: this.getProposalStatuses(),
+                projectProposal: of(this.selectedEntity$.value)
             });
         }
     }
