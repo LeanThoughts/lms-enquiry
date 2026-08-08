@@ -10,7 +10,7 @@
     
     <div fdLayoutGridRow>
         <div fdLayoutGridCol [style.padding.rem]="1" style="background-color: white;">
-            @if (config.createButton) {
+            @if (config.createButton && !viewModeOnly) {
                 <!-- Create button -->
                 <button fd-button
                     fdType="emphasized"
@@ -22,7 +22,7 @@
                     Create
                 </button>
             }
-            @if (config.updateButton) {
+            @if (config.updateButton && !viewModeOnly) {
             <!-- Update button -->
                 <button fd-button
                     fdType="emphasized"

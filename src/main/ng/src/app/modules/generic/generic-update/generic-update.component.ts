@@ -328,7 +328,6 @@ export class GenericUpdateComponent implements OnInit {
         // Save the file
         let fileReference = '';
         if (this.genericForm.get('file')?.value) {
-            console.log('Saving file');
             var formData = new FormData();
             formData.append('file', this.genericForm.get('file')?.value[0], this.genericForm.get('file')?.value[0].name);
             this.service$.uploadVaultDocument(formData).subscribe({
@@ -350,7 +349,6 @@ export class GenericUpdateComponent implements OnInit {
      * Save the entity details
      */
     saveEntityDetails(fileReference: string) {
-        console.log('fileReference', fileReference);
         var formData = this.genericForm.value;
         const operation = this.operation;
         const isCreate = operation === 'Create';
@@ -412,7 +410,6 @@ export class GenericUpdateComponent implements OnInit {
                 isCreate ? this.onCreateSuccess.emit(response) : this.onUpdateSuccess.emit(response);
             },
             error: (error: any) => {
-                console.log('error', error);
                 this.messageService.showError(error?.error?.message || errorMsg);
             }
         });

@@ -25,7 +25,7 @@ export class ProjectProposalService implements Resolve<any> {
      * Resolve
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (state.url.includes('update-project-proposal')) {
+        if (state.url.includes('update-project-proposal') || state.url.includes('view-project-proposal')) {
             return forkJoin({
                 projectProposal: this.getProjectProposal(route.params['projectProposalId']),
                 documentType: this.getDocumentTypes(),

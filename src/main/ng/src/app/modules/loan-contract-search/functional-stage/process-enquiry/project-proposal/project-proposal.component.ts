@@ -49,6 +49,8 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
     selectedPartner: any;
     selectedEnquiryAction: any;
 
+    viewModeOnly = false;
+
     private destroy$ = new Subject<void>();
 
     constructor(private route: ActivatedRoute,
@@ -88,40 +90,49 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
             this.selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
         } 
         else {
-            // Optimized block for initializing resolved data
-
             // Project Proposal
             this.selectedProjectProposal = { 
                 ...resolvedData.projectProposal, 
                 loanEnquiryNumber: this.selectedEnquiry.enquiryNo?.id 
             };
-            this.projectProposalOperation = currentUrl.includes('update-project-proposal') ? 'Update' : 'View';
 
             // Project Details
             this.selectedProjectDetail = resolvedData.projectDetail 
-                ? (this.projectDetailOperation = 'Update', resolvedData.projectDetail) 
+                ? resolvedData.projectDetail 
                 : this.mapEnquiryToProjectDetail();
 
             // Project Cost
             if (resolvedData.projectCost) {
-                this.projectCostOperation = 'Update';
                 this.selectedProjectCost = resolvedData.projectCost;
             }
 
             // Other Loan Details
             if (resolvedData.otherLoanDetails) {
-                this.otherLoanDetailsOperation = 'Update';
                 this.selectedOtherLoanDetails = resolvedData.otherLoanDetails;
             }
 
             // Deal Guarantee Timeline
             if (resolvedData.dealGuaranteeTimeline) {
-                this.dealGuaranteeOperation = 'Update';
                 this.selectedDealGuarantee = resolvedData.dealGuaranteeTimeline;
             }
+
+            // Set operation based on URL
+            if (currentUrl.includes('update-project-proposal')) {
+                this.projectProposalOperation = 'Update';
+            } else {
+                this.projectProposalOperation = 'View';
+                this.viewModeOnly = true;
+            }
+            this.projectDetailOperation = this.projectProposalOperation;
+            this.projectCostOperation = this.projectProposalOperation;
+            this.otherLoanDetailsOperation = this.projectProposalOperation;
+            this.dealGuaranteeOperation = this.projectProposalOperation;
         }
     }
 
+    /**
+     * Map enquiry to project detail
+     */
     private mapEnquiryToProjectDetail(): any {
         const enquiry = this.selectedEnquiry || {};
         return {
@@ -159,10 +170,16 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         };
     }
 
+    /**
+     * ngOnInit
+     */
     ngOnInit(): void {
         this.title = this.getTitle();
     }
 
+    /**
+     * Get title
+     */
     private getTitle(): string {
         const enquiry = this.selectedEnquiry || {};
         const proposalOp = this.projectProposalOperation;

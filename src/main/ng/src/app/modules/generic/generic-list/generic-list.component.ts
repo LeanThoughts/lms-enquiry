@@ -78,6 +78,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
         return this._entity;
     }
 
+    // Strictly View Mode only
+    @Input() viewModeOnly: boolean = false;
 
     @Output() onCreateClick: EventEmitter<void> = new EventEmitter<void>();
     @Output() onUpdateClick: EventEmitter<any> = new EventEmitter<string>();

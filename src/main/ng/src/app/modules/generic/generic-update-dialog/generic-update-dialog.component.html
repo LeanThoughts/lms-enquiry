@@ -121,7 +121,7 @@
                             <div fd-form-set>
                                 <div fd-form-item [style.margin-top.rem]="0.7">
                                     @if (field.type !== '' && field.type !== 'header') {
-                                        <label fd-form-label [for]="field.name" [required]="field.required">{{ field.label }}</label>
+                                        <label fd-form-label [for]="field.name" [required]="field.required">{{ field.label }}:</label>
                                         @if (field.type === 'text' || field.type === 'number') {
                                             <label>{{ selectedObject[field.name] || '--' }}</label>
                                         }

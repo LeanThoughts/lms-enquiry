@@ -126,7 +126,6 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
      * On update project proposal click
      */
     onUpdateProjectProposalClick(projectProposal: any) {
-        console.log('redirecting to update project proposal with projectProposal is', projectProposal);
         this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId, 'update-project-proposal', 
             projectProposal.id]);
     }
@@ -135,7 +134,6 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
      * On view project proposal click
      */
     onViewProjectProposalClick(projectProposal: any) {
-        console.log('redirecting to view project proposal with projectProposal is', projectProposal);
         this.projectProposalService.selectedEntity$.next(projectProposal);
         this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId, 'view-project-proposal', 
             projectProposal.id]);

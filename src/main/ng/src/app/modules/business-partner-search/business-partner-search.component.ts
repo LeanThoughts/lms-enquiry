@@ -109,7 +109,6 @@ export class BusinessPartnerSearchComponent implements OnInit, OnDestroy {
             next: (partners: any[]) => {
                 this.businessPartnerService.businessPartnerSearchParameters$.next(formValues);
                 this.businessPartners = partners.sort((a: any, b: any) => a.partyName.localeCompare(b.partyName));
-                console.log('this.businessPartners', this.businessPartners);
             },
             error: (error: any) => {
                 this.messageService.showError(error.message);
@@ -139,7 +138,6 @@ export class BusinessPartnerSearchComponent implements OnInit, OnDestroy {
      * Update business partner
      */
     updateBusinessPartner(): void {
-        console.log('this.selectedBusinessPartner', this.selectedBusinessPartner);
         this.businessPartnerService.selectedEntity$.next(this.selectedBusinessPartner);
         this.router.navigate(['/business-partners/update', this.selectedBusinessPartner.id]);
     }
