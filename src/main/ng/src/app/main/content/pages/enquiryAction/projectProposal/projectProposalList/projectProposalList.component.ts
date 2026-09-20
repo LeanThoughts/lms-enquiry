@@ -72,7 +72,7 @@ export class ProjectProposalListComponent implements OnDestroy {
             'projectProposal': {},
             'operation': operation
         };
-        if (operation === 'modifyProjectProposal') {
+        if (operation === 'modifyProjectProposal' || operation === 'viewProjectProposal') {
             data.projectProposal = this._selectedProjectProposal;
         }
         const dialogRef = this._dialogRef.open(ProjectProposalUpdateComponent, {

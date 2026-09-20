@@ -55,6 +55,8 @@ export class ProjectProposalUpdateComponent {
             this.displayTabs = true;
         }
 
+        console.log('***** project proposal in project proposal update is', this.projectProposal);
+        
         this.projectProposalForm = this._formBuilder.group({
             loanEnquiryNumber: [ this.projectProposal.loanEnquiryNumber || _enquiryActionService._loanApplication.loanApplication.enquiryNo.id ],
             proposalFormSharingDate: [ this.projectProposal.proposalFormSharingDate || new Date() ],
