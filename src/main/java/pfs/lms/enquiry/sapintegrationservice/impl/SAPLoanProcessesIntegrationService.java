@@ -219,6 +219,9 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
                 add("X-Requested-With", "X");
             }
         };
+        if (httpMethod.matches("PUT")){
+            headers.add("Prefer","return=representation" );
+        }
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Object> requestToPost = new HttpEntity<Object>(resource, headers);

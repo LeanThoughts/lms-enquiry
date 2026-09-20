@@ -116,8 +116,12 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerBasicDetailResource sapBusinessPartnerBasicDetailResource = new SAPBusinessPartnerBasicDetailResource();
                     sapBusinessPartnerBasicDetailResource.setSAPBusinessPartnerBasicDetailsResourceDetails(sapBusinessPartnerBasicDetailsResourceDetail);
 
-//                    if (partner.getPartyNumber() == null)
-//                        sapIntegrationPointer.setMode("C");
+                    if (partner.getCreatedInSAP() == null) {
+                        sapIntegrationPointer.setMode("C");
+                    }else {
+                        if (partner.getCreatedInSAP() == false)
+                            sapIntegrationPointer.setMode("C");
+                    }
 
                     resource = (Object) sapBusinessPartnerBasicDetailResource;
                     serviceUri = businessPartnerServiceUri + "BasicDetailSet";
@@ -138,10 +142,13 @@ public class PartnerScheduledTaskCreateAndChange {
                          try {
                                businessPartnerID = responseKeyValueI.get("d").get("BusPartnerNumber");
                              partner.setPartyNumber(Integer.parseInt(businessPartnerID));
+                             partner.setCreatedInSAP(true);
                              partnerRepository.save(partner);
+                             partnerRepository.saveAndFlush(partner);
                              log.info("Business Partner Created/Updated in SAP: " + businessPartnerID);
                          } catch ( Exception ex ){
                              log.info("Exception from SAP Business Partner Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
+                             break;
                          }
 
                     }
@@ -260,7 +267,7 @@ public class PartnerScheduledTaskCreateAndChange {
                 case "BusinessPartnerIdentification":
                     businessPartnerIdentification = businessPartnerIdentificationRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if(partner == null) continue;
+                    if(partner  == null) continue;
                     if (partner.getPartyNumber() == null) continue;
                     log.info("---------------Sync. Business Partner Identification  to SAP : " + partner.getPartyNumber() );
 
@@ -321,7 +328,7 @@ public class PartnerScheduledTaskCreateAndChange {
                 case "BusinessPartnerIndustry":
                     businessPartnerIndustry = businessPartnerIndustryRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if(partner == null) continue;
+                    if(partner  == null) continue;
                     if (partner.getPartyNumber() == null) continue;
 
                     log.info("---------------Sync. Business Partner Industry  to SAP : " + partner.getPartyNumber() );
@@ -521,7 +528,7 @@ public class PartnerScheduledTaskCreateAndChange {
             }
 
             } catch (Exception ex){
-                log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
+               // log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
             }
 
         }
