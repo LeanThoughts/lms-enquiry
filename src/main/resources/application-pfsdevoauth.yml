@@ -40,7 +40,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true
-  profiles: oauth
+  profiles: pfsdevoauth
   rest:
     basePath: /api
   content:
