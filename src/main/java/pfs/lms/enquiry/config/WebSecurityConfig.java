@@ -12,7 +12,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@Profile("!oauth")
+@Profile({"!oauth", "!pfsdevoauth"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsConfigurationSource corsConfigurationSource;

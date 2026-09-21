@@ -49,7 +49,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Dn47gh3y@
+    password: Marines1@
     maximum-pool-size: 40
     url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
     validation-query: select 1
