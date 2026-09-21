@@ -144,7 +144,7 @@ public class PartnerScheduledTaskCreateAndChange {
                              partner.setPartyNumber(Integer.parseInt(businessPartnerID));
                              partner.setCreatedInSAP(true);
                              partnerRepository.save(partner);
-                             partnerRepository.saveAndFlush(partner);
+                             //partnerRepository.saveAndFlush(partner);
                              log.info("Business Partner Created/Updated in SAP: " + businessPartnerID);
                          } catch ( Exception ex ){
                              log.info("Exception from SAP Business Partner Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
@@ -548,7 +548,7 @@ public class PartnerScheduledTaskCreateAndChange {
             //Set Status as Posted Successfully
             sapIntegrationPointer.setStatus(3); // Posting Successful
             sapIntegrationRepository.save(sapIntegrationPointer);
-            sapIntegrationRepository.flush();
+             sapIntegrationRepository.flush();
         }
 
     }
