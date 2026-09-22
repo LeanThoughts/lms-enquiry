@@ -29,8 +29,8 @@ export class SideNavigationService {
                 { headerTitle: 'Loan Processes' },
                 { link: { icon: 'loan', title: 'Loan Contracts List', routerLink: 'loan-contract-search' } },
                 
-                // { headerTitle: 'Business Development' },
-                // { link: { icon: 'upload-to-cloud', title: 'Upload Loan Enquiries', routerLink: 'enquiry-upload' } },
+                { headerTitle: 'Business Development' },
+                { link: { icon: 'upload-to-cloud', title: 'Upload Loan Enquiries', routerLink: 'enquiry-upload' } },
                 
                 // { headerTitle: 'Risk Department' },
                 // { link: { icon: 'home', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
