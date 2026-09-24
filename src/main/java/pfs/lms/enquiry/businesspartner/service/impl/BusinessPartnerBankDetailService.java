@@ -85,7 +85,9 @@ public class BusinessPartnerBankDetailService implements IBusinessPartnerBankDet
                 + " : Business Partner Bank Detail not found"));
 
         Object oldObject = businessPartnerBankDetail.clone();
-
+        String bankDetailId = businessPartnerBankDetailResource.getSerialNumber().toString();
+        businessPartnerBankDetail.setBankDetailId(bankDetailId  );
+        businessPartnerBankDetail.setSerialNumber(businessPartnerBankDetail.getSerialNumber());
         businessPartnerBankDetail.setBankKey(businessPartnerBankDetailResource.getBankKey());
         businessPartnerBankDetail.setBankName(businessPartnerBankDetailResource.getBankName());
         businessPartnerBankDetail.setIfscCode(businessPartnerBankDetailResource.getIfscCode());

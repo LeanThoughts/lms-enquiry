@@ -374,6 +374,7 @@ public class BusinessPartnerIdentificationService implements IBusinessPartnerIde
             businessPartnerIdentificationResource.setCountry(businessPartnerIdentification.getCountry());
             businessPartnerIdentificationResource.setRegion(businessPartnerIdentification.getRegion());
 
+
             businessPartnerIdentificationResource.setIdentificationCategory(identificationCategoryRepository.
                     findByCode(businessPartnerIdentification.getIdentificationCategoryCode()).get().getValue());
 

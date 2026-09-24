@@ -116,8 +116,12 @@ public class PartnerScheduledTaskCreateAndChange {
                     SAPBusinessPartnerBasicDetailResource sapBusinessPartnerBasicDetailResource = new SAPBusinessPartnerBasicDetailResource();
                     sapBusinessPartnerBasicDetailResource.setSAPBusinessPartnerBasicDetailsResourceDetails(sapBusinessPartnerBasicDetailsResourceDetail);
 
-//                    if (partner.getPartyNumber() == null)
-//                        sapIntegrationPointer.setMode("C");
+                    if (partner.getCreatedInSAP() == null) {
+                        sapIntegrationPointer.setMode("C");
+                    }else {
+                        if (partner.getCreatedInSAP() == false)
+                            sapIntegrationPointer.setMode("C");
+                    }
 
                     resource = (Object) sapBusinessPartnerBasicDetailResource;
                     serviceUri = businessPartnerServiceUri + "BasicDetailSet";
@@ -125,24 +129,27 @@ public class PartnerScheduledTaskCreateAndChange {
                     switch (sapIntegrationPointer.getMode()){
                         case "C":
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
-                        break;
-                            case "U":
+                            break;
+                        case "U":
                             serviceUri = serviceUri + "('" + partner.getPartyNumber() + "')";
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
-                        break;
+                            break;
                     }
                     if (response != null) {
                         ResponseEntity responseEntity = (ResponseEntity) response;
                         LinkedHashMap<String, String> responseKeyValueH = (LinkedHashMap<String, String>) responseEntity.getBody();
-                         LinkedHashMap<String, LinkedHashMap<String, String>> responseKeyValueI = (LinkedHashMap<String, LinkedHashMap<String, String>>) responseEntity.getBody();
-                         try {
-                               businessPartnerID = responseKeyValueI.get("d").get("BusPartnerNumber");
-                             partner.setPartyNumber(Integer.parseInt(businessPartnerID));
-                             partnerRepository.save(partner);
-                             log.info("Business Partner Created/Updated in SAP: " + businessPartnerID);
-                         } catch ( Exception ex ){
-                             log.info("Exception from SAP Business Partner Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
-                         }
+                        LinkedHashMap<String, LinkedHashMap<String, String>> responseKeyValueI = (LinkedHashMap<String, LinkedHashMap<String, String>>) responseEntity.getBody();
+                        try {
+                            businessPartnerID = responseKeyValueI.get("d").get("BusPartnerNumber");
+                            partner.setPartyNumber(Integer.parseInt(businessPartnerID));
+                            partner.setCreatedInSAP(true);
+                            partnerRepository.save(partner);
+                            //partnerRepository.saveAndFlush(partner);
+                            log.info("Business Partner Created/Updated in SAP: " + businessPartnerID);
+                        } catch ( Exception ex ){
+                            log.info("Exception from SAP Business Partner Create/Update. HTTP Status Code :" + responseEntity.getStatusCode());
+                            break;
+                        }
 
                     }
 
@@ -249,7 +256,7 @@ public class PartnerScheduledTaskCreateAndChange {
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.POST, MediaType.APPLICATION_JSON);
                             break;
                         case "U":
-                           // serviceUri = serviceUri + "(" + "Businesspartner='" + partner.getPartyNumber() + "',Bankdetailid=" +  "'" + sapBusinessPartnerBankDetailResourceDetail.getBankDetailId() + "')";
+                            // serviceUri = serviceUri + "(" + "Businesspartner='" + partner.getPartyNumber() + "',Bankdetailid=" +  "'" + sapBusinessPartnerBankDetailResourceDetail.getBankDetailId() + "')";
                             serviceUri = serviceUri + "(" + "Businesspartner='" + partner.getPartyNumber() + "'" + ")";
                             response = sapLoanProcessesIntegrationService.postResourceToSAP(resource, serviceUri, HttpMethod.PUT, MediaType.APPLICATION_JSON);
                             break;
@@ -260,7 +267,7 @@ public class PartnerScheduledTaskCreateAndChange {
                 case "BusinessPartnerIdentification":
                     businessPartnerIdentification = businessPartnerIdentificationRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if(partner == null) continue;
+                    if(partner  == null) continue;
                     if (partner.getPartyNumber() == null) continue;
                     log.info("---------------Sync. Business Partner Identification  to SAP : " + partner.getPartyNumber() );
 
@@ -321,7 +328,7 @@ public class PartnerScheduledTaskCreateAndChange {
                 case "BusinessPartnerIndustry":
                     businessPartnerIndustry = businessPartnerIndustryRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
-                    if(partner == null) continue;
+                    if(partner  == null) continue;
                     if (partner.getPartyNumber() == null) continue;
 
                     log.info("---------------Sync. Business Partner Industry  to SAP : " + partner.getPartyNumber() );
@@ -513,15 +520,15 @@ public class PartnerScheduledTaskCreateAndChange {
                 UUID partnerId = UUID.fromString(sapIntegrationPointer.getMainEntityId());
                 Partner partner1 = partnerRepository.findById(partnerId).get();
                 if (partner1 != null){
-                if (partner1.getWorkFlowStatusCode()!= null) {
-                    if (partner1.getWorkFlowStatusCode() == 3) {
-                        sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                    if (partner1.getWorkFlowStatusCode()!= null) {
+                        if (partner1.getWorkFlowStatusCode() == 3) {
+                            sapIntegrationPointerListFilteredByWorkflowStatus.add(sapIntegrationPointer);
+                        }
                     }
                 }
-            }
 
             } catch (Exception ex){
-//                log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
+                // log.info("Partner Not Found for ID: " + sapIntegrationPointer.getMainEntityId() );
             }
 
         }
@@ -545,4 +552,4 @@ public class PartnerScheduledTaskCreateAndChange {
         }
 
     }
-    }
+}

@@ -193,6 +193,7 @@ public class BusinessPartnerIndustryService implements IBusinessPartnerIndustryS
 //            businessPartnerIndustryResource.setIndustrySystem(industrySystemRepository.
 //                    getReferenceById(businessPartnerIndustry.getIndustrySystemId()).getValue());
 
+
             businessPartnerIndustryResource.setIndustryTypeId(businessPartnerIndustry.getIndustryTypeId());
 //            businessPartnerIndustryResource.setIndustryType(industryTypeRepository.
 //                    getReferenceById(businessPartnerIndustry.getIndustryTypeId()).getValue());
