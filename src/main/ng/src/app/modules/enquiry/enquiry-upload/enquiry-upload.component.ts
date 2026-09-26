@@ -145,12 +145,12 @@ export class EnquiryUploadComponent {
             (response: any) => {
                 this.enquiries = response.enquiries;
                 if (response.savedCount > 0)
-                    this.displayAlertMessage(response.savedCount + ' new enquirie(s) uploaded successfully.');
+                    this.displayAlertMessage(response.savedCount + ' new enquirie(s) uploaded successfully.', 'success');
                 else
-                    this.displayAlertMessage('No new enquiries uploaded.');
+                    this.displayAlertMessage('No new enquiries uploaded.', 'success');
             },
             (error: HttpErrorResponse) => {
-                this.displayAlertMessage(error.error.message);
+                this.displayAlertMessage(error.error.message, 'error');
             }
         );
     }
@@ -158,7 +158,7 @@ export class EnquiryUploadComponent {
     /**
      * Display alert message
      */
-    displayAlertMessage(message: string): void {
+    displayAlertMessage(message: string, type: 'error' | 'success' = 'error'): void {
         this.messageStripAlertService.open({
             content: message,
             position: 'bottom-middle',
@@ -166,7 +166,7 @@ export class EnquiryUploadComponent {
             messageStrip: {
                 duration: 7000,
                 mousePersist: true,
-                type: 'error',
+                type: type,
                 dismissible: true
             }
         });

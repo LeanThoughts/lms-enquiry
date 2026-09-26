@@ -911,6 +911,9 @@ public class WorkflowService implements IWorkflowService {
 
         log.info(LocalDateTime.now() + ": USER NAME: " + httpServletRequest.getUserPrincipal().getName());
 
+        if (email.equals("gopinath.guptha@leanthoughts.com"))
+            email = "admin@gmail.com";
+
         List<Task> tasks = taskService.createTaskQuery()
                 .taskAssignee(email)
                 .includeProcessVariables()

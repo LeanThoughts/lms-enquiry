@@ -103,10 +103,14 @@ export class IdentificationDetailsUpdateDialogComponent implements OnInit {
                 documentType: new FormControl(this.selectedIdentification?.documentType || null),
                 file: new FormControl(null)
             });
+
             // Invoke on identification category change to set the form validators
             if (this.operation === 'update') {
                 this.onIdentificationCategoryChange(this.identificationDetailsForm.get('identificationCategoryCode')?.value);
             }
+
+            // Get regions on startup
+            this.onCountryChange('IN');
         }
     }
 

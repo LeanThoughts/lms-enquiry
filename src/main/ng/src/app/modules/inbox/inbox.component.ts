@@ -99,7 +99,7 @@ export class InboxComponent implements OnInit, OnDestroy {
                 console.log('data', data);
                 const businessPartner = data[0];
                 this.businessPartnerService.selectedEntity$.next(businessPartner);
-                this.router.navigate(['/business-partners/update', businessPartner.id, businessPartner.defaultPartnerRole]);
+                this.router.navigate(['/business-partners/update', businessPartner.id]);
             });
         }
         else if (task.processName === 'Process Enquiry') {
@@ -142,7 +142,7 @@ export class InboxComponent implements OnInit, OnDestroy {
                         'processInstanceId': task.id,
                         'rejectionReason': result.inputValue
                     }
-                    this.messageService.showInfo('Reject in Process.');
+                    this.messageService.showInfo('Reject in Process.', 25000);
                     this.inboxService.rejectTask(workFlowProcessRequestResource).subscribe({
                         next: (response) => {
                             this.messageService.showSuccess( 'Selected task is rejected and email notification was sent to requestor');

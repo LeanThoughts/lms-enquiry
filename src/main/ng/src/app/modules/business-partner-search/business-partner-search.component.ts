@@ -147,7 +147,7 @@ export class BusinessPartnerSearchComponent implements OnInit, OnDestroy {
      */
     viewBusinessPartner(): void {
         this.businessPartnerService.selectedEntity$.next(this.selectedBusinessPartner);
-        this.router.navigate(['/business-partners/view', this.selectedBusinessPartner.id, this.selectedBusinessPartner.defaultPartnerRole]);
+        this.router.navigate(['/business-partners/view', this.selectedBusinessPartner.id]);
     }
 
     /**

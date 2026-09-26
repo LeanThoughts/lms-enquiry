@@ -20,7 +20,8 @@ import { SelectionModel } from '@angular/cdk/collections';
         LinkComponent,
         TableModule
     ],
-    templateUrl: './business-partner-list.component.html'
+    templateUrl: './business-partner-list.component.html',
+    styleUrl: './business-partner-list.component.scss'
 })
 export class BusinessPartnerListComponent {
 
@@ -53,5 +54,15 @@ export class BusinessPartnerListComponent {
             '3': 'Group'
         };
         return categoryMap[partnerCategory] || '--';
-    }    
+    }
+
+    /**
+     * Format address, omitting missing / blank parts
+     */
+    formatAddress(partner: any): string {
+        return [partner?.addressLine1, partner?.addressLine2, partner?.city]
+            .map((part) => (part == null ? '' : String(part).trim().replace(/^,+|,+$/g, '').trim()))
+            .filter((part) => part !== '')
+            .join(', ');
+    }
 }

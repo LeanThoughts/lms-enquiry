@@ -55,6 +55,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**");
     }
 
+    /** The Angular app is built with baseHref /enquiry/, so its shell lives under static/enquiry/. */
+    private static final String SPA_INDEX = "/static/enquiry/index.html";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -66,8 +69,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
                                  protected Resource getResource(String resourcePath,
                                                                 Resource location) throws IOException {
                                      Resource requestedResource = location.createRelative(resourcePath);
-                                     return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
-                                             : new ClassPathResource("/static/index.html");
+                                     if (requestedResource.exists() && requestedResource.isReadable()) {
+                                         return requestedResource;
+                                     }
+                                     // Angular routes such as /enquiry/homepage have no extension and must be
+                                     // served the SPA shell; a missing .js/.css/.ico is a genuine 404.
+                                     if (resourcePath.contains(".")) {
+                                         return null;
+                                     }
+                                     Resource index = new ClassPathResource(SPA_INDEX);
+                                     return index.exists() && index.isReadable() ? index : null;
                                  }
                              }
                 );

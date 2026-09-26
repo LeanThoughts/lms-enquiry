@@ -88,46 +88,35 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
         if (currentUrl.includes('create-project-proposal')) {
             this.projectProposalOperation = 'Create';
             this.selectedProjectProposal['loanEnquiryNumber'] = this.selectedEnquiry.enquiryNo?.id;
-        } 
-        else {
-            // Project Proposal
-            this.selectedProjectProposal = { 
-                ...resolvedData.projectProposal, 
-                loanEnquiryNumber: this.selectedEnquiry.enquiryNo?.id 
-            };
-
-            // Project Details
-            this.selectedProjectDetail = resolvedData.projectDetail 
-                ? resolvedData.projectDetail 
-                : this.mapEnquiryToProjectDetail();
-
-            // Project Cost
-            if (resolvedData.projectCost) {
-                this.selectedProjectCost = resolvedData.projectCost;
-            }
-
-            // Other Loan Details
-            if (resolvedData.otherLoanDetails) {
-                this.selectedOtherLoanDetails = resolvedData.otherLoanDetails;
-            }
-
-            // Deal Guarantee Timeline
-            if (resolvedData.dealGuaranteeTimeline) {
-                this.selectedDealGuarantee = resolvedData.dealGuaranteeTimeline;
-            }
-
-            // Set operation based on URL
-            if (currentUrl.includes('update-project-proposal')) {
-                this.projectProposalOperation = 'Update';
-            } else {
-                this.projectProposalOperation = 'View';
-                this.viewModeOnly = true;
-            }
-            this.projectDetailOperation = this.projectProposalOperation;
-            this.projectCostOperation = this.projectProposalOperation;
-            this.otherLoanDetailsOperation = this.projectProposalOperation;
-            this.dealGuaranteeOperation = this.projectProposalOperation;
+            return;
         }
+
+        this.selectedProjectProposal = {
+            ...resolvedData.projectProposal,
+            loanEnquiryNumber: this.selectedEnquiry.enquiryNo?.id
+        };
+
+        this.projectDetailOperation = resolvedData.projectDetail ? 'Update' : 'Create';
+        this.selectedProjectDetail = resolvedData.projectDetail ?? this.mapEnquiryToProjectDetail();
+
+        this.projectCostOperation = this.applyResolvedEntity(resolvedData.projectCost, (v) => this.selectedProjectCost = v);
+        this.otherLoanDetailsOperation = this.applyResolvedEntity(resolvedData.otherLoanDetails, (v) => this.selectedOtherLoanDetails = v);
+        this.dealGuaranteeOperation = this.applyResolvedEntity(resolvedData.dealGuaranteeTimeline, (v) => this.selectedDealGuarantee = v);
+
+        const isUpdate = currentUrl.includes('update-project-proposal');
+        this.projectProposalOperation = isUpdate ? 'Update' : 'View';
+        this.viewModeOnly = !isUpdate;
+    }
+
+    /**
+     * Set selected entity when present and return matching operation
+     */
+    private applyResolvedEntity(data: any, assign: (value: any) => void): 'Update' | 'Create' {
+        if (data) {
+            assign(data);
+            return 'Update';
+        }
+        return 'Create';
     }
 
     /**

@@ -41,6 +41,7 @@
                             <div fd-form-item>
                                 <label fd-form-label [required]="filteredFormFieldsConfig.bankName === 2">Bank Key:</label>
                                 <fd-select 
+                                    #bankKeySelect
                                     formControlName="bankKey" 
                                     placeholder="Select Bank Key"
                                     (valueChange)="onBankKeySelectionChange($event)"

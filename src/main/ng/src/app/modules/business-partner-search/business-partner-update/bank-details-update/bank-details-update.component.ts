@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { BusinessPartnerSearchService } from '../../business-partner-search.service';
 import { 
     ButtonComponent, 
@@ -8,6 +8,7 @@ import {
     DialogRef, 
     FormModule, 
     LayoutGridModule, 
+    SelectComponent,
     SelectModule, 
     TitleComponent,
 } from '@fundamental-ngx/core';
@@ -33,6 +34,8 @@ import { MultiComboboxModule } from '@fundamental-ngx/core';
 })
 export class BankDetailsUpdateDialogComponent implements OnInit {
 
+    @ViewChild('bankKeySelect') bankKeySelect!: SelectComponent;
+
     title: string = '';
     bankDetailsForm!: FormGroup;
     operation: string = '';
@@ -52,7 +55,8 @@ export class BankDetailsUpdateDialogComponent implements OnInit {
     constructor(
         public dialogRef: DialogRef, 
         private businessPartnerService: BusinessPartnerSearchService, 
-        private messageService: MessageService) 
+        private messageService: MessageService,
+        private changeDetectorRef: ChangeDetectorRef) 
     {
         // Initialize data for dropdowns and other variables
         this.operation = this.dialogRef.data.operation;
@@ -112,7 +116,8 @@ export class BankDetailsUpdateDialogComponent implements OnInit {
             (bankKey.bankKey && bankKey.bankKey.toLowerCase().includes(searchText?.toLowerCase())) ||
             (bankKey.bankName && bankKey.bankName.toLowerCase().includes(searchText?.toLowerCase()))
         );
-        console.log('filteredBankKeys', this.filteredBankKeys);
+        this.changeDetectorRef.detectChanges();
+        this.bankKeySelect?.open();
     }
 
     /**

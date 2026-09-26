@@ -165,8 +165,8 @@
                             >
                                 Business Partner Number:
                             </label>
-                            <input id="partyNumber" formControlName="partyNumber" fd-form-control type="text" maxlength="40">
-                                <!-- [readonly]="formFieldsConfig?.partyNumber === 0"/> -->
+                            <input id="partyNumber" formControlName="partyNumber" fd-form-control type="text" maxlength="40"
+                                [readonly]="formFieldsConfig?.partyNumber === 0"/>
                         </div>
                         @if (
                             partnerDetailsForm.get('partyNumber')?.touched &&

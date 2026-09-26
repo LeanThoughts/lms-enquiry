@@ -243,7 +243,8 @@ public class PartnerService implements IPartnerService {
         partner.setChangedOn(LocalDate.now());
         partner.setChangedByUserName(username);
         partner.setPartnerGroup(partnerResource.getPartnerGroup());
-
+        partner.setPartyNumber(partnerResource.getPartyNumber());
+        
         //Reset Workflow Status to Updated
         partner.setWorkFlowStatusCode(11);
 

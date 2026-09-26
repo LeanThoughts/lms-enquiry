@@ -21,7 +21,8 @@
                                 @if (identificationDetailsForm.get('identificationCategoryCode')?.errors?.['required'] && 
                                         identificationDetailsForm.get('identificationCategoryCode')?.touched) {
                                 <fd-form-message type="error">
-                                    Please provide valid input for Identification Category. It is a mandatory field.
+                                    Please provide valid input for Identification Cahttp://localhost:9000/enquiry/api/partners/update
+                                    tegory. It is a mandatory field.
                                 </fd-form-message>
                                 }
                             </div>
@@ -129,7 +130,7 @@
                                 <label fd-form-label [required]="filteredFormFieldsConfig.region === 2">Region:</label>
                                 <fd-select formControlName="region" placeholder="Select Region">
                                     @for (region of regions; track region.regionCode) {
-                                    <li fd-option [value]="region.code">{{ region.value }}</li>
+                                    <li fd-option [value]="region.regionCode">{{ region.value }}</li>
                                     }
                                 </fd-select>
                                 @if (identificationDetailsForm.get('region')?.errors?.['required'] 
