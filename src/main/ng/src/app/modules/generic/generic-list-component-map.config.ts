@@ -5,6 +5,7 @@ import { ProjectProposalService } from "../loan-contract-search/functional-stage
 import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
 import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
 import { SanctionService } from "../loan-contract-search/functional-stage/sanction/sanction.service";
+import { BoardApprovalService } from "../loan-contract-search/functional-stage/board-approval/board-approval.service";
 
 interface EntityUpdateDialogComponentConfig {
     // Required for list components
@@ -680,5 +681,89 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateDialogWidth: '40rem',
         viewDialogWidth: '40rem',
         routeResolvedData: ['approvalByBoardMeetingNumber', 'rejectionCategory'],
+    },
+
+    // Board Approval - Deferred By Board
+    boardApprovalDeferredByBoard: {
+        displayedColumns: [
+            {name: 'meetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'meetingDate', header: 'Meeting Date', type: 'date'},
+            {name: 'details', header: 'Details', type: 'text'},
+        ],
+        fetchFunction: BoardApprovalService.prototype.getDeferredByBoards,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '40rem',
+        routeResolvedData: ['projectAppraisalCompletion'],
+    },
+
+    // Board Approval - Reasons For Delay
+    boardApprovalReasonsForDelay: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Serial Number', type: 'text'},
+            {name: 'date', header: 'Date', type: 'date'},
+            {name: 'reason', header: 'Reason', type: 'text'},
+        ],
+        fetchFunction: BoardApprovalService.prototype.getReasonsForDelay,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '35rem',
+        viewDialogWidth: '35rem',
+        routeResolvedData: ['projectAppraisalCompletion'],
+    },
+
+    // Board Approval - Rejected By Board
+    boardApprovalRejectedByBoard: {
+        displayedColumns: [
+            {name: 'meetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'meetingDate', header: 'Meeting Date', type: 'date'},
+            {name: 'details', header: 'Reason for Rejection', type: 'text'},
+        ],
+        fetchFunction: BoardApprovalService.prototype.getRejectedByBoards,
+        createButton: true,
+        disableCreateButtonAfterCreate: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '40rem',
+        routeResolvedData: ['projectAppraisalCompletion'],
+    },
+
+    // Board Approval - Approval By Board
+    boardApprovalApprovalByBoard: {
+        displayedColumns: [
+            {name: 'meetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'meetingDate', header: 'Meeting Date', type: 'date'},
+            {name: 'details', header: 'Remarks', type: 'text'},
+        ],
+        fetchFunction: BoardApprovalService.prototype.getApprovalByBoards,
+        createButton: true,
+        disableCreateButtonAfterCreate: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '40rem',
+        routeResolvedData: ['projectAppraisalCompletion'],
+    },
+
+    // Board Approval - Rejected By Customer
+    boardApprovalRejectedByCustomer: {
+        displayedColumns: [
+            {name: 'approvalByBoardMeetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'meetingDate', header: 'Meeting Date', type: 'date'},
+            {name: 'rejectionCategoryDescription', header: 'Rejection Category', type: 'text'},
+            {name: 'details', header: 'Reason for Rejection', type: 'text'},
+        ],
+        fetchFunction: BoardApprovalService.prototype.getRejectedByCustomers,
+        createButton: true,
+        disableCreateButtonAfterCreate: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '40rem',
+        routeResolvedData: ['projectAppraisalCompletion', 'approvalByBoardMeetingNumber', 'rejectionCategory'],
     }
 }

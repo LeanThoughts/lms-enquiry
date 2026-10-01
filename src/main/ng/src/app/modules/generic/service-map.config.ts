@@ -5,6 +5,7 @@ import { ProjectProposalService } from "../loan-contract-search/functional-stage
 import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
 import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
 import { SanctionService } from "../loan-contract-search/functional-stage/sanction/sanction.service";
+import { BoardApprovalService } from "../loan-contract-search/functional-stage/board-approval/board-approval.service";
 
 export const entityServiceMap: { [key: string]: any } = {
 
@@ -56,4 +57,10 @@ export const entityServiceMap: { [key: string]: any } = {
     sanctionLetters: SanctionService,
     sanctionPaymentReceiptsPostSanction: SanctionService,
     sanctionRejectedByCustomer: SanctionService,
+
+    boardApprovalDeferredByBoard: BoardApprovalService,
+    boardApprovalReasonsForDelay: BoardApprovalService,
+    boardApprovalRejectedByBoard: BoardApprovalService,
+    boardApprovalApprovalByBoard: BoardApprovalService,
+    boardApprovalRejectedByCustomer: BoardApprovalService,
 }

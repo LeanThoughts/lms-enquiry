@@ -59,6 +59,17 @@
                         fd-toolbar-item
                         fdCompact
                         fdType="positive"
+                        label="Board Approval"
+                        [style.margin-left.rem]="0.1"
+                        [disabled]="selectedEnquiry.selected.length === 0"
+                        (click)="redirectToBoardApproval()"
+                    >
+                    </button>
+
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="positive"
                         label="Sanction"
                         [style.margin-left.rem]="0.1"
                         [disabled]="selectedEnquiry.selected.length === 0"

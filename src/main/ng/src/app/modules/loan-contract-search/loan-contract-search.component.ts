@@ -26,6 +26,7 @@ import { MessageService } from '../../message.service';
 import { IccInprincipleApprovalService } from './functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service';
 import { RiskAssessmentService } from './functional-stage/risk-assessment/risk-assessment.service';
 import { ApplicationFeeService } from './functional-stage/application-fee/application-fee.service';
+import { BoardApprovalService } from './functional-stage/board-approval/board-approval.service';
 import { SanctionService } from './functional-stage/sanction/sanction.service';
 
 @Component({
@@ -67,6 +68,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 private iccInprincipleApprovalService: IccInprincipleApprovalService,
                 private riskAssessmentService: RiskAssessmentService,
                 private applicationFeeService: ApplicationFeeService,
+                private boardApprovalService: BoardApprovalService,
                 private sanctionService: SanctionService,
                 public router: Router,
                 private messageService: MessageService)
@@ -240,6 +242,28 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 this.messageService.showError('An error occurred while processing the enquiry.');
             }
         }
+    }
+
+    /**
+     * Redirect to Board Approval
+     */
+    redirectToBoardApproval(): void {
+        const loanApplication = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        this.boardApprovalService.getBoardApproval(loanApplication.id).subscribe({
+            next: (boardApproval) => {
+                this.boardApprovalService.selectedEntity$.next(boardApproval);
+                this.router.navigate(['/board-approval', boardApproval.id, 'loanApplication', loanApplication.id]);
+            },
+            error: (error) => {
+                if (error.status === 404) {
+                    this.boardApprovalService.selectedEntity$.next(null);
+                    this.router.navigate(['/board-approval', '', 'loanApplication', loanApplication.id]);
+                }
+                else {
+                    this.messageService.showError('An error occurred while processing the enquiry.');
+                }
+            }
+        });
     }
 
     /**
