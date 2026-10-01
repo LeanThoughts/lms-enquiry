@@ -84,6 +84,11 @@ body {
     overflow: hidden;
 }
 
+.fd-form-item {
+    --sapElement_Height: 2rem;
+    --fdInput_Height: 2rem;
+}
+
 .fd-icon-tab-bar__label {
     font-size: 0.7rem !important;
     font-weight: bold !important;
