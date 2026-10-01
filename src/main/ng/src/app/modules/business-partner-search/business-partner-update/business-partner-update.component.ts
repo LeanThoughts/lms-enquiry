@@ -1,6 +1,15 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentNgxComponent } from '../../../common/component-ngx/component-ngx.component';
-import { ButtonComponent, DialogService, LayoutGridModule, PanelComponent } from '@fundamental-ngx/core';
+import { 
+    ButtonComponent, 
+    DialogService, 
+    DynamicPageComponent, 
+    DynamicPageContentComponent, 
+    DynamicPageGlobalActionsComponent, 
+    DynamicPageHeaderComponent, 
+    LayoutGridModule, 
+    PanelComponent, 
+    ToolbarComponent 
+} from '@fundamental-ngx/core';
 import { BusinessPartnerSearchService } from '../business-partner-search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -19,8 +28,14 @@ import { KycDetailsUpdateDialogComponent } from './kyc-details-update/kyc-detail
 @Component({
     selector: 'app-business-partner-update',
     imports: [
+        // Dynamic Page Components
+        DynamicPageHeaderComponent,
+        DynamicPageComponent,
+        DynamicPageGlobalActionsComponent,
+        ToolbarComponent,
+        DynamicPageContentComponent,
+        // Other Components and Modules
         ButtonComponent,
-        ComponentNgxComponent,
         LayoutGridModule,
         IconTabBarComponent,
         IconTabBarTabComponent,

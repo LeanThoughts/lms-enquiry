@@ -9,40 +9,45 @@
     }
     
     <div fdLayoutGridRow>
-        <div fdLayoutGridCol [style.padding.rem]="1" style="background-color: white;">
-            @if (config.createButton && !viewModeOnly) {
-                <!-- Create button -->
-                <button fd-button
-                    fdType="emphasized"
-                    (click)="openCreateDialog()"
-                    [disabled]="disableCreateButton"
-                    style="margin-right: 0.5rem;"
-                >
-                    <!-- <fd-icon font="BusinessSuiteInAppSymbols" [glyph]="'add-component'" [style.margin-right.rem]="0.4"></fd-icon> -->
-                    Create
-                </button>
-            }
-            @if (config.updateButton && !viewModeOnly) {
-            <!-- Update button -->
-                <button fd-button
-                    fdType="emphasized"
-                    (click)="openUpdateDialog()"
-                    label="Update"
-                    style="margin-right: 0.5rem;"
-                    [disabled]="selectedObjectId.isEmpty()"
-                >
-                </button>
-            }
-            @if (config.viewButton) {
-                <!-- View button -->
-                <button fd-button
-                    fdType="emphasized"
-                    (click)="openViewDialog()"
-                    label="View"
-                    [disabled]="selectedObjectId.isEmpty()"
-                >
-                </button>
-            }
+        <div fdLayoutGridCol [style.padding.rem]="0.5" style="background-color: white;">
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                @if (config.createButton && !viewModeOnly) {
+                    <!-- Create button -->
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="emphasized"
+                        label="Create"
+                        (click)="openCreateDialog()"
+                        [disabled]="disableCreateButton"
+                    >
+                    </button>
+                }
+                @if (config.updateButton && !viewModeOnly) {
+                    <!-- Update button -->
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="emphasized"
+                        label="Update"
+                        (click)="openUpdateDialog()"
+                        [disabled]="selectedObjectId.isEmpty()"
+                    >
+                    </button>
+                }
+                @if (config.viewButton) {
+                    <!-- View button -->
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="emphasized"
+                        label="View"
+                        (click)="openViewDialog()"
+                        [disabled]="selectedObjectId.isEmpty()"
+                    >
+                    </button>
+                }
+            </fd-toolbar>
         </div>
     </div>
 

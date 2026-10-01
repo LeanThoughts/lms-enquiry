@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Injector, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ButtonComponent, DialogService, IconComponent, LayoutGridModule, TableModule, TitleComponent } from '@fundamental-ngx/core';
+import { ButtonComponent, DialogService, IconComponent, LayoutGridModule, TableModule, TitleComponent, ToolbarModule } from '@fundamental-ngx/core';
 import { Subject, takeUntil } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MessageService } from '../../../message.service';
@@ -16,7 +16,8 @@ import { environment } from '../../../../environments/environment';
         LayoutGridModule,
         ButtonComponent,
         IconComponent,
-        TitleComponent
+        TitleComponent,
+        ToolbarModule
     ],
     providers: [
         DatePipe

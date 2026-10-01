@@ -5,19 +5,23 @@ import {
     ButtonComponent, 
     DatePickerComponent, 
     DialogService, 
+    DynamicPageComponent, 
+    DynamicPageContentComponent, 
+    DynamicPageGlobalActionsComponent, 
+    DynamicPageHeaderComponent, 
     FormModule, 
     LayoutGridModule, 
     MessageToastModule, 
     MessageToastService, 
     SelectModule, 
     TitleComponent,
+    ToolbarComponent,
 } from '@fundamental-ngx/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MOBILE_NUMBER_REGEX, NUMERIC_ONLY_REGEX, PHONE_NUMBER_REGEX } from '../../../../common/common.regex';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from '../../../../message.service';
 import { statesOfIndia } from '../../../../app.constants';
-import { ComponentNgxComponent } from '../../../../common/component-ngx/component-ngx.component';
 import { MultiComboboxModule } from '@fundamental-ngx/core';
 import { NgIf } from '@angular/common';
 import { CustomDialogComponent } from '../../../../custom-dialog.component';
@@ -25,6 +29,13 @@ import { CustomDialogComponent } from '../../../../custom-dialog.component';
 @Component({
     selector: 'app-partner-details-update',
     imports: [
+        // Dynamic Page Components
+        DynamicPageHeaderComponent,
+        DynamicPageComponent,
+        DynamicPageGlobalActionsComponent,
+        ToolbarComponent,
+        DynamicPageContentComponent,
+        // Other Components and Modules
         ButtonComponent,
         LayoutGridModule,
         ReactiveFormsModule,
@@ -32,7 +43,6 @@ import { CustomDialogComponent } from '../../../../custom-dialog.component';
         SelectModule,
         DatePickerComponent,
         TitleComponent,
-        ComponentNgxComponent,
         MultiComboboxModule,
         NgIf,
         MessageToastModule
