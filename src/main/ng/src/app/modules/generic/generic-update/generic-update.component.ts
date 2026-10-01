@@ -13,8 +13,7 @@ import {
     IconComponent
 } from '@fundamental-ngx/core';
 import { MessageService } from '../../../message.service';
-import { entityServiceMap } from '../service-map.config';
-import { entityComponentConfigs } from '../generic-update-component-map.config';
+import { entityServiceMap, entityUpdateConfigs } from '../config';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Observable, switchMap, tap } from 'rxjs';
@@ -90,7 +89,7 @@ export class GenericUpdateComponent implements OnInit {
             throw new Error('entity is mandatory and was not provided.');
         }
 
-        // Inject the service based on the entity. The entity and service map are defined in entityServiceMap in service-map.config.ts.
+        // Inject the service based on the entity. entityServiceMap maps each entity to its functional stage's service.
         const serviceToken = entityServiceMap[this.entity];
         if (!serviceToken) {
             throw new Error(`No service found for entity: ${this.entity}`);
@@ -102,8 +101,8 @@ export class GenericUpdateComponent implements OnInit {
             throw new Error(`Failed to inject service for entity ${this.entity}: ${error}`);
         }
 
-        // Initialize config. The entity and config map are defined in entityUpdateDialogConfigs in generic-update-dialog-component-map.config.ts.
-        this.config = entityComponentConfigs[this.entity];
+        // Initialize config. The entity configs are defined per functional stage in the config folder.
+        this.config = entityUpdateConfigs[this.entity];
         // Convert fieldsConfig to rows format if present
         if (this.config.fieldsConfig && !this.config.rows) {
             this.config.rows = this.convertFieldsConfigToRows(this.config.fieldsConfig);

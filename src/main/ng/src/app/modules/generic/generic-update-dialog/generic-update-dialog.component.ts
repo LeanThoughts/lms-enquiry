@@ -14,8 +14,7 @@ import {
     DatetimeAdapter
 } from '@fundamental-ngx/core';
 import { MessageService } from '../../../message.service';
-import { entityServiceMap } from '../service-map.config';
-import { entityComponentConfigs } from '../generic-update-dialog-component-map.config';
+import { entityServiceMap, entityUpdateDialogConfigs } from '../config';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
@@ -106,11 +105,11 @@ export class GenericUpdateDialogComponent implements OnInit {
      * Load configuration for the entity
      */
     private loadEntityConfig(): void {
-        if (!entityComponentConfigs[this.entity]) {
+        if (!entityUpdateDialogConfigs[this.entity]) {
             throw new Error(`No configuration found for entity: ${this.entity}`);
         }
         
-        this.config = entityComponentConfigs[this.entity];
+        this.config = entityUpdateDialogConfigs[this.entity];
         
         // Convert fieldsConfig to rows format if present
         if (this.config.fieldsConfig && !this.config.rows) {

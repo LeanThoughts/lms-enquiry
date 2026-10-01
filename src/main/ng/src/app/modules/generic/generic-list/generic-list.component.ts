@@ -3,11 +3,10 @@ import { ButtonComponent, DialogService, IconComponent, LayoutGridModule, TableM
 import { Subject, takeUntil } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MessageService } from '../../../message.service';
-import { entityServiceMap } from '../service-map.config';
+import { entityListConfigs, entityServiceMap } from '../config';
 import { GenericUpdateDialogComponent } from '../generic-update-dialog/generic-update-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { entityComponentConfigs } from '../generic-list-component-map.config';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -114,7 +113,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             throw new Error('entity input is mandatory and was not provided.');
         }
 
-        // Inject the service based on the entity. The entity and service map are defined in entityServiceMap.
+        // Inject the service based on the entity. entityServiceMap maps each entity to its functional stage's service.
         const serviceToken = entityServiceMap[this.entity];
         if (!serviceToken) {
             throw new Error(`No service found for entity: ${this.entity}`);
@@ -126,8 +125,8 @@ export class GenericListComponent implements OnInit, OnDestroy {
             throw new Error(`Failed to inject service for entity ${this.entity}: ${error}`);
         }
 
-        // Initialize config. The entity and config map are defined in entityConfigs in generic-list-component-map.config.ts.
-        this.config = entityComponentConfigs[this.entity];
+        // Initialize config. The entity configs are defined per functional stage in the config folder.
+        this.config = entityListConfigs[this.entity];
         if (!this.config) {
             throw new Error(`No configuration found for entity: ${this.entity}`);
         }

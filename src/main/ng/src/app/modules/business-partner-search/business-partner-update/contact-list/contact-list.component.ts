@@ -18,7 +18,6 @@ import {
 } from '@fundamental-ngx/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { entityComponentConfigs } from '../../../generic/generic-list-component-map.config';
 import { GenericUpdateDialogComponent } from '../../../generic/generic-update-dialog/generic-update-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
 import { BusinessPartnerSearchService } from '../../business-partner-search.service';
@@ -84,9 +83,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
      * Open the create dialog
      */
     openCreateDialog() {
-        // Determine the config object based on entity
-        const config = entityComponentConfigs['businessPartnerLoanContacts'];
-
         // Open the create dialog and subscribe to the afterClosed event
         const dialogRef = this.dialog.open(GenericUpdateDialogComponent, {
             data: {
@@ -109,9 +105,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
      * Open the update dialog
      */
     openUpdateDialog(selectedContact: any) {
-        // Determine the config object based on entity
-        const config = entityComponentConfigs['businessPartnerLoanContacts'];
-
         // Create a shallow copy of selectedObject and remove properties starting with 'formatted_'
         selectedContact = Object.keys(selectedContact || {}).reduce((acc: any, key: string) => {
             if (!key.startsWith('formatted_')) {
