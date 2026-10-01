@@ -131,11 +131,13 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                     this.iccInprincipleApprovalService.getIccInprincipleApproval(loanApplication.id)
                 );
                 console.log('icc inprinciple approval fetched');
+                this.iccInprincipleApprovalService.selectedEntity$.next(iccInprincipleApproval);
                 this.router.navigate(['/icc-inprinciple-approval', iccInprincipleApproval.id, 'loanApplication', loanApplication.id]);
             } 
             catch (error: any) {
                 console.log('error in fetching icc inprinciple approval', error);
                 if (error.status === 404) {
+                    this.iccInprincipleApprovalService.selectedEntity$.next(null);
                     this.router.navigate(['/icc-inprinciple-approval', '', 'loanApplication', loanApplication.id]);
                 }
             }

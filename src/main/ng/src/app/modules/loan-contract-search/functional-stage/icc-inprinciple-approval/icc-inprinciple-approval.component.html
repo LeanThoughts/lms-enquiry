@@ -68,6 +68,33 @@
                             [searchString2]="loanApplicationId"
                         />
                     </fdp-icon-tab-bar-tab>
+
+                    <!-- Rejected By Customer Tab -->
+                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalRejectedByCustomer'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Loan Enhancements Tab -->
+                    <fdp-icon-tab-bar-tab label="Loan Enhancements">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalLoanEnhancements'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Risk Notifications Tab -->
+                    <fdp-icon-tab-bar-tab label="Risk Notifications">
+                        <app-generic-list 
+                            [entity]="'iccInprincipleApprovalRiskNotifications'" 
+                            [searchString1]="iccInprincipleApprovalId" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
                 </fdp-icon-tab-bar>
             </div>
         </div>

@@ -444,5 +444,59 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateDialogWidth: '40rem',
         viewDialogWidth: '35rem',
         routeResolvedData: ['enquiryCompletion', 'documentTypeMinutes', 'documentTypeMailFromCS'],
+    },
+
+    // ICC In-principle Approval - Rejected By Customer
+    iccInprincipleApprovalRejectedByCustomer: {
+        displayedColumns: [
+            {name: 'meetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'rejectionCategory', header: 'Rejection Category', type: 'text'},
+            {name: 'dateOfRejection', header: 'Date of Rejection', type: 'date'},
+            {name: 'remarks', header: 'Reason For Rejection', type: 'text'},
+        ],
+        fetchFunction: IccInprincipleApprovalService.prototype.getRejectedByCustomer,
+        createButton: true,
+        disableCreateButtonAfterCreate: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '35rem',
+        routeResolvedData: ['enquiryCompletion'],
+    },
+
+    // ICC In-principle Approval - Loan Enhancements
+    iccInprincipleApprovalLoanEnhancements: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Sl No.', type: 'text'},
+            {name: 'iccMeetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'iccClearanceDate', header: 'Date of ICC Clearance', type: 'date'},
+            {name: 'revisedProjectCost', header: 'Rev. Project Cost', type: 'number'},
+            {name: 'revisedEquity', header: 'Rev. Equity', type: 'number'},
+            {name: 'revisedContractAmount', header: 'Rev. Contract Amt.', type: 'number'},
+            {name: 'revisedCommercialOperationsDate', header: 'Rev. COD', type: 'date'},
+            {name: 'reviseRepaymentStartDate', header: 'Rev. Repayment Start Date', type: 'date'},
+            {name: 'remarks', header: 'Remarks', type: 'text'},
+        ],
+        fetchFunction: IccInprincipleApprovalService.prototype.getLoanEnhancements,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '45rem',
+        viewDialogWidth: '40rem',
+    },
+
+    // ICC In-principle Approval - Risk Notifications
+    iccInprincipleApprovalRiskNotifications: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Sl No.', type: 'text'},
+            {name: 'notificationDate', header: 'Notification Date', type: 'date'},
+            {name: 'remarks', header: 'Remarks', type: 'text'},
+        ],
+        fetchFunction: IccInprincipleApprovalService.prototype.getRiskNotifications,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '35rem',
+        viewDialogWidth: '30rem',
     }
 }

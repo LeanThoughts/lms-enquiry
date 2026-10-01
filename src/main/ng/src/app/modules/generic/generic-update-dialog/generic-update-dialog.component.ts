@@ -376,7 +376,7 @@ export class GenericUpdateDialogComponent implements OnInit {
     private setDefaultValues(): void {
         this.config.rows.forEach((row: any) => {
             row.fields?.forEach((field: any) => {
-                if (this.isSelectOrComboboxField(field) && field.defaultValue) {
+                if (field.defaultValue) {
                     this.genericForm.get(field.name)?.setValue(field.defaultValue);
                 }
             });

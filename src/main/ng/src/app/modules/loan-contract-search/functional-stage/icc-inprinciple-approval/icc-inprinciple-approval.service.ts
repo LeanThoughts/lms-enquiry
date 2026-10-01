@@ -64,6 +64,19 @@ export class IccInprincipleApprovalService implements Resolve<any> {
     }
 
     /**
+     * Send ICC In-principle Approval for approval
+     */
+    public sendIccApprovalForApproval(businessProcessId: string, requestorName: string, requestorEmail: string): Observable<any> {
+        const requestObj = {
+            'businessProcessId': businessProcessId,
+            'requestorName': requestorName,
+            'requestorEmail': requestorEmail,
+            'processName': 'ICCApproval'
+        };
+        return this.http.post<any>(environment.primaryApiHost + '/iccApprovals/sendForApproval', requestObj);
+    }
+
+    /**
      * Get ICC Further Details
      */
     public getIccFurtherDetails(iccApprovalId: string): Observable<any> {
@@ -165,5 +178,98 @@ export class IccInprincipleApprovalService implements Resolve<any> {
      */
     public updateApprovalByIcc(approvalByICC: any): Observable<any> {
         return this.http.put(environment.primaryApiHost + '/approvalByICCs/update', approvalByICC);
+    }
+
+    /**
+     * Get Rejected By Customer
+     */
+    public getRejectedByCustomer(iccApprovalId: string): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/rejectedByCustomers/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).pipe(
+            map((response: any) => [response]),
+            catchError((error) => of(null))
+        );
+    }
+
+    /**
+     * Create Rejected By Customer
+     */
+    public createRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this.http.post(environment.primaryApiHost + '/rejectedByCustomers/create', rejectedByCustomer);
+    }
+
+    /**
+     * Update Rejected By Customer
+     */
+    public updateRejectedByCustomer(rejectedByCustomer: any): Observable<any> {
+        return this.http.put(environment.primaryApiHost + '/rejectedByCustomers/update', rejectedByCustomer);
+    }
+
+    /**
+     * Get Loan Enhancements
+     */
+    public getLoanEnhancements(iccApprovalId: string): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/loanEnhancements/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).pipe(
+            map((response: any) => response._embedded.loanEnhancements),
+            catchError((error) => of(null))
+        );
+    }
+
+    /**
+     * Create Loan Enhancement
+     */
+    public createLoanEnhancement(loanEnhancement: any): Observable<any> {
+        return this.http.post(environment.primaryApiHost + '/loanEnhancements/create', loanEnhancement);
+    }
+
+    /**
+     * Update Loan Enhancement
+     */
+    public updateLoanEnhancement(loanEnhancement: any): Observable<any> {
+        return this.http.put(environment.primaryApiHost + '/loanEnhancements/update', loanEnhancement);
+    }
+
+    /**
+     * Delete Loan Enhancement
+     */
+    public deleteLoanEnhancement(loanEnhancementId: string): Observable<any> {
+        return this.http.delete(environment.primaryApiHost + '/loanEnhancements/delete/' + loanEnhancementId);
+    }
+
+    /**
+     * Get Risk Notifications
+     */
+    public getRiskNotifications(iccApprovalId: string): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/riskNotifications/search/findByIccApprovalId?iccApprovalId=' + iccApprovalId).pipe(
+            map((response: any) => response._embedded.riskNotifications),
+            catchError((error) => of(null))
+        );
+    }
+
+    /**
+     * Create Risk Notification
+     */
+    public createRiskNotification(riskNotification: any): Observable<any> {
+        return this.http.post(environment.primaryApiHost + '/riskNotifications/create', riskNotification);
+    }
+
+    /**
+     * Update Risk Notification
+     */
+    public updateRiskNotification(riskNotification: any): Observable<any> {
+        return this.http.put(environment.primaryApiHost + '/riskNotifications/update', riskNotification);
+    }
+
+    /**
+     * Delete Risk Notification
+     */
+    public deleteRiskNotification(riskNotificationId: string): Observable<any> {
+        return this.http.delete(environment.primaryApiHost + '/riskNotifications/delete/' + riskNotificationId);
+    }
+
+    /**
+     * Send Risk Notification to the Risk Department
+     */
+    public sendRiskNotification(riskNotification: any): Observable<any> {
+        return this.http.put(environment.primaryApiHost + '/riskNotifications/send', riskNotification);
     }
 }

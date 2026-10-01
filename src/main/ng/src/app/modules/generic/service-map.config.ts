@@ -37,4 +37,7 @@ export const entityServiceMap: { [key: string]: any } = {
     iccInprincipleApprovalReasonsForDelay: IccInprincipleApprovalService,
     iccInprincipleApprovalRejectedByIcc: IccInprincipleApprovalService,
     iccInprincipleApprovalApprovalByIcc: IccInprincipleApprovalService,
+    iccInprincipleApprovalRejectedByCustomer: IccInprincipleApprovalService,
+    iccInprincipleApprovalLoanEnhancements: IccInprincipleApprovalService,
+    iccInprincipleApprovalRiskNotifications: IccInprincipleApprovalService,
 }

@@ -549,5 +549,74 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
             {row: 5, span: 12, name: 'file2', label: 'Mail from Company Secretary/Internal Note Sheet', type: 'file', required: false },
             {row: 6, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200 },
         ]
+    },
+
+    // ICC In-principle Approval - Rejected By Customer
+    iccInprincipleApprovalRejectedByCustomer: {
+        searchString1ForCreate: 'iccInprincipleApprovalId',
+        passSearchString1Via: 'Object',
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Rejected By Customer Details',
+        updateDialogTitle: 'Update Rejected By Customer Details',
+        viewDialogTitle: 'View Rejected By Customer Details',
+        createFunction: IccInprincipleApprovalService.prototype.createRejectedByCustomer,
+        updateFunction: IccInprincipleApprovalService.prototype.updateRejectedByCustomer,
+        createSuccessMessage: 'Rejected by Customer details created successfully',
+        updateSuccessMessage: 'Rejected by Customer details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'iccApproval',
+        fieldsConfig: [
+            { row: 1, span: 12, name: 'meetingNumber', label: 'Meeting Number', type: 'text', maxLength: 50 },
+            { row: 2, span: 6, name: 'dateOfRejection', label: 'Date of Rejection', type: 'date', required: true, maxValue: 'currentDate', minValue: 'enquiryCompletion.date' },
+            { row: 3, span: 12, name: 'rejectionCategory', label: 'Rejection Category', type: 'text', readOnly: true, 
+                defaultValue: 'Rejected By Customer' },
+            { row: 4, span: 12, name: 'remarks', label: 'Reason For Rejection', type: 'text', maxLength: 200, required: true },
+        ]
+    },
+
+    // ICC In-principle Approval - Loan Enhancements
+    iccInprincipleApprovalLoanEnhancements: {
+        searchString1ForCreate: 'iccInprincipleApprovalId',
+        passSearchString1Via: 'Object',
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Loan Enhancement Details',
+        updateDialogTitle: 'Update Loan Enhancement Details',
+        viewDialogTitle: 'View Loan Enhancement Details',
+        createFunction: IccInprincipleApprovalService.prototype.createLoanEnhancement,
+        updateFunction: IccInprincipleApprovalService.prototype.updateLoanEnhancement,
+        createSuccessMessage: 'Loan Enhancement details added successfully',
+        updateSuccessMessage: 'Loan Enhancement details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'iccApproval',
+        fieldsConfig: [
+            { row: 1, span: 6, name: 'iccMeetingNumber', label: 'ICC Meeting Number', type: 'text', maxLength: 10 },
+            { row: 1, span: 6, name: 'iccClearanceDate', label: 'ICC Clearance Date', type: 'date' },
+            { row: 2, span: 6, name: 'revisedProjectCost', label: 'Revised Project Cost', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            { row: 2, span: 6, name: 'revisedEquity', label: 'Revised Equity', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            { row: 3, span: 6, name: 'revisedContractAmount', label: 'Revised Contract Amount', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            { row: 3, span: 6, name: 'revisedCommercialOperationsDate', label: 'Rev. COD', type: 'date' },
+            { row: 4, span: 6, name: 'reviseRepaymentStartDate', label: 'Rev. Repayment Start Date', type: 'date' },
+            { row: 5, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200 },
+        ]
+    },
+
+    // ICC In-principle Approval - Risk Notifications
+    iccInprincipleApprovalRiskNotifications: {
+        searchString1ForCreate: 'iccInprincipleApprovalId',
+        passSearchString1Via: 'Object',
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Risk Notification',
+        updateDialogTitle: 'Update Risk Notification',
+        viewDialogTitle: 'View Risk Notification',
+        createFunction: IccInprincipleApprovalService.prototype.createRiskNotification,
+        updateFunction: IccInprincipleApprovalService.prototype.updateRiskNotification,
+        createSuccessMessage: 'Risk notification details added successfully',
+        updateSuccessMessage: 'Risk notification details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'iccApproval',
+        fieldsConfig: [
+            { row: 1, span: 12, name: 'notificationDate', label: 'Notification Date', type: 'date' },
+            { row: 2, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200, required: true },
+        ]
     }
 }
