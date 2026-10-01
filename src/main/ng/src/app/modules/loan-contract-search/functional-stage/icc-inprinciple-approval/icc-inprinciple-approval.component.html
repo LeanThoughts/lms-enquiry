@@ -1,102 +1,109 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="8">
-                <h2>{{ title }}</h2>
-            </div>
-            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
-                <button 
-                    fd-button 
-                    (click)="router.navigate(['/loan-contract-search'])" 
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title"
+        subtitle="Further details, reasons for delay, ICC decisions, loan enhancements and risk notifications"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
                     fdType="emphasized"
+                    label="Back"
+                    (click)="router.navigate(['/loan-contract-search'])"
                 >
-                    Back
                 </button>
-                <button 
-                    [style.margin-left.rem]="0.5"
-                    fd-button 
-                    (click)="sendForApproval()" 
-                    fdType="emphasized"
+
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="positive"
+                    label="Send for Approval"
+                    [style.margin-left.rem]="0.1"
                     [disabled]="(!selectedIccInprincipleApproval || selectedIccInprincipleApproval.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    (click)="sendForApproval()"
                 >
-                    Send for Approval
                 </button>
-            </div>
-        </div>
-    </fd-layout-grid>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fdp-icon-tab-bar 
+        [layoutMode]="'row'"
+        [enableTabReordering]="false"
+        iconTabSize="sm"
+    >
+        <!-- Further Details Tab -->
+        <fdp-icon-tab-bar-tab label="Further Details">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalFurtherDetails'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div fdLayoutGridCol colGrow>
-                <fdp-icon-tab-bar 
-                    [layoutMode]="'row'"
-                    [enableTabReordering]="false"
-                    iconTabSize="sm"
-                >
-                    <!-- Project Proposals Tab -->
-                    <fdp-icon-tab-bar-tab label="Further Details">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalFurtherDetails'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Reasons For Delay Tab -->
+        <fdp-icon-tab-bar-tab label="Reasons For Delay">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalReasonsForDelay'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Reasons For Delay Tab -->
-                    <fdp-icon-tab-bar-tab label="Reasons For Delay">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalReasonsForDelay'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Rejected By ICC Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By ICC">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalRejectedByIcc'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Rejected By ICC Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By ICC">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalRejectedByIcc'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Approval By ICC Tab -->
+        <fdp-icon-tab-bar-tab label="Approval By ICC">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalApprovalByIcc'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Approval By ICC Tab -->
-                    <fdp-icon-tab-bar-tab label="Approval By ICC">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalApprovalByIcc'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Rejected By Customer Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By Customer">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalRejectedByCustomer'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Rejected By Customer Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalRejectedByCustomer'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Loan Enhancements Tab -->
+        <fdp-icon-tab-bar-tab label="Loan Enhancements">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalLoanEnhancements'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Loan Enhancements Tab -->
-                    <fdp-icon-tab-bar-tab label="Loan Enhancements">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalLoanEnhancements'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-
-                    <!-- Risk Notifications Tab -->
-                    <fdp-icon-tab-bar-tab label="Risk Notifications">
-                        <app-generic-list 
-                            [entity]="'iccInprincipleApprovalRiskNotifications'" 
-                            [searchString1]="iccInprincipleApprovalId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-                </fdp-icon-tab-bar>
-            </div>
-        </div>
-    </fd-layout-grid>
-</component-ngx>
+        <!-- Risk Notifications Tab -->
+        <fdp-icon-tab-bar-tab label="Risk Notifications">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'iccInprincipleApprovalRiskNotifications'" 
+                    [searchString1]="iccInprincipleApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    </fdp-icon-tab-bar>
+</fd-dynamic-page>

@@ -1,6 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ComponentNgxComponent } from '../../../../../common/component-ngx/component-ngx.component';
-import { ButtonComponent, LayoutGridModule } from '@fundamental-ngx/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { 
+    ButtonComponent, 
+    DynamicPageComponent, 
+    DynamicPageContentComponent, 
+    DynamicPageGlobalActionsComponent, 
+    DynamicPageHeaderComponent, 
+    ToolbarComponent 
+} from '@fundamental-ngx/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IconTabBarComponent, IconTabBarTabComponent } from '@fundamental-ngx/platform/icon-tab-bar';
 import { ProcessEnquiryService } from '../process-enquiry.service';
@@ -16,9 +23,15 @@ import { MessageService } from '../../../../../message.service';
 @Component({
     selector: 'app-project-proposal',
     imports: [
+        // Dynamic Page Components
+        DynamicPageHeaderComponent,
+        DynamicPageComponent,
+        DynamicPageGlobalActionsComponent,
+        ToolbarComponent,
+        DynamicPageContentComponent,
+        // Other Components and Modules
         ButtonComponent,
-        ComponentNgxComponent,
-        LayoutGridModule,
+        NgTemplateOutlet,
         IconTabBarComponent,
         IconTabBarTabComponent,
         GenericUpdateComponent,

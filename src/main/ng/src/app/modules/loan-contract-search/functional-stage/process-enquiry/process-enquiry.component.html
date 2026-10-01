@@ -1,95 +1,100 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="8">
-                <h2>{{ title }}</h2>
-            </div>
-            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
-                <button 
-                    fd-button 
-                    (click)="router.navigate(['/loan-contract-search'])" 
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title"
+        subtitle="Project proposals, rejections, other details, reasons for delay and enquiry completion"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
                     fdType="emphasized"
+                    label="Back"
+                    (click)="router.navigate(['/loan-contract-search'])"
                 >
-                    Back
                 </button>
-                <button 
-                    [style.margin-left.rem]="0.5"
-                    fd-button 
-                    (click)="sendForApproval()" 
-                    fdType="emphasized"
+
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="positive"
+                    label="Send for Approval"
+                    [style.margin-left.rem]="0.1"
                     [disabled]="!selectedEnquiryAction || selectedEnquiryAction?.workFlowStatusCode === 2 || disableSendForApproval"
+                    (click)="sendForApproval()"
                 >
-                    Send for Approval
                 </button>
-            </div>
-        </div>
-    </fd-layout-grid>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fdp-icon-tab-bar 
+        [layoutMode]="'row'"
+        [enableTabReordering]="false"
+        iconTabSize="sm"
+    >
+        <!-- Project Proposals Tab -->
+        <fdp-icon-tab-bar-tab label="Project Proposals">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'processEnquiryProjectProposal'" 
+                    [searchString1]="enquiryActionId" 
+                    [searchString2]="loanApplicationId"
+                    (onUpdateClick)="onUpdateProjectProposalClick($event)"
+                    (onViewClick)="onViewProjectProposalClick($event)"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    
+        <!-- Rejected By PFS Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By PFS">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'processEnquiryRejectedByPFS'" 
+                    [searchString1]="enquiryActionId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div fdLayoutGridCol colGrow>
-                <fdp-icon-tab-bar 
-                    [layoutMode]="'row'"
-                    [enableTabReordering]="false"
-                    iconTabSize="sm"
-                >
-                    <!-- Project Proposals Tab -->
-                    <fdp-icon-tab-bar-tab label="Project Proposals">
-                        <app-generic-list 
-                            [entity]="'processEnquiryProjectProposal'" 
-                            [searchString1]="enquiryActionId" 
-                            [searchString2]="loanApplicationId"
-                            (onUpdateClick)="onUpdateProjectProposalClick($event)"
-                            (onViewClick)="onViewProjectProposalClick($event)"
-                        />
-                    </fdp-icon-tab-bar-tab>
-                
-                    <!-- Rejected By PFS Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By PFS">
-                        <app-generic-list 
-                            [entity]="'processEnquiryRejectedByPFS'" 
-                            [searchString1]="enquiryActionId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Other Details Tab -->
+        <fdp-icon-tab-bar-tab label="Other Details">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'processEnquiryOtherDetails'" 
+                    [searchString1]="enquiryActionId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Other Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Other Details">
-                        <app-generic-list 
-                            [entity]="'processEnquiryOtherDetails'" 
-                            [searchString1]="enquiryActionId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Reason For Delay Tab -->
+        <fdp-icon-tab-bar-tab label="Reason For Delay">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'processEnquiryReasonForDelay'" 
+                    [searchString1]="enquiryActionId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Reason For Delay Tab -->
-                    <fdp-icon-tab-bar-tab label="Reason For Delay">
-                        <app-generic-list 
-                            [entity]="'processEnquiryReasonForDelay'" 
-                            [searchString1]="enquiryActionId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Enquiry Completion Details Tab -->
+        <fdp-icon-tab-bar-tab label="Enquiry Completion">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'processEnquiryEnquiryCompletion'" 
+                    [searchString1]="enquiryActionId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Enquiry Completion Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Enquiry Completion">
-                        <app-generic-list 
-                            [entity]="'processEnquiryEnquiryCompletion'" 
-                            [searchString1]="enquiryActionId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-
-                    <!-- Rejected By Customer Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
-                        <app-generic-list 
-                            [entity]="'processEnquiryRejectedByCustomer'" 
-                            [searchString1]="enquiryActionId" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-                </fdp-icon-tab-bar>
-            </div>
-        </div>
-    </fd-layout-grid>
-</component-ngx>
+        <!-- Rejected By Customer Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By Customer">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'processEnquiryRejectedByCustomer'" 
+                    [searchString1]="enquiryActionId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    </fdp-icon-tab-bar>
+</fd-dynamic-page>

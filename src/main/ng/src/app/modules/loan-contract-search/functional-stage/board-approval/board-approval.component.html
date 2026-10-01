@@ -1,84 +1,87 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="8">
-                <h2>{{ title }}</h2>
-            </div>
-            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
-                <button 
-                    fd-button 
-                    (click)="router.navigate(['/loan-contract-search'])" 
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title"
+        subtitle="Board deferrals, reasons for delay, board decisions and customer rejections"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
                     fdType="emphasized"
+                    label="Back"
+                    (click)="router.navigate(['/loan-contract-search'])"
                 >
-                    Back
                 </button>
-                <button 
-                    [style.margin-left.rem]="0.5"
-                    fd-button 
-                    (click)="sendForApproval()" 
-                    fdType="emphasized"
+
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="positive"
+                    label="Send for Approval"
+                    [style.margin-left.rem]="0.1"
                     [disabled]="(!selectedBoardApproval || selectedBoardApproval.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    (click)="sendForApproval()"
                 >
-                    Send for Approval
                 </button>
-            </div>
-        </div>
-    </fd-layout-grid>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fdp-icon-tab-bar 
+        [layoutMode]="'row'"
+        [enableTabReordering]="false"
+        iconTabSize="sm"
+    >
+        <!-- Deferred By Board Tab -->
+        <fdp-icon-tab-bar-tab label="Deferred By Board">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'boardApprovalDeferredByBoard'" 
+                    [searchString1]="selectedBoardApproval?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div fdLayoutGridCol colGrow>
-                <fdp-icon-tab-bar 
-                    [layoutMode]="'row'"
-                    [enableTabReordering]="false"
-                    iconTabSize="sm"
-                >
-                    <!-- Deferred By Board Tab -->
-                    <fdp-icon-tab-bar-tab label="Deferred By Board">
-                        <app-generic-list 
-                            [entity]="'boardApprovalDeferredByBoard'" 
-                            [searchString1]="selectedBoardApproval?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Reason For Delay Tab -->
+        <fdp-icon-tab-bar-tab label="Reason For Delay">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'boardApprovalReasonsForDelay'" 
+                    [searchString1]="selectedBoardApproval?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Reason For Delay Tab -->
-                    <fdp-icon-tab-bar-tab label="Reason For Delay">
-                        <app-generic-list 
-                            [entity]="'boardApprovalReasonsForDelay'" 
-                            [searchString1]="selectedBoardApproval?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Rejected By Board Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By Board">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'boardApprovalRejectedByBoard'" 
+                    [searchString1]="selectedBoardApproval?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Rejected By Board Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By Board">
-                        <app-generic-list 
-                            [entity]="'boardApprovalRejectedByBoard'" 
-                            [searchString1]="selectedBoardApproval?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Board Approval Tab -->
+        <fdp-icon-tab-bar-tab label="Board Approval">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'boardApprovalApprovalByBoard'" 
+                    [searchString1]="selectedBoardApproval?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Board Approval Tab -->
-                    <fdp-icon-tab-bar-tab label="Board Approval">
-                        <app-generic-list 
-                            [entity]="'boardApprovalApprovalByBoard'" 
-                            [searchString1]="selectedBoardApproval?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-
-                    <!-- Rejected By Customer Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
-                        <app-generic-list 
-                            [entity]="'boardApprovalRejectedByCustomer'" 
-                            [searchString1]="selectedBoardApproval?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-                </fdp-icon-tab-bar>
-            </div>
-        </div>
-    </fd-layout-grid>
-</component-ngx>
+        <!-- Rejected By Customer Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By Customer">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'boardApprovalRejectedByCustomer'" 
+                    [searchString1]="selectedBoardApproval?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    </fdp-icon-tab-bar>
+</fd-dynamic-page>

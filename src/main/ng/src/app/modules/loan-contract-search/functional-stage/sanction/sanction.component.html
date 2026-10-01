@@ -1,84 +1,87 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="8">
-                <h2>{{ title }}</h2>
-            </div>
-            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
-                <button 
-                    fd-button 
-                    (click)="router.navigate(['/loan-contract-search'])" 
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title"
+        subtitle="Reasons for delay, pre and post sanction payment receipts, sanction letters and customer rejections"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
                     fdType="emphasized"
+                    label="Back"
+                    (click)="router.navigate(['/loan-contract-search'])"
                 >
-                    Back
                 </button>
-                <button 
-                    [style.margin-left.rem]="0.5"
-                    fd-button 
-                    (click)="sendForApproval()" 
-                    fdType="emphasized"
+
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="positive"
+                    label="Send for Approval"
+                    [style.margin-left.rem]="0.1"
                     [disabled]="(!selectedSanction || selectedSanction.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    (click)="sendForApproval()"
                 >
-                    Send for Approval
                 </button>
-            </div>
-        </div>
-    </fd-layout-grid>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fdp-icon-tab-bar 
+        [layoutMode]="'row'"
+        [enableTabReordering]="false"
+        iconTabSize="sm"
+    >
+        <!-- Reasons For Delay Tab -->
+        <fdp-icon-tab-bar-tab label="Reasons For Delay">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'sanctionReasonsForDelay'" 
+                    [searchString1]="selectedSanction?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div fdLayoutGridCol colGrow>
-                <fdp-icon-tab-bar 
-                    [layoutMode]="'row'"
-                    [enableTabReordering]="false"
-                    iconTabSize="sm"
-                >
-                    <!-- Reasons For Delay Tab -->
-                    <fdp-icon-tab-bar-tab label="Reasons For Delay">
-                        <app-generic-list 
-                            [entity]="'sanctionReasonsForDelay'" 
-                            [searchString1]="selectedSanction?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Payment Receipts - Pre Sanction Tab -->
+        <fdp-icon-tab-bar-tab label="Payment Receipts - Pre Sanction">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'sanctionPaymentReceiptsPreSanction'" 
+                    [searchString1]="selectedSanction?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Payment Receipts - Pre Sanction Tab -->
-                    <fdp-icon-tab-bar-tab label="Payment Receipts - Pre Sanction">
-                        <app-generic-list 
-                            [entity]="'sanctionPaymentReceiptsPreSanction'" 
-                            [searchString1]="selectedSanction?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Original Sanction Letters Tab -->
+        <fdp-icon-tab-bar-tab label="Original Sanction Letters">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'sanctionLetters'" 
+                    [searchString1]="selectedSanction?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Original Sanction Letters Tab -->
-                    <fdp-icon-tab-bar-tab label="Original Sanction Letters">
-                        <app-generic-list 
-                            [entity]="'sanctionLetters'" 
-                            [searchString1]="selectedSanction?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Payment Receipts - Post Sanction Tab -->
+        <fdp-icon-tab-bar-tab label="Payment Receipts - Post Sanction">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'sanctionPaymentReceiptsPostSanction'" 
+                    [searchString1]="selectedSanction?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Payment Receipts - Post Sanction Tab -->
-                    <fdp-icon-tab-bar-tab label="Payment Receipts - Post Sanction">
-                        <app-generic-list 
-                            [entity]="'sanctionPaymentReceiptsPostSanction'" 
-                            [searchString1]="selectedSanction?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-
-                    <!-- Rejected By Customer Tab -->
-                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
-                        <app-generic-list 
-                            [entity]="'sanctionRejectedByCustomer'" 
-                            [searchString1]="selectedSanction?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-                </fdp-icon-tab-bar>
-            </div>
-        </div>
-    </fd-layout-grid>
-</component-ngx>
+        <!-- Rejected By Customer Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By Customer">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'sanctionRejectedByCustomer'" 
+                    [searchString1]="selectedSanction?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    </fdp-icon-tab-bar>
+</fd-dynamic-page>

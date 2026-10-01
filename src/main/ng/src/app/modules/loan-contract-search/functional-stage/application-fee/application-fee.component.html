@@ -1,82 +1,85 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="8">
-                <h2>{{ title }}</h2>
-            </div>
-            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
-                <button 
-                    fd-button 
-                    (click)="router.navigate(['/loan-contract-search'])" 
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title"
+        subtitle="Term sheets, formal requests, invoicing and project details, and application fee receipts"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
                     fdType="emphasized"
+                    label="Back"
+                    (click)="router.navigate(['/loan-contract-search'])"
                 >
-                    Back
                 </button>
-                <button 
-                    [style.margin-left.rem]="0.5"
-                    fd-button 
-                    (click)="sendForApproval()" 
-                    fdType="emphasized"
+
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="positive"
+                    label="Send for Approval"
+                    [style.margin-left.rem]="0.1"
                     [disabled]="(!selectedApplicationFee || selectedApplicationFee.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    (click)="sendForApproval()"
                 >
-                    Send for Approval
                 </button>
-            </div>
-        </div>
-    </fd-layout-grid>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fdp-icon-tab-bar 
+        [layoutMode]="'row'"
+        [enableTabReordering]="false"
+        iconTabSize="sm"
+    >
+        <!-- Term Sheet Tab -->
+        <fdp-icon-tab-bar-tab label="Term Sheet">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'applicationFeeTermSheets'" 
+                    [searchString1]="selectedApplicationFee?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-    <fd-layout-grid [noGap]="true" class="component-grid">
-        <div fdLayoutGridRow>
-            <div fdLayoutGridCol colGrow>
-                <fdp-icon-tab-bar 
-                    [layoutMode]="'row'"
-                    [enableTabReordering]="false"
-                    iconTabSize="sm"
-                >
-                    <!-- Term Sheet Tab -->
-                    <fdp-icon-tab-bar-tab label="Term Sheet">
-                        <app-generic-list 
-                            [entity]="'applicationFeeTermSheets'" 
-                            [searchString1]="selectedApplicationFee?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Formal Request Tab -->
+        <fdp-icon-tab-bar-tab label="Formal Request">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'applicationFeeFormalRequests'" 
+                    [searchString1]="selectedApplicationFee?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Formal Request Tab -->
-                    <fdp-icon-tab-bar-tab label="Formal Request">
-                        <app-generic-list 
-                            [entity]="'applicationFeeFormalRequests'" 
-                            [searchString1]="selectedApplicationFee?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Customer and Invoicing Details Tab -->
+        <fdp-icon-tab-bar-tab label="Customer and Invoicing Details">
+            <fd-dynamic-page-content>
+                <app-invoicing-details 
+                    [loanApplication]="selectedEnquiry"
+                    [applicationFeeId]="selectedApplicationFee?.id ?? ''"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Customer and Invoicing Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Customer and Invoicing Details">
-                        <app-invoicing-details 
-                            [loanApplication]="selectedEnquiry"
-                            [applicationFeeId]="selectedApplicationFee?.id ?? ''"
-                        />
-                    </fdp-icon-tab-bar-tab>
+        <!-- Project Details Tab -->
+        <fdp-icon-tab-bar-tab label="Project Details">
+            <fd-dynamic-page-content>
+                <app-application-fee-project-details 
+                    [loanApplication]="selectedEnquiry"
+                    [applicationFeeId]="selectedApplicationFee?.id ?? ''"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
 
-                    <!-- Project Details Tab -->
-                    <fdp-icon-tab-bar-tab label="Project Details">
-                        <app-application-fee-project-details 
-                            [loanApplication]="selectedEnquiry"
-                            [applicationFeeId]="selectedApplicationFee?.id ?? ''"
-                        />
-                    </fdp-icon-tab-bar-tab>
-
-                    <!-- Application/Inception Fee Receipt Tab -->
-                    <fdp-icon-tab-bar-tab label="Application/Inception Fee Receipt">
-                        <app-generic-list 
-                            [entity]="'applicationFeeInceptionFees'" 
-                            [searchString1]="selectedApplicationFee?.id ?? ''" 
-                            [searchString2]="loanApplicationId"
-                        />
-                    </fdp-icon-tab-bar-tab>
-                </fdp-icon-tab-bar>
-            </div>
-        </div>
-    </fd-layout-grid>
-</component-ngx>
+        <!-- Application/Inception Fee Receipt Tab -->
+        <fdp-icon-tab-bar-tab label="Application/Inception Fee Receipt">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'applicationFeeInceptionFees'" 
+                    [searchString1]="selectedApplicationFee?.id ?? ''" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    </fdp-icon-tab-bar>
+</fd-dynamic-page>

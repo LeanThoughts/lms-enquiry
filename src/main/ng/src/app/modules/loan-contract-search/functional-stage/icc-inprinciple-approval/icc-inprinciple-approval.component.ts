@@ -1,6 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ComponentNgxComponent } from '../../../../common/component-ngx/component-ngx.component';
-import { ButtonComponent, LayoutGridModule } from '@fundamental-ngx/core';
+import { 
+    ButtonComponent, 
+    DynamicPageComponent, 
+    DynamicPageContentComponent, 
+    DynamicPageGlobalActionsComponent, 
+    DynamicPageHeaderComponent, 
+    ToolbarComponent 
+} from '@fundamental-ngx/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { IconTabBarComponent, IconTabBarTabComponent } from '@fundamental-ngx/platform/icon-tab-bar';
@@ -13,9 +19,14 @@ import { AuthService } from '../../../auth/auth.service';
 @Component({
     selector: 'app-icc-inprinciple-approval',
     imports: [
+        // Dynamic Page Components
+        DynamicPageHeaderComponent,
+        DynamicPageComponent,
+        DynamicPageGlobalActionsComponent,
+        ToolbarComponent,
+        DynamicPageContentComponent,
+        // Other Components and Modules
         ButtonComponent,
-        ComponentNgxComponent,
-        LayoutGridModule,
         IconTabBarComponent,
         IconTabBarTabComponent,
         GenericListComponent
