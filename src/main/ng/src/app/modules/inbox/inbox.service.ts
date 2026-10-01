@@ -23,6 +23,13 @@ export class InboxService implements Resolve<any> {
     }
 
     /**
+     * Get loan application by loan contract id (falls back to enquiry number on the backend)
+     */
+    getLoanApplicationByLoanContractId(loanContractId: string): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/loanApplications/loanContractId/' + loanContractId);
+    }
+
+    /**
      * Resolve
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

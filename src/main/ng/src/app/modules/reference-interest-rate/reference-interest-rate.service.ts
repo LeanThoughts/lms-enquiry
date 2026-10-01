@@ -9,6 +9,8 @@ import { environment } from '../../../environments/environment';
 })
 export class ReferenceInterestRateService implements Resolve<any> {
 
+    referenceInterestRateTypeCode: string | null = null;
+
     /**
      * Constructor
      */

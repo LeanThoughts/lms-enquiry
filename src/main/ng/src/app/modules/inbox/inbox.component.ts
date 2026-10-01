@@ -5,13 +5,25 @@ import { ButtonComponent } from '@fundamental-ngx/core';
 import { ComponentNgxComponent } from '../../common/component-ngx/component-ngx.component';
 import { InboxService } from './inbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { MessageService } from '../../message.service';
 import { CustomDialogComponent } from '../../custom-dialog.component';
 import { BusinessPartnerSearchService } from '../business-partner-search/business-partner-search.service';
 import { ProcessEnquiryService } from '../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service';
 import { LoanContractSearchService } from '../loan-contract-search/loan-contract-search.service';
+import { IccInprincipleApprovalService } from '../loan-contract-search/functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service';
+import { RiskAssessmentService } from '../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service';
+import { ApplicationFeeService } from '../loan-contract-search/functional-stage/application-fee/application-fee.service';
+import { BoardApprovalService } from '../loan-contract-search/functional-stage/board-approval/board-approval.service';
+import { SanctionService } from '../loan-contract-search/functional-stage/sanction/sanction.service';
+import { ReferenceInterestRateService } from '../reference-interest-rate/reference-interest-rate.service';
+
+interface StageReview {
+    route: string;
+    selectedEntity$: BehaviorSubject<any>;
+    getEntity: (loanApplicationId: string) => Observable<any>;
+}
 
 @Component({
     selector: 'app-inbox',
@@ -30,6 +42,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     private readonly destroy$ = new Subject<void>();
 
     isApproveDisabled = false;
+    isRejectDisabled = false;
     tasks: any[] = [];
 
     /**
@@ -42,7 +55,13 @@ export class InboxComponent implements OnInit, OnDestroy {
                 private router: Router,
                 private businessPartnerService: BusinessPartnerSearchService,
                 private loanContractSearchService: LoanContractSearchService,
-                private processEnquiryService: ProcessEnquiryService) {
+                private processEnquiryService: ProcessEnquiryService,
+                private iccInprincipleApprovalService: IccInprincipleApprovalService,
+                private riskAssessmentService: RiskAssessmentService,
+                private applicationFeeService: ApplicationFeeService,
+                private boardApprovalService: BoardApprovalService,
+                private sanctionService: SanctionService,
+                private referenceInterestRateService: ReferenceInterestRateService) {
     }
 
     /**
@@ -74,12 +93,12 @@ export class InboxComponent implements OnInit, OnDestroy {
             'processInstanceId': task.id,
             'rejectionReason': ''
         }
-        this.messageService.showInfo('Approval in Process.');
+        this.messageService.showInfo('Approval in Process.', 25000);
         this.inboxService.approveTask(workFlowProcessRequestResource).subscribe({
             next: (response) => {
                 this.isApproveDisabled = false;
                 this.refreshTasks();
-                this.messageService.showSuccess('Task approved successfully.');
+                this.messageService.showSuccess('Selected task is approved and email notification was sent to requestor');
             },
             error: (error) => {
                 this.isApproveDisabled = false;
@@ -93,30 +112,96 @@ export class InboxComponent implements OnInit, OnDestroy {
      * Review task
      */
     reviewTask(task: any): void {
-        console.log('Review task', task);
         if (task.processName === 'BusinessPartner') {
-            this.businessPartnerService.getBusinesPartner(task.businessProcessId).subscribe((data: any) => {
-                console.log('data', data);
-                const businessPartner = data[0];
-                this.businessPartnerService.selectedEntity$.next(businessPartner);
-                this.router.navigate(['/business-partners/update', businessPartner.id]);
+            this.messageService.showInfo('Review in Process.');
+            this.businessPartnerService.getBusinesPartner(task.businessProcessId).subscribe({
+                next: (data: any) => {
+                    const businessPartner = data[0];
+                    this.businessPartnerService.selectedEntity$.next(businessPartner);
+                    this.router.navigate(['/business-partners/update', businessPartner.id]);
+                },
+                error: (error: any) => this.showReviewError(error)
             });
         }
-        else if (task.processName === 'Process Enquiry') {
-            this.reviewProcessEnquiry(task);
+        else if (task.processName === 'ReferenceInterestRateValue') {
+            this.referenceInterestRateService.referenceInterestRateTypeCode = task.lanContractId.split(':')[0];
+            this.router.navigate(['/reference-interest-rates']);
+        }
+        else {
+            const stageReview = this.getStageReview(task.processName);
+            if (!stageReview) {
+                this.messageService.showError('Review of ' + task.processName + ' tasks is not available.');
+                return;
+            }
+            this.messageService.showInfo('Review in Process.');
+            this.inboxService.getLoanApplicationByLoanContractId(task.lanContractId).pipe(
+                switchMap((response: any) => {
+                    this.loanContractSearchService.selectedEnquiry$.next(response);
+                    return stageReview.getEntity(response.loanApplication.id);
+                })
+            ).subscribe({
+                next: (entity: any) => {
+                    const loanApplicationId = this.loanContractSearchService.selectedEnquiry$.value.loanApplication.id;
+                    stageReview.selectedEntity$.next(entity);
+                    this.router.navigate([stageReview.route, entity.id, 'loanApplication', loanApplicationId]);
+                },
+                error: (error: any) => this.showReviewError(error)
+            });
         }
     }
-    
+
     /**
-     * Review process enquiry
+     * Return the stage page and entity lookup for a workflow process name
      */
-    reviewProcessEnquiry(task: any): void {
-        this.processEnquiryService.getEnquiryActionByEnquiryActionId(task.businessProcessId).subscribe((data: any) => {
-            this.inboxService.getLoanApplicationBySelfLink(data._links.loanApplication.href).subscribe((loanApplication: any) => {
-                this.loanContractSearchService.selectedEnquiry$.next({ loanApplication: loanApplication });
-                this.router.navigate(['/process-enquiry', task.businessProcessId, 'loanApplication', loanApplication.id]);
-            });
-        });
+    private getStageReview(processName: string): StageReview | null {
+        switch (processName) {
+            case 'Process Enquiry':
+                return {
+                    route: '/process-enquiry',
+                    selectedEntity$: this.processEnquiryService.selectedEntity$,
+                    getEntity: (id) => this.processEnquiryService.getEnquiryAction(id)
+                };
+            case 'ICC In-Principal Approval':
+                return {
+                    route: '/icc-inprinciple-approval',
+                    selectedEntity$: this.iccInprincipleApprovalService.selectedEntity$,
+                    getEntity: (id) => this.iccInprincipleApprovalService.getIccInprincipleApproval(id)
+                };
+            case 'Prelim Risk Assessment':
+                return {
+                    route: '/risk-assessment',
+                    selectedEntity$: this.riskAssessmentService.selectedEntity$,
+                    getEntity: (id) => this.riskAssessmentService.getRiskAssessment(id)
+                };
+            case 'Application Fee':
+                return {
+                    route: '/application-fee',
+                    selectedEntity$: this.applicationFeeService.selectedEntity$,
+                    getEntity: (id) => this.applicationFeeService.getApplicationFee(id)
+                };
+            case 'Board Approval':
+                return {
+                    route: '/board-approval',
+                    selectedEntity$: this.boardApprovalService.selectedEntity$,
+                    getEntity: (id) => this.boardApprovalService.getBoardApproval(id)
+                };
+            case 'Sanction':
+                return {
+                    route: '/sanction',
+                    selectedEntity$: this.sanctionService.selectedEntity$,
+                    getEntity: (id) => this.sanctionService.getSanction(id)
+                };
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Show review error
+     */
+    private showReviewError(error: any): void {
+        this.messageService.showError(error.message + '!! Error opening task for review. Please try again. If the problem persists, '
+            + 'please contact the administrator.');
     }
 
     /**
@@ -142,13 +227,16 @@ export class InboxComponent implements OnInit, OnDestroy {
                         'processInstanceId': task.id,
                         'rejectionReason': result.inputValue
                     }
+                    this.isRejectDisabled = true;
                     this.messageService.showInfo('Reject in Process.', 25000);
                     this.inboxService.rejectTask(workFlowProcessRequestResource).subscribe({
                         next: (response) => {
-                            this.messageService.showSuccess( 'Selected task is rejected and email notification was sent to requestor');
+                            this.isRejectDisabled = false;
+                            this.messageService.showSuccess('Selected task is rejected and email notification was sent to requestor');
                             this.refreshTasks();
                         },
                         error: (error) => {
+                            this.isRejectDisabled = false;
                             this.messageService.showError(error.message + '!! Error rejecting task. Please try again. '
                                 + 'If the problem persists, please contact the administrator.');
                         }

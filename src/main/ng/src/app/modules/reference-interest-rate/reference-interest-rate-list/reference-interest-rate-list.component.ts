@@ -57,6 +57,12 @@ export class ReferenceInterestRateListComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
             this.referenceRateTypes = data['routeResolver'].referenceRateTypes;
+            const referenceInterestRateTypeCode = this.referenceInterestRateService.referenceInterestRateTypeCode;
+            if (referenceInterestRateTypeCode) {
+                this.referenceInterestRateService.referenceInterestRateTypeCode = null;
+                this.selectedReferenceRateType = this.referenceRateTypes.find((type: any) => type.code === referenceInterestRateTypeCode) ?? null;
+                this.getReferenceInterestValues();
+            }
         });
     }
 
