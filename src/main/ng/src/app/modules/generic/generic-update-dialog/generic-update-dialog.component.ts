@@ -649,14 +649,26 @@ export class GenericUpdateDialogComponent implements OnInit {
     }
 
     /**
-     * Whether a field should be shown. Fields with visibleWhen are shown only when the named field has a value.
+     * Whether a field should be shown. visibleWhen is either a field name (shown when that field has a value)
+     * or { field, value } (shown when that field equals the value).
      */
     isFieldVisible(field: any): boolean {
         if (!field.visibleWhen) return true;
+        const sourceName = this.getVisibleWhenSource(field);
         const value = this.isViewMode()
-            ? this.selectedObject[field.visibleWhen]
-            : this.genericForm?.get(field.visibleWhen)?.value;
+            ? this.selectedObject[sourceName]
+            : this.genericForm?.get(sourceName)?.value;
+        if (typeof field.visibleWhen === 'object') {
+            return value === field.visibleWhen.value;
+        }
         return value != null && value !== '';
+    }
+
+    /**
+     * Name of the field that controls the visibility of a field with visibleWhen
+     */
+    private getVisibleWhenSource(field: any): string {
+        return typeof field.visibleWhen === 'object' ? field.visibleWhen.field : field.visibleWhen;
     }
 
     /**
@@ -667,7 +679,7 @@ export class GenericUpdateDialogComponent implements OnInit {
         this.config.rows.forEach((row: any) => {
             row.fields?.forEach((field: any) => {
                 if (!field.visibleWhen) return;
-                const sourceControl = this.genericForm.get(field.visibleWhen);
+                const sourceControl = this.genericForm.get(this.getVisibleWhenSource(field));
                 const control = this.genericForm.get(field.name);
                 if (!sourceControl || !control) return;
                 const applyVisibility = () => {

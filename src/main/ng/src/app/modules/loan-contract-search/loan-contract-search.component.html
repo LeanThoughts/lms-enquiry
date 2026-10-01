@@ -44,6 +44,17 @@
                     >
                     </button>
 
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="positive"
+                        label="Application Fee"
+                        [style.margin-left.rem]="0.1"
+                        [disabled]="selectedEnquiry.selected.length === 0"
+                        (click)="redirectToApplicationFee()"
+                    >
+                    </button>
+
                     <!-- <fd-toolbar-separator></fd-toolbar-separator>
 
                     <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['loan-contract-search'])">

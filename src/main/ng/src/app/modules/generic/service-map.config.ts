@@ -3,6 +3,7 @@ import { IccInprincipleApprovalService } from "../loan-contract-search/functiona
 import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
 import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
+import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
 
 export const entityServiceMap: { [key: string]: any } = {
 
@@ -43,4 +44,9 @@ export const entityServiceMap: { [key: string]: any } = {
     iccInprincipleApprovalRiskNotifications: IccInprincipleApprovalService,
 
     riskAssessmentPreliminaryRiskAssessment: RiskAssessmentService,
+
+    applicationFeeTermSheets: ApplicationFeeService,
+    applicationFeeFormalRequests: ApplicationFeeService,
+    applicationFeeInceptionFees: ApplicationFeeService,
+    applicationFeeProjectDetails: ApplicationFeeService,
 }

@@ -10,6 +10,8 @@ import { IccInprincipleApprovalService } from "./functional-stage/icc-inprincipl
 import { ICCInprincipleApprovalComponent } from "./functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.component";
 import { RiskAssessmentComponent } from "./functional-stage/risk-assessment/risk-assessment.component";
 import { RiskAssessmentService } from "./functional-stage/risk-assessment/risk-assessment.service";
+import { ApplicationFeeComponent } from "./functional-stage/application-fee/application-fee.component";
+import { ApplicationFeeService } from "./functional-stage/application-fee/application-fee.service";
 
 export default [
     {
@@ -65,6 +67,14 @@ export default [
         component: RiskAssessmentComponent,
         resolve: {
             routeResolvedData: RiskAssessmentService
+        },
+        canActivate: [routeInterceptor],
+    },
+    {
+        path: 'application-fee/:applicationFeeId/loanApplication/:loanApplicationId',
+        component: ApplicationFeeComponent,
+        resolve: {
+            routeResolvedData: ApplicationFeeService
         },
         canActivate: [routeInterceptor],
     },

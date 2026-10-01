@@ -1,0 +1,78 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 fd-title>Search Partners</h1>
+        <button fd-dialog-close-button (click)="dialogRef.dismiss('Closed')"></button>
+    </fd-dialog-header>
+    <fd-dialog-body>
+        <form [formGroup]="partnerForm" (ngSubmit)="search()">
+            <div fdLayoutGridRow style="height: auto;">
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-item>
+                        <label fd-form-label for="partyName1">Partner Name:</label>
+                        <input fd-form-control id="partyName1" formControlName="partyName1" type="text" />
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-item>
+                        <label fd-form-label for="partyNumber">Partner Number:</label>
+                        <input fd-form-control id="partyNumber" formControlName="partyNumber" type="text" />
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3" style="padding-right: 1rem !important;">
+                    <div fd-form-item>
+                        <label fd-form-label for="searchTerm1">Search Term 1:</label>
+                        <input fd-form-control id="searchTerm1" formControlName="searchTerm1" type="text" />
+                    </div>
+                </div>
+                <div [fdLayoutGridCol]="3">
+                    <div fd-form-item>
+                        <label fd-form-label for="searchTerm2">Search Term 2:</label>
+                        <input fd-form-control id="searchTerm2" formControlName="searchTerm2" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div fdLayoutGridRow style="height: auto;" [style.padding-top.rem]="1">
+                <div fdLayoutGridCol>
+                    <button fd-button type="submit" fdType="emphasized" label="Search" glyph="search"></button>
+                </div>
+            </div>
+        </form>
+
+        <div fdLayoutGridRow style="height: auto;" [style.padding-top.rem]="1">
+            <div [fdLayoutGridCol]="12">
+                <table fd-table>
+                    <thead fd-table-header>
+                        <tr fd-table-row>
+                            <th fd-table-cell>Partner Name</th>
+                            <th fd-table-cell>Partner Number</th>
+                            <th fd-table-cell>Address Line 1</th>
+                            <th fd-table-cell>Address Line 2</th>
+                            <th fd-table-cell>City</th>
+                            <th fd-table-cell>State</th>
+                        </tr>
+                    </thead>
+                    <tbody fd-table-body>
+                        @for (partner of partners; track partner.id) {
+                            <tr fd-table-row
+                                [hoverable]="true"
+                                [active]="selectedPartner?.id === partner.id"
+                                (click)="selectedPartner = partner"
+                            >
+                                <td fd-table-cell>{{ partner.partyName1 || '--' }}</td>
+                                <td fd-table-cell>{{ partner.partyNumber || '--' }}</td>
+                                <td fd-table-cell>{{ partner.addressLine1 || '--' }}</td>
+                                <td fd-table-cell>{{ partner.addressLine2 || '--' }}</td>
+                                <td fd-table-cell>{{ partner.city || '--' }}</td>
+                                <td fd-table-cell>{{ partner.state || '--' }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fd-dialog-body>
+    <fd-dialog-footer>
+        <button fd-button fdType="emphasized" label="Select" [disabled]="!selectedPartner" (click)="selectPartner()"></button>
+        <button fd-button fdType="transparent" label="Cancel" [style.margin-left.rem]="0.5" (click)="dialogRef.dismiss('Cancel')"></button>
+    </fd-dialog-footer>
+</fd-dialog>

@@ -3,6 +3,7 @@ import { IccInprincipleApprovalService } from "../loan-contract-search/functiona
 import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
 import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
+import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
 
 interface EntityUpdateDialogComponentConfig {
     // Required for list components
@@ -520,5 +521,64 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         updateDialogWidth: '45rem',
         viewDialogWidth: '40rem',
         routeResolvedData: ['approvalByIcc', 'documentType'],
+    },
+
+    // Application Fee - Term Sheets
+    applicationFeeTermSheets: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Serial Number', type: 'text'},
+            {name: 'status', header: 'Status', type: 'text'},
+            {name: 'issuanceDate', header: 'Date of Issuance', type: 'date'},
+            {name: 'acceptanceDate', header: 'Acceptance Date', type: 'date'},
+            {name: 'fileReference', header: 'Document', type: 'file'},
+        ],
+        fetchFunction: ApplicationFeeService.prototype.getTermSheets,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '35rem',
+        viewDialogWidth: '35rem',
+        routeResolvedData: ['preliminaryRiskAssessment', 'status'],
+    },
+
+    // Application Fee - Formal Requests
+    applicationFeeFormalRequests: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Serial Number', type: 'text'},
+            {name: 'documentName', header: 'Document Name', type: 'text'},
+            {name: 'uploadDate', header: 'Upload Date', type: 'date'},
+            {name: 'documentLetterDate', header: 'Document Letter Date', type: 'date'},
+            {name: 'documentReceivedDate', header: 'Document Received Date', type: 'date'},
+            {name: 'fileReference', header: 'Document', type: 'file'},
+        ],
+        fetchFunction: ApplicationFeeService.prototype.getFormalRequests,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '40rem',
+    },
+
+    // Application Fee - Application/Inception Fee Receipts
+    applicationFeeInceptionFees: {
+        displayedColumns: [
+            {name: 'description', header: 'Fee Type', type: 'text'},
+            {name: 'statusDescription', header: 'Status', type: 'text'},
+            {name: 'invoiceNumber', header: 'Invoice Number', type: 'text'},
+            {name: 'invoiceDate', header: 'Invoice Date', type: 'date'},
+            {name: 'amount', header: 'Amount', type: 'number'},
+            {name: 'taxAmount', header: 'Tax Amount', type: 'number'},
+            {name: 'totalAmount', header: 'Total Amount', type: 'number'},
+            {name: 'amountReceived', header: 'Amount Received', type: 'number'},
+            {name: 'rtgsNumber', header: 'RTGS Number', type: 'text'},
+            {name: 'referenceNumber', header: 'Reference Number', type: 'text'},
+            {name: 'remarks', header: 'Remarks', type: 'text'},
+        ],
+        fetchFunction: ApplicationFeeService.prototype.getInceptionFees,
+        createButton: false,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '45rem',
+        viewDialogWidth: '45rem',
     }
 }

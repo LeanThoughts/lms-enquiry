@@ -1,0 +1,82 @@
+<component-ngx>
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div [fdLayoutGridCol]="8">
+                <h2>{{ title }}</h2>
+            </div>
+            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+                <button 
+                    fd-button 
+                    (click)="router.navigate(['/loan-contract-search'])" 
+                    fdType="emphasized"
+                >
+                    Back
+                </button>
+                <button 
+                    [style.margin-left.rem]="0.5"
+                    fd-button 
+                    (click)="sendForApproval()" 
+                    fdType="emphasized"
+                    [disabled]="(!selectedApplicationFee || selectedApplicationFee.workFlowStatusCode === 2) || disableSendForApproval === true"
+                >
+                    Send for Approval
+                </button>
+            </div>
+        </div>
+    </fd-layout-grid>
+
+    <fd-layout-grid [noGap]="true" class="component-grid">
+        <div fdLayoutGridRow>
+            <div fdLayoutGridCol colGrow>
+                <fdp-icon-tab-bar 
+                    [layoutMode]="'row'"
+                    [enableTabReordering]="false"
+                    iconTabSize="sm"
+                >
+                    <!-- Term Sheet Tab -->
+                    <fdp-icon-tab-bar-tab label="Term Sheet">
+                        <app-generic-list 
+                            [entity]="'applicationFeeTermSheets'" 
+                            [searchString1]="selectedApplicationFee?.id ?? ''" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Formal Request Tab -->
+                    <fdp-icon-tab-bar-tab label="Formal Request">
+                        <app-generic-list 
+                            [entity]="'applicationFeeFormalRequests'" 
+                            [searchString1]="selectedApplicationFee?.id ?? ''" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Customer and Invoicing Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Customer and Invoicing Details">
+                        <app-invoicing-details 
+                            [loanApplication]="selectedEnquiry"
+                            [applicationFeeId]="selectedApplicationFee?.id ?? ''"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Project Details Tab -->
+                    <fdp-icon-tab-bar-tab label="Project Details">
+                        <app-application-fee-project-details 
+                            [loanApplication]="selectedEnquiry"
+                            [applicationFeeId]="selectedApplicationFee?.id ?? ''"
+                        />
+                    </fdp-icon-tab-bar-tab>
+
+                    <!-- Application/Inception Fee Receipt Tab -->
+                    <fdp-icon-tab-bar-tab label="Application/Inception Fee Receipt">
+                        <app-generic-list 
+                            [entity]="'applicationFeeInceptionFees'" 
+                            [searchString1]="selectedApplicationFee?.id ?? ''" 
+                            [searchString2]="loanApplicationId"
+                        />
+                    </fdp-icon-tab-bar-tab>
+                </fdp-icon-tab-bar>
+            </div>
+        </div>
+    </fd-layout-grid>
+</component-ngx>

@@ -1,6 +1,7 @@
 import { FormGroup } from "@angular/forms";
 import { FIFTEEN_COMMA_TWO, FIVE_COMMA_TWO, NUMERIC_ONLY_REGEX, SEVEN_COMMA_TWO, SHARE_HOLDING_PERCENTAGE_REGEX, TAX_PERCENTAGE_REGEX } from "../../common/common.regex";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
+import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
 
 interface EntityUpdateComponentConfig {
     // Required for create and update components
@@ -275,6 +276,76 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateComponentConfi
             {row: 11, span: 12, name: 'esmsCategorization', label: 'Environmental and Social Management System Categorization Remarks', type: 'text', 
                 maxLength: 500 },
             {row: 12, span: 12, name: 'otherProjectDetails', label: 'Other Project Details', type: 'text', maxLength: 500 }
+        ]
+    },
+
+    // Application Fee - Project Details
+    applicationFeeProjectDetails: {
+        searchString1ForCreate: 'loanApplicationId',
+        passSearchString1Via: 'Object',
+        createFunction: ApplicationFeeService.prototype.createProjectDetails,
+        updateFunction: ApplicationFeeService.prototype.updateProjectDetails,
+        createSuccessMessage: 'Project details saved successfully',
+        updateSuccessMessage: 'Project details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'applicationFee',
+        genericOnValueChangeFunction: (formGroup?: FormGroup) => {
+            if (!formGroup) return;
+            const debt = Number(formGroup.get('debt')?.value) || 0;
+            const equity = Number(formGroup.get('promoterContributionEquity')?.value) || 0;
+            const grant = Number(formGroup.get('grantSubsidyAmount')?.value) || 0;
+            formGroup.get('debtEquityRatio')?.setValue(equity > 0 ? (debt / equity).toFixed(2) : 0);
+            formGroup.get('debtEquityRatioWithGrant')?.setValue(debt && grant && equity > 0 ? ((grant + debt) / equity).toFixed(2) : null);
+        },
+        fieldsConfig: [
+            {row: 1, span: 12, name: 'header1', type: 'header', label: 'Project Details' },
+
+            {row: 2, span: 3, name: 'projectName', label: 'Name of Project', type: 'text', maxLength: 60 },
+            {row: 2, span: 3, name: 'promoterName', label: 'Name of Sponsor/Group', type: 'text', maxLength: 60 },
+            {row: 2, span: 6, name: 'loanPurpose', label: 'Purpose of Loan', type: 'text', maxLength: 60 },
+
+            {row: 3, span: 3, name: 'projectCapacity', label: 'Project Capacity', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO },
+            {row: 3, span: 3, name: 'projectCapacityUnit', label: 'Project Capacity Unit', type: 'select', displayKey: 'value', valueKey: 'code', 
+                nullOption: true },
+            {row: 3, span: 3, name: 'state', label: 'State', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+            {row: 3, span: 3, name: 'productTypeCode', label: 'Product Type', type: 'select', displayKey: 'name', valueKey: 'code', required: true },
+
+            {row: 4, span: 3, name: 'term', label: 'Term', type: 'select', displayKey: 'value', valueKey: 'code', required: true },
+            {row: 4, span: 3, name: 'enquiryCompletionDate', label: 'Enquiry Completion Date', type: 'date', required: true, maxValue: 'currentDate' },
+            {row: 4, span: 3, name: 'loanType', label: 'Loan Type', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+            {row: 4, span: 3, name: 'loanClass', label: 'Loan Class', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+
+            {row: 5, span: 3, name: 'assistanceType', label: 'Type of Assistance', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+            {row: 5, span: 3, name: 'financingType', label: 'Financing Type', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+            {row: 5, span: 3, name: 'projectType', label: 'Project Type (Sub Sector)', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+            {row: 5, span: 3, name: 'projectTypeCoreSector', label: 'Project Type (Core Sector)', type: 'select', displayKey: 'value', valueKey: 'code' },
+
+            {row: 6, span: 3, name: 'purposeOfLoan', label: 'Purpose of Loan', type: 'select', displayKey: 'value', valueKey: 'code', nullOption: true },
+
+            {row: 7, span: 12, name: 'header2', type: 'header', label: 'Project Cost and Funding (Crores)' },
+
+            {row: 8, span: 3, name: 'projectCost', label: 'Project Cost', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO },
+            {row: 8, span: 3, name: 'debt', label: 'Debt', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO, onValueChange: true },
+            {row: 8, span: 3, name: 'promoterContributionEquity', label: 'Promoter Contribution/Equity', type: 'text', maxLength: 10, 
+                pattern: SEVEN_COMMA_TWO, onValueChange: true },
+            {row: 8, span: 3, name: 'debtEquityRatio', label: 'Debt:Equity Ratio without Grant', type: 'text', readOnly: true },
+
+            {row: 9, span: 3, name: 'grantSubsidyAmount', label: 'Grant/Subsidy Amount', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO, 
+                onValueChange: true },
+            {row: 9, span: 3, name: 'debtEquityRatioWithGrant', label: 'Debt:Equity Ratio with Grant', type: 'text', readOnly: true },
+            {row: 9, span: 3, name: 'pfsDebtAmount', label: 'PFS Debt Amount', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO },
+            {row: 9, span: 3, name: 'rateOfInterest', label: 'Rate of Interest', type: 'text', maxLength: 5, pattern: TAX_PERCENTAGE_REGEX },
+
+            {row: 10, span: 12, name: 'header3', type: 'header', label: 'Tenure and Periods' },
+
+            {row: 11, span: 3, name: 'tenorYear', label: 'Tenure (Years)', type: 'text', maxLength: 2, pattern: NUMERIC_ONLY_REGEX },
+            {row: 11, span: 3, name: 'tenorMonths', label: 'Tenure (Months)', type: 'text', maxLength: 2, pattern: NUMERIC_ONLY_REGEX },
+
+            {row: 12, span: 3, name: 'moratoriumPeriod', label: 'Moratorium Period', type: 'text', maxLength: 4, pattern: NUMERIC_ONLY_REGEX },
+            {row: 12, span: 3, name: 'moratoriumPeriodUnit', label: 'Moratorium Period Unit', type: 'select', displayKey: 'description', valueKey: 'code', 
+                nullOption: true, required: { dependsOn: 'moratoriumPeriod' } },
+            {row: 12, span: 3, name: 'constructionPeriod', label: 'Construction Period', type: 'text', maxLength: 4, pattern: NUMERIC_ONLY_REGEX },
+            {row: 12, span: 3, name: 'constructionPeriodUnit', label: 'Construction Period Unit', type: 'select', displayKey: 'description', valueKey: 'code', 
+                nullOption: true, required: { dependsOn: 'constructionPeriod' } }
         ]
     }
 }

@@ -25,6 +25,7 @@ import { ProcessEnquiryService } from './functional-stage/process-enquiry/proces
 import { MessageService } from '../../message.service';
 import { IccInprincipleApprovalService } from './functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service';
 import { RiskAssessmentService } from './functional-stage/risk-assessment/risk-assessment.service';
+import { ApplicationFeeService } from './functional-stage/application-fee/application-fee.service';
 
 @Component({
     selector: 'app-loan-contract-search',
@@ -64,6 +65,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 private processEnquiryService: ProcessEnquiryService,
                 private iccInprincipleApprovalService: IccInprincipleApprovalService,
                 private riskAssessmentService: RiskAssessmentService,
+                private applicationFeeService: ApplicationFeeService,
                 public router: Router,
                 private messageService: MessageService)
     {
@@ -193,6 +195,44 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
             if (error.status === 404) {
                 this.riskAssessmentService.selectedEntity$.next(null);
                 this.router.navigate(['/risk-assessment', '', 'loanApplication', loanApplication.id]);
+            }
+            else {
+                this.messageService.showError('An error occurred while processing the enquiry.');
+            }
+        }
+    }
+
+    /**
+     * Redirect to Application Fee
+     */
+    async redirectToApplicationFee(): Promise<void> {
+        const loanApplication = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        const riskAssessmentIncompleteMessage = 'Please complete Prelim Risk Assessment approval before starting Application Fee.';
+
+        let riskAssessment: any;
+        try {
+            riskAssessment = await firstValueFrom(this.riskAssessmentService.getRiskAssessment(loanApplication.id));
+        }
+        catch (error: any) {
+            this.messageService.showError(error.status === 404 ? riskAssessmentIncompleteMessage : 'An error occurred while processing the enquiry.');
+            return;
+        }
+
+        // Functional status 10 - Prelim Risk Assessment Stage. Workflow status 3 - Approved.
+        if (Number(loanApplication.functionalStatus) < 10 || riskAssessment.workFlowStatusCode !== 3) {
+            this.messageService.showError(riskAssessmentIncompleteMessage);
+            return;
+        }
+
+        try {
+            const applicationFee = await firstValueFrom(this.applicationFeeService.getApplicationFee(loanApplication.id));
+            this.applicationFeeService.selectedEntity$.next(applicationFee);
+            this.router.navigate(['/application-fee', applicationFee.id, 'loanApplication', loanApplication.id]);
+        }
+        catch (error: any) {
+            if (error.status === 404) {
+                this.applicationFeeService.selectedEntity$.next(null);
+                this.router.navigate(['/application-fee', '', 'loanApplication', loanApplication.id]);
             }
             else {
                 this.messageService.showError('An error occurred while processing the enquiry.');

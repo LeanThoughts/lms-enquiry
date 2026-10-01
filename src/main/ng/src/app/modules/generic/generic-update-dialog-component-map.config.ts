@@ -12,6 +12,7 @@ import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
 import { IccInprincipleApprovalService } from "../loan-contract-search/functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service";
 import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
+import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
 
 interface EntityUpdateDialogComponentConfig {
     // routeResolvedData?: string[],
@@ -19,12 +20,12 @@ interface EntityUpdateDialogComponentConfig {
     passSearchString1Via?: string;
     searchString2ForCreate?: string;
     passSearchString2Via?: string;
-    createFunction: any;
+    createFunction?: any;
     updateFunction?: any;
-    createDialogTitle: string;
+    createDialogTitle?: string;
     updateDialogTitle?: string;
     viewDialogTitle?: string;
-    createSuccessMessage: string;
+    createSuccessMessage?: string;
     updateSuccessMessage?: string;
     trackObjectAfterCreateAndUpdate?: string;
     fieldsConfig: {
@@ -49,7 +50,7 @@ interface EntityUpdateDialogComponentConfig {
         viewOperationKey?: string; // Key to be used to display the value in the view mode
         maxValue?: any; // Maximum value for numeric or date fields
         minValue?: any; // Minimum value for numeric or date fields: another field's name, or a dotted path into routeResolvedData
-        visibleWhen?: string; // Name of the field that must have a value for this field to be shown
+        visibleWhen?: string | { field: string; value: any }; // Field that must have a value (or the given value) for this field to be shown
     }[];
 }
 
@@ -643,6 +644,72 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
             { row: 4, span: 6, name: 'documentType', label: 'Document Type', type: 'select', displayKey: 'description', valueKey: 'code' },
             { row: 4, span: 6, name: 'file', label: 'Upload Document (PDF)', type: 'file' },
             { row: 5, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200, required: true },
+        ]
+    },
+
+    // Application Fee - Term Sheets
+    applicationFeeTermSheets: {
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Term Sheet',
+        updateDialogTitle: 'Update Term Sheet',
+        viewDialogTitle: 'View Term Sheet',
+        createFunction: ApplicationFeeService.prototype.createTermSheet,
+        updateFunction: ApplicationFeeService.prototype.updateTermSheet,
+        createSuccessMessage: 'Term Sheet details added successfully',
+        updateSuccessMessage: 'Term Sheet details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'applicationFee',
+        fieldsConfig: [
+            { row: 1, span: 12, name: 'status', label: 'Status', type: 'select', required: true, displayKey: 'description', valueKey: 'code' },
+            { row: 2, span: 12, name: 'issuanceDate', label: 'Date of Issuance', type: 'date', required: true, maxValue: 'currentDate', 
+                minValue: 'preliminaryRiskAssessment.dateOfAssessment', visibleWhen: { field: 'status', value: 'Draft' } },
+            { row: 3, span: 12, name: 'acceptanceDate', label: 'Acceptance Date', type: 'date', required: true, maxValue: 'currentDate', 
+                visibleWhen: { field: 'status', value: 'Final' } },
+            { row: 4, span: 12, name: 'file', label: 'Upload Document (PDF)', type: 'file' },
+        ]
+    },
+
+    // Application Fee - Formal Requests
+    applicationFeeFormalRequests: {
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Formal Request',
+        updateDialogTitle: 'Update Formal Request',
+        viewDialogTitle: 'View Formal Request',
+        createFunction: ApplicationFeeService.prototype.createFormalRequest,
+        updateFunction: ApplicationFeeService.prototype.updateFormalRequest,
+        createSuccessMessage: 'Formal Request details added successfully',
+        updateSuccessMessage: 'Formal Request details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'applicationFee',
+        fieldsConfig: [
+            { row: 1, span: 12, name: 'documentName', label: 'Document Name', type: 'text', maxLength: 100 },
+            { row: 2, span: 6, name: 'uploadDate', label: 'Upload Date', type: 'date', maxValue: 'currentDate' },
+            { row: 2, span: 6, name: 'documentLetterDate', label: 'Document Letter Date', type: 'date', maxValue: 'currentDate' },
+            { row: 3, span: 6, name: 'documentReceivedDate', label: 'Document Received Date', type: 'date', maxValue: 'currentDate', 
+                minValue: 'documentLetterDate' },
+            { row: 3, span: 6, name: 'file', label: 'Upload Document (PDF)', type: 'file' },
+        ]
+    },
+
+    // Application Fee - Application/Inception Fee Receipts. Fee records come from SAP; only the receipt details can be changed.
+    applicationFeeInceptionFees: {
+        updateDialogTitle: 'Update Inception Fee',
+        viewDialogTitle: 'View Inception Fee',
+        updateFunction: ApplicationFeeService.prototype.updateInceptionFee,
+        updateSuccessMessage: 'Inception fee details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'applicationFee',
+        fieldsConfig: [
+            { row: 1, span: 6, name: 'description', label: 'Fee Type', type: 'text', readOnly: true },
+            { row: 1, span: 6, name: 'statusDescription', label: 'Status', type: 'text', readOnly: true },
+            { row: 2, span: 6, name: 'invoiceNumber', label: 'Invoice Number', type: 'text', readOnly: true },
+            { row: 2, span: 6, name: 'invoiceDate', label: 'Invoice Date', type: 'text', readOnly: true },
+            { row: 3, span: 4, name: 'amount', label: 'Amount', type: 'text', readOnly: true },
+            { row: 3, span: 4, name: 'taxAmount', label: 'Tax Amount', type: 'text', readOnly: true },
+            { row: 3, span: 4, name: 'totalAmount', label: 'Total Amount', type: 'text', readOnly: true },
+            { row: 4, span: 6, name: 'amountReceived', label: 'Amount Received', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
+            { row: 4, span: 6, name: 'rtgsNumber', label: 'RTGS Number', type: 'text', maxLength: 100 },
+            { row: 5, span: 6, name: 'referenceNumber', label: 'Reference Number', type: 'text', maxLength: 100 },
+            { row: 6, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200 },
         ]
     }
 }

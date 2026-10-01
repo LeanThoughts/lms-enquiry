@@ -153,7 +153,10 @@ export class GenericUpdateComponent implements OnInit {
                         const validators = [];
                         // if (field.required) validators.push(Validators.required);
                         if (field.pattern) validators.push(Validators.pattern(field.pattern));
-                        formControls[field.name] = [this.selectedObject[field.name] || null, validators];
+                        const value = field.type === 'date'
+                            ? this.toFdDate(this.selectedObject[field.name])
+                            : this.selectedObject[field.name] || null;
+                        formControls[field.name] = [value, validators];
                     }
                 // });
             });
@@ -424,5 +427,18 @@ export class GenericUpdateComponent implements OnInit {
             return this.datetimeAdapter.compareDate(fdDate, FdDate.getToday()) > 0;
         }
         return false;
+    }
+
+    /**
+     * Convert a saved date ('yyyy-MM-dd' string, ISO string or Date) to the FdDate the date picker expects.
+     * fd-date-picker flags any non-FdDate value with a dateValidation error.
+     */
+    private toFdDate(value: any): FdDate | null {
+        if (value == null || value === '') return null;
+        if (value instanceof FdDate) return value;
+        const dateOnly = typeof value === 'string' ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value) : null;
+        if (dateOnly) return new FdDate(+dateOnly[1], +dateOnly[2], +dateOnly[3]);
+        const date = new Date(value);
+        return isNaN(date.getTime()) ? null : new FdDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     }
 }

@@ -1,0 +1,25 @@
+<fd-layout-grid [noGap]="true" class="tab-component-grid">
+    <div fdLayoutGridRow>
+        <div fdLayoutGridCol [style.padding.rem]="1" style="background-color: white;">
+            <button fd-button
+                fdType="emphasized"
+                label="Select Partner"
+                glyph="search"
+                [disabled]="saving"
+                (click)="searchPartners()"
+            >
+            </button>
+        </div>
+    </div>
+
+    <div fdLayoutGridRow style="height: auto; background-color: white;" [style.padding.rem]="1">
+        @for (field of fields; track field.name) {
+            <div [fdLayoutGridCol]="3">
+                <div fd-form-item [style.margin-bottom.rem]="1">
+                    <label fd-form-label [for]="field.name"><em>{{ field.label }}</em>:</label>
+                    <label [id]="field.name">{{ details[field.name] || '--' }}</label>
+                </div>
+            </div>
+        }
+    </div>
+</fd-layout-grid>
