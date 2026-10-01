@@ -4,6 +4,7 @@ import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
 import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
 import { ApplicationFeeService } from "../loan-contract-search/functional-stage/application-fee/application-fee.service";
+import { SanctionService } from "../loan-contract-search/functional-stage/sanction/sanction.service";
 
 interface EntityUpdateDialogComponentConfig {
     // Required for list components
@@ -580,5 +581,104 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         viewButton: true,
         updateDialogWidth: '45rem',
         viewDialogWidth: '45rem',
+    },
+
+    // Sanction - Reasons For Delay
+    sanctionReasonsForDelay: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Serial Number', type: 'text'},
+            {name: 'date', header: 'Date', type: 'date'},
+            {name: 'reason', header: 'Reason', type: 'text'},
+        ],
+        fetchFunction: SanctionService.prototype.getReasonsForDelay,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '35rem',
+        viewDialogWidth: '35rem',
+    },
+
+    // Sanction - Payment Receipts - Pre Sanction
+    sanctionPaymentReceiptsPreSanction: {
+        displayedColumns: [
+            {name: 'proformaInvoiceNumber', header: 'Proforma Invoice Number', type: 'text'},
+            {name: 'proformaInvoiceDate', header: 'Proforma Invoice Date', type: 'date'},
+            {name: 'feeTypeDescription', header: 'Fee Type', type: 'text'},
+            {name: 'amount', header: 'Amount', type: 'number'},
+            {name: 'payee', header: 'Payee', type: 'text'},
+            {name: 'amountReceived', header: 'Amount Received', type: 'number'},
+            {name: 'dateOfTransfer', header: 'Date of Transfer', type: 'date'},
+            {name: 'rtgsNeftNumber', header: 'RTGS/NEFT Number', type: 'text'},
+            {name: 'referenceNumber', header: 'Reference Number (If Any)', type: 'text'},
+        ],
+        fetchFunction: SanctionService.prototype.getPaymentReceiptsPreSanction,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '45rem',
+        viewDialogWidth: '45rem',
+        routeResolvedData: ['feeType'],
+    },
+
+    // Sanction - Original Sanction Letters
+    sanctionLetters: {
+        displayedColumns: [
+            {name: 'serialNumber', header: 'Serial Number', type: 'text'},
+            {name: 'typeDescription', header: 'Type', type: 'text'},
+            {name: 'sanctionLetterIssueDate', header: 'Sanction Letter Issue Date', type: 'date'},
+            {name: 'sanctionLetterValidToDate', header: 'Sanction Letter Valid To Date', type: 'date'},
+            {name: 'originalSanctionAmount', header: 'Original Sanction Amount', type: 'number'},
+            {name: 'revisedSanctionAmount', header: 'Revised Sanction Amount', type: 'number'},
+            {name: 'originalInterestRate', header: 'Original Interest Rate', type: 'number'},
+            {name: 'revisedInterestRate', header: 'Revised Interest Rate', type: 'number'},
+            {name: 'fileReference', header: 'Document', type: 'file'},
+        ],
+        fetchFunction: SanctionService.prototype.getSanctionLetters,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '55rem',
+        viewDialogWidth: '55rem',
+        routeResolvedData: ['type', 'documentType', 'approvalByBoard'],
+    },
+
+    // Sanction - Payment Receipts - Post Sanction
+    sanctionPaymentReceiptsPostSanction: {
+        displayedColumns: [
+            {name: 'proformaInvoiceNumber', header: 'Proforma Invoice Number', type: 'text'},
+            {name: 'proformaInvoiceDate', header: 'Proforma Invoice Date', type: 'date'},
+            {name: 'feeTypeDescription', header: 'Fee Type', type: 'text'},
+            {name: 'amount', header: 'Amount', type: 'number'},
+            {name: 'payee', header: 'Payee', type: 'text'},
+            {name: 'amountReceived', header: 'Amount Received', type: 'number'},
+            {name: 'dateOfTransfer', header: 'Date of Transfer', type: 'date'},
+            {name: 'rtgsNeftNumber', header: 'RTGS/NEFT Number', type: 'text'},
+            {name: 'referenceNumber', header: 'Reference Number (If Any)', type: 'text'},
+        ],
+        fetchFunction: SanctionService.prototype.getPaymentReceiptsPostSanction,
+        createButton: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '45rem',
+        viewDialogWidth: '45rem',
+        routeResolvedData: ['feeType'],
+    },
+
+    // Sanction - Rejected By Customer
+    sanctionRejectedByCustomer: {
+        displayedColumns: [
+            {name: 'approvalByBoardMeetingNumber', header: 'Meeting Number', type: 'text'},
+            {name: 'meetingDate', header: 'Meeting Date', type: 'date'},
+            {name: 'rejectionCategoryDescription', header: 'Rejection Category', type: 'text'},
+            {name: 'details', header: 'Reason for Rejection', type: 'text'},
+        ],
+        fetchFunction: SanctionService.prototype.getRejectedByCustomers,
+        createButton: true,
+        disableCreateButtonAfterCreate: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '40rem',
+        viewDialogWidth: '40rem',
+        routeResolvedData: ['approvalByBoardMeetingNumber', 'rejectionCategory'],
     }
 }

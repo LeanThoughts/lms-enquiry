@@ -55,6 +55,17 @@
                     >
                     </button>
 
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="positive"
+                        label="Sanction"
+                        [style.margin-left.rem]="0.1"
+                        [disabled]="selectedEnquiry.selected.length === 0"
+                        (click)="redirectToSanction()"
+                    >
+                    </button>
+
                     <!-- <fd-toolbar-separator></fd-toolbar-separator>
 
                     <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['loan-contract-search'])">

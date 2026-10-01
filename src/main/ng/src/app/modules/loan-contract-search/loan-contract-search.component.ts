@@ -26,6 +26,7 @@ import { MessageService } from '../../message.service';
 import { IccInprincipleApprovalService } from './functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service';
 import { RiskAssessmentService } from './functional-stage/risk-assessment/risk-assessment.service';
 import { ApplicationFeeService } from './functional-stage/application-fee/application-fee.service';
+import { SanctionService } from './functional-stage/sanction/sanction.service';
 
 @Component({
     selector: 'app-loan-contract-search',
@@ -66,6 +67,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 private iccInprincipleApprovalService: IccInprincipleApprovalService,
                 private riskAssessmentService: RiskAssessmentService,
                 private applicationFeeService: ApplicationFeeService,
+                private sanctionService: SanctionService,
                 public router: Router,
                 private messageService: MessageService)
     {
@@ -233,6 +235,62 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
             if (error.status === 404) {
                 this.applicationFeeService.selectedEntity$.next(null);
                 this.router.navigate(['/application-fee', '', 'loanApplication', loanApplication.id]);
+            }
+            else {
+                this.messageService.showError('An error occurred while processing the enquiry.');
+            }
+        }
+    }
+
+    /**
+     * Redirect to Sanction
+     */
+    async redirectToSanction(): Promise<void> {
+        const loanApplication = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        const boardApprovalIncompleteMessage = 'Board approval workflow not completed for loan.';
+
+        // Functional status 1 - Enquiry, 2 - ICC, 3 - Appraisal, 4 - Board Approval, 5 - Sanction, 11 - Application Fee
+        const functionalStatus: number = Number(loanApplication.functionalStatus);
+        if (functionalStatus === 4) {
+            let boardApproval: any;
+            try {
+                boardApproval = await firstValueFrom(this.sanctionService.getBoardApproval(loanApplication.id));
+            }
+            catch (error: any) {
+                this.messageService.showError(error.status === 404 ? boardApprovalIncompleteMessage : 'An error occurred while processing the enquiry.');
+                return;
+            }
+            // Workflow status 1 - Draft, 2 - Under Approval, 3 - Approved, 4 - Rejected
+            if (boardApproval.workFlowStatusCode === 4) {
+                this.messageService.showError('Board Approval is rejected. Sanction not possible.');
+                return;
+            }
+            if (boardApproval.workFlowStatusCode !== 3) {
+                this.messageService.showError(boardApprovalIncompleteMessage);
+                return;
+            }
+        }
+        else if (functionalStatus === 11) {
+            const approvalByBoards = await firstValueFrom(this.sanctionService.getApprovalByBoards(loanApplication.id));
+            if (approvalByBoards.length === 0) {
+                this.messageService.showError(boardApprovalIncompleteMessage);
+                return;
+            }
+        }
+        else if (![1, 2, 3, 5].includes(functionalStatus)) {
+            this.messageService.showError('Sanction cannot be started at the current stage of the loan.');
+            return;
+        }
+
+        try {
+            const sanction = await firstValueFrom(this.sanctionService.getSanction(loanApplication.id));
+            this.sanctionService.selectedEntity$.next(sanction);
+            this.router.navigate(['/sanction', sanction.id, 'loanApplication', loanApplication.id]);
+        }
+        catch (error: any) {
+            if (error.status === 404) {
+                this.sanctionService.selectedEntity$.next(null);
+                this.router.navigate(['/sanction', '', 'loanApplication', loanApplication.id]);
             }
             else {
                 this.messageService.showError('An error occurred while processing the enquiry.');

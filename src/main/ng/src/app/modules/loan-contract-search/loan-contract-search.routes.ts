@@ -12,6 +12,8 @@ import { RiskAssessmentComponent } from "./functional-stage/risk-assessment/risk
 import { RiskAssessmentService } from "./functional-stage/risk-assessment/risk-assessment.service";
 import { ApplicationFeeComponent } from "./functional-stage/application-fee/application-fee.component";
 import { ApplicationFeeService } from "./functional-stage/application-fee/application-fee.service";
+import { SanctionComponent } from "./functional-stage/sanction/sanction.component";
+import { SanctionService } from "./functional-stage/sanction/sanction.service";
 
 export default [
     {
@@ -75,6 +77,14 @@ export default [
         component: ApplicationFeeComponent,
         resolve: {
             routeResolvedData: ApplicationFeeService
+        },
+        canActivate: [routeInterceptor],
+    },
+    {
+        path: 'sanction/:sanctionId/loanApplication/:loanApplicationId',
+        component: SanctionComponent,
+        resolve: {
+            routeResolvedData: SanctionService
         },
         canActivate: [routeInterceptor],
     },

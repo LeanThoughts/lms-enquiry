@@ -650,7 +650,7 @@ export class GenericUpdateDialogComponent implements OnInit {
 
     /**
      * Whether a field should be shown. visibleWhen is either a field name (shown when that field has a value)
-     * or { field, value } (shown when that field equals the value).
+     * or { field, value } (shown when that field equals the value, or one of the values if value is an array).
      */
     isFieldVisible(field: any): boolean {
         if (!field.visibleWhen) return true;
@@ -659,7 +659,8 @@ export class GenericUpdateDialogComponent implements OnInit {
             ? this.selectedObject[sourceName]
             : this.genericForm?.get(sourceName)?.value;
         if (typeof field.visibleWhen === 'object') {
-            return value === field.visibleWhen.value;
+            const expected = field.visibleWhen.value;
+            return Array.isArray(expected) ? expected.includes(value) : value === expected;
         }
         return value != null && value !== '';
     }
