@@ -11,6 +11,7 @@ import { BusinessPartnerSearchService } from "../business-partner-search/busines
 import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
 import { IccInprincipleApprovalService } from "../loan-contract-search/functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service";
+import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
 
 interface EntityUpdateDialogComponentConfig {
     // routeResolvedData?: string[],
@@ -617,6 +618,31 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         fieldsConfig: [
             { row: 1, span: 12, name: 'notificationDate', label: 'Notification Date', type: 'date' },
             { row: 2, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200, required: true },
+        ]
+    },
+
+    // Risk Assessment - Preliminary Risk Assessment
+    riskAssessmentPreliminaryRiskAssessment: {
+        searchString1ForCreate: 'riskAssessmentId',
+        passSearchString1Via: 'Object',
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Preliminary Risk Assessment Details',
+        updateDialogTitle: 'Update Preliminary Risk Assessment Details',
+        viewDialogTitle: 'View Preliminary Risk Assessment Details',
+        createFunction: RiskAssessmentService.prototype.createPreliminaryRiskAssessment,
+        updateFunction: RiskAssessmentService.prototype.updatePreliminaryRiskAssessment,
+        createSuccessMessage: 'Preliminary Risk Assessment details created successfully',
+        updateSuccessMessage: 'Preliminary Risk Assessment details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'riskAssessment',
+        fieldsConfig: [
+            { row: 1, span: 6, name: 'dateOfAssessment', label: 'Date of Assessment', type: 'date', maxValue: 'currentDate', minValue: 'approvalByIcc.meetingDate' },
+            { row: 2, span: 12, name: 'remarksByRiskDepartment', label: 'Remarks by Risk Department', type: 'text', maxLength: 200, required: true },
+            { row: 3, span: 6, name: 'mdApprovalDate', label: 'MD Approval Date', type: 'date', maxValue: 'currentDate', minValue: 'dateOfAssessment' },
+            { row: 3, span: 6, name: 'documentTitle', label: 'Document Title', type: 'text', maxLength: 20 },
+            { row: 4, span: 6, name: 'documentType', label: 'Document Type', type: 'select', displayKey: 'description', valueKey: 'code' },
+            { row: 4, span: 6, name: 'file', label: 'Upload Document (PDF)', type: 'file' },
+            { row: 5, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200, required: true },
         ]
     }
 }

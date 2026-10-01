@@ -1,0 +1,108 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ComponentNgxComponent } from '../../../../common/component-ngx/component-ngx.component';
+import { ButtonComponent, LayoutGridModule } from '@fundamental-ngx/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { IconTabBarComponent, IconTabBarTabComponent } from '@fundamental-ngx/platform/icon-tab-bar';
+import { LoanContractSearchService } from '../../loan-contract-search.service';
+import { RiskAssessmentService } from './risk-assessment.service';
+import { GenericListComponent } from '../../../generic/generic-list/generic-list.component';
+import { MessageService } from '../../../../message.service';
+import { AuthService } from '../../../auth/auth.service';
+
+@Component({
+    selector: 'app-risk-assessment',
+    imports: [
+        ButtonComponent,
+        ComponentNgxComponent,
+        LayoutGridModule,
+        IconTabBarComponent,
+        IconTabBarTabComponent,
+        GenericListComponent
+    ],
+    templateUrl: './risk-assessment.component.html'
+})
+export class RiskAssessmentComponent implements OnInit, OnDestroy {
+
+    disableSendForApproval: boolean = false;
+
+    title: string = '';
+
+    private destroy$ = new Subject<void>();
+
+    loanApplicationId: string = '';
+    riskAssessmentId: string = '';
+
+    selectedEnquiry: any;
+    selectedRiskAssessment: any;
+
+    /**
+     * Constructor
+     */
+    constructor(
+        private route: ActivatedRoute,
+        public router: Router,
+        private loanContractSearchService: LoanContractSearchService,
+        private riskAssessmentService: RiskAssessmentService,
+        private messageService: MessageService,
+        private authService: AuthService
+    ) 
+    {
+        this.loanApplicationId = this.route.snapshot.params['loanApplicationId'];
+        this.riskAssessmentId = this.route.snapshot.params['riskAssessmentId'];
+
+        this.selectedEnquiry = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        this.riskAssessmentService.selectedEntity$.pipe(takeUntil(this.destroy$)).subscribe((entity) => {
+            this.selectedRiskAssessment = entity;
+            // Nothing to send until the risk assessment has been changed since it was last approved
+            this.disableSendForApproval = !entity?.modified;
+        });
+    }
+
+    /**
+     * On init
+     */
+    ngOnInit(): void {
+        // Set the title
+        this.title = this.getTitle();
+    }
+
+    /**
+     * Get the title for the page
+     */
+    private getTitle(): string {
+        let title = 'Prelim Risk Assessment';
+        title += (this.selectedEnquiry.loanContractId) ? ` : ${this.selectedEnquiry.loanContractId}` : ` : ${this.selectedEnquiry.enquiryNo}`;
+        title += ` / ${this.selectedEnquiry.projectName}`;
+        return title;
+    }
+
+    /**
+     * Send for approval
+     */
+    sendForApproval(): void {
+        this.disableSendForApproval = true;
+        const { firstName = '', lastName = '', email = '' } = this.authService.currentUser ?? {};
+        const name = `${firstName} ${lastName}`.trim();
+        this.messageService.showInfo('Please wait while attempting to send the Prelim Risk Assessment for approval.', 25000);
+
+        this.riskAssessmentService.sendRiskAssessmentForApproval(this.selectedRiskAssessment.id, name, email).subscribe({
+            next: (response) => {
+                this.riskAssessmentService.selectedEntity$.next(response);
+                this.messageService.showSuccess('Risk assessment is sent for approval.');
+            },
+            error: () => {
+                this.disableSendForApproval = false;
+                this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+            }
+        });
+    }
+
+    /**
+     * On destroy
+     */
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+}

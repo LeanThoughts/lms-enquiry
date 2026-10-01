@@ -2,6 +2,7 @@ import { BusinessPartnerSearchService } from "../business-partner-search/busines
 import { IccInprincipleApprovalService } from "../loan-contract-search/functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service";
 import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
+import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
 
 export const entityServiceMap: { [key: string]: any } = {
 
@@ -40,4 +41,6 @@ export const entityServiceMap: { [key: string]: any } = {
     iccInprincipleApprovalRejectedByCustomer: IccInprincipleApprovalService,
     iccInprincipleApprovalLoanEnhancements: IccInprincipleApprovalService,
     iccInprincipleApprovalRiskNotifications: IccInprincipleApprovalService,
+
+    riskAssessmentPreliminaryRiskAssessment: RiskAssessmentService,
 }

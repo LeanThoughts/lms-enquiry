@@ -2,6 +2,7 @@ import { BusinessPartnerSearchService } from "../business-partner-search/busines
 import { IccInprincipleApprovalService } from "../loan-contract-search/functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service";
 import { ProcessEnquiryService } from "../loan-contract-search/functional-stage/process-enquiry/process-enquiry.service";
 import { ProjectProposalService } from "../loan-contract-search/functional-stage/process-enquiry/project-proposal/project-proposal.service";
+import { RiskAssessmentService } from "../loan-contract-search/functional-stage/risk-assessment/risk-assessment.service";
 
 interface EntityUpdateDialogComponentConfig {
     // Required for list components
@@ -498,5 +499,26 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         viewButton: true,
         updateDialogWidth: '35rem',
         viewDialogWidth: '30rem',
+    },
+
+    // Risk Assessment - Preliminary Risk Assessment
+    riskAssessmentPreliminaryRiskAssessment: {
+        displayedColumns: [
+            {name: 'dateOfAssessment', header: 'Date of Assessment', type: 'date'},
+            {name: 'remarksByRiskDepartment', header: 'Remarks By Risk Department', type: 'text'},
+            {name: 'mdApprovalDate', header: 'MD Approval Date', type: 'date'},
+            {name: 'documentTitle', header: 'Document Title', type: 'text'},
+            {name: 'documentType', header: 'Document Type', type: 'text'},
+            {name: 'fileReference', header: 'Document', type: 'file'},
+            {name: 'remarks', header: 'Remarks', type: 'text'},
+        ],
+        fetchFunction: RiskAssessmentService.prototype.getPreliminaryRiskAssessment,
+        createButton: true,
+        disableCreateButtonAfterCreate: true,
+        updateButton: true,
+        viewButton: true,
+        updateDialogWidth: '45rem',
+        viewDialogWidth: '40rem',
+        routeResolvedData: ['approvalByIcc', 'documentType'],
     }
 }

@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import { ProcessEnquiryService } from './functional-stage/process-enquiry/process-enquiry.service';
 import { MessageService } from '../../message.service';
 import { IccInprincipleApprovalService } from './functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service';
+import { RiskAssessmentService } from './functional-stage/risk-assessment/risk-assessment.service';
 
 @Component({
     selector: 'app-loan-contract-search',
@@ -62,6 +63,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
     constructor(private loanContractSearchService: LoanContractSearchService,
                 private processEnquiryService: ProcessEnquiryService,
                 private iccInprincipleApprovalService: IccInprincipleApprovalService,
+                private riskAssessmentService: RiskAssessmentService,
                 public router: Router,
                 private messageService: MessageService)
     {
@@ -149,6 +151,52 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                     ? 'Enquiry process and Enquiry completion should be completed and approved before ICC In-principle approval.'
                     : 'An error occurred while processing the enquiry.';
             this.messageService.showError(message);
+        }
+    }
+
+    /**
+     * Redirect to Prelim Risk Assessment
+     */
+    async redirectToRiskAssessment(): Promise<void> {
+        const loanApplication = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        const iccIncompleteMessage = 'Please complete ICC In-principle approval before starting Prelim Risk Assessment.';
+
+        let iccApproval: any;
+        try {
+            iccApproval = await firstValueFrom(this.iccInprincipleApprovalService.getIccInprincipleApproval(loanApplication.id));
+        }
+        catch (error: any) {
+            this.messageService.showError(iccIncompleteMessage);
+            return;
+        }
+
+        const approvalsByIcc = await firstValueFrom(this.iccInprincipleApprovalService.getApprovalByIcc(iccApproval.id));
+        const approvalByIcc = approvalsByIcc?.[0];
+        if (!approvalByIcc?.edApprovalDate || !approvalByIcc?.cfoApprovalDate) {
+            this.messageService.showError('ED Approval Date and CFO Approval Date must be set before proceeding to Risk Assessment.');
+            return;
+        }
+
+        // Functional status 2 - ICC In-Principle Approval Stage, 10 - Prelim Risk Assessment Stage. Workflow status 3 - Approved.
+        const functionalStatus: number = Number(loanApplication.functionalStatus);
+        if ((functionalStatus !== 2 && functionalStatus !== 10) || iccApproval.workFlowStatusCode !== 3) {
+            this.messageService.showError(iccIncompleteMessage);
+            return;
+        }
+
+        try {
+            const riskAssessment = await firstValueFrom(this.riskAssessmentService.getRiskAssessment(loanApplication.id));
+            this.riskAssessmentService.selectedEntity$.next(riskAssessment);
+            this.router.navigate(['/risk-assessment', riskAssessment.id, 'loanApplication', loanApplication.id]);
+        }
+        catch (error: any) {
+            if (error.status === 404) {
+                this.riskAssessmentService.selectedEntity$.next(null);
+                this.router.navigate(['/risk-assessment', '', 'loanApplication', loanApplication.id]);
+            }
+            else {
+                this.messageService.showError('An error occurred while processing the enquiry.');
+            }
         }
     }
     

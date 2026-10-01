@@ -8,6 +8,8 @@ import { ProjectProposalComponent } from "./functional-stage/process-enquiry/pro
 import { ProjectProposalService } from "./functional-stage/process-enquiry/project-proposal/project-proposal.service";
 import { IccInprincipleApprovalService } from "./functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service";
 import { ICCInprincipleApprovalComponent } from "./functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.component";
+import { RiskAssessmentComponent } from "./functional-stage/risk-assessment/risk-assessment.component";
+import { RiskAssessmentService } from "./functional-stage/risk-assessment/risk-assessment.service";
 
 export default [
     {
@@ -55,6 +57,14 @@ export default [
         component: ICCInprincipleApprovalComponent,
         resolve: {
             routeResolvedData: IccInprincipleApprovalService
+        },
+        canActivate: [routeInterceptor],
+    },
+    {
+        path: 'risk-assessment/:riskAssessmentId/loanApplication/:loanApplicationId',
+        component: RiskAssessmentComponent,
+        resolve: {
+            routeResolvedData: RiskAssessmentService
         },
         canActivate: [routeInterceptor],
     },
