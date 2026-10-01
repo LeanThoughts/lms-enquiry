@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { BehaviorSubject, catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
+import { ProcessEnquiryService } from '../process-enquiry/process-enquiry.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class IccInprincipleApprovalService implements Resolve<any> {
     /**
      * Constructor
      */
-    constructor(private http: HttpClient) {         
+    constructor(private http: HttpClient, private processEnquiryService: ProcessEnquiryService) {         
     }
 
     /**
@@ -22,8 +23,37 @@ export class IccInprincipleApprovalService implements Resolve<any> {
      */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return forkJoin({
-            iccFurtherDetails: this.getIccFurtherDetails(route.params['iccApprovalId'])
+            iccFurtherDetails: this.getIccFurtherDetails(route.params['iccInprincipleApprovalId']),
+            enquiryCompletion: this.getEnquiryCompletionDetails(route.params['loanApplicationId']).pipe(
+                map((enquiryCompletions: any[]) => enquiryCompletions?.[0] ?? null),
+                catchError(() => of(null))
+            ),
+            documentTypeMinutes: this.getDocumentTypes(),
+            documentTypeMailFromCS: this.getDocumentTypes()
         });
+    }
+
+    /**
+     * Upload vault document
+     */
+    public uploadVaultDocument(file: FormData): Observable<any> {
+        return this.http.post(environment.primaryApiHost + '/upload', file);
+    }    
+
+    /**
+     * Get document types
+     */
+    getDocumentTypes(): Observable<any> {
+        return this.http.get<any>(environment.primaryApiHost + '/documentTypes');
+    }
+    
+    /**
+     * Get Enquiry Completion Details
+     */
+    getEnquiryCompletionDetails(loanApplicationId: string): Observable<any> {
+        return this.processEnquiryService.getEnquiryAction(loanApplicationId).pipe(
+            switchMap((response: any) => this.processEnquiryService.getEnquiryCompletionDetails(response.id))
+        );
     }
 
     /**
@@ -121,5 +151,19 @@ export class IccInprincipleApprovalService implements Resolve<any> {
             map((response: any) => [response]),
             catchError((error) => of(null))
         );
-    }    
+    }
+
+    /**
+     * Create Approval By ICC
+     */
+    public createApprovalByIcc(approvalByICC: any): Observable<any> {
+        return this.http.post(environment.primaryApiHost + '/approvalByICCs/create', approvalByICC);
+    }
+
+    /**
+     * Update Approval By ICC
+     */
+    public updateApprovalByIcc(approvalByICC: any): Observable<any> {
+        return this.http.put(environment.primaryApiHost + '/approvalByICCs/update', approvalByICC);
+    }
 }

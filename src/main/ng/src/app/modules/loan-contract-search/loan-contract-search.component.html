@@ -1,13 +1,14 @@
 <fd-dynamic-page size="large" [autoResponsive]="true">
     <fd-dynamic-page-header headingLevel="2" title="Search Loan Contracts"
-        subtitle="Search Loan contracts by Functional Status, Project Name, State, Enquiry Number, etc.">
-        <fd-dynamic-page-breadcrumb>
+        subtitle="Search Loan contracts by Functional Status, Project Name, State, Enquiry Number, etc."
+        [style.margin-top.rem]="1">
+        <!-- <fd-dynamic-page-breadcrumb>
             <fd-breadcrumb [style.margin-top.rem]="0.2">
                 <fd-breadcrumb-item>
                     <a fd-link href="loan-contract-search">Loan Contracts</a>
                 </fd-breadcrumb-item>
             </fd-breadcrumb>
-        </fd-dynamic-page-breadcrumb>
+        </fd-dynamic-page-breadcrumb> -->
         <fd-dynamic-page-global-actions>
             <fd-toolbar fdType="transparent" [clearBorder]="true">
                 <ng-container [fdCompact]="'compact'">
@@ -21,11 +22,22 @@
                     >
                     </button>
 
-                    <fd-toolbar-separator></fd-toolbar-separator>
-
-                    <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['homepage'])">
-                        <i class="sap-icon--decline"></i>
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="positive"
+                        label="ICC Approval"
+                        [style.margin-left.rem]="0.1"
+                        [disabled]="selectedEnquiry.selected.length === 0"
+                        (click)="redirectToICCApproval()"
+                    >
                     </button>
+
+                    <!-- <fd-toolbar-separator></fd-toolbar-separator>
+
+                    <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['loan-contract-search'])">
+                        <i class="sap-icon--decline"></i>
+                    </button> -->
                 </ng-container>
             </fd-toolbar>
         </fd-dynamic-page-global-actions>
@@ -46,14 +58,6 @@
         </div>
         <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
             <div [fdLayoutGridCol]="12" [style.text-align]="'right'">
-                <button fd-button
-                    fdType="emphasized"
-                    label="ICC Approval"
-                    [style.margin-left.rem]="0.3"
-                    [disabled]="selectedEnquiry.selected.length === 0"
-                    (click)="redirectToICCApproval()"
-                >
-                </button>
                 <button fd-button
                     fdType="emphasized"
                     label="Prelim Risk Assessment"

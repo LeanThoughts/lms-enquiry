@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ComponentNgxComponent } from '../../common/component-ngx/component-ngx.component';
 import { 
-    BreadcrumbComponent,
-    BreadcrumbItemComponent,
     ButtonComponent, 
     DatePickerModule, 
-    DynamicPageBreadcrumbComponent, 
     DynamicPageComponent, 
     DynamicPageContentComponent, 
     DynamicPageGlobalActionsComponent, 
@@ -16,8 +12,7 @@ import {
     PanelModule,
     SelectModule,
     TableModule,
-    ToolbarComponent,
-    ToolbarSeparatorComponent
+    ToolbarComponent
 } from '@fundamental-ngx/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -36,17 +31,12 @@ import { IccInprincipleApprovalService } from './functional-stage/icc-inprincipl
         // Dynamic Page Components
         DynamicPageHeaderComponent,
         DynamicPageComponent,
-        DynamicPageBreadcrumbComponent,
-        BreadcrumbComponent,
-        BreadcrumbItemComponent,
         DynamicPageGlobalActionsComponent,
         ToolbarComponent,
-        ToolbarSeparatorComponent,
         DynamicPageContentComponent,
         // Other Components and Modules
         ButtonComponent,
         CommonModule,
-        ComponentNgxComponent,
         DatePickerModule,
         FormsModule,
         LayoutGridModule,

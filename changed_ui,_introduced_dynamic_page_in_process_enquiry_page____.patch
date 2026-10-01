@@ -1,0 +1,408 @@
+Subject: [PATCH] changed ui, introduced dynamic page in process enquiry page ...
+---
+Index: src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.ts b/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.ts
+--- a/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.ts	(revision ae5d080a60160c6035dd8ad29e1b4cac073d8c21)
++++ b/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.ts	(date 1777396739485)
+@@ -1,6 +1,18 @@
+ import { Component, OnDestroy, OnInit } from '@angular/core';
+ import { ComponentNgxComponent } from '../../../../common/component-ngx/component-ngx.component';
+-import { ButtonComponent, LayoutGridModule } from '@fundamental-ngx/core';
++import { BreadcrumbComponent, 
++    BreadcrumbItemComponent, 
++    ButtonComponent, 
++    DynamicPageBreadcrumbComponent, 
++    DynamicPageComponent, 
++    DynamicPageContentComponent, 
++    DynamicPageGlobalActionsComponent, 
++    DynamicPageHeaderComponent, 
++    LayoutGridModule, 
++    PanelModule, 
++    ToolbarComponent, 
++    ToolbarSeparatorComponent 
++} from '@fundamental-ngx/core';
+ import { ActivatedRoute, Router } from '@angular/router';
+ import { Subject, takeUntil } from 'rxjs';
+ import { IconTabBarComponent, IconTabBarTabComponent } from '@fundamental-ngx/platform/icon-tab-bar';
+@@ -14,12 +26,24 @@
+ @Component({
+     selector: 'app-process-enquiry',
+     imports: [
++        // Dynamic Page Components
++        DynamicPageHeaderComponent,
++        DynamicPageComponent,
++        DynamicPageBreadcrumbComponent,
++        BreadcrumbComponent,
++        BreadcrumbItemComponent,
++        DynamicPageGlobalActionsComponent,
++        ToolbarComponent,
++        ToolbarSeparatorComponent,
++        DynamicPageContentComponent,
++        // Other Components and Modules
+         ButtonComponent,
+         ComponentNgxComponent,
+         LayoutGridModule,
++        PanelModule, // Required for fdcompact directive to work
++        GenericListComponent,
+         IconTabBarComponent,
+         IconTabBarTabComponent,
+-        GenericListComponent
+     ],
+     templateUrl: './process-enquiry.component.html'
+ })
+@@ -28,6 +52,7 @@
+     disableSendForApproval: boolean = false;
+ 
+     title: string = '';
++    subtitle: string = '';
+ 
+     private destroy$ = new Subject<void>();
+ 
+@@ -64,18 +89,11 @@
+      */
+     ngOnInit(): void {
+         // Set the title
+-        this.title = this.getTitle();
+-    }
+-
+-    /**
+-     * Get the title for the page
+-     */
+-    private getTitle(): string {
+-        let title = 'Process Enquiry';
+-        title += (this.selectedEnquiry.loanContractId) ? ` : ${this.selectedEnquiry.loanContractId}` : 
+-            ` : ${this.selectedEnquiry.enquiryNo}`;
+-        title += ` / ${this.selectedEnquiry.projectName}`;
+-        return title;
++        this.title = 'Project Name: ' + this.selectedEnquiry.projectName;
++        this.subtitle = 'Enquiry Number: ' + this.selectedEnquiry.enquiryNo.id;
++        if (this.selectedEnquiry.loanContractId) {
++            this.subtitle += ' / Loan Contract ID: ' + this.selectedEnquiry.loanContractId;
++        }
+     }
+ 
+     /**
+@@ -139,7 +157,7 @@
+         this.router.navigate(['/process-enquiry', this.enquiryActionId, 'loanApplication', this.loanApplicationId, 'view-project-proposal', 
+             projectProposal.id]);
+     }
+-    
++
+     /**
+      * On destroy
+      */
+Index: src/main/ng/src/app/modules/loan-contract-search/loan-contract-search.component.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/ng/src/app/modules/loan-contract-search/loan-contract-search.component.html b/src/main/ng/src/app/modules/loan-contract-search/loan-contract-search.component.html
+--- a/src/main/ng/src/app/modules/loan-contract-search/loan-contract-search.component.html	(revision ae5d080a60160c6035dd8ad29e1b4cac073d8c21)
++++ b/src/main/ng/src/app/modules/loan-contract-search/loan-contract-search.component.html	(date 1777393598858)
+@@ -35,90 +35,4 @@
+         <app-loan-contract-list></app-loan-contract-list>
+     
+     </fd-dynamic-page-content>
+-</fd-dynamic-page>
+-
+-<!-- <component-ngx>
+-    <fd-layout-grid [noGap]="true" [style.width.rem]="98">
+-        <div fdLayoutGridRow [style.margin-top.rem]="-0.5" [style.margin-bottom.rem]="-1">
+-            <div [fdLayoutGridCol]="12" >
+-                <h2>Loan Contract Search</h2>
+-            </div>
+-        </div>
+-        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
+-            <div [fdLayoutGridCol]="12" [style.text-align]="'right'">
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="ICC Approval"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                    (click)="redirectToICCApproval()"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Prelim Risk Assessment"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Application Fee"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Appraisal"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="BMC Approval"
+-                    [style.margin-left.rem]="0.3"   
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Board Approval"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Sanction"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Documentation"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Monitoring"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-                <button fd-button
+-                    fdType="emphasized"
+-                    label="Recovery"
+-                    [style.margin-left.rem]="0.3"
+-                    [disabled]="selectedEnquiry.selected.length === 0"
+-                >
+-                </button>
+-            </div>
+-        </div>
+-
+-    </fd-layout-grid>
+-</component-ngx> -->
++</fd-dynamic-page>
+\ No newline at end of file
+Index: src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.html b/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.html
+--- a/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.html	(revision ae5d080a60160c6035dd8ad29e1b4cac073d8c21)
++++ b/src/main/ng/src/app/modules/loan-contract-search/functional-stage/process-enquiry/process-enquiry.component.html	(date 1777397450857)
+@@ -1,95 +1,105 @@
+-<component-ngx>
+-    <fd-layout-grid [noGap]="true" class="component-grid">
+-        <div fdLayoutGridRow>
+-            <div [fdLayoutGridCol]="8">
+-                <h2>{{ title }}</h2>
+-            </div>
+-            <div [fdLayoutGridCol]="4" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+-                <button 
+-                    fd-button 
+-                    (click)="router.navigate(['/loan-contract-search'])" 
+-                    fdType="emphasized"
+-                >
+-                    Back
+-                </button>
+-                <button 
+-                    [style.margin-left.rem]="0.5"
+-                    fd-button 
+-                    (click)="sendForApproval()" 
+-                    fdType="emphasized"
+-                    [disabled]="!selectedEnquiryAction || selectedEnquiryAction?.workFlowStatusCode === 2 || disableSendForApproval"
+-                >
+-                    Send for Approval
+-                </button>
+-            </div>
+-        </div>
+-    </fd-layout-grid>
++<fd-dynamic-page size="large" [autoResponsive]="true">
++    <fd-dynamic-page-header headingLevel="2" [title]="title"
++        [subtitle]="subtitle">
++        <fd-dynamic-page-breadcrumb>
++            <fd-breadcrumb [style.margin-top.rem]="0.2">
++                <fd-breadcrumb-item>
++                    <a fd-link href="loan-contract-search">Process Enquiry</a>
++                </fd-breadcrumb-item>
++            </fd-breadcrumb>
++        </fd-dynamic-page-breadcrumb>
++        <fd-dynamic-page-global-actions>
++            <fd-toolbar fdType="transparent" [clearBorder]="true">
++                <ng-container [fdCompact]="'compact'">
++                    <button 
++                        fd-button 
++                        fd-toolbar-item
++                        fdCompact
++                        fdType="positive"
++                        label="Send for Approval"
++                        (click)="sendForApproval()" 
++                        [disabled]="!selectedEnquiryAction || selectedEnquiryAction?.workFlowStatusCode === 2 || disableSendForApproval"
++                    >
++                    </button>
+ 
+-    <fd-layout-grid [noGap]="true" class="component-grid">
+-        <div fdLayoutGridRow>
+-            <div fdLayoutGridCol colGrow>
+-                <fdp-icon-tab-bar 
+-                    [layoutMode]="'row'"
+-                    [enableTabReordering]="false"
+-                    iconTabSize="sm"
+-                >
+-                    <!-- Project Proposals Tab -->
+-                    <fdp-icon-tab-bar-tab label="Project Proposals">
+-                        <app-generic-list 
+-                            [entity]="'processEnquiryProjectProposal'" 
+-                            [searchString1]="enquiryActionId" 
+-                            [searchString2]="loanApplicationId"
+-                            (onUpdateClick)="onUpdateProjectProposalClick($event)"
+-                            (onViewClick)="onViewProjectProposalClick($event)"
+-                        />
+-                    </fdp-icon-tab-bar-tab>
+-                
+-                    <!-- Rejected By PFS Tab -->
+-                    <fdp-icon-tab-bar-tab label="Rejected By PFS">
+-                        <app-generic-list 
+-                            [entity]="'processEnquiryRejectedByPFS'" 
+-                            [searchString1]="enquiryActionId" 
+-                            [searchString2]="loanApplicationId"
+-                        />
+-                    </fdp-icon-tab-bar-tab>
+-
+-                    <!-- Other Details Tab -->
+-                    <fdp-icon-tab-bar-tab label="Other Details">
+-                        <app-generic-list 
+-                            [entity]="'processEnquiryOtherDetails'" 
+-                            [searchString1]="enquiryActionId" 
+-                            [searchString2]="loanApplicationId"
+-                        />
+-                    </fdp-icon-tab-bar-tab>
+-
+-                    <!-- Reason For Delay Tab -->
+-                    <fdp-icon-tab-bar-tab label="Reason For Delay">
+-                        <app-generic-list 
+-                            [entity]="'processEnquiryReasonForDelay'" 
+-                            [searchString1]="enquiryActionId" 
+-                            [searchString2]="loanApplicationId"
+-                        />
+-                    </fdp-icon-tab-bar-tab>
+-
+-                    <!-- Enquiry Completion Details Tab -->
+-                    <fdp-icon-tab-bar-tab label="Enquiry Completion">
+-                        <app-generic-list 
+-                            [entity]="'processEnquiryEnquiryCompletion'" 
+-                            [searchString1]="enquiryActionId" 
+-                            [searchString2]="loanApplicationId"
+-                        />
+-                    </fdp-icon-tab-bar-tab>
+-
+-                    <!-- Rejected By Customer Tab -->
+-                    <fdp-icon-tab-bar-tab label="Rejected By Customer">
+-                        <app-generic-list 
+-                            [entity]="'processEnquiryRejectedByCustomer'" 
+-                            [searchString1]="enquiryActionId" 
+-                            [searchString2]="loanApplicationId"
+-                        />
+-                    </fdp-icon-tab-bar-tab>
+-                </fdp-icon-tab-bar>
+-            </div>
+-        </div>
+-    </fd-layout-grid>
+-</component-ngx>
+\ No newline at end of file
++                    <fd-toolbar-separator></fd-toolbar-separator>
++
++                    <button fd-button fdType="transparent" aria-label="Close" title="Close" (click)="router.navigate(['/loan-contract-search'])">
++                        <i class="sap-icon--decline"></i>
++                    </button>
++                </ng-container>
++            </fd-toolbar>
++        </fd-dynamic-page-global-actions>
++    </fd-dynamic-page-header>
++    <fd-dynamic-page-content cdkScrollable>
++        <!-- <component-ngx> -->
++            <fd-layout-grid [noGap]="true" class="component-grid">
++                <div fdLayoutGridRow>
++                    <div fdLayoutGridCol colGrow>
++                        <fdp-icon-tab-bar 
++                            [layoutMode]="'row'"
++                            [enableTabReordering]="false"
++                            iconTabSize="sm"
++                        >
++                            <!-- Project Proposals Tab -->
++                            <fdp-icon-tab-bar-tab label="Project Proposals">
++                                <app-generic-list 
++                                    [entity]="'processEnquiryProjectProposal'" 
++                                    [searchString1]="enquiryActionId" 
++                                    [searchString2]="loanApplicationId"
++                                    (onUpdateClick)="onUpdateProjectProposalClick($event)"
++                                    (onViewClick)="onViewProjectProposalClick($event)"
++                                />
++                            </fdp-icon-tab-bar-tab>
++                        
++                            <!-- Rejected By PFS Tab -->
++                            <fdp-icon-tab-bar-tab label="Rejected By PFS">
++                                <app-generic-list 
++                                    [entity]="'processEnquiryRejectedByPFS'" 
++                                    [searchString1]="enquiryActionId" 
++                                    [searchString2]="loanApplicationId"
++                                />
++                            </fdp-icon-tab-bar-tab>
++        
++                            <!-- Other Details Tab -->
++                            <fdp-icon-tab-bar-tab label="Other Details">
++                                <app-generic-list 
++                                    [entity]="'processEnquiryOtherDetails'" 
++                                    [searchString1]="enquiryActionId" 
++                                    [searchString2]="loanApplicationId"
++                                />
++                            </fdp-icon-tab-bar-tab>
++        
++                            <!-- Reason For Delay Tab -->
++                            <fdp-icon-tab-bar-tab label="Reason For Delay">
++                                <app-generic-list 
++                                    [entity]="'processEnquiryReasonForDelay'" 
++                                    [searchString1]="enquiryActionId" 
++                                    [searchString2]="loanApplicationId"
++                                />
++                            </fdp-icon-tab-bar-tab>
++        
++                            <!-- Enquiry Completion Details Tab -->
++                            <fdp-icon-tab-bar-tab label="Enquiry Completion">
++                                <app-generic-list 
++                                    [entity]="'processEnquiryEnquiryCompletion'" 
++                                    [searchString1]="enquiryActionId" 
++                                    [searchString2]="loanApplicationId"
++                                />
++                            </fdp-icon-tab-bar-tab>
++        
++                            <!-- Rejected By Customer Tab -->
++                            <fdp-icon-tab-bar-tab label="Rejected By Customer">
++                                <app-generic-list 
++                                    [entity]="'processEnquiryRejectedByCustomer'" 
++                                    [searchString1]="enquiryActionId" 
++                                    [searchString2]="loanApplicationId"
++                                />
++                            </fdp-icon-tab-bar-tab>
++                        </fdp-icon-tab-bar>
++                    </div>
++                </div>
++            </fd-layout-grid>
++        <!-- </component-ngx> -->
++    </fd-dynamic-page-content>
++</fd-dynamic-page>
+\ No newline at end of file

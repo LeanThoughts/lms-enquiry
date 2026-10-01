@@ -20,6 +20,7 @@
                 @for (row of config.rows; track row) {
                     <div fdLayoutGridRow style="height: auto;">
                         @for (field of row.fields; track field.name) {
+                            @if (isFieldVisible(field)) {
                             <div [fdLayoutGridCol]="field.span">
                                 <div fd-form-set>
                                     <!-- @for (field of column.fields; track field.name) { -->
@@ -42,6 +43,7 @@
                                             }
                                             @if (field.type === 'date') {
                                                 <fd-date-picker
+                                                    [disableFunction]="disableFunction.bind(this, field)"
                                                     type="single"
                                                     [inputId]="field.name"
                                                     [formControlName]="field.name"
@@ -100,6 +102,16 @@
                                                     Please provide valid input for {{ field.label }}
                                                 </fd-form-message>
                                             }
+                                            @if (genericForm.get(field.name)?.errors?.['futureDate']) {
+                                                <fd-form-message type="error" id="name-form-message">
+                                                    {{ field.label }} cannot be a future date.
+                                                </fd-form-message>
+                                            }
+                                            @if (genericForm.get(field.name)?.errors?.['minDate']) {
+                                                <fd-form-message type="error" id="name-form-message">
+                                                    {{ field.label }} cannot be earlier than {{ genericForm.get(field.name)?.errors?.['minDate']?.min | date:'dd/MM/yyyy' }}.
+                                                </fd-form-message>
+                                            }
                                         }
                                         @else {
                                             <h5 fd-title>{{ field.label }}</h5>
@@ -108,6 +120,7 @@
                                     <!-- } -->
                                 </div>
                             </div>
+                            }
                         }
                     </div>
                 }
@@ -117,6 +130,7 @@
             @for (row of config.rows; track row) {
                 <div fdLayoutGridRow style="height: auto;">
                     @for (field of row.fields; track field.name) {
+                        @if (isFieldVisible(field)) {
                         <div [fdLayoutGridCol]="field.span">
                             <div fd-form-set>
                                 <div fd-form-item [style.margin-top.rem]="0.7">
@@ -153,6 +167,7 @@
                                 </div>
                             </div>
                         </div>
+                        }
                     }
                 </div>
             }

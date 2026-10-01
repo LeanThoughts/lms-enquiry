@@ -47,6 +47,8 @@ interface EntityUpdateDialogComponentConfig {
         dependsOn?: string; // Name of the field that the dependent select field depends on
         viewOperationKey?: string; // Key to be used to display the value in the view mode
         maxValue?: any; // Maximum value for numeric or date fields
+        minValue?: any; // Minimum value for numeric or date fields: another field's name, or a dotted path into routeResolvedData
+        visibleWhen?: string; // Name of the field that must have a value for this field to be shown
     }[];
 }
 
@@ -470,7 +472,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         fieldsConfig: [
             { row: 1, span: 12, name: 'serialNumber', label: 'Serial Number', type: 'text', readOnly: true },
             { row: 2, span: 12, name: 'iccMeetingNumber', label: 'ICC Meeting Number', type: 'text', maxLength: 10, required: true },
-            { row: 2, span: 12, name: 'iccMeetingDate', label: 'ICC Meeting Date', type: 'date', required: true },
+            { row: 2, span: 12, name: 'iccMeetingDate', label: 'ICC Meeting Date', type: 'date', required: true, maxValue: 'currentDate' },
             { row: 4, span: 12, name: 'detailsRequired', label: 'Details Required', type: 'text', maxLength: 200 },
         ]
     },
@@ -491,7 +493,7 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         trackObjectAfterCreateAndUpdate: 'iccApproval',
         fieldsConfig: [
             { row: 1, span: 12, name: 'reasonForDelay', label: 'Reason For Delay', type: 'text', required: true, maxLength: 200 },
-            { row: 2, span: 12, name: 'date', label: 'Date', type: 'date', required: true },
+            { row: 2, span: 12, name: 'date', label: 'Date', type: 'date', required: true, maxValue: 'currentDate' },
         ]
     },
 
@@ -511,10 +513,41 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         trackObjectAfterCreateAndUpdate: 'iccApproval',
         fieldsConfig: [
             { row: 1, span: 12, name: 'meetingNumber', label: 'Meeting Number', type: 'text', required: true, maxLength: 10 },
-            { row: 2, span: 12, name: 'meetingDate', label: 'Meeting Date', type: 'date', required: true },
+            { row: 2, span: 12, name: 'meetingDate', label: 'Meeting Date', type: 'date', required: true, maxValue: 'currentDate', minValue: 'enquiryCompletion.date' },
             { row: 3, span: 12, name: 'rejectionCategory', label: 'Rejection Category', type: 'text', readOnly: true, 
                 defaultValue: 'Rejected By ICC' },
             { row: 3, span: 12, name: 'reasonForRejection', label: 'Reason For Rejection', type: 'text', maxLength: 200, required: true },
+        ]
+    },
+
+    // ICC In-principle Approval - Approval By ICC
+    iccInprincipleApprovalApprovalByIcc: {
+        searchString1ForCreate: 'iccInprincipleApprovalId',
+        passSearchString1Via: 'Object',
+        searchString2ForCreate: 'loanApplicationId',
+        passSearchString2Via: 'Object',
+        createDialogTitle: 'Add Approval By ICC Details',
+        updateDialogTitle: 'Update Approval By ICC Details',
+        viewDialogTitle: 'View Approval By ICC Details',
+        createFunction: IccInprincipleApprovalService.prototype.createApprovalByIcc,
+        updateFunction: IccInprincipleApprovalService.prototype.updateApprovalByIcc,
+        createSuccessMessage: 'Approval by ICC details created successfully',
+        updateSuccessMessage: 'Approval by ICC details updated successfully',
+        trackObjectAfterCreateAndUpdate: 'iccApproval',
+        fieldsConfig: [
+            { row: 1, span: 6, name: 'meetingNumber', label: 'Meeting Number', type: 'text', required: true, maxLength: 10 },
+            { row: 1, span: 6, name: 'meetingDate', label: 'Meeting Date', type: 'date', required: true, maxValue: 'currentDate', minValue: 'enquiryCompletion.date' },
+            { row: 2, span: 6, name: 'amountApproved', label: 'Approved Amount', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO, required: true },
+            { row: 2, span: 6, name: 'iccApprovedRoi', label: 'ICC Approved ROI', type: 'text', maxLength: 5, pattern: FIVE_COMMA_TWO, required: true },
+            { row: 3, span: 6, name: 'cfoApprovalDate', label: 'CFO Signing Date of ICC Minutes', type: 'date', required: false, maxValue: 'currentDate', minValue: 'meetingDate', visibleWhen: 'meetingDate' },
+            { row: 3, span: 6, name: 'edApprovalDate', label: 'ED Signing Date of ICC Minutes', type: 'date', required: false, maxValue: 'currentDate', minValue: 'meetingDate', visibleWhen: 'meetingDate' },
+            {row: 4, span: 12, name: 'documentTypeMinutes', label: 'Document Type (Minutes)', type: 'select', displayKey: 'description', valueKey: 'code', 
+                viewOperationKey: 'documentTypeName', required: false },
+            {row: 4, span: 12, name: 'file1', label: 'Upload Minutes Document', type: 'file', required: false },
+            {row: 5, span: 12, name: 'documentTypeMailFromCS', label: 'Document Type (Mail from Company Secretary/Internal Note Sheet)', type: 'select', displayKey: 'description', valueKey: 'code', 
+                viewOperationKey: 'documentTypeName', required: false },
+            {row: 5, span: 12, name: 'file2', label: 'Mail from Company Secretary/Internal Note Sheet', type: 'file', required: false },
+            {row: 6, span: 12, name: 'remarks', label: 'Remarks', type: 'text', maxLength: 200 },
         ]
     }
 }

@@ -53,6 +53,9 @@ export default [
     {
         path: 'icc-inprinciple-approval/:iccInprincipleApprovalId/loanApplication/:loanApplicationId',
         component: ICCInprincipleApprovalComponent,
+        resolve: {
+            routeResolvedData: IccInprincipleApprovalService
+        },
         canActivate: [routeInterceptor],
     },
 ] as Routes;

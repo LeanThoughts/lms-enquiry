@@ -9,14 +9,16 @@ import {
     FormModule, 
     LayoutGridModule, 
     SelectModule,
-    IconModule
+    IconModule,
+    FdDate,
+    DatetimeAdapter
 } from '@fundamental-ngx/core';
 import { MessageService } from '../../../message.service';
 import { entityServiceMap } from '../service-map.config';
 import { entityComponentConfigs } from '../generic-update-dialog-component-map.config';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { Observable, switchMap, tap } from 'rxjs';
+import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 
@@ -60,7 +62,8 @@ export class GenericUpdateDialogComponent implements OnInit {
         public dialogRef: DialogRef, 
         private formBuilder: FormBuilder,
         private messageService: MessageService,
-        private injector: Injector
+        private injector: Injector,
+        private datetimeAdapter: DatetimeAdapter<FdDate>
     ) {}
 
     /**
@@ -147,6 +150,8 @@ export class GenericUpdateDialogComponent implements OnInit {
 
         this.createFormControls();
         this.setupFieldDependencies();
+        this.setupMinDateDependencies();
+        this.setupFieldVisibility();
         this.setDataForDropdowns();
         
         if (this.isCreateMode()) {
@@ -197,7 +202,10 @@ export class GenericUpdateDialogComponent implements OnInit {
             row.fields?.forEach((field: any) => {
                 if (field.name) {
                     const validators = this.buildValidators(field);
-                    formControls[field.name] = [this.selectedObject[field.name] || null, validators];
+                    const value = field.type === 'date'
+                        ? this.toFdDate(this.selectedObject[field.name])
+                        : this.selectedObject[field.name] || null;
+                    formControls[field.name] = [value, validators];
                 }
             });
         });
@@ -212,6 +220,8 @@ export class GenericUpdateDialogComponent implements OnInit {
         const validators = [];
         if (field.required) validators.push(Validators.required);
         if (field.pattern) validators.push(Validators.pattern(field.pattern));
+        if (field.type === 'date' && this.isMaxCurrentDate(field)) validators.push(this.noFutureDateValidator);
+        if (field.type === 'date' && field.minValue) validators.push(this.minDateValidator(field));
         return validators;
     }
 
@@ -404,73 +414,94 @@ export class GenericUpdateDialogComponent implements OnInit {
      * Submit the form
      */
     submit(): void {
+        console.log('checking if form is valid');
         if (!this.validateForm()) return;
         
-        const fileValue = this.genericForm.get('file')?.value;
-        if (fileValue) {
-            this.uploadFileAndSave();
-        } else {
-            this.saveEntityDetails('');
-        }
-    }
-
-    /**
-     * Validate form before submission
-     */
-    private validateForm(): boolean {
-        if (this.genericForm.invalid) {
-            this.genericForm.markAllAsTouched();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Upload file and then save entity
-     */
-    private uploadFileAndSave(): void {
-        const formData = this.createFileFormData();
-        
-        this.service$.uploadVaultDocument(formData).subscribe({
-            next: (response: any) => {
-                this.saveEntityDetails(response.fileReference);
+        forkJoin({
+            fileReference: this.uploadFile('file'),
+            fileReference1: this.uploadFile('file1'),
+            fileReference2: this.uploadFile('file2')
+        }).subscribe({
+            next: ({ fileReference, fileReference1, fileReference2 }) => {
+                this.saveEntityDetails(fileReference, fileReference1, fileReference2);
             },
-            error: (error: any) => {
+            error: () => {
                 this.messageService.showError('Unable to upload the file. Please try again after sometime or contact your system administrator');
             }
         });
     }
 
     /**
+     * Validate form before submission
+     */
+    private validateForm(): boolean {
+        console.log(this.genericForm.invalid);
+
+        if (this.genericForm.invalid) {
+            this.genericForm.markAllAsTouched();
+            // this.logInvalidControls();
+            return false;
+        }
+        return true;
+    }
+
+    // private logInvalidControls(): void {
+    //     const invalidControls = Object.entries(this.genericForm.controls)
+    //         .filter(([, control]) => control.invalid)
+    //         .map(([name, control]) => ({ name, errors: control.errors, value: control.value }));
+    //     console.table(invalidControls);
+    //     if (this.genericForm.errors) console.log('Form-level errors:', this.genericForm.errors);
+    // }
+
+    /**
+     * Upload the file selected in the given control and emit its fileReference, or '' if no file is selected
+     */
+    private uploadFile(controlName: string): Observable<string> {
+        const fileValue = this.genericForm.get(controlName)?.value;
+        if (!fileValue?.[0]) return of('');
+        return this.service$.uploadVaultDocument(this.createFileFormData(fileValue[0])).pipe(
+            map((response: any) => response.fileReference)
+        );
+    }
+
+    /**
      * Create form data for file upload
      */
-    private createFileFormData(): FormData {
+    private createFileFormData(file: File): FormData {
         const formData = new FormData();
-        const fileValue = this.genericForm.get('file')?.value;
-        formData.append('file', fileValue[0], fileValue[0].name);
+        formData.append('file', file, file.name);
         return formData;
     }
 
     /**
      * Save entity details
      */
-    private saveEntityDetails(fileReference: string): void {
-        const formData = this.prepareFormData(fileReference);
+    private saveEntityDetails(fileReference: string, fileReference1: string, fileReference2: string): void {
+        const formData = this.prepareFormData(fileReference, fileReference1, fileReference2);
         const operation = this.dialogRef.data.operation;
         const isCreate = operation === 'Create';
         
         const args = this.buildServiceArgs(formData, fileReference, isCreate);
         const fn = isCreate ? this.config.createFunction : this.config.updateFunction;
         
+        console.log('calling service function', isCreate);
         this.callServiceFunction(fn, args, isCreate);
     }
 
     /**
      * Prepare form data for submission
      */
-    private prepareFormData(fileReference: string): any {
-        const formData = { ...this.genericForm.value };
-        
+    private prepareFormData(fileReference: string, fileReference1: string, fileReference2: string): any {
+        let formData = { ...this.genericForm.value };
+        if (fileReference) {
+            formData = { ...formData, fileReference };
+        }
+        if (fileReference1) {
+            formData = { ...formData, fileReference1 };
+        }
+        if (fileReference2) {
+            formData = { ...formData, fileReference2 };
+        }
         this.convertDateFields(formData);
         this.addSearchStrings(formData);
         
@@ -570,5 +601,151 @@ export class GenericUpdateDialogComponent implements OnInit {
         
         const closeMessage = isCreate ? 'Created' : 'Updated';
         this.dialogRef.close(closeMessage);
+    }
+
+    /**
+     * Disable dates in the calendar that are after today (maxValue 'currentDate')
+     * or before the date referenced by minValue in routeResolvedData
+     */
+    disableFunction = (field: any, fdDate: FdDate): boolean => {
+        if (this.isMaxCurrentDate(field) && this.datetimeAdapter.compareDate(fdDate, FdDate.getToday()) > 0) {
+            return true;
+        }
+        return this.isBeforeMinDate(field, fdDate);
+    };
+
+    /**
+     * Whether the field is capped at the current date
+     */
+    private isMaxCurrentDate(field: any): boolean {
+        return field.maxValue === 'currentDate';
+    }
+
+    /**
+     * Minimum allowed date for the field. field.minValue is either the name of another field in this
+     * form (e.g. 'meetingDate') or a dotted path into routeResolvedData (e.g. 'enquiryCompletion.date').
+     */
+    private getMinDate(field: any, form: AbstractControl | null = this.genericForm): Date | null {
+        if (!field.minValue) return null;
+        const key = String(field.minValue);
+        const sourceControl = form?.get(key);
+        const value = sourceControl
+            ? sourceControl.value
+            : key.split('.').reduce((obj: any, k: string) => obj?.[k], this.dialogRef.data.routeResolvedData);
+        const minDate = this.toDate(value);
+        minDate?.setHours(0, 0, 0, 0);
+        return minDate;
+    }
+
+    /**
+     * Whether a date value falls before the field's minimum date
+     */
+    private isBeforeMinDate(field: any, value: any, form: AbstractControl | null = this.genericForm): boolean {
+        const minDate = this.getMinDate(field, form);
+        const date = this.toDate(value);
+        if (!minDate || !date) return false;
+        date.setHours(0, 0, 0, 0);
+        return date.getTime() < minDate.getTime();
+    }
+
+    /**
+     * Whether a field should be shown. Fields with visibleWhen are shown only when the named field has a value.
+     */
+    isFieldVisible(field: any): boolean {
+        if (!field.visibleWhen) return true;
+        const value = this.isViewMode()
+            ? this.selectedObject[field.visibleWhen]
+            : this.genericForm?.get(field.visibleWhen)?.value;
+        return value != null && value !== '';
+    }
+
+    /**
+     * Enable fields with visibleWhen only while they are visible. Hidden fields are cleared and disabled
+     * so that their validators (e.g. required) do not block submission.
+     */
+    private setupFieldVisibility(): void {
+        this.config.rows.forEach((row: any) => {
+            row.fields?.forEach((field: any) => {
+                if (!field.visibleWhen) return;
+                const sourceControl = this.genericForm.get(field.visibleWhen);
+                const control = this.genericForm.get(field.name);
+                if (!sourceControl || !control) return;
+                const applyVisibility = () => {
+                    if (this.isFieldVisible(field)) {
+                        control.enable({ emitEvent: false });
+                    } else {
+                        control.reset(null, { emitEvent: false });
+                        control.disable({ emitEvent: false });
+                    }
+                };
+                sourceControl.valueChanges.subscribe(applyVisibility);
+                applyVisibility();
+            });
+        });
+    }
+
+    /**
+     * Re-validate date fields whose minValue points at another field whenever that field changes
+     */
+    private setupMinDateDependencies(): void {
+        this.config.rows.forEach((row: any) => {
+            row.fields?.forEach((field: any) => {
+                if (field.type !== 'date' || !field.minValue) return;
+                const sourceControl = this.genericForm.get(String(field.minValue));
+                const dependentControl = this.genericForm.get(field.name);
+                if (!sourceControl || !dependentControl) return;
+                sourceControl.valueChanges.subscribe(() => {
+                    dependentControl.updateValueAndValidity();
+                });
+                dependentControl.updateValueAndValidity();
+            });
+        });
+    }
+
+    /**
+     * Reject future dates typed into the date picker input
+     */
+    private noFutureDateValidator = (control: AbstractControl): ValidationErrors | null =>
+        control.value && this.isFutureDate(control.value) ? { futureDate: true } : null;
+
+    /**
+     * Reject dates typed into the date picker input that are before the field's minimum date
+     */
+    private minDateValidator = (field: any) => (control: AbstractControl): ValidationErrors | null =>
+        control.value && this.isBeforeMinDate(field, control.value, control.parent)
+            ? { minDate: { min: this.getMinDate(field, control.parent) } }
+            : null;
+
+    /**
+     * Check whether a date value (FdDate, Date or string) falls after today
+     */
+    private isFutureDate(value: any): boolean {
+        const date = this.toDate(value);
+        if (!date) return false;
+        const endOfToday = new Date();
+        endOfToday.setHours(23, 59, 59, 999);
+        return date.getTime() > endOfToday.getTime();
+    }
+
+    /**
+     * Convert an FdDate, Date or date string to a Date, or null if it is empty or invalid
+     */
+    private toDate(value: any): Date | null {
+        if (value == null || value === '') return null;
+        const date = value instanceof FdDate ? value.toDate() : new Date(value);
+        return isNaN(date.getTime()) ? null : date;
+    }
+
+    /**
+     * Convert a saved date ('yyyy-MM-dd' string, ISO string or Date) to the FdDate the date picker expects.
+     * fd-date-picker flags any non-FdDate value with a dateValidation error.
+     */
+    private toFdDate(value: any): FdDate | null {
+        if (value == null || value === '') return null;
+        if (value instanceof FdDate) return value;
+        const dateOnly = typeof value === 'string' ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value) : null;
+        if (dateOnly) return new FdDate(+dateOnly[1], +dateOnly[2], +dateOnly[3]);
+        const date = new Date(value);
+        return isNaN(date.getTime()) ? null : new FdDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     }
 }

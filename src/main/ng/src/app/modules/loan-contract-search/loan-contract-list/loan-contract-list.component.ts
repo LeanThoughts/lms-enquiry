@@ -125,6 +125,11 @@ export class LoanContractListComponent implements OnInit {
             enquiryNumber: [null],
             enquiryDate: [null]
         });
+
+        // Restore the search criteria of the last successful search
+        if (this.loanContractSearchService.searchFormValue) {
+            this.loanContractSearchForm.patchValue(this.loanContractSearchService.searchFormValue);
+        }
     }
 
     /**
@@ -143,18 +148,18 @@ export class LoanContractListComponent implements OnInit {
         if (Object.values(this.loanContractSearchForm.value).every(value => value === null))
             this.displayAlertMessage('Provide at least one search parameter');
         else {
-            let formValue = this.loanContractSearchForm.value;
+            const formValue = this.loanContractSearchForm.value;
+            const searchParameters = { ...formValue };
             if (formValue.enquiryDate) {
-                const enquiryDate = new Date(Date.UTC(formValue.enquiryDate.year, formValue.enquiryDate.month - 1, 
+                searchParameters.enquiryDate = new Date(Date.UTC(formValue.enquiryDate.year, formValue.enquiryDate.month - 1, 
                     formValue.enquiryDate.day));
-                formValue.enquiryDate = enquiryDate;
-                console.log(formValue);
             }
-            this.loanContractSearchService.searchLoanContracts(formValue).subscribe((result) => {
+            this.loanContractSearchService.searchLoanContracts(searchParameters).subscribe((result) => {
                 if (result.length === 0) {
                     this.displayAlertMessage('No records found for search criteria');
                 }
                 else {
+                    this.loanContractSearchService.searchFormValue = formValue;
                     result.sort((a: any, b: any) => b.loanApplication.enquiryNo.id - a.loanApplication.enquiryNo.id);
                     this.enquiries = result;
                     this.totalItems = this.enquiries.length;
@@ -167,6 +172,18 @@ export class LoanContractListComponent implements OnInit {
         }
     }
     
+    /**
+     * Clear the search form, the stored search criteria and the results
+     */
+    clearSearch(): void {
+        this.loanContractSearchForm.reset();
+        this.loanContractSearchService.searchFormValue = null;
+        this.enquiries = [];
+        this.totalItems = 0;
+        this.currentPage = 1;
+        this.updateDataSource();
+    }
+
     /**
      * On items per page change
      */

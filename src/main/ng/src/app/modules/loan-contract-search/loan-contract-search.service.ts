@@ -12,6 +12,9 @@ export class LoanContractSearchService implements Resolve<any> {
 
     selectedEnquiry$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
+    // Search form value of the last search that returned results, restored when returning to /loan-contract-search
+    searchFormValue: any = null;
+
     /**
      * Constructor
      */

@@ -420,18 +420,21 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         viewButton: true,
         updateDialogWidth: '40rem',
         viewDialogWidth: '35rem',
+        routeResolvedData: ['enquiryCompletion'],
     },
 
     // ICC In-principle Approval - Approval By ICC
     iccInprincipleApprovalApprovalByIcc: {
         displayedColumns: [
             {name: 'meetingNumber', header: 'Meeting Number', type: 'text'},
-            {name: 'remarks', header: 'Remarks', type: 'text'},
             {name: 'meetingDate', header: 'Meeting Date', type: 'date'},
+            {name: 'amountApproved', header: 'Approved Amount', type: 'number'},
+            {name: 'iccApprovedRoi', header: 'ICC Approved ROI', type: 'number'},
             {name: 'edApprovalDate', header: 'ED Approval Date', type: 'date'},
             {name: 'cfoApprovalDate', header: 'CFO Approval Date', type: 'date'},
             {name: 'fileReference1', header: 'Minutes Document', type: 'file'},
             {name: 'fileReference2', header: 'Mail from CS/Internal Note Sheet', type: 'file'},
+            {name: 'remarks', header: 'Remarks', type: 'text'}
         ],
         fetchFunction: IccInprincipleApprovalService.prototype.getApprovalByIcc,
         createButton: true,
@@ -440,5 +443,6 @@ export const entityComponentConfigs: { [key: string]: EntityUpdateDialogComponen
         viewButton: true,
         updateDialogWidth: '40rem',
         viewDialogWidth: '35rem',
+        routeResolvedData: ['enquiryCompletion', 'documentTypeMinutes', 'documentTypeMailFromCS'],
     }
 }
