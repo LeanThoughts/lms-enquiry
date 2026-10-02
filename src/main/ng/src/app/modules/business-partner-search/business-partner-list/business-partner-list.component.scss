@@ -1,12 +1,146 @@
-.bp-table-scroll {
-    max-height: calc(100vh - 22rem);
-    overflow-y: auto;
-    width: 100%;
+$accent: #0e7c86;
+$label: var(--sapContent_LabelColor, #556b82);
+$border: var(--sapList_BorderColor, #e5e5e5);
 
-    thead {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        background-color: var(--sapList_HeaderBackground, #fff);
+.bp-list {
+    &__summary {
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: $label;
+    }
+
+    &__count {
+        font-weight: 700;
+        color: $accent;
+    }
+
+    &__table {
+        max-height: calc(100vh - 24rem);
+        overflow: auto;
+        border: 1px solid $border;
+        border-radius: 0.75rem;
+        background-color: var(--sapList_Background, #fff);
+
+        table {
+            border: none;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: var(--sapList_HeaderBackground, #fff);
+        }
+
+        th {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.03rem;
+            text-transform: uppercase;
+            color: $label;
+        }
+
+        td {
+            vertical-align: middle;
+            padding-top: 0.6rem;
+            padding-bottom: 0.6rem;
+        }
+    }
+
+    &__number {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    &__pan {
+        font-family: monospace;
+        letter-spacing: 0.05rem;
+    }
+
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1rem;
+        border: 1px dashed $border;
+        border-radius: 0.75rem;
+        background-color: var(--sapList_Background, #fff);
+        text-align: center;
+    }
+
+    &__empty-icon {
+        font-size: 2.5rem;
+        color: rgba($accent, 0.6);
+    }
+
+    &__empty-title {
+        margin: 1rem 0 0.25rem;
+        font-size: 1.1rem;
+    }
+
+    &__empty-text {
+        margin: 0;
+        color: $label;
+    }
+}
+
+.bp-partner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &__avatar {
+        display: inline-flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    &__name {
+        font-weight: 600;
+    }
+
+    &__address {
+        margin-top: 0.15rem;
+        font-size: 0.75rem;
+        color: $label;
+    }
+}
+
+.bp-contact {
+    display: flex;
+    flex-direction: column;
+
+    &__email {
+        font-size: 0.8125rem;
+        color: $label;
+    }
+}
+
+.bp-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+// Partner category: 1 Person, 2 Organization, 3 Group
+@each $category, $color in (1: $accent, 2: #2b5fb4, 3: #7b3fb3, none: #4a5568) {
+    .bp-category--#{$category} {
+        background-color: rgba($color, 0.12);
+        color: $color;
     }
 }

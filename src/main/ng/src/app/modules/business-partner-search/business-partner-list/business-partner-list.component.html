@@ -1,79 +1,65 @@
-<!-- <fd-grid-list>
-    <fd-grid-list-title-bar title="Business Partners">
-        <span fd-grid-list-title-bar-additional-title-item>{{  ' - (' + businessPartners.length + ')'  }} results found</span>
-        <fd-grid-list-title-bar-spacer></fd-grid-list-title-bar-spacer>
-        <button
-            fd-button
-            fdType="transparent"
-            glyph="add"
-            aria-labelledby="grid-list-title-bar-1 grid-list-button-1"
-            aria-label="Sort"
-            title="Sort"
-            fdCompact
-        ></button>
-    </fd-grid-list-title-bar>
+@if (businessPartners?.length) {
+    <div class="bp-list__summary">
+        <span class="bp-list__count">&nbsp;{{ businessPartners.length }}</span>
+        business partner{{ businessPartners.length === 1 ? '' : 's' }} found
+    </div>
 
-    <fd-grid-list-item *ngFor="let businessPartner of businessPartners" 
-        [status]="getStatus(businessPartner.partnerCategory)" 
-        [title]="businessPartner.partyName" 
-        [description]="getPartnerCategoryDescription(businessPartner.partnerCategory, businessPartner.partyNumber)"
-        [style.padding.rem]="0.5"
-        type="navigation" 
-        (navigate)="navigateToBusinessPartner(businessPartner.id)"
-    >
-
-        <fd-grid-list-item-toolbar>PAN: {{ businessPartner.pan }} </fd-grid-list-item-toolbar>
-
-        <ng-template fd-grid-list-item-body>
-            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                <fd-icon glyph="addresses" style="font-size: 1.25rem;" />
-                <div>
-                    <p style="margin: 0px;">{{ businessPartner.addressLine1 }}, {{ businessPartner.addressLine2 }}</p>
-                    <p style="margin: 0px;">{{ businessPartner.city }}, {{ businessPartner.country }}</p>        
-                </div>
-            </div>
-            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.5rem;">
-                <fd-icon glyph="email" style="font-size: 1.25rem;" />
-                <div>
-                    <a fd-link tabindex="0">{{ businessPartner.email }}</a>
-                </div>
-            </div>
-        </ng-template>
-    </fd-grid-list-item>
-
-</fd-grid-list> -->
-
-<div class="bp-table-scroll">
-    <table fd-table aria-label="Default">
-        <thead fd-table-header>
-            <th fd-table-cell fd-table-status-indicator></th>
-            @for (column of displayedColumns; track column) {
-                <th fd-table-cell>{{ column }}</th>
-            }
-        </thead>
-        <tbody fd-table-body>
-            @for (value of businessPartners; track value) {
-                <tr fd-table-row
-                    [hoverable]="true"
-                    [active]="selectedBusinessPartnerId.isSelected(value.id)"
-                    (click)="selectedBusinessPartnerId.select(value.id); businessPartnerService.selectedEntity$.next(value);"
-                >
-                    <td fd-table-cell fd-table-status-indicator [status]="getStatus(value.partnerCategory)"></td>
-                    <td fd-table-cell>{{ value.partyNumber }}</td>
-                    <td fd-table-cell>{{ value.defaultPartnerRole }}</td>
-                    <td fd-table-cell [style.padding-top.rem]="0.5" [style.padding-bottom.rem]="0.5">
-                        <div style="display: flex; flex-direction: column;">
-                            <span [style.font-size.rem]="1">{{ value.partyName }}</span>
-                            <span [style.margin-top.rem]="0.25">{{ formatAddress(value) }}</span>
-                        </div>
-                    </td>
-                    <td fd-table-cell>{{ value.pan }}</td>
-                    <td fd-table-cell>{{ getPartnerCategoryDescription(value.partnerCategory) }}</td>
-                    <td fd-table-cell><a fd-link tabindex="0">{{ value.email }}</a></td>
-                    <td fd-table-cell>{{ value.contactPersonName }}</td>
-                    <!-- <td fd-table-cell>{{ value.addressLine1 + ',' + value.addressLine2 + ',' + value.city }}</td> -->
+    <div class="bp-list__table">
+        <table fd-table aria-label="Business partners">
+            <thead fd-table-header>
+                <tr fd-table-row>
+                    <th fd-table-cell>Business Partner</th>
+                    <th fd-table-cell>Number</th>
+                    <th fd-table-cell>Default Role</th>
+                    <th fd-table-cell>PAN</th>
+                    <th fd-table-cell>Category</th>
+                    <th fd-table-cell>Contact</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody fd-table-body>
+                @for (value of businessPartners; track value.id) {
+                    <tr fd-table-row
+                        [hoverable]="true"
+                        [active]="selectedBusinessPartnerId.isSelected(value.id)"
+                        (click)="selectedBusinessPartnerId.select(value.id); businessPartnerService.selectedEntity$.next(value);"
+                    >
+                        <td fd-table-cell>
+                            <div class="bp-partner">
+                                <span class="bp-partner__avatar bp-category--{{ value.partnerCategory || 'none' }}">
+                                    {{ getInitials(value.partyName) }}
+                                </span>
+                                <div class="bp-partner__details">
+                                    <span class="bp-partner__name">{{ value.partyName }}</span>
+                                    <span class="bp-partner__address">{{ formatAddress(value) || '--' }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td fd-table-cell class="bp-list__number">{{ value.partyNumber || '--' }}</td>
+                        <td fd-table-cell>{{ value.defaultPartnerRole || '--' }}</td>
+                        <td fd-table-cell class="bp-list__pan">{{ value.pan || '--' }}</td>
+                        <td fd-table-cell>
+                            <span class="bp-badge bp-category--{{ value.partnerCategory || 'none' }}">
+                                {{ getPartnerCategoryDescription(value.partnerCategory) }}
+                            </span>
+                        </td>
+                        <td fd-table-cell>
+                            <div class="bp-contact">
+                                <span>{{ value.contactPersonName || '--' }}</span>
+                                @if (value.email) {
+                                    <span class="bp-contact__email">{{ value.email }}</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@else {
+    <div class="bp-list__empty">
+        <fd-icon glyph="search" class="bp-list__empty-icon"></fd-icon>
+        <h3 class="bp-list__empty-title">No business partners to show</h3>
+        <p class="bp-list__empty-text">Search by name, email, business partner number or PAN to find business partners.</p>
+    </div>
+}

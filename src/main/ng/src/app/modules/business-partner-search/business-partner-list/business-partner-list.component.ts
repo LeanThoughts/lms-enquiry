@@ -1,15 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { 
-    ButtonComponent, 
-    GridListModule, 
-    IconModule, 
-    LayoutGridModule,
-    LinkComponent,
-    TableModule} from '@fundamental-ngx/core';
+import { IconComponent, TableModule } from '@fundamental-ngx/core';
 import { BusinessPartnerSearchService } from '../business-partner-search.service';
-import { ComponentNgxComponent } from '../../../common/component-ngx/component-ngx.component';
-import { RouterLink } from '@angular/router';
-import { IconComponent } from '@fundamental-ngx/core/icon';
 import { CommonModule } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -17,7 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     selector: 'app-business-partner-list',
     imports: [
         CommonModule,
-        LinkComponent,
+        IconComponent,
         TableModule
     ],
     templateUrl: './business-partner-list.component.html',
@@ -27,21 +18,12 @@ export class BusinessPartnerListComponent {
 
     @Input() businessPartners!: Array<any>;
 
-    displayedColumns: string[] = ['Bus Partner Number', 'Default Role', 'Name', 'PAN', 'Category', 'Email', 'Contact Person'];
-    
     selectedBusinessPartnerId: SelectionModel<any> = new SelectionModel<any>();
 
     /**
      * Constructor
      */
     constructor(public businessPartnerService: BusinessPartnerSearchService) {
-    }
-
-    /**
-     * Get status
-     */
-    getStatus(partnerCategory: string): any {
-        return partnerCategory === '1' ? 'information' : partnerCategory === '2' ? 'valid' : partnerCategory === '3' ? 'warning' : 'error';
     }
 
     /**
@@ -54,6 +36,18 @@ export class BusinessPartnerListComponent {
             '3': 'Group'
         };
         return categoryMap[partnerCategory] || '--';
+    }
+
+    /**
+     * Get the initials of a name (first letters of the first two words)
+     */
+    getInitials(name: string): string {
+        return (name || '')
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((word) => word.charAt(0).toUpperCase())
+            .join('') || '?';
     }
 
     /**
