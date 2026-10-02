@@ -8,6 +8,7 @@ import { riskAssessmentStageConfig } from "./risk-assessment.config";
 import { applicationFeeStageConfig } from "./application-fee.config";
 import { boardApprovalStageConfig } from "./board-approval.config";
 import { sanctionStageConfig } from "./sanction.config";
+import { referenceInterestRateStageConfig } from "./reference-interest-rate.config";
 
 const stageConfigs: StageConfig[] = [
     businessPartnerStageConfig,
@@ -18,6 +19,7 @@ const stageConfigs: StageConfig[] = [
     applicationFeeStageConfig,
     boardApprovalStageConfig,
     sanctionStageConfig,
+    referenceInterestRateStageConfig,
 ];
 
 /**

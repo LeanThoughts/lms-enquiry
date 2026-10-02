@@ -1,30 +1,36 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ComponentNgxComponent } from '../../../common/component-ngx/component-ngx.component';
-import { ButtonComponent, DialogService, FormModule, IconModule, LayoutGridModule, SelectModule, TableModule } from '@fundamental-ngx/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ReferenceInterestRateService } from '../reference-interest-rate.service';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { 
+    ButtonComponent, 
+    DynamicPageComponent, 
+    DynamicPageContentComponent, 
+    DynamicPageGlobalActionsComponent, 
+    DynamicPageHeaderComponent, 
+    FormModule, 
+    SelectModule, 
+    ToolbarComponent 
+} from '@fundamental-ngx/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { SelectionModel } from '@angular/cdk/collections';
-import { ReferenceInterestRateUpdateComponent } from '../reference-interest-rate-update/reference-interest-rate-update.component';
-import { DatePipe } from '@angular/common';
-import { CustomDialogComponent } from '../../../custom-dialog.component';
+import { ReferenceInterestRateService } from '../reference-interest-rate.service';
+import { GenericListComponent } from '../../generic/generic-list/generic-list.component';
 import { MessageService } from '../../../message.service';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
     selector: 'app-reference-interest-rate-list',
     imports: [
+        // Dynamic Page Components
+        DynamicPageComponent,
+        DynamicPageContentComponent,
+        DynamicPageGlobalActionsComponent,
+        DynamicPageHeaderComponent,
+        ToolbarComponent,
+        // Other Components and Modules
         ButtonComponent,
-        ComponentNgxComponent,
-        DatePipe,
         FormModule,
-        IconModule,
-        LayoutGridModule,
-        ReactiveFormsModule,
         SelectModule,
-        TableModule
+        GenericListComponent
     ],
     templateUrl: './reference-interest-rate-list.component.html'
 })
@@ -32,13 +38,11 @@ export class ReferenceInterestRateListComponent implements OnInit, OnDestroy {
 
     private readonly destroy$ = new Subject<void>();
 
-    displayedColumns: string[] = ['Interest Rate Type Code', 'Interest Rate Type Description', 'Valid From Date', 'Interest Rate', 
-        'Modification Status Description', 'Work Flow Status Description'];
+    @ViewChild(GenericListComponent) referenceInterestValueList?: GenericListComponent;
+
     referenceRateTypes: any[] = [];
-    referenceInterestValues: any[] = [];
     selectedReferenceRateType: any = null;
-    selectedReferenceInterestValue: any = null;
-    selectedReferenceInterestValueId: SelectionModel<any> = new SelectionModel<any>(false, []);
+    sendingForApproval: boolean = false;
     
     /**
      * Constructor
@@ -46,7 +50,7 @@ export class ReferenceInterestRateListComponent implements OnInit, OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
-        private dialog: DialogService,
+        private cdr: ChangeDetectorRef,
         private referenceInterestRateService: ReferenceInterestRateService,
         private messageService: MessageService
     ) {}
@@ -57,121 +61,67 @@ export class ReferenceInterestRateListComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
             this.referenceRateTypes = data['routeResolver'].referenceRateTypes;
+            // The inbox sets the rate type code of the task being reviewed before navigating here
             const referenceInterestRateTypeCode = this.referenceInterestRateService.referenceInterestRateTypeCode;
             if (referenceInterestRateTypeCode) {
                 this.referenceInterestRateService.referenceInterestRateTypeCode = null;
                 this.selectedReferenceRateType = this.referenceRateTypes.find((type: any) => type.code === referenceInterestRateTypeCode) ?? null;
-                this.getReferenceInterestValues();
             }
         });
     }
 
     /**
-     * Get reference interest values
+     * Id of the selected reference rate type, used by the generic list to fetch its values
      */
-    getReferenceInterestValues(): void {
-        if (this.selectedReferenceRateType) {
-            this.referenceInterestRateService.getReferenceInterestRates(this.selectedReferenceRateType.id).
-                subscribe((response: any) => {
-                    this.referenceInterestValues = response;
-                    this.selectedReferenceInterestValueId.clear();
-                });
+    get selectedReferenceRateTypeId(): string {
+        return this.selectedReferenceRateType ? String(this.selectedReferenceRateType.id) : '';
+    }
+
+    /**
+     * Reload the values when another reference rate type is selected. The first selection creates the list, which loads on init.
+     */
+    onReferenceRateTypeChange(): void {
+        const list = this.referenceInterestValueList;
+        if (list) {
+            this.cdr.detectChanges();
+            list.clearSelection();
+            list.fetchData();
         }
     }
 
     /**
-     * Return modification status description
+     * Whether the selected value can be sent for approval. Only changed values that are not already awaiting approval can be sent.
      */
-    getModificationStatusDescription(modificationStatus: number): string {
-        if (modificationStatus === 0) {
-            return 'Not Changed';
-        } else if (modificationStatus === 1) {
-            return 'Changed';
-        } else if (modificationStatus === 2) {
-            return 'Marked for Deletion';
-        } else {
-            return '';
-        }
-    }
-    
-    /**
-     * Open reference interest rate dialog
-     */
-    openReferenceInterestRateDialog(operation: string): void {
-        const dialogRef = this.dialog.open(ReferenceInterestRateUpdateComponent, {
-            data: {
-                operation: operation,
-                referenceRateType: this.selectedReferenceRateType,
-                referenceInterestValue: this.selectedReferenceInterestValue
-            },
-            width: operation === 'View' ? '30rem' : '40rem'
-        });
-        dialogRef.afterClosed.pipe(takeUntil(this.destroy$)).subscribe({
-            next: (result: any) => {
-                if (result === 'Updated') {
-                    this.getReferenceInterestValues();
-                }
-            },
-            error: (error: any) => {
-                console.error(error);
-            }
-        });
-    }
-    
-    /**
-     * Delete reference interest rate value
-     */
-    deleteReferenceInterestRateValue(): void {
-        const dialogRef = this.dialog.open(CustomDialogComponent, {
-            data: {
-                title: 'Delete Reference Interest Rate Value',
-                description: 'Are you sure you want to delete this reference interest rate value? This will impact cash flows of existing '
-                    + 'loans in the system.',
-            }
-        });
-        // Subscribe to the dialog close event to intercept the action taken.
-        dialogRef.afterClosed.subscribe({
-            next: (result: any) => {
-                if (result.continue) {
-                    this.referenceInterestRateService.deleteReferenceInterestRate(this.selectedReferenceInterestValue.id).subscribe({
-                        next: () => {
-                            this.getReferenceInterestValues();
-                            this.messageService.showSuccess('Reference interest rate value deleted successfully');
-                        },
-                        error: (error: any) => {
-                            this.messageService.showError(error.message + '!! Error deleting reference interest rate value. Please try '
-                                + 'again. If the problem persists, please contact the administrator.');
-                        }
-                    });
-                }
-            }
-        });
+    isSendForApprovalDisabled(): boolean {
+        const selected = this.referenceInterestValueList?.selectedObject;
+        return !selected || selected.workFlowStatusCode === 1 || selected.modificationStatus === 0 || this.sendingForApproval;
     }
 
     /**
-     * Send reference interest value for approval
+     * Send the selected reference interest value for approval
      */
     sendForApproval(): void {
-        if (this.selectedReferenceInterestValue.workFlowStatusDescription === 'Not Sent for Approval') {
-            if (this.selectedReferenceInterestValue.modificationStatus === 0) {
-                this.messageService.showError('Reference Interest Value is already sent for approval. Only modified values can be sent '
-                    + 'for approval.');
-            } else {
-                let name = this.authService.currentUser.firstName + ' ' + this.authService.currentUser.lastName;
-                let email = this.authService.currentUser.email;
-                this.messageService.showInfo('Please wait while attempting to send reference interest value for approval.', 15000);
-                this.referenceInterestRateService.sendReferenceInterestValueForApproval(this.selectedReferenceInterestValue.id, name, email).subscribe({
-                    next: () => {
-                        this.messageService.showSuccess('Reference Interest Value is sent for approval.');
-                        this.getReferenceInterestValues();
-                    },
-                    error: (error: any) => {
-                        this.messageService.showError(error.message + '!! Error sending reference interest value for approval. Please try '
-                            + 'again. If the problem persists, please contact the administrator.');
-                    }
-                });
+        const list = this.referenceInterestValueList;
+        if (!list?.selectedObject) return;
+
+        this.sendingForApproval = true;
+        const { firstName = '', lastName = '', email = '' } = this.authService.currentUser ?? {};
+        const name = `${firstName} ${lastName}`.trim();
+        this.messageService.showInfo('Please wait while attempting to send reference interest value for approval.', 15000);
+
+        this.referenceInterestRateService.sendReferenceInterestValueForApproval(list.selectedObject.id, name, email).subscribe({
+            next: () => {
+                this.sendingForApproval = false;
+                this.messageService.showSuccess('Reference interest value is sent for approval.');
+                list.clearSelection();
+                list.fetchData();
+            },
+            error: (error: any) => {
+                this.sendingForApproval = false;
+                this.messageService.showError(error.message + '!! Error sending reference interest value for approval. Please try '
+                    + 'again. If the problem persists, please contact the administrator.');
             }
-        }
+        });
     }
     
     /**

@@ -32,8 +32,8 @@ export class SideNavigationService {
                 { headerTitle: 'Business Development' },
                 { link: { icon: 'upload-to-cloud', title: 'Upload Loan Enquiries', routerLink: 'enquiry-upload' } },
                 
-                // { headerTitle: 'Risk Department' },
-                // { link: { icon: 'home', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
+                { headerTitle: 'Risk Department' },
+                { link: { icon: 'trend-up', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
                 
                 // { headerTitle: 'Reports' },
                 // { link: { icon: 'home', title: 'Change History', routerLink: 'homepage' } }                

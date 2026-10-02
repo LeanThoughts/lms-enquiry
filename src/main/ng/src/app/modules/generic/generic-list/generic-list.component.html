@@ -31,7 +31,19 @@
                         fdType="emphasized"
                         label="Update"
                         (click)="openUpdateDialog()"
-                        [disabled]="selectedObjectId.isEmpty()"
+                        [disabled]="isUpdateDisabled()"
+                    >
+                    </button>
+                }
+                @if (config.deleteButton && !viewModeOnly) {
+                    <!-- Delete button -->
+                    <button fd-button
+                        fd-toolbar-item
+                        fdCompact
+                        fdType="negative"
+                        label="Delete"
+                        (click)="openDeleteDialog()"
+                        [disabled]="isDeleteDisabled()"
                     >
                     </button>
                 }

@@ -5,6 +5,7 @@ import {
     DialogCloseButtonComponent, 
     DialogModule, 
     DialogRef, 
+    DialogService,
     FileUploaderModule, 
     FormModule, 
     LayoutGridModule, 
@@ -20,6 +21,7 @@ import { DatePipe } from '@angular/common';
 import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
+import { CustomDialogComponent } from '../../../custom-dialog.component';
 
 @Component({
     selector: 'app-generic-update-dialog',
@@ -62,7 +64,8 @@ export class GenericUpdateDialogComponent implements OnInit {
         private formBuilder: FormBuilder,
         private messageService: MessageService,
         private injector: Injector,
-        private datetimeAdapter: DatetimeAdapter<FdDate>
+        private datetimeAdapter: DatetimeAdapter<FdDate>,
+        private dialogService: DialogService
     ) {}
 
     /**
@@ -204,7 +207,8 @@ export class GenericUpdateDialogComponent implements OnInit {
                     const value = field.type === 'date'
                         ? this.toFdDate(this.selectedObject[field.name])
                         : this.selectedObject[field.name] || null;
-                    formControls[field.name] = [value, validators];
+                    const disabled = !!field.readOnlyOnUpdate && this.dialogRef.data.operation === 'Update';
+                    formControls[field.name] = [{ value, disabled }, validators];
                 }
             });
         });
@@ -415,7 +419,32 @@ export class GenericUpdateDialogComponent implements OnInit {
     submit(): void {
         console.log('checking if form is valid');
         if (!this.validateForm()) return;
-        
+
+        if (!this.config.submitConfirmationMessage) {
+            this.uploadFilesAndSave();
+            return;
+        }
+        const confirmationDialogRef = this.dialogService.open(CustomDialogComponent, {
+            data: {
+                title: 'Confirm ' + (this.isCreateMode() ? 'Create' : 'Update'),
+                description: this.config.submitConfirmationMessage
+            },
+            width: '30rem'
+        });
+        confirmationDialogRef.afterClosed.subscribe({
+            next: (result: any) => {
+                if (result?.continue) {
+                    this.uploadFilesAndSave();
+                }
+            },
+            error: () => {}
+        });
+    }
+
+    /**
+     * Upload the selected files, then save the entity details
+     */
+    private uploadFilesAndSave(): void {
         forkJoin({
             fileReference: this.uploadFile('file'),
             fileReference1: this.uploadFile('file1'),

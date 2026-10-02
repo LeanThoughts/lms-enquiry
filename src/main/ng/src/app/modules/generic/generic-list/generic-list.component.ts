@@ -8,6 +8,7 @@ import { GenericUpdateDialogComponent } from '../generic-update-dialog/generic-u
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../../../environments/environment';
+import { CustomDialogComponent } from '../../../custom-dialog.component';
 
 @Component({
     selector: 'app-generic-list',
@@ -355,6 +356,58 @@ export class GenericListComponent implements OnInit, OnDestroy {
             },
             width: this.config.viewDialogWidth
         });
+    }
+
+    /**
+     * Ask for confirmation and delete the selected object
+     */
+    openDeleteDialog() {
+        const dialogRef = this.dialog.open(CustomDialogComponent, {
+            data: {
+                title: 'Confirm Delete',
+                description: this.config.deleteConfirmationMessage || 'Are you sure you want to delete the selected record?'
+            },
+            width: '30rem'
+        });
+        dialogRef.afterClosed.pipe(takeUntil(this.destroy$)).subscribe({
+            next: (result: any) => {
+                if (!result?.continue) return;
+                this.config.deleteFunction.call(this.service$, this.selectedObject.id).subscribe({
+                    next: () => {
+                        this.messageService.showSuccess(this.config.deleteSuccessMessage || 'Record deleted successfully');
+                        this.clearSelection();
+                        this.fetchData();
+                    },
+                    error: (error: any) => {
+                        this.messageService.showError(error?.error?.message || 'An error occurred while deleting.');
+                    }
+                });
+            },
+            error: () => {}
+        });
+    }
+
+    /**
+     * Whether the update button is disabled for the current selection
+     */
+    isUpdateDisabled(): boolean {
+        return this.selectedObjectId.isEmpty() || !!this.config.disableUpdate?.(this.selectedObject);
+    }
+
+    /**
+     * Whether the delete button is disabled for the current selection
+     */
+    isDeleteDisabled(): boolean {
+        return this.selectedObjectId.isEmpty() || !!this.config.disableDelete?.(this.selectedObject);
+    }
+
+    /**
+     * Clear the selected row
+     */
+    public clearSelection() {
+        this.selectedObject = null;
+        this.selectedObjectId.clear();
+        this.cdr.markForCheck();
     }
 
     /**

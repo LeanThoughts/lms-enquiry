@@ -35,6 +35,7 @@ export interface FieldConfig {
     nullOption?: boolean;
     required?: boolean | { dependsOn: string }; // Required always, or only when the named field has a value
     readOnly?: boolean;
+    readOnlyOnUpdate?: boolean; // Editable on create, disabled on update (disabled values are not submitted)
     maxLength?: number;
     pattern?: RegExp;
     options?: any[];
@@ -62,6 +63,11 @@ export interface ListConfig {
     updateButton?: boolean;
     deleteButton?: boolean;
     viewButton?: boolean;
+    deleteFunction?: ServiceMethod; // Called with the selected object's id
+    deleteConfirmationMessage?: string;
+    deleteSuccessMessage?: string;
+    disableUpdate?: (selectedObject: any) => boolean; // Disable the update button for the selected object
+    disableDelete?: (selectedObject: any) => boolean; // Disable the delete button for the selected object
     disableCreateButtonAfterCreate?: boolean;
     onlyEmitCreateEvent?: boolean;
     onlyEmitUpdateEvent?: boolean;
@@ -96,6 +102,7 @@ export interface UpdateDialogConfig extends CreateUpdateConfig {
     createDialogTitle?: string;
     updateDialogTitle?: string;
     viewDialogTitle?: string;
+    submitConfirmationMessage?: string; // Ask the user to confirm before the create/update is submitted
 }
 
 /**
