@@ -14,6 +14,7 @@ import {
     FdDatetimeAdapter, 
     DatetimeAdapter, 
     DatePickerModule, 
+    FdDate,
     FormItemComponent,
     FormLabelComponent
 } from '@fundamental-ngx/core';
@@ -78,12 +79,33 @@ export class EnquiryUploadComponent {
     constructor(
         private formBuilder: FormBuilder,
         public messageStripAlertService: MessageStripAlertService, 
-        private enquiryUploadService: EnquiryUploadService) 
+        private enquiryUploadService: EnquiryUploadService,
+        private datetimeAdapter: DatetimeAdapter<FdDate>) 
     {
         this.downloadEnquiriesForm = this.formBuilder.group({
             enquiryDateFrom: [null],
             enquiryDateTo: [null]
         });
+
+        this.downloadEnquiriesForm.get('enquiryDateFrom')?.valueChanges.subscribe((dateFrom: FdDate) => {
+            const dateToControl = this.downloadEnquiriesForm.get('enquiryDateTo');
+            const dateTo: FdDate = dateToControl?.value;
+            if (dateFrom?.isDateValid() && dateTo?.isDateValid() && this.datetimeAdapter.compareDate(dateTo, dateFrom) < 0) {
+                dateToControl?.setValue(null);
+            }
+        });
+    }
+
+    disableDateFrom = (fdDate: FdDate): boolean => this.isFutureDate(fdDate);
+
+    disableDateTo = (fdDate: FdDate): boolean => {
+        const dateFrom: FdDate = this.downloadEnquiriesForm.get('enquiryDateFrom')?.value;
+        return this.isFutureDate(fdDate)
+            || (!!dateFrom?.isDateValid() && this.datetimeAdapter.compareDate(fdDate, dateFrom) < 0);
+    };
+
+    private isFutureDate(fdDate: FdDate): boolean {
+        return this.datetimeAdapter.compareDate(fdDate, FdDate.getToday()) > 0;
     }
 
     get issueCount(): number {

@@ -68,6 +68,7 @@
                                     type="single"
                                     inputId="enquiryDateFrom"
                                     formControlName="enquiryDateFrom"
+                                    [disableFunction]="disableDateFrom"
                                     [allowNull]="false"
                                     [useValidation]="true">
                                 </fd-date-picker>
@@ -78,6 +79,7 @@
                                     type="single"
                                     inputId="enquiryDateTo"
                                     formControlName="enquiryDateTo"
+                                    [disableFunction]="disableDateTo"
                                     [allowNull]="false"
                                     [useValidation]="true">
                                 </fd-date-picker>
