@@ -75,7 +75,7 @@
                                     </div>
                                     <div>
                                         <span class="inbox__date">Requested {{ task.requestDate | date:'dd MMM yyyy' }}</span>
-                                        <span class="inbox__age" [class.inbox__age--overdue]="getAgeInDays(task.requestDate) > 7">
+                                        <span class="inbox__age" [class.inbox__age--overdue]="isOverdue(task.requestDate)">
                                             &middot; {{ getAgeLabel(task.requestDate) }}
                                         </span>
                                     </div>
@@ -122,7 +122,7 @@
                                     </td>
                                     <td fd-table-cell>
                                         <div class="inbox__date">{{ task.requestDate | date:'dd MMM yyyy' }}</div>
-                                        <div class="inbox__age" [class.inbox__age--overdue]="getAgeInDays(task.requestDate) > 7">
+                                        <div class="inbox__age" [class.inbox__age--overdue]="isOverdue(task.requestDate)">
                                             {{ getAgeLabel(task.requestDate) }}
                                         </div>
                                     </td>

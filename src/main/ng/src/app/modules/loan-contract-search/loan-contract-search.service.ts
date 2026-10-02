@@ -5,6 +5,19 @@ import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { statesOfIndia } from '../../app.constants';
 
+export interface RecentlyViewedLoanContract {
+    enquiryNo: number;
+    loanContractId: string;
+    projectName: string;
+    borrowerName: string;
+    functionalStatus: number;
+    functionalStatusDescription: string;
+    viewedOn: string;
+}
+
+const RECENTLY_VIEWED_STORAGE_KEY = 'loanContracts.recentlyViewed';
+const RECENTLY_VIEWED_LIMIT = 8;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +27,9 @@ export class LoanContractSearchService implements Resolve<any> {
 
     // Search form value of the last search that returned results, restored when returning to /loan-contract-search
     searchFormValue: any = null;
+
+    // Run the search with searchFormValue as soon as /loan-contract-search opens (set when navigating from the homepage)
+    runSearchOnLoad = false;
 
     /**
      * Constructor
@@ -253,5 +269,40 @@ export class LoanContractSearchService implements Resolve<any> {
      */
     public searchLoanContracts(searchParameters: any): Observable<any> {
         return this.http.put<any>(environment.primaryApiHost + '/loanApplications/loanContracts/search', searchParameters);
+    }
+
+    /**
+     * Get the loan contracts recently selected in the search list, most recent first
+     */
+    public getRecentlyViewed(): RecentlyViewedLoanContract[] {
+        try {
+            const recentlyViewed = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_STORAGE_KEY) || '[]');
+            return Array.isArray(recentlyViewed) ? recentlyViewed : [];
+        }
+        catch {
+            return [];
+        }
+    }
+
+    /**
+     * Remember a loan contract selected in the search list
+     */
+    public addRecentlyViewed(enquiry: any): void {
+        const loanApplication = enquiry?.loanApplication;
+        const enquiryNo = loanApplication?.enquiryNo?.id;
+        if (!enquiryNo) {
+            return;
+        }
+        const recentlyViewed: RecentlyViewedLoanContract = {
+            enquiryNo,
+            loanContractId: loanApplication.loanContractId,
+            projectName: loanApplication.projectName,
+            borrowerName: enquiry.partner?.partyName1,
+            functionalStatus: loanApplication.functionalStatus,
+            functionalStatusDescription: loanApplication.functionalStatusDescription,
+            viewedOn: new Date().toISOString()
+        };
+        const others = this.getRecentlyViewed().filter(item => item.enquiryNo !== enquiryNo);
+        localStorage.setItem(RECENTLY_VIEWED_STORAGE_KEY, JSON.stringify([recentlyViewed, ...others].slice(0, RECENTLY_VIEWED_LIMIT)));
     }
 }

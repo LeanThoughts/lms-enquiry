@@ -1,0 +1,45 @@
+<app-dashboard-card title="My Pending Tasks" icon="task" [loading]="loading" [error]="tasks === null ? 'Tasks could not be loaded.' : ''">
+    <button fd-button cardActions fdCompact fdType="transparent" label="Open Inbox" (click)="openInbox()"></button>
+
+    @if (tasks?.length) {
+        <div class="tasks__summary">
+            <div class="tasks__stat">
+                <span class="tasks__stat-value">{{ tasks?.length }}</span>
+                <span class="tasks__stat-label">Pending</span>
+            </div>
+            <div class="tasks__stat" [class.tasks__stat--overdue]="overdueCount > 0">
+                <span class="tasks__stat-value">{{ overdueCount }}</span>
+                <span class="tasks__stat-label">Older than {{ overdueDays }} days</span>
+            </div>
+        </div>
+
+        <div class="tasks__processes">
+            @for (process of processes; track process.processName) {
+                <button type="button" class="tasks__process dashboard-badge dashboard-badge--process-{{ getProcessColor(process.processName) }}"
+                    [title]="process.overdue + ' overdue'" (click)="openInbox(process.processName)">
+                    {{ getProcessLabel(process.processName) }} &middot; {{ process.count }}
+                </button>
+            }
+        </div>
+
+        <h4 class="tasks__heading">Waiting longest</h4>
+        <ul class="dashboard-list">
+            @for (task of oldestTasks; track task.id) {
+                <li class="dashboard-list__item dashboard-list__item--clickable" tabindex="0"
+                    (click)="openInbox(task.processName)" (keydown.enter)="openInbox(task.processName)">
+                    <div class="dashboard-list__main">
+                        <span class="dashboard-list__primary">{{ task.projectName || task.lanContractId || '--' }}</span>
+                        <span class="dashboard-list__secondary">{{ getProcessLabel(task.processName) }} &middot; {{ task.requestorName }}</span>
+                    </div>
+                    <div class="dashboard-list__aside">
+                        <span>{{ task.requestDate | date:'dd MMM yyyy' }}</span>
+                        <span [class.tasks__age--overdue]="isOverdue(task)">{{ getAgeLabel(task) }}</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    @else {
+        <p class="dashboard-empty">You're all caught up. There are no tasks waiting for you.</p>
+    }
+</app-dashboard-card>

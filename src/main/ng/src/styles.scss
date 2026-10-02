@@ -164,3 +164,105 @@ body {
     padding-top: 0.25rem !important;
     padding-bottom: 1rem !important;
 }
+
+// Lists and badges shared by the homepage dashboard widgets
+.dashboard-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.5rem;
+        border-bottom: 1px solid var(--sapList_BorderColor, #e5e5e5);
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &--clickable {
+            border-radius: 0.5rem;
+            cursor: pointer;
+
+            &:hover,
+            &:focus-visible {
+                outline: none;
+                background-color: rgba(14, 124, 134, 0.06);
+            }
+        }
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-width: 0;
+    }
+
+    &__primary,
+    &__secondary {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__primary {
+        font-weight: 600;
+    }
+
+    &__secondary {
+        margin-top: 0.15rem;
+        font-size: 0.75rem;
+        color: var(--sapContent_LabelColor, #556b82);
+    }
+
+    &__aside {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        align-items: flex-end;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        color: var(--sapContent_LabelColor, #556b82);
+    }
+}
+
+.dashboard-empty {
+    margin: 0;
+    padding: 1.5rem 0;
+    font-size: 0.875rem;
+    color: var(--sapContent_LabelColor, #556b82);
+    text-align: center;
+}
+
+.dashboard-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    background-color: rgba(#4a5568, 0.12);
+    color: #4a5568;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    // Workflow processes, same colors as the inbox
+    @each $index, $color in (1: #0e7c86, 2: #2b5fb4, 3: #7b3fb3, 4: #b4570e, 5: #1d7f3f, 6: #b3245c, 7: #5c6b0f, 8: #4a5568) {
+        &--process-#{$index} {
+            background-color: rgba($color, 0.12);
+            color: $color;
+        }
+    }
+
+    // Functional status codes, same colors as the loan contract list
+    @each $code, $color in (
+        1: #0e7c86, 2: #2b5fb4, 10: #7b3fb3, 11: #b4570e, 3: #3f51b5, 12: #b3245c,
+        4: #1d7f3f, 5: #0b6b3a, 6: #5c6b0f, 8: #00796b, 9: #c62828
+    ) {
+        &--stage-#{$code} {
+            background-color: rgba($color, 0.12);
+            color: $color;
+        }
+    }
+}

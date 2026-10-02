@@ -1,0 +1,49 @@
+$accent: #0e7c86;
+
+.portfolio {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.3rem;
+        font-size: 0.8125rem;
+    }
+
+    &__label {
+        overflow: hidden;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__figures {
+        flex-shrink: 0;
+        color: var(--sapContent_LabelColor, #556b82);
+
+        strong {
+            color: var(--sapTextColor, #32363a);
+        }
+    }
+
+    &__track {
+        height: 0.5rem;
+        overflow: hidden;
+        border-radius: 1rem;
+        background-color: rgba($accent, 0.1);
+    }
+
+    &__bar {
+        height: 100%;
+        min-width: 0.25rem;
+        border-radius: 1rem;
+        background: linear-gradient(90deg, rgba($accent, 0.7), $accent);
+        transition: width 0.4s ease;
+    }
+}

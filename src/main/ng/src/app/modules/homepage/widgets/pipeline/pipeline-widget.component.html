@@ -1,0 +1,16 @@
+<app-dashboard-card title="Pipeline by Stage" icon="process" [loading]="loading"
+    [subtitle]="stages ? total + ' loan contracts' : ''"
+    [error]="stages === null ? 'The pipeline could not be loaded.' : ''">
+    <div class="pipeline">
+        @for (stage of stages; track stage.code) {
+            <button type="button" class="pipeline__stage pipeline__stage--{{ stage.code }}" [class.pipeline__stage--empty]="stage.count === 0"
+                [disabled]="stage.count === 0" [title]="'Search ' + stage.label + ' loan contracts'" (click)="openStage(stage)">
+                <span class="pipeline__count">{{ stage.count }}</span>
+                <span class="pipeline__label">{{ stage.label }}</span>
+                @if (stage.amount > 0) {
+                    <span class="pipeline__amount">Rs {{ stage.amount | number:'1.0-2' }} Cr</span>
+                }
+            </button>
+        }
+    </div>
+</app-dashboard-card>

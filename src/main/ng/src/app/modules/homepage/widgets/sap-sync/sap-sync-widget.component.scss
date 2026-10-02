@@ -1,0 +1,51 @@
+.sap-sync {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+
+    &__item {
+        --item-color: #4a5568;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        column-gap: 0.6rem;
+        padding: 0.7rem 0.85rem;
+        border-radius: 0.6rem;
+        background-color: color-mix(in srgb, var(--item-color) 8%, transparent);
+        color: var(--item-color);
+
+        fd-icon {
+            grid-row: span 2;
+            font-size: 1.25rem;
+        }
+
+        &--posted {
+            --item-color: #1d7f3f;
+        }
+
+        &--waiting {
+            --item-color: #2b5fb4;
+        }
+
+        &--progress {
+            --item-color: #b4570e;
+        }
+
+        &--alert {
+            --item-color: #c62828;
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--item-color) 40%, transparent);
+        }
+    }
+
+    &__value {
+        font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    &__label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--sapTextColor, #32363a);
+    }
+}

@@ -126,6 +126,11 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
         if (this.loanContractSearchService.searchFormValue) {
             this.loanContractSearchForm.patchValue(this.loanContractSearchService.searchFormValue);
         }
+
+        if (this.loanContractSearchService.runSearchOnLoad) {
+            this.loanContractSearchService.runSearchOnLoad = false;
+            this.searchLoanContracts(true);
+        }
     }
 
     /**
@@ -134,13 +139,14 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
     onSelectEnquiry(enquiry: any): void {
         this.selectedEnquiry.select(enquiry.loanApplication.enquiryNo.id);
         this.loanContractSearchService.selectedEnquiry$.next(enquiry);
+        this.loanContractSearchService.addRecentlyViewed(enquiry);
         console.log('selected enquiry is', enquiry);
     }
     
     /**
-     * Search for loan contracts
+     * Search for loan contracts, optionally selecting the result when exactly one loan contract is found
      */
-    searchLoanContracts(): void {
+    searchLoanContracts(selectSingleResult = false): void {
         if (Object.values(this.loanContractSearchForm.value).every(value => value === null))
             this.displayAlertMessage('Provide at least one search parameter');
         else {
@@ -163,6 +169,9 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
                     this.currentPage = 1;
                     this.expanded = false;
                     this.updateDataSource();
+                    if (selectSingleResult && result.length === 1) {
+                        this.onSelectEnquiry(result[0]);
+                    }
                 }
             });
         }

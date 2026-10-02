@@ -30,6 +30,7 @@ import { ApplicationFeeService } from '../loan-contract-search/functional-stage/
 import { BoardApprovalService } from '../loan-contract-search/functional-stage/board-approval/board-approval.service';
 import { SanctionService } from '../loan-contract-search/functional-stage/sanction/sanction.service';
 import { ReferenceInterestRateService } from '../reference-interest-rate/reference-interest-rate.service';
+import { getProcessColor, getProcessLabel, getTaskAgeInDays, getTaskAgeLabel, TASK_OVERDUE_DAYS } from './inbox.constants';
 
 interface StageReview {
     route: string;
@@ -45,22 +46,6 @@ interface ProcessSummary {
 type InboxViewMode = 'table' | 'cards';
 
 const VIEW_MODE_STORAGE_KEY = 'inbox.viewMode';
-
-const PROCESS_LABELS: Record<string, string> = {
-    'BusinessPartner': 'Business Partner',
-    'ReferenceInterestRateValue': 'Reference Interest Rate',
-};
-
-const PROCESS_COLORS: Record<string, number> = {
-    'Process Enquiry': 1,
-    'ICC In-Principal Approval': 2,
-    'Prelim Risk Assessment': 3,
-    'Application Fee': 4,
-    'Board Approval': 5,
-    'Sanction': 6,
-    'BusinessPartner': 7,
-    'ReferenceInterestRateValue': 8,
-};
 
 @Component({
     selector: 'app-inbox',
@@ -118,6 +103,7 @@ export class InboxComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+        this.selectedProcess = this.activatedRoute.snapshot.queryParamMap.get('process');
         this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
             this.setTasks(data.routeResolver.tasks);
         });
@@ -182,11 +168,15 @@ export class InboxComponent implements OnInit, OnDestroy {
     }
 
     getProcessLabel(processName: string): string {
-        return PROCESS_LABELS[processName] || processName;
+        return getProcessLabel(processName);
     }
 
     getProcessColor(processName: string): number {
-        return PROCESS_COLORS[processName] || 8;
+        return getProcessColor(processName);
+    }
+
+    isOverdue(requestDate: string): boolean {
+        return getTaskAgeInDays(requestDate) > TASK_OVERDUE_DAYS;
     }
 
     getInitials(name: string): string {
@@ -197,22 +187,8 @@ export class InboxComponent implements OnInit, OnDestroy {
         return (parts[0].charAt(0) + (parts.length > 1 ? parts[parts.length - 1].charAt(0) : '')).toUpperCase();
     }
 
-    getAgeInDays(requestDate: string): number {
-        const requested = new Date(requestDate);
-        if (isNaN(requested.getTime())) {
-            return 0;
-        }
-        const today = new Date();
-        const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-        return Math.max(0, Math.round((startOfDay(today) - startOfDay(requested)) / 86400000));
-    }
-
     getAgeLabel(requestDate: string): string {
-        if (!requestDate || isNaN(new Date(requestDate).getTime())) {
-            return '';
-        }
-        const days = this.getAgeInDays(requestDate);
-        return days === 0 ? 'Today' : days === 1 ? '1 day ago' : days + ' days ago';
+        return getTaskAgeLabel(requestDate);
     }
 
     /**

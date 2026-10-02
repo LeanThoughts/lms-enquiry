@@ -1,0 +1,68 @@
+$accent: #0e7c86;
+$label: var(--sapContent_LabelColor, #556b82);
+$border: var(--sapList_BorderColor, #e5e5e5);
+
+:host {
+    display: block;
+    min-width: 0;
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid $border;
+    border-radius: 0.75rem;
+    background-color: var(--sapList_Background, #fff);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid $border;
+    }
+
+    &__heading {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    &__icon {
+        color: $accent;
+    }
+
+    &__subtitle {
+        margin-top: 0.15rem;
+        font-size: 0.75rem;
+        color: $label;
+    }
+
+    &__body {
+        flex-grow: 1;
+        padding: 0.75rem 1rem 1rem;
+    }
+
+    &__message {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1.5rem 0;
+        font-size: 0.875rem;
+        color: $label;
+        text-align: center;
+    }
+}

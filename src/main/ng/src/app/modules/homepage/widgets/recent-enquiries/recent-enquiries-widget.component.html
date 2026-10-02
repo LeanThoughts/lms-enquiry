@@ -1,0 +1,28 @@
+<app-dashboard-card title="Recent Enquiries" icon="customer-history" [loading]="loading"
+    [subtitle]="enquiries ? totalCount + ' in the last 30 days' : ''"
+    [error]="enquiries === null ? 'Recent enquiries could not be loaded.' : ''">
+    @if (enquiries?.length) {
+        <ul class="dashboard-list">
+            @for (enquiry of enquiries; track enquiry.loanApplicationId) {
+                <li class="dashboard-list__item dashboard-list__item--clickable" tabindex="0"
+                    (click)="openEnquiry(enquiry)" (keydown.enter)="openEnquiry(enquiry)">
+                    <div class="dashboard-list__main">
+                        <span class="dashboard-list__primary">{{ enquiry.projectName || '--' }}</span>
+                        <span class="dashboard-list__secondary">
+                            Enquiry {{ enquiry.enquiryNo }} &middot; {{ enquiry.borrowerName || '--' }}
+                        </span>
+                    </div>
+                    <div class="dashboard-list__aside">
+                        <span class="dashboard-badge dashboard-badge--stage-{{ enquiry.functionalStatus }}">
+                            {{ enquiry.functionalStatusDescription || '--' }}
+                        </span>
+                        <span>{{ enquiry.loanEnquiryDate | date:'dd MMM yyyy' }}</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    @else {
+        <p class="dashboard-empty">No enquiries were received in the last 30 days.</p>
+    }
+</app-dashboard-card>

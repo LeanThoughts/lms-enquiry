@@ -1,5 +1,53 @@
-<div>
-    <p>Welcome!</p>
+<div class="home">
+    <header class="home__greeting">
+        <div class="home__greeting-text">
+            <h1 class="home__title">{{ greeting }}{{ user?.firstName ? ', ' + user.firstName : '' }}</h1>
+            <p class="home__subtitle">
+                {{ today | date:'EEEE, d MMMM y' }}
+                @if (user?.roleDescription) {
+                    <span class="home__role">{{ user.roleDescription }}</span>
+                }
+            </p>
+        </div>
+    </header>
 
-    <!-- <button fd-button label="Get User Info" (click)="getUserInfo()"></button> -->
+    <nav class="home__actions" aria-label="Quick actions">
+        @for (action of visibleQuickActions; track action.label) {
+            <button type="button" class="home__action" (click)="action.open()">
+                <span class="home__action-icon">
+                    <fd-icon [glyph]="action.icon"></fd-icon>
+                </span>
+                <span class="home__action-text">
+                    <span class="home__action-label">
+                        {{ action.label }}
+                        @if (action.showTaskCount && tasks?.length) {
+                            <span class="home__action-count">{{ tasks?.length }}</span>
+                        }
+                    </span>
+                    <span class="home__action-description">{{ action.description }}</span>
+                </span>
+            </button>
+        }
+    </nav>
+
+    <app-pipeline-widget [loading]="loadingDashboard" [stageCounts]="dashboard?.stages ?? null"></app-pipeline-widget>
+
+    <div class="home__grid">
+        <app-pending-tasks-widget [loading]="loadingTasks" [taskList]="tasks"></app-pending-tasks-widget>
+
+        <app-recently-viewed-widget></app-recently-viewed-widget>
+
+        <app-recent-enquiries-widget [loading]="loadingDashboard" [enquiries]="dashboard?.recentEnquiries ?? null"
+            [totalCount]="dashboard?.recentEnquiryCount ?? 0"></app-recent-enquiries-widget>
+
+        <app-portfolio-widget title="Portfolio by Project Type" icon="bar-chart" [loading]="loadingDashboard"
+            [slices]="dashboard?.portfolioByProjectType ?? null"></app-portfolio-widget>
+
+        <app-portfolio-widget title="Portfolio by State" icon="map-2" [loading]="loadingDashboard" [describe]="describeState"
+            [slices]="dashboard?.portfolioByState ?? null"></app-portfolio-widget>
+
+        @if (!isBorrower) {
+            <app-sap-sync-widget [loading]="loadingDashboard" [status]="dashboard?.sapSync ?? null"></app-sap-sync-widget>
+        }
+    </div>
 </div>

@@ -1,0 +1,23 @@
+<app-dashboard-card [title]="title" [icon]="icon" subtitle="Loan contract amount (Rs Cr) and count" [loading]="loading"
+    [error]="bars === null ? 'The portfolio could not be loaded.' : ''">
+    @if (bars?.length) {
+        <ul class="portfolio">
+            @for (bar of bars; track bar.code) {
+                <li class="portfolio__row">
+                    <div class="portfolio__header">
+                        <span class="portfolio__label" [title]="describe(bar.description)">{{ describe(bar.description) }}</span>
+                        <span class="portfolio__figures">
+                            <strong>{{ bar.amount | number:'1.0-2' }}</strong> &middot; {{ bar.count }}
+                        </span>
+                    </div>
+                    <div class="portfolio__track">
+                        <div class="portfolio__bar" [style.width.%]="bar.width"></div>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    @else {
+        <p class="dashboard-empty">There are no loan contracts to show.</p>
+    }
+</app-dashboard-card>

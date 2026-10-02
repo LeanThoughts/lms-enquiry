@@ -1,0 +1,27 @@
+<app-dashboard-card title="SAP Sync" icon="synchronize" subtitle="Posting status of loan applications taken up for processing"
+    [loading]="loading" [error]="status === null ? 'The SAP posting status could not be loaded.' : ''">
+    @if (status) {
+        <div class="sap-sync">
+            <div class="sap-sync__item sap-sync__item--posted">
+                <fd-icon glyph="accept"></fd-icon>
+                <span class="sap-sync__value">{{ status.posted }}</span>
+                <span class="sap-sync__label">Posted</span>
+            </div>
+            <div class="sap-sync__item sap-sync__item--waiting">
+                <fd-icon glyph="pending"></fd-icon>
+                <span class="sap-sync__value">{{ status.waiting }}</span>
+                <span class="sap-sync__label">Waiting to post</span>
+            </div>
+            <div class="sap-sync__item sap-sync__item--progress">
+                <fd-icon glyph="synchronize"></fd-icon>
+                <span class="sap-sync__value">{{ status.inProgress }}</span>
+                <span class="sap-sync__label">Posting attempted</span>
+            </div>
+            <div class="sap-sync__item sap-sync__item--errors" [class.sap-sync__item--alert]="status.errors > 0">
+                <fd-icon glyph="error"></fd-icon>
+                <span class="sap-sync__value">{{ status.errors }}</span>
+                <span class="sap-sync__label">Errors</span>
+            </div>
+        </div>
+    }
+</app-dashboard-card>

@@ -1,0 +1,33 @@
+<section class="dashboard-card">
+    <header class="dashboard-card__header">
+        <div class="dashboard-card__heading">
+            <h3 class="dashboard-card__title">
+                @if (icon) {
+                    <fd-icon [glyph]="icon" class="dashboard-card__icon"></fd-icon>
+                }
+                {{ title }}
+            </h3>
+            @if (subtitle) {
+                <span class="dashboard-card__subtitle">{{ subtitle }}</span>
+            }
+        </div>
+        <ng-content select="[cardActions]"></ng-content>
+    </header>
+
+    <div class="dashboard-card__body">
+        @if (loading) {
+            <div class="dashboard-card__message">
+                <fd-busy-indicator [loading]="true" size="m" ariaLabel="Loading"></fd-busy-indicator>
+            </div>
+        }
+        @else if (error) {
+            <div class="dashboard-card__message">
+                <fd-icon glyph="message-warning"></fd-icon>
+                {{ error }}
+            </div>
+        }
+        @else {
+            <ng-content></ng-content>
+        }
+    </div>
+</section>

@@ -1,0 +1,26 @@
+<app-dashboard-card title="Recently Viewed" icon="history" subtitle="Loan contracts you selected recently on this device">
+    @if (recentlyViewed.length) {
+        <ul class="dashboard-list">
+            @for (item of recentlyViewed; track item.enquiryNo) {
+                <li class="dashboard-list__item dashboard-list__item--clickable" tabindex="0"
+                    (click)="open(item)" (keydown.enter)="open(item)">
+                    <div class="dashboard-list__main">
+                        <span class="dashboard-list__primary">{{ item.projectName || '--' }}</span>
+                        <span class="dashboard-list__secondary">
+                            Enquiry {{ item.enquiryNo }}{{ item.loanContractId ? ' / ' + item.loanContractId : '' }} &middot; {{ item.borrowerName || '--' }}
+                        </span>
+                    </div>
+                    <div class="dashboard-list__aside">
+                        <span class="dashboard-badge dashboard-badge--stage-{{ item.functionalStatus }}">
+                            {{ item.functionalStatusDescription || '--' }}
+                        </span>
+                        <span>{{ getViewedLabel(item) }}</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    @else {
+        <p class="dashboard-empty">Loan contracts you select in the loan contract search will appear here.</p>
+    }
+</app-dashboard-card>
