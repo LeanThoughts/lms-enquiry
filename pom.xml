@@ -271,7 +271,7 @@
                 </executions>
             </plugin>
 
-            <!-- This is needed to copy all angular files to /classes/static/enquiry folder -->
+            <!-- This is needed to copy all angular files to /classes/static folder -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -291,7 +291,6 @@
                                     <!-- Most common cases: -->
                                     <!-- 1. If angular.json → "outputPath": "dist/enquiry"          → use: src/main/ng/dist/enquiry -->
                                     <!-- 2. If angular.json → "outputPath": "dist/my-app"           → use: src/main/ng/dist/my-app -->
-                                    <!-- 3. If angular.json → "outputPath": "../resources/static/enquiry" → use: src/main/ng/../resources/static/enquiry -->
                                     <directory>src/main/ng/dist/lms-enquiry-bo/</directory>
                                 </resource>
                             </resources>
@@ -309,12 +308,6 @@
                 <excludes>
                     <exclude>static/**</exclude>
                 </excludes>
-            </resource>
-
-            <!-- Angular build output (NO filtering) -->
-            <resource>
-                <directory>src/main/resources/static</directory>
-                <filtering>false</filtering>
             </resource>
         </resources>
     </build>
