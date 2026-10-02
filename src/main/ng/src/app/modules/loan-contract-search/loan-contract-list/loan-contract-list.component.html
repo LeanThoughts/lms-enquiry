@@ -1,228 +1,202 @@
-<fd-layout-grid [noGap]="true" [style.width.rem]="97">
-    <div fdLayoutGridRow style="height: auto;">
-        <div [fdLayoutGridCol]="12">
-            <fd-panel
-                [(expanded)]="expanded"
-                expandId="panel-expand-1"
-                expandAriaLabel="Expand to see search parameters"
-                expandAriaLabelledBy="panel-expandable-title-1"
-                [style.height.rem]="90"
-            >
-                <h1 fd-panel-title id="panel-expandable-title-1">Loan Contract Search Parameters</h1>
-                <div fd-panel-content ariaLabel="Panel Content" id="panel-content-1">
-                    <fd-layout-grid [noGap]="true" [style.width.rem]="94">
-                        <div fdLayoutGridRow style="height: auto;">
-                            <div [fdLayoutGridCol]="12" [style.background-color]="'white'">
-                                <form [formGroup]="loanContractSearchForm" (ngSubmit)="searchLoanContracts()">
-                                    <div fdLayoutGridRow style="height: auto;">
-                                        <div [fdLayoutGridCol]="3" [style.padding.rem]="1" [style.padding-right.rem]="1">
-                                            <div fd-form-set>
-                                                <!-- Functional Status -->
-                                                <div fd-form-item>
-                                                    <label fd-form-label for="functionalStatus">Functional Status:</label>
-                                                    <fd-select id="functionalStatus" formControlName="functionalStatus">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of functionalStatuses; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.value }}</li>
-                                                        }
-                                                    </fd-select>
-                                                </div>
-                                                <!-- Loan Class -->
-                                                <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="loanClass">Loan Class:</label>
-                                                    <fd-select id="loanClass" formControlName="loanClass">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of loanClasses; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.value }}</li>
-                                                        }
-                                                    </fd-select>
-                                                </div>
-                                                <!-- Borrower Code From -->
-                                                <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="borrowerCodeFrom">Borrower Code From:</label>
-                                                    <input id="borrowerCodeFrom" formControlName="borrowerCodeFrom" fd-form-control type="text" />
-                                                </div>
-                                                <!-- Enquiry Number -->
-                                                <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="enquiryNumber">Enquiry Number:</label>
-                                                    <input id="enquiryNumber" formControlName="enquiryNumber" fd-form-control type="text" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div [fdLayoutGridCol]="3" [style.padding.rem]="1" [style.padding-left.rem]="0.5" [style.padding-right.rem]="0.5">
-                                            <div fd-form-set>
-                                                <!-- Technical Status -->
-                                                <div fd-form-item>
-                                                    <label fd-form-label for="technicalStatus">Project Status:</label>
-                                                    <fd-select id="technicalStatus" formControlName="technicalStatus">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of technicalStatuses; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.description }}</li>
-                                                        }
-                                                    </fd-select>
-                                                </div>
-                                                <!-- Project Type -->
-                                                <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="projectType">Project Type:</label>
-                                                    <fd-select id="projectType" formControlName="projectType">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of projectTypes; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.value }}</li>
-                                                        }
-                                                    </fd-select>
-                                                </div>
-                                                <!-- Borrower Code To -->
-                                                <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="borrowerCodeTo">Borrower Code To:</label>
-                                                    <input id="borrowerCodeTo" formControlName="borrowerCodeTo" fd-form-control type="text" />
-                                                </div>
-                                                <!-- Enquiry Date -->
-                                                <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="enquiryDate">Enquiry Date From:</label>
-                                                    <fd-date-picker 
-                                                        type="single" 
-                                                        inputId="enquiryDate" 
-                                                        formControlName="enquiryDate"
-                                                        [allowNull]="false" 
-                                                        [useValidation]="true">
-                                                    </fd-date-picker>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div [fdLayoutGridCol]="3" [style.padding.rem]="1" [style.padding-left.rem]="0.5" [style.padding-right.rem]="0.5">
-                                            <div fd-form-set>
-                                                <!-- Project Name -->
-                                                <div fd-form-item>
-                                                <label fd-form-label for="partyName">Name of the Project:</label>
-                                                <input
-                                                    formControlName="partyName"
-                                                    fd-form-control
-                                                    type="text"
-                                                    id="partyName"
-                                                />
-                                            </div>
-                                            <!-- Financing Type -->
-                                            <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="financingType">Financing Type:</label>
-                                                    <fd-select id="financingType" formControlName="financingType">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of financingTypes; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.value }}</li>
-                                                        }
-                                                    </fd-select>
-                                            </div>
-                                            <!-- Loan Number From -->
-                                            <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="loanNumberFrom">Loan Number From:</label>
-                                                    <input id="loanNumberFrom" formControlName="loanNumberFrom" fd-form-control type="text" />
-                                            </div>
-                                        </div>
-                                        </div>
-
-                                        <div [fdLayoutGridCol]="3" [style.padding.rem]="1" [style.padding-left.rem]="0.5" [style.padding-right.rem]="2">
-                                            <!-- Project Location State -->
-                                            <div fd-form-set>
-                                                <div fd-form-item>
-                                                    <label fd-form-label for="state">Project Location (State):</label>
-                                                    <fd-select id="state" formControlName="projectLocationState">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of states; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.value }}</li>
-                                                        }
-                                                    </fd-select>
-                                            </div>
-                                            <!-- Assistance Type -->
-                                            <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="assistanceType">Assistance Type:</label>
-                                                    <fd-select id="assistanceType" formControlName="assistanceType">
-                                                        <li fd-option [value]=""></li>
-                                                        @for (option of assistanceTypes; track option) {
-                                                            <li fd-option [value]="option.code">{{ option.value }}</li>
-                                                        }
-                                                    </fd-select>
-                                            </div>
-                                            <!-- Loan Number To -->
-                                            <div fd-form-item [style.margin-top.rem]="0.2">
-                                                    <label fd-form-label for="loanNumberTo">Loan Number To:</label>
-                                                    <input id="loanNumberTo" formControlName="loanNumberTo" fd-form-control type="text" />
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div fdLayoutGridRow  [style.padding.rem]="1" [style.padding-top.rem]="0">
-                                        <div [fdLayoutGridCol]="12">
-                                            <button fd-button
-                                                type="submit"
-                                                label="Search"
-                                            >
-                                            </button>
-                                            <button fd-button
-                                                label="Clear"
-                                                [style.margin-left.rem]="0.3"
-                                                (click)="clearSearch()"
-                                            >
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </fd-layout-grid>
-                </div>
-            </fd-panel>
-        </div>
-    </div>
-
-    <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="1" [style.width.rem]="93.5">
-        <div [fdLayoutGridCol]="12">
-            <div style="width: 100%; overflow-x: auto;">
-                <table fd-table aria-label="Default" style="min-width: 140rem;">
-                    <thead fd-table-header>
-                        <tr fd-table-row>
-                            @for (column of displayedColumns; track column) {
-                                <th fd-table-cell>{{ column }}</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody fd-table-body>
-                        @for (enquiry of dataSource; track enquiry) {
-                            <tr fd-table-row
-                                [hoverable]="true"
-                                [active]="selectedEnquiry.isSelected(enquiry.loanApplication.enquiryNo.id)"
-                                (click)="onSelectEnquiry(enquiry)"
-                            >
-                                <td fd-table-cell>{{ enquiry.loanApplication.enquiryNo.id }}</td>
-                                <td fd-table-cell>{{ enquiry.loanApplication.loanEnquiryDate | date:'dd/MM/yyyy' }}</td>
-                                <td fd-table-cell>{{ enquiry.loanApplication.functionalStatusDescription }}</td>
-                                <td fd-table-cell>{{ enquiry.loanApplication.busPartnerNumber }}</td>
-                                <td fd-table-cell>{{ enquiry.partner ? enquiry.partner.partyName1: '' }}</td>
-                                <td fd-table-cell>{{ enquiry.loanApplication.projectName }}</td>
-                                <td fd-table-cell>{{ enquiry.loanApplication.loanContractId }}</td>
-                                <td fd-table-cell>{{ enquiry.loanApplication.projectLocationState }}</td>
-                                <td fd-table-cell>{{ getProjectTypeDescription(enquiry.loanApplication.projectType) }}</td>
-                                <td fd-table-cell>{{ getLoanClassDescription(enquiry.loanApplication.loanClass) }}</td>
-                                <td fd-table-cell>{{ getProjectCapacity(enquiry) }}</td>
-                                <td fd-table-cell>{{ getAssistanceTypeDescription(enquiry.loanApplication.assistanceType) }}</td>
-                                <td fd-table-cell [style.text-align]="'right'">{{ enquiry.loanApplication.projectCost }}</td>
-                            </tr>
+<fd-panel class="lc-filters" [(expanded)]="expanded" expandId="lc-filters-expand" expandAriaLabel="Expand to see search parameters"
+    expandAriaLabelledBy="lc-filters-title">
+    <h3 fd-panel-title id="lc-filters-title">Search Parameters</h3>
+    <div fd-panel-content ariaLabel="Search parameters">
+        <form [formGroup]="loanContractSearchForm" (ngSubmit)="searchLoanContracts()">
+            <div class="lc-filters__grid">
+                <div fd-form-item>
+                    <label fd-form-label for="functionalStatus">Functional Status</label>
+                    <fd-select id="functionalStatus" formControlName="functionalStatus" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of functionalStatuses; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.value }}</li>
                         }
-                    </tbody>
-                </table>
+                    </fd-select>
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="technicalStatus">Project Status</label>
+                    <fd-select id="technicalStatus" formControlName="technicalStatus" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of technicalStatuses; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.description }}</li>
+                        }
+                    </fd-select>
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="partyName">Project Name</label>
+                    <input fd-form-control id="partyName" formControlName="partyName" type="text" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="state">Project Location (State)</label>
+                    <fd-select id="state" formControlName="projectLocationState" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of states; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.value }}</li>
+                        }
+                    </fd-select>
+                </div>
+
+                <div fd-form-item>
+                    <label fd-form-label for="loanClass">Loan Class</label>
+                    <fd-select id="loanClass" formControlName="loanClass" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of loanClasses; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.value }}</li>
+                        }
+                    </fd-select>
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="projectType">Project Type</label>
+                    <fd-select id="projectType" formControlName="projectType" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of projectTypes; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.value }}</li>
+                        }
+                    </fd-select>
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="financingType">Financing Type</label>
+                    <fd-select id="financingType" formControlName="financingType" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of financingTypes; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.value }}</li>
+                        }
+                    </fd-select>
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="assistanceType">Assistance Type</label>
+                    <fd-select id="assistanceType" formControlName="assistanceType" placeholder="Any">
+                        <li fd-option [value]="null">Any</li>
+                        @for (option of assistanceTypes; track option.code) {
+                            <li fd-option [value]="option.code">{{ option.value }}</li>
+                        }
+                    </fd-select>
+                </div>
+
+                <div fd-form-item>
+                    <label fd-form-label for="borrowerCodeFrom">Borrower Code From</label>
+                    <input fd-form-control id="borrowerCodeFrom" formControlName="borrowerCodeFrom" type="text" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="borrowerCodeTo">Borrower Code To</label>
+                    <input fd-form-control id="borrowerCodeTo" formControlName="borrowerCodeTo" type="text" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="loanNumberFrom">Loan Number From</label>
+                    <input fd-form-control id="loanNumberFrom" formControlName="loanNumberFrom" type="text" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="loanNumberTo">Loan Number To</label>
+                    <input fd-form-control id="loanNumberTo" formControlName="loanNumberTo" type="text" />
+                </div>
+
+                <div fd-form-item>
+                    <label fd-form-label for="enquiryNumber">Enquiry Number</label>
+                    <input fd-form-control id="enquiryNumber" formControlName="enquiryNumber" type="text" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="enquiryDate">Enquiry Date From</label>
+                    <fd-date-picker type="single" inputId="enquiryDate" formControlName="enquiryDate" [allowNull]="false" 
+                        [useValidation]="true">
+                    </fd-date-picker>
+                </div>
             </div>
+
+            <div class="lc-filters__actions">
+                <button fd-button type="submit" fdType="emphasized" glyph="search" label="Search"></button>
+                <button fd-button type="button" fdType="transparent" label="Clear" (click)="clearSearch()"></button>
+            </div>
+        </form>
+    </div>
+</fd-panel>
+
+@if (enquiries.length > 0) {
+    <div class="lc-results">
+        <div class="lc-results__summary">
+            <span class="lc-results__count">&nbsp;{{ totalItems }}</span> loan contract{{ totalItems === 1 ? '' : 's' }} found
         </div>
-        <div [fdLayoutGridCol]="2">
+
+        <div class="lc-results__table">
+            <table fd-table aria-label="Loan contracts">
+                <thead fd-table-header>
+                    <tr fd-table-row>
+                        <th fd-table-cell>Enquiry</th>
+                        <th fd-table-cell>Functional Status</th>
+                        <th fd-table-cell>Borrower</th>
+                        <th fd-table-cell>Project</th>
+                        <th fd-table-cell>Loan Contract</th>
+                        <th fd-table-cell>Project Type</th>
+                        <th fd-table-cell>Loan Class</th>
+                        <th fd-table-cell>Capacity</th>
+                        <th fd-table-cell>Assistance Type</th>
+                        <th fd-table-cell class="lc-results__amount">Project Cost (Rs Cr)</th>
+                    </tr>
+                </thead>
+                <tbody fd-table-body>
+                    @for (enquiry of dataSource; track enquiry.loanApplication.enquiryNo.id) {
+                        <tr fd-table-row
+                            [hoverable]="true"
+                            [active]="selectedEnquiry.isSelected(enquiry.loanApplication.enquiryNo.id)"
+                            (click)="onSelectEnquiry(enquiry)"
+                        >
+                            <td fd-table-cell>
+                                <div class="lc-cell">
+                                    <span class="lc-cell__primary">{{ enquiry.loanApplication.enquiryNo.id }}</span>
+                                    <span class="lc-cell__secondary">{{ enquiry.loanApplication.loanEnquiryDate | date:'dd MMM yyyy' }}</span>
+                                </div>
+                            </td>
+                            <td fd-table-cell>
+                                <span class="lc-stage lc-stage--{{ enquiry.loanApplication.functionalStatus }}">
+                                    {{ enquiry.loanApplication.functionalStatusDescription || '--' }}
+                                </span>
+                            </td>
+                            <td fd-table-cell>
+                                <div class="lc-borrower">
+                                    <span class="lc-borrower__avatar">
+                                        {{ getInitials(enquiry.partner?.partyName1) }}
+                                    </span>
+                                    <div class="lc-cell">
+                                        <span class="lc-cell__primary">{{ enquiry.partner?.partyName1 || '--' }}</span>
+                                        <span class="lc-cell__secondary">BP {{ enquiry.loanApplication.busPartnerNumber || '--' }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td fd-table-cell>
+                                <div class="lc-cell lc-cell--wide">
+                                    <span class="lc-cell__primary">{{ enquiry.loanApplication.projectName || '--' }}</span>
+                                    <span class="lc-cell__secondary">{{ enquiry.loanApplication.projectLocationState || '--' }}</span>
+                                </div>
+                            </td>
+                            <td fd-table-cell class="lc-results__contract">{{ enquiry.loanApplication.loanContractId || '--' }}</td>
+                            <td fd-table-cell>{{ getProjectTypeDescription(enquiry.loanApplication.projectType) || '--' }}</td>
+                            <td fd-table-cell>{{ getLoanClassDescription(enquiry.loanApplication.loanClass) || '--' }}</td>
+                            <td fd-table-cell>{{ getProjectCapacity(enquiry) || '--' }}</td>
+                            <td fd-table-cell>{{ getAssistanceTypeDescription(enquiry.loanApplication.assistanceType) || '--' }}</td>
+                            <td fd-table-cell class="lc-results__amount">{{ enquiry.loanApplication.projectCost ?? '--' }}</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="lc-results__pagination">
             <fd-pagination
-                fd-toolbar-item
+                fdCompact
                 [totalItems]="totalItems"
                 [itemsPerPage]="itemsPerPage"
-                (itemsPerPageChange)="onItemsPerPageChange($event)"
                 [currentPage]="currentPage"
                 [itemsPerPageOptions]="[10, 15, 20, 30, 50]"
+                (itemsPerPageChange)="onItemsPerPageChange($event)"
                 (pageChangeStart)="onPageChange($event)"
                 [mobile]="true"
             ></fd-pagination>
         </div>
     </div>
-</fd-layout-grid>
+}
+@else {
+    <div class="lc-empty">
+        <fd-icon glyph="loan" class="lc-empty__icon"></fd-icon>
+        <h3 class="lc-empty__title">No loan contracts to show</h3>
+        <p class="lc-empty__text">Enter at least one search parameter above and select Search.</p>
+    </div>
+}

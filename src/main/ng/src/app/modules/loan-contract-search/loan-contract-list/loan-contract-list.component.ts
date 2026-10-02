@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { 
+    ButtonComponent,
     DatePickerModule, 
     FormModule, 
-    LayoutGridModule, 
+    IconComponent,
     MessageStripAlertService, 
     PaginationModule, 
     PanelModule,
     SelectModule,
     TableModule
 } from '@fundamental-ngx/core';
-import { ButtonComponent } from '@fundamental-ngx/core';
+import { ContentDensityDirective } from '@fundamental-ngx/core/content-density';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { LoanContractSearchService } from '../loan-contract-search.service';
@@ -24,10 +25,10 @@ import { ActivatedRoute } from '@angular/router';
     imports: [
         ButtonComponent,
         CommonModule,
-        LayoutGridModule, 
+        ContentDensityDirective,
         DatePickerModule,
         FormModule,
-        LayoutGridModule,
+        IconComponent,
         PaginationModule,
         PanelModule,
         ReactiveFormsModule,
@@ -37,7 +38,7 @@ import { ActivatedRoute } from '@angular/router';
     templateUrl: './loan-contract-list.component.html',
     styleUrl: './loan-contract-list.component.scss'
 })
-export class LoanContractListComponent implements OnInit {
+export class LoanContractListComponent implements OnInit, OnDestroy {
 
     technicalStatuses!: any[];
     states = statesOfIndia.sort((a: any, b: any) => a.value.localeCompare(b.value)); // Sort the states by value
@@ -45,11 +46,6 @@ export class LoanContractListComponent implements OnInit {
     projectTypes!: any[];
     financingTypes!: any[];
     assistanceTypes!: any[];
-
-    displayedColumns = [
-        'Enquiry Number', 'Enquiry Date', 'Status', 'BP ID', 'Borrower Name', 'Project Name', 'Loan Contract Id', 'State', 'Project Type', 
-            'Loan Class', 'Project Capacity', 'Assistance Type', 'Project Cost (Rs Cr)'
-    ];
 
     enquiries: any[] = [];
     expanded = true;
@@ -189,9 +185,8 @@ export class LoanContractListComponent implements OnInit {
      */
     onItemsPerPageChange(pageSize: number): void {
         this.itemsPerPage = pageSize;
-        // Calculate max valid page for new page size
-        const maxPage = Math.ceil(this.totalItems / this.itemsPerPage) - 1;
-        // Reset to first page or stay on current if still valid
+        // Stay on the current page if it still exists for the new page size, otherwise move to the last page
+        const maxPage = Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage));
         this.currentPage = Math.min(this.currentPage, maxPage);
         this.updateDataSource();
     }
@@ -243,6 +238,18 @@ export class LoanContractListComponent implements OnInit {
             return enquiry.loanApplication.projectCapacity + " " + enquiry.loanApplication.projectCapacityUnit;
         else
             return '';
+    }
+
+    /**
+     * Get the initials of a name (first letters of the first two words)
+     */
+    getInitials(name: string): string {
+        return (name || '')
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((word) => word.charAt(0).toUpperCase())
+            .join('') || '?';
     }
 
     /**

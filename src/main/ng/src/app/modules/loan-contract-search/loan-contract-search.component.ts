@@ -60,6 +60,20 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
 
     selectedEnquiry: SelectionModel<any> = new SelectionModel<any>(false, []);
 
+    private static readonly DEFAULT_SUBTITLE = 'Search loan contracts, select one and open a functional stage';
+
+    subtitle: string = LoanContractSearchComponent.DEFAULT_SUBTITLE;
+
+    // Functional stages that can be opened for the selected enquiry, in the order of the loan life cycle
+    readonly stages = [
+        { label: 'Process Enquiry', open: () => this.redirectToProcessEnquiry() },
+        { label: 'ICC Approval', open: () => this.redirectToICCApproval() },
+        { label: 'Risk Assessment', open: () => this.redirectToRiskAssessment() },
+        { label: 'Application Fee', open: () => this.redirectToApplicationFee() },
+        { label: 'Board Approval', open: () => this.redirectToBoardApproval() },
+        { label: 'Sanction', open: () => this.redirectToSanction() },
+    ];
+
     /**
      * Constructor
      */
@@ -82,9 +96,14 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
         this.loanContractSearchService.selectedEnquiry$.pipe(takeUntil(this.destroy$)).subscribe((enquiry) => {
             if (enquiry) {
                 this.selectedEnquiry.select(enquiry.loanApplication.enquiryNo.id);
+                const loanApplication = enquiry.loanApplication;
+                this.subtitle = `Selected: Enquiry ${loanApplication.enquiryNo.id}`
+                    + (loanApplication.loanContractId ? ` / ${loanApplication.loanContractId}` : '')
+                    + (loanApplication.projectName ? ` - ${loanApplication.projectName}` : '');
             }
             else {
                 this.selectedEnquiry.clear();
+                this.subtitle = LoanContractSearchComponent.DEFAULT_SUBTITLE;
             }
         });
     }
