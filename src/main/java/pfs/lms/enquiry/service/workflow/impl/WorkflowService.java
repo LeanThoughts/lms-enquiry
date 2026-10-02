@@ -210,7 +210,7 @@ public class WorkflowService implements IWorkflowService {
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "ICC In-Principal Approval";
                 break;
-            case "Prelim Risk Assessment":
+            case "Prelim Risk Assessment":
                 //Fetch the Entity
                 riskAssessment = riskAssessmentRepository.getOne(businessProcessId);
                 // Set the Work Flow Status Code "02" - Sent for Approval

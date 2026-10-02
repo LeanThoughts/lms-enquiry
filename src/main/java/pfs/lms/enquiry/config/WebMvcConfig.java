@@ -55,8 +55,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**");
     }
 
-    /** The Angular app is built with baseHref /enquiry/, so its shell lives under static/enquiry/. */
-    private static final String SPA_INDEX = "/static/enquiry/index.html";
+    /** /enquiry is the servlet context path, so the Angular build is copied to the root of static/. */
+    private static final String SPA_INDEX = "/static/index.html";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
