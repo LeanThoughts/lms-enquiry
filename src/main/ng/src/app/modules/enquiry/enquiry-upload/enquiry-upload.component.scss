@@ -1,3 +1,145 @@
-::ng-deep .fd-file-uploader__container {
-    width: 38.5% !important;
+$accent: #0e7c86;
+$border: var(--sapList_BorderColor, #e5e5e5);
+$label: var(--sapContent_LabelColor, #556b82);
+
+:host ::ng-deep .fd-file-uploader__container {
+    width: 100% !important;
+}
+
+.enquiry-upload {
+    padding: 0.5rem 0.5rem 1rem;
+
+    &__panels {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+        gap: 1rem;
+    }
+}
+
+.eu-panel,
+.eu-preview {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border;
+    border-radius: 0.75rem;
+    background-color: var(--sapList_Background, #fff);
+}
+
+.eu-panel {
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem 0.5rem;
+    }
+
+    &__icon {
+        display: inline-flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.6rem;
+        background-color: rgba($accent, 0.12);
+        color: $accent;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    &__subtitle {
+        margin: 0.2rem 0 0;
+        font-size: 0.8rem;
+        color: $label;
+    }
+
+    &__body {
+        flex: 1;
+        padding: 0.5rem 1.25rem 1rem;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border-top: 1px solid $border;
+    }
+}
+
+.eu-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.eu-hint {
+    margin: 0.75rem 0 0;
+    font-size: 0.75rem;
+    color: $label;
+}
+
+.eu-preview {
+    margin-top: 1rem;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid $border;
+    }
+
+    &__stats {
+        display: flex;
+        gap: 0.4rem;
+        margin-top: 0.4rem;
+    }
+
+    &__table {
+        overflow-x: auto;
+
+        table {
+            min-width: 180rem;
+            border: none;
+        }
+
+        th {
+            font-size: 1rem;
+            font-weight: 700;
+            // text-transform: uppercase;
+            color: $label;
+            white-space: nowrap;
+        }
+    }
+}
+
+.eu-stat {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 1rem;
+    background-color: rgba(0, 0, 0, 0.06);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &--positive {
+        background-color: rgba(#1d7f3f, 0.12);
+        color: #1d7f3f;
+    }
+
+    &--negative {
+        background-color: rgba(#bb0000, 0.1);
+        color: #bb0000;
+    }
+}
+
+.eu-number {
+    text-align: right;
 }

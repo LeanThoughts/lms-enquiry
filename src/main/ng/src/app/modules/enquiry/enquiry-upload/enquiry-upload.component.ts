@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { EnquiryUploadService } from './enquiry-upload.service';
 import { 
     ButtonComponent, 
-    LayoutGridModule, 
+    DynamicPageComponent,
+    DynamicPageContentComponent,
+    DynamicPageHeaderComponent,
+    IconComponent,
     MessageStripModule, 
     MessageStripAlertService, 
     TableModule,
@@ -14,7 +17,6 @@ import {
     FormItemComponent,
     FormLabelComponent
 } from '@fundamental-ngx/core';
-import { ComponentNgxComponent } from '../../../common/component-ngx/component-ngx.component';
 import { FileUploaderModule } from '@fundamental-ngx/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -29,13 +31,15 @@ import { SelectionModel } from '@angular/cdk/collections';
     imports: [
         ButtonComponent,
         CommonModule,
-        ComponentNgxComponent,
         DatePickerModule,
+        DynamicPageComponent,
+        DynamicPageContentComponent,
+        DynamicPageHeaderComponent,
         FileUploaderModule,
         FormsModule,
         FormItemComponent,
         FormLabelComponent,
-        LayoutGridModule,
+        IconComponent,
         MessageStripModule,
         ReactiveFormsModule,
         TableModule,
@@ -80,6 +84,14 @@ export class EnquiryUploadComponent {
             enquiryDateFrom: [null],
             enquiryDateTo: [null]
         });
+    }
+
+    get issueCount(): number {
+        return this.enquiries.filter(enquiry => enquiry.comments).length;
+    }
+
+    get readyCount(): number {
+        return this.enquiries.length - this.issueCount;
     }
 
     /**

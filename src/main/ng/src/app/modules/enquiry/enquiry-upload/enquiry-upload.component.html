@@ -1,156 +1,182 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" [style.width.rem]="96.5">
-        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
-            <div [fdLayoutGridCol]="12">
-                <div class="text-xl font-bold">
-                    Upload/ Download Enquiries
-                </div>
-            </div>
-        </div>
-        <div fdLayoutGridRow style="height: auto;">
-            <div [fdLayoutGridCol]="12" style="background-color: white;" [style.padding.rem]="1">
-                <fd-file-uploader
-                    #fileUploaderComponentRef
-                    ariaLabel="Choose file"
-                    ariaLabelledBy="Choose file"
-                    placeholder="Select the file "
-                    buttonLabel="Browse"
-                    buttonAriaLabel="browse file"
-                    accept=".xls,.xlsx"
-                    [required]="true"
-                    [(ngModel)]="files"
-                    [multiple]="false"
-                    (selectedFilesChanged)="handleFileSelection($event)"
-                >
-                </fd-file-uploader>
-
-                <div [style.margin-top.rem]="0.5">
-                    Files Selected:
-                </div>
-                @for (file of files; track file) {
-                    <span>
-                        <span class="text-green-600">{{ file.name }} </span><br />
-                    </span>
-                }
-
-                <button
-                    fd-button
-                    (click)="previewEnquiries()"
-                    label="Preview Enquiries"
-                    [style.margin-top.rem]="0.5"
-                >
-                </button>
-
-                <button
-                    fd-button
-                    (click)="fileUploaderComponentRef.clear()"
-                    label="Clear Selection"
-                    [style.margin-top.rem]="0.5"
-                    [style.margin-left.rem]="0.3"
-                >
-                </button>
-            </div>
-        </div>
-
-        <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="1">
-            <div [fdLayoutGridCol]="12" [style.background-color]="'white'">
-                <form [formGroup]="downloadEnquiriesForm">
-                    <div fdLayoutGridRow style="height: auto;" [style.padding.rem]="1">
-                        <div [fdLayoutGridCol]="2">
-                            <div fd-form-item>
-                                <label fd-form-label for="datePicker1">Enquiry Date From</label>
-                                <fd-date-picker 
-                                    type="single" 
-                                    inputId="datePicker1" 
-                                    formControlName="enquiryDateFrom"
-                                    [allowNull]="false" 
-                                    [useValidation]="true">
-                                </fd-date-picker>        
-                            </div>
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Upload / Download Enquiries"
+        subtitle="Import enquiries from an Excel file or export enquiries for a date range"
+        [style.margin-top.rem]="1">
+    </fd-dynamic-page-header>
+    <fd-dynamic-page-content>
+        <div class="enquiry-upload">
+            <div class="enquiry-upload__panels">
+                <section class="eu-panel" aria-labelledby="upload-title">
+                    <header class="eu-panel__header">
+                        <span class="eu-panel__icon"><fd-icon glyph="upload"></fd-icon></span>
+                        <div>
+                            <h3 class="eu-panel__title" id="upload-title">Upload Enquiries</h3>
+                            <p class="eu-panel__subtitle">Select an Excel file (.xls or .xlsx) and preview the enquiries before creating them.</p>
                         </div>
-                        <div [fdLayoutGridCol]="2" [style.margin-left.rem]="0.3">
+                    </header>
+                    <div class="eu-panel__body">
+                        <div fd-form-item>
+                            <label fd-form-label for="enquiryFile" [required]="true">Enquiry File</label>
+                            <fd-file-uploader
+                                #fileUploaderComponentRef
+                                id="enquiryFile"
+                                ariaLabel="Choose file"
+                                ariaLabelledBy="Choose file"
+                                placeholder="No file selected"
+                                buttonLabel="Browse"
+                                buttonAriaLabel="Browse file"
+                                accept=".xls,.xlsx"
+                                [required]="true"
+                                [(ngModel)]="files"
+                                [multiple]="false"
+                                (selectedFilesChanged)="handleFileSelection($event)"
+                            >
+                            </fd-file-uploader>
+                        </div>
+                    </div>
+                    <footer class="eu-panel__footer">
+                        <button fd-button
+                            fdType="transparent"
+                            label="Clear"
+                            [disabled]="files.length === 0"
+                            (click)="fileUploaderComponentRef.clear(); files = []"
+                        >
+                        </button>
+                        <button fd-button
+                            fdType="emphasized"
+                            glyph="show"
+                            label="Preview Enquiries"
+                            (click)="previewEnquiries()"
+                        >
+                        </button>
+                    </footer>
+                </section>
+
+                <section class="eu-panel" aria-labelledby="download-title">
+                    <header class="eu-panel__header">
+                        <span class="eu-panel__icon"><fd-icon glyph="download"></fd-icon></span>
+                        <div>
+                            <h3 class="eu-panel__title" id="download-title">Download Enquiries</h3>
+                            <p class="eu-panel__subtitle">Export enquiries created within a date range to an Excel file.</p>
+                        </div>
+                    </header>
+                    <form class="eu-panel__body" [formGroup]="downloadEnquiriesForm">
+                        <div class="eu-dates">
                             <div fd-form-item>
-                                <label fd-form-label for="datePicker2">Enquiry Date To</label>
-                                <fd-date-picker 
-                                    type="single" 
-                                    inputId="datePicker2" 
+                                <label fd-form-label for="enquiryDateFrom">Enquiry Date From</label>
+                                <fd-date-picker
+                                    type="single"
+                                    inputId="enquiryDateFrom"
+                                    formControlName="enquiryDateFrom"
+                                    [allowNull]="false"
+                                    [useValidation]="true">
+                                </fd-date-picker>
+                            </div>
+                            <div fd-form-item>
+                                <label fd-form-label for="enquiryDateTo">Enquiry Date To</label>
+                                <fd-date-picker
+                                    type="single"
+                                    inputId="enquiryDateTo"
                                     formControlName="enquiryDateTo"
-                                    [allowNull]="false" 
+                                    [allowNull]="false"
                                     [useValidation]="true">
                                 </fd-date-picker>
                             </div>
                         </div>
-                        <div [fdLayoutGridCol]="2" [style.margin-left.rem]="0.3">
-                            <button
-                                fd-button
-                                (click)="downloadEnquiries()"
-                                label="Download Enquiries"
-                                [style.margin-top.rem]="1.2"
-                            >
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                        <p class="eu-hint">Dates that are left empty default to today.</p>
+                    </form>
+                    <footer class="eu-panel__footer">
+                        <button fd-button
+                            fdType="emphasized"
+                            glyph="excel-attachment"
+                            label="Download Enquiries"
+                            (click)="downloadEnquiries()"
+                        >
+                        </button>
+                    </footer>
+                </section>
             </div>
-        </div>
 
-        <div fdLayoutGridRow style="height: auto;" *ngIf="enquiries.length > 0" [style.margin-top.rem]="1">
-            <div [fdLayoutGridCol]="12">
-                <div style="width: 100%; overflow-x: auto;">
-                    <table fd-table aria-label="Default" style="min-width: 200rem;">
-                        <thead fd-table-header>
-                            <tr fd-table-row>
-                                @for (column of displayedColumns; track column) {
-                                    <th fd-table-cell>{{ column }}</th>
+            @if (enquiries.length > 0) {
+                <section class="eu-preview" aria-labelledby="preview-title">
+                    <header class="eu-preview__header">
+                        <div>
+                            <h3 class="eu-panel__title" id="preview-title">Preview</h3>
+                            <div class="eu-preview__stats">
+                                <span class="eu-stat">{{ enquiries.length }} total</span>
+                                <span class="eu-stat eu-stat--positive">{{ readyCount }} ready</span>
+                                @if (issueCount > 0) {
+                                    <span class="eu-stat eu-stat--negative">{{ issueCount }} need attention</span>
                                 }
-                            </tr>
-                        </thead>
-                        <tbody fd-table-body>
-                            @for (enquiry of enquiries; track enquiry) {
-                            <tr fd-table-row
-                                [hoverable]="true"
-                                [active]="selectedEnquiry.isSelected(enquiry.serialNumber)"
-                                (click)="selectedEnquiry.select(enquiry.serialNumber)"
-                            >
-                                <td fd-table-cell>
-                                    <div *ngIf="enquiry.comments !== ''">
-                                        <button fd-button type="button" color="accent" (click)="viewRejectedReasons(enquiry.comments)">
-                                            View Reasons
-                                        </button>
-                                    </div>
-                                </td>
-                                <td fd-table-cell>{{ enquiry.serialNumber }}</td>
-                                <td fd-table-cell>{{ enquiry.sapEnquiryId === 0 ? '' : enquiry.sapEnquiryId }}</td>
-                                <td fd-table-cell>{{ enquiry.borrowerName }}</td>
-                                <td fd-table-cell>{{ enquiry.groupName }}</td>
-                                <td fd-table-cell>{{ enquiry.projectType }}</td>
-                                <td fd-table-cell>{{ enquiry.loanType }}</td>
-                                <td fd-table-cell>{{ enquiry.proposalType }}</td>
-                                <td fd-table-cell>{{ enquiry.dateOfLeadGeneration | date:'dd/MM/yyyy' }}</td>
-                                <td fd-table-cell [style.text-align]="'right'">{{ enquiry.amountRequested === 0 ? '' : enquiry.amountRequested }}</td>
-                                <td fd-table-cell [style.text-align]="'right'">{{ enquiry.borrowerRequestedRoi === 0 ? '' : enquiry.borrowerRequestedROI }}</td>
-                                <td fd-table-cell>{{ enquiry.iccReadinessStatus }}</td>
-                                <td fd-table-cell>{{ enquiry.remarksOnIccReadiness }}</td>
-                                <td fd-table-cell>{{ enquiry.presentedInIcc }}</td>
-                                <td fd-table-cell>{{ enquiry.iccStatus }}</td>
-                                <td fd-table-cell>{{ enquiry.reasonForIccStatus }}</td>
-                                <td fd-table-cell>{{ enquiry.iccClearanceDate | date:'dd/MM/yyyy' }}</td>
-                                <td fd-table-cell>{{ enquiry.iccMeetingNumber }}</td>
-                                <td fd-table-cell [style.text-align]="'right'">{{ enquiry.amountApproved === 0 ? '' : enquiry.amountApproved }}</td>
-                                <td fd-table-cell [style.text-align]="'right'">{{ enquiry.iccApprovedRoi === 0 ? '' : enquiry.iccApprovedRoi }}</td>
-                                <td fd-table-cell>{{ enquiry.remarksForIccApproval }}</td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <button fd-button
-                    (click)="createEnquiries()"
-                    label="Create Enquiries"
-                    [style.margin.rem]="1"
-                >
-                </button>
-            </div>
+                            </div>
+                        </div>
+                        <button fd-button
+                            fdType="positive"
+                            glyph="add"
+                            label="Create Enquiries"
+                            (click)="createEnquiries()"
+                        >
+                        </button>
+                    </header>
+                    <div class="eu-preview__table">
+                        <table fd-table aria-label="Enquiries preview">
+                            <thead fd-table-header>
+                                <tr fd-table-row>
+                                    <th fd-table-cell>Status</th>
+                                    @for (column of displayedColumns.slice(1); track column) {
+                                        <th fd-table-cell>{{ column }}</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody fd-table-body>
+                                @for (enquiry of enquiries; track enquiry) {
+                                    <tr fd-table-row
+                                        [hoverable]="true"
+                                        [active]="selectedEnquiry.isSelected(enquiry.serialNumber)"
+                                        (click)="selectedEnquiry.select(enquiry.serialNumber)"
+                                    >
+                                        <td fd-table-cell>
+                                            @if (enquiry.comments) {
+                                                <button fd-button
+                                                    fdCompact
+                                                    fdType="negative"
+                                                    glyph="message-error"
+                                                    label="View Reasons"
+                                                    (click)="viewRejectedReasons(enquiry.comments); $event.stopPropagation()"
+                                                >
+                                                </button>
+                                            }
+                                            @else {
+                                                <span class="eu-stat eu-stat--positive">Ready</span>
+                                            }
+                                        </td>
+                                        <td fd-table-cell>{{ enquiry.serialNumber }}</td>
+                                        <td fd-table-cell>{{ enquiry.sapEnquiryId === 0 ? '' : enquiry.sapEnquiryId }}</td>
+                                        <td fd-table-cell>{{ enquiry.borrowerName }}</td>
+                                        <td fd-table-cell>{{ enquiry.groupName }}</td>
+                                        <td fd-table-cell>{{ enquiry.projectType }}</td>
+                                        <td fd-table-cell>{{ enquiry.loanType }}</td>
+                                        <td fd-table-cell>{{ enquiry.proposalType }}</td>
+                                        <td fd-table-cell>{{ enquiry.dateOfLeadGeneration | date:'dd/MM/yyyy' }}</td>
+                                        <td fd-table-cell class="eu-number">{{ enquiry.amountRequested === 0 ? '' : enquiry.amountRequested }}</td>
+                                        <td fd-table-cell class="eu-number">{{ enquiry.borrowerRequestedRoi === 0 ? '' : enquiry.borrowerRequestedROI }}</td>
+                                        <td fd-table-cell>{{ enquiry.iccReadinessStatus }}</td>
+                                        <td fd-table-cell>{{ enquiry.remarksOnIccReadiness }}</td>
+                                        <td fd-table-cell>{{ enquiry.presentedInIcc }}</td>
+                                        <td fd-table-cell>{{ enquiry.iccStatus }}</td>
+                                        <td fd-table-cell>{{ enquiry.reasonForIccStatus }}</td>
+                                        <td fd-table-cell>{{ enquiry.iccClearanceDate | date:'dd/MM/yyyy' }}</td>
+                                        <td fd-table-cell>{{ enquiry.iccMeetingNumber }}</td>
+                                        <td fd-table-cell class="eu-number">{{ enquiry.amountApproved === 0 ? '' : enquiry.amountApproved }}</td>
+                                        <td fd-table-cell class="eu-number">{{ enquiry.iccApprovedRoi === 0 ? '' : enquiry.iccApprovedRoi }}</td>
+                                        <td fd-table-cell>{{ enquiry.remarksForIccApproval }}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            }
         </div>
-    </fd-layout-grid>
-</component-ngx>
+    </fd-dynamic-page-content>
+</fd-dynamic-page>
