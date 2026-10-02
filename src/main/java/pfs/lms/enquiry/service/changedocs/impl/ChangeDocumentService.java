@@ -241,6 +241,7 @@ public class ChangeDocumentService implements IChangeDocumentService {
 
             sapIntegrationPointerService.saveForObject(businessProcessName, subProcessName, entityId, mainEntityId, mode);
         } catch (Exception ex) {
+            ex.printStackTrace();
             log.error("Error during change document create: " + businessProcessName + "-" + subProcessName + ":" + ex.getMessage());
             return null;
         }

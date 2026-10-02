@@ -1,8 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LayoutGridModule, CardModule, DialogService } from '@fundamental-ngx/core';
+import { FormsModule } from '@angular/forms';
+import {
+    CardModule,
+    DialogService,
+    DynamicPageComponent,
+    DynamicPageContentComponent,
+    DynamicPageGlobalActionsComponent,
+    DynamicPageHeaderComponent,
+    FormControlComponent,
+    IconComponent,
+    SegmentedButtonComponent,
+    TableModule,
+    ToolbarComponent,
+} from '@fundamental-ngx/core';
 import { ButtonComponent } from '@fundamental-ngx/core';
-import { ComponentNgxComponent } from '../../common/component-ngx/component-ngx.component';
 import { InboxService } from './inbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
@@ -25,14 +37,47 @@ interface StageReview {
     getEntity: (loanApplicationId: string) => Observable<any>;
 }
 
+interface ProcessSummary {
+    processName: string;
+    count: number;
+}
+
+type InboxViewMode = 'table' | 'cards';
+
+const VIEW_MODE_STORAGE_KEY = 'inbox.viewMode';
+
+const PROCESS_LABELS: Record<string, string> = {
+    'BusinessPartner': 'Business Partner',
+    'ReferenceInterestRateValue': 'Reference Interest Rate',
+};
+
+const PROCESS_COLORS: Record<string, number> = {
+    'Process Enquiry': 1,
+    'ICC In-Principal Approval': 2,
+    'Prelim Risk Assessment': 3,
+    'Application Fee': 4,
+    'Board Approval': 5,
+    'Sanction': 6,
+    'BusinessPartner': 7,
+    'ReferenceInterestRateValue': 8,
+};
+
 @Component({
     selector: 'app-inbox',
     imports: [
         ButtonComponent,
         CardModule,
         CommonModule,
-        ComponentNgxComponent,
-        LayoutGridModule,
+        FormsModule,
+        SegmentedButtonComponent,
+        DynamicPageComponent,
+        DynamicPageContentComponent,
+        DynamicPageGlobalActionsComponent,
+        DynamicPageHeaderComponent,
+        FormControlComponent,
+        IconComponent,
+        TableModule,
+        ToolbarComponent,
     ],
     templateUrl: './inbox.component.html',
     styleUrl: './inbox.component.scss'
@@ -44,6 +89,11 @@ export class InboxComponent implements OnInit, OnDestroy {
     isApproveDisabled = false;
     isRejectDisabled = false;
     tasks: any[] = [];
+    filteredTasks: any[] = [];
+    processSummary: ProcessSummary[] = [];
+    selectedProcess: string | null = null;
+    searchTerm = '';
+    viewMode: InboxViewMode = localStorage.getItem(VIEW_MODE_STORAGE_KEY) === 'cards' ? 'cards' : 'table';
 
     /**
      * Constructor
@@ -69,7 +119,7 @@ export class InboxComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
-            this.tasks = data.routeResolver.tasks;
+            this.setTasks(data.routeResolver.tasks);
         });
     }
 
@@ -78,8 +128,91 @@ export class InboxComponent implements OnInit, OnDestroy {
      */
     refreshTasks() {
         this.inboxService.getTasks().subscribe((data: any) => {
-            this.tasks = data;
+            this.setTasks(data);
         });
+    }
+
+    /**
+     * Store the tasks and rebuild the per process summary and the filtered list
+     */
+    private setTasks(tasks: any[]): void {
+        this.tasks = tasks || [];
+        const counts = new Map<string, number>();
+        this.tasks.forEach(task => counts.set(task.processName, (counts.get(task.processName) || 0) + 1));
+        this.processSummary = Array.from(counts, ([processName, count]) => ({ processName, count }));
+        if (this.selectedProcess !== null && !counts.has(this.selectedProcess)) {
+            this.selectedProcess = null;
+        }
+        this.applyFilters();
+    }
+
+    /**
+     * Switch between the table and card views and remember the choice
+     */
+    setViewMode(viewMode: InboxViewMode): void {
+        if (viewMode !== 'table' && viewMode !== 'cards') {
+            return;
+        }
+        this.viewMode = viewMode;
+        localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
+    }
+
+    /**
+     * Filter tasks by process
+     */
+    selectProcess(processName: string | null): void {
+        this.selectedProcess = processName;
+        this.applyFilters();
+    }
+
+    /**
+     * Filter tasks by search term
+     */
+    onSearch(searchTerm: string): void {
+        this.searchTerm = searchTerm;
+        this.applyFilters();
+    }
+
+    private applyFilters(): void {
+        const term = this.searchTerm.trim().toLowerCase();
+        this.filteredTasks = this.tasks.filter(task =>
+            (this.selectedProcess === null || task.processName === this.selectedProcess) &&
+            (term === '' || [task.projectName, task.lanContractId, task.requestorName, task.requestorEmail, task.processName]
+                .some(value => value && value.toString().toLowerCase().includes(term))));
+    }
+
+    getProcessLabel(processName: string): string {
+        return PROCESS_LABELS[processName] || processName;
+    }
+
+    getProcessColor(processName: string): number {
+        return PROCESS_COLORS[processName] || 8;
+    }
+
+    getInitials(name: string): string {
+        if (!name) {
+            return '?';
+        }
+        const parts = name.trim().split(/\s+/);
+        return (parts[0].charAt(0) + (parts.length > 1 ? parts[parts.length - 1].charAt(0) : '')).toUpperCase();
+    }
+
+    getAgeInDays(requestDate: string): number {
+        const requested = new Date(requestDate);
+        if (isNaN(requested.getTime())) {
+            return 0;
+        }
+        const today = new Date();
+        const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+        return Math.max(0, Math.round((startOfDay(today) - startOfDay(requested)) / 86400000));
+    }
+
+    getAgeLabel(requestDate: string): string {
+        if (!requestDate || isNaN(new Date(requestDate).getTime())) {
+            return '';
+        }
+        const days = this.getAgeInDays(requestDate);
+        return days === 0 ? 'Today' : days === 1 ? '1 day ago' : days + ' days ago';
     }
 
     /**

@@ -1,64 +1,164 @@
-<component-ngx>
-    <fd-layout-grid [noGap]="true" [style.width.rem]="98">
-        <div fdLayoutGridRow>
-            <div [fdLayoutGridCol]="2">
-                <h2>Inbox</h2>
-            </div>
-            <div [fdLayoutGridCol]="10" [style.text-align]="'right'" [style.margin-top.rem]="0.5">
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Inbox"
+        [subtitle]="tasks.length === 1 ? '1 task awaiting your approval' : tasks.length + ' tasks awaiting your approval'"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
                 <button fd-button
+                    fd-toolbar-item
                     fdType="emphasized"
+                    glyph="refresh"
                     label="Refresh"
                     (click)="refreshTasks()"
                 >
                 </button>
-            </div>
-        </div>
-
-        <div fdLayoutGridRow [style.margin-top.rem]="0.5" [style.margin-bottom.rem]="0.5">
-            <div [fdLayoutGridCol]="12">
-                <div fd-card-list style="display: flex; gap: 1rem; flex-wrap: wrap">
-                    @for (task of tasks; track task.id) {
-                    <fd-card [interactive]="true" role="listitem" style="max-width: 25%">
-                        <fd-card-header>
-                            <fd-card-main-header [style.text-align]="'right'">
-                                <h2 fd-card-title>{{ task.processName }}</h2>
-                                <h3 fd-card-subtitle>Enquiry No: {{ task.lanContractId }}</h3>
-                                <span fd-card-counter satus="positive">
-                                    Requestor Details: <br>
-                                    {{ task.requestorEmail }} <br>
-                                    {{ task.requestorName }}
-                                </span>
-                                <!-- <button
-                                    fd-button
-                                    fd-card-header-action
-                                    fdType="transparent"
-                                    glyph="overflow"
-                                    ariaLabel="More"
-                                    title="More"
-                                ></button> -->
-                            </fd-card-main-header>
-                            <fd-card-extended-header>
-                                <div fd-card-header-column>
-                                    <div fd-card-header-row>
-                                        <span [style.font-size.rem]="1">{{ task.projectName }}</span>
-                                    </div>
-                                    <div fd-card-header-row>
-                                        <span [style.font-size.rem]="0.8">Requested Date: {{ task.requestDate | date:'dd/MM/yyyy' }}</span>
-                                    </div>
-                                </div>
-                            </fd-card-extended-header>
-                        </fd-card-header>
-                        <fd-card-footer style="border-top: none;">
-                            <button *fdCardFooterActionItem fd-button fdType="positive" [disabled]="isApproveDisabled" 
-                                (click)="approveTask(task)">Approve</button>
-                            <button *fdCardFooterActionItem fd-button fdType="standard" (click)="reviewTask(task)">Review</button>
-                            <button *fdCardFooterActionItem fd-button fdType="negative" [disabled]="isRejectDisabled" 
-                                (click)="rejectTask(task)">Reject</button>
-                        </fd-card-footer>
-                    </fd-card>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fd-dynamic-page-content>
+        <div class="inbox">
+            <div class="inbox__toolbar">
+                <div class="inbox__filters" role="tablist" aria-label="Filter tasks by process">
+                    <button type="button" class="inbox__filter" role="tab"
+                        [class.inbox__filter--active]="selectedProcess === null"
+                        [attr.aria-selected]="selectedProcess === null"
+                        (click)="selectProcess(null)">
+                        All <span class="inbox__filter-count">{{ tasks.length }}</span>
+                    </button>
+                    @for (summary of processSummary; track summary.processName) {
+                        <button type="button" class="inbox__filter" role="tab"
+                            [class.inbox__filter--active]="selectedProcess === summary.processName"
+                            [attr.aria-selected]="selectedProcess === summary.processName"
+                            (click)="selectProcess(summary.processName)">
+                            {{ getProcessLabel(summary.processName) }}
+                            <span class="inbox__filter-count">{{ summary.count }}</span>
+                        </button>
                     }
                 </div>
+                <div class="inbox__view-controls">
+                    <input class="inbox__search"
+                        fd-form-control
+                        type="search"
+                        placeholder="Search by project, reference or requestor"
+                        aria-label="Search tasks"
+                        [value]="searchTerm"
+                        (input)="onSearch($any($event.target).value)"
+                    />
+                    <fd-segmented-button [ngModel]="viewMode" (ngModelChange)="setViewMode($event)" aria-label="Select view">
+                        <button fd-button value="table" glyph="table-view" title="Table view" ariaLabel="Table view"></button>
+                        <button fd-button value="cards" glyph="grid" title="Card view" ariaLabel="Card view"></button>
+                    </fd-segmented-button>
+                </div>
             </div>
+
+            @if (filteredTasks.length > 0 && viewMode === 'cards') {
+                <div class="inbox__cards" role="list">
+                    @for (task of filteredTasks; track task.id) {
+                        <fd-card role="listitem" class="inbox-card">
+                            <fd-card-header>
+                                <fd-card-main-header>
+                                    <h2 fd-card-title>{{ task.projectName || '--' }}</h2>
+                                    <h3 fd-card-subtitle>Reference: {{ task.lanContractId }}</h3>
+                                </fd-card-main-header>
+                            </fd-card-header>
+                            <fd-card-content>
+                                <div class="inbox-card__body">
+                                    <span class="inbox-badge inbox-badge--{{ getProcessColor(task.processName) }}">
+                                        {{ getProcessLabel(task.processName) }}
+                                    </span>
+                                    <div class="inbox-person">
+                                        <span class="inbox-person__avatar">{{ getInitials(task.requestorName) }}</span>
+                                        <div class="inbox-person__details">
+                                            <span class="inbox-person__name">{{ task.requestorName }}</span>
+                                            <span class="inbox-person__email">{{ task.requestorEmail }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="inbox__date">Requested {{ task.requestDate | date:'dd MMM yyyy' }}</span>
+                                        <span class="inbox__age" [class.inbox__age--overdue]="getAgeInDays(task.requestDate) > 7">
+                                            &middot; {{ getAgeLabel(task.requestDate) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </fd-card-content>
+                            <div class="inbox-card__footer">
+                                <ng-container [ngTemplateOutlet]="taskActions" [ngTemplateOutletContext]="{ $implicit: task }"></ng-container>
+                            </div>
+                        </fd-card>
+                    }
+                </div>
+            }
+            @else if (filteredTasks.length > 0) {
+                <div class="inbox__table-wrapper">
+                    <table fd-table aria-label="Tasks awaiting approval">
+                        <thead fd-table-header>
+                            <tr fd-table-row>
+                                <th fd-table-cell>Task</th>
+                                <th fd-table-cell>Reference</th>
+                                <th fd-table-cell>Project</th>
+                                <th fd-table-cell>Requested By</th>
+                                <th fd-table-cell>Requested On</th>
+                                <th fd-table-cell class="inbox__actions-cell">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody fd-table-body>
+                            @for (task of filteredTasks; track task.id) {
+                                <tr fd-table-row [hoverable]="true">
+                                    <td fd-table-cell>
+                                        <span class="inbox-badge inbox-badge--{{ getProcessColor(task.processName) }}">
+                                            {{ getProcessLabel(task.processName) }}
+                                        </span>
+                                    </td>
+                                    <td fd-table-cell class="inbox__reference">{{ task.lanContractId }}</td>
+                                    <td fd-table-cell class="inbox__project">{{ task.projectName || '--' }}</td>
+                                    <td fd-table-cell>
+                                        <div class="inbox-person">
+                                            <span class="inbox-person__avatar">{{ getInitials(task.requestorName) }}</span>
+                                            <div class="inbox-person__details">
+                                                <span class="inbox-person__name">{{ task.requestorName }}</span>
+                                                <span class="inbox-person__email">{{ task.requestorEmail }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td fd-table-cell>
+                                        <div class="inbox__date">{{ task.requestDate | date:'dd MMM yyyy' }}</div>
+                                        <div class="inbox__age" [class.inbox__age--overdue]="getAgeInDays(task.requestDate) > 7">
+                                            {{ getAgeLabel(task.requestDate) }}
+                                        </div>
+                                    </td>
+                                    <td fd-table-cell class="inbox__actions-cell">
+                                        <ng-container [ngTemplateOutlet]="taskActions" [ngTemplateOutletContext]="{ $implicit: task }"></ng-container>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            @else {
+                <div class="inbox__empty">
+                    <fd-icon glyph="inbox" class="inbox__empty-icon"></fd-icon>
+                    @if (tasks.length === 0) {
+                        <h3 class="inbox__empty-title">You're all caught up</h3>
+                        <p class="inbox__empty-text">There are no tasks awaiting your approval.</p>
+                    }
+                    @else {
+                        <h3 class="inbox__empty-title">No matching tasks</h3>
+                        <p class="inbox__empty-text">Try a different search or filter.</p>
+                    }
+                </div>
+            }
         </div>
-    </fd-layout-grid>
-</component-ngx>
+    </fd-dynamic-page-content>
+</fd-dynamic-page>
+
+<ng-template #taskActions let-task>
+    <div class="inbox__actions">
+        <button fd-button fdCompact fdType="positive" glyph="accept" label="Approve"
+            [disabled]="isApproveDisabled" (click)="approveTask(task)"></button>
+        <button fd-button fdCompact fdType="standard" glyph="detail-view" label="Review"
+            (click)="reviewTask(task)"></button>
+        <button fd-button fdCompact fdType="negative" glyph="decline" label="Reject"
+            [disabled]="isRejectDisabled" (click)="rejectTask(task)"></button>
+    </div>
+</ng-template>

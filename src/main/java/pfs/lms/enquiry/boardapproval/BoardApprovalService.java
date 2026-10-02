@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pfs.lms.enquiry.appraisal.reasonfordelay.ReasonForDelay;
 import pfs.lms.enquiry.boardapproval.approvalbyboard.ApprovalByBoard;
 import pfs.lms.enquiry.boardapproval.approvalbyboard.ApprovalByBoardRepository;
@@ -20,6 +21,9 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -44,6 +48,8 @@ public class BoardApprovalService implements IBoardApprovalService {
     @Autowired
     private final BoardApprovalRejectedByCustomerRepository boardApprovalRejectedByCustomerRepository;
     private final IChangeDocumentService changeDocumentService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public BoardApproval processRejection(BoardApproval boardApproval, String username) throws CloneNotSupportedException {
@@ -66,9 +72,17 @@ public class BoardApprovalService implements IBoardApprovalService {
     }
 
     @Override
+    @Transactional
     public BoardApproval processApprovedBoardApproval(BoardApproval boardApproval, String username) throws CloneNotSupportedException {
 
         LoanApplication loanApplication = boardApproval.getLoanApplication();
+        // The loan application may have been loaded earlier in the request and updated since by the SAP posting
+        // scheduler; re-read it under a row lock so the update below is made against the current version.
+        if (entityManager.contains(loanApplication)) {
+            entityManager.refresh(loanApplication, LockModeType.PESSIMISTIC_WRITE);
+        } else {
+            loanApplication = entityManager.find(LoanApplication.class, loanApplication.getId(), LockModeType.PESSIMISTIC_WRITE);
+        }
         Object oldLoanApplication;
         oldLoanApplication = loanApplication.clone();
 
@@ -87,9 +101,9 @@ public class BoardApprovalService implements IBoardApprovalService {
                 loanApplication.getId(),
                 loanApplication.getId().toString(),
                 loanApplication.getId().toString(),
-                loanApplication.getEnquiryNo().getId().toString(),
-                loanApplication,
+                loanApplication.getLoanContractId(),
                 oldLoanApplication,
+                loanApplication,
                 "Updated",
                 username,
                 "LoanApplication", "LoanApplication" );

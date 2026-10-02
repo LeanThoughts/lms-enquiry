@@ -1,0 +1,250 @@
+$accent: #0e7c86;
+
+.inbox {
+    padding: 0.5rem 0.5rem 1rem;
+
+    &__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    &__filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        padding: 0.3rem;
+        background-color: var(--sapNeutralBackground, #eff1f2);
+        border-radius: 0.75rem;
+    }
+
+    &__filter {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.85rem;
+        border: none;
+        border-radius: 0.55rem;
+        background: transparent;
+        color: var(--sapContent_LabelColor, #556b82);
+        font-family: inherit;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.15s ease, color 0.15s ease;
+
+        &:hover {
+            background-color: rgba($accent, 0.1);
+            color: $accent;
+        }
+
+        &--active,
+        &--active:hover {
+            background-color: $accent;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba($accent, 0.3);
+        }
+    }
+
+    &__filter-count {
+        min-width: 1.25rem;
+        padding: 0 0.35rem;
+        border-radius: 1rem;
+        background-color: rgba(0, 0, 0, 0.08);
+        font-size: 0.7rem;
+        line-height: 1.2rem;
+        text-align: center;
+    }
+
+    &__filter--active &__filter-count {
+        background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    &__view-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__search {
+        width: 22rem;
+        max-width: 100%;
+    }
+
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: 1rem;
+    }
+
+    &__table-wrapper {
+        overflow-x: auto;
+        border: 1px solid var(--sapList_BorderColor, #e5e5e5);
+        border-radius: 0.75rem;
+        background-color: var(--sapList_Background, #fff);
+    }
+
+    table {
+        border: none;
+    }
+
+    th {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.03rem;
+        text-transform: uppercase;
+        color: var(--sapContent_LabelColor, #556b82);
+    }
+
+    td {
+        vertical-align: middle;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    &__reference {
+        font-family: var(--sapFontFamily, inherit);
+        font-weight: 600;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    &__project {
+        max-width: 22rem;
+        font-weight: 600;
+    }
+
+    &__date {
+        white-space: nowrap;
+    }
+
+    &__age {
+        font-size: 0.75rem;
+        color: var(--sapContent_LabelColor, #556b82);
+
+        &--overdue {
+            color: var(--sapCriticalTextColor, #b44f00);
+            font-weight: 600;
+        }
+    }
+
+    &__actions-cell {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    &__actions {
+        display: inline-flex;
+        gap: 0.35rem;
+    }
+
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 1rem;
+        border: 1px dashed var(--sapList_BorderColor, #d9d9d9);
+        border-radius: 0.75rem;
+        background-color: var(--sapList_Background, #fff);
+        text-align: center;
+    }
+
+    &__empty-icon {
+        font-size: 3rem;
+        color: rgba($accent, 0.6);
+    }
+
+    &__empty-title {
+        margin: 1rem 0 0.25rem;
+        font-size: 1.1rem;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    &__empty-text {
+        margin: 0;
+        color: var(--sapContent_LabelColor, #556b82);
+    }
+}
+
+.inbox-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.25rem 1rem 1rem;
+    }
+
+    &__footer {
+        margin-top: auto;
+        padding: 0.75rem 1rem;
+        border-top: 1px solid var(--sapList_BorderColor, #e5e5e5);
+        text-align: right;
+    }
+}
+
+.inbox-person {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    &__avatar {
+        display: inline-flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background-color: rgba($accent, 0.12);
+        color: $accent;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    &__name {
+        font-weight: 600;
+    }
+
+    &__email {
+        font-size: 0.75rem;
+        color: var(--sapContent_LabelColor, #556b82);
+    }
+}
+
+.inbox-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    @each $name, $color in (
+        1: #0e7c86,
+        2: #2b5fb4,
+        3: #7b3fb3,
+        4: #b4570e,
+        5: #1d7f3f,
+        6: #b3245c,
+        7: #5c6b0f,
+        8: #4a5568
+    ) {
+        &--#{$name} {
+            background-color: rgba($color, 0.12);
+            color: $color;
+        }
+    }
+}
