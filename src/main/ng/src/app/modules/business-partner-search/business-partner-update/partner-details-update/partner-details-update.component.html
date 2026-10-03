@@ -413,9 +413,9 @@
                                 <label fd-form-label for="mobile">Mobile:</label>
                                 <input id="mobile" formControlName="mobileNumber" fd-form-control type="text" maxlength="10"
                                     [readonly]="formFieldsConfig?.mobileNumber === 0"/>
-                                @if (partnerDetailsForm.get('mobile')?.errors?.['pattern'] && partnerDetailsForm.get('mobile')?.touched) {
+                                @if (partnerDetailsForm.get('mobileNumber')?.errors?.['pattern'] && partnerDetailsForm.get('mobileNumber')?.touched) {
                                     <fd-form-message type="error" id="mobile-form-message">
-                                        Please provide a valid mobile number
+                                        Please provide a valid mobile number. It should be a 10 digit number starting with 6-9.
                                     </fd-form-message>
                                 }
                             </div>
