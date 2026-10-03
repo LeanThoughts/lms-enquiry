@@ -79,8 +79,8 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
      */
     private getTitle(): string {
         let title = 'Board Approval';
-        title += (this.selectedEnquiry.loanContractId) ? ` : ${this.selectedEnquiry.loanContractId}` : ` : ${this.selectedEnquiry.enquiryNo}`;
-        title += ` / ${this.selectedEnquiry.projectName}`;
+        title += (this.selectedEnquiry.loanContractId) ? ` (Loan Contract: ${this.selectedEnquiry.loanContractId}` : ` (Enquiry No: ${this.selectedEnquiry.enquiryNo?.id}`;
+        title += ` / ${this.selectedEnquiry.projectName})`;
         return title;
     }
 

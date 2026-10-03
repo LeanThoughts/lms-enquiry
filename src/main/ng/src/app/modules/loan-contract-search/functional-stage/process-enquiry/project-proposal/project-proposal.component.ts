@@ -185,10 +185,10 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
     private getTitle(): string {
         const enquiry = this.selectedEnquiry || {};
         const proposalOp = this.projectProposalOperation;
-        const contractId = enquiry.loanContractId
-            ? ` : ${enquiry.loanContractId}`
-            : ` : ${enquiry.enquiryNo}`;
-        return `${proposalOp} Project Proposal (Enquiry${contractId} / ${enquiry.projectName})`;
+        const reference = enquiry.loanContractId
+            ? `Loan Contract: ${enquiry.loanContractId}`
+            : `Enquiry No: ${enquiry.enquiryNo?.id}`;
+        return `${proposalOp} Project Proposal (${reference} / ${enquiry.projectName})`;
     }
 
     back(): void {

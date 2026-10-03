@@ -97,9 +97,9 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
             if (enquiry) {
                 this.selectedEnquiry.select(enquiry.loanApplication.enquiryNo.id);
                 const loanApplication = enquiry.loanApplication;
-                this.subtitle = `Selected: Enquiry ${loanApplication.enquiryNo.id}`
-                    + (loanApplication.loanContractId ? ` / ${loanApplication.loanContractId}` : '')
-                    + (loanApplication.projectName ? ` - ${loanApplication.projectName}` : '');
+                this.subtitle = `Selected: Enquiry No: ${loanApplication.enquiryNo.id}`
+                    + (loanApplication.loanContractId ? ` / Loan Contract: ${loanApplication.loanContractId}` : '')
+                    + (loanApplication.projectName ? ` / ${loanApplication.projectName}` : '');
             }
             else {
                 this.selectedEnquiry.clear();
