@@ -1,0 +1,98 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title"
+        subtitle="Further details, reasons for delay, ICC decisions and loan enhancements"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="emphasized"
+                    label="Back"
+                    (click)="router.navigate(['/loan-contract-search'])"
+                >
+                </button>
+
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="positive"
+                    label="Send for Approval"
+                    [style.margin-left.rem]="0.1"
+                    [disabled]="(!selectedBmcApproval || selectedBmcApproval.workFlowStatusCode === 2) || disableSendForApproval === true"
+                    (click)="sendForApproval()"
+                >
+                </button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fdp-icon-tab-bar 
+        [layoutMode]="'row'"
+        [enableTabReordering]="false"
+        iconTabSize="sm"
+    >
+        <!-- Further Details Tab -->
+        <fdp-icon-tab-bar-tab label="Further Details">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'bmcApprovalFurtherDetails'" 
+                    [searchString1]="bmcApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+
+        <!-- Reason For Delay Tab -->
+        <fdp-icon-tab-bar-tab label="Reason For Delay">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'bmcApprovalReasonsForDelay'" 
+                    [searchString1]="bmcApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+
+        <!-- Rejected By ICC Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By ICC">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'bmcApprovalRejectedByIcc'" 
+                    [searchString1]="bmcApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+
+        <!-- ICC Approval Tab -->
+        <fdp-icon-tab-bar-tab label="ICC Approval">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'bmcApprovalApprovalByIcc'" 
+                    [searchString1]="bmcApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+
+        <!-- Rejected By Customer Tab -->
+        <fdp-icon-tab-bar-tab label="Rejected By Customer">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'bmcApprovalRejectedByCustomer'" 
+                    [searchString1]="bmcApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+
+        <!-- Loan Enhancement Tab -->
+        <fdp-icon-tab-bar-tab label="Loan Enhancement">
+            <fd-dynamic-page-content>
+                <app-generic-list 
+                    [entity]="'bmcApprovalLoanEnhancements'" 
+                    [searchString1]="bmcApprovalId" 
+                    [searchString2]="loanApplicationId"
+                />
+            </fd-dynamic-page-content>
+        </fdp-icon-tab-bar-tab>
+    </fdp-icon-tab-bar>
+</fd-dynamic-page>

@@ -26,6 +26,7 @@ import { MessageService } from '../../message.service';
 import { IccInprincipleApprovalService } from './functional-stage/icc-inprinciple-approval/icc-inprinciple-approval.service';
 import { RiskAssessmentService } from './functional-stage/risk-assessment/risk-assessment.service';
 import { ApplicationFeeService } from './functional-stage/application-fee/application-fee.service';
+import { BmcApprovalService } from './functional-stage/bmc-approval/bmc-approval.service';
 import { BoardApprovalService } from './functional-stage/board-approval/board-approval.service';
 import { SanctionService } from './functional-stage/sanction/sanction.service';
 
@@ -70,6 +71,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
         { label: 'ICC Approval', open: () => this.redirectToICCApproval() },
         { label: 'Risk Assessment', open: () => this.redirectToRiskAssessment() },
         { label: 'Application Fee', open: () => this.redirectToApplicationFee() },
+        { label: 'BMC Approval', open: () => this.redirectToBmcApproval() },
         { label: 'Board Approval', open: () => this.redirectToBoardApproval() },
         { label: 'Sanction', open: () => this.redirectToSanction() },
     ];
@@ -82,6 +84,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 private iccInprincipleApprovalService: IccInprincipleApprovalService,
                 private riskAssessmentService: RiskAssessmentService,
                 private applicationFeeService: ApplicationFeeService,
+                private bmcApprovalService: BmcApprovalService,
                 private boardApprovalService: BoardApprovalService,
                 private sanctionService: SanctionService,
                 public router: Router,
@@ -256,6 +259,37 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
             if (error.status === 404) {
                 this.applicationFeeService.selectedEntity$.next(null);
                 this.router.navigate(['/application-fee', '', 'loanApplication', loanApplication.id]);
+            }
+            else {
+                this.messageService.showError('An error occurred while processing the enquiry.');
+            }
+        }
+    }
+
+    /**
+     * Redirect to BMC Approval
+     */
+    async redirectToBmcApproval(): Promise<void> {
+        const loanApplication = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+
+        try {
+            await firstValueFrom(this.bmcApprovalService.getLoanAppraisal(loanApplication.id));
+        }
+        catch (error: any) {
+            this.messageService.showError(error.status === 404 ? 'Appraisal stage is not completed for loan enquiry.' : 
+                'An error occurred while processing the enquiry.');
+            return;
+        }
+
+        try {
+            const bmcApproval = await firstValueFrom(this.bmcApprovalService.getBmcIccApproval(loanApplication.id));
+            this.bmcApprovalService.selectedEntity$.next(bmcApproval);
+            this.router.navigate(['/bmc-approval', bmcApproval.id, 'loanApplication', loanApplication.id]);
+        }
+        catch (error: any) {
+            if (error.status === 404) {
+                this.bmcApprovalService.selectedEntity$.next(null);
+                this.router.navigate(['/bmc-approval', '', 'loanApplication', loanApplication.id]);
             }
             else {
                 this.messageService.showError('An error occurred while processing the enquiry.');

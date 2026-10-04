@@ -12,6 +12,8 @@ import { RiskAssessmentComponent } from "./functional-stage/risk-assessment/risk
 import { RiskAssessmentService } from "./functional-stage/risk-assessment/risk-assessment.service";
 import { ApplicationFeeComponent } from "./functional-stage/application-fee/application-fee.component";
 import { ApplicationFeeService } from "./functional-stage/application-fee/application-fee.service";
+import { BmcApprovalComponent } from "./functional-stage/bmc-approval/bmc-approval.component";
+import { BmcApprovalService } from "./functional-stage/bmc-approval/bmc-approval.service";
 import { BoardApprovalComponent } from "./functional-stage/board-approval/board-approval.component";
 import { BoardApprovalService } from "./functional-stage/board-approval/board-approval.service";
 import { SanctionComponent } from "./functional-stage/sanction/sanction.component";
@@ -79,6 +81,14 @@ export default [
         component: ApplicationFeeComponent,
         resolve: {
             routeResolvedData: ApplicationFeeService
+        },
+        canActivate: [routeInterceptor],
+    },
+    {
+        path: 'bmc-approval/:bmcApprovalId/loanApplication/:loanApplicationId',
+        component: BmcApprovalComponent,
+        resolve: {
+            routeResolvedData: BmcApprovalService
         },
         canActivate: [routeInterceptor],
     },

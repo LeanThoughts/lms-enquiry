@@ -6,6 +6,7 @@ import { projectProposalStageConfig } from "./project-proposal.config";
 import { iccInprincipleApprovalStageConfig } from "./icc-inprinciple-approval.config";
 import { riskAssessmentStageConfig } from "./risk-assessment.config";
 import { applicationFeeStageConfig } from "./application-fee.config";
+import { bmcApprovalStageConfig } from "./bmc-approval.config";
 import { boardApprovalStageConfig } from "./board-approval.config";
 import { sanctionStageConfig } from "./sanction.config";
 import { referenceInterestRateStageConfig } from "./reference-interest-rate.config";
@@ -17,6 +18,7 @@ const stageConfigs: StageConfig[] = [
     iccInprincipleApprovalStageConfig,
     riskAssessmentStageConfig,
     applicationFeeStageConfig,
+    bmcApprovalStageConfig,
     boardApprovalStageConfig,
     sanctionStageConfig,
     referenceInterestRateStageConfig,
