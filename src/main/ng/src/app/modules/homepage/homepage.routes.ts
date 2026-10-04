@@ -6,6 +6,6 @@ export default [
     {
         path: 'homepage',
         component: HomepageComponent,
-        // canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor],
     },
 ] as Routes;

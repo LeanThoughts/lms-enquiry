@@ -10,6 +10,6 @@ export default [
         resolve: {
             routeResolver: InboxService
         },
-        // canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor]
     },
 ] as Routes;

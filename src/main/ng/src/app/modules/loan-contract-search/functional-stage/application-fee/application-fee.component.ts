@@ -113,9 +113,10 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
                     this.applicationFeeService.selectedEntity$.next(response);
                     this.messageService.showSuccess('Application Fee is sent for approval.');
                 },
-                error: () => {
+                error: (error: any) => {
                     this.disableSendForApproval = false;
-                    this.messageService.showError('Errors occurred while sending for approval. Please try again later or contact your system administrator.');
+                    this.messageService.showError(error?.error?.message
+                        || 'Errors occurred while sending for approval. Please try again later or contact your system administrator.');
                 }
             });
         });
