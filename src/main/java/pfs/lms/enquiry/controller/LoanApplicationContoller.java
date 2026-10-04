@@ -137,7 +137,7 @@ public class LoanApplicationContoller {
                         log.info("Loan Applicant is   NULL for Loan : " + loanApplication.getLoanContractId());
                         Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "", null,null,null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
                         resources.add(loanApplicationResource);
 
@@ -146,7 +146,7 @@ public class LoanApplicationContoller {
                         Partner partner = partnerRepository.findById(loanApplication.getLoanApplicant()).orElse(null);
 //                        Partner partner = (Partner) partnerRepository.findById(loanApplication.getLoanApplicant()).get();
 
-                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
+                        LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null,null);
                         loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                         resources.add(loanApplicationResource);
@@ -777,7 +777,7 @@ public class LoanApplicationContoller {
                             break;
                     }
                 }
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
 
@@ -799,6 +799,7 @@ public class LoanApplicationContoller {
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
                     State state = stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState());
                     if (state != null) {
+                        loanApplicationResource.setProjectLocationStateCode(loanApplicationResource.getLoanApplication().getProjectLocationState());
                         loanApplicationResource.getLoanApplication().setProjectLocationState(state.getName());
                     }
                 }
@@ -1015,7 +1016,7 @@ public class LoanApplicationContoller {
                     }
                 }
 
-                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null);
+                LoanApplicationResource loanApplicationResource = new LoanApplicationResource(loanApplication, partner, "", "", "",null,null,null,null,null,null);
                 loanApplicationResource = fetchAttributeDescriptions(loanApplicationResource);
 
                 resources.add(loanApplicationResource);
@@ -1026,8 +1027,10 @@ public class LoanApplicationContoller {
             if (loanApplicationResource.getLoanApplication().getProjectLocationState() != null) {
                 if (loanApplicationResource.getLoanApplication().getProjectLocationState().length() == 2) {
                     State state = stateRepository.findByCode(loanApplicationResource.getLoanApplication().getProjectLocationState());
-                    if (state != null)
+                    if (state != null) {
+                        loanApplicationResource.setProjectLocationStateCode(state.getCode());
                         loanApplicationResource.getLoanApplication().setProjectLocationState(state.getName());
+                    }
                 }
             }
         }

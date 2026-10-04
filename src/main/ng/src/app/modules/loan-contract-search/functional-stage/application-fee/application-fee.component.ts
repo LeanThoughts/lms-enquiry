@@ -65,6 +65,7 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
         this.loanApplicationId = this.route.snapshot.params['loanApplicationId'];
 
         this.selectedEnquiry = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        this.selectedEnquiry.projectLocationStateCode = this.loanContractSearchService.selectedEnquiry$.value.projectLocationStateCode;        
         this.applicationFeeService.selectedEntity$.pipe(takeUntil(this.destroy$)).subscribe((entity) => {
             this.selectedApplicationFee = entity;
             // Nothing to send until the application fee has been changed since it was last approved

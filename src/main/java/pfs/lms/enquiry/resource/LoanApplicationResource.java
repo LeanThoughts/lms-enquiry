@@ -30,4 +30,5 @@ public class LoanApplicationResource {
     private NPA npa;
     private List<NPADetail> npaDetailList;
     private LoanContractExtension loanContractExtension;
+    private String projectLocationStateCode;
  }

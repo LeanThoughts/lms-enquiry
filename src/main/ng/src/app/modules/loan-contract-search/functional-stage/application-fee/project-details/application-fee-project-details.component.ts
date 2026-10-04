@@ -69,7 +69,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
             loanPurpose: loanApplication.loanPurpose,
             projectCapacity: loanApplication.projectCapacity,
             projectCapacityUnit: loanApplication.projectCapacityUnit,
-            state: loanApplication.projectLocationState,
+            state: loanApplication.projectLocationStateCode,
             productTypeCode: loanApplication.productCode,
             term: loanApplication.term,
             enquiryCompletionDate: loanApplication.enquiryCompletionDate,

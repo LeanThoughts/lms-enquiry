@@ -190,7 +190,7 @@ export const applicationFeeStageConfig: StageConfig = {
                 {row: 9, span: 3, name: 'grantSubsidyAmount', label: 'Grant/Subsidy Amount', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO, 
                     onValueChange: true },
                 {row: 9, span: 3, name: 'debtEquityRatioWithGrant', label: 'Debt:Equity Ratio with Grant', type: 'text', readOnly: true },
-                {row: 9, span: 3, name: 'pfsDebtAmount', label: 'PFS Debt Amount', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO },
+                {row: 9, span: 3, name: 'pfsDebtAmount', label: 'PFS Debt Amount', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
                 {row: 9, span: 3, name: 'rateOfInterest', label: 'Rate of Interest', type: 'text', maxLength: 5, pattern: TAX_PERCENTAGE_REGEX },
 
                 {row: 10, span: 12, name: 'header3', type: 'header', label: 'Tenure and Periods' },
