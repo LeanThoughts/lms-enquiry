@@ -181,7 +181,7 @@ export const applicationFeeStageConfig: StageConfig = {
 
                 {row: 7, span: 12, name: 'header2', type: 'header', label: 'Project Cost and Funding (Crores)' },
 
-                {row: 8, span: 3, name: 'projectCost', label: 'Project Cost', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO },
+                {row: 8, span: 3, name: 'projectCost', label: 'Project Cost', type: 'text', maxLength: 18, pattern: FIFTEEN_COMMA_TWO },
                 {row: 8, span: 3, name: 'debt', label: 'Debt', type: 'text', maxLength: 10, pattern: SEVEN_COMMA_TWO, onValueChange: true },
                 {row: 8, span: 3, name: 'promoterContributionEquity', label: 'Promoter Contribution/Equity', type: 'text', maxLength: 10, 
                     pattern: SEVEN_COMMA_TWO, onValueChange: true },

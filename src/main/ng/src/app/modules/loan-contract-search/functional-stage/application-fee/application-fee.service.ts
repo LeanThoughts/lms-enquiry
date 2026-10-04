@@ -74,10 +74,10 @@ export class ApplicationFeeService implements Resolve<any> {
      */
     getPeriodUnits(): Observable<any> {
         return of([
-            { code: '0', description: 'Days' },
-            { code: '1', description: 'Weeks' },
-            { code: '2', description: 'Months' },
-            { code: '3', description: 'Years' }
+            { code: '1', description: 'Days' },
+            { code: '2', description: 'Weeks' },
+            { code: '3', description: 'Months' },
+            { code: '4', description: 'Years' }
         ]);
     }
 

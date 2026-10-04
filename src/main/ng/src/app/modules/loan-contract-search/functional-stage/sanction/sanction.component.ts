@@ -98,9 +98,10 @@ export class SanctionComponent implements OnInit, OnDestroy {
                 this.sanctionService.selectedEntity$.next(response);
                 this.messageService.showSuccess('Sanction is sent for approval.');
             },
-            error: () => {
+            error: (error: any) => {
                 this.disableSendForApproval = false;
-                this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+                this.messageService.showError(error?.error?.message 
+                    || 'Errors occurred. Please try again later or contact your system administrator.');
             }
         });
     }

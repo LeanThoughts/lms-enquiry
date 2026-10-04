@@ -98,9 +98,9 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
                 this.boardApprovalService.selectedEntity$.next(response);
                 this.messageService.showSuccess('Board approval is sent for approval.');
             },
-            error: () => {
+            error: (error: any) => {
                 this.disableSendForApproval = false;
-                this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+                this.messageService.showError(error?.error?.message || 'Errors occurred. Please try again later or contact your system administrator.');
             }
         });
     }

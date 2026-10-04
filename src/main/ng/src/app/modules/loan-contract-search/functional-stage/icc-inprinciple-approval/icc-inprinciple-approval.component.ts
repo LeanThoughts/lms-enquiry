@@ -104,7 +104,7 @@ export class ICCInprincipleApprovalComponent implements OnInit, OnDestroy {
                 this.iccInprincipleApprovalService.selectedEntity$.next(response);
                 this.messageService.showSuccess('ICC Stage is sent for approval.');
             },
-            error: (error) => {
+            error: (error: any) => {
                 this.disableSendForApproval = false;
                 // The backend reports missing ICC tab entries as a 500 with a user-readable message
                 if (error.status === 500 && error.error?.message) {

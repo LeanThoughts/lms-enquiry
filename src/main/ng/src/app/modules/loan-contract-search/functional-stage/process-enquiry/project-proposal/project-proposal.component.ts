@@ -435,8 +435,8 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
                                     this.processEnquiryService.selectedEntity$.next(response);
                                     this.messageService.showSuccess('Enquiry is sent for approval.');
                                 },
-                                error: () => {
-                                    this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+                                error: (error: any) => {
+                                    this.messageService.showError(error?.error?.message || 'Errors occurred. Please try again later or contact your system administrator.');
                                     this.disableSendForApproval = false;
                                 }
                             });
@@ -445,8 +445,8 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
                             this.disableSendForApproval = false;
                         }
                     },
-                    error: () => {
-                        this.messageService.showError('Errors occurred. Please try again later or contact your system administrator.');
+                    error: (error: any) => {
+                        this.messageService.showError(error?.error?.message || 'Errors occurred. Please try again later or contact your system administrator.');
                         this.disableSendForApproval = false;
                     }
                 });
