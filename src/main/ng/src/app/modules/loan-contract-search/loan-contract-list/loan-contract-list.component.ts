@@ -140,7 +140,7 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
         this.selectedEnquiry.select(enquiry.loanApplication.enquiryNo.id);
         this.loanContractSearchService.selectedEnquiry$.next(enquiry);
         this.loanContractSearchService.addRecentlyViewed(enquiry);
-        console.log('selected enquiry is', enquiry);
+        // console.log('selected enquiry is', enquiry);
     }
     
     /**

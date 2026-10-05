@@ -45,6 +45,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
         const projectDetails$ = this.applicationFeeId ? this.applicationFeeService.getProjectDetails(this.applicationFeeId) : of(null);
         projectDetails$.subscribe((projectDetails: any) => {
             this.projectDetails = projectDetails ?? this.getDefaultsFromLoanApplication();
+            // this.projectDetails = this.getDefaultsFromLoanApplication();
             this.operation = projectDetails ? 'Update' : 'Create';
             this.loaded = true;
         });
@@ -63,6 +64,7 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
      */
     private getDefaultsFromLoanApplication(): any {
         const loanApplication = this.loanApplication ?? {};
+        // console.log('loanApplication', loanApplication);
         return {
             projectName: loanApplication.projectName,
             promoterName: loanApplication.promoterName,

@@ -247,9 +247,9 @@ body {
     font-weight: 600;
     white-space: nowrap;
 
-    // Workflow processes, same colors as the inbox
+    // Workflow processes (same colors as the inbox) and generic list badge columns
     @each $index, $color in (1: #0e7c86, 2: #2b5fb4, 3: #7b3fb3, 4: #b4570e, 5: #1d7f3f, 6: #b3245c, 7: #5c6b0f, 8: #4a5568) {
-        &--process-#{$index} {
+        &--process-#{$index}, &--color-#{$index} {
             background-color: rgba($color, 0.12);
             color: $color;
         }

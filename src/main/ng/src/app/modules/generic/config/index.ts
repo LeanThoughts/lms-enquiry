@@ -10,6 +10,7 @@ import { bmcApprovalStageConfig } from "./bmc-approval.config";
 import { boardApprovalStageConfig } from "./board-approval.config";
 import { sanctionStageConfig } from "./sanction.config";
 import { referenceInterestRateStageConfig } from "./reference-interest-rate.config";
+import { workflowApproverStageConfig } from "./workflow-approver.config";
 
 const stageConfigs: StageConfig[] = [
     businessPartnerStageConfig,
@@ -22,6 +23,7 @@ const stageConfigs: StageConfig[] = [
     boardApprovalStageConfig,
     sanctionStageConfig,
     referenceInterestRateStageConfig,
+    workflowApproverStageConfig,
 ];
 
 /**

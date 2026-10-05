@@ -1,0 +1,53 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Workflow Approvers"
+        subtitle="Maintain the approver of each workflow process for every department"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button
+                    fd-toolbar-item
+                    fdType="transparent"
+                    label="Clear Filters"
+                    [disabled]="!isFiltered"
+                    (click)="clearFilters()"
+                >
+                </button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+    <fd-dynamic-page-content>
+        <div [style.display]="'flex'" [style.flex-wrap]="'wrap'" [style.gap.rem]="1" [style.margin-bottom.rem]="1">
+            <div fd-form-item [style.width.rem]="20">
+                <label fd-form-label for="departmentFilter">Department</label>
+                <fd-select id="departmentFilter"
+                    placeholder="All departments"
+                    [(value)]="selectedDepartmentCode"
+                    (valueChange)="onFilterChange()"
+                >
+                    <li fd-option [value]="''">All departments</li>
+                    @for (department of workflowApproverService.departments; track department.code) {
+                        <li fd-option [value]="department.code">{{ department.description }}</li>
+                    }
+                </fd-select>
+            </div>
+            <div fd-form-item [style.width.rem]="20">
+                <label fd-form-label for="processFilter">Process</label>
+                <fd-select id="processFilter"
+                    placeholder="All processes"
+                    [(value)]="selectedProcessName"
+                    (valueChange)="onFilterChange()"
+                >
+                    <li fd-option [value]="''">All processes</li>
+                    @for (process of workflowApproverService.processes; track process.name) {
+                        <li fd-option [value]="process.name">{{ process.label }}</li>
+                    }
+                </fd-select>
+            </div>
+        </div>
+
+        <app-generic-list
+            [entity]="'workflowApprovers'"
+            [searchString1]="filter"
+        />
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

@@ -191,7 +191,7 @@ export class GenericListComponent implements OnInit, OnDestroy {
             return item[col] ? item[col].toString() : '';
         }
 
-        if (field.type === 'text') {
+        if (field.type === 'text' || field.type === 'badge') {
             // console.log('returning text or number for', col, item[col]);
             return item[col] ? item[col].toString() : '';
         }

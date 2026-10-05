@@ -8,6 +8,7 @@ import inboxRoutes from './modules/inbox/inbox.routes';
 import referenceInterestRateRoutes from './modules/reference-interest-rate/reference-interest-rate.routes';
 import businessPartnerSearchRoutes from './modules/business-partner-search/business-partner-search.routes';
 import userManagementRoutes from './modules/user-management/user-management.routes';
+import workflowApproverRoutes from './modules/workflow-approver/workflow-approver.routes';
 
 export const routes: Routes = [
 
@@ -31,6 +32,7 @@ export const routes: Routes = [
             ...referenceInterestRateRoutes,
             ...businessPartnerSearchRoutes,
             ...userManagementRoutes,
+            ...workflowApproverRoutes,
         ]
     },
 

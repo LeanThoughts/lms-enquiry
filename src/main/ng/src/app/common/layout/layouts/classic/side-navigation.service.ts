@@ -18,6 +18,7 @@ export class SideNavigationService {
                 
                 { headerTitle: 'Administration' },
                 { link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } },
+                { link: { icon: 'workflow-tasks', title: 'Workflow Approvers', routerLink: 'workflow-approvers' } },
                 // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
 
                 { headerTitle: 'Applications' },

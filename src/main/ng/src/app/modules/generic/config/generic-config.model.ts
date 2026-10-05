@@ -12,7 +12,7 @@ export type PassSearchStringVia = 'Object' | 'Query';
 export type FieldType = 'text' | 'number' | 'date' | 'select' | 'combobox' | 'file' | 'header';
 
 // Column types formatted by the generic list component
-export type ColumnType = 'text' | 'number' | 'date' | 'select' | 'file';
+export type ColumnType = 'text' | 'number' | 'date' | 'select' | 'file' | 'badge';
 
 /**
  * Column displayed by the generic list component
@@ -21,6 +21,7 @@ export interface ColumnConfig {
     name: string;
     header: string;
     type: ColumnType;
+    badgeColor?: (item: any) => number; // Color index (1 - 8) of a 'badge' column's value
 }
 
 /**

@@ -91,6 +91,10 @@
                                         @else {
                                             <span>--</span>
                                         }
+                                    } @else if (col.type === 'badge' && item['formatted_' + col.name]) {
+                                        <span class="dashboard-badge dashboard-badge--color-{{ col.badgeColor?.(item) ?? 8 }}">
+                                            {{ item['formatted_' + col.name] }}
+                                        </span>
                                     } @else {
                                         {{ item['formatted_' + col.name] || '--' }}
                                     }
