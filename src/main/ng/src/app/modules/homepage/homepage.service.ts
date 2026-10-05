@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { skipBusyIndicator } from '../../busy-indicator.service';
 import { InboxService } from '../inbox/inbox.service';
 import { LoanContractSearchService } from '../loan-contract-search/loan-contract-search.service';
 
@@ -66,7 +67,7 @@ export class HomepageService {
      * Get the dashboard aggregates, or null if they could not be loaded
      */
     getDashboard(): Observable<Dashboard | null> {
-        return this.http.get<Dashboard>(environment.primaryApiHost + '/dashboard').pipe(
+        return this.http.get<Dashboard>(environment.primaryApiHost + '/dashboard', { context: skipBusyIndicator() }).pipe(
             catchError(() => of(null))
         );
     }
@@ -75,7 +76,7 @@ export class HomepageService {
      * Get the tasks of the logged in user, or null if they could not be loaded
      */
     getTasks(): Observable<any[] | null> {
-        return this.inboxService.getTasks().pipe(
+        return this.inboxService.getTasks(skipBusyIndicator()).pipe(
             map((tasks: any) => tasks || []),
             catchError(() => of(null))
         );

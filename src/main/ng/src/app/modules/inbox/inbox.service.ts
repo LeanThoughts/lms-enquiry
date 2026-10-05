@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
@@ -41,8 +41,8 @@ export class InboxService implements Resolve<any> {
     /**
      * Get tasks
      */
-    getTasks(): Observable<any> {
-        return this.http.get(environment.primaryApiHost + '/tasklist');
+    getTasks(context?: HttpContext): Observable<any> {
+        return this.http.get(environment.primaryApiHost + '/tasklist', { context });
     }
 
     /**

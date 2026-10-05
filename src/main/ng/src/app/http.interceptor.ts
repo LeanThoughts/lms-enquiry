@@ -6,12 +6,14 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, finalize, Observable, throwError } from 'rxjs';
 import { MessageService } from './message.service';
+import { BusyIndicatorService, SKIP_BUSY_INDICATOR } from './busy-indicator.service';
 
 export function httpInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> {
 
     const messageService = inject(MessageService);
+    const busyIndicatorService = inject(BusyIndicatorService);
 
     // Using Router.navigate() is preferred in Angular as it preserves app state and triggers proper lifecycle hooks
     const router = inject(Router);
@@ -21,8 +23,18 @@ export function httpInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Obs
         withCredentials: true
     });
 
+    const showBusyIndicator = !req.context.get(SKIP_BUSY_INDICATOR);
+    if (showBusyIndicator) {
+        busyIndicatorService.start();
+    }
+
     // Handle the request and check for 401 responses
     return next(modifiedReq).pipe(
+        finalize(() => {
+            if (showBusyIndicator) {
+                busyIndicatorService.stop();
+            }
+        }),
         catchError((error: HttpErrorResponse) => {
             // If the BFF returns 401 (Unauthorized) or 403 (Forbidden),
             // it means the session is no longer valid or access is denied.

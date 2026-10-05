@@ -1,1 +1,9 @@
 <router-outlet />
+
+@if (busyIndicatorService.busy()) {
+    <div class="app-busy-overlay">
+        <div fd-busy-indicator-extended>
+            <fd-busy-indicator [loading]="true" [size]="size" label="Loading..." ariaLabel="Loading"></fd-busy-indicator>
+        </div>
+    </div>
+}
