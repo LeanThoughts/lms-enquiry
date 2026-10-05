@@ -7,6 +7,7 @@ import loanContractSearchRoutes from './modules/loan-contract-search/loan-contra
 import inboxRoutes from './modules/inbox/inbox.routes';
 import referenceInterestRateRoutes from './modules/reference-interest-rate/reference-interest-rate.routes';
 import businessPartnerSearchRoutes from './modules/business-partner-search/business-partner-search.routes';
+import userManagementRoutes from './modules/user-management/user-management.routes';
 
 export const routes: Routes = [
 
@@ -29,6 +30,7 @@ export const routes: Routes = [
             ...inboxRoutes,
             ...referenceInterestRateRoutes,
             ...businessPartnerSearchRoutes,
+            ...userManagementRoutes,
         ]
     },
 

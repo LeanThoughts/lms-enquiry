@@ -1,0 +1,172 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 fd-title class="fd-dialog-header-title">
+            <fd-icon [glyph]="isEdit ? 'edit' : 'add-employee'"></fd-icon>
+            {{ title }}
+        </h1>
+        <button fd-dialog-close-button (click)="cancel()"></button>
+    </fd-dialog-header>
+
+    <fd-dialog-body>
+        <fd-busy-indicator [loading]="saving" [block]="true">
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                @if (serverError) {
+                    <fd-form-message type="error" [style.margin-bottom.rem]="1">{{ serverError }}</fd-form-message>
+                }
+
+                <!-- Personal details -->
+                <h4 fd-title [headerSize]="5" class="um-form__section">
+                    <fd-icon glyph="employee"></fd-icon> Personal Details
+                </h4>
+                <fd-layout-grid>
+                    <div fdLayoutGridRow>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label for="um-firstName" [required]="true">First Name:</label>
+                                <input id="um-firstName" fd-form-control type="text" formControlName="firstName" maxlength="100"
+                                    [state]="showError('firstName') ? 'error' : null" />
+                                @if (showError('firstName')) {
+                                    <fd-form-message type="error">First name is required.</fd-form-message>
+                                }
+                            </div>
+                        </div>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label for="um-lastName" [required]="true">Last Name:</label>
+                                <input id="um-lastName" fd-form-control type="text" formControlName="lastName" maxlength="100"
+                                    [state]="showError('lastName') ? 'error' : null" />
+                                @if (showError('lastName')) {
+                                    <fd-form-message type="error">Last name is required.</fd-form-message>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div fdLayoutGridRow>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label for="um-email" [required]="true">E-mail (login ID):</label>
+                                <input id="um-email" fd-form-control type="email" formControlName="email"
+                                    [state]="showError('email') ? 'error' : null" />
+                                @if (showError('email')) {
+                                    <fd-form-message type="error">
+                                        @if (form.controls.email.errors?.['duplicate']) {
+                                            A user with this e-mail already exists.
+                                        } @else if (form.controls.email.errors?.['required']) {
+                                            E-mail is required.
+                                        } @else {
+                                            Enter a valid e-mail address.
+                                        }
+                                    </fd-form-message>
+                                }
+                            </div>
+                        </div>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label for="um-userName">User Name:</label>
+                                <input id="um-userName" fd-form-control type="text" formControlName="userName" maxlength="100" />
+                            </div>
+                        </div>
+                    </div>
+                </fd-layout-grid>
+
+                <!-- Role and SAP link -->
+                <h4 fd-title [headerSize]="5" class="um-form__section">
+                    <fd-icon glyph="role"></fd-icon> Role &amp; SAP Link
+                </h4>
+                <fd-layout-grid>
+                    <div fdLayoutGridRow>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label [required]="true">Role:</label>
+                                <fd-select formControlName="roleKey" placeholder="Select a role"
+                                    [state]="showError('roleKey') ? 'error' : null">
+                                    @for (role of roles; track role.id) {
+                                        <li fd-option [value]="roleKey(role)">{{ role.code }} – {{ role.value }}</li>
+                                    }
+                                </fd-select>
+                                @if (showError('roleKey')) {
+                                    <fd-form-message type="error">Role is required.</fd-form-message>
+                                }
+                            </div>
+                        </div>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label for="um-bp">SAP Business Partner Number:</label>
+                                <input id="um-bp" fd-form-control type="text" formControlName="sapBPNumber" maxlength="10" />
+                            </div>
+                        </div>
+                    </div>
+                </fd-layout-grid>
+
+                <!-- Risk department -->
+                <h4 fd-title [headerSize]="5" class="um-form__section">
+                    <fd-icon glyph="building"></fd-icon> Risk Department Access
+                </h4>
+                <fd-layout-grid>
+                    <div fdLayoutGridRow>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label>Risk Department:</label>
+                                <fd-select formControlName="riskDepartment" placeholder="None">
+                                    <li fd-option value="">None</li>
+                                    @for (department of departments; track department.code) {
+                                        <li fd-option [value]="department.code">{{ department.value }}</li>
+                                    }
+                                </fd-select>
+                            </div>
+                        </div>
+                        <div [fdLayoutGridCol]="6">
+                            <div fd-form-item>
+                                <label fd-form-label>Department Head:</label>
+                                <fd-switch formControlName="departmentHead"></fd-switch>
+                            </div>
+                            <div fd-form-item>
+                                <label fd-form-label>Risk Portal Display-only Access:</label>
+                                <fd-switch formControlName="riskPortalDisplayOnlyAccess"></fd-switch>
+                            </div>
+                        </div>
+                    </div>
+                </fd-layout-grid>
+
+                <!-- Account -->
+                <h4 fd-title [headerSize]="5" class="um-form__section">
+                    <fd-icon glyph="account"></fd-icon> Account
+                </h4>
+                @if (isEdit && data.user; as user) {
+                    <fd-layout-grid>
+                        <div fdLayoutGridRow>
+                            <div [fdLayoutGridCol]="4">
+                                <div fd-form-item>
+                                    <label fd-form-label>Active:</label>
+                                    <fd-switch formControlName="status"></fd-switch>
+                                </div>
+                            </div>
+                            <div [fdLayoutGridCol]="4">
+                                <div fd-form-item>
+                                    <label fd-form-label>Start Date:</label>
+                                    <span class="um-form__value">{{ formatDate(user.startDate) }}</span>
+                                </div>
+                            </div>
+                            <div [fdLayoutGridCol]="4">
+                                <div fd-form-item>
+                                    <label fd-form-label>End Date:</label>
+                                    <span class="um-form__value">{{ endDatePreview }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fd-layout-grid>
+                    <p class="um-form__hint">Deactivating sets the end date to today; re-activating sets it to 31.12.9999.</p>
+                } @else {
+                    <p class="um-form__hint">The user is created active, valid from today ({{ today }}) to 31.12.9999.</p>
+                }
+            </form>
+        </fd-busy-indicator>
+    </fd-dialog-body>
+
+    <fd-dialog-footer>
+        <fd-button-bar fdType="emphasized" glyph="accept" [label]="isEdit ? 'Save' : 'Create'" [disabled]="saving"
+            (click)="submit()" [ariaLabel]="isEdit ? 'Save' : 'Create'">
+        </fd-button-bar>
+        <fd-button-bar fdType="transparent" label="Cancel" (click)="cancel()" ariaLabel="Cancel"></fd-button-bar>
+    </fd-dialog-footer>
+</fd-dialog>

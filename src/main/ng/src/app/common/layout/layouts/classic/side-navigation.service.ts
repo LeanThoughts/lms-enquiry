@@ -16,8 +16,8 @@ export class SideNavigationService {
                 { link: { icon: 'home', title: 'Home', routerLink: 'homepage' } },
                 { link: { icon: 'inbox', title: 'Inbox', routerLink: 'inbox' } },
                 
-                // { headerTitle: 'Administration' },
-                // { link: { icon: 'home', title: 'User Management', routerLink: 'homepage' } },
+                { headerTitle: 'Administration' },
+                { link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } },
                 // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
 
                 { headerTitle: 'Applications' },

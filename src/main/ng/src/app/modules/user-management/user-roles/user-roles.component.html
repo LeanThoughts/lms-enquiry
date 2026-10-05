@@ -1,0 +1,66 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="User Roles"
+        subtitle="Role master (code and description) used by the Role field of each user" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <fd-toolbar-separator></fd-toolbar-separator>
+                <button fd-button fdType="transparent" glyph="decline" aria-label="Back to user list"
+                    title="Back to user list" (click)="back()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (issueCount) {
+            <fd-message-strip type="warning" [dismissible]="false" class="um-roles__strip">
+                <strong>{{ issueCount }} role entries need attention.</strong>
+                Role codes must be unique and not blank so that users can be assigned reliably.
+            </fd-message-strip>
+        }
+
+        <div class="um-roles__toolbar">
+            <span class="um-roles__title">Roles ({{ filteredRoles.length }})</span>
+            <input fd-form-control type="search" class="um-roles__filter" [(ngModel)]="filter"
+                placeholder="Filter by code or description" aria-label="Filter roles" />
+        </div>
+
+        <fd-busy-indicator [loading]="loading" [block]="true">
+            <div class="um-roles__scroll">
+                <table fd-table aria-label="User roles">
+                    <thead fd-table-header>
+                        <tr fd-table-row>
+                            <th fd-table-cell>Code</th>
+                            <th fd-table-cell>Description</th>
+                            <th fd-table-cell>Users</th>
+                            <th fd-table-cell>Check</th>
+                        </tr>
+                    </thead>
+                    <tbody fd-table-body>
+                        @for (role of filteredRoles; track role.id) {
+                            <tr fd-table-row>
+                                <td fd-table-cell class="um-roles__code">{{ role.code || '(blank)' }}</td>
+                                <td fd-table-cell>{{ role.value }}</td>
+                                <td fd-table-cell>
+                                    @if (role.userCount && role.code) {
+                                        <button fd-button fdType="transparent" glyph="group" [label]="'' + role.userCount"
+                                            [attr.aria-label]="'Show users with role ' + role.code"
+                                            (click)="showUsers(role)"></button>
+                                    } @else {
+                                        <span class="um-roles__muted">0</span>
+                                    }
+                                </td>
+                                <td fd-table-cell>
+                                    @if (role.issue) {
+                                        <span fd-object-status status="critical" glyph="message-warning" [label]="role.issue"></span>
+                                    } @else {
+                                        <span fd-object-status status="positive" glyph="status-positive" label="OK"></span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </fd-busy-indicator>
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

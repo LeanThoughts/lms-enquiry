@@ -1,0 +1,208 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="User Management"
+        subtitle="Maintain portal users, their role, SAP business partner link and risk access" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-toolbar-item fd-button fdType="transparent" glyph="role" label="Manage Roles"
+                    (click)="manageRoles()"></button>
+                <button fd-toolbar-item fd-button fdType="emphasized" glyph="add-employee" label="Create User"
+                    (click)="createUser()"></button>
+                <fd-toolbar-separator></fd-toolbar-separator>
+                <button fd-button fdType="transparent" glyph="decline" aria-label="Close" title="Close"
+                    (click)="router.navigate(['homepage'])"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        <!-- Filter bar -->
+        <form [formGroup]="searchForm" (ngSubmit)="search()">
+            <fd-layout-grid [noGap]="true">
+                <div fdLayoutGridRow style="height: auto;">
+                    <div [fdLayoutGridCol]="3">
+                        <div fd-form-item class="um-filter">
+                            <label fd-form-label for="um-query">Search:</label>
+                            <input id="um-query" fd-form-control type="text" formControlName="query"
+                                placeholder="Name, e-mail or user name" />
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="3">
+                        <div fd-form-item class="um-filter">
+                            <label fd-form-label>Role:</label>
+                            <fd-select formControlName="role" placeholder="All roles">
+                                <li fd-option value="">All roles</li>
+                                @for (role of roles; track role.id) {
+                                    <li fd-option [value]="role.code">{{ role.code }} – {{ role.value }}</li>
+                                }
+                            </fd-select>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="2">
+                        <div fd-form-item class="um-filter">
+                            <label fd-form-label>Risk Department:</label>
+                            <fd-select formControlName="riskDepartment" placeholder="All departments">
+                                <li fd-option value="">All departments</li>
+                                @for (department of departments; track department.code) {
+                                    <li fd-option [value]="department.code">{{ department.value }}</li>
+                                }
+                            </fd-select>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="2">
+                        <div fd-form-item class="um-filter">
+                            <label fd-form-label>Status:</label>
+                            <fd-segmented-button formControlName="status" aria-label="Status filter">
+                                <button fd-button value="all" label="All"></button>
+                                <button fd-button value="active" label="Active"></button>
+                                <button fd-button value="inactive" label="Inactive"></button>
+                            </fd-segmented-button>
+                        </div>
+                    </div>
+                    <div [fdLayoutGridCol]="2" class="um-filter__actions">
+                        <button fd-button fdType="emphasized" glyph="filter" label="Go" type="submit"></button>
+                        <button fd-button fdType="transparent" glyph="clear-filter" label="Clear" type="button"
+                            (click)="clear()"></button>
+                    </div>
+                </div>
+            </fd-layout-grid>
+        </form>
+
+        <!-- Table + quick view -->
+        <div class="um-list">
+            <div class="um-list__table">
+                <div class="um-list__summary">
+                    <fd-icon glyph="group"></fd-icon>
+                    <span class="um-list__count">{{ users.length }}</span> users
+                    · {{ activeCount }} active · {{ inactiveCount }} inactive
+                </div>
+
+                @if (!initialLoadDone) {
+                    <!-- First load after launching the app -->
+                    <div class="um-loading" role="status" aria-live="polite">
+                        <fd-busy-indicator [loading]="true" size="l" [label]="loadingMessage"
+                            [ariaLabel]="loadingMessage"></fd-busy-indicator>
+                    </div>
+                } @else {
+                <fd-busy-indicator [loading]="loading" [block]="true" [label]="loadingMessage" [ariaLabel]="loadingMessage">
+                    @if (users.length) {
+                        <div class="um-list__scroll">
+                            <table fd-table aria-label="Users">
+                                <thead fd-table-header>
+                                    <tr fd-table-row>
+                                        <th fd-table-cell>User</th>
+                                        <th fd-table-cell>User Name</th>
+                                        <th fd-table-cell>Role</th>
+                                        <th fd-table-cell>SAP BP No.</th>
+                                        <th fd-table-cell>Risk Department</th>
+                                        <th fd-table-cell>Access</th>
+                                        <th fd-table-cell>Status</th>
+                                        <th fd-table-cell>Valid From – To</th>
+                                        <th fd-table-cell><span class="um-sr-only">Open</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody fd-table-body>
+                                    @for (user of users; track user.id) {
+                                        <tr fd-table-row [hoverable]="true" [activable]="true"
+                                            [active]="selectedUser?.id === user.id"
+                                            (click)="select(user)" (dblclick)="openProfile(user)">
+                                            <td fd-table-cell>
+                                                <div class="um-user">
+                                                    <fd-avatar [circle]="true" size="xs" [label]="fullName(user)"
+                                                        [colorAccent]="user.status ? 6 : 10"></fd-avatar>
+                                                    <div class="um-user__text">
+                                                        <span class="um-user__name">{{ fullName(user) }}</span>
+                                                        <span class="um-user__email">{{ user.email }}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td fd-table-cell class="um-mono">{{ user.userName || '–' }}</td>
+                                            <td fd-table-cell>
+                                                <div>{{ roleLabel(user) }}</div>
+                                                <div class="um-mono um-muted">{{ user.role }}</div>
+                                            </td>
+                                            <td fd-table-cell class="um-mono">{{ user.sapBPNumber || '–' }}</td>
+                                            <td fd-table-cell>{{ user.riskDepartmentName || user.riskDepartment || '–' }}</td>
+                                            <td fd-table-cell>
+                                                <div class="um-tags">
+                                                    @if (user.departmentHead) {
+                                                        <fd-info-label glyph="manager" label="Dept. head" [color]="6"></fd-info-label>
+                                                    }
+                                                    @if (user.riskPortalDisplayOnlyAccess) {
+                                                        <fd-info-label glyph="display" label="Risk display-only" [color]="7"></fd-info-label>
+                                                    }
+                                                    @if (!user.departmentHead && !user.riskPortalDisplayOnlyAccess) {
+                                                        <span class="um-muted">–</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td fd-table-cell>
+                                                <span fd-object-status [status]="user.status ? 'positive' : 'negative'"
+                                                    [glyph]="user.status ? 'status-positive' : 'status-negative'"
+                                                    [label]="user.status ? 'Active' : 'Inactive'"></span>
+                                            </td>
+                                            <td fd-table-cell class="um-mono um-nowrap">
+                                                {{ formatDate(user.startDate) }} – {{ formatDate(user.endDate) }}
+                                            </td>
+                                            <td fd-table-cell>
+                                                <button fd-button fdType="transparent" glyph="slim-arrow-right"
+                                                    [attr.aria-label]="'Open ' + fullName(user)" title="Open profile"
+                                                    (click)="openProfile(user); $event.stopPropagation()"></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    } @else if (!loading) {
+                        <div class="um-empty">
+                            <fd-icon glyph="search" class="um-empty__icon"></fd-icon>
+                            <h3 class="um-empty__title">No users to show</h3>
+                            <p class="um-empty__text">Change the filters or create a new user.</p>
+                        </div>
+                    }
+                </fd-busy-indicator>
+                }
+            </div>
+
+            <!-- Quick view -->
+            <aside class="um-list__quickview" aria-label="Selected user">
+                @if (selectedUser; as user) {
+                    <div class="um-qv__header">
+                        <fd-avatar [circle]="true" size="m" [label]="fullName(user)" [colorAccent]="6"></fd-avatar>
+                        <div>
+                            <div class="um-qv__name">{{ fullName(user) }}</div>
+                            <div class="um-muted">{{ roleLabel(user) }}</div>
+                        </div>
+                    </div>
+                    <dl class="um-qv__facts">
+                        <dt><fd-icon glyph="email"></fd-icon> E-mail</dt><dd>{{ user.email }}</dd>
+                        <dt><fd-icon glyph="employee"></fd-icon> User name</dt><dd>{{ user.userName || '–' }}</dd>
+                        <dt><fd-icon glyph="role"></fd-icon> Role code</dt><dd>{{ user.role }}</dd>
+                        <dt><fd-icon glyph="business-card"></fd-icon> SAP BP No.</dt><dd>{{ user.sapBPNumber || '–' }}</dd>
+                        <dt><fd-icon glyph="building"></fd-icon> Risk dept.</dt><dd>{{ user.riskDepartmentName || '–' }}</dd>
+                        <dt><fd-icon glyph="status-positive"></fd-icon> Status</dt>
+                        <dd>
+                            <span fd-object-status [status]="user.status ? 'positive' : 'negative'"
+                                [label]="user.status ? 'Active' : 'Inactive'"></span>
+                        </dd>
+                        <dt><fd-icon glyph="appointment-2"></fd-icon> Start date</dt><dd>{{ formatDate(user.startDate) }}</dd>
+                        <dt><fd-icon glyph="calendar"></fd-icon> End date</dt><dd>{{ formatDate(user.endDate) }}</dd>
+                    </dl>
+                    <div class="um-qv__actions">
+                        <button fd-button fdType="emphasized" glyph="employee-lookup" label="Open Profile"
+                            (click)="openProfile(user)"></button>
+                        <button fd-button fdType="standard" glyph="edit" label="Edit" (click)="editUser(user)"></button>
+                        <button fd-button [fdType]="user.status ? 'negative' : 'positive'"
+                            [glyph]="user.status ? 'locked' : 'unlocked'"
+                            [label]="user.status ? 'Deactivate' : 'Activate'" (click)="toggleStatus(user)"></button>
+                    </div>
+                } @else {
+                    <div class="um-empty um-empty--small">
+                        <fd-icon glyph="person-placeholder" class="um-empty__icon"></fd-icon>
+                        <p class="um-empty__text">Select a user to see the details.</p>
+                    </div>
+                }
+            </aside>
+        </div>
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

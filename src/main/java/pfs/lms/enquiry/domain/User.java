@@ -5,6 +5,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -26,6 +27,8 @@ public class User extends AggregateRoot<User> {
     private String sapBPNumber;
     private String riskDepartment;
     private boolean riskPortalDisplayOnlyAccess;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @Nullable
     private boolean departmentHead;
@@ -123,6 +126,26 @@ public class User extends AggregateRoot<User> {
 
     public void setDepartmentHead(@Nullable boolean departmentHead) {
         this.departmentHead = departmentHead;
+    }
+
+    public boolean isRiskPortalDisplayOnlyAccess() {
+        return riskPortalDisplayOnlyAccess;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public void setRiskPortalDisplayOnlyAccess(boolean riskPortalDisplayOnlyAccess) {

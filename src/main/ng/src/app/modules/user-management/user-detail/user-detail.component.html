@@ -1,0 +1,114 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="user ? fullName(user) : 'User'"
+        [subtitle]="user ? (user.roleDescription || user.role) + ' · ' + user.email : ''" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-toolbar-item fd-button fdType="emphasized" glyph="edit" label="Edit"
+                    [disabled]="!user" (click)="edit()"></button>
+                @if (user) {
+                    <button fd-toolbar-item fd-button [fdType]="user.status ? 'negative' : 'positive'"
+                        [glyph]="user.status ? 'locked' : 'unlocked'"
+                        [label]="user.status ? 'Deactivate' : 'Activate'" (click)="toggleStatus()"></button>
+                }
+                <fd-toolbar-separator></fd-toolbar-separator>
+                <button fd-button fdType="transparent" glyph="decline" aria-label="Back to user list"
+                    title="Back to user list" (click)="backToList()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        <fd-busy-indicator [loading]="loading" [block]="true">
+            @if (user; as u) {
+                <!-- Object header -->
+                <div class="um-header">
+                    <fd-avatar [circle]="true" size="l" [label]="fullName(u)" [colorAccent]="6"></fd-avatar>
+                    <div class="um-header__facts">
+                        <div class="um-fact">
+                            <fd-icon glyph="status-positive"></fd-icon>
+                            <div>
+                                <div class="um-fact__label">Status</div>
+                                <span fd-object-status [status]="u.status ? 'positive' : 'negative'"
+                                    [label]="u.status ? 'Active' : 'Inactive'" [inverted]="true"></span>
+                            </div>
+                        </div>
+                        <div class="um-fact">
+                            <fd-icon glyph="calendar"></fd-icon>
+                            <div>
+                                <div class="um-fact__label">Valid from – to</div>
+                                <div>{{ formatDate(u.startDate) }} – {{ formatDate(u.endDate) }}</div>
+                            </div>
+                        </div>
+                        <div class="um-fact">
+                            <fd-icon glyph="employee"></fd-icon>
+                            <div><div class="um-fact__label">User name</div><div>{{ u.userName || '–' }}</div></div>
+                        </div>
+                        <div class="um-fact">
+                            <fd-icon glyph="role"></fd-icon>
+                            <div><div class="um-fact__label">Role code</div><div>{{ u.role }}</div></div>
+                        </div>
+                        <div class="um-fact">
+                            <fd-icon glyph="business-card"></fd-icon>
+                            <div><div class="um-fact__label">SAP BP number</div><div>{{ u.sapBPNumber || '–' }}</div></div>
+                        </div>
+                        <div class="um-fact">
+                            <fd-icon glyph="building"></fd-icon>
+                            <div>
+                                <div class="um-fact__label">Risk department</div>
+                                <div>{{ u.riskDepartmentName || '–' }}{{ u.departmentHead ? ' · Head' : '' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <fdp-icon-tab-bar [layoutMode]="'row'" [enableTabReordering]="false" iconTabSize="sm">
+                    <fdp-icon-tab-bar-tab label="General" icon="employee">
+                        <fd-panel [fixed]="true" class="um-panel">
+                            <dl class="um-grid">
+                                <div><dt>First name</dt><dd>{{ u.firstName }}</dd></div>
+                                <div><dt>Last name</dt><dd>{{ u.lastName }}</dd></div>
+                                <div><dt>E-mail (login ID)</dt><dd>{{ u.email }}</dd></div>
+                                <div><dt>User name</dt><dd>{{ u.userName || '–' }}</dd></div>
+                                <div><dt>SAP business partner</dt><dd>{{ u.sapBPNumber || '–' }}</dd></div>
+                                <div><dt>Status</dt><dd>{{ u.status ? 'Active' : 'Inactive' }}</dd></div>
+                                <div><dt>Start date</dt><dd>{{ formatDate(u.startDate) }}</dd></div>
+                                <div><dt>End date</dt><dd>{{ formatDate(u.endDate) }}</dd></div>
+                            </dl>
+                        </fd-panel>
+                    </fdp-icon-tab-bar-tab>
+
+                    <fdp-icon-tab-bar-tab label="Role & Access" icon="role">
+                        <fd-panel [fixed]="true" class="um-panel">
+                            <dl class="um-grid">
+                                <div><dt>Role</dt><dd>{{ u.role }} – {{ u.roleDescription || '–' }}</dd></div>
+                            </dl>
+                            <p class="um-note">
+                                <fd-icon glyph="message-information"></fd-icon>
+                                Each user has one role. A changed role takes effect at the user's next sign-in.
+                            </p>
+                        </fd-panel>
+                    </fdp-icon-tab-bar-tab>
+
+                    <fdp-icon-tab-bar-tab label="Risk Department" icon="building">
+                        <fd-panel [fixed]="true" class="um-panel">
+                            <dl class="um-grid">
+                                <div><dt>Risk department</dt><dd>{{ u.riskDepartmentName || u.riskDepartment || '–' }}</dd></div>
+                                <div><dt>Department head</dt><dd>{{ yesNo(u.departmentHead) }}</dd></div>
+                                <div><dt>Risk portal display-only access</dt><dd>{{ yesNo(u.riskPortalDisplayOnlyAccess) }}</dd></div>
+                            </dl>
+                        </fd-panel>
+                    </fdp-icon-tab-bar-tab>
+
+                    <fdp-icon-tab-bar-tab label="Audit" icon="history">
+                        <fd-panel [fixed]="true" class="um-panel">
+                            <dl class="um-grid">
+                                <div><dt>Created</dt><dd>{{ stamp(u.createdOn, u.createdAt, u.createdByUserName) }}</dd></div>
+                                <div><dt>Last changed</dt><dd>{{ stamp(u.changedOn, u.changedAt, u.changedByUserName) }}</dd></div>
+                            </dl>
+                        </fd-panel>
+                    </fdp-icon-tab-bar-tab>
+                </fdp-icon-tab-bar>
+            }
+        </fd-busy-indicator>
+    </fd-dynamic-page-content>
+</fd-dynamic-page>
