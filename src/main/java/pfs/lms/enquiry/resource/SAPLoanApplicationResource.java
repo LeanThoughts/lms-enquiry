@@ -296,11 +296,18 @@ import java.util.List;
 
         detailsResource.setiCCMeetNumber(loanApplication.getiCCMeetNumber());
         detailsResource.setiCCRemarks(loanApplication.getiCCRemarks());
+
         if (loanApplication.getiCCClearanceDate() != null)
             detailsResource.setiCCClearanceDate(DataConversionUtility.convertDateToSAPFormat(loanApplication.getiCCClearanceDate()));
         else
             detailsResource.setiCCClearanceDate(null);
 
+        if(loanApplication.getAmountApproved() != null){
+            detailsResource.setiCCApprovedAmount(loanApplication.getAmountApproved().toString());
+        }
+        if(loanApplication.getIccApprovedRoi() != null){
+            detailsResource.setiCCApprovedRoi(loanApplication.getIccApprovedRoi().toString());
+        }
         //Enquiry Completion
         if (loanApplication.getEnquiryCompletionDate() != null)
             detailsResource.setEnquiryCompletionDate(DataConversionUtility.convertDateToSAPFormat(loanApplication.getEnquiryCompletionDate()));
@@ -324,7 +331,7 @@ import java.util.List;
 
         detailsResource.setLoanStatus(this.getLoanStatus(loanApplication.getFunctionalStatus(), loanApplication.getTechnicalStatus()));
 
-        detailsResource.setiCCClearanceDate(null);
+        //detailsResource.setiCCClearanceDate(null);
 
 
         log.info( "Product Code : " + detailsResource.getLoanProduct());

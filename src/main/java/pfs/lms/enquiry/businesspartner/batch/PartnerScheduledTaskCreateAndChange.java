@@ -265,7 +265,10 @@ public class PartnerScheduledTaskCreateAndChange {
                     updateSAPIntegrationPointer(response, sapIntegrationPointer);
                     break;
                 case "BusinessPartnerIdentification":
-                    businessPartnerIdentification = businessPartnerIdentificationRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                    BusinessPartnerIdentification businessPartnerIdentification1 = new BusinessPartnerIdentification();
+                    businessPartnerIdentification1 = businessPartnerIdentificationRepository.getById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+
+                    //businessPartnerIdentification = businessPartnerIdentificationRepository.getOne(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
                     partner = partnerRepository.getOne(UUID.fromString(sapIntegrationPointer.getMainEntityId()));
                     if(partner  == null) continue;
                     if (partner.getPartyNumber() == null) continue;
@@ -277,13 +280,19 @@ public class PartnerScheduledTaskCreateAndChange {
                     //Set Status as in progressNot found for upload to SAP
                     sapIntegrationPointer.setStatus(1); // In Posting Process
                     sapIntegrationRepository.save(sapIntegrationPointer);
+                    Optional<BusinessPartnerIdentification> bpi = businessPartnerIdentificationRepository.findById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
+                    if (!bpi.isPresent()) {
+                        log.warn("BusinessPartnerIdentification {} not found, skipping pointer {}", sapIntegrationPointer.getBusinessObjectId(), sapIntegrationPointer.getId());
+                        continue;
+                    }
+                    businessPartnerIdentification1 = businessPartnerIdentificationRepository.getById(UUID.fromString(sapIntegrationPointer.getBusinessObjectId()));
 
                     SAPBusinessPartnerIdentificationResourceDetail sapBusinessPartnerIdentificationResourceDetail  =
-                            sapBusinessPartnerIdentificationResource.mapResource(businessPartnerIdentification);
+                            sapBusinessPartnerIdentificationResource.mapResource(businessPartnerIdentification1);
 
-                    if(businessPartnerIdentification.getIdentificationCategoryCode() != null){
+                    if(businessPartnerIdentification1.getIdentificationCategoryCode() != null){
                         IdentificationCategory identificationCategory =
-                                identificationCategoryRepository.findByCode(businessPartnerIdentification.getIdentificationCategoryCode()).get();
+                                identificationCategoryRepository.findByCode(businessPartnerIdentification1.getIdentificationCategoryCode()).get();
                         sapBusinessPartnerIdentificationResourceDetail.setIdentificationCategory(identificationCategory.getCode());
                     }
                     else sapBusinessPartnerIdentificationResourceDetail.setIdentificationCategory("");
@@ -305,18 +314,18 @@ public class PartnerScheduledTaskCreateAndChange {
                     }
 
                     if (response != null) {
-                        if (businessPartnerIdentification.getFileReference() != null && businessPartnerIdentification.getFileReference().length() > 0) {
+                        if (businessPartnerIdentification1.getFileReference() != null && businessPartnerIdentification1.getFileReference().length() > 0) {
 
                             try {
                                 response = postDocument(
-                                        businessPartnerIdentification.getPartner().getPartyNumber().toString(),
-                                        businessPartnerIdentification.getFileReference(),
-                                        businessPartnerIdentification.getId().toString(),
-                                        businessPartnerIdentification.getId().toString(),
+                                        businessPartnerIdentification1.getPartner().getPartyNumber().toString(),
+                                        businessPartnerIdentification1.getFileReference(),
+                                        businessPartnerIdentification1.getId().toString(),
+                                        businessPartnerIdentification1.getId().toString(),
                                         "Business Partner",
                                         "Identification",
-                                        businessPartnerIdentification.getDocumentType(),
-                                        businessPartnerIdentification.getDocumentName());
+                                        businessPartnerIdentification1.getDocumentType(),
+                                        businessPartnerIdentification1.getDocumentName());
                             } catch (Exception ex){
                                 log.error("Exception Posting Identification Document : " + businessPartnerIdentification.getPartner().getPartyNumber());
                             }

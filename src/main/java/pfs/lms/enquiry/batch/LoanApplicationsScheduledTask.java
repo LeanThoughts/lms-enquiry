@@ -180,6 +180,7 @@ public class LoanApplicationsScheduledTask {
              if (loanApplication.getProductCode() == null) {
                  continue;
              }
+             log.info(loanApplication.toString());
 
             // Set SAP Posting Status to Attempted to Post - "1"
             loanApplication.setPostedInSAP(1);
@@ -201,6 +202,9 @@ public class LoanApplicationsScheduledTask {
 
             SAPLoanApplicationResource d = new SAPLoanApplicationResource();
             d.setSapLoanApplicationDetailsResource(detailsResource);
+
+            log.info("Payload to SAP Service:" );
+            log.info(detailsResource.toString());
 
             sapLoanApplicationResource =   isapIntegrationService.postLoanApplication(d);
 

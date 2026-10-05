@@ -67,6 +67,7 @@ public class IBMCICCApprovalServiceImpl implements IBMCICCApprovalService {
                 "Updated",
                 username,
                 "LoanApplication", "LoanApplication" );
+        loanApplication.setPostedInSAP(0);
 
         loanApplicationRepository.save(loanApplication);
 

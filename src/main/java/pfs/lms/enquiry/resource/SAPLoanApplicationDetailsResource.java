@@ -230,7 +230,7 @@ public class SAPLoanApplicationDetailsResource {
     @JsonProperty(value = "LoanCurrentContractAmount")
     private String  loanCurrentContractAmount;
 
-    @JsonProperty(value = " LoanDisbursedAmount ")
+    @JsonProperty(value = "LoanDisbursedAmount ")
     private String  loanDisbursedAmount;
 
     @JsonProperty(value = "IndustrySector")
@@ -244,7 +244,7 @@ public class SAPLoanApplicationDetailsResource {
     private String boardApprovalRemarks;
     @JsonProperty(value = "BODStatus")
     private String bODStatus;
-    @JsonProperty(value = "ICCClearanceDate")
+    @JsonProperty(value = "IccClearanceDate")
     private String iCCClearanceDate;
     @JsonProperty(value = "ICCMeetNumber")
     private String iCCMeetNumber;
@@ -252,6 +252,11 @@ public class SAPLoanApplicationDetailsResource {
     private String iCCStatus;
     @JsonProperty(value = "ICCRemarks")
     private String iCCRemarks;
+    @JsonProperty(value = "IccApprovedAmount")
+    private String iCCApprovedAmount;
+    @JsonProperty(value = "IccApprovedRoi")
+    private String iCCApprovedRoi;
+
 
     @JsonProperty(value = "EnquiryCompletionDate")
     private String enquiryCompletionDate;
@@ -341,6 +346,38 @@ public class SAPLoanApplicationDetailsResource {
 
     public void setFeeRemarks(String feeRemarks) {
         FeeRemarks = feeRemarks;
+    }
+
+    public String getiCCApprovedAmount() {
+        return iCCApprovedAmount;
+    }
+
+    public void setiCCApprovedAmount(String iCCApprovedAmount) {
+        this.iCCApprovedAmount = iCCApprovedAmount;
+    }
+
+    public String getiCCApprovedRoi() {
+        return iCCApprovedRoi;
+    }
+
+    public void setiCCApprovedRoi(String iCCApprovedRoi) {
+        this.iCCApprovedRoi = iCCApprovedRoi;
+    }
+
+    public String getMoratoriumPeriod() {
+        return moratoriumPeriod;
+    }
+
+    public String getMoratoriumPeriodUnit() {
+        return moratoriumPeriodUnit;
+    }
+
+    public String getConstructionPeriod() {
+        return constructionPeriod;
+    }
+
+    public String getConstructionPeriodUnit() {
+        return constructionPeriodUnit;
     }
 
     public SAPLoanApplicationDetailsResource() {
@@ -1055,7 +1092,7 @@ public class SAPLoanApplicationDetailsResource {
     public String toString() {
         return "SAPLoanApplicationDetailsResource{" +
                 "loanContract='" + loanContract + '\'' +
-                ", LoanApplicationId='" + loanApplicationId + '\'' +
+                ", loanApplicationId='" + loanApplicationId + '\'' +
                 ", busPartnerNumber='" + busPartnerNumber + '\'' +
                 ", partnerCategory='" + partnerCategory + '\'' +
                 ", partnerType='" + partnerType + '\'' +
@@ -1076,33 +1113,76 @@ public class SAPLoanApplicationDetailsResource {
                 ", country='" + country + '\'' +
                 ", contactPerName='" + contactPerName + '\'' +
                 ", panNumber='" + panNumber + '\'' +
-                ", applicationDate=" + applicationDate +
+                ", applicationDate='" + applicationDate + '\'' +
                 ", loanClass='" + loanClass + '\'' +
                 ", financingType='" + financingType + '\'' +
+                ", loanType='" + loanType + '\'' +
                 ", projectType='" + projectType + '\'' +
+                ", projectTypeCoreSector='" + projectTypeCoreSector + '\'' +
                 ", debtEquityIndicator='" + debtEquityIndicator + '\'' +
-                ", projectCapaacity=" + projectCapaacity +
+                ", projectCapaacity='" + projectCapaacity + '\'' +
                 ", projectCapacityUnit='" + projectCapacityUnit + '\'' +
                 ", projectState='" + projectState + '\'' +
                 ", projectDistrict='" + projectDistrict + '\'' +
-                ", tenorYear=" + tenorYear +
-                ", tenorMonth=" + tenorMonth +
-                ", projectCostInCrores=" + projectCostInCrores +
-                ", debtAmountInCrores=" + debtAmountInCrores +
-                ", equityAmountInCrores=" + equityAmountInCrores +
+                ", tenorYear='" + tenorYear + '\'' +
+                ", tenorMonth='" + tenorMonth + '\'' +
+                ", projectCostInCrores='" + projectCostInCrores + '\'' +
+                ", debtAmountInCrores='" + debtAmountInCrores + '\'' +
+                ", equityAmountInCrores='" + equityAmountInCrores + '\'' +
                 ", currency='" + currency + '\'' +
-                ", applicationCapitalInCrores=" + applicationCapitalInCrores +
+                ", applicationCapitalInCrores='" + applicationCapitalInCrores + '\'' +
                 ", loanPurpose='" + loanPurpose + '\'' +
-                ", scheduledCommDate=" + scheduledCommDate +
+                ", purpose='" + purpose + '\'' +
+                ", scheduledCommDate='" + scheduledCommDate + '\'' +
+                ", actualCOD='" + actualCOD + '\'' +
                 ", groupCompanyName='" + groupCompanyName + '\'' +
+                ", groupCompany='" + groupCompany + '\'' +
                 ", promoterName='" + promoterName + '\'' +
-                ", promoterNetWorthInCrores=" + promoterNetWorthInCrores +
-                ", promoterPATInCrores=" + promoterPATInCrores +
+                ", promoterNetWorthInCrores='" + promoterNetWorthInCrores + '\'' +
+                ", promoterPATInCrores='" + promoterPATInCrores + '\'' +
                 ", promoterAreaOfBusiness='" + promoterAreaOfBusiness + '\'' +
                 ", promoterRating='" + promoterRating + '\'' +
                 ", promoterKeyDirector='" + promoterKeyDirector + '\'' +
                 ", loanStatus='" + loanStatus + '\'' +
+                ", disbursementStatus='" + disbursementStatus + '\'' +
+                ", firstDisbursementDate='" + firstDisbursementDate + '\'' +
+                ", term='" + term + '\'' +
                 ", projectName='" + projectName + '\'' +
+                ", loanOfficer='" + loanOfficer + '\'' +
+                ", loanProduct='" + loanProduct + '\'' +
+                ", contactBranchAddress='" + contactBranchAddress + '\'' +
+                ", contactDesignation='" + contactDesignation + '\'' +
+                ", contactDepartment='" + contactDepartment + '\'' +
+                ", contactTelePhone='" + contactTelePhone + '\'' +
+                ", contactLandLinePhone='" + contactLandLinePhone + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", contactEmail='" + contactEmail + '\'' +
+                ", contactFaxNumber='" + contactFaxNumber + '\'' +
+                ", loanContractAmount='" + loanContractAmount + '\'' +
+                ", sanctionLetterDate='" + sanctionLetterDate + '\'' +
+                ", sanctionLetterAmount='" + sanctionLetterAmount + '\'' +
+                ", loanRevisedSanctionAmount='" + loanRevisedSanctionAmount + '\'' +
+                ", loanCurrentContractAmount='" + loanCurrentContractAmount + '\'' +
+                ", loanDisbursedAmount='" + loanDisbursedAmount + '\'' +
+                ", industrySector='" + industrySector + '\'' +
+                ", boardMeetingNumber='" + boardMeetingNumber + '\'' +
+                ", boardApprovalDate='" + boardApprovalDate + '\'' +
+                ", boardApprovalRemarks='" + boardApprovalRemarks + '\'' +
+                ", bODStatus='" + bODStatus + '\'' +
+                ", iCCClearanceDate='" + iCCClearanceDate + '\'' +
+                ", iCCMeetNumber='" + iCCMeetNumber + '\'' +
+                ", iCCStatus='" + iCCStatus + '\'' +
+                ", iCCRemarks='" + iCCRemarks + '\'' +
+                ", iCCApprovedAmount='" + iCCApprovedAmount + '\'' +
+                ", iCCApprovedRoi='" + iCCApprovedRoi + '\'' +
+                ", enquiryCompletionDate='" + enquiryCompletionDate + '\'' +
+                ", enquiryRemarks='" + enquiryRemarks + '\'' +
+                ", termSheetAcceptance='" + termSheetAcceptance + '\'' +
+                ", FeeRemarks='" + FeeRemarks + '\'' +
+                ", moratoriumPeriod='" + moratoriumPeriod + '\'' +
+                ", moratoriumPeriodUnit='" + moratoriumPeriodUnit + '\'' +
+                ", constructionPeriod='" + constructionPeriod + '\'' +
+                ", constructionPeriodUnit='" + constructionPeriodUnit + '\'' +
                 '}';
     }
 }

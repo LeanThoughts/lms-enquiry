@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetail;
 import pfs.lms.enquiry.applicationfee.invoice.InvoicingDetailRepository;
+import pfs.lms.enquiry.applicationfee.termsheet.TermSheet;
+import pfs.lms.enquiry.applicationfee.termsheet.TermSheetRepository;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
 import pfs.lms.enquiry.businesspartner.service.IBusinessPartnerIdentificationService;
@@ -15,6 +17,7 @@ import pfs.lms.enquiry.repository.LoanApplicationRepository;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.service.changedocs.IChangeDocumentService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +32,7 @@ public class ApplicationFeeService implements IApplicationFeeService {
     private final InvoicingDetailRepository invoicingDetailRepository;
     private final IBusinessPartnerIdentificationService businessPartnerIdentificationService;
     private final BusinessPartnerIdentificationRepository businessPartnerIdentificationRepository;
+    private final TermSheetRepository termSheetRepository;
 
     @Override
     public ApplicationFee processRejection(ApplicationFee applicationFee, String username) throws CloneNotSupportedException {
@@ -71,6 +75,13 @@ public class ApplicationFeeService implements IApplicationFeeService {
         loanApplication.setFunctionalStatus(11);
         loanApplication.setFunctionalStatusDescription("Application Fee Stage");
 
+        List<TermSheet> finalTermSheets = termSheetRepository.findByApplicationFeeIdAndStatus(applicationFee.getId(),
+                "Final");
+        if (finalTermSheets != null) {
+            finalTermSheets.sort(Comparator.comparing(TermSheet::getAcceptanceDate,
+                    Comparator.nullsLast(Comparator.reverseOrder())));
+            loanApplication.setTermSheetAcceptance(finalTermSheets.get(0).getAcceptanceDate());
+        }
         partnerRepository.save(partner);
         loanApplicationRepository.save(loanApplication);
 

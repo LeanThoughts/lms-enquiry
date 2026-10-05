@@ -139,4 +139,55 @@ public class BMCApprovalByICCService implements IBMCApprovalByICCService {
                 "BmcApprovalByIcc", "BmcApprovalByIcc");
         return BMCApprovalByIcc;
     }
+//
+//    @Override
+//    public BMCICCApproval processApprovedICC(BmcIccApproval BMCICCApproval, String username) throws CloneNotSupportedException {
+//
+//        LoanApplication loanApplication = BMCICCApproval.getLoanApplication();
+//        Object oldLoanApplication;
+//        oldLoanApplication = loanApplication.clone();
+//
+//
+//        loanApplication.setFunctionalStatus(12);
+//        loanApplication.setFunctionalStatusDescription("BMC Approval");
+//
+//        // Change Documents for Loan Application
+//        changeDocumentService.createChangeDocument(
+//                loanApplication.getId(),
+//                loanApplication.getId().toString(),
+//                loanApplication.getId().toString(),
+//                loanApplication.getEnquiryNo().getId().toString(),
+//                loanApplication,
+//                oldLoanApplication,
+//                "Updated",
+//                username,
+//                "LoanApplication", "LoanApplication" );
+//        loanApplication.setPostedInSAP(0);
+//
+//        loanApplicationRepository.save(loanApplication);
+//
+//        return BMCICCApproval;
+//    }
+
+//    @Override
+//    public BmcApprovalByIcc processRejection(BmcApprovalByIcc bmcApprovalByIcc, String username) throws CloneNotSupportedException {
+//
+//        BmcIccApproval bmcIccApproval = bmcApprovalByIcc.getBmcICCApproval();
+//        Object oldBmcIccApproval = bmcIccApproval.clone();
+//        bmcIccApproval.setWorkFlowStatusCode(04);
+//        bmcIccApproval.setWorkFlowStatusDescription("Rejected");
+//
+//        // Change Documents for Monitoring Header
+//        changeDocumentService.createChangeDocument(
+//                bmcIccApproval.getId(), bmcIccApproval.getId().toString(), null,
+//                bmcIccApproval.getLoanApplication().getLoanContractId(),
+//                oldBmcIccApproval,
+//                bmcIccApproval,
+//                "Updated",
+//                username,
+//                "BmcApprovalByIcc Approval", "Header");
+//        bmcICCApprovalRepository.save(bmcIccApproval);
+//
+//        return bmcApprovalByIcc;
+//    }
 }

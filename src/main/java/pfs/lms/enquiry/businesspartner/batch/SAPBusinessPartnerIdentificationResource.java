@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
 import pfs.lms.enquiry.businesspartner.domain.IdentificationCategory;
+import pfs.lms.enquiry.businesspartner.repository.BusinessPartnerIdentificationRepository;
 import pfs.lms.enquiry.businesspartner.repository.IdentificationCategoryRepository;
 import pfs.lms.enquiry.utils.DataConversionUtility;
 
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.UUID;
 
 
 //@JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,9 +27,10 @@ import java.text.ParseException;
 @Slf4j
 @Service
 @Transactional
+@Component
  public class SAPBusinessPartnerIdentificationResource implements Serializable {
 
-
+    BusinessPartnerIdentificationRepository businessPartnerIdentificationRepository;
 
     @JsonProperty(value = "d")
     private SAPBusinessPartnerIdentificationResourceDetail sapBusinessPartnerIdentificationResourceDetail;
@@ -45,6 +48,13 @@ import java.text.ParseException;
 
     public SAPBusinessPartnerIdentificationResourceDetail
                                 mapResource(BusinessPartnerIdentification businessPartnerIdentification) throws ParseException {
+
+//        BusinessPartnerIdentification businessPartnerIdentification = new BusinessPartnerIdentification();
+//        if ( id == null)
+//            return null;
+//        businessPartnerIdentification = businessPartnerIdentificationRepository.getById(id);
+//        if ( businessPartnerIdentification == null )
+//            return null ;
 
         SAPBusinessPartnerIdentificationResourceDetail detailsResource = new SAPBusinessPartnerIdentificationResourceDetail();
         if (businessPartnerIdentification.getPartner().getPartyNumber() != null)

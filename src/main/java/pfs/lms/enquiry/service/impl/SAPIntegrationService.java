@@ -30,7 +30,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.UUID;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Slf4j
 @Service
@@ -126,10 +127,14 @@ public class SAPIntegrationService implements ISAPIntegrationService {
         SAPLoanApplicationResource createdEnquiry = null;
         HttpEntity<SAPLoanApplicationResource> requestToPost = new HttpEntity<SAPLoanApplicationResource>(sapLoanApplicationResource, headers);
 
+        String payloadJson = toJson(sapLoanApplicationResource);
+
+
         ResponseEntity responseEntity; // = new ResponseEntity();
 
         try {
             log.info("URL: " + postURL);
+            log.info("Payload to SAP:\n" + payloadJson);
             responseEntity = restTemplate.exchange(postURL, HttpMethod.POST, requestToPost, SAPLoanApplicationResource.class);
             //Object o =   responseEntity.getBody();
            // createdEnquiry = (ResponseEntity<SAPLoanApplicationResource>) responseEntity.getBody();
@@ -351,6 +356,16 @@ public class SAPIntegrationService implements ISAPIntegrationService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         log.info(responseEntity.getBody());
+    }
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private String toJson(Object o) {
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            return String.valueOf(o);   // fall back to toString()
+        }
     }
 
 

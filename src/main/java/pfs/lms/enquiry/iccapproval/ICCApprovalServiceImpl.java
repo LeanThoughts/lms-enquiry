@@ -148,7 +148,15 @@ public class ICCApprovalServiceImpl implements ICCApprovalService {
             loanApplication.setiCCRemarks(latestLog.getRemarks());
             loanApplication.setiCCStatus(latestLog.getEventType());
             loanApplication.setiCCClearanceDate(latestLog.getEventDate());
+            if  ( latestLog.getEventType().equals("Approved by ICC") ) {
+                if (approvalByICC != null) {
+                    loanApplication.setLoanContractAmount(approvalByICC.getAmountApproved());
+                    loanApplication.setIccApprovedRoi(approvalByICC.getIccApprovedRoi());
+                }
+            }
         }
+
+        //loanApplication.setPostedInSAP(4);
 
         // Change Documents for Loan Application
         changeDocumentService.createChangeDocument(

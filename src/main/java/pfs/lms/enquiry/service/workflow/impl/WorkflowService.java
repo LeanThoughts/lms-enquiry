@@ -23,6 +23,10 @@ import pfs.lms.enquiry.applicationfee.ApplicationFeeService;
 import pfs.lms.enquiry.appraisal.LoanAppraisal;
 import pfs.lms.enquiry.appraisal.LoanAppraisalRepository;
 import pfs.lms.enquiry.appraisal.service.ILoanAppraisalService;
+import pfs.lms.enquiry.bmcapproval.BMCICCApprovalRepository;
+import pfs.lms.enquiry.bmcapproval.BmcIccApproval;
+import pfs.lms.enquiry.bmcapproval.IBMCICCApprovalService;
+import pfs.lms.enquiry.bmcapproval.bmcapprovalbyicc.BMCApprovalByICCService;
 import pfs.lms.enquiry.boardapproval.BoardApproval;
 import pfs.lms.enquiry.boardapproval.BoardApprovalRepository;
 import pfs.lms.enquiry.boardapproval.BoardApprovalService;
@@ -90,6 +94,8 @@ public class WorkflowService implements IWorkflowService {
 
     @Autowired
     private BoardApprovalRepository boardApprovalRepository;
+    @Autowired
+    private BMCICCApprovalRepository bmciccApprovalRepository;
 
     @Autowired
     private SanctionRepository sanctionRepository;
@@ -116,6 +122,7 @@ public class WorkflowService implements IWorkflowService {
 
     private final ProjectProposalService projectProposalService;
     private final BoardApprovalService boardApprovalService;
+    private final IBMCICCApprovalService ibmciccApprovalService;
     private final SanctionService sanctionService;
     private final IRiskAssessmentService riskAssessmentService;
     private final ILoanMonitoringService loanMonitoringService;
@@ -146,6 +153,8 @@ public class WorkflowService implements IWorkflowService {
         ICCApproval iccApproval = new ICCApproval();
         ApplicationFee applicationFee = new ApplicationFee();
         BoardApproval boardApproval = new BoardApproval();
+        BmcIccApproval bmcIccApproval = new BmcIccApproval();
+
         Sanction sanction = new Sanction();
         LoanApplication loanApplication = new LoanApplication();
         RiskAssessment riskAssessment = new RiskAssessment();
@@ -239,6 +248,17 @@ public class WorkflowService implements IWorkflowService {
                 loanApplication = boardApproval.getLoanApplication();
                 objectId = loanApplication.getEnquiryNo().getId().toString();
                 processDescription = "Board Approval";
+                break;
+
+            case "BMCApproval":
+                //Fetch the Entity
+                bmcIccApproval = bmciccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "02" - Sent for Approval
+                bmcIccApproval.setWorkFlowStatusCode(02);
+                bmcIccApproval.setWorkFlowStatusDescription("Sent for Approval");
+                loanApplication = bmcIccApproval.getLoanApplication();
+                objectId = loanApplication.getEnquiryNo().getId().toString();
+                processDescription = "BMCApproval";
                 break;
             case "Sanction":
                 //Fetch the Entity
@@ -391,6 +411,11 @@ public class WorkflowService implements IWorkflowService {
                 boardApproval.setProcessInstanceId(processInstanceId);
                 boardApproval = boardApprovalRepository.save(boardApproval);
                 return boardApproval;
+            case "BMCApproval":
+                //Save entity with the Process Instance and workflow status code
+                bmcIccApproval.setProcessInstanceId(processInstanceId);
+                bmcIccApproval = bmciccApprovalRepository.save(bmcIccApproval);
+                return bmcIccApproval;
             case "Sanction":
                 //Save entity with the Process Instance and workflow status code
                 sanction.setProcessInstanceId(processInstanceId);
@@ -422,6 +447,7 @@ public class WorkflowService implements IWorkflowService {
         LoanAppraisal loanAppraisal = new LoanAppraisal();
         EnquiryAction enquiryAction = new EnquiryAction();
         BoardApproval boardApproval = new BoardApproval();
+        BmcIccApproval bmcIccApproval = new BmcIccApproval();
         ApplicationFee applicationFee = new ApplicationFee();
         ICCApproval iccApproval = new ICCApproval();
         RiskAssessment riskAssessment = new RiskAssessment();
@@ -514,6 +540,14 @@ public class WorkflowService implements IWorkflowService {
                 loanEnquiryId = boardApproval.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = boardApproval.getProcessInstanceId();
                 break;
+            case "BMCApproval":
+                //Fetch the Entity
+                bmcIccApproval = bmciccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "03" - Approved
+                bmcIccApproval.setWorkFlowStatusCode(03);
+                bmcIccApproval.setWorkFlowStatusDescription("Approved");
+                loanEnquiryId = bmcIccApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = bmcIccApproval.getProcessInstanceId();
             case "Sanction":
                 //Fetch the Entity
                 sanction = sanctionRepository.getOne(businessProcessId);
@@ -604,6 +638,7 @@ public class WorkflowService implements IWorkflowService {
                 iccApprovalRepository.flush();
                 iccApprovalService.processApprovedICC(iccApproval, username);
                 return iccApproval;
+
             case "ICC In-Principal Approval":
                 //Save entity with the new workflow status code
                 iccApproval.setWorkFlowStatusDescription("Approved");
@@ -643,6 +678,15 @@ public class WorkflowService implements IWorkflowService {
                 boardApprovalRepository.flush();
                 boardApprovalService.processApprovedBoardApproval(boardApproval, username);
                 return boardApproval;
+            case "BMCApproval":
+                //Save entity with the new workflow status code
+                bmcIccApproval.setWorkFlowStatusDescription("Approved");
+                bmcIccApproval.setWorkFlowStatusCode(3);
+                bmcIccApproval.setProcessInstanceId(processInstanceId);
+                bmciccApprovalRepository.save(bmcIccApproval);
+                bmciccApprovalRepository.flush();
+                ibmciccApprovalService.processApprovedICC(bmcIccApproval, username);
+                return bmcIccApproval;
             case "Sanction":
                 //Save entity with the new workflow status code
                 sanction.setWorkFlowStatusDescription("Approved");
@@ -696,6 +740,7 @@ public class WorkflowService implements IWorkflowService {
         EnquiryAction enquiryAction = new EnquiryAction();
         ICCApproval iccApproval = new ICCApproval();
         BoardApproval boardApproval = new BoardApproval();
+        BmcIccApproval bmcIccApproval = new BmcIccApproval();
         ApplicationFee applicationFee = new ApplicationFee();
         Sanction sanction = new Sanction();
         RiskAssessment riskAssessment = new RiskAssessment();
@@ -772,6 +817,15 @@ public class WorkflowService implements IWorkflowService {
                 boardApproval.setWorkFlowStatusDescription("Rejected");
                 loanEnquiryId = boardApproval.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = boardApproval.getProcessInstanceId();
+                break;
+            case "BMCApproval":
+                //Fetch the Entity
+                bmcIccApproval = bmciccApprovalRepository.getOne(businessProcessId);
+                // Set the Work Flow Status Code "04" - Rejected
+                bmcIccApproval.setWorkFlowStatusCode(4);
+                bmcIccApproval.setWorkFlowStatusDescription("Rejected");
+                loanEnquiryId = bmcIccApproval.getLoanApplication().getEnquiryNo().getId().toString();
+                processInstanceId = bmcIccApproval.getProcessInstanceId();
                 break;
             case "Sanction":
                 //Fetch the Entity
@@ -871,6 +925,11 @@ public class WorkflowService implements IWorkflowService {
                 //Fetch the Entity
                 boardApproval = boardApprovalRepository.getOne(businessProcessId);
                 boardApprovalService.processRejection(boardApproval, username);
+                break;
+            case "BMCApproval":
+                //Fetch the Entity
+                bmcIccApproval = bmciccApprovalRepository.getOne(businessProcessId);
+                ibmciccApprovalService.processRejection(bmcIccApproval, username);
                 break;
             case "Sanction":
                 //Fetch the Entity

@@ -90,7 +90,7 @@ public class BoardApprovalService implements IBoardApprovalService {
 
         loanApplication = mapBoardApprovalToLoanApplication(boardApproval, loanApplication);
 
-        loanApplication.setFunctionalStatus(4); // Baord Approval
+        loanApplication.setFunctionalStatus(4); // Board Approval
         loanApplication.setFunctionalStatusDescription("Board Approval Stage");
         loanApplication.setTechnicalStatus(4);  // Approved/Taken Up for processing
         loanApplication.setPostedInSAP(0);
