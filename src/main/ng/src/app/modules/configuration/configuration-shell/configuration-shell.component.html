@@ -1,0 +1,50 @@
+<div class="cfg-shell">
+    <div class="cfg-shell__header">
+        <h1 class="cfg-shell__title">Configuration</h1>
+        <div class="cfg-shell__subtitle">Settings of the portal, grouped by module</div>
+    </div>
+
+    <div class="cfg-shell__tabs" role="tablist" aria-label="Configuration modules">
+        @for (m of modules; track m.id) {
+            <button type="button" role="tab" class="cfg-shell__tab" [class.is-selected]="m === module"
+                [attr.aria-selected]="m === module" (click)="openModule(m)">
+                {{ m.title }}
+                @if (m.apps.length) {
+                    <span class="cfg-shell__count">{{ m.apps.length }}</span>
+                }
+            </button>
+        }
+    </div>
+
+    <div class="cfg-shell__body">
+        <nav class="cfg-shell__apps" [attr.aria-label]="module.title + ' configuration apps'">
+            @for (a of module.apps; track a.path; let i = $index) {
+                @if (groupBefore(i); as group) {
+                    <div class="cfg-shell__group" role="presentation">{{ group }}</div>
+                }
+                <a class="cfg-shell__app" [routerLink]="'/configuration/' + a.path" routerLinkActive="is-selected"
+                    ariaCurrentWhenActive="page">{{ a.title }}</a>
+            } @empty {
+                <div class="cfg-shell__no-apps">No apps yet</div>
+            }
+        </nav>
+
+        <section class="cfg-shell__main">
+            <div class="cfg-shell__bar" [class.is-edit]="mode === 'Edit'">
+                @if (app) {
+                    <div class="cfg-shell__bar-title">
+                        <span fd-object-status [inverted]="true" [status]="mode === 'Edit' ? 'informative' : null"
+                            [glyph]="mode === 'Edit' ? 'edit' : 'display'" [label]="mode" class="cfg-shell__mode"></span>
+                        <span>Configuration: {{ app.title }}</span>
+                    </div>
+                    <div class="cfg-shell__bar-text">{{ app.description }}</div>
+                } @else {
+                    <div class="cfg-shell__bar-title">{{ module.title }}</div>
+                }
+            </div>
+            <div class="cfg-shell__content">
+                <router-outlet (activate)="onActivate($event)" (deactivate)="onDeactivate()"></router-outlet>
+            </div>
+        </section>
+    </div>
+</div>

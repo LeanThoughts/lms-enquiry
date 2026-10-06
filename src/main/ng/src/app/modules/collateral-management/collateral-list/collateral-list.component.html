@@ -1,0 +1,184 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2"
+        [title]="loanLabel ? 'Collaterals of Loan ' + loanLabel : 'Collaterals'"
+        [subtitle]="loan ? (loan.borrowerName || 'Borrower ' + (loan.borrowerNumber || '–')) + ' · ' + (loan.projectName || '–') : ''"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button fdType="transparent" glyph="refresh" label="Refresh"
+                    [disabled]="!!waitMessage" (click)="load()"></button>
+                @if (canWrite) {
+                    <button fd-button fdType="standard" glyph="paper-plane" label="Send for Approval"
+                        [disabled]="!canSendForApproval || !!waitMessage || loadFailed"
+                        [title]="inApproval ? 'Already waiting for approval' : (items.length ? 'Send the checklist for approval' : 'Create a collateral first')"
+                        (click)="sendForApproval()"></button>
+                }
+                @if (canChange) {
+                    <button fd-button fdType="transparent" glyph="delete" label="Delete"
+                        [disabled]="!selected || !!waitMessage" (click)="remove()"></button>
+                    <button fd-button fdType="emphasized" glyph="add" label="Create"
+                        [disabled]="!!waitMessage || loadFailed" (click)="create()"></button>
+                }
+                <fd-toolbar-separator></fd-toolbar-separator>
+                <button fd-button fdType="transparent" glyph="decline" aria-label="Back to loan contracts"
+                    title="Back to loan contracts" (click)="back()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (loan) {
+            <div class="cm-facts">
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Loan Contract</span>
+                    <span class="cm-fact__value cm-fact__value--strong">{{ loan.loanContractId || '–' }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Enquiry</span>
+                    <span class="cm-fact__value">{{ loan.enquiryNo || '–' }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Borrower</span>
+                    <span class="cm-fact__value">{{ loan.borrowerName || '–' }} · BP {{ loan.borrowerNumber || '–' }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Checklist Workflow Status</span>
+                    <span class="cm-fact__value">
+                        @if (checklist?.id) {
+                            <span fd-object-status [status]="workflowState"
+                                [label]="checklist?.workFlowStatusDescription || '–'"></span>
+                        } @else {
+                            No collaterals yet
+                        }
+                    </span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Collaterals</span>
+                    <span class="cm-fact__value cm-fact__value--kpi">{{ items.length }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Complied</span>
+                    <span class="cm-fact__value cm-fact__value--kpi cm-fact__value--positive">{{ compliedCount }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Your Access</span>
+                    <span class="cm-fact__value">
+                        <fd-icon [glyph]="canWrite ? 'edit' : 'display'" aria-hidden="true"></fd-icon>
+                        {{ canWrite ? 'Create, change and delete' : 'Display only' }}
+                    </span>
+                </div>
+            </div>
+        }
+
+        @if (inApproval) {
+            <fd-message-strip type="information" [dismissible]="false" class="cm-list-strip">
+                The checklist is waiting for approval. Collaterals cannot be created, changed or deleted until the
+                approver approves or rejects it.
+            </fd-message-strip>
+        } @else if (checklist?.workFlowStatusCode === 4 && checklist?.rejectionReason) {
+            <fd-message-strip type="error" [dismissible]="false" class="cm-list-strip">
+                Rejected by the approver: {{ checklist?.rejectionReason }}
+            </fd-message-strip>
+        }
+
+        @if (waitMessage) {
+            <!-- Waiting state (NFR 18): message and hourglass until the list is on screen -->
+            <div class="cm-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                <span class="cm-wait__text">{{ waitMessage }}</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="cm-empty">
+                <fd-icon glyph="message-error" class="cm-empty__icon"></fd-icon>
+                <h3 class="cm-empty__title">The collaterals could not be loaded</h3>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else if (items.length) {
+            <div class="cm-table">
+                <div class="cm-table__toolbar">
+                    <span class="cm-table__title">Collaterals ({{ items.length }})</span>
+                    <span class="cm-table__hint">Double-click a collateral to display it.</span>
+                </div>
+                <div class="cm-table__scroll">
+                    <table fd-table aria-label="Collaterals of the loan">
+                        <thead fd-table-header>
+                            <tr fd-table-row>
+                                <th fd-table-cell>Checklist ID</th>
+                                <th fd-table-cell>Condition Group</th>
+                                <th fd-table-cell>Condition Description</th>
+                                <th fd-table-cell>Condition Category</th>
+                                <th fd-table-cell>Collateral Object</th>
+                                <th fd-table-cell>Compliance Status</th>
+                                <th fd-table-cell>Compliance Date</th>
+                                <th fd-table-cell class="cm-center">Waived Off</th>
+                                <th fd-table-cell>Waiver Reason</th>
+                                <th fd-table-cell>Start – End Date</th>
+                                <th fd-table-cell class="cm-center">Recurring</th>
+                                <th fd-table-cell class="cm-right">Freq.</th>
+                                <th fd-table-cell class="cm-center">Every Disb.</th>
+                                <th fd-table-cell class="cm-right">% of Disb.</th>
+                                <th fd-table-cell>Responsible Party</th>
+                                <th fd-table-cell><span class="cm-sr-only">Open</span></th>
+                            </tr>
+                        </thead>
+                        <tbody fd-table-body>
+                            @for (item of items; track item.id) {
+                                <!-- Plain rows with the fd-table classes (the row/cell directives slow down long lists) -->
+                                <tr class="fd-table__row fd-table__row--hoverable fd-table__row--activable"
+                                    [class.is-selected]="selected?.id === item.id"
+                                    (click)="select(item)" (dblclick)="open(item)">
+                                    <td class="fd-table__cell cm-strong">{{ item.checklistIdNo || 'New' }}</td>
+                                    <td class="fd-table__cell">{{ text('CONDITION_GROUP', item.conditionGroup) || '–' }}</td>
+                                    <td class="fd-table__cell">{{ item.conditionDescription || '–' }}</td>
+                                    <td class="fd-table__cell">{{ text('CONDITION_CATEGORY', item.conditionCategory) || '–' }}</td>
+                                    <td class="fd-table__cell">
+                                        <div>{{ text('COLLATERAL_OBJECT_TYPE', item.collateralObjectType) || '–' }}</div>
+                                        <div class="cm-muted">{{ item.collateralObjectType }}</div>
+                                    </td>
+                                    <td class="fd-table__cell cm-nowrap">
+                                        @if (item.complianceStatus) {
+                                            <span fd-object-status [status]="statusState(item)" [label]="statusText(item)"></span>
+                                        } @else {
+                                            <span class="cm-muted">–</span>
+                                        }
+                                    </td>
+                                    <td class="fd-table__cell cm-nowrap">{{ formatDate(item.complianceDate) || '–' }}</td>
+                                    <td class="fd-table__cell cm-center">
+                                        @if (item.waivedOff) { <fd-icon glyph="accept" aria-label="Yes"></fd-icon> }
+                                    </td>
+                                    <td class="fd-table__cell">{{ item.waiverReason || '' }}</td>
+                                    <td class="fd-table__cell cm-nowrap">{{ period(item) || '–' }}</td>
+                                    <td class="fd-table__cell cm-center">
+                                        @if (item.recurring) { <fd-icon glyph="accept" aria-label="Yes"></fd-icon> }
+                                    </td>
+                                    <td class="fd-table__cell cm-right">{{ item.frequencyOfRecurrence ?? '' }}</td>
+                                    <td class="fd-table__cell cm-center">
+                                        @if (item.applicableForEveryDisbursement) { <fd-icon glyph="accept" aria-label="Yes"></fd-icon> }
+                                    </td>
+                                    <td class="fd-table__cell cm-right">{{ item.percentageOfDisbursement != null ? item.percentageOfDisbursement + ' %' : '' }}</td>
+                                    <td class="fd-table__cell">{{ text('RESPONSIBLE_PARTY', item.responsibleParty) || '–' }}</td>
+                                    <td class="fd-table__cell">
+                                        <button fd-button fdType="transparent" glyph="slim-arrow-right"
+                                            [attr.aria-label]="'Open collateral ' + itemLabel(item)" title="Open"
+                                            (click)="open(item); $event.stopPropagation()"></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        } @else {
+            <div class="cm-empty">
+                <fd-icon glyph="checklist" class="cm-empty__icon"></fd-icon>
+                <h3 class="cm-empty__title">No collaterals for this loan yet</h3>
+                @if (canChange) {
+                    <p class="cm-empty__text">Use Create to add the first collateral.</p>
+                    <button fd-button fdType="emphasized" glyph="add" label="Create" (click)="create()"></button>
+                } @else {
+                    <p class="cm-empty__text">You have display access only.</p>
+                }
+            </div>
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

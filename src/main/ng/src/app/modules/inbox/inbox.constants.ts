@@ -4,6 +4,7 @@ export const TASK_OVERDUE_DAYS = 7;
 const PROCESS_LABELS: Record<string, string> = {
     'BusinessPartner': 'Business Partner',
     'ReferenceInterestRateValue': 'Reference Interest Rate',
+    'CollateralManagement': 'Collateral Management',
 };
 
 const PROCESS_COLORS: Record<string, number> = {
@@ -15,6 +16,7 @@ const PROCESS_COLORS: Record<string, number> = {
     'Sanction': 6,
     'BusinessPartner': 7,
     'ReferenceInterestRateValue': 8,
+    'CollateralManagement': 3,
 };
 
 /**

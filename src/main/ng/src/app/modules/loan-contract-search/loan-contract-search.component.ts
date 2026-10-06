@@ -74,6 +74,7 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
         { label: 'BMC Approval', open: () => this.redirectToBmcApproval() },
         { label: 'Board Approval', open: () => this.redirectToBoardApproval() },
         { label: 'Sanction', open: () => this.redirectToSanction() },
+        { label: 'Collaterals', open: () => this.redirectToCollaterals() },
     ];
 
     /**
@@ -295,6 +296,14 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 this.messageService.showError('An error occurred while processing the enquiry.');
             }
         }
+    }
+
+    /**
+     * Redirect to Collateral Management (collateral list of the selected loan)
+     */
+    redirectToCollaterals(): void {
+        const loanApplication = this.loanContractSearchService.selectedEnquiry$.value.loanApplication;
+        this.router.navigate(['/collateral-management/loan', loanApplication.id]);
     }
 
     /**

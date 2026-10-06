@@ -1,0 +1,82 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 fd-title class="fd-dialog-header-title cm-dialog__title">
+            <fd-icon [glyph]="data.grid.icon" aria-hidden="true"></fd-icon>
+            {{ title }}
+            <span class="cm-dialog__mode" [class.cm-dialog__mode--edit]="edit">{{ modeText }}</span>
+        </h1>
+    </fd-dialog-header>
+
+    <fd-dialog-body>
+        <div class="cm-dialog__body">
+            @if (errorMessage) {
+                <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="cm-dialog__strip">
+                    {{ errorMessage }}
+                </fd-message-strip>
+            }
+            <form [formGroup]="form" (ngSubmit)="save()" novalidate class="cm-dialog__grid">
+                @for (def of fields; track def.key) {
+                    <app-collateral-field [def]="def" [form]="form" [edit]="edit" [options]="options(def)"
+                        [style.grid-column]="'span ' + (def.span ?? 6)"></app-collateral-field>
+                }
+            </form>
+
+            @if (data.grid.upload) {
+                <!-- The document itself: stored in the portal file storage like the Post Exec document -->
+                <div class="cm-dialog__upload">
+                    <span class="cm-dialog__upload-label">Document</span>
+                    <div class="cm-dialog__upload-row">
+                        @if (fileReference) {
+                            <a class="cm-dialog__file" [href]="fileUrl" target="_blank" rel="noopener">
+                                <fd-icon glyph="attachment" aria-hidden="true"></fd-icon>{{ fileName }}
+                            </a>
+                        } @else if (sapDocumentId) {
+                            <span class="cm-muted">Kept in SAP (component ID {{ sapDocumentId }})</span>
+                        } @else {
+                            <span class="cm-muted">No document uploaded</span>
+                        }
+                        @if (edit) {
+                            <button type="button" fd-button fdType="standard" glyph="upload"
+                                [label]="fileReference ? 'Replace Document' : 'Upload Document'"
+                                [disabled]="saving || !!uploading" (click)="chooseFile()"></button>
+                            @if (fileReference) {
+                                <button type="button" fd-button fdType="transparent" glyph="delete" label="Remove"
+                                    [disabled]="saving || !!uploading" (click)="removeFile()"></button>
+                            }
+                            <input #fileInput type="file" class="cm-sr-only" tabindex="-1" aria-hidden="true"
+                                (change)="upload($event)" />
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (uploading) {
+                <!-- Waiting for the Java layer (NFR 18) -->
+                <div class="cm-dialog__wait" role="status" aria-live="polite">
+                    <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                    <span>Uploading {{ uploading }}. Please wait</span>
+                </div>
+            }
+
+            @if (saving) {
+                <!-- Waiting for the Java layer (NFR 18) -->
+                <div class="cm-dialog__wait" role="status" aria-live="polite">
+                    <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                    <span>Saving {{ data.grid.rowLabel }}. Please wait</span>
+                </div>
+            }
+        </div>
+    </fd-dialog-body>
+
+    <fd-dialog-footer>
+        @if (edit) {
+            <fd-button-bar fdType="emphasized" glyph="save" label="Save" [disabled]="saving || !!uploading" (click)="save()"></fd-button-bar>
+            <fd-button-bar fdType="transparent" label="Cancel" [disabled]="saving" (click)="close()"></fd-button-bar>
+        } @else {
+            @if (data.canEdit) {
+                <fd-button-bar fdType="emphasized" glyph="edit" label="Change" (click)="change()"></fd-button-bar>
+            }
+            <fd-button-bar fdType="transparent" label="Close" (click)="close()"></fd-button-bar>
+        }
+    </fd-dialog-footer>
+</fd-dialog>

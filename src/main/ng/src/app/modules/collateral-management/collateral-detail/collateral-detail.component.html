@@ -1,0 +1,168 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="title" [subtitle]="subtitle" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                @if (edit) {
+                    <button fd-button fdType="emphasized" glyph="save" label="Save"
+                        [disabled]="saving || !!waitMessage" (click)="save()"></button>
+                    <button fd-button fdType="transparent" glyph="decline" label="Cancel"
+                        [disabled]="saving" (click)="cancel()"></button>
+                } @else if (canWrite && item) {
+                    <button fd-button fdType="emphasized" glyph="edit" label="Change"
+                        [disabled]="!!waitMessage" (click)="change()"></button>
+                }
+                <fd-toolbar-separator></fd-toolbar-separator>
+                <button fd-button fdType="transparent" glyph="nav-back" aria-label="Back to the collateral list"
+                    title="Back to the collateral list" [disabled]="saving" (click)="back()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (loadFailed) {
+            <div class="cm-empty">
+                <fd-icon glyph="message-error" class="cm-empty__icon"></fd-icon>
+                <h3 class="cm-empty__title">The collateral could not be loaded</h3>
+                <p class="cm-empty__text">It may have been deleted.</p>
+                <button fd-button fdType="emphasized" glyph="nav-back" label="Back to the list" (click)="back()"></button>
+            </div>
+        } @else if (waitMessage && !saving && !loan) {
+            <!-- First load (NFR 18): message and hourglass -->
+            <div class="cm-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                <span class="cm-wait__text">{{ waitMessage }}</span>
+            </div>
+        } @else {
+            <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+                <!-- Status line -->
+                <div class="cm-status">
+                    @if (!isNew) {
+                        <span fd-object-status [status]="complianceState" [label]="complianceText"></span>
+                    }
+                    @if (workFlowStatusDescription) {
+                        <span class="cm-muted">Checklist: {{ workFlowStatusDescription }}</span>
+                    }
+                    @if (audit) {
+                        <span class="cm-muted">{{ audit }}</span>
+                    }
+                    @if (!canWrite && !inApproval) {
+                        <span class="cm-muted"><fd-icon glyph="display" aria-hidden="true"></fd-icon> Display only</span>
+                    }
+                </div>
+
+                @if (noEditAccess && !isNew && !noEditAccessDismissed) {
+                    <fd-message-strip type="warning" [dismissible]="true" (onDismiss)="noEditAccessDismissed = true"
+                        class="cm-strip cm-no-edit-access">
+                        {{ noEditAccessText }}
+                    </fd-message-strip>
+                }
+                @if (inApproval) {
+                    <fd-message-strip type="information" [dismissible]="false" class="cm-strip">
+                        The checklist is sent for approval. Collaterals cannot be changed until the approver decides.
+                    </fd-message-strip>
+                }
+                @if (edit) {
+                    <fd-message-strip type="warning" [dismissible]="false" class="cm-strip">
+                        {{ isNew ? 'New collateral' : 'Change mode' }}: fields are editable. Save writes a change document.
+                    </fd-message-strip>
+                }
+                @if (errorMessage) {
+                    <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="cm-strip">
+                        {{ errorMessage }}
+                    </fd-message-strip>
+                }
+
+                <!-- Header block: condition details, visible on every tab -->
+                <section class="cm-block" aria-labelledby="cm-header-title">
+                    <h3 id="cm-header-title" class="cm-block__title">Condition Details</h3>
+                    <div class="cm-grid">
+                        @for (def of headerFields; track def.key) {
+                            <app-collateral-field [def]="def" [form]="form" [edit]="edit" [options]="options(def)" [partnerNames]="partnerNames"
+                                [style.grid-column]="'span ' + (def.span ?? 3)"></app-collateral-field>
+                        }
+                    </div>
+                </section>
+
+                <!-- Tabs -->
+                <nav class="cm-tabs" role="tablist" aria-label="Collateral details">
+                    @for (tab of tabs; track tab.id) {
+                        <button type="button" role="tab" class="cm-tabs__tab"
+                            [class.cm-tabs__tab--active]="tab === activeTab"
+                            [class.cm-tabs__tab--error]="tabHasError(tab)"
+                            [attr.aria-selected]="tab === activeTab"
+                            (click)="selectTab(tab)">
+                            <fd-icon [glyph]="tab.icon" aria-hidden="true"></fd-icon>
+                            {{ tab.label }}
+                            @if (tab.grid) {
+                                <span class="cm-tabs__count" [class.cm-tabs__count--active]="tab === activeTab">{{ rows(tab.grid).length }}</span>
+                            }
+                            @if (tabHasError(tab)) {
+                                <fd-icon glyph="message-error" class="cm-tabs__error" aria-label="Has errors"></fd-icon>
+                            }
+                        </button>
+                    }
+                </nav>
+
+                <div class="cm-tab-content" role="tabpanel" [attr.aria-label]="activeTab.label">
+                    @for (section of activeTab.sections; track section.title) {
+                        <section class="cm-block">
+                            <h3 class="cm-block__title">{{ section.title }}</h3>
+                            <div class="cm-grid">
+                                @for (def of section.fields; track def.key) {
+                                    <app-collateral-field [def]="def" [form]="form" [edit]="edit" [options]="options(def)" [partnerNames]="partnerNames"
+                                        [style.grid-column]="'span ' + (def.span ?? 3)"></app-collateral-field>
+                                }
+
+                                @if (activeTab.id === 'post-execution' && section.title === 'Post Execution Opinion') {
+                                    <!-- Document of the post execution opinion: stored like business partner documents -->
+                                    <div class="cm-document" style="grid-column: span 12">
+                                        <span class="cm-document__label">Document Name</span>
+                                        <div class="cm-document__row">
+                                            @if (documentName) {
+                                                @if (documentReference) {
+                                                    <a class="cm-document__link" [href]="documentUrl" target="_blank" rel="noopener">
+                                                        <fd-icon glyph="attachment" aria-hidden="true"></fd-icon>{{ documentName }}
+                                                    </a>
+                                                } @else {
+                                                    <span><fd-icon glyph="attachment" aria-hidden="true"></fd-icon> {{ documentName }}</span>
+                                                }
+                                            } @else {
+                                                <span class="cm-muted">No document uploaded</span>
+                                            }
+                                            @if (edit) {
+                                                <button type="button" fd-button fdType="standard" glyph="upload" label="Upload Document"
+                                                    [disabled]="!!waitMessage" (click)="chooseFile()"></button>
+                                                @if (documentName) {
+                                                    <button type="button" fd-button fdType="transparent" glyph="delete" label="Remove"
+                                                        (click)="removeDocument()"></button>
+                                                }
+                                                <input #fileInput type="file" class="cm-sr-only" tabindex="-1" aria-hidden="true"
+                                                    (change)="upload($event)" />
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </section>
+                    }
+
+                    @if (activeTab.grid; as grid) {
+                        <app-collateral-child-grid [grid]="grid" [rows]="rows(grid)" [lists]="lists"
+                            [itemId]="item?.id ?? null" [editable]="edit" [canWrite]="canWrite"
+                            (rowsChange)="setRows(grid, $event)"></app-collateral-child-grid>
+                    }
+                </div>
+            </form>
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>
+
+@if (waitMessage && (saving || loan)) {
+    <!-- Waiting for the Java layer (NFR 18): the page is blocked until the answer arrives -->
+    <div class="cm-overlay" role="status" aria-live="polite">
+        <div class="cm-overlay__card">
+            <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+            <span>{{ waitMessage }}</span>
+        </div>
+    </div>
+}

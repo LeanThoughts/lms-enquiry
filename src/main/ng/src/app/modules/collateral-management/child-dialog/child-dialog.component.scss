@@ -1,0 +1,87 @@
+@use '../collateral-management';
+
+.cm-dialog {
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__mode {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 400;
+        border-radius: 0.5rem;
+        color: var(--sapInformativeColor, #0a6ed1);
+        background-color: var(--sapInformationBackground, #e5f0fa);
+
+        &--edit {
+            color: var(--sapCriticalTextColor, #e9730c);
+            background-color: var(--sapWarningBackground, #fef7f1);
+        }
+    }
+
+    &__body {
+        position: relative;
+        width: min(48rem, 85vw);
+        min-height: 8rem;
+    }
+
+    &__strip {
+        margin-bottom: 0.75rem;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 0.875rem 1.25rem;
+
+        @media (max-width: 40rem) {
+            app-collateral-field {
+                grid-column: span 12 !important;
+            }
+        }
+    }
+
+    &__wait {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        background-color: rgba(255, 255, 255, 0.75);
+
+        .cm-hourglass {
+            font-size: 1.75rem;
+        }
+    }
+
+    &__upload {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-top: 0.875rem;
+    }
+
+    &__upload-label {
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__upload-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 0.75rem;
+        min-height: 2.25rem;
+    }
+
+    &__file {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        color: var(--sapLinkColor, #0a6ed1);
+        word-break: break-all;
+    }
+}

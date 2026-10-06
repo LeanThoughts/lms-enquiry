@@ -1,0 +1,78 @@
+// Shared by the field status page and its dialog
+
+.fs-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.0625rem 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.375rem;
+    white-space: nowrap;
+    border-radius: 0.75rem;
+
+    // 0 Display only
+    &--0 {
+        color: var(--sapInformativeTextColor, #0a6ed1);
+        background-color: var(--sapInformationBackground, #e5f0fa);
+        border-color: var(--sapInformativeElementColor, #0a6ed1);
+    }
+
+    // 1 Optional
+    &--1 {
+        color: var(--sapNeutralTextColor, #515559);
+        background-color: var(--sapNeutralBackground, #f4f4f4);
+        border-color: var(--sapNeutralElementColor, #6a6d70);
+    }
+
+    // 2 Mandatory
+    &--2 {
+        color: var(--sapCriticalTextColor, #b44f00);
+        background-color: var(--sapWarningBackground, #fef7f1);
+        border-color: var(--sapCriticalElementColor, #e9730c);
+    }
+
+    // 3 Hide
+    &--3 {
+        color: var(--sapContent_LabelColor, #6a6d70);
+        background-color: transparent;
+        border-color: var(--sapContent_LabelColor, #6a6d70);
+        text-decoration: line-through;
+    }
+}
+
+.fs-native-select {
+    width: 100%;
+    min-height: 2.25rem;
+    padding: 0 0.5rem;
+    font: inherit;
+    color: var(--sapField_TextColor, #32363a);
+    border: 1px solid var(--sapField_BorderColor, #89919a);
+    border-radius: 0.25rem;
+    background-color: var(--sapField_Background, #fff);
+
+    &:focus {
+        outline: 2px solid var(--sapContent_FocusColor, #0854a0);
+        outline-offset: -2px;
+    }
+
+    &--error {
+        border-color: var(--sapField_InvalidColor, #bb0000);
+        border-width: 2px;
+    }
+}
+
+.fs-hourglass {
+    display: inline-block;
+    font-size: 1.75rem;
+    color: var(--sapBrandColor, #0a6ed1);
+    animation: fs-hourglass-flip 1.4s ease-in-out infinite;
+}
+
+@keyframes fs-hourglass-flip {
+    0% { transform: rotate(0deg); }
+    45%, 100% { transform: rotate(180deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fs-hourglass { animation: none; }
+}

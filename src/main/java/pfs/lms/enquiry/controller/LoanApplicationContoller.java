@@ -984,10 +984,10 @@ public class LoanApplicationContoller {
                             loanApplication.setFunctionalStatusDescription("Appraisal Stage");
                             break;
                         case 4:
-                            loanApplication.setFunctionalStatusDescription("Sanction Stage");
+                            loanApplication.setFunctionalStatusDescription("Board Approval Stage");
                             break;
                         case 5:
-                            loanApplication.setFunctionalStatusDescription("Board Approval Stage");
+                            loanApplication.setFunctionalStatusDescription("Sanction Stage");
                             break;
                         case 6:
                             loanApplication.setFunctionalStatusDescription("Loan Documentation Stage");

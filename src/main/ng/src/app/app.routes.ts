@@ -9,6 +9,8 @@ import referenceInterestRateRoutes from './modules/reference-interest-rate/refer
 import businessPartnerSearchRoutes from './modules/business-partner-search/business-partner-search.routes';
 import userManagementRoutes from './modules/user-management/user-management.routes';
 import workflowApproverRoutes from './modules/workflow-approver/workflow-approver.routes';
+import collateralManagementRoutes from './modules/collateral-management/collateral-management.routes';
+import configurationRoutes from './modules/configuration/configuration.routes';
 
 export const routes: Routes = [
 
@@ -33,6 +35,8 @@ export const routes: Routes = [
             ...businessPartnerSearchRoutes,
             ...userManagementRoutes,
             ...workflowApproverRoutes,
+            ...collateralManagementRoutes,
+            ...configurationRoutes,
         ]
     },
 

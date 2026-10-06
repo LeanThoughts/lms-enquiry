@@ -1,0 +1,142 @@
+// Shared styles of the Collateral Management pages (imported by the page components).
+$label: var(--sapContent_LabelColor, #6a6d70);
+$border: var(--sapList_BorderColor, #e5e5e5);
+$surface: var(--sapList_Background, #fff);
+
+.cm-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 3rem;
+    padding: 0.25rem 0 1rem;
+}
+
+.cm-fact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+
+    &__label {
+        font-size: 0.8125rem;
+        color: $label;
+    }
+
+    &__value {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        &--strong {
+            font-weight: 700;
+        }
+
+        &--kpi {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--sapBrandColor, #0a6ed1);
+        }
+
+        &--positive {
+            color: var(--sapPositiveColor, #107e3e);
+        }
+    }
+}
+
+/* Waiting state (NFR 18): message with the hourglass ("sandclock") icon */
+.cm-wait {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 18rem;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    &__text {
+        font-size: 1rem;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    .cm-hourglass {
+        font-size: 2.5rem;
+    }
+}
+
+.cm-hourglass {
+    display: inline-block;
+    color: var(--sapBrandColor, #0a6ed1);
+    animation: cm-hourglass-flip 1.4s ease-in-out infinite;
+}
+
+@keyframes cm-hourglass-flip {
+    0% {
+        transform: rotate(0deg);
+    }
+    45%,
+    100% {
+        transform: rotate(180deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cm-hourglass {
+        animation: none;
+    }
+}
+
+.cm-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: $label;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    &__icon {
+        font-size: 2rem;
+    }
+
+    &__title {
+        margin: 0.25rem 0 0;
+        font-size: 1rem;
+        color: var(--sapTextColor, #32363a);
+    }
+
+    &__text {
+        margin: 0 0 0.5rem;
+    }
+}
+
+.cm-muted {
+    font-size: 0.8125rem;
+    color: $label;
+}
+
+.cm-strong {
+    font-weight: 700;
+}
+
+.cm-nowrap {
+    white-space: nowrap;
+}
+
+.cm-center {
+    text-align: center;
+}
+
+.cm-right {
+    text-align: right;
+}
+
+.cm-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}

@@ -1,0 +1,210 @@
+// Configuration workspace. Only SAP theme variables of the application (Fundamental NGX / SAP Fiori), so the workspace
+// looks like the other pages and follows the theme the user selects (Horizon, Quartz, dark, high contrast, …).
+.cfg-shell {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 3.25rem);
+    min-height: 32rem;
+    background: var(--sapBackgroundColor);
+    color: var(--sapTextColor);
+    font-family: var(--sapFontFamily);
+
+    // Page header, as the dynamic page header of the other pages
+    // header, tabs and bar keep their height; the app list and the app scroll
+    &__header,
+    &__tabs,
+    &__bar {
+        flex-shrink: 0;
+    }
+
+    &__header {
+        padding: 1rem 2rem 0.75rem;
+        background: var(--sapObjectHeader_Background);
+    }
+
+    &__title {
+        margin: 0;
+        color: var(--sapGroup_TitleTextColor, var(--sapTextColor));
+        font-family: var(--sapFontHeaderFamily, var(--sapFontFamily));
+        font-size: var(--sapFontHeader3Size, 1.5rem);
+        font-weight: 400;
+    }
+
+    &__subtitle {
+        margin-top: 0.25rem;
+        color: var(--sapContent_LabelColor);
+        font-size: var(--sapFontSize);
+    }
+
+    // Module tabs, as an icon tab bar (text only)
+    &__tabs {
+        display: flex;
+        gap: 0.25rem;
+        padding: 0 2rem;
+        background: var(--sapObjectHeader_Background);
+        border-bottom: 1px solid var(--sapObjectHeader_BorderColor, var(--sapGroup_TitleBorderColor));
+        box-shadow: var(--sapContent_HeaderShadow);
+        overflow-x: auto;
+    }
+
+    &__tab {
+        position: relative;
+        flex: 0 0 auto;
+        padding: 0.75rem 1rem;
+        border: 0;
+        background: transparent;
+        color: var(--sapContent_LabelColor);
+        font: inherit;
+        font-size: var(--sapFontSize);
+        cursor: pointer;
+
+        &:hover { color: var(--sapTextColor); }
+        &:focus-visible { outline: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle) var(--sapContent_FocusColor); outline-offset: -0.25rem; }
+
+        &.is-selected {
+            color: var(--sapSelectedColor);
+            font-family: var(--sapFontBoldFamily, var(--sapFontFamily));
+
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0.5rem;
+                right: 0.5rem;
+                bottom: 0;
+                height: 0.1875rem;
+                border-radius: 0.125rem 0.125rem 0 0;
+                background: var(--sapSelectedColor);
+            }
+        }
+    }
+
+    &__count {
+        margin-left: 0.375rem;
+        color: var(--sapContent_LabelColor);
+        font-family: var(--sapFontFamily);
+        font-size: var(--sapFontSmallSize);
+    }
+
+    &__body {
+        display: flex;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    // Apps of the module, as a navigation list
+    &__apps {
+        flex: 0 0 15rem;
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem 0;
+        background: var(--sapList_Background);
+        border-right: 1px solid var(--sapList_BorderColor);
+        overflow-y: auto;
+    }
+
+    &__app {
+        display: block;
+        padding: 0.75rem 1rem;
+        border-left: 0.1875rem solid transparent;
+        color: var(--sapList_TextColor);
+        font-size: var(--sapFontSize);
+        text-decoration: none;
+
+        &:hover { background: var(--sapList_Hover_Background); }
+        &:focus-visible { outline: var(--sapContent_FocusWidth) var(--sapContent_FocusStyle) var(--sapContent_FocusColor); outline-offset: -0.25rem; }
+
+        &.is-selected {
+            background: var(--sapList_SelectionBackgroundColor);
+            border-left-color: var(--sapList_SelectionBorderColor);
+            font-family: var(--sapFontBoldFamily, var(--sapFontFamily));
+        }
+    }
+
+    &__group {
+        padding: 0.875rem 1rem 0.25rem;
+        color: var(--sapContent_LabelColor);
+        font-size: var(--sapFontSmallSize);
+        font-family: var(--sapFontBoldFamily, var(--sapFontFamily));
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+
+        &:first-child { padding-top: 0.25rem; }
+    }
+
+    &__no-apps {
+        padding: 0.75rem 1rem;
+        color: var(--sapContent_LabelColor);
+        font-style: italic;
+    }
+
+    &__main {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    // "Display / Edit Configuration: <app>", as a toolbar above the app
+    &__bar {
+        padding: 0.625rem 2rem;
+        background: var(--sapToolbar_Background, var(--sapObjectHeader_Background));
+        border-bottom: 1px solid var(--sapToolbar_SeparatorColor, var(--sapGroup_TitleBorderColor));
+    }
+
+    &__bar-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--sapGroup_TitleTextColor, var(--sapTextColor));
+        font-size: var(--sapFontHeader5Size, 1rem);
+        font-family: var(--sapFontBoldFamily, var(--sapFontFamily));
+    }
+
+    &__bar-text {
+        margin-top: 0.125rem;
+        color: var(--sapContent_LabelColor);
+        font-size: var(--sapFontSmallSize);
+    }
+
+    &__content {
+        position: relative;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
+        background: var(--sapBackgroundColor);
+
+        // The bar above names the app: the hosted page keeps only its actions (Change, Save, …)
+        .fd-dynamic-page__title,
+        .fd-dynamic-page__subtitle { display: none; }
+        .fd-dynamic-page__title-container,
+        .fd-dynamic-page__main-container { margin-top: 0 !important; }
+        > :not(router-outlet) { display: block; height: 100%; }
+    }
+}
+
+.cfg-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 100%;
+    min-height: 16rem;
+    color: var(--sapContent_LabelColor);
+
+    &__icon, &__icon::before { font-size: 3rem; color: var(--sapContent_NonInteractiveIconColor); }
+    &__title { font-size: var(--sapFontHeader5Size, 1rem); font-family: var(--sapFontBoldFamily, var(--sapFontFamily)); color: var(--sapTextColor); }
+}
+
+@media (max-width: 48rem) {
+    .cfg-shell {
+        height: auto;
+
+        &__header, &__tabs, &__bar { padding-left: 1rem; padding-right: 1rem; }
+        &__body { flex-direction: column; }
+        &__apps { flex: 0 0 auto; flex-direction: row; padding: 0; border-right: 0; border-bottom: 1px solid var(--sapList_BorderColor); overflow-x: auto; }
+        &__app { white-space: nowrap; border-left: 0; border-bottom: 0.1875rem solid transparent; }
+        &__group { display: none; }
+        &__app.is-selected { border-bottom-color: var(--sapList_SelectionBorderColor); }
+    }
+}

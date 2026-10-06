@@ -1,0 +1,73 @@
+<section class="cm-grid-table" [attr.aria-label]="grid.title">
+    <div class="cm-grid-table__toolbar">
+        <h3 class="cm-grid-table__title">{{ grid.title }} ({{ rows.length }})</h3>
+        <span class="cm-grid-table__spacer"></span>
+        @if (canChange) {
+            <button fd-button fdType="emphasized" glyph="add" label="Create" (click)="create()"></button>
+            <button fd-button fdType="standard" glyph="edit" label="Change" [disabled]="!selected" (click)="change()"></button>
+            <button fd-button fdType="standard" glyph="delete" label="Delete" [disabled]="!selected || deleting"
+                (click)="remove()"></button>
+        }
+        <button fd-button fdType="transparent" glyph="display" label="Display" [disabled]="!selected || !itemId"
+            (click)="display()"></button>
+    </div>
+
+    @if (!itemId) {
+        <div class="cm-grid-table__empty">
+            <fd-icon glyph="message-information" aria-hidden="true"></fd-icon>
+            Save the new collateral first; then {{ grid.title }} entries can be added.
+        </div>
+    } @else if (rows.length) {
+        <div class="cm-grid-table__scroll">
+            <table fd-table [attr.aria-label]="grid.title">
+                <thead fd-table-header>
+                    <tr fd-table-row>
+                        @for (column of grid.columns; track column.key) {
+                            <th fd-table-cell [class.cm-grid-table__number]="column.type === 'number'">{{ column.label }}</th>
+                        }
+                        <th fd-table-cell><span class="cm-sr-only">Display</span></th>
+                    </tr>
+                </thead>
+                <tbody fd-table-body>
+                    @for (row of rows; track row['id']) {
+                        <tr class="fd-table__row fd-table__row--hoverable fd-table__row--activable"
+                            [class.is-selected]="isSelected(row)"
+                            (click)="select(row)" (dblclick)="display(row)">
+                            @for (column of grid.columns; track column.key) {
+                                <td class="fd-table__cell" [class.cm-grid-table__number]="column.type === 'number'">
+                                    @if (column.type === 'file') {
+                                        @if (row['fileReference']) {
+                                            <a class="cm-grid-table__file" [href]="fileUrl(row)" target="_blank" rel="noopener"
+                                                (click)="$event.stopPropagation()" (dblclick)="$event.stopPropagation()">
+                                                <fd-icon glyph="attachment" aria-hidden="true"></fd-icon>{{ row['fileName'] || 'Document' }}
+                                            </a>
+                                        } @else if (row['bdsDocumentId']) {
+                                            <span class="cm-grid-table__muted" [title]="'SAP component ID ' + row['bdsDocumentId']">In SAP</span>
+                                        } @else {
+                                            –
+                                        }
+                                    } @else {
+                                        {{ cell(row, column) || '–' }}
+                                    }
+                                </td>
+                            }
+                            <td class="fd-table__cell cm-grid-table__open">
+                                <button fd-button fdType="transparent" glyph="slim-arrow-right" aria-label="Display"
+                                    title="Display" (click)="display(row); $event.stopPropagation()"></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="cm-grid-table__hint">Double-click a row to display it.</div>
+    } @else {
+        <div class="cm-grid-table__empty">
+            <fd-icon [glyph]="grid.icon" aria-hidden="true"></fd-icon>
+            <span>
+                No {{ grid.title }} entries yet.
+                {{ canChange ? grid.emptyText : (canWrite ? 'Choose Change on the collateral to add entries.' : '') }}
+            </span>
+        </div>
+    }
+</section>

@@ -1,0 +1,232 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Business Partner Entity Set Fields"
+        subtitle="Field status, key field and minimum entries of the entity sets (bank details, identifications, …) per business partner role"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                @if (edit) {
+                    <button fd-button fdType="emphasized" glyph="save" [label]="changedCount ? 'Save (' + changedCount + ')' : 'Save'"
+                        [disabled]="!!busy" (click)="save()"></button>
+                    <button fd-button fdType="transparent" glyph="decline" label="Cancel" [disabled]="!!busy"
+                        (click)="cancel()"></button>
+                } @else {
+                    <button fd-button fdType="transparent" glyph="refresh" label="Refresh"
+                        [disabled]="!!waitMessage || !!busy" (click)="refresh()"></button>
+                    @if (canChange) {
+                        <button fd-button fdType="emphasized" glyph="edit" label="Change"
+                            [disabled]="!data || !!busy" (click)="change()"></button>
+                    }
+                }
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (overview && !canChange && !noEditAccessDismissed) {
+            <fd-message-strip type="warning" [dismissible]="true" (onDismiss)="noEditAccessDismissed = true"
+                class="es-strip">{{ noEditAccessText }}</fd-message-strip>
+        }
+
+        @if (waitMessage) {
+            <div class="es-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                <span>{{ waitMessage }}</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="es-wait">
+                <fd-icon glyph="message-error" class="es-wait__error" aria-hidden="true"></fd-icon>
+                <span>The business partner entity set fields could not be loaded.</span>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else if (overview) {
+            <!-- Selection: role and entity set -->
+            <section class="es-select" aria-label="Role and entity set">
+                <div class="es-select__field">
+                    <label fd-form-label for="es-role">Business Partner Role</label>
+                    <select #roleSelect id="es-role" class="fs-native-select" [disabled]="!!busy"
+                        (change)="chooseRole(roleSelect.value, roleSelect)">
+                        @for (role of overview.roles; track role.code) {
+                            <option [value]="role.code" [selected]="role.code === roleCode">
+                                {{ role.code }} {{ role.description || '' }} — {{ count(role.code) ? count(role.code) + ' fields' : 'not configured' }}
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="es-select__field">
+                    <label fd-form-label for="es-set">Entity Set</label>
+                    <select #setSelect id="es-set" class="fs-native-select" [disabled]="!!busy"
+                        (change)="chooseEntitySet(setSelect.value, setSelect)">
+                        @for (set of overview.entitySets; track set) {
+                            <option [value]="set" [selected]="set === entitySet">
+                                {{ set }} — {{ count(roleCode, set) ? count(roleCode, set) + ' fields' : 'not configured' }}
+                            </option>
+                        }
+                    </select>
+                </div>
+                <p class="es-select__hint">
+                    Entity fields (Partner, CustomerDetail, …) are maintained in
+                    <a class="es-link" [routerLink]="['/configuration/bupa-field-status']" [queryParams]="{ role: roleCode }">BP Field Status</a>.
+                </p>
+            </section>
+
+            @if (data) {
+                <section class="es-main" [attr.aria-label]="data.entitySet + ' of role ' + data.roleCode">
+                    <div class="es-main__head">
+                        <div>
+                            <h3 class="es-main__title">{{ data.entitySet }}</h3>
+                            <span class="es-main__meta">Role {{ data.roleCode }} {{ data.roleDescription || '' }} ·
+                                {{ data.fields.length }} fields · {{ keyValues.length }} key field value{{ keyValues.length === 1 ? '' : 's' }}</span>
+                        </div>
+                        @if (edit) {
+                            <div class="es-main__actions">
+                                <button fd-button fdType="standard" glyph="add" label="Add Field"
+                                    [disabled]="changedCount > 0 || !!busy"
+                                    [title]="changedCount ? 'Save or cancel your changes first' : ''" (click)="openDialog('set')"></button>
+                                <button fd-button fdType="transparent" glyph="copy" label="Copy from Role"
+                                    [disabled]="changedCount > 0 || !!busy"
+                                    [title]="changedCount ? 'Save or cancel your changes first' : 'Add the ' + data.entitySet + ' fields of another role'"
+                                    (click)="openDialog('copy')"></button>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="es-filters">
+                        <select class="fs-native-select es-filters__key" aria-label="Key field value"
+                            (change)="setKeyFilter($any($event.target).value)">
+                            <option value="" [selected]="!keyFilter">All key field values</option>
+                            @for (value of keyValues; track value) {
+                                <option [value]="value" [selected]="value === keyFilter">{{ keyLabel(value) }}</option>
+                            }
+                        </select>
+                        <input fd-form-control type="search" class="es-filters__search" placeholder="Search field"
+                            aria-label="Search field" [value]="fieldSearch" (input)="setFieldSearch($any($event.target).value)" />
+                        <div class="es-chips" role="group" aria-label="Filter by field status">
+                            @for (status of statuses; track status.value) {
+                                <button type="button" class="es-chip fs-status fs-status--{{ status.value }}"
+                                    [class.is-active]="statusFilter === status.value" [attr.aria-pressed]="statusFilter === status.value"
+                                    (click)="setStatusFilter(status.value)">
+                                    {{ status.label }} <b>{{ statusCounts[status.value] }}</b>
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                    @if (edit && selected.size) {
+                        <div class="es-bulk" role="toolbar" aria-label="Change selected fields">
+                            <span><b>{{ selected.size }}</b> selected · Set field status:</span>
+                            @for (status of statuses; track status.value) {
+                                <button type="button" class="es-chip fs-status fs-status--{{ status.value }}"
+                                    (click)="setSelectedStatus(status.value)">{{ status.label }}</button>
+                            }
+                            <button fd-button fdType="transparent" label="Clear selection" (click)="selected.clear()"></button>
+                        </div>
+                    }
+
+                    <div class="es-table-wrap">
+                        @if (visibleCount) {
+                            <table class="fd-table es-table">
+                                <thead class="fd-table__header">
+                                    <tr class="fd-table__row">
+                                        @if (edit) {
+                                            <th class="fd-table__cell es-table__check">
+                                                <input type="checkbox" aria-label="Select all shown fields"
+                                                    [checked]="allVisibleSelected" (change)="toggleAllVisible()" />
+                                            </th>
+                                        }
+                                        <th class="fd-table__cell">Field Name</th>
+                                        <th class="fd-table__cell es-table__center">Key Field</th>
+                                        <th class="fd-table__cell es-table__num">Min. Entries</th>
+                                        <th class="fd-table__cell es-table__status">Field Status</th>
+                                        @if (edit) {
+                                            <th class="fd-table__cell es-table__action"><span class="es-sr-only">Delete</span></th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody class="fd-table__body">
+                                    @for (group of groups; track group.keyFieldValue) {
+                                        <tr class="es-group">
+                                            <td [attr.colspan]="edit ? 6 : 4">{{ keyLabel(group.keyFieldValue) }} <span>{{ group.rows.length }}</span></td>
+                                        </tr>
+                                        @for (row of group.rows; track row.id) {
+                                            <tr class="fd-table__row" [class.is-changed]="isChanged(row)">
+                                                @if (edit) {
+                                                    <td class="fd-table__cell es-table__check">
+                                                        <input type="checkbox" [attr.aria-label]="'Select ' + row.fieldName"
+                                                            [checked]="selected.has(row.id)" (change)="toggleSelected(row.id)" />
+                                                    </td>
+                                                }
+                                                <td class="fd-table__cell">{{ row.fieldName }}</td>
+                                                <td class="fd-table__cell es-table__center">
+                                                    @if (edit) {
+                                                        <input type="checkbox" [attr.aria-label]="'Key field ' + row.fieldName"
+                                                            [checked]="row.keyField" (change)="setKeyField(row, $any($event.target).checked)" />
+                                                    } @else if (row.keyField) {
+                                                        <fd-icon glyph="key" aria-label="Key field"></fd-icon>
+                                                    }
+                                                </td>
+                                                <td class="fd-table__cell es-table__num">
+                                                    @if (edit) {
+                                                        <input fd-form-control type="number" min="0" max="999" step="1" class="es-min"
+                                                            [attr.aria-label]="'Minimum entries ' + row.fieldName"
+                                                            [value]="row.minimumEntries ?? 0" (change)="setMinimum(row, $any($event.target).value)" />
+                                                    } @else {
+                                                        {{ row.minimumEntries ?? 0 }}
+                                                    }
+                                                </td>
+                                                <td class="fd-table__cell es-table__status">
+                                                    @if (edit) {
+                                                        <select class="fs-native-select es-status-select fs-status fs-status--{{ row.fieldStatus }}"
+                                                            [attr.aria-label]="'Field status of ' + row.fieldName"
+                                                            (change)="setStatus(row, $any($event.target).value)">
+                                                            @for (status of statuses; track status.value) {
+                                                                <option [value]="status.value" [selected]="status.value === row.fieldStatus">{{ status.label }}</option>
+                                                            }
+                                                        </select>
+                                                    } @else {
+                                                        <span class="fs-status fs-status--{{ row.fieldStatus }}">{{ statusLabel(row.fieldStatus) }}</span>
+                                                    }
+                                                </td>
+                                                @if (edit) {
+                                                    <td class="fd-table__cell es-table__action">
+                                                        <button fd-button fdType="transparent" glyph="delete" [attr.aria-label]="'Delete ' + row.fieldName"
+                                                            [title]="changedCount ? 'Save or cancel your changes first' : 'Delete'"
+                                                            [disabled]="changedCount > 0 || !!busy" (click)="remove(row)"></button>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        } @else {
+                            <div class="es-empty">
+                                <fd-icon glyph="hint" aria-hidden="true"></fd-icon>
+                                @if (data.fields.length) {
+                                    <span>No field matches the filter.</span>
+                                } @else {
+                                    <span>
+                                        Role {{ data.roleCode }} has no {{ data.entitySet }} fields.
+                                        @if (canChange) { Choose Change, then Add Field or Copy from Role. }
+                                    </span>
+                                }
+                            </div>
+                        }
+                        @if (busy) {
+                            <div class="es-busy" role="status" aria-live="polite">
+                                <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                                <span>{{ busy }}</span>
+                            </div>
+                        }
+                    </div>
+                </section>
+            } @else if (busy) {
+                <div class="es-wait" role="status" aria-live="polite">
+                    <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                    <span>{{ busy }}</span>
+                </div>
+            } @else {
+                <div class="es-empty">No entity set fields are maintained yet.</div>
+            }
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

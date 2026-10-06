@@ -1,0 +1,111 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 fd-title class="fd-dialog-header-title cm-ps__title">
+            <fd-icon glyph="search" aria-hidden="true"></fd-icon>
+            Search Partner – {{ data.fieldLabel }}
+        </h1>
+        <button fd-dialog-close-button (click)="cancel()"></button>
+    </fd-dialog-header>
+
+    <fd-dialog-body>
+        <div class="cm-ps">
+            <form [formGroup]="form" (ngSubmit)="search()" class="cm-ps__criteria" novalidate>
+                <div fd-form-item>
+                    <label fd-form-label for="cm-ps-name1">Name 1</label>
+                    <input fd-form-control id="cm-ps-name1" type="text" formControlName="name1" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="cm-ps-name2">Name 2</label>
+                    <input fd-form-control id="cm-ps-name2" type="text" formControlName="name2" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label>Default Partner Role</label>
+                    <fd-select formControlName="defaultPartnerRole" placeholder="Any role" aria-label="Default Partner Role">
+                        <li fd-option [value]="null">Any role</li>
+                        @for (role of roles; track role.code) {
+                            <li fd-option [value]="role.code">{{ role.code }} {{ role.description }}</li>
+                        }
+                    </fd-select>
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="cm-ps-st1">Search Term 1</label>
+                    <input fd-form-control id="cm-ps-st1" type="text" formControlName="searchTerm1" />
+                </div>
+                <div fd-form-item>
+                    <label fd-form-label for="cm-ps-st2">Search Term 2</label>
+                    <input fd-form-control id="cm-ps-st2" type="text" formControlName="searchTerm2" />
+                </div>
+                <div class="cm-ps__buttons">
+                    <button fd-button type="submit" fdType="emphasized" glyph="search" label="Search" [disabled]="searching"></button>
+                    <button fd-button type="button" fdType="transparent" label="Clear" [disabled]="searching" (click)="clear()"></button>
+                </div>
+            </form>
+
+            @if (errorMessage) {
+                <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="cm-ps__strip">
+                    {{ errorMessage }}
+                </fd-message-strip>
+            }
+
+            <div class="cm-ps__results">
+                @if (searching) {
+                    <!-- Waiting for the Java layer (NFR 18) -->
+                    <div class="cm-ps__info" role="status" aria-live="polite">
+                        <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                        Searching partners. Please wait
+                    </div>
+                } @else if (results.length) {
+                    <div class="cm-ps__count">
+                        {{ results.length }} partner{{ results.length === 1 ? '' : 's' }} found{{ results.length >= maxResults ? ' (first ' + maxResults + ' shown; refine the search)' : '' }}.
+                        Double-click a partner to choose it.
+                    </div>
+                    <div class="cm-ps__scroll">
+                        <table fd-table aria-label="Partners">
+                            <thead fd-table-header>
+                                <tr fd-table-row>
+                                    <th fd-table-cell>Party Number</th>
+                                    <th fd-table-cell>Name 1</th>
+                                    <th fd-table-cell>Name 2</th>
+                                    <th fd-table-cell>Default Partner Role</th>
+                                    <th fd-table-cell>Search Term 1</th>
+                                    <th fd-table-cell>Search Term 2</th>
+                                    <th fd-table-cell>City</th>
+                                </tr>
+                            </thead>
+                            <tbody fd-table-body>
+                                @for (partner of results; track partner.id) {
+                                    <tr class="fd-table__row fd-table__row--hoverable fd-table__row--activable"
+                                        [class.is-selected]="selected?.id === partner.id"
+                                        (click)="select(partner)" (dblclick)="choose(partner)">
+                                        <td class="fd-table__cell cm-ps__number">{{ partner.partyNumber }}</td>
+                                        <td class="fd-table__cell">{{ partner.partyName1 || '–' }}</td>
+                                        <td class="fd-table__cell">{{ partner.partyName2 || '' }}</td>
+                                        <td class="fd-table__cell">{{ roleText(partner) || '–' }}</td>
+                                        <td class="fd-table__cell">{{ partner.searchTerm1 || '' }}</td>
+                                        <td class="fd-table__cell">{{ partner.searchTerm2 || '' }}</td>
+                                        <td class="fd-table__cell">{{ partner.city || '' }}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                } @else if (searched) {
+                    <div class="cm-ps__info">
+                        <fd-icon glyph="search" aria-hidden="true"></fd-icon>
+                        No partners match the search criteria.
+                    </div>
+                } @else {
+                    <div class="cm-ps__info">
+                        <fd-icon glyph="message-information" aria-hidden="true"></fd-icon>
+                        Enter one or more criteria and choose Search.
+                    </div>
+                }
+            </div>
+        </div>
+    </fd-dialog-body>
+
+    <fd-dialog-footer>
+        <fd-button-bar fdType="emphasized" label="Select" [disabled]="!selected" (click)="choose()"></fd-button-bar>
+        <fd-button-bar fdType="transparent" label="Cancel" (click)="cancel()"></fd-button-bar>
+    </fd-dialog-footer>
+</fd-dialog>

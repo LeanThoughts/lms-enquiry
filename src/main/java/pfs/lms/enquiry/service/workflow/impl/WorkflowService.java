@@ -548,6 +548,7 @@ public class WorkflowService implements IWorkflowService {
                 bmcIccApproval.setWorkFlowStatusDescription("Approved");
                 loanEnquiryId = bmcIccApproval.getLoanApplication().getEnquiryNo().getId().toString();
                 processInstanceId = bmcIccApproval.getProcessInstanceId();
+                break;
             case "Sanction":
                 //Fetch the Entity
                 sanction = sanctionRepository.getOne(businessProcessId);

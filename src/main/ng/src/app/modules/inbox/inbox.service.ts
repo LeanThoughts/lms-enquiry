@@ -49,6 +49,9 @@ export class InboxService implements Resolve<any> {
      * Approve task
      */
     approveTask(workFlowProcessRequestResource: any): Observable<any> {
+        if (workFlowProcessRequestResource?.processName === 'CollateralManagement') {
+            return this.http.put(environment.primaryApiHost + '/collaterals/workflow/approvetask', workFlowProcessRequestResource);
+        }
         return this.http.put(environment.primaryApiHost + '/approvetask', workFlowProcessRequestResource);
     }
     
@@ -56,6 +59,9 @@ export class InboxService implements Resolve<any> {
      * Reject task
      */
     rejectTask(workFlowProcessRequestResource: any): Observable<any> {
+        if (workFlowProcessRequestResource?.processName === 'CollateralManagement') {
+            return this.http.put(environment.primaryApiHost + '/collaterals/workflow/rejecttask', workFlowProcessRequestResource);
+        }
         return this.http.put(environment.primaryApiHost + '/rejecttask', workFlowProcessRequestResource);
     }
 }

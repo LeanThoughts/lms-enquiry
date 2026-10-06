@@ -17,6 +17,7 @@ const PROCESSES: { name: string; label: string }[] = [
     { name: 'Monitoring', label: 'Monitoring' },
     { name: 'BusinessPartner', label: 'Business Partner' },
     { name: 'ReferenceInterestRateValue', label: 'Reference Interest Rate' },
+    { name: 'CollateralManagement', label: 'Collateral Management' },
 ];
 
 @Injectable({

@@ -1,0 +1,122 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Checklist ID Number Range"
+        subtitle="Collateral Management · numbering of the Checklist ID No. (SAP ZID_NO)" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                @if (edit) {
+                    <button fd-button fdType="emphasized" glyph="save" label="Save" [disabled]="!!waitMessage"
+                        (click)="save()"></button>
+                    <button fd-button fdType="transparent" glyph="decline" label="Cancel" [disabled]="!!waitMessage"
+                        (click)="cancel()"></button>
+                } @else {
+                    <button fd-button fdType="transparent" glyph="refresh" label="Refresh" [disabled]="!!waitMessage"
+                        (click)="load()"></button>
+                    @if (config?.canChange) {
+                        <button fd-button fdType="emphasized" glyph="edit" label="Change"
+                            [disabled]="!!waitMessage || !config" (click)="change()"></button>
+                    }
+                }
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (config && !config.canChange && !noEditAccessDismissed) {
+            <fd-message-strip type="warning" [dismissible]="true" (onDismiss)="noEditAccessDismissed = true"
+                class="cfg-strip">{{ noEditAccessText }}</fd-message-strip>
+        }
+        @if (errorMessage) {
+            <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="cfg-strip">
+                {{ errorMessage }}
+            </fd-message-strip>
+        }
+
+        @if (waitMessage && !config) {
+            <!-- Waiting state (NFR 18) -->
+            <div class="cm-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                <span class="cm-wait__text">{{ waitMessage }}</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="cm-empty">
+                <fd-icon glyph="message-error" class="cm-empty__icon"></fd-icon>
+                <h3 class="cm-empty__title">The Checklist ID number range could not be loaded</h3>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else if (config) {
+            <section class="cfg-next" aria-label="Next Checklist ID No.">
+                <span class="cfg-next__label">Next Checklist ID No.</span>
+                <span class="cfg-next__value">{{ format(config.nextNumber) }}</span>
+                <span class="cfg-next__hint">The next collateral created in the portal gets this number.</span>
+            </section>
+
+            <section class="cfg-card">
+                <h3 class="cfg-card__title">Highest ZID_NO in SAP</h3>
+                <p class="cfg-card__text">
+                    Collaterals created in the portal are numbered above the highest Checklist ID No. used in SAP, so the
+                    portal never uses a number that SAP has. Enter the highest ZID_NO from SAP table ZPFS_T_LN_CHKLST.
+                </p>
+                <div class="cfg-card__row">
+                    <div class="cfg-field">
+                        <label fd-form-label for="cfg-sap-highest" [required]="edit">Highest ZID_NO in SAP</label>
+                        @if (edit) {
+                            <input fd-form-control id="cfg-sap-highest" type="number" step="1" [min]="minimum"
+                                [formControl]="sapHighest" class="cfg-field__input" (keydown.enter)="save()" />
+                        } @else {
+                            <span class="cfg-field__value">{{ config.sapHighestNumber ?? 'Not maintained' }}</span>
+                        }
+                    </div>
+                    @if (edit && preview !== null) {
+                        <div class="cfg-preview" role="status" aria-live="polite">
+                            <fd-icon [glyph]="previewIsJump ? 'arrow-right' : 'message-information'" aria-hidden="true"></fd-icon>
+                            @if (previewIsJump) {
+                                The next collateral gets Checklist ID No. <strong>{{ preview }}</strong>.
+                            } @else {
+                                Below the next number {{ config.nextNumber }}: numbers never go down, so the next collateral
+                                still gets <strong>{{ config.nextNumber }}</strong>.
+                            }
+                        </div>
+                    }
+                </div>
+                @if (formatChanged()) {
+                    <div class="cfg-card__audit">{{ formatChanged() }}</div>
+                }
+            </section>
+
+            <section class="cfg-card">
+                <h3 class="cfg-card__title">Current numbers</h3>
+                <div class="cm-facts">
+                    <div class="cm-fact">
+                        <span class="cm-fact__label">Highest Checklist ID No. in the portal</span>
+                        <span class="cm-fact__value">{{ format(config.highestNumberInPortal) }}</span>
+                    </div>
+                    <div class="cm-fact">
+                        <span class="cm-fact__label">Highest loaded from SAP (migration)</span>
+                        <span class="cm-fact__value">{{ format(config.highestMigratedNumber) }}</span>
+                    </div>
+                    <div class="cm-fact">
+                        <span class="cm-fact__label">Start number (application property)</span>
+                        <span class="cm-fact__value">{{ format(config.startNumber) }}</span>
+                    </div>
+                    <div class="cm-fact">
+                        <span class="cm-fact__label">Maximum (ZID_NO is CHAR 10)</span>
+                        <span class="cm-fact__value">{{ format(config.maximumNumber) }}</span>
+                    </div>
+                </div>
+                <p class="cfg-card__note">
+                    Numbers are given one after the other and never twice. A number that already exists, for example
+                    one loaded from SAP, is skipped.
+                </p>
+            </section>
+
+            @if (waitMessage) {
+                <div class="cfg-overlay" role="status" aria-live="polite">
+                    <div class="cfg-overlay__box">
+                        <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                        <span>{{ waitMessage }}</span>
+                    </div>
+                </div>
+            }
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

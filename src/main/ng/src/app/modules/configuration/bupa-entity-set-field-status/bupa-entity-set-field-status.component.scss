@@ -1,0 +1,261 @@
+@use '../bupa-field-status/bupa-field-status.shared';
+
+$border: var(--sapList_BorderColor, #e5e5e5);
+$surface: var(--sapList_Background, #fff);
+$label: var(--sapContent_LabelColor, #6a6d70);
+
+.es-strip {
+    margin-bottom: 0.75rem;
+}
+
+.es-wait {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 18rem;
+    font-size: 1rem;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    .fs-hourglass {
+        font-size: 2.5rem;
+    }
+
+    &__error {
+        font-size: 2rem;
+        color: var(--sapNegativeColor, #bb0000);
+    }
+}
+
+.es-select {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        width: min(24rem, 100%);
+    }
+
+    &__hint {
+        flex: 1 1 16rem;
+        margin: 0;
+        padding-bottom: 0.5rem;
+        font-size: 0.8125rem;
+        color: $label;
+    }
+}
+
+.es-link {
+    color: var(--sapLinkColor, #0a6ed1);
+}
+
+.es-main {
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    &__head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.5rem 1rem;
+        padding: 0.875rem 1rem 0.25rem;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1.125rem;
+    }
+
+    &__meta {
+        font-size: 0.8125rem;
+        color: $label;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+}
+
+.es-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    padding: 0.75rem 1rem;
+
+    &__key {
+        width: auto;
+        min-width: 13rem;
+    }
+
+    &__search {
+        width: 14rem;
+    }
+}
+
+.es-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.es-chip {
+    gap: 0.375rem;
+    font: inherit;
+    font-size: 0.8125rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    &.is-active {
+        border-color: currentColor;
+        box-shadow: inset 0 0 0 1px currentColor;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--sapContent_FocusColor, #0854a0);
+        outline-offset: 1px;
+    }
+}
+
+.es-bulk {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--sapInformationBackground, #e5f0fa);
+}
+
+.es-table-wrap {
+    position: relative;
+    max-height: calc(100vh - 27rem);
+    min-height: 10rem;
+    overflow: auto;
+    border-top: 1px solid $border;
+}
+
+.es-table {
+    width: 100%;
+    border: 0;
+    border-collapse: collapse;
+
+    th,
+    td {
+        height: 2.5rem;
+        padding: 0.25rem 1rem;
+        text-align: left;
+        vertical-align: middle;
+        border: 0;
+        border-bottom: 1px solid $border;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        font-weight: 400;
+        color: $label;
+        background-color: var(--sapList_HeaderBackground, #f2f2f2);
+    }
+
+    &__check {
+        width: 2.5rem;
+        text-align: center !important;
+    }
+
+    &__center {
+        width: 6rem;
+        text-align: center !important;
+    }
+
+    &__num {
+        width: 8rem;
+        text-align: right !important;
+    }
+
+    &__status {
+        width: 12rem;
+    }
+
+    &__action {
+        width: 3rem;
+        text-align: center !important;
+    }
+
+    tr.is-changed td:first-child {
+        box-shadow: inset 3px 0 0 var(--sapCriticalElementColor, #e9730c);
+    }
+}
+
+.es-group td {
+    font-weight: 700;
+    background-color: var(--sapList_GroupHeaderBackground, #fafafa);
+
+    span {
+        margin-left: 0.375rem;
+        font-weight: 400;
+        color: $label;
+    }
+}
+
+.es-status-select {
+    width: 10.5rem;
+    min-height: 2rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.es-min {
+    width: 5rem;
+    text-align: right;
+}
+
+.es-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 10rem;
+    padding: 1rem;
+    text-align: center;
+    color: $label;
+}
+
+.es-busy {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.es-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

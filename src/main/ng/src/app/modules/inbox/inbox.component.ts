@@ -232,6 +232,9 @@ export class InboxComponent implements OnInit, OnDestroy {
                 error: (error: any) => this.showReviewError(error)
             });
         }
+        else if (task.processName === 'CollateralManagement') {
+            this.router.navigate(['/collateral-management/checklist', task.businessProcessId]);
+        }
         else if (task.processName === 'ReferenceInterestRateValue') {
             this.referenceInterestRateService.referenceInterestRateTypeCode = task.lanContractId.split(':')[0];
             this.router.navigate(['/reference-interest-rates']);

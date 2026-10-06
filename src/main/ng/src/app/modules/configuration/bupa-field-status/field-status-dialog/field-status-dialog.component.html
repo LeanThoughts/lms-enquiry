@@ -1,0 +1,120 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 fd-title class="fd-dialog-header-title fs-dialog__title">
+            <fd-icon [glyph]="data.mode === 'copy' ? 'copy' : 'add'" aria-hidden="true"></fd-icon>
+            {{ title }}
+            <span class="fs-dialog__role">{{ data.roleCode }}{{ data.roleDescription ? ' · ' + data.roleDescription : '' }}</span>
+        </h1>
+    </fd-dialog-header>
+
+    <fd-dialog-body>
+        <div class="fs-dialog__body">
+            @if (errorMessage) {
+                <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="fs-dialog__strip">
+                    {{ errorMessage }}
+                </fd-message-strip>
+            }
+
+            <form class="fs-dialog__grid" (ngSubmit)="save()" novalidate>
+                @if (data.mode === 'entity') {
+                    <div class="fs-dialog__field fs-dialog__field--half">
+                        <label fd-form-label for="fs-entity" [required]="true">Entity</label>
+                        <input fd-form-control id="fs-entity" name="entity" list="fs-entities" [(ngModel)]="entity"
+                            [state]="missing(entity) ? 'error' : null" autocomplete="off" />
+                        <datalist id="fs-entities">
+                            @for (entry of data.entities; track entry) { <option [value]="entry"></option> }
+                        </datalist>
+                    </div>
+                    <div class="fs-dialog__field fs-dialog__field--half">
+                        <label fd-form-label for="fs-field" [required]="true">Field Name</label>
+                        <input fd-form-control id="fs-field" name="fieldName" [(ngModel)]="fieldName"
+                            [state]="missing(fieldName) ? 'error' : null" placeholder="e.g. partyName2" autocomplete="off" />
+                    </div>
+                } @else if (data.mode === 'set') {
+                    <div class="fs-dialog__field fs-dialog__field--half">
+                        <label fd-form-label for="fs-set" [required]="true">Entity Set</label>
+                        <input fd-form-control id="fs-set" name="entitySet" list="fs-sets" [(ngModel)]="entitySet"
+                            [readonly]="!!data.fixedEntitySet" [state]="missing(entitySet) ? 'error' : null" autocomplete="off" />
+                        <datalist id="fs-sets">
+                            @for (entry of data.entitySets; track entry) { <option [value]="entry"></option> }
+                        </datalist>
+                    </div>
+                    <div class="fs-dialog__field fs-dialog__field--quarter">
+                        <label fd-form-label for="fs-key" [required]="true">Key Field Value</label>
+                        <input fd-form-control id="fs-key" name="keyFieldValue" list="fs-keys" [(ngModel)]="keyFieldValue"
+                            [state]="missing(keyFieldValue) ? 'error' : null" placeholder="e.g. Z00001" autocomplete="off" />
+                        <datalist id="fs-keys">
+                            @for (entry of data.keyFieldValues ?? []; track entry) {
+                                <option [value]="entry" [label]="entry + ' ' + (data.keyFieldDescriptions?.[entry] ?? '')"></option>
+                            }
+                        </datalist>
+                        @if (keyFieldDescription) {
+                            <span class="fs-dialog__hint">{{ keyFieldDescription }}</span>
+                        }
+                    </div>
+                    <div class="fs-dialog__field fs-dialog__field--quarter">
+                        <label fd-form-label for="fs-min">Minimum Entries</label>
+                        <input fd-form-control id="fs-min" name="minimumEntries" type="number" min="0" max="999" step="1"
+                            [(ngModel)]="minimumEntries" />
+                    </div>
+                    <div class="fs-dialog__field fs-dialog__field--half">
+                        <label fd-form-label for="fs-field" [required]="true">Field Name</label>
+                        <input fd-form-control id="fs-field" name="fieldName" [(ngModel)]="fieldName"
+                            [state]="missing(fieldName) ? 'error' : null" autocomplete="off" />
+                    </div>
+                    <div class="fs-dialog__field fs-dialog__field--half fs-dialog__check">
+                        <label class="fs-dialog__checkbox">
+                            <input type="checkbox" name="keyField" [(ngModel)]="keyField" />
+                            Key field of the entity set
+                        </label>
+                    </div>
+                } @else {
+                    <p class="fs-dialog__text">
+                        Adds the {{ data.fixedEntitySet ? data.fixedEntitySet + ' ' : '' }}fields of the chosen role that
+                        {{ data.roleCode }} does not have yet, with their field status. Fields {{ data.roleCode }} already has
+                        are not changed.
+                    </p>
+                    <div class="fs-dialog__field fs-dialog__field--full">
+                        <label fd-form-label for="fs-source" [required]="true">Copy from Role</label>
+                        <select id="fs-source" name="sourceRoleCode" class="fs-native-select" [(ngModel)]="sourceRoleCode"
+                            [class.fs-native-select--error]="submitted && !sourceRoleCode">
+                            <option value="">Choose a role</option>
+                            @for (role of copyRoles; track role.code) {
+                                <option [value]="role.code">{{ role.code }} {{ role.description || '' }} ({{ role.entityFieldCount + role.entitySetFieldCount }} fields)</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                @if (data.mode !== 'copy') {
+                    <div class="fs-dialog__field fs-dialog__field--full">
+                        <span fd-form-label>Field Status</span>
+                        <div class="fs-dialog__statuses" role="radiogroup" aria-label="Field Status">
+                            @for (status of statuses; track status.value) {
+                                <label class="fs-dialog__status fs-status fs-status--{{ status.value }}"
+                                    [class.is-selected]="+fieldStatus === status.value">
+                                    <input type="radio" name="fieldStatus" [value]="status.value" [(ngModel)]="fieldStatus" />
+                                    {{ status.label }}
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+                <button type="submit" hidden></button>
+            </form>
+
+            @if (saving) {
+                <div class="fs-dialog__wait" role="status" aria-live="polite">
+                    <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                    <span>Saving. Please wait</span>
+                </div>
+            }
+        </div>
+    </fd-dialog-body>
+
+    <fd-dialog-footer>
+        <fd-button-bar fdType="emphasized" [glyph]="data.mode === 'copy' ? 'copy' : 'save'"
+            [label]="data.mode === 'copy' ? 'Copy' : 'Add'" [disabled]="saving" (click)="save()"></fd-button-bar>
+        <fd-button-bar fdType="transparent" label="Cancel" [disabled]="saving" (click)="close()"></fd-button-bar>
+    </fd-dialog-footer>
+</fd-dialog>

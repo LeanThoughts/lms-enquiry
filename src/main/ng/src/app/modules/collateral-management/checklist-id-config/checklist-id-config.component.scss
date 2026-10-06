@@ -1,0 +1,123 @@
+@use '../collateral-management';
+
+.cfg-strip {
+    margin-bottom: 0.75rem;
+}
+
+.cfg-next {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-left: 0.25rem solid var(--sapBrandColor, #0a6ed1);
+    border-radius: 0.25rem;
+    background-color: var(--sapInformationBackground, #e5f0fa);
+
+    &__label {
+        font-size: 0.875rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__value {
+        font-size: 2.25rem;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--sapTextColor, #32363a);
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__hint {
+        font-size: 0.8125rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+}
+
+.cfg-card {
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem 1.25rem;
+    border: 1px solid var(--sapList_BorderColor, #e5e5e5);
+    border-radius: 0.25rem;
+    background-color: var(--sapList_Background, #fff);
+
+    &__title {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    &__text,
+    &__note {
+        max-width: 48rem;
+        margin: 0 0 1rem;
+        font-size: 0.875rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__note {
+        margin: 0.5rem 0 0;
+    }
+
+    &__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 1rem 2rem;
+    }
+
+    &__audit {
+        margin-top: 1rem;
+        font-size: 0.8125rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+}
+
+.cfg-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 14rem;
+
+    &__input {
+        width: 14rem;
+        text-align: right;
+    }
+
+    &__value {
+        font-size: 1.125rem;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.cfg-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.cfg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
+
+    &__box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem 1.75rem;
+        font-size: 1rem;
+        border-radius: 0.25rem;
+        background-color: var(--sapList_Background, #fff);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+
+        .cm-hourglass {
+            font-size: 1.75rem;
+        }
+    }
+}

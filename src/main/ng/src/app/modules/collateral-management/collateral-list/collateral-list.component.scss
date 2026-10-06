@@ -1,0 +1,55 @@
+@use '../collateral-management';
+
+.cm-table {
+    border: 1px solid var(--sapList_BorderColor, #e5e5e5);
+    border-radius: 0.25rem;
+    background-color: var(--sapList_Background, #fff);
+
+    &__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--sapList_BorderColor, #e5e5e5);
+    }
+
+    &__title {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    &__hint {
+        font-size: 0.8125rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__scroll {
+        max-height: calc(100vh - 22rem);
+        overflow: auto;
+
+        table {
+            border: none;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: var(--sapList_HeaderBackground, #f2f2f2);
+        }
+
+        th {
+            white-space: nowrap;
+        }
+
+        tr {
+            cursor: pointer;
+        }
+    }
+}
+
+.cm-list-strip {
+    margin-bottom: 0.75rem;
+}

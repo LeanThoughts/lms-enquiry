@@ -1,0 +1,216 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Business Partner Field Status"
+        subtitle="Display only, optional, mandatory or hidden: the fields of the business partner screens per business partner role"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                @if (edit) {
+                    <button fd-button fdType="emphasized" glyph="save" [label]="changedCount ? 'Save (' + changedCount + ')' : 'Save'"
+                        [disabled]="!!roleWait" (click)="save()"></button>
+                    <button fd-button fdType="transparent" glyph="decline" label="Cancel" [disabled]="!!roleWait"
+                        (click)="cancel()"></button>
+                } @else {
+                    <button fd-button fdType="transparent" glyph="refresh" label="Refresh"
+                        [disabled]="!!waitMessage || !!roleWait" (click)="refresh()"></button>
+                    @if (canChange) {
+                        <button fd-button fdType="emphasized" glyph="edit" label="Change"
+                            [disabled]="!role || !!roleWait" (click)="change()"></button>
+                    }
+                }
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (overview && !canChange && !noEditAccessDismissed) {
+            <fd-message-strip type="warning" [dismissible]="true" (onDismiss)="noEditAccessDismissed = true"
+                class="fs-strip">{{ noEditAccessText }}</fd-message-strip>
+        }
+
+        @if (waitMessage) {
+            <div class="fs-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                <span>{{ waitMessage }}</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="fs-wait">
+                <fd-icon glyph="message-error" class="fs-wait__error" aria-hidden="true"></fd-icon>
+                <span>The business partner field status could not be loaded.</span>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="loadOverview()"></button>
+            </div>
+        } @else if (overview) {
+            <div class="fs-layout">
+                <!-- Roles -->
+                <aside class="fs-roles" aria-label="Business partner roles">
+                    <div class="fs-roles__head">
+                        <span class="fs-roles__title">Roles ({{ overview.roles.length }})</span>
+                        <input fd-form-control type="search" class="fs-roles__search" placeholder="Search role"
+                            aria-label="Search role" [value]="roleSearch" (input)="roleSearch = $any($event.target).value" />
+                    </div>
+                    <ul class="fs-roles__list" role="listbox" aria-label="Business partner roles">
+                        @for (entry of roles; track entry.code) {
+                            <li role="option" [attr.aria-selected]="entry.code === selectedCode">
+                                <button type="button" class="fs-role" [class.is-selected]="entry.code === selectedCode"
+                                    (click)="chooseRole(entry.code)">
+                                    <span class="fs-role__code">{{ entry.code }}</span>
+                                    <span class="fs-role__name">{{ entry.description || '–' }}</span>
+                                    <span class="fs-role__count" [class.fs-role__count--empty]="!entry.entityFieldCount">
+                                        {{ entry.entityFieldCount ? entry.entityFieldCount + ' entity fields' : 'Not configured' }}
+                                    </span>
+                                </button>
+                            </li>
+                        } @empty {
+                            <li class="fs-roles__empty">No role matches “{{ roleSearch }}”.</li>
+                        }
+                    </ul>
+                </aside>
+
+                <!-- Fields of the chosen role -->
+                <section class="fs-main" [attr.aria-label]="'Field status of role ' + selectedCode">
+                    @if (role) {
+                        <div class="fs-main__head">
+                            <div>
+                                <h3 class="fs-main__title">{{ role.roleCode }} <span class="fs-main__subtitle">{{ role.roleDescription || '' }}</span></h3>
+                                <span class="fs-main__meta">{{ role.entityFields.length }} entity fields ·
+                                    entity sets (bank details, identifications, …) are maintained in
+                                    <a class="fs-link" [routerLink]="['/configuration/bupa-entity-set-field-status']"
+                                        [queryParams]="{ role: role.roleCode }">BP Entity Set Fields</a></span>
+                            </div>
+                            @if (edit) {
+                                <div class="fs-main__actions">
+                                    <button fd-button fdType="standard" glyph="add" label="Add Field"
+                                        [disabled]="changedCount > 0 || !!roleWait"
+                                        [title]="changedCount ? 'Save or cancel your changes first' : ''"
+                                        (click)="openDialog('entity')"></button>
+                                    <button fd-button fdType="transparent" glyph="copy" label="Copy from Role"
+                                        [disabled]="changedCount > 0 || !!roleWait"
+                                        [title]="changedCount ? 'Save or cancel your changes first' : 'Add the fields of another role'"
+                                        (click)="openDialog('copy')"></button>
+                                </div>
+                            }
+                        </div>
+
+
+                        <div class="fs-filters">
+                            <select class="fs-native-select fs-filters__group" aria-label="Entity"
+                                [value]="groupFilter" (change)="setGroupFilter($any($event.target).value)">
+                                <option value="">All entities</option>
+                                @for (name of groupNames; track name) {
+                                    <option [value]="name" [selected]="name === groupFilter">{{ name }}</option>
+                                }
+                            </select>
+                            <input fd-form-control type="search" class="fs-filters__search"
+                                placeholder="Search field"
+                                aria-label="Search field" [value]="fieldSearch" (input)="setFieldSearch($any($event.target).value)" />
+                            <div class="fs-chips" role="group" aria-label="Filter by field status">
+                                @for (status of statuses; track status.value) {
+                                    <button type="button" class="fs-chip fs-status fs-status--{{ status.value }}"
+                                        [class.is-active]="statusFilter === status.value" [attr.aria-pressed]="statusFilter === status.value"
+                                        (click)="setStatusFilter(status.value)">
+                                        {{ status.label }} <b>{{ statusCounts[status.value] }}</b>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+
+                        @if (edit && selected.size) {
+                            <div class="fs-bulk" role="toolbar" aria-label="Change selected fields">
+                                <span><b>{{ selected.size }}</b> selected · Set field status:</span>
+                                @for (status of statuses; track status.value) {
+                                    <button type="button" class="fs-chip fs-status fs-status--{{ status.value }}"
+                                        (click)="setSelectedStatus(status.value)">{{ status.label }}</button>
+                                }
+                                <button fd-button fdType="transparent" label="Clear selection" (click)="selected.clear()"></button>
+                            </div>
+                        }
+
+                        <div class="fs-table-wrap" [class.is-busy]="!!roleWait">
+                            @if (visibleCount) {
+                                <table class="fd-table fs-table">
+                                    <thead class="fd-table__header">
+                                        <tr class="fd-table__row">
+                                            @if (edit) {
+                                                <th class="fd-table__cell fs-table__check">
+                                                    <input type="checkbox" aria-label="Select all shown fields"
+                                                        [checked]="allVisibleSelected" (change)="toggleAllVisible()" />
+                                                </th>
+                                            }
+                                            <th class="fd-table__cell">Field Name</th>
+                                            <th class="fd-table__cell fs-table__status">Field Status</th>
+                                            @if (edit) {
+                                                <th class="fd-table__cell fs-table__action"><span class="fs-sr-only">Delete</span></th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fd-table__body">
+                                        @for (group of entityGroups; track group.name) {
+                                            <tr class="fs-group">
+                                                <td [attr.colspan]="edit ? 4 : 2">{{ group.name }} <span>{{ group.rows.length }}</span></td>
+                                            </tr>
+                                            @for (row of group.rows; track row.id) {
+                                                <tr class="fd-table__row" [class.is-changed]="isChanged(row)">
+                                                    @if (edit) {
+                                                        <td class="fd-table__cell fs-table__check">
+                                                            <input type="checkbox" [attr.aria-label]="'Select ' + row.fieldName"
+                                                                [checked]="selected.has(row.id)" (change)="toggleSelected(row.id)" />
+                                                        </td>
+                                                    }
+                                                    <td class="fd-table__cell fs-table__field">{{ row.fieldName }}</td>
+                                                    <td class="fd-table__cell fs-table__status">
+                                                        @if (edit) {
+                                                            <select class="fs-native-select fs-status-select fs-status fs-status--{{ row.fieldStatus }}"
+                                                                [attr.aria-label]="'Field status of ' + row.fieldName"
+                                                                (change)="setStatus(row, $any($event.target).value)">
+                                                                @for (status of statuses; track status.value) {
+                                                                    <option [value]="status.value" [selected]="status.value === row.fieldStatus">{{ status.label }}</option>
+                                                                }
+                                                            </select>
+                                                        } @else {
+                                                            <span class="fs-status fs-status--{{ row.fieldStatus }}">{{ statusLabel(row.fieldStatus) }}</span>
+                                                        }
+                                                    </td>
+                                                    @if (edit) {
+                                                        <td class="fd-table__cell fs-table__action">
+                                                            <button fd-button fdType="transparent" glyph="delete" [attr.aria-label]="'Delete ' + row.fieldName"
+                                                                [title]="changedCount ? 'Save or cancel your changes first' : 'Delete'"
+                                                                [disabled]="changedCount > 0 || !!roleWait" (click)="remove(row)"></button>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            } @else {
+                                <div class="fs-empty">
+                                    <fd-icon glyph="hint" aria-hidden="true"></fd-icon>
+                                    @if (rowsOfTab.length) {
+                                        <span>No field matches the filter.</span>
+                                    } @else {
+                                        <span>
+                                            Role {{ role.roleCode }} has no entity fields.
+                                            @if (canChange) { Choose Change, then Add or Copy from Role. }
+                                        </span>
+                                    }
+                                </div>
+                            }
+                            @if (roleWait) {
+                                <div class="fs-busy" role="status" aria-live="polite">
+                                    <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                                    <span>{{ roleWait }}</span>
+                                </div>
+                            }
+                        </div>
+                    } @else if (roleWait) {
+                        <div class="fs-wait" role="status" aria-live="polite">
+                            <fd-icon glyph="lateness" class="fs-hourglass" aria-hidden="true"></fd-icon>
+                            <span>{{ roleWait }}</span>
+                        </div>
+                    } @else {
+                        <div class="fs-empty">Choose a role on the left.</div>
+                    }
+                </section>
+            </div>
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

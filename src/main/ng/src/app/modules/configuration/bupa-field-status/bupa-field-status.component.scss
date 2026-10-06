@@ -1,0 +1,378 @@
+@use 'bupa-field-status.shared';
+
+$border: var(--sapList_BorderColor, #e5e5e5);
+$surface: var(--sapList_Background, #fff);
+$label: var(--sapContent_LabelColor, #6a6d70);
+
+.fs-strip {
+    margin-bottom: 0.75rem;
+}
+
+.fs-wait {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 18rem;
+    font-size: 1rem;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    .fs-hourglass {
+        font-size: 2.5rem;
+    }
+
+    &__error {
+        font-size: 2rem;
+        color: var(--sapNegativeColor, #bb0000);
+    }
+}
+
+.fs-layout {
+    display: grid;
+    grid-template-columns: 17rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+
+    @media (max-width: 56rem) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Roles */
+.fs-roles {
+    position: sticky;
+    top: 0;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    &__head {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border-bottom: 1px solid $border;
+    }
+
+    &__title {
+        font-weight: 700;
+    }
+
+    &__search {
+        width: 100%;
+    }
+
+    &__list {
+        max-height: calc(100vh - 19rem);
+        margin: 0;
+        padding: 0.25rem 0;
+        overflow-y: auto;
+        list-style: none;
+    }
+
+    &__empty {
+        padding: 1rem;
+        color: $label;
+    }
+}
+
+.fs-role {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    border: 0;
+    border-left: 3px solid transparent;
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--sapList_Hover_Background, #f5f5f5);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--sapContent_FocusColor, #0854a0);
+        outline-offset: -2px;
+    }
+
+    &.is-selected {
+        border-left-color: var(--sapBrandColor, #0a6ed1);
+        background-color: var(--sapList_SelectionBackgroundColor, #e5f0fa);
+    }
+
+    &__code {
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__count {
+        grid-column: 1 / -1;
+        font-size: 0.75rem;
+        color: $label;
+
+        &--empty {
+            font-style: italic;
+        }
+    }
+}
+
+/* Fields */
+.fs-main {
+    min-width: 0;
+    border: 1px solid $border;
+    border-radius: 0.25rem;
+    background-color: $surface;
+
+    &__head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.5rem 1rem;
+        padding: 0.875rem 1rem 0.5rem;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1.125rem;
+    }
+
+    &__subtitle {
+        font-weight: 400;
+        color: $label;
+    }
+
+    &__meta {
+        font-size: 0.8125rem;
+        color: $label;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+}
+
+.fs-tabs {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0 1rem;
+    border-bottom: 1px solid $border;
+}
+
+.fs-tab {
+    padding: 0.625rem 0.75rem;
+    font: inherit;
+    color: var(--sapTextColor, #32363a);
+    border: 0;
+    border-bottom: 3px solid transparent;
+    background: none;
+    cursor: pointer;
+
+    &.is-active {
+        color: var(--sapSelectedColor, #0854a0);
+        font-weight: 700;
+        border-bottom-color: var(--sapSelectedColor, #0854a0);
+    }
+
+    &__count {
+        margin-left: 0.25rem;
+        font-weight: 400;
+        color: $label;
+    }
+}
+
+.fs-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    padding: 0.75rem 1rem;
+
+    &__group {
+        width: auto;
+        min-width: 14rem;
+    }
+
+    &__search {
+        width: 14rem;
+    }
+}
+
+.fs-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.fs-chip {
+    gap: 0.375rem;
+    font: inherit;
+    font-size: 0.8125rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    &.is-active {
+        border-color: currentColor;
+        box-shadow: inset 0 0 0 1px currentColor;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--sapContent_FocusColor, #0854a0);
+        outline-offset: 1px;
+    }
+}
+
+.fs-bulk {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--sapInformationBackground, #e5f0fa);
+}
+
+.fs-table-wrap {
+    position: relative;
+    max-height: calc(100vh - 25rem);
+    min-height: 10rem;
+    overflow: auto;
+    border-top: 1px solid $border;
+}
+
+.fs-table {
+    width: 100%;
+    border: 0;
+    border-collapse: collapse;
+
+    th,
+    td {
+        height: 2.5rem;
+        padding: 0.25rem 1rem;
+        text-align: left;
+        vertical-align: middle;
+        border: 0;
+        border-bottom: 1px solid $border;
+    }
+
+    th {
+        font-weight: 400;
+        color: $label;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: var(--sapList_HeaderBackground, #f2f2f2);
+    }
+
+    &__check {
+        width: 2.5rem;
+        text-align: center !important;
+    }
+
+    &__field {
+        font-family: var(--sapFontFamily, '72', sans-serif);
+    }
+
+    &__center {
+        width: 6rem;
+        text-align: center !important;
+    }
+
+    &__num {
+        width: 8rem;
+        text-align: right !important;
+    }
+
+    &__status {
+        width: 12rem;
+    }
+
+    &__action {
+        width: 3rem;
+        text-align: center !important;
+    }
+
+    tr.is-changed td:first-child {
+        box-shadow: inset 3px 0 0 var(--sapCriticalElementColor, #e9730c);
+    }
+}
+
+.fs-group td {
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    border-bottom: 1px solid $border;
+    background-color: var(--sapList_GroupHeaderBackground, #fafafa);
+
+    span {
+        margin-left: 0.375rem;
+        font-weight: 400;
+        color: $label;
+    }
+}
+
+.fs-status-select {
+    width: 10.5rem;
+    min-height: 2rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.fs-min {
+    width: 5rem;
+    text-align: right;
+}
+
+.fs-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 10rem;
+    padding: 1rem;
+    text-align: center;
+    color: $label;
+}
+
+.fs-busy {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+.fs-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.fs-link {
+    color: var(--sapLinkColor, #0a6ed1);
+}

@@ -1,0 +1,682 @@
+{
+ "CONDITION_GROUP": [
+  {
+   "code": "01",
+   "description": "Pre-Commitment"
+  },
+  {
+   "code": "02",
+   "description": "Pre-Disbursement"
+  },
+  {
+   "code": "03",
+   "description": "Post-Commitment"
+  },
+  {
+   "code": "04",
+   "description": "Collateral Conditions"
+  },
+  {
+   "code": "05",
+   "description": "Other Conditions"
+  }
+ ],
+ "CONDITION_CATEGORY": [
+  {
+   "code": "01",
+   "description": "Pre commitment"
+  },
+  {
+   "code": "02",
+   "description": "Pre disbursement"
+  },
+  {
+   "code": "03",
+   "description": "Post commitment"
+  },
+  {
+   "code": "04",
+   "description": "Collateral conditions"
+  },
+  {
+   "code": "05",
+   "description": "Financial covenants"
+  },
+  {
+   "code": "06",
+   "description": "Undertaking by Promoters"
+  },
+  {
+   "code": "07",
+   "description": "Undertaking by Borrowers"
+  },
+  {
+   "code": "08",
+   "description": "Condi. prece. to each disbur."
+  },
+  {
+   "code": "09",
+   "description": "Other Conditions"
+  },
+  {
+   "code": "10",
+   "description": "Negative Covenants"
+  },
+  {
+   "code": "11",
+   "description": "Credit Rating"
+  },
+  {
+   "code": "12",
+   "description": "Debt Service Reserve Account"
+  },
+  {
+   "code": "13",
+   "description": "Trust & Retention Account"
+  },
+  {
+   "code": "14",
+   "description": "Commitment Fee"
+  },
+  {
+   "code": "15",
+   "description": "Draw-down Schedule"
+  },
+  {
+   "code": "16",
+   "description": "Cash Sweep/Cash Trap"
+  },
+  {
+   "code": "17",
+   "description": "Prepayments"
+  },
+  {
+   "code": "18",
+   "description": "Interest Tax Levies & Duties"
+  },
+  {
+   "code": "19",
+   "description": "Liquidated Damages"
+  },
+  {
+   "code": "20",
+   "description": "Additional Interest"
+  }
+ ],
+ "COLLATERAL_OBJECT_TYPE": [
+  {
+   "code": "Z00007",
+   "description": "Personal Guarantee"
+  },
+  {
+   "code": "Z00008",
+   "description": "Corporate Guarantee"
+  },
+  {
+   "code": "Z00009",
+   "description": "Bank Guarantee"
+  },
+  {
+   "code": "Z00012",
+   "description": "Letter Of Credit"
+  },
+  {
+   "code": "Z00013",
+   "description": "Post Dated Cheque"
+  },
+  {
+   "code": "Z00014",
+   "description": "Promoters Undertaking"
+  },
+  {
+   "code": "Z00015",
+   "description": "Borrowers Undertaking"
+  },
+  {
+   "code": "Z00016",
+   "description": "Sponsors Undertaking"
+  },
+  {
+   "code": "Z00017",
+   "description": "Interim/Alternate Security"
+  },
+  {
+   "code": "Z30001",
+   "description": "Securities"
+  },
+  {
+   "code": "ZCL001",
+   "description": "DSRA Account"
+  },
+  {
+   "code": "ZCL002",
+   "description": "TRA Account"
+  },
+  {
+   "code": "ZCL003",
+   "description": "Other Current Assets"
+  },
+  {
+   "code": "ZCL004",
+   "description": "Book Debts"
+  },
+  {
+   "code": "ZCL005",
+   "description": "Third Party Pledge"
+  },
+  {
+   "code": "ZCL006",
+   "description": "Unsecured Loan"
+  },
+  {
+   "code": "ZDE001",
+   "description": "Plant and Machinery"
+  },
+  {
+   "code": "ZDE002",
+   "description": "Furniture and Fixtures"
+  },
+  {
+   "code": "ZDE003",
+   "description": "Office Equipment"
+  },
+  {
+   "code": "ZDE004",
+   "description": "Other Movables"
+  },
+  {
+   "code": "ZDE005",
+   "description": "Motor Vehicle (Hypothecation)"
+  },
+  {
+   "code": "ZDE006",
+   "description": "Third Party Movable Assets"
+  },
+  {
+   "code": "ZIN002",
+   "description": "Inventory"
+  },
+  {
+   "code": "ZIN003",
+   "description": "Movable property-Inventory(incl.Recvbls)"
+  },
+  {
+   "code": "ZOT001",
+   "description": "Project Clearances"
+  },
+  {
+   "code": "ZOT002",
+   "description": "Project Documents"
+  },
+  {
+   "code": "ZOT003",
+   "description": "Bank Guarantees under project documents"
+  },
+  {
+   "code": "ZOT004",
+   "description": "Approvals"
+  },
+  {
+   "code": "ZOT005",
+   "description": "Claims from Insurances"
+  },
+  {
+   "code": "ZOT006",
+   "description": "Claims from letter of credit"
+  },
+  {
+   "code": "ZPA001",
+   "description": "Patents"
+  },
+  {
+   "code": "ZPA002",
+   "description": "Intangible \u2013 Goodwill"
+  },
+  {
+   "code": "ZPA003",
+   "description": "Intangibles - Trademarks"
+  },
+  {
+   "code": "ZPA004",
+   "description": "Intangible - Licence"
+  },
+  {
+   "code": "ZPA005",
+   "description": "Intangible - Licence under a Patent"
+  },
+  {
+   "code": "ZPA006",
+   "description": "Intangible - Copyright"
+  },
+  {
+   "code": "ZPA007",
+   "description": "Intangible - Copyright under a Patent"
+  },
+  {
+   "code": "ZPA008",
+   "description": "Intangible - Designs"
+  },
+  {
+   "code": "ZPA009",
+   "description": "Intangible - IPR"
+  },
+  {
+   "code": "ZPA010",
+   "description": "Intangible - Others"
+  },
+  {
+   "code": "ZRE001",
+   "description": "Land"
+  },
+  {
+   "code": "ZRE002",
+   "description": "Building"
+  },
+  {
+   "code": "ZRE003",
+   "description": "Immovable property Residential"
+  },
+  {
+   "code": "ZRE004",
+   "description": "Immovable property Commercial"
+  },
+  {
+   "code": "ZRE005",
+   "description": "Immovable property others"
+  },
+  {
+   "code": "ZRE006",
+   "description": "Property situated outside India"
+  },
+  {
+   "code": "ZRE007",
+   "description": "Third Pary Immovable Collateral"
+  },
+  {
+   "code": "ZSHP01",
+   "description": "Movable property - Ship or any share in"
+  }
+ ],
+ "AGREEMENT_TYPE": [
+  {
+   "code": "Z00001",
+   "description": "Mortgage"
+  },
+  {
+   "code": "Z00002",
+   "description": "Mortgage Registered"
+  },
+  {
+   "code": "Z00003",
+   "description": "Pledge of Securities Account"
+  },
+  {
+   "code": "Z00004",
+   "description": "Pledge of Accounts"
+  },
+  {
+   "code": "Z00005",
+   "description": "Pledge of Patents/Rights"
+  },
+  {
+   "code": "Z00006",
+   "description": "Pledge of Other Valuables"
+  },
+  {
+   "code": "Z00007",
+   "description": "Personal Guarantee"
+  },
+  {
+   "code": "Z00008",
+   "description": "Corporate Guarantee"
+  },
+  {
+   "code": "Z00009",
+   "description": "Bank Guarantee"
+  },
+  {
+   "code": "Z00010",
+   "description": "Hypothecation"
+  },
+  {
+   "code": "Z00011",
+   "description": "Transfer of Rights on Inventory"
+  },
+  {
+   "code": "Z00012",
+   "description": "Letter of Credit"
+  },
+  {
+   "code": "Z00013",
+   "description": "Post Dated Cheque"
+  },
+  {
+   "code": "Z00014",
+   "description": "Promoters Undertaking"
+  },
+  {
+   "code": "Z00015",
+   "description": "Borrowers Undertaking"
+  },
+  {
+   "code": "Z00016",
+   "description": "Sponsors Undertaking"
+  },
+  {
+   "code": "Z00017",
+   "description": "Interim/Alternate Security"
+  }
+ ],
+ "COMPLIANCE_STATUS": [
+  {
+   "code": "1",
+   "description": "Complied"
+  },
+  {
+   "code": "2",
+   "description": "Not Complied"
+  },
+  {
+   "code": "3",
+   "description": "In-Process"
+  },
+  {
+   "code": "4",
+   "description": "Partially Complied"
+  },
+  {
+   "code": "5",
+   "description": "Timeline Available"
+  }
+ ],
+ "RESPONSIBLE_PARTY": [
+  {
+   "code": "0",
+   "description": "Promoter"
+  },
+  {
+   "code": "1",
+   "description": "Borrower"
+  },
+  {
+   "code": "2",
+   "description": "Third Party"
+  },
+  {
+   "code": "3",
+   "description": "SPC/SPV of Borrower"
+  }
+ ],
+ "ACTION_DAYS_PREFIX": [
+  {
+   "code": "0",
+   "description": "Equal"
+  },
+  {
+   "code": "1",
+   "description": "Within"
+  },
+  {
+   "code": "2",
+   "description": "Before"
+  },
+  {
+   "code": "3",
+   "description": "Till"
+  },
+  {
+   "code": "4",
+   "description": "After"
+  },
+  {
+   "code": "5",
+   "description": "At the time of"
+  },
+  {
+   "code": "6",
+   "description": "Less Than"
+  },
+  {
+   "code": "7",
+   "description": "Less Than or Equal To"
+  },
+  {
+   "code": "8",
+   "description": "Greater Than"
+  },
+  {
+   "code": "9",
+   "description": "Greater Than or Equal To"
+  },
+  {
+   "code": "A",
+   "description": "Others"
+  }
+ ],
+ "ACTION_DAYS_SUFFIX": [
+  {
+   "code": "1",
+   "description": "Days"
+  },
+  {
+   "code": "2",
+   "description": "Weeks"
+  },
+  {
+   "code": "3",
+   "description": "Months"
+  },
+  {
+   "code": "4",
+   "description": "Years"
+  }
+ ],
+ "TIMELINE_EVENT": [
+  {
+   "code": "0",
+   "description": "Others"
+  },
+  {
+   "code": "1",
+   "description": "Enquiry Completion Date"
+  },
+  {
+   "code": "2",
+   "description": "ICC Clearance Date"
+  },
+  {
+   "code": "3",
+   "description": "Appraisal Completion Date"
+  },
+  {
+   "code": "4",
+   "description": "Sanction Letter Issue Date"
+  },
+  {
+   "code": "5",
+   "description": "Contract Date"
+  },
+  {
+   "code": "6",
+   "description": "1st Disbursement Date"
+  },
+  {
+   "code": "7",
+   "description": "Scheduled COD"
+  },
+  {
+   "code": "8",
+   "description": "Actual COD"
+  },
+  {
+   "code": "9",
+   "description": "Date of Security"
+  }
+ ],
+ "PERFECTION_EVENT_TYPE": [
+  {
+   "code": "1",
+   "description": "Filing/Form Submission"
+  },
+  {
+   "code": "2",
+   "description": "Perfection/ Satisfaction"
+  },
+  {
+   "code": "3",
+   "description": "Modification"
+  },
+  {
+   "code": "4",
+   "description": "Release"
+  }
+ ],
+ "COMPETENT_AUTHORITY": [
+  {
+   "code": "0",
+   "description": "Board"
+  },
+  {
+   "code": "1",
+   "description": "BCM"
+  },
+  {
+   "code": "2",
+   "description": "ICC"
+  },
+  {
+   "code": "3",
+   "description": "MD&CEO"
+  }
+ ],
+ "DOCUMENT_STAGE": [
+  {
+   "code": "1",
+   "description": "Creation"
+  },
+  {
+   "code": "2",
+   "description": "Perfection"
+  },
+  {
+   "code": "3",
+   "description": "Modification"
+  },
+  {
+   "code": "4",
+   "description": "Release-Pre-Requisites"
+  },
+  {
+   "code": "5",
+   "description": "Release-Final"
+  }
+ ],
+ "SECURITIES_TYPE": [
+  {
+   "code": "CALLS_MADE",
+   "description": "Calls made but not paid"
+  },
+  {
+   "code": "CCD",
+   "description": "Pledge CCD (Comp. Convertible Deben.)"
+  },
+  {
+   "code": "CCPS",
+   "description": "Share  Pledge of CCPS's"
+  },
+  {
+   "code": "NCD",
+   "description": "Pledge NCD (Non- Convertible Debentures)"
+  },
+  {
+   "code": "PFS_DUMMY",
+   "description": "Other type of securities"
+  },
+  {
+   "code": "SHARE_PL_EQ_SHARES",
+   "description": "Share Pledge/Equity Shares"
+  },
+  {
+   "code": "UNCALLED_SHARE_CAP",
+   "description": "Uncalled Share Capital"
+  }
+ ],
+ "COVERAGE_BASIS": [
+  {
+   "code": "1",
+   "description": "Current Contract Capital"
+  },
+  {
+   "code": "2",
+   "description": "Effective Capital"
+  },
+  {
+   "code": "3",
+   "description": "Commitment Capital"
+  },
+  {
+   "code": "4",
+   "description": "Sanction Amount"
+  }
+ ],
+ "FREQUENCY_UNIT": [
+  {
+   "code": "0",
+   "description": "Days"
+  },
+  {
+   "code": "1",
+   "description": "Week"
+  },
+  {
+   "code": "2",
+   "description": "Month"
+  },
+  {
+   "code": "3",
+   "description": "Year"
+  }
+ ],
+ "CURRENCY": [
+  {
+   "code": "INR",
+   "description": "Indian Rupee"
+  },
+  {
+   "code": "USD",
+   "description": "US Dollar"
+  },
+  {
+   "code": "EUR",
+   "description": "Euro"
+  },
+  {
+   "code": "GBP",
+   "description": "British Pound"
+  },
+  {
+   "code": "JPY",
+   "description": "Japanese Yen"
+  }
+ ],
+ "DOCUMENT_TYPE": [
+  {
+   "code": "ZPFSLM101",
+   "description": "Legal Counsel Report"
+  },
+  {
+   "code": "ZPFSLM108",
+   "description": "Collateral Security Amendement"
+  }
+ ],
+ "UNIT_OF_MEASURE": [
+  {
+   "code": "ACR",
+   "description": "Acre"
+  },
+  {
+   "code": "HAR",
+   "description": "Hectare"
+  }
+ ]
+}

@@ -1,0 +1,140 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" [title]="data?.table?.title ?? 'Configuration'"
+        [subtitle]="data?.table?.description ?? ''" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                @if (edit) {
+                    <button fd-button fdType="emphasized" glyph="add" label="Add Entry" [disabled]="!data || !!busy"
+                        (click)="openDialog()"></button>
+                    <button fd-button fdType="transparent" glyph="accept" label="Done" [disabled]="!!busy"
+                        (click)="done()"></button>
+                } @else {
+                    <button fd-button fdType="transparent" glyph="refresh" label="Refresh" [disabled]="loading"
+                        (click)="load()"></button>
+                    @if (canChange) {
+                        <button fd-button fdType="emphasized" glyph="edit" label="Change" [disabled]="!data"
+                            (click)="change()"></button>
+                    }
+                }
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (data && !canChange && !noEditAccessDismissed) {
+            <fd-message-strip type="warning" [dismissible]="true" (onDismiss)="noEditAccessDismissed = true"
+                class="bt-strip">{{ noEditAccessText }}</fd-message-strip>
+        }
+
+        @if (!data && loading) {
+            <div class="bt-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="bt-wait__icon" aria-hidden="true"></fd-icon>
+                <span>Loading. Please wait</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="bt-wait">
+                <fd-icon glyph="message-error" class="bt-wait__icon bt-wait__icon--error" aria-hidden="true"></fd-icon>
+                <span>The configuration could not be loaded.</span>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else if (data) {
+            <section class="bt-main" [attr.aria-label]="data.table.title">
+                @if (edit) {
+                    <p class="bt-note">
+                        <fd-icon glyph="message-information" aria-hidden="true"></fd-icon>
+                        Keys cannot be changed: to use another key, add an entry. Entries delivered with the portal
+                        ({{ data.table.configClass }}) are added again at the next start if they are missing.
+                    </p>
+                }
+
+                <div class="bt-filters">
+                    <input fd-form-control type="search" class="bt-filters__search" placeholder="Search"
+                        [attr.aria-label]="'Search ' + data.table.title" [value]="search"
+                        (input)="setSearch($any($event.target).value)" />
+                    <span class="bt-filters__count" aria-live="polite">
+                        @if (data.total) { {{ data.total }} {{ data.total === 1 ? 'entry' : 'entries' }} } @else { No entries }
+                        @if (search) { matching “{{ search }}” }
+                    </span>
+                    @if (loading || busy) {
+                        <span class="bt-filters__busy" role="status">
+                            <fd-icon glyph="lateness" aria-hidden="true"></fd-icon> {{ busy || 'Loading' }}
+                        </span>
+                    }
+                </div>
+
+                <div class="bt-table-wrap" [class.is-loading]="loading">
+                    <table class="fd-table bt-table">
+                        <thead class="fd-table__header">
+                            <tr class="fd-table__row">
+                                @for (field of columns; track field.name) {
+                                    <th class="fd-table__cell" [class.bt-table__center]="field.type === 'BOOLEAN'">
+                                        {{ field.label }}
+                                        @if (field.idField || field.businessKey) {
+                                            <fd-icon glyph="primary-key" class="bt-table__key" title="Key"
+                                                aria-label="Key"></fd-icon>
+                                        }
+                                    </th>
+                                }
+                                @if (edit) {
+                                    <th class="fd-table__cell bt-table__actions"><span class="bt-sr">Actions</span></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody class="fd-table__body">
+                            @for (row of data.rows; track row.id) {
+                                <tr class="fd-table__row">
+                                    @for (field of columns; track field.name) {
+                                        @if (field.type === 'BOOLEAN') {
+                                            <td class="fd-table__cell bt-table__center">
+                                                @if (row.values[field.name] === true) {
+                                                    <fd-icon glyph="accept" class="bt-table__yes" aria-label="Yes"></fd-icon>
+                                                } @else {
+                                                    <span class="bt-table__no" aria-label="No">–</span>
+                                                }
+                                            </td>
+                                        } @else {
+                                            <td class="fd-table__cell" [class.bt-table__keycell]="field.idField || field.businessKey">
+                                                {{ cell(row, field) }}
+                                            </td>
+                                        }
+                                    }
+                                    @if (edit) {
+                                        <td class="fd-table__cell bt-table__actions">
+                                            <button fd-button fdType="transparent" glyph="edit" [disabled]="!!busy"
+                                                [attr.aria-label]="'Change ' + rowName(row)" title="Change"
+                                                (click)="openDialog(row)"></button>
+                                            <button fd-button fdType="transparent" glyph="delete" [disabled]="!!busy"
+                                                [attr.aria-label]="'Delete ' + rowName(row)" title="Delete"
+                                                (click)="remove(row)"></button>
+                                        </td>
+                                    }
+                                </tr>
+                            } @empty {
+                                <tr class="fd-table__row">
+                                    <td class="fd-table__cell bt-table__empty" [attr.colspan]="columns.length + (edit ? 1 : 0)">
+                                        {{ search ? 'No entries match your search.' : 'No entries yet.' }}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (data.total > pageSizes[0]) {
+                    <div class="bt-pagination">
+                        <span class="bt-pagination__range">{{ rangeText }}</span>
+                        <fd-pagination
+                            [totalItems]="data.total"
+                            [itemsPerPage]="size"
+                            [currentPage]="page + 1"
+                            [itemsPerPageOptions]="pageSizes"
+                            [displayTotalItems]="false"
+                            (itemsPerPageChange)="setPageSize($event)"
+                            (pageChangeStart)="goToPage($event)"
+                        ></fd-pagination>
+                    </div>
+                }
+            </section>
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

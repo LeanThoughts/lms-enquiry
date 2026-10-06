@@ -1,0 +1,78 @@
+@if (def.type === 'separator') {
+    <div class="cm-field__separator">{{ def.label }}</div>
+} @else {
+<div class="cm-field">
+    @if (def.type !== 'checkbox') {
+        <label fd-form-label [for]="id" [required]="editable && !!def.required" class="cm-field__label">{{ def.label }}</label>
+    }
+
+    @if (!editable) {
+        @switch (def.type) {
+            @case ('checkbox') {
+                <div class="cm-field__check">
+                    <fd-icon [glyph]="value ? 'accept' : 'decline'" [class.cm-field__check-icon--on]="!!value"
+                        class="cm-field__check-icon" aria-hidden="true"></fd-icon>
+                    <span>{{ def.label }}: <strong>{{ value ? 'Yes' : 'No' }}</strong></span>
+                </div>
+            }
+            @case ('longtext') {
+                <div class="cm-field__longtext" [class.cm-field__text--empty]="!display">{{ display || '–' }}</div>
+            }
+            @default {
+                <div class="cm-field__text" [class.cm-field__text--empty]="!display"
+                    [class.cm-field__text--number]="def.type === 'number' || def.type === 'integer'">{{ display || def.emptyText || '–' }}</div>
+            }
+        }
+    } @else {
+        @switch (def.type) {
+            @case ('select') {
+                <fd-select [formControl]="control" placeholder="Select" [state]="invalid ? 'error' : null"
+                    [attr.aria-label]="def.label">
+                    <li fd-option [value]="null">&nbsp;</li>
+                    @for (option of options; track option.code) {
+                        <li fd-option [value]="option.code">{{ option.code }} {{ option.description }}</li>
+                    }
+                </fd-select>
+            }
+            @case ('date') {
+                <fd-date-picker type="single" [formControl]="control" [inputId]="id" [allowNull]="true"
+                    [state]="invalid ? 'error' : null"></fd-date-picker>
+            }
+            @case ('checkbox') {
+                <div class="cm-field__check-edit">
+                    <fd-checkbox [formControl]="control" [label]="def.label" [inputId]="id"></fd-checkbox>
+                </div>
+            }
+            @case ('longtext') {
+                <textarea fd-form-control [id]="id" [formControl]="control" rows="6" class="cm-field__textarea"
+                    [state]="invalid ? 'error' : null"></textarea>
+            }
+            @case ('number') {
+                <input fd-form-control type="number" step="any" min="0" [id]="id" [formControl]="control"
+                    class="cm-field__number" [state]="invalid ? 'error' : null" />
+            }
+            @case ('integer') {
+                <input fd-form-control type="number" step="1" min="0" [id]="id" [formControl]="control"
+                    class="cm-field__number" [state]="invalid ? 'error' : null" />
+            }
+            @case ('partner') {
+                <div class="cm-field__partner">
+                    <input fd-form-control type="text" inputmode="numeric" [id]="id" [formControl]="control"
+                        [attr.maxlength]="maxLength" [state]="invalid ? 'error' : null" class="cm-field__partner-number" />
+                    <button type="button" fd-button fdType="standard" glyph="value-help"
+                        [attr.aria-label]="'Search partner for ' + def.label" title="Search partner"
+                        (click)="searchPartner()"></button>
+                    <span class="cm-field__partner-name" [title]="partnerName">{{ partnerName }}</span>
+                </div>
+            }
+            @default {
+                <input fd-form-control type="text" [id]="id" [formControl]="control"
+                    [attr.maxlength]="maxLength" [state]="invalid ? 'error' : null" />
+            }
+        }
+        @if (errorText) {
+            <fd-form-message type="error">{{ errorText }}</fd-form-message>
+        }
+    }
+</div>
+}

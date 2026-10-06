@@ -1,0 +1,85 @@
+@use '../collateral-management';
+
+:host {
+    display: block;
+}
+
+.cm-grid-table {
+    margin-bottom: 1rem;
+    border: 1px solid var(--sapList_BorderColor, #e5e5e5);
+    border-radius: 0.25rem;
+    background-color: var(--sapList_Background, #fff);
+
+    &__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1rem;
+        border-bottom: 1px solid var(--sapList_BorderColor, #e5e5e5);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    &__spacer {
+        flex-grow: 1;
+    }
+
+    &__scroll {
+        overflow-x: auto;
+
+        table {
+            border: none;
+        }
+
+        th {
+            white-space: nowrap;
+        }
+
+        tr {
+            cursor: pointer;
+        }
+    }
+
+    &__number {
+        text-align: right;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__open {
+        width: 3rem;
+    }
+
+    &__hint {
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+        border-top: 1px solid var(--sapList_BorderColor, #e5e5e5);
+    }
+
+    &__empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 2rem 1rem;
+        text-align: center;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__file {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--sapLinkColor, #0a6ed1);
+    }
+
+    &__muted {
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+}

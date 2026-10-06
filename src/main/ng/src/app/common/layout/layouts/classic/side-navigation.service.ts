@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { ProductSwitchItem, SideNavigationModel } from "@fundamental-ngx/core";
+import { NestedListItem, ProductSwitchItem, SideNavigationModel } from "@fundamental-ngx/core";
 
 @Injectable({
     providedIn: 'root'
@@ -11,33 +11,37 @@ export class SideNavigationService {
         condensed: false,
         mainNavigation: {
             items: [
-                { headerTitle: 'Home' },
-                // { link: { icon: 'home', title: 'Home', callback: () => this.callbackFunction('homepage') } },
-                { link: { icon: 'home', title: 'Home', routerLink: 'homepage' } },
-                { link: { icon: 'inbox', title: 'Inbox', routerLink: 'inbox' } },
-                
-                { headerTitle: 'Administration' },
-                { link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } },
-                { link: { icon: 'workflow-tasks', title: 'Workflow Approvers', routerLink: 'workflow-approvers' } },
-                // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
+                // Folders in menu order. A folder opens and closes when its title is clicked;
+                // the third argument is whether it is open when the application starts.
+                this.folder('Home', 'home', true, [
+                    { link: { icon: 'home', title: 'Home', routerLink: 'homepage' } },
+                    { link: { icon: 'inbox', title: 'Inbox', routerLink: 'inbox' } },
+                ]),
+                this.folder('Master Data', 'database', true, [
+                    // { link: { icon: 'home', title: 'New Loan Enquiry', routerLink: 'homepage' } },
+                    // { link: { icon: 'home', title: 'Enquiry Alerts', routerLink: 'homepage' } },
+                    // { link: { icon: 'home', title: 'Enquiry List', routerLink: 'homepage' } },
+                    { link: { icon: 'leads', title: 'Business Partners', routerLink: 'business-partners' } },
+                ]),
+                this.folder('Loan Processes', 'loan', true, [
+                    { link: { icon: 'loan', title: 'Loan Contracts List', routerLink: 'loan-contract-search' } },
+                ]),
+                this.folder('Business Development', 'opportunities', true, [
+                    { link: { icon: 'upload-to-cloud', title: 'Upload Loan Enquiries', routerLink: 'enquiry-upload' } },
+                ]),
+                this.folder('Risk Department', 'trend-up', true, [
+                    { link: { icon: 'trend-up', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
+                ]),
+                this.folder('Administration', 'user-settings', false, [
+                    { link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } },
+                    { link: { icon: 'workflow-tasks', title: 'Workflow Approvers', routerLink: 'workflow-approvers' } },
+                    // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
+                ]),
+                // Configuration workspace: its apps are on the tabs of the workspace (by module)
+                { link: { icon: 'action-settings', title: 'Configuration', routerLink: 'configuration' } },
 
-                { headerTitle: 'Applications' },
-                // { link: { icon: 'home', title: 'New Loan Enquiry', routerLink: 'homepage' } },
-                // { link: { icon: 'home', title: 'Enquiry Alerts', routerLink: 'homepage' } },
-                // { link: { icon: 'home', title: 'Enquiry List', routerLink: 'homepage' } },
-                { link: { icon: 'leads', title: 'Business Partners', routerLink: 'business-partners' } },
-
-                { headerTitle: 'Loan Processes' },
-                { link: { icon: 'loan', title: 'Loan Contracts List', routerLink: 'loan-contract-search' } },
-                
-                { headerTitle: 'Business Development' },
-                { link: { icon: 'upload-to-cloud', title: 'Upload Loan Enquiries', routerLink: 'enquiry-upload' } },
-                
-                { headerTitle: 'Risk Department' },
-                { link: { icon: 'trend-up', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
-                
                 // { headerTitle: 'Reports' },
-                // { link: { icon: 'home', title: 'Change History', routerLink: 'homepage' } }                
+                // { link: { icon: 'home', title: 'Change History', routerLink: 'homepage' } }
             ]
         }
         // utilityNavigation: {
@@ -84,6 +88,18 @@ export class SideNavigationService {
      * Constructor
      */
     constructor(private router: Router) { }
+
+    /**
+     * Menu folder: opens and closes from its arrow and from its title.
+     */
+    private folder(title: string, icon: string, expanded: boolean, items: NestedListItem[]): NestedListItem {
+        const folder: NestedListItem = {
+            link: { icon, title, callback: () => folder.expanded = !folder.expanded },
+            expanded,
+            list: { items }
+        };
+        return folder;
+    }
 
     /**
      * Side Navigation and Product Switcher Callback function

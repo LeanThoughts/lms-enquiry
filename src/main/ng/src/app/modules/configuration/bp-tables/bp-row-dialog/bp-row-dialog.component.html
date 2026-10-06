@@ -1,0 +1,60 @@
+<fd-dialog>
+    <fd-dialog-header>
+        <h1 fd-title class="fd-dialog-header-title bt-dialog__title">
+            <fd-icon [glyph]="isNew ? 'add' : 'edit'" aria-hidden="true"></fd-icon>
+            {{ isNew ? 'Add Entry' : 'Change Entry' }}
+            <span class="bt-dialog__table">{{ data.table.title }}</span>
+        </h1>
+    </fd-dialog-header>
+
+    <fd-dialog-body>
+        <div class="bt-dialog__body">
+            @if (errorMessage) {
+                <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="bt-dialog__strip">
+                    {{ errorMessage }}
+                </fd-message-strip>
+            }
+
+            <form class="bt-dialog__grid" (ngSubmit)="save()" novalidate>
+                @for (field of fields; track field.name) {
+                    <div class="bt-dialog__field" [class.bt-dialog__field--full]="wide(field)">
+                        @if (field.type === 'BOOLEAN') {
+                            <label class="bt-dialog__checkbox">
+                                <input type="checkbox" [name]="field.name" [(ngModel)]="values[field.name]"
+                                    [disabled]="readOnly(field) || saving" />
+                                {{ field.label }}
+                            </label>
+                        } @else {
+                            <label fd-form-label [for]="'bt-' + field.name" [required]="field.required && !readOnly(field)">{{ field.label }}</label>
+                            @if (options(field); as list) {
+                                <select [id]="'bt-' + field.name" [name]="field.name" class="fs-native-select"
+                                    [class.fs-native-select--error]="missing(field)" [(ngModel)]="values[field.name]"
+                                    [disabled]="readOnly(field) || saving">
+                                    <option value="">{{ field.required ? 'Choose' : '(none)' }}</option>
+                                    @for (option of list; track option.value) {
+                                        <option [value]="option.value">{{ option.label }}</option>
+                                    }
+                                </select>
+                            } @else {
+                                <input fd-form-control [id]="'bt-' + field.name" [name]="field.name" [(ngModel)]="values[field.name]"
+                                    [maxlength]="field.maxLength" [readonly]="readOnly(field)" [disabled]="saving"
+                                    [attr.tabindex]="readOnly(field) ? -1 : null"
+                                    [state]="missing(field) ? 'error' : null" autocomplete="off" />
+                            }
+                            @if (readOnly(field)) {
+                                <span class="bt-dialog__hint">Key: cannot be changed</span>
+                            }
+                        }
+                    </div>
+                }
+                <button type="submit" hidden></button>
+            </form>
+        </div>
+    </fd-dialog-body>
+
+    <fd-dialog-footer>
+        <fd-button-bar fdType="emphasized" glyph="save" [label]="isNew ? 'Add' : 'Save'" [disabled]="saving"
+            (click)="save()"></fd-button-bar>
+        <fd-button-bar fdType="transparent" label="Cancel" [disabled]="saving" (click)="close()"></fd-button-bar>
+    </fd-dialog-footer>
+</fd-dialog>

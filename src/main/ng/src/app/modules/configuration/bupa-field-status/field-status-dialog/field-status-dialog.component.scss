@@ -1,0 +1,104 @@
+@use '../bupa-field-status.shared';
+
+.fs-dialog {
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__role {
+        font-size: 0.8125rem;
+        font-weight: 400;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__body {
+        position: relative;
+        width: min(40rem, 85vw);
+    }
+
+    &__strip {
+        margin-bottom: 0.75rem;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.875rem 1.25rem;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        &--quarter { grid-column: span 1; }
+        &--half { grid-column: span 2; }
+        &--full { grid-column: span 4; }
+
+        @media (max-width: 40rem) {
+            grid-column: span 4;
+        }
+    }
+
+    &__hint {
+        font-size: 0.75rem;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__check {
+        justify-content: flex-end;
+    }
+
+    &__checkbox {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 2.25rem;
+        cursor: pointer;
+    }
+
+    &__text {
+        grid-column: span 4;
+        margin: 0;
+        line-height: 1.5;
+        color: var(--sapContent_LabelColor, #6a6d70);
+    }
+
+    &__statuses {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    &__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        border: 1px solid var(--sapField_BorderColor, #89919a);
+        border-radius: 1rem;
+        cursor: pointer;
+        background-color: var(--sapField_Background, #fff);
+
+        input {
+            margin: 0;
+        }
+
+        &.is-selected {
+            border-width: 2px;
+            padding: calc(0.375rem - 1px) calc(0.75rem - 1px);
+        }
+    }
+
+    &__wait {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.75);
+    }
+}
