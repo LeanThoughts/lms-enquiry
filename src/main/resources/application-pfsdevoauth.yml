@@ -13,7 +13,8 @@ spring:
             client-id: cb4a1715-c35b-496f-ae5b-32b7d68a0cf6
             client-secret: j-j8Q~zdfVY3_TX8uRw.tLIkDkW7UH6Hfjhwobl. # Ensure this is present and correct if needed
             authorization-grant-type: authorization_code # Common for web apps (BFF)
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}" # Standard Spring Security default
+            # Fixed https url, the proxy forwards requests to the app over http without X-Forwarded-Proto
+            redirect-uri: "https://bp-tst.pfs-ess.com/enquiry/login/oauth2/code/{registrationId}"
             scope: openid,profile,offline_access # Common minimal scopes for OIDC
         provider: # <--- This block is for provider (Authorization Server) definitions
           azure: # <--- This is your provider ID (e.g., 'azure')
