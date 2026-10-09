@@ -128,8 +128,14 @@ sap:
 #        keyValue: PfS$$$98567
 server:
   port: 9000
+  # Use X-Forwarded-Proto/Host from the reverse proxy so {baseUrl} in the redirect-uri is https://bp-tst.pfs-ess.com
+  forward-headers-strategy: framework
   error:
     include-message: always
+app:
+  oauth2:
+    login-success-url: /homepage
+    logout-success-url: /login
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:

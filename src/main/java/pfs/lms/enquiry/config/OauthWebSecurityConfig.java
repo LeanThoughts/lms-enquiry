@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,13 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsConfigurationSource corsConfigurationSource; // Use constructor injection
     private final OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver; // 1. Inject the custom resolver
     private final CustomOidcUserService customOidcUserService; // Inject your custom service
+
+    // Relative urls are resolved against the request host and the /enquiry context path
+    @Value("${app.oauth2.login-success-url:http://localhost:9000/enquiry/homepage}")
+    private String loginSuccessUrl;
+
+    @Value("${app.oauth2.logout-success-url:http://localhost:9000/enquiry/login}")
+    private String logoutSuccessUrl;
 
     // Constructor injection is preferred to avoid the "might not have been initialized" error
     public OauthWebSecurityConfig(CorsConfigurationSource corsConfigurationSource,
@@ -62,13 +70,13 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 userInfoEndpoint.oidcUserService(customOidcUserService) // <--- THIS IS KEY!
                         )
                         // Specify the default redirect after successful login
-                        .defaultSuccessUrl("http://localhost:9000/enquiry/homepage", true)
+                        .defaultSuccessUrl(loginSuccessUrl, true)
                         .failureUrl("/login?error")
                 )
                 .oauth2Client() // Simply call it, no 'withDefaults()' needed for 5.1.x
                 .and() // End of oauth2Client() chain
                 .logout()
-                .logoutSuccessUrl("http://localhost:9000/enquiry/login") // Redirect to application root after logout
+                .logoutSuccessUrl(logoutSuccessUrl) // Redirect to application root after logout
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID");
