@@ -44,6 +44,11 @@ export class ApplicationFeeProjectDetailsComponent implements OnInit {
     ngOnInit(): void {
         const projectDetails$ = this.applicationFeeId ? this.applicationFeeService.getProjectDetails(this.applicationFeeId) : of(null);
         projectDetails$.subscribe((projectDetails: any) => {
+            if (projectDetails?.term != null && projectDetails.term !== '') {
+                // The backend returns the term as a decimal string ("3.0"), the select options use whole numbers ("3")
+                projectDetails.term = String(Number(projectDetails.term));
+            }
+            console.log('projectDetails', projectDetails);
             this.projectDetails = projectDetails ?? this.getDefaultsFromLoanApplication();
             // this.projectDetails = this.getDefaultsFromLoanApplication();
             this.operation = projectDetails ? 'Update' : 'Create';
