@@ -48,7 +48,7 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests() // No lambda here for 5.1.x
                 // Allow unauthenticated access to the root and static resources (your Angular app)
-                .antMatchers("/", "/index.html", "/static/**", "/assets/**",
+                .antMatchers("/", "/index.html", "/static/**", "/assets/**", "/Base/**",
                         "/*.js", "/*.css", "/*.ico", "/*.json", "/error",
                         "/actuator/**").permitAll()
                 // Allow access to login/logout related paths handled by Spring Security
