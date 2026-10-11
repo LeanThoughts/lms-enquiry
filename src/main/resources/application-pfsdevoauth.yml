@@ -13,7 +13,8 @@ spring:
             client-id: cb4a1715-c35b-496f-ae5b-32b7d68a0cf6
             client-secret: j-j8Q~zdfVY3_TX8uRw.tLIkDkW7UH6Hfjhwobl. # Ensure this is present and correct if needed
             authorization-grant-type: authorization_code # Common for web apps (BFF)
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}" # Standard Spring Security default
+            # Fixed https url, the proxy forwards requests to the app over http without X-Forwarded-Proto
+            redirect-uri: "https://bp-tst.pfs-ess.com/enquiry/login/oauth2/code/{registrationId}"
             scope: openid,profile,offline_access # Common minimal scopes for OIDC
         provider: # <--- This block is for provider (Authorization Server) definitions
           azure: # <--- This is your provider ID (e.g., 'azure')
@@ -49,7 +50,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Marines1@
+    password: Dn47gh3y@
     maximum-pool-size: 40
     url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
     validation-query: select 1
@@ -128,8 +129,14 @@ sap:
 #        keyValue: PfS$$$98567
 server:
   port: 9000
+  # Use X-Forwarded-Proto/Host from the reverse proxy so {baseUrl} in the redirect-uri is https://bp-tst.pfs-ess.com
+  forward-headers-strategy: framework
   error:
     include-message: always
+app:
+  oauth2:
+    login-success-url: /homepage
+    logout-success-url: /login
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:

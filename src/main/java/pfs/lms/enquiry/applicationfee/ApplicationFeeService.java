@@ -77,7 +77,7 @@ public class ApplicationFeeService implements IApplicationFeeService {
 
         List<TermSheet> finalTermSheets = termSheetRepository.findByApplicationFeeIdAndStatus(applicationFee.getId(),
                 "Final");
-        if (finalTermSheets != null) {
+        if (finalTermSheets != null && finalTermSheets.size() > 0) {
             finalTermSheets.sort(Comparator.comparing(TermSheet::getAcceptanceDate,
                     Comparator.nullsLast(Comparator.reverseOrder())));
             loanApplication.setTermSheetAcceptance(finalTermSheets.get(0).getAcceptanceDate());
