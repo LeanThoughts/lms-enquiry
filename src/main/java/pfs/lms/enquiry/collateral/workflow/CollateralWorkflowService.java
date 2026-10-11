@@ -6,11 +6,13 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pfs.lms.enquiry.collateral.batch.CollateralSapIntegrationService;
 import pfs.lms.enquiry.collateral.domain.CollateralChecklist;
 import pfs.lms.enquiry.collateral.dto.CollateralChecklistDto;
 import pfs.lms.enquiry.collateral.repository.CollateralChecklistRepository;
@@ -31,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -53,6 +56,7 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
     private final UserRepository userRepository;
     private final ICollateralService collateralService;
     private final CollateralChangeDocumentService changeDocumentService;
+    private final ObjectProvider<CollateralSapIntegrationService> sapIntegrationServiceProvider;
     private final String fromEmail;
 
     public CollateralWorkflowService(ProcessEngine processEngine,
@@ -62,6 +66,7 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
                                      UserRepository userRepository,
                                      ICollateralService collateralService,
                                      CollateralChangeDocumentService changeDocumentService,
+                                     ObjectProvider<CollateralSapIntegrationService> sapIntegrationServiceProvider,
                                      @Value("${spring.activiti.mail-server-user-name:}") String fromEmail) {
         this.processEngine = processEngine;
         this.checklistRepository = checklistRepository;
@@ -70,6 +75,7 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
         this.userRepository = userRepository;
         this.collateralService = collateralService;
         this.changeDocumentService = changeDocumentService;
+        this.sapIntegrationServiceProvider = sapIntegrationServiceProvider;
         this.fromEmail = fromEmail;
     }
 
@@ -135,6 +141,9 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
         completeTask(checklist, processInstanceId, "TRUE", null, userName);
         setStatus(checklist, CollateralChecklist.STATUS_APPROVED, CollateralChecklist.STATUS_APPROVED_TEXT, userName);
         record(checklist, CollateralChangeDocumentService.APPROVED, userName);
+        // On approval, send every unprocessed SAP integration pointer that belongs to this checklist (its main object)
+        // to SAP straight away; the scheduled sweep remains as a fallback. A no-op until the gateway URI is configured.
+        pushApprovedChecklistToSAP(checklist.getId());
         return collateralService.getChecklist(checklist.getLoanApplication().getId());
     }
 
@@ -200,20 +209,51 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
         return task;
     }
 
-    /** Approver for the requestor's department, else the approver maintained without department. */
+    /**
+     * Approver for process {@value ICollateralWorkflowService#PROCESS_NAME}. Preference: the approver maintained for
+     * the requestor's department, else the default approver maintained without a department, else — when the department
+     * is empty and only one approver is maintained for the process — that single approver. This keeps the checklist
+     * approvable when the requestor has no department, as long as a (default) approver is maintained.
+     */
     private WorkflowApprover findApprover(String departmentCode) {
         WorkflowApprover probe = new WorkflowApprover();
         probe.setProcessName(PROCESS_NAME);
         List<WorkflowApprover> approvers = workflowApproverRepository.findAll(Example.of(probe));
-        return approvers.stream()
-                .filter(approver -> departmentCode != null && departmentCode.equals(approver.getDepartmentCode()))
-                .findFirst()
-                .orElseGet(() -> approvers.stream()
-                        .filter(approver -> approver.getDepartmentCode() == null || approver.getDepartmentCode().isEmpty())
-                        .findFirst()
-                        .orElseThrow(() -> new LmsException("Workflow approver not maintained for process " + PROCESS_NAME
-                                + (departmentCode != null ? " and department " + departmentCode : "")
-                                + ". Maintain it under Administration > Workflow Approvers.", HttpStatus.PRECONDITION_FAILED)));
+        if (approvers.isEmpty()) {
+            throw new LmsException("Workflow approver not maintained for process " + PROCESS_NAME
+                    + ". Maintain it under Administration > Workflow Approvers.", HttpStatus.PRECONDITION_FAILED);
+        }
+        String department = departmentCode == null ? "" : departmentCode.trim();
+
+        // 1) exact department match, when the requestor has a department
+        if (!department.isEmpty()) {
+            Optional<WorkflowApprover> byDepartment = approvers.stream()
+                    .filter(approver -> department.equalsIgnoreCase(trim(approver.getDepartmentCode())))
+                    .findFirst();
+            if (byDepartment.isPresent()) {
+                return byDepartment.get();
+            }
+        }
+        // 2) the default approver maintained without a department
+        Optional<WorkflowApprover> noDepartment = approvers.stream()
+                .filter(approver -> trim(approver.getDepartmentCode()).isEmpty())
+                .findFirst();
+        if (noDepartment.isPresent()) {
+            return noDepartment.get();
+        }
+        // 3) the department is empty (or unmatched) and a single approver is maintained: use it unambiguously
+        if (approvers.size() == 1) {
+            return approvers.get(0);
+        }
+        throw new LmsException("Workflow approver not maintained for process " + PROCESS_NAME
+                + (department.isEmpty() ? " (no department could be determined for the requestor)"
+                                        : " and department " + department)
+                + ". Maintain a default approver (without a department) under Administration > Workflow Approvers.",
+                HttpStatus.PRECONDITION_FAILED);
+    }
+
+    private static String trim(String value) {
+        return value == null ? "" : value.trim();
     }
 
     private CollateralChecklist findChecklist(UUID checklistId) {
@@ -237,5 +277,28 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
         changeDocumentService.record(checklist.getLoanApplication(), checklist.getId(), checklist.getId(),
                 "Collateral checklist of loan " + checklist.getLoanContractId(), null, checklist, action, userName,
                 CollateralChangeDocumentService.SUB_PROCESS_CHECKLIST);
+    }
+
+    /**
+     * Posts the approved checklist's collateral components to SAP. The checklist id is the SAP integration pointer's
+     * main object id ({@code mainEntityId}). Failures are logged and swallowed so that an SAP outage never fails the
+     * approval itself — the scheduled sweep ({@code CollateralSapIntegrationService#syncApprovedCollateralsToSAP}) will
+     * retry any pointer still at status 0.
+     */
+    private void pushApprovedChecklistToSAP(UUID checklistId) {
+        if (checklistId == null) {
+            return;
+        }
+        CollateralSapIntegrationService sapIntegrationService = sapIntegrationServiceProvider.getIfAvailable();
+        if (sapIntegrationService == null) {
+            return; // SAP integration not wired in this context (e.g. tests)
+        }
+        try {
+            int posted = sapIntegrationService.syncCollateralsForMainObject(checklistId.toString());
+            log.info("Collateral checklist {} approved: {} component(s) sent to SAP", checklistId, posted);
+        } catch (Exception ex) {
+            log.error("Collateral checklist {} approved, but sending to SAP failed: {}", checklistId, ex.getMessage(),
+                    ex);
+        }
     }
 }

@@ -11,6 +11,8 @@
                     <button fd-button fdType="emphasized" glyph="edit" label="Change"
                         [disabled]="!!waitMessage" (click)="change()"></button>
                 }
+                <button fd-button fdType="transparent" glyph="hint" label="Technical Info"
+                    title="Id and audit trail of this collateral" [disabled]="!item?.id" (click)="technicalInfo()"></button>
                 <fd-toolbar-separator></fd-toolbar-separator>
                 <button fd-button fdType="transparent" glyph="nav-back" aria-label="Back to the collateral list"
                     title="Back to the collateral list" [disabled]="saving" (click)="back()"></button>
@@ -59,11 +61,6 @@
                 @if (inApproval) {
                     <fd-message-strip type="information" [dismissible]="false" class="cm-strip">
                         The checklist is sent for approval. Collaterals cannot be changed until the approver decides.
-                    </fd-message-strip>
-                }
-                @if (edit) {
-                    <fd-message-strip type="warning" [dismissible]="false" class="cm-strip">
-                        {{ isNew ? 'New collateral' : 'Change mode' }}: fields are editable. Save writes a change document.
                     </fd-message-strip>
                 }
                 @if (errorMessage) {

@@ -9,6 +9,7 @@ replaced by an in-memory mock (`tests/mock-api.ts`): the tests need only the Ang
 | `tests/collateral-detail.spec.ts` | 14 tabs, change and save, new collateral with required fields, no-edit-access message, lock during approval |
 | `tests/collateral-child-tables.spec.ts` | Coverage dialog, Documents with upload, Securities with INR default |
 | `tests/checklist-id-configuration.spec.ts` | Configuration > Checklist ID Number Range |
+| `tests/technical-info.spec.ts` | Technical Info (id and audit trail) on the list, the detail screen and a child dialog |
 
 ## Run
 

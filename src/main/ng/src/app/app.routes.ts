@@ -11,6 +11,7 @@ import userManagementRoutes from './modules/user-management/user-management.rout
 import workflowApproverRoutes from './modules/workflow-approver/workflow-approver.routes';
 import collateralManagementRoutes from './modules/collateral-management/collateral-management.routes';
 import configurationRoutes from './modules/configuration/configuration.routes';
+import outstandingApprovalsRoutes from './modules/outstanding-approvals/outstanding-approvals.routes';
 
 export const routes: Routes = [
 
@@ -37,6 +38,7 @@ export const routes: Routes = [
             ...workflowApproverRoutes,
             ...collateralManagementRoutes,
             ...configurationRoutes,
+            ...outstandingApprovalsRoutes,
         ]
     },
 

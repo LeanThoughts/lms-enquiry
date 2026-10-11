@@ -69,6 +69,10 @@
     </fd-dialog-body>
 
     <fd-dialog-footer>
+        @if (!isNew) {
+            <fd-button-bar fdType="transparent" glyph="hint" label="Technical Info" [disabled]="saving"
+                (click)="technicalInfo()"></fd-button-bar>
+        }
         @if (edit) {
             <fd-button-bar fdType="emphasized" glyph="save" label="Save" [disabled]="saving || !!uploading" (click)="save()"></fd-button-bar>
             <fd-button-bar fdType="transparent" label="Cancel" [disabled]="saving" (click)="close()"></fd-button-bar>

@@ -40,4 +40,23 @@ public class BusinessPartnerIdentification extends AggregateRoot<BusinessPartner
         return super.clone();
     }
 
+    @Override
+    public String toString() {
+        return "BusinessPartnerIdentification{" +
+                "partner=" + partner +
+                ", serialNumber=" + serialNumber +
+                ", identificationCategoryCode='" + identificationCategoryCode + '\'' +
+                ", identificationNumber='" + identificationNumber + '\'' +
+                ", idInstitute='" + idInstitute + '\'' +
+                ", idEntryDate=" + idEntryDate +
+                ", idValidFromDate=" + idValidFromDate +
+                ", idValidToDate=" + idValidToDate +
+                ", country='" + country + '\'' +
+                ", countryIso='" + countryIso + '\'' +
+                ", region='" + region + '\'' +
+                ", fileReference='" + fileReference + '\'' +
+                ", documentName='" + documentName + '\'' +
+                ", documentType='" + documentType + '\'' +
+                '}';
+    }
 }
