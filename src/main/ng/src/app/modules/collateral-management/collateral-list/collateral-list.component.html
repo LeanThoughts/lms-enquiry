@@ -19,6 +19,9 @@
                     <button fd-button fdType="emphasized" glyph="add" label="Create"
                         [disabled]="!!waitMessage || loadFailed" (click)="create()"></button>
                 }
+                <button fd-button fdType="transparent" glyph="hint" label="Technical Info"
+                    [title]="checklist?.id ? 'Id and audit trail of this checklist' : 'Created with the first collateral'"
+                    [disabled]="!checklist?.id || !!waitMessage" (click)="technicalInfo()"></button>
                 <fd-toolbar-separator></fd-toolbar-separator>
                 <button fd-button fdType="transparent" glyph="decline" aria-label="Back to loan contracts"
                     title="Back to loan contracts" (click)="back()"></button>

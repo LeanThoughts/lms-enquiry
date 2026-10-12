@@ -50,7 +50,10 @@ export class MockApi {
         this.checklist = {
             id: 'C1', workFlowStatusCode: options.workFlowStatusCode ?? 0,
             workFlowStatusDescription: statusText(options.workFlowStatusCode ?? 0),
-            rejectionReason: options.rejectionReason ?? null
+            rejectionReason: options.rejectionReason ?? null,
+            // technical data (Technical Info)
+            createdOn: '2026-10-01', createdAt: '08:15:30.123456', createdByUserName: 'writer@pfs.local',
+            changedOn: '2026-10-09', changedAt: '17:45:05', changedByUserName: 'legal@pfs.local'
         };
         this.items = [
             item('I912', 912, { conditionDescription: 'Collateral', collateralObjectType: 'Z00007',
@@ -61,7 +64,9 @@ export class MockApi {
         ];
         this.children.set('I912', {
             coverages: [{ id: 'V1', serialNumber: 1, effectiveFromDate: '2001-01-01', expectedCoverageAmount: 1212,
-                expectedCoveragePercentage: 12, coverageBasis: '2', coverageBasisDescription: 'Effective Capital' }],
+                expectedCoveragePercentage: 12, coverageBasis: '2', coverageBasisDescription: 'Effective Capital',
+                createdOn: '2026-10-03', createdAt: '11:02:44', createdByUserName: 'writer@pfs.local',
+                changedOn: null, changedAt: null, changedByUserName: null }],
             rocEvents: [], cersaiEvents: [], neslEvents: [],
             documents: [{ id: 'D1', serialNumber: 1, documentType: 'ZPFSLM101', documentTypeDescription: 'Legal Counsel Report',
                 documentStage: '2', documentStageDescription: 'Perfection', documentTitle: 'LLC opinion',
@@ -274,7 +279,8 @@ export class MockApi {
 function item(id: string, checklistIdNo: number, values: Row): Row {
     return {
         id, checklistId: 'C1', checklistIdNo, conditionGroup: '04', conditionCategory: '04',
-        createdOn: '2026-10-05', createdByUserName: 'test@pfs.local', ...values
+        createdOn: '2026-10-05', createdAt: '09:06:12.5', createdByUserName: 'test@pfs.local',
+        changedOn: '2026-10-08', changedAt: '14:30:00', changedByUserName: 'writer@pfs.local', ...values
     };
 }
 

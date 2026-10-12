@@ -1,0 +1,186 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="Outstanding Workflow Approvals"
+        subtitle="Active approval tasks awaiting action, from the workflow engine (ACT_RU_TASK)" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button fdType="transparent" glyph="excel-attachment" label="Export CSV"
+                    [disabled]="!data || !data.total || exporting || !canView" (click)="exportCsv()"></button>
+                <button fd-button fdType="transparent" glyph="refresh" label="Refresh" [disabled]="loading"
+                    (click)="load()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (!data && loading) {
+            <div class="oa-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="oa-wait__icon" aria-hidden="true"></fd-icon>
+                <span>Loading. Please wait</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="oa-wait">
+                <fd-icon glyph="message-error" class="oa-wait__icon oa-wait__icon--error" aria-hidden="true"></fd-icon>
+                <span>The report could not be loaded.</span>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else if (data && !canView) {
+            <fd-message-strip type="warning" [dismissible]="false" class="oa-strip">
+                No access to this report for the user with the role {{ data.userRole || '(none)' }}.
+            </fd-message-strip>
+        } @else if (data) {
+            <!-- KPI tiles -->
+            <div class="oa-kpis">
+                <div class="oa-kpi">
+                    <div class="oa-kpi__value">{{ data.summary.total }}</div>
+                    <div class="oa-kpi__label">Outstanding</div>
+                </div>
+                <div class="oa-kpi oa-kpi--warn">
+                    <div class="oa-kpi__value">{{ data.summary.overdue }}</div>
+                    <div class="oa-kpi__label">Overdue (≥ {{ data.summary.overdueThresholdDays }}d)</div>
+                </div>
+                <div class="oa-kpi">
+                    <div class="oa-kpi__value">{{ data.summary.oldestAgeDays }}<span class="oa-kpi__unit">d</span></div>
+                    <div class="oa-kpi__label">Oldest</div>
+                </div>
+                <div class="oa-kpi">
+                    <div class="oa-kpi__value">{{ data.summary.averageAgeDays }}<span class="oa-kpi__unit">d</span></div>
+                    <div class="oa-kpi__label">Average age</div>
+                </div>
+                <div class="oa-kpi">
+                    <div class="oa-kpi__value">{{ data.summary.distinctApprovers }}</div>
+                    <div class="oa-kpi__label">Approvers</div>
+                </div>
+            </div>
+
+            <!-- Breakdowns -->
+            <div class="oa-breakdowns">
+                <section class="oa-break">
+                    <h3 class="oa-break__title">By process</h3>
+                    @for (p of data.summary.byProcess; track p.key) {
+                        <div class="oa-break__row">
+                            <span class="oa-break__name">{{ p.label }}</span>
+                            <span class="oa-break__bar"><span class="oa-break__fill"
+                                [style.width.%]="data.summary.total ? (p.count * 100 / data.summary.total) : 0"></span></span>
+                            <span class="oa-break__count">{{ p.count }}</span>
+                        </div>
+                    } @empty {
+                        <div class="oa-break__empty">No outstanding approvals.</div>
+                    }
+                </section>
+                <section class="oa-break">
+                    <h3 class="oa-break__title">Top approvers</h3>
+                    @for (a of data.summary.byApprover; track a.key) {
+                        <div class="oa-break__row">
+                            <span class="oa-break__name">{{ a.label }}</span>
+                            <span class="oa-break__bar"><span class="oa-break__fill oa-break__fill--alt"
+                                [style.width.%]="data.summary.total ? (a.count * 100 / data.summary.total) : 0"></span></span>
+                            <span class="oa-break__count">{{ a.count }}</span>
+                        </div>
+                    } @empty {
+                        <div class="oa-break__empty">No outstanding approvals.</div>
+                    }
+                </section>
+            </div>
+
+            <!-- Filters -->
+            <div class="oa-filters">
+                <div class="oa-filters__field">
+                    <label fd-form-label for="oa-process">Process</label>
+                    <select id="oa-process" class="oa-select" [(ngModel)]="filter.processName" (ngModelChange)="onFilterChange()">
+                        <option value="">All processes</option>
+                        @for (p of data.processes; track p.key) {
+                            <option [value]="p.key">{{ p.label }} ({{ p.count }})</option>
+                        }
+                    </select>
+                </div>
+                <div class="oa-filters__field">
+                    <label fd-form-label for="oa-approver">Approver</label>
+                    <input fd-form-control id="oa-approver" [(ngModel)]="filter.approver" (ngModelChange)="onFilterChange()"
+                        placeholder="name or email" autocomplete="off" />
+                </div>
+                <div class="oa-filters__field">
+                    <label fd-form-label for="oa-requestor">Requestor</label>
+                    <input fd-form-control id="oa-requestor" [(ngModel)]="filter.requestor" (ngModelChange)="onFilterChange()"
+                        placeholder="name or email" autocomplete="off" />
+                </div>
+                <div class="oa-filters__field oa-filters__field--age">
+                    <label fd-form-label for="oa-age">Min age (days)</label>
+                    <input fd-form-control id="oa-age" type="number" min="0" [(ngModel)]="filter.minAgeDays"
+                        (ngModelChange)="onFilterChange()" />
+                </div>
+                <div class="oa-filters__field oa-filters__field--search">
+                    <label fd-form-label for="oa-search">Search</label>
+                    <input fd-form-control id="oa-search" type="search" [(ngModel)]="filter.search" (ngModelChange)="onFilterChange()"
+                        placeholder="loan, project, name…" autocomplete="off" />
+                </div>
+                <button fd-button fdType="transparent" glyph="clear-filter" label="Clear" (click)="clearFilters()"></button>
+            </div>
+
+            <div class="oa-count" aria-live="polite">
+                @if (data.total) { {{ rangeText }} } @else { No outstanding approvals match the filters }
+                @if (loading) { <fd-icon glyph="lateness" aria-hidden="true"></fd-icon> }
+            </div>
+
+            <div class="oa-table-wrap" [class.is-loading]="loading">
+                <table class="fd-table oa-table">
+                    <thead class="fd-table__header">
+                        <tr class="fd-table__row">
+                            <th class="fd-table__cell">Process</th>
+                            <th class="fd-table__cell">Business Process Id</th>
+                            <th class="fd-table__cell">Loan / Project</th>
+                            <th class="fd-table__cell">Requestor</th>
+                            <th class="fd-table__cell">Approver</th>
+                            <th class="fd-table__cell">Created</th>
+                            <th class="fd-table__cell oa-table__num">Age</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fd-table__body">
+                        @for (row of data.rows; track row.taskId) {
+                            <tr class="fd-table__row">
+                                <td class="fd-table__cell"><span class="oa-proc">{{ row.processLabel }}</span></td>
+                                <td class="fd-table__cell oa-mono">{{ row.businessProcessId || '—' }}</td>
+                                <td class="fd-table__cell">
+                                    <div>{{ row.loanContractId || '—' }}</div>
+                                    @if (row.projectName) { <div class="oa-sub">{{ row.projectName }}</div> }
+                                </td>
+                                <td class="fd-table__cell">
+                                    <div>{{ row.requestorName || '—' }}</div>
+                                    @if (row.requestorEmail) { <div class="oa-sub">{{ row.requestorEmail }}</div> }
+                                </td>
+                                <td class="fd-table__cell">
+                                    <div>{{ row.approverName || row.assignee || '—' }}</div>
+                                    @if (row.approverEmail) { <div class="oa-sub">{{ row.approverEmail }}</div> }
+                                </td>
+                                <td class="fd-table__cell oa-nowrap">{{ row.createdOn || '—' }}</td>
+                                <td class="fd-table__cell oa-table__num">
+                                    <span class="oa-age" [class.is-overdue]="isOverdue(row)">{{ row.ageDays }}d</span>
+                                </td>
+                            </tr>
+                        } @empty {
+                            <tr class="fd-table__row">
+                                <td class="fd-table__cell oa-table__empty" colspan="7">
+                                    No outstanding approvals match the filters.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (data.total > pageSizes[0]) {
+                <div class="oa-pagination">
+                    <span class="oa-pagination__range">{{ rangeText }}</span>
+                    <fd-pagination
+                        [totalItems]="data.total"
+                        [itemsPerPage]="size"
+                        [currentPage]="page + 1"
+                        [itemsPerPageOptions]="pageSizes"
+                        [displayTotalItems]="false"
+                        (itemsPerPageChange)="setPageSize($event)"
+                        (pageChangeStart)="goToPage($event)"
+                    ></fd-pagination>
+                </div>
+            }
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

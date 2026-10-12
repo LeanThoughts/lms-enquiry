@@ -35,6 +35,7 @@ export class SideNavigationService {
                 this.folder('Administration', 'user-settings', false, [
                     { link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } },
                     { link: { icon: 'workflow-tasks', title: 'Workflow Approvers', routerLink: 'workflow-approvers' } },
+                    { link: { icon: 'task', title: 'Outstanding Approvals', routerLink: 'outstanding-approvals' } },
                     // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
                 ]),
                 // Configuration workspace: its apps are on the tabs of the workspace (by module)

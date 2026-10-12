@@ -5,6 +5,7 @@ import {
     ButtonComponent,
     DialogModule,
     DialogRef,
+    DialogService,
     IconComponent,
     MessageStripComponent,
     TitleComponent
@@ -13,8 +14,9 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CollateralFieldComponent } from '../collateral-field/collateral-field.component';
 import { CollateralService } from '../collateral.service';
-import { CHILD_MAX_LENGTH, FieldDef, GridDef, ValueEntry, ValueLists } from '../collateral.model';
+import { CHILD_MAX_LENGTH, FieldDef, GridDef, ValueEntry, ValueLists, technicalInfoOf } from '../collateral.model';
 import { buildControls, fromFormValue, toFormValue } from '../collateral-form';
+import { TechnicalInfoDialogComponent, TechnicalInfoDialogData } from '../technical-info-dialog/technical-info-dialog.component';
 
 /** Data passed to {@link ChildDialogComponent}. */
 export interface ChildDialogData {
@@ -59,7 +61,9 @@ export class ChildDialogComponent implements OnDestroy {
 
     @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
 
-    constructor(public dialogRef: DialogRef, private collateralService: CollateralService) {
+    constructor(public dialogRef: DialogRef,
+                private collateralService: CollateralService,
+                private dialogService: DialogService) {
         this.data = dialogRef.data as ChildDialogData;
         this.fields = this.data.grid.fields;
         this.form = new FormGroup(buildControls(this.fields));
@@ -84,6 +88,18 @@ export class ChildDialogComponent implements OnDestroy {
 
     get modeText(): string {
         return this.edit ? (this.isNew ? 'Create' : 'Change') : 'Display';
+    }
+
+    /** Technical Info: the record's id and audit trail (only for a saved record). */
+    technicalInfo(): void {
+        if (this.isNew) {
+            return;
+        }
+        const data: TechnicalInfoDialogData = {
+            title: this.data.grid.dialogTitle,
+            info: technicalInfoOf(this.data.row)
+        };
+        this.dialogService.open(TechnicalInfoDialogComponent, { data, responsivePadding: true });
     }
 
     options(def: FieldDef): ValueEntry[] {

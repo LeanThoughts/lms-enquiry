@@ -31,12 +31,14 @@ import {
     ValueLists,
     WORKFLOW_STATUS,
     formatDate,
+    technicalInfoOf,
     valueDescription
 } from '../collateral.model';
 import { buildControls, dateOrderValidator, fromFormValue, toFormValue } from '../collateral-form';
 import { ChildGridComponent } from '../child-grid/child-grid.component';
 import { CollateralFieldComponent } from '../collateral-field/collateral-field.component';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../confirm-dialog/confirm-dialog.component';
+import { TechnicalInfoDialogComponent, TechnicalInfoDialogData } from '../technical-info-dialog/technical-info-dialog.component';
 
 /** Fields that are kept in the form but have no field definition (Post Exec upload). */
 const EXTRA_CONTROLS = ['postExecutionDocumentName', 'postExecutionDocumentReference'];
@@ -230,6 +232,18 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
         this.edit = true;
         this.errorMessage = '';
         this.loadAgreementTypes(this.form.controls['collateralObjectType'].value);
+    }
+
+    /** Technical Info: the collateral's id and audit trail. */
+    technicalInfo(): void {
+        if (!this.item?.id) {
+            return;
+        }
+        const data: TechnicalInfoDialogData = {
+            title: `Collateral ${this.item.checklistIdNo || ''}`.trim(),
+            info: technicalInfoOf(this.item as unknown as Record<string, unknown>)
+        };
+        this.dialogService.open(TechnicalInfoDialogComponent, { data, responsivePadding: true });
     }
 
     cancel(): void {

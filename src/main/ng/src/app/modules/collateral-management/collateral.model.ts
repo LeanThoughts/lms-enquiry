@@ -289,9 +289,40 @@ interface CollateralChildBase {
     portalDocumentId?: string | null;
     sourceOfEntry?: string | null;
     createdOn?: string;
+    createdAt?: string;
     createdByUserName?: string;
     changedOn?: string;
+    changedAt?: string;
     changedByUserName?: string;
+}
+
+/**
+ * Technical data of a collateral record (its id and audit trail), shown by the "Technical Info" button of every
+ * collateral screen. Every record the backend returns carries these fields (AggregateRoot).
+ */
+export interface TechnicalInfo {
+    id?: string | null;
+    createdOn?: string | null;
+    createdAt?: string | null;
+    createdByUserName?: string | null;
+    changedOn?: string | null;
+    changedAt?: string | null;
+    changedByUserName?: string | null;
+}
+
+/** The technical data of any collateral record (item, child record or checklist). */
+export function technicalInfoOf(record: Record<string, unknown> | null | undefined): TechnicalInfo {
+    const r = record ?? {};
+    const text = (value: unknown): string | null => (value == null || value === '' ? null : String(value));
+    return {
+        id: text(r['id']),
+        createdOn: text(r['createdOn']),
+        createdAt: text(r['createdAt']),
+        createdByUserName: text(r['createdByUserName']),
+        changedOn: text(r['changedOn']),
+        changedAt: text(r['changedAt']),
+        changedByUserName: text(r['changedByUserName'])
+    };
 }
 
 /** Collateral Coverage (SAP ZCOL_COV) */
@@ -523,6 +554,13 @@ export interface CollateralChecklist {
     rejectionReason?: string | null;
     loan: LoanSummary;
     items: CollateralItem[];
+    // technical data of the checklist (Technical Info)
+    createdOn?: string | null;
+    createdAt?: string | null;
+    createdByUserName?: string | null;
+    changedOn?: string | null;
+    changedAt?: string | null;
+    changedByUserName?: string | null;
 }
 
 export interface CollateralItemDetail {

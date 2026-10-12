@@ -169,6 +169,13 @@ public class CollateralService implements ICollateralService {
             dto.setWorkFlowStatusCode(checklist.getWorkFlowStatusCode());
             dto.setWorkFlowStatusDescription(checklist.getWorkFlowStatusDescription());
             dto.setRejectionReason(checklist.getRejectionReason());
+            // technical data for the Technical Info display
+            dto.setCreatedOn(checklist.getCreatedOn());
+            dto.setCreatedAt(checklist.getCreatedAt());
+            dto.setCreatedByUserName(checklist.getCreatedByUserName());
+            dto.setChangedOn(checklist.getChangedOn());
+            dto.setChangedAt(checklist.getChangedAt());
+            dto.setChangedByUserName(checklist.getChangedByUserName());
             List<CollateralItem> items = itemRepository.findByChecklist_Id(checklist.getId());
             items.sort(ITEM_ORDER);
             dto.setItems(items);

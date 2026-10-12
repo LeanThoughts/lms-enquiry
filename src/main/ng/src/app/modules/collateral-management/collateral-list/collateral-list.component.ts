@@ -24,10 +24,12 @@ import {
     ValueLists,
     WORKFLOW_STATUS,
     formatDate,
+    technicalInfoOf,
     valueDescription,
     workflowState
 } from '../collateral.model';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../confirm-dialog/confirm-dialog.component';
+import { TechnicalInfoDialogComponent, TechnicalInfoDialogData } from '../technical-info-dialog/technical-info-dialog.component';
 
 /**
  * Collaterals of a loan (SAP "PFS Check List", checklist conditions). Double-click opens a collateral.
@@ -161,6 +163,18 @@ export class CollateralListComponent implements OnInit, OnDestroy {
 
     create(): void {
         this.router.navigate(['/collateral-management/loan', this.loanApplicationId, 'item', 'new']);
+    }
+
+    /** Technical Info: the checklist's id and audit trail (the checklist exists once the first collateral is created). */
+    technicalInfo(): void {
+        if (!this.checklist?.id) {
+            return;
+        }
+        const data: TechnicalInfoDialogData = {
+            title: `Collateral checklist of ${this.loanLabel}`.trim(),
+            info: technicalInfoOf(this.checklist as unknown as Record<string, unknown>)
+        };
+        this.dialogService.open(TechnicalInfoDialogComponent, { data, responsivePadding: true });
     }
 
     remove(): void {
