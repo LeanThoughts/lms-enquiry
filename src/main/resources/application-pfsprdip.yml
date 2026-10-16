@@ -55,7 +55,7 @@ spring:
       max-file-size: 15MB
       max-request-size: 15MB
 oauth:
-  baseUrl: http://192.168.1.247:9999/auth
+  baseUrl: http://52.172.88.79:9999/auth
 sap:
   postUrl: http://192.168.1.207:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/LoanApplicationSet?sap-client=500
   sanctionLetterUrl: http://192.168.1.207:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/SanctionLetterSet?sap-client=500
