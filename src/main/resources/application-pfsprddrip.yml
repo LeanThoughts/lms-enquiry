@@ -52,7 +52,7 @@ sap:
   postUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/LoanApplicationSet?sap-client=500
   sanctionLetterUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/SanctionLetterSet?sap-client=500
   sanctionDocumentUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/DocumentSet?sap-client=500
-  baseUrl: http://13.71.85.200:8000
+  baseUrl: http://52.172.88.79:8000
   serviceUri: /sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet
   monitorServiceUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/
   appraisalServiceUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/
@@ -71,16 +71,16 @@ security:
     client:
       client-id: pfs-client
       client-secret: pfs-secret
-      access-token-uri: http://13.71.85.200:9999/auth/oauth/token
-      user-authorization-uri: http://13.71.85.200:9999/auth/oauth/authorize
+      access-token-uri: http://52.172.88.79:9999/auth/oauth/token
+      user-authorization-uri: http://52.172.88.79:9999/auth/oauth/authorize
     resource:
-      user-info-uri: http://13.71.85.200:9999/auth/api/me
+      user-info-uri: http://52.172.88.79:9999/auth/api/me
     jwt:
         keyValue: PfS$$$98567
 server:
   port: 8080
 riskRating:
-  baseUrl: http://13.71.85.200:8090/risk/api
+  baseUrl: http://52.172.88.79:8090/risk/api
 batch:
   businessPartnerMasterDataScheduledTask: 3000
   loanApplicationsScheduledTask: 50000
