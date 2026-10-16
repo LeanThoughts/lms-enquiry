@@ -1,0 +1,156 @@
+// Workflow Status Report. SAP theme variables only (Fundamental NGX / Fiori), so the page follows the selected theme.
+$border: var(--sapList_BorderColor, #e5e5e5);
+$label: var(--sapContent_LabelColor, #6a6d70);
+$mono: var(--sapFontMonoFamily, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+$radius: 0.5rem;
+
+.ws {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 3.25rem);
+    background: var(--sapBackgroundColor, #f7f7f7);
+    color: var(--sapTextColor);
+    font-family: var(--sapFontFamily);
+}
+
+// ----------------------------------------------------------------------------------------------- header
+.ws-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.875rem 2rem 1rem;
+    background: var(--sapObjectHeader_Background, #fff);
+    border-bottom: 1px solid var(--sapObjectHeader_BorderColor, $border);
+    box-shadow: var(--sapContent_HeaderShadow);
+
+    &__title {
+        margin: 0.125rem 0 0.25rem;
+        font-family: var(--sapFontHeaderFamily, var(--sapFontFamily));
+        font-size: var(--sapFontHeader3Size, 1.5rem);
+        font-weight: 400;
+        color: var(--sapGroup_TitleTextColor, var(--sapTextColor));
+    }
+    &__subtitle { display: flex; align-items: center; gap: 0.5rem; font-size: var(--sapFontSmallSize); color: $label; }
+    &__dot { opacity: 0.6; }
+    &__actions { display: flex; align-items: center; gap: 0.25rem; flex-shrink: 0; }
+}
+.ws-crumbs {
+    display: flex; align-items: center; gap: 0.375rem;
+    font-size: var(--sapFontSmallSize); color: $label;
+    &__link { color: var(--sapLinkColor, #0a6ed1); cursor: pointer; &:hover { text-decoration: underline; } }
+    &__sep { opacity: 0.6; }
+}
+.ws-source {
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    padding: 0.0625rem 0.5rem; border-radius: 0.75rem;
+    font-family: $mono; font-size: 0.75rem;
+    color: var(--sapNeutralTextColor, var(--sapTextColor)); background: var(--sapNeutralBackground, #eaecee);
+}
+
+// ----------------------------------------------------------------------------------------------- body & panels
+.ws-body { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem 2rem 2rem; }
+.ws-strip { margin: 0; }
+
+.ws-panel {
+    border: 1px solid $border;
+    border-radius: $radius;
+    background: var(--sapList_Background, #fff);
+    box-shadow: var(--sapContent_Shadow0);
+
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.25rem;
+        border-bottom: 1px solid $border;
+    }
+    &__title { margin: 0; font-size: 1rem; font-family: var(--sapFontBoldFamily, var(--sapFontFamily)); font-weight: 400; }
+    &__hint { font-size: var(--sapFontSmallSize); color: $label; }
+}
+
+// ----------------------------------------------------------------------------------------------- filter
+.ws-panel__toggle {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.125rem 0.375rem; margin: 0 0 0 -0.375rem;
+    font: inherit; color: inherit; background: none; border: 0; border-radius: 0.25rem; cursor: pointer;
+    &:hover { background: var(--sapList_Hover_Background, rgba(0, 0, 0, 0.05)); }
+    &:focus-visible { outline: 2px solid var(--sapContent_FocusColor, #0032a5); outline-offset: 1px; }
+    fd-icon { font-size: 0.875rem; color: $label; }
+}
+.ws-filter--collapsed {
+    .ws-filter__groups, .ws-filter__hint { display: none; }
+    .ws-panel__head { border-bottom: 0; }
+}
+.ws-filter__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 0;
+}
+
+.ws-group {
+    padding: 0.875rem 1.25rem 1rem;
+    border-right: 1px solid $border;
+    &:last-child { border-right: 0; }
+
+    &__title {
+        display: flex; align-items: center; gap: 0.375rem;
+        margin: 0 0 0.75rem;
+        font-size: 0.6875rem; font-family: var(--sapFontBoldFamily, var(--sapFontFamily)); font-weight: 400;
+        letter-spacing: 0.06em; text-transform: uppercase; color: $label;
+        fd-icon { font-size: 0.8125rem; }
+    }
+    &__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: 0.75rem 1rem; }
+}
+
+.ws-field {
+    display: flex; flex-direction: column; gap: 0.25rem; min-width: 0;
+    label { margin: 0; font-size: var(--sapFontSmallSize); color: $label; }
+    &--wide { grid-column: span 2; }
+    &--range { grid-column: 1 / -1; }
+}
+.ws-range {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.375rem;
+    &__sep { color: $label; }
+}
+
+.ws-input, .ws-select {
+    width: 100%;
+    min-height: 2.25rem;
+    padding: 0 0.625rem;
+    font: inherit;
+    color: var(--sapField_TextColor, var(--sapTextColor));
+    border: 1px solid var(--sapField_BorderColor, #89919a);
+    border-radius: 0.25rem;
+    background-color: var(--sapField_Background, #fff);
+    transition: border-color 0.1s, box-shadow 0.1s;
+    &::placeholder { color: var(--sapField_PlaceholderTextColor, #74777a); font-style: italic; }
+    &:hover { border-color: var(--sapField_Hover_BorderColor, var(--sapSelectedColor)); }
+    &:focus { outline: none; border-color: var(--sapField_Focus_BorderColor, var(--sapSelectedColor)); box-shadow: 0 0 0 2px var(--sapContent_FocusColor, rgba(8, 84, 160, 0.25)); }
+}
+.ws-input--code { text-transform: uppercase; font-family: $mono; }
+
+.ws-filter__bar {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem;
+    padding: 0.625rem 1.25rem;
+    border-top: 1px solid $border;
+    background: var(--sapGroup_ContentBackground, var(--sapBackgroundColor));
+    border-radius: 0 0 $radius $radius;
+}
+.ws-filter__summary { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; min-height: 1.5rem; }
+.ws-filter__none { font-size: var(--sapFontSmallSize); color: $label; font-style: italic; }
+.ws-filter__buttons { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
+.ws-chip {
+    display: inline-flex; align-items: center;
+    padding: 0.125rem 0.625rem; border-radius: 0.75rem;
+    font-size: 0.75rem; font-family: var(--sapFontBoldFamily, var(--sapFontFamily));
+    color: var(--sapInformativeTextColor, #0a6ed1); background: var(--sapInformationBackground, #e5f0fa);
+    border: 1px solid var(--sapInformationBorderColor, transparent);
+}
+
+.ws-search {
+    position: relative; width: 18rem; max-width: 100%;
+    &__icon { position: absolute; left: 0.625rem; top: 50%; transform: translateY(-50%); font-size: 0.875rem; color: $label; pointer-events: none; }
+    &__input { @extend .ws-input; padding-left: 2rem; }
+}
+

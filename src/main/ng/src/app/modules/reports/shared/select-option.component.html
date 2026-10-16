@@ -1,0 +1,79 @@
+<div class="so" [class.so--date]="kind() === 'date'">
+    <span class="so-cap so-cap--from" aria-hidden="true">From</span>
+    <input class="so-input" [id]="idPrefix() + '-from'" [type]="kind() === 'date' ? 'date' : 'text'" autocomplete="off"
+           [attr.maxlength]="kind() === 'date' ? null : maxLength()" [value]="fields().from" [readOnly]="!simple()"
+           [attr.aria-label]="label() + ' from'" [placeholder]="kind() === 'date' ? '' : 'from'"
+           (input)="onFrom($any($event.target).value)" (click)="onFieldClick()" />
+    <span class="so-sep" aria-hidden="true">–</span>
+    <span class="so-cap so-cap--to" aria-hidden="true">To</span>
+    <input class="so-input" [id]="idPrefix() + '-to'" [type]="kind() === 'date' ? 'date' : 'text'" autocomplete="off"
+           [attr.maxlength]="kind() === 'date' ? null : maxLength()" [value]="fields().to" [readOnly]="!simple()"
+           [attr.aria-label]="label() + ' to'" [placeholder]="kind() === 'date' ? '' : 'to'"
+           (input)="onTo($any($event.target).value)" (click)="onFieldClick()" />
+    <button type="button" class="so-multi" [class.so-multi--on]="!simple()" [id]="idPrefix() + '-multi'" (click)="open()"
+            [attr.aria-label]="'Multiple selection for ' + label() + (count() ? ' (' + count() + ' entries)' : '')"
+            [attr.title]="summary() ? 'Multiple selection: ' + summary() : 'Multiple selection'">
+        <fd-icon glyph="navigation-right-arrow" aria-hidden="true"></fd-icon>
+        @if (!simple()) {
+            <span class="so-multi__count">{{ count() }}</span>
+        }
+    </button>
+</div>
+
+@if (isOpen) {
+    <div class="so-backdrop" (click)="cancel()"></div>
+    <div class="so-dialog" role="dialog" aria-modal="true" [attr.aria-labelledby]="idPrefix() + '-dlg'" (keydown.enter)="$any($event.target).tagName === 'INPUT' && $event.preventDefault()">
+        <header class="so-dialog__head">
+            <h3 class="so-dialog__title" [id]="idPrefix() + '-dlg'">Multiple Selection for {{ label() }}</h3>
+            <button type="button" class="so-close" aria-label="Close" (click)="cancel()"><fd-icon glyph="decline" aria-hidden="true"></fd-icon></button>
+        </header>
+
+        <div class="so-tabs" role="tablist">
+            @for (t of tabs; track t.key) {
+                <button type="button" role="tab" class="so-tab" [class.so-tab--on]="tab === t.key" [attr.aria-selected]="tab === t.key"
+                        [class.so-tab--excl]="t.key === 'xsingle' || t.key === 'xrange'" (click)="tab = t.key">
+                    {{ t.title }}@if (filled(t.key)) { <span class="so-tab__n">{{ filled(t.key) }}</span> }
+                </button>
+            }
+        </div>
+
+        <div class="so-body" role="tabpanel">
+            <div class="so-hint">
+                @if (isRangeTab()) { Choose an operator and enter the limits. } @else { One value per row; use * at the start or end as a wildcard. You can paste a list. }
+                @if (tab === 'xsingle' || tab === 'xrange') { Rows here are left out of the selection. }
+            </div>
+            @for (row of rows(); track row; let i = $index) {
+                <div class="so-row" [class.so-row--range]="isRangeTab()">
+                    @if (isRangeTab()) {
+                        <select class="so-input so-op" [attr.aria-label]="'Operator, row ' + (i + 1)" [value]="row.option" (change)="onOption(row, $any($event.target).value)">
+                            @for (o of rangeOptions; track o.code) {
+                                <option [value]="o.code" [selected]="o.code === row.option">{{ o.symbol }} · {{ o.text }}</option>
+                            }
+                        </select>
+                    }
+                    <input class="so-input" [type]="kind() === 'date' ? 'date' : 'text'" autocomplete="off"
+                           [attr.maxlength]="kind() === 'date' ? null : maxLength()" [value]="row.low"
+                           [attr.aria-label]="(isRangeTab() ? 'Value' : 'Value') + ' ' + (i + 1)"
+                           (input)="row.low = $any($event.target).value; onRowInput(i)" (paste)="onPaste($event, i)" />
+                    @if (isRangeTab()) {
+                        @if (twoValues(row)) {
+                            <input class="so-input" [type]="kind() === 'date' ? 'date' : 'text'" autocomplete="off"
+                                   [attr.maxlength]="kind() === 'date' ? null : maxLength()" [value]="row.high"
+                                   [attr.aria-label]="'Upper value ' + (i + 1)" (input)="row.high = $any($event.target).value; onRowInput(i)" />
+                        } @else {
+                            <span></span>
+                        }
+                    }
+                    <button type="button" class="so-close" [attr.aria-label]="'Remove row ' + (i + 1)" (click)="removeRow(i)"><fd-icon glyph="delete" aria-hidden="true"></fd-icon></button>
+                </div>
+            }
+        </div>
+
+        <footer class="so-dialog__foot">
+            <span class="so-error" role="alert">{{ error }}</span>
+            <button type="button" fd-button fdType="transparent" label="Delete All" (click)="deleteAll()"></button>
+            <button type="button" fd-button fdType="transparent" label="Cancel" (click)="cancel()"></button>
+            <button type="button" fd-button fdType="emphasized" label="Copy" (click)="apply()"></button>
+        </footer>
+    </div>
+}

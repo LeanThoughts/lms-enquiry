@@ -1,0 +1,246 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2" title="SAP Integration Log"
+        subtitle="Every HTTP request the portal sent to SAP: request, payload, response and errors" [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button fdType="transparent" glyph="excel-attachment" label="Export CSV"
+                    [disabled]="!data || !data.total || exporting || !canView" (click)="exportCsv()"></button>
+                @if (data?.canPurge) {
+                    <span class="sl-purge">
+                        <label fd-form-label for="sl-purge-days" class="sl-purge__label">Delete older than</label>
+                        <input fd-form-control id="sl-purge-days" type="number" min="0" class="sl-purge__days"
+                            [(ngModel)]="purgeDays" [disabled]="purging" />
+                        <span class="sl-purge__unit">days</span>
+                        <button fd-button fdType="transparent" glyph="delete" label="Delete" [disabled]="purging || !data?.total"
+                            (click)="purge()"></button>
+                    </span>
+                }
+                <button fd-button fdType="transparent" glyph="refresh" label="Refresh" [disabled]="loading"
+                    (click)="load()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (!data && loading) {
+            <div class="sl-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="sl-wait__icon" aria-hidden="true"></fd-icon>
+                <span>Loading. Please wait</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="sl-wait">
+                <fd-icon glyph="message-error" class="sl-wait__icon sl-wait__icon--error" aria-hidden="true"></fd-icon>
+                <span>The SAP integration log could not be loaded.</span>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else if (data && !canView) {
+            <fd-message-strip type="warning" [dismissible]="false" class="sl-strip">
+                No access to this report for the user with the role {{ data.userRole || '(none)' }}.
+            </fd-message-strip>
+        } @else if (data) {
+            @if (!data.loggingEnabled) {
+                <fd-message-strip type="warning" [dismissible]="false" class="sl-strip">
+                    SAP request logging is switched off (sap.http-log.enabled=false): new calls are not recorded.
+                </fd-message-strip>
+            }
+
+            <!-- KPI tiles (of the filtered calls) -->
+            <div class="sl-kpis">
+                <div class="sl-kpi">
+                    <div class="sl-kpi__value">{{ data.summary.total }}</div>
+                    <div class="sl-kpi__label">Calls{{ hasFilter ? ' (filtered)' : '' }}</div>
+                </div>
+                <button type="button" class="sl-kpi sl-kpi--button" [class.sl-kpi--bad]="data.summary.failed > 0"
+                    (click)="showFailedOnly()" title="Show failed calls only">
+                    <div class="sl-kpi__value">{{ data.summary.failed }}</div>
+                    <div class="sl-kpi__label">Failed</div>
+                </button>
+                <div class="sl-kpi">
+                    <div class="sl-kpi__value">{{ successRate }}</div>
+                    <div class="sl-kpi__label">Success rate</div>
+                </div>
+                <div class="sl-kpi">
+                    <div class="sl-kpi__value">{{ data.summary.averageDurationMs }}<span class="sl-kpi__unit">ms</span></div>
+                    <div class="sl-kpi__label">Average · max {{ data.summary.maxDurationMs }} ms</div>
+                </div>
+                <div class="sl-kpi">
+                    <div class="sl-kpi__value sl-kpi__value--small">{{ data.summary.lastCallAt || '–' }}</div>
+                    <div class="sl-kpi__label">Last call</div>
+                </div>
+                <div class="sl-kpi" [class.sl-kpi--bad]="!!data.summary.lastFailureAt">
+                    <div class="sl-kpi__value sl-kpi__value--small">{{ data.summary.lastFailureAt || '–' }}</div>
+                    <div class="sl-kpi__label">Last failure</div>
+                </div>
+            </div>
+
+            <!-- Breakdowns -->
+            <div class="sl-breakdowns">
+                <section class="sl-break">
+                    <h3 class="sl-break__title">By entity set</h3>
+                    @for (c of data.summary.byEntitySet; track c.key) {
+                        <div class="sl-break__row">
+                            <span class="sl-break__name" [title]="c.key">{{ c.key }}</span>
+                            <span class="sl-break__bar"><span class="sl-break__fill"
+                                [style.width.%]="data.summary.total ? (c.count * 100 / data.summary.total) : 0"></span></span>
+                            <span class="sl-break__count">{{ c.count }}</span>
+                        </div>
+                    } @empty {
+                        <div class="sl-break__empty">No calls.</div>
+                    }
+                </section>
+                <section class="sl-break">
+                    <h3 class="sl-break__title">By HTTP status</h3>
+                    @for (c of data.summary.byStatus; track c.key) {
+                        <div class="sl-break__row">
+                            <span class="sl-break__name">{{ c.key }}</span>
+                            <span class="sl-break__bar"><span class="sl-break__fill"
+                                [class.sl-break__fill--bad]="c.key === 'No response' || +c.key >= 400"
+                                [style.width.%]="data.summary.total ? (c.count * 100 / data.summary.total) : 0"></span></span>
+                            <span class="sl-break__count">{{ c.count }}</span>
+                        </div>
+                    } @empty {
+                        <div class="sl-break__empty">No calls.</div>
+                    }
+                </section>
+                <section class="sl-break">
+                    <h3 class="sl-break__title">By method</h3>
+                    @for (c of data.summary.byMethod; track c.key) {
+                        <div class="sl-break__row">
+                            <span class="sl-break__name">{{ c.key }}</span>
+                            <span class="sl-break__bar"><span class="sl-break__fill sl-break__fill--alt"
+                                [style.width.%]="data.summary.total ? (c.count * 100 / data.summary.total) : 0"></span></span>
+                            <span class="sl-break__count">{{ c.count }}</span>
+                        </div>
+                    } @empty {
+                        <div class="sl-break__empty">No calls.</div>
+                    }
+                </section>
+            </div>
+
+            <!-- Filters -->
+            <div class="sl-filters">
+                <div class="sl-filters__field sl-filters__field--date">
+                    <label fd-form-label for="sl-from">From</label>
+                    <input fd-form-control id="sl-from" type="date" [(ngModel)]="filter.from" (ngModelChange)="onFilterChange()" />
+                </div>
+                <div class="sl-filters__field sl-filters__field--date">
+                    <label fd-form-label for="sl-to">To</label>
+                    <input fd-form-control id="sl-to" type="date" [(ngModel)]="filter.to" (ngModelChange)="onFilterChange()" />
+                </div>
+                <div class="sl-filters__field sl-filters__field--short">
+                    <label fd-form-label for="sl-outcome">Outcome</label>
+                    <select id="sl-outcome" class="sl-select" [(ngModel)]="filter.outcome" (ngModelChange)="onFilterChange()">
+                        <option value="">All</option>
+                        <option value="success">Success</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div class="sl-filters__field sl-filters__field--short">
+                    <label fd-form-label for="sl-method">Method</label>
+                    <select id="sl-method" class="sl-select" [(ngModel)]="filter.method" (ngModelChange)="onFilterChange()">
+                        <option value="">All</option>
+                        @for (m of methods; track m) {
+                            <option [value]="m">{{ m }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="sl-filters__field">
+                    <label fd-form-label for="sl-service">SAP service</label>
+                    <select id="sl-service" class="sl-select" [(ngModel)]="filter.serviceName" (ngModelChange)="onFilterChange()">
+                        <option value="">All services</option>
+                        @for (s of data.serviceNames; track s) {
+                            <option [value]="s">{{ s }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="sl-filters__field">
+                    <label fd-form-label for="sl-process">Business process</label>
+                    <select id="sl-process" class="sl-select" [(ngModel)]="filter.businessProcess" (ngModelChange)="onFilterChange()">
+                        <option value="">All processes</option>
+                        @for (p of data.businessProcesses; track p) {
+                            <option [value]="p">{{ p }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="sl-filters__field sl-filters__field--search">
+                    <label fd-form-label for="sl-search">Search</label>
+                    <input fd-form-control id="sl-search" type="search" [(ngModel)]="filter.search" (ngModelChange)="onFilterChange()"
+                        placeholder="URL, entity, object id, error, payload…" autocomplete="off" />
+                </div>
+                <button fd-button fdType="transparent" glyph="clear-filter" label="Clear" (click)="clearFilters()"></button>
+            </div>
+
+            <div class="sl-count" aria-live="polite">
+                @if (data.total) { {{ rangeText }} } @else { No SAP calls match the filters }
+                @if (loading) { <fd-icon glyph="lateness" aria-hidden="true"></fd-icon> }
+                @if (data.retentionDays > 0) {
+                    <span class="sl-count__retention">· entries are kept for {{ data.retentionDays }} days</span>
+                }
+            </div>
+
+            <div class="sl-table-wrap" [class.is-loading]="loading">
+                <table class="fd-table sl-table">
+                    <thead class="fd-table__header">
+                        <tr class="fd-table__row">
+                            <th class="fd-table__cell">Time</th>
+                            <th class="fd-table__cell">Method</th>
+                            <th class="fd-table__cell">Request</th>
+                            <th class="fd-table__cell sl-table__num">Status</th>
+                            <th class="fd-table__cell sl-table__num">ms</th>
+                            <th class="fd-table__cell">Process / object</th>
+                            <th class="fd-table__cell">Error</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fd-table__body">
+                        @for (row of data.rows; track row.id) {
+                            <tr class="fd-table__row sl-row" [class.sl-row--failed]="!row.success" (click)="open(row)"
+                                tabindex="0" role="button" [attr.aria-label]="'Open SAP call ' + row.id"
+                                (keydown.enter)="open(row)" (keydown.space)="open(row); $event.preventDefault()">
+                                <td class="fd-table__cell sl-nowrap sl-mono">{{ row.requestedAt }}</td>
+                                <td class="fd-table__cell"><span class="sl-method sl-method--{{ row.httpMethod | lowercase }}">{{ row.httpMethod }}</span></td>
+                                <td class="fd-table__cell sl-request">
+                                    <div class="sl-mono sl-request__target" [title]="row.url">{{ target(row) }}</div>
+                                    <div class="sl-sub">{{ row.serviceName || '' }}
+                                        @if (row.requestSize) { · {{ formatSize(row.requestSize) }} }</div>
+                                </td>
+                                <td class="fd-table__cell sl-table__num">
+                                    <span class="sl-status" [class.is-ok]="row.success" [class.is-bad]="!row.success">
+                                        {{ row.responseStatus || '—' }}
+                                    </span>
+                                </td>
+                                <td class="fd-table__cell sl-table__num sl-mono">{{ row.durationMs ?? '—' }}</td>
+                                <td class="fd-table__cell">
+                                    <div>{{ row.businessProcess || row.caller || '—' }}</div>
+                                    @if (row.subProcess || row.businessObjectId) {
+                                        <div class="sl-sub sl-mono">{{ row.subProcess || '' }}
+                                            @if (row.businessObjectId) { · {{ row.businessObjectId }} }</div>
+                                    }
+                                </td>
+                                <td class="fd-table__cell sl-error-cell" [title]="row.errorMessage || ''">{{ row.errorMessage || '' }}</td>
+                            </tr>
+                        } @empty {
+                            <tr class="fd-table__row">
+                                <td class="fd-table__cell sl-table__empty" colspan="7">No SAP calls match the filters.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (data.total > pageSizes[0]) {
+                <div class="sl-pagination">
+                    <span class="sl-pagination__range">{{ rangeText }}</span>
+                    <fd-pagination
+                        [totalItems]="data.total"
+                        [itemsPerPage]="size"
+                        [currentPage]="page + 1"
+                        [itemsPerPageOptions]="pageSizes"
+                        [displayTotalItems]="false"
+                        (itemsPerPageChange)="setPageSize($event)"
+                        (pageChangeStart)="goToPage($event)"
+                    ></fd-pagination>
+                </div>
+            }
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

@@ -6,6 +6,8 @@ export interface RecordedRequest {
     method: string;
     path: string;
     body: any;
+    /** Decoded query parameters of the call */
+    query?: Record<string, string>;
 }
 
 export interface MockOptions {
@@ -29,6 +31,111 @@ const CHILD_KEYS: Record<string, string> = {
  * 0000010003200) with collaterals 912 and 913, applies creates / changes / deletes like the backend (numbering,
  * required fields, workflow lock) and records every request so tests can check what the app sent.
  */
+/** ICC Approval Status Report sample (SAP MISIccApprovalStatRpt), two loan proposals. */
+const ICC_APPROVAL_ROWS = [
+    { fyear: '2026', serialNo: '0001', quarter: '2', ranl: '0000010003814', status: 'Active', bupaId: '0001000234',
+        borrowerName: 'Sunrise Power Ltd', projectName: 'Solar Park Phase 2', zzsanctionedAmt: '1250000000.00',
+        commitCapital: '800000000.00', loanType: 'Term Loan', sector: 'Renewables', projectType: 'Greenfield',
+        grpCompName: 'Sunrise Group', feePct: '1.00', roi: '9.75', iccStatusDesc: 'Approved by ICC',
+        iccApprDate: '2026-07-14', ziccRemarks: 'Approved subject to security creation', bodDate: '2026-07-28',
+        bodStatusDesc: 'Approved', zboardAppRemarks: 'Noted' },
+    { fyear: '2026', serialNo: '0002', quarter: '3', ranl: '0000010003900', status: 'Pending', bupaId: '0001000300',
+        borrowerName: 'Himalaya Hydro Pvt Ltd', projectName: 'Run-of-river 60MW', zzsanctionedAmt: '640000000.00',
+        commitCapital: '0.00', loanType: 'Bridge Loan', sector: 'Hydro', projectType: 'Brownfield',
+        grpCompName: 'Himalaya Group', feePct: '0.75', roi: '10.25', iccStatusDesc: 'Pending with ICC',
+        iccApprDate: null, ziccRemarks: null, bodDate: null, bodStatusDesc: 'Awaiting board', zboardAppRemarks: null }
+];
+
+/** Loans KYC Report sample (SAP KycReportSet), two loan contracts. */
+const KYC_ROWS = [
+    { contractNo: '0000010003814', status: '60', serialNo: '0001', partnerId: '0001000234', partnerName: 'Sunrise Power Ltd',
+        role: 'Borrower', projectName: 'Solar Park Phase 2', loanAgmtDate: '2025-03-14', kycStatus: 'Compliant',
+        kycComplianceDate: '2026-04-10', reKycComplianceDate: '2028-04-10', ckycComplDate: '2026-04-12', ckycRefNo: 'CK0001234',
+        pan: 'Yes', panNumber: 'AAACS1234A', coi: 'Yes', moa: 'Yes', aoa: 'Yes', cin: 'U40100DL2010PLC123456',
+        lei: '335800ABCDEF1234567', addrProof: 'Yes', boardRes: 'Yes', authSignatory: 'Yes',
+        kycRiskCategoryDesc: 'Low', reKycRiskCategoryDesc: 'Low' },
+    { contractNo: '0000010003900', status: '60', serialNo: '0002', partnerId: '0001000300', partnerName: 'Himalaya Hydro Pvt Ltd',
+        role: 'Borrower', projectName: 'Run-of-river 60MW', loanAgmtDate: '2025-08-01', kycStatus: 'Pending',
+        kycComplianceDate: null, reKycComplianceDate: null, ckycComplDate: null, ckycRefNo: null,
+        pan: 'Yes', panNumber: 'AAACH5678B', coi: 'Yes', moa: 'No', aoa: 'No', cin: 'U40100HP2012PTC654321',
+        lei: null, addrProof: 'No', boardRes: 'No', authSignatory: 'No',
+        kycRiskCategoryDesc: 'Medium', reKycRiskCategoryDesc: null }
+];
+
+/** Workflow Status Report sample (SAP WorkflowStatusSet), three workflows of two loans. */
+const WORKFLOW_STATUS_ROWS = [
+    { rowId: '0000000001', bukrs: 'PFS', relobj: 'VDARL', partner: '0001000234', datum: '2026-10-01', relObject: 'Loan Master Data',
+        ranl: '0000010003814', parnter: '0001000234', boId: 'PFS0000010003814', initiatorId: 'SAJEEV', initiatorPosition: 'MGR',
+        initiatorName: 'Sajeev Khan', initiationDate: '2026-10-01', initiationTime: '09:06:12', wfReferenceNo: 'WF00000123',
+        taskText: 'Approve loan master data', approverId: 'ANITA', approverPosition: 'GM', approverName: 'Anita Rao',
+        approvalDate: '2026-10-03', approvalTime: '14:20:05', releaseStatus: '02', releaseStatusDesc: 'Released',
+        releaseIndicator: 'X', releaseIndicatorDesc: 'Approved' },
+    { rowId: '0000000002', bukrs: 'PFS', relobj: 'VDARL', partner: '0001000300', datum: '2026-10-08', relObject: 'Loan Master Data',
+        ranl: '0000010003900', parnter: '0001000300', boId: 'PFS0000010003900', initiatorId: 'RAHUL', initiatorPosition: 'AM',
+        initiatorName: 'Rahul Verma', initiationDate: '2026-10-08', initiationTime: '11:45:00', wfReferenceNo: 'WF00000131',
+        taskText: 'Approve loan master data', approverId: 'ANITA', approverPosition: 'GM', approverName: 'Anita Rao',
+        approvalDate: null, approvalTime: null, releaseStatus: '01', releaseStatusDesc: 'Pending',
+        releaseIndicator: null, releaseIndicatorDesc: 'Awaiting approval' },
+    { rowId: '0000000003', bukrs: 'PFS', relobj: 'VDARL', partner: '0001000234', datum: '2026-09-15', relObject: 'Loan Master Data',
+        ranl: '0000010003814', parnter: '0001000234', boId: 'PFS0000010003814', initiatorId: 'SAJEEV', initiatorPosition: 'MGR',
+        initiatorName: 'Sajeev Khan', initiationDate: '2026-09-15', initiationTime: '16:02:40', wfReferenceNo: 'WF00000118',
+        taskText: 'Change interest conditions', approverId: 'MEERA', approverPosition: 'CFO', approverName: 'Meera Iyer',
+        approvalDate: '2026-09-16', approvalTime: '10:00:00', releaseStatus: '03', releaseStatusDesc: 'Rejected',
+        releaseIndicator: 'R', releaseIndicatorDesc: 'Rejected' }
+];
+
+/** SAP Integration Log sample: one success, one SAP error, one media upload, one transport failure. */
+const SAP_LOG_ROWS = [
+    { id: 4, requestedAt: '2026-10-12 13:56:15.086', durationMs: 762, httpMethod: 'PUT',
+        url: "http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/DocumentSet(ZidNo='0000001037',ItemId=guid'1589f4c0-8071-4bbc-ae0c-86c6a8af40a7')?sap-client=300",
+        serviceName: 'ZPFS_LMS_COLLATERAL_SRV', entitySet: 'DocumentSet', responseStatus: 400, responseStatusText: 'Bad Request', success: false,
+        errorMessage: 'HTTP 400 Bad Request: Invalid key predicate [005056A509B11EE1B9A8FEC11C22378E]', sapTransactionId: '6AB73D1A84A1F08AE1000000C0A801CD',
+        businessProcess: 'Collateral Management', subProcess: 'Collateral Documents', businessObjectId: '1589f4c0-8071-4bbc-ae0c-86c6a8af40a7', pointerId: 118,
+        caller: 'CollateralSapIntegrationService.send', userName: null, requestSize: 312, responseSize: 455 },
+    { id: 3, requestedAt: '2026-10-12 13:56:14.410', durationMs: 1310, httpMethod: 'PUT',
+        url: "http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/DocumentAttachmentSet(BusinessObjectName='Document',ZidNo='0000001037')/$value?sap-client=300",
+        serviceName: 'ZPFS_LMS_COLLATERAL_SRV', entitySet: 'DocumentAttachmentSet', responseStatus: 204, responseStatusText: 'No Content', success: true,
+        errorMessage: null, sapTransactionId: null, businessProcess: 'Collateral Management', subProcess: 'Collateral Documents',
+        businessObjectId: '1589f4c0-8071-4bbc-ae0c-86c6a8af40a7', pointerId: 118, caller: 'CollateralSapIntegrationService.sendAttachment', userName: null,
+        requestSize: 184320, responseSize: 0 },
+    { id: 2, requestedAt: '2026-10-12 13:56:13.902', durationMs: 298, httpMethod: 'POST',
+        url: 'http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/ChecklistHeaderSet?sap-client=300',
+        serviceName: 'ZPFS_LMS_COLLATERAL_SRV', entitySet: 'ChecklistHeaderSet', responseStatus: 201, responseStatusText: 'Created', success: true,
+        errorMessage: null, sapTransactionId: null, businessProcess: 'Collateral Management', subProcess: 'Collateral Item',
+        businessObjectId: '4e37e4f3-2c9c-4b21-8a35-25e58e90a7d1', pointerId: 117, caller: 'CollateralSapIntegrationService.send', userName: null,
+        requestSize: 1480, responseSize: 2210 },
+    { id: 1, requestedAt: '2026-10-12 09:02:37.169', durationMs: 21, httpMethod: 'GET',
+        url: 'http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet?sap-client=300',
+        serviceName: 'ZPFS_LOAN_ENQ_PORTAL_SRV', entitySet: 'LoanApplicationSet', responseStatus: 0, responseStatusText: null, success: false,
+        errorMessage: 'ResourceAccessException: I/O error on GET request: Connection refused', sapTransactionId: null,
+        businessProcess: null, subProcess: null, businessObjectId: null, pointerId: null, caller: 'SAPIntegrationService.getLoanApplication',
+        userName: 'test@pfs.local', requestSize: 0, responseSize: 0 }
+];
+
+/** SAP SELECT-OPTIONS semantics for the mock: the JSON lines of a query parameter against a value (includes OR, excludes AND). */
+function selected(value: string, json: string | null): boolean {
+    if (!json) {
+        return true;
+    }
+    const lines: { sign: string, option: string, low: string, high: string }[] = JSON.parse(json);
+    const test = (l: { option: string, low: string, high: string }) => {
+        switch (l.option) {
+            case 'EQ': return value === l.low;
+            case 'NE': return value !== l.low;
+            case 'BT': return value >= l.low && value <= l.high;
+            case 'NB': return value < l.low || value > l.high;
+            case 'GE': return value >= l.low;
+            case 'GT': return value > l.low;
+            case 'LE': return value <= l.low;
+            case 'LT': return value < l.low;
+            case 'CP': return l.low.endsWith('*') ? value.startsWith(l.low.slice(0, -1)) : value.endsWith(l.low.replace(/^\*/, ''));
+            default: return true;
+        }
+    };
+    const includes = lines.filter(l => l.sign === 'I');
+    return (includes.length === 0 || includes.some(test)) && lines.filter(l => l.sign === 'E').every(l => !test(l));
+}
+
 export class MockApi {
     readonly requests: RecordedRequest[] = [];
     readonly loan = {
@@ -104,12 +211,12 @@ export class MockApi {
         } catch {
             body = request.postData();
         }
-        this.requests.push({ method: request.method(), path, body });
-        const [status, response] = this.respond(request.method(), path, body);
+        this.requests.push({ method: request.method(), path, body, query: Object.fromEntries(new URL(request.url()).searchParams) });
+        const [status, response] = this.respond(request.method(), path, body, new URL(request.url()).searchParams);
         await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(response ?? null) });
     }
 
-    private respond(method: string, path: string, body: any): [number, any] {
+    private respond(method: string, path: string, body: any, query: URLSearchParams): [number, any] {
         let match: RegExpMatchArray | null;
         if (path === '/me') {
             return [200, { firstName: 'Test', lastName: 'User', email: 'test@pfs.local', role: this.role }];
@@ -117,11 +224,97 @@ export class MockApi {
         if (path === '/collaterals/access') {
             return [200, { canWrite: this.canWrite, userName: 'test@pfs.local', role: this.role, writeRoles: WRITE_ROLES }];
         }
+        // Reports > Loans Management > Loans KYC Report (SAP ZPFS_LMS_REPORTS_SRV · KycReportSet)
+        if (path === '/reports/kyc/export') {
+            return [200, { excel: true, rows: (body?.rows ?? []).length }];
+        }
+        if (path === '/reports/kyc') {
+            const rows = KYC_ROWS.filter(r => selected(r.contractNo, query.get('contract')) && selected(r.status, query.get('status')));
+            return [200, { rows, total: rows.length, generatedOn: new Date().toISOString(),
+                query: 'http://sap/sap/opu/odata/sap/ZPFS_LMS_REPORTS_SRV/KycReportSet?$format=json&$filter=…' }];
+        }
+        // Reports > Loans Management > ICC Approval Status Report (SAP ZPFS_LMS_REPORTS_SRV)
+        if (path === '/reports/icc-approval/export') {
+            return [200, { excel: true, rows: (body?.rows ?? []).length }];
+        }
+        if (path === '/reports/icc-approval') {
+            const rows = ICC_APPROVAL_ROWS.filter(r => (!query.get('fiscalYear') || r.fyear === query.get('fiscalYear'))
+                && (!query.get('quarter') || r.quarter === query.get('quarter')));
+            return [200, { rows, total: rows.length, generatedOn: new Date().toISOString(),
+                query: 'http://sap/sap/opu/odata/sap/ZPFS_LMS_REPORTS_SRV/MISIccApprovalStatRpt?$format=json&$filter=…' }];
+        }
+        // Reports > Miscellaneous > Workflow Status Report (SAP ZPFS_LMS_REPORTS_SRV)
+        if (path === '/reports/workflow-status/export') {
+            return [200, { excel: true, rows: (body?.rows ?? []).length }];
+        }
+        if (path === '/reports/workflow-status') {
+            const rows = WORKFLOW_STATUS_ROWS.filter(r => selected(r.ranl, query.get('contract')));
+            return [200, { rows, total: rows.length, generatedOn: new Date().toISOString(),
+                query: 'http://sap/sap/opu/odata/sap/ZPFS_LMS_REPORTS_SRV/WorkflowStatusSet?$format=json&$filter=…' }];
+        }
+        // Administration > SAP Integration Log (sap_http_log)
+        if (path === '/administration/sap-http-log/export') {
+            return [200, 'Id,Requested At,Method,URL\r\n'];
+        }
+        const sapLogDetail = /^\/administration\/sap-http-log\/(\d+)$/.exec(path);
+        if (sapLogDetail) {
+            const row = SAP_LOG_ROWS.find(r => r.id === Number(sapLogDetail[1]));
+            return row ? [200, { ...row,
+                host: '192.168.1.205:8000',
+                requestHeaders: 'Accept: application/json\nAuthorization: Basic ***\nX-Requested-With: X\nContent-Type: application/json',
+                requestContentType: 'application/json',
+                requestBody: row.httpMethod === 'GET' ? null : '{"ZidNo":"0000001037","DocTitle":"Deed of Pledge","PtlId":"1589f4c0-8071-4bbc-ae0c-86c6a8af40a7"}',
+                responseContentType: 'application/json',
+                responseBody: row.success ? '{"d":{"ZidNo":"0000001037"}}'
+                    : '{"error":{"code":"005056A509B11EE1B9A8FEC11C22378E","message":{"lang":"en","value":"Invalid key predicate"},"innererror":{"transactionid":"6AB73D1A84A1F08AE1000000C0A801CD"}}}',
+                threadName: 'scheduling-1' }] : [404, { message: 'SAP call not found.' }];
+        }
+        if (path === '/administration/sap-http-log') {
+            if (method === 'DELETE') {
+                return [200, { deleted: 2, olderThanDays: Number(query.get('olderThanDays') ?? 0) }];
+            }
+            const outcome = query.get('outcome');
+            const search = (query.get('search') ?? '').toLowerCase();
+            const rows = SAP_LOG_ROWS
+                .filter(r => !outcome || (outcome === 'failed' ? !r.success : r.success))
+                .filter(r => !search || r.url.toLowerCase().includes(search) || (r.errorMessage ?? '').toLowerCase().includes(search));
+            const failed = rows.filter(r => !r.success).length;
+            return [200, {
+                rows, page: 0, size: 25, total: rows.length,
+                summary: { total: rows.length, failed, succeeded: rows.length - failed, averageDurationMs: 412, maxDurationMs: 1310,
+                    lastCallAt: rows[0]?.requestedAt ?? null, lastFailureAt: rows.find(r => !r.success)?.requestedAt ?? null,
+                    byMethod: [{ key: 'POST', count: 1 }, { key: 'PUT', count: 2 }, { key: 'GET', count: 1 }],
+                    byStatus: [{ key: '201', count: 1 }, { key: '204', count: 1 }, { key: '400', count: 1 }, { key: 'No response', count: 1 }],
+                    byEntitySet: [{ key: 'ChecklistHeaderSet', count: 1 }, { key: 'DocumentSet', count: 1 }, { key: 'DocumentAttachmentSet', count: 1 }, { key: 'LoanApplicationSet', count: 1 }] },
+                businessProcesses: ['Collateral Management'], serviceNames: ['ZPFS_LMS_COLLATERAL_SRV', 'ZPFS_LOAN_ENQ_PORTAL_SRV'],
+                generatedOn: new Date().toISOString(), canView: this.role !== 'ZLM014', canPurge: this.role === 'ZLM023',
+                loggingEnabled: true, retentionDays: 90, userRole: this.role
+            }];
+        }
         if (path === '/collaterals/value-lists') {
             return [200, valueLists];
         }
+        if (path === '/collaterals/agreement-types/by-object') {
+            // The whole SAP table (CollateralObjectTypeAgreementType) keyed by object type: a guarantee object is its
+            // own agreement type, Z30001 gets the first three; other objects have no row
+            const all: { code: string; description: string }[] = (valueLists as any).AGREEMENT_TYPE;
+            const table: Record<string, { code: string; description: string }[]> = { Z30001: all.slice(0, 3) };
+            for (const type of all) {
+                table[type.code] = [type];
+            }
+            return [200, table];
+        }
         if (path === '/collaterals/agreement-types') {
-            return [200, (valueLists as any).AGREEMENT_TYPE];
+            // As SAP derives it (CollateralObjectTypeAgreementType): a guarantee object type is its own agreement
+            // type; other objects get the first three; no object type -> nothing
+            const objectType = query.get('collateralObjectType');
+            const all: { code: string; description: string }[] = (valueLists as any).AGREEMENT_TYPE;
+            if (!objectType) {
+                return [200, []];
+            }
+            return [200, all.some(type => type.code === objectType)
+                ? all.filter(type => type.code === objectType)
+                : all.slice(0, 3)];
         }
         if (path === '/collaterals/partner-roles') {
             return [200, [{ code: 'ZLM010', description: 'Security Trustee' }]];

@@ -1,0 +1,94 @@
+// Reports app: SAP theme variables only, so it follows the selected theme like the other pages.
+.rp-home {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 3.25rem);
+    background: var(--sapBackgroundColor);
+    color: var(--sapTextColor);
+    font-family: var(--sapFontFamily);
+
+    &__header {
+        flex-shrink: 0;
+        padding: 1rem 2rem 0.75rem;
+        background: var(--sapObjectHeader_Background);
+        border-bottom: 1px solid var(--sapObjectHeader_BorderColor, var(--sapGroup_TitleBorderColor));
+        box-shadow: var(--sapContent_HeaderShadow);
+    }
+    &__title {
+        margin: 0;
+        color: var(--sapGroup_TitleTextColor, var(--sapTextColor));
+        font-family: var(--sapFontHeaderFamily, var(--sapFontFamily));
+        font-size: var(--sapFontHeader3Size, 1.5rem);
+        font-weight: 400;
+    }
+    &__subtitle { margin-top: 0.25rem; color: var(--sapContent_LabelColor); font-size: var(--sapFontSize); }
+    &__body { padding: 1.25rem 2rem 2rem; }
+}
+
+.rp-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+.rp-module {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--sapTile_BorderColor, var(--sapList_BorderColor));
+    border-radius: 0.5rem;
+    background: var(--sapTile_Background, var(--sapList_Background));
+    box-shadow: var(--sapContent_Shadow0);
+    transition: box-shadow 0.15s;
+
+    &:hover { box-shadow: var(--sapContent_Shadow1); }
+    &.is-open { grid-column: 1 / -1; border-color: var(--sapSelectedColor); }
+
+    &__head { display: flex; align-items: flex-start; gap: 0.75rem; }
+    &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        font-size: 1.375rem;
+        color: var(--sapContent_IconColor, var(--sapSelectedColor));
+        background: var(--sapTile_IconBackground, var(--sapInformationBackground, #e5f0fa));
+    }
+    &__text { flex: 1; min-width: 0; }
+    &__title { margin: 0; font-size: 1.125rem; font-family: var(--sapFontHeaderFamily, var(--sapFontFamily)); font-weight: 400; }
+    &__desc { margin-top: 0.125rem; font-size: var(--sapFontSmallSize); color: var(--sapContent_LabelColor); }
+    &__count {
+        white-space: nowrap;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.75rem;
+        font-size: 0.75rem;
+        color: var(--sapInformativeTextColor, #0a6ed1);
+        background: var(--sapInformationBackground, #e5f0fa);
+        &.is-empty { color: var(--sapNeutralTextColor, var(--sapContent_LabelColor)); background: var(--sapNeutralBackground, #eaecee); }
+    }
+    &__actions { display: flex; justify-content: flex-end; }
+}
+
+.rp-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--sapList_BorderColor);
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--sapList_BorderColor);
+    }
+    &__text { flex: 1; min-width: 0; }
+    &__title { font-family: var(--sapFontBoldFamily, var(--sapFontFamily)); }
+    &__desc { font-size: var(--sapFontSmallSize); color: var(--sapContent_LabelColor); }
+    &__source { margin-top: 0.125rem; font-size: 0.75rem; font-family: var(--sapFontMonoFamily, monospace); color: var(--sapContent_LabelColor); }
+    &__empty { padding: 1rem 0; font-size: var(--sapFontSmallSize); font-style: italic; color: var(--sapContent_LabelColor); }
+}

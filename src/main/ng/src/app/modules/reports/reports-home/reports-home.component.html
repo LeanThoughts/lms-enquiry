@@ -1,0 +1,47 @@
+<div class="rp-home">
+    <div class="rp-home__header">
+        <h1 class="rp-home__title">Reports</h1>
+        <div class="rp-home__subtitle">{{ total }} {{ total === 1 ? 'report' : 'reports' }} in {{ modules.length }} modules. Open a module to see its reports and launch one.</div>
+    </div>
+
+    <div class="rp-home__body">
+        <div class="rp-modules">
+            @for (m of modules; track m.id) {
+                <section class="rp-module" [class.is-open]="isOpen(m)" [attr.aria-labelledby]="'rp-module-' + m.id">
+                    <div class="rp-module__head">
+                        <span class="rp-module__icon"><fd-icon [glyph]="m.icon" aria-hidden="true"></fd-icon></span>
+                        <div class="rp-module__text">
+                            <h2 class="rp-module__title" [id]="'rp-module-' + m.id">{{ m.title }}</h2>
+                            <div class="rp-module__desc">{{ m.description }}</div>
+                        </div>
+                        <span class="rp-module__count" [class.is-empty]="!m.reports.length">
+                            {{ m.reports.length }} {{ m.reports.length === 1 ? 'report' : 'reports' }}
+                        </span>
+                    </div>
+                    <div class="rp-module__actions">
+                        <button fd-button [fdType]="isOpen(m) ? 'standard' : 'emphasized'" [glyph]="isOpen(m) ? 'slim-arrow-up' : 'list'"
+                            [label]="isOpen(m) ? 'Hide reports' : 'Show reports'" [attr.aria-expanded]="isOpen(m)"
+                            [attr.aria-controls]="'rp-list-' + m.id" (click)="toggle(m)"></button>
+                    </div>
+
+                    @if (isOpen(m)) {
+                        <ul class="rp-list" [id]="'rp-list-' + m.id" role="list" [attr.aria-label]="m.title + ' reports'">
+                            @for (r of m.reports; track r.path) {
+                                <li class="rp-list__item">
+                                    <div class="rp-list__text">
+                                        <div class="rp-list__title">{{ r.title }}</div>
+                                        <div class="rp-list__desc">{{ r.description }}</div>
+                                        @if (r.source) { <div class="rp-list__source">{{ r.source }}</div> }
+                                    </div>
+                                    <button fd-button fdType="emphasized" glyph="begin" label="Launch" (click)="launch(r)"></button>
+                                </li>
+                            } @empty {
+                                <li class="rp-list__empty">No reports in this module yet.</li>
+                            }
+                        </ul>
+                    }
+                </section>
+            }
+        </div>
+    </div>
+</div>
