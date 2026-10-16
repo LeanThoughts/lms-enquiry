@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
 /**
  * Collateral → SAP mapping, checked against the ZPFS_LMS_COLLATERAL_SRV $metadata: OData property names, Edm.DateTime
@@ -79,7 +80,7 @@ class CollateralSapPayloadMapperTest {
     }
 
     @Test
-    @DisplayName("portal id: PtlId on a child record and PortalId on the header carry the entity's own id")
+    @DisplayName("portal id: PtlId carries the entity's own id on every entity; the header also fills PortalId")
     void portalId() {
         assertThat(CollateralSapFieldNaming.propertyName(CollateralSapPayloadMapper.PTL_ID)).isEqualTo("PtlId");
         assertThat(CollateralSapFieldNaming.propertyName(CollateralSapPayloadMapper.PORTAL_ID)).isEqualTo("PortalId");
@@ -92,8 +93,10 @@ class CollateralSapPayloadMapperTest {
         Map<String, Object> header = new LinkedHashMap<>();
         header.put("PortalId", "stale");                       // whatever the entity field carried
         mapper.putPortalId(header, id, true);
-        assertThat(header).containsEntry("PortalId", "1a2b3c4d-5e6f-7081-9abc-def012345678"); // id always wins
-        assertThat(((String) header.get("PortalId")).length()).isLessThanOrEqualTo(40);          // SAP MaxLength
+        // the collateral item's id goes to PtlId, and also to the header's not-nullable PortalId; id always wins
+        assertThat(header).containsEntry("PtlId", "1a2b3c4d-5e6f-7081-9abc-def012345678")
+                .containsEntry("PortalId", "1a2b3c4d-5e6f-7081-9abc-def012345678");
+        assertThat(((String) header.get("PtlId")).length()).isLessThanOrEqualTo(40);             // SAP MaxLength
 
         Map<String, Object> none = new LinkedHashMap<>();
         mapper.putPortalId(none, null, false);
@@ -232,22 +235,53 @@ class CollateralSapPayloadMapperTest {
     }
 
     @Test
-    @DisplayName("header key is (ZidNo='…'); child key is (ZidNo='…',ItemId=guid'…'); missing value yields null")
+    @DisplayName("header key is (ZidNo='…',PtlId='…'); child key is (ZidNo='…',ItemId=guid'…',PtlId='…'); missing value yields null")
     void keyPredicate() {
+        java.util.UUID id = java.util.UUID.fromString("1a2b3c4d-5e6f-7081-9abc-def012345678");
         Map<String, Object> header = new LinkedHashMap<>();
         mapper.putChecklistNumber(header, 912L);
+        mapper.putPortalId(header, id, true);
         assertThat(mapper.keyPredicate(header, "ChecklistHeaderSet", CollateralSapEntitySet.HEADER.getKeyColumns()))
-                .isEqualTo("(ZidNo='0000000912')");
+                .isEqualTo("(ZidNo='0000000912',PtlId='1a2b3c4d-5e6f-7081-9abc-def012345678')");
 
         Map<String, Object> child = new LinkedHashMap<>();
         mapper.putChecklistNumber(child, 913L);
         mapper.putItemId(child, "1a2b3c4d-5e6f-7081-9abc-def012345678");
-        assertThat(mapper.keyPredicate(child, "CoverageSet", CollateralSapEntitySet.COVERAGE.getKeyColumns()))
-                .isEqualTo("(ZidNo='0000000913',ItemId=guid'1a2b3c4d-5e6f-7081-9abc-def012345678')");
+        mapper.putPortalId(child, id, false);
+        assertThat(mapper.keyPredicate(child, "DocumentSet", CollateralSapEntitySet.DOCUMENT.getKeyColumns()))
+                .isEqualTo("(ZidNo='0000000913',ItemId=guid'1a2b3c4d-5e6f-7081-9abc-def012345678',PtlId='1a2b3c4d-5e6f-7081-9abc-def012345678')");
 
-        // without ItemId the key cannot be built -> update/delete is skipped
+        // an empty key is still sent: ItemId as the nil GUID, a string key as a space; only a missing ZidNo stops it
         Map<String, Object> noItem = new LinkedHashMap<>();
         mapper.putChecklistNumber(noItem, 913L);
-        assertThat(mapper.keyPredicate(noItem, "CoverageSet", CollateralSapEntitySet.COVERAGE.getKeyColumns())).isNull();
+        assertThat(mapper.keyPredicate(noItem, "CoverageSet", CollateralSapEntitySet.COVERAGE.getKeyColumns()))
+                .isEqualTo("(ZidNo='0000000913',ItemId=guid'00000000-0000-0000-0000-000000000000',PtlId='%20')");
+        assertThat(mapper.keyPredicate(new LinkedHashMap<>(), "CoverageSet", CollateralSapEntitySet.COVERAGE.getKeyColumns()))
+                .isNull();
+    }
+
+    @Test
+    @DisplayName("long texts go to CollateralItemLongTextSet keyed by ZidNo; blank texts are sent as empty strings")
+    void longText() {
+        CollateralItem item = new CollateralItem();
+        item.setSecurityTypeText("Pledge of 51% shares");
+        item.setStipulatedSecurity("First charge on all assets");
+        item.setComplianceRemarksLegal(null);
+        item.setActionTaken("Borrower's reply awaited");
+        Map<String, Object> header = new LinkedHashMap<>();
+        mapper.putChecklistNumber(header, 912L);
+
+        Map<String, Object> text = mapper.toLongTextPayload(item, header);
+        assertThat(text).containsExactly(
+                entry("ZidNo", "0000000912"),
+                entry("Securitytypetext", "Pledge of 51% shares"),
+                entry("Stipulatedsecurity", "First charge on all assets"),
+                entry("Complianceremarkslegal", ""),
+                entry("Actiontaken", "Borrower's reply awaited"));
+        assertThat(mapper.keyPredicate(text, CollateralSapPayloadMapper.COLLATERAL_ITEM_LONG_TEXT_SET,
+                new String[]{CollateralSapPayloadMapper.ZID_NO})).isEqualTo("(ZidNo='0000000912')");
+
+        // no checklist number on the header -> nothing to key the text on
+        assertThat(mapper.toLongTextPayload(item, new LinkedHashMap<>())).isNull();
     }
 }

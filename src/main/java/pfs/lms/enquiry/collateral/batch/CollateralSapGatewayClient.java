@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import pfs.lms.enquiry.sapintegrationservice.SapRestTemplates;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +65,8 @@ public class CollateralSapGatewayClient {
         }
     }
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    /** Logged (SAP HTTP log) and buffering, so every collateral call is in the Administration report. */
+    private final RestTemplate restTemplate = SapRestTemplates.logged();
     private final String baseUrl;
     private final String client;
     private final String authorization;
@@ -77,6 +79,19 @@ public class CollateralSapGatewayClient {
         this.client = client == null ? "" : client.trim();
         String auth = (userName == null ? "" : userName) + ":" + (password == null ? "" : password);
         this.authorization = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.US_ASCII));
+    }
+
+    /**
+     * GET a collection or entity, e.g. {@code …/CollateralObjectTypeAgreementTypeSet?$filter=…}. The path must already
+     * be percent-encoded (spaces as %20, quotes as %27); the JSON body is in {@link Result#getBody()}.
+     */
+    public Result get(String path) {
+        return exchange(HttpMethod.GET, path, null);
+    }
+
+    /** True when {@code sap.baseUrl} is configured; without it every call fails fast with status 0. */
+    public boolean isConfigured() {
+        return !baseUrl.isEmpty();
     }
 
     /** POST the entity to a collection, e.g. {@code /sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/ChecklistHeaderSet}. */
@@ -123,6 +138,10 @@ public class CollateralSapGatewayClient {
     }
 
     private Result exchange(HttpMethod method, String path, Object payload, HttpHeaders extra) {
+        if (baseUrl.isEmpty()) {
+            log.warn("Collateral SAP gateway: sap.baseUrl is not configured; {} {} not sent", method, path);
+            return new Result(0, null, false, "sap.baseUrl is not configured");
+        }
         String url = url(path);
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, authorization);
@@ -135,7 +154,8 @@ public class CollateralSapGatewayClient {
             headers.putAll(extra); // e.g. the file's content type and Slug for a media stream
         }
         log.info("Collateral SAP gateway: {} {}", method, url);
-        log.info("Collateral Payload: {} ", payload.toString() );
+        log.info("Collateral Payload: {} ", payload == null ? "(none)"
+                : payload instanceof byte[] ? ((byte[]) payload).length + " bytes" : payload.toString());
 
         try {
             // the path is already a valid, percent-encoded URI (key predicates encode their values); passing a URI

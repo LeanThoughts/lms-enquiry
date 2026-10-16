@@ -49,7 +49,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Marines1@
+    password: dn47gh3y
     maximum-pool-size: 40
     url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
     validation-query: select 1
@@ -108,6 +108,7 @@ sap:
   appraisalDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/DocumentSet
   businessPartnerServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/
   businessPartnerDocumentServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/DocumentSet
+  collateralServiceUri: /sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/
   lieUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LendersIndependentEngineerSet
   lieReportAndFeeUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LIEReportAndFeeSet
   monitorDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/DocumentSet
@@ -146,7 +147,7 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
+        security: INFO
 
 
 # leanthoughts

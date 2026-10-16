@@ -32,10 +32,13 @@ export class SideNavigationService {
                 this.folder('Risk Department', 'trend-up', true, [
                     { link: { icon: 'trend-up', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
                 ]),
+                // Reports app: the catalogue of reports by module, each report launched from its module's list
+                { link: { icon: 'bar-chart', title: 'Reports', routerLink: 'reports' } },
                 this.folder('Administration', 'user-settings', false, [
                     { link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } },
                     { link: { icon: 'workflow-tasks', title: 'Workflow Approvers', routerLink: 'workflow-approvers' } },
                     { link: { icon: 'task', title: 'Outstanding Approvals', routerLink: 'outstanding-approvals' } },
+                    { link: { icon: 'connected', title: 'SAP Integration Log', routerLink: 'sap-integration-log' } },
                     // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
                 ]),
                 // Configuration workspace: its apps are on the tabs of the workspace (by module)

@@ -11,6 +11,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import pfs.lms.enquiry.sapintegrationservice.SapRestTemplates;
 import org.springframework.web.client.UnknownHttpStatusCodeException;
 import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResource;
 import pfs.lms.enquiry.monitoring.resource.SAPDocumentAttachmentResourceDetails;
@@ -95,7 +96,7 @@ public class SAPIntegrationService implements ISAPIntegrationService {
         }
         log.error("THE URI : "+uri.toString());
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         log.error("Headers: " + responseEntity.getHeaders());
         log.error("Result - status ("+ responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
@@ -123,7 +124,7 @@ public class SAPIntegrationService implements ISAPIntegrationService {
             }
         };
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         SAPLoanApplicationResource createdEnquiry = null;
         HttpEntity<SAPLoanApplicationResource> requestToPost = new HttpEntity<SAPLoanApplicationResource>(sapLoanApplicationResource, headers);
 
@@ -204,7 +205,7 @@ public class SAPIntegrationService implements ISAPIntegrationService {
             }
         };
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         SAPSanctionLetterResource createdSanctionLetter   = null;
         HttpEntity<SAPSanctionLetterResource> requestToPost = new HttpEntity<SAPSanctionLetterResource>(sapSanctionLetterResource, headers);
 
@@ -353,7 +354,7 @@ public class SAPIntegrationService implements ISAPIntegrationService {
             e.printStackTrace();
         }
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         log.info(responseEntity.getBody());
     }

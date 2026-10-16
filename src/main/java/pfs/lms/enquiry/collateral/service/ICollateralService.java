@@ -16,6 +16,9 @@ public interface ICollateralService {
     Map<String, List<ValueEntryDto>> getValueLists();
 
     /** Agreement types offered for a collateral object type (all types until the mapping is maintained). */
+    /** Agreement types allowed for every collateral object type (one SAP read), keyed by object type. */
+    Map<String, List<ValueEntryDto>> getAgreementTypesByObjectType();
+
     List<ValueEntryDto> getAgreementTypes(String collateralObjectType);
 
     CollateralChecklistDto getChecklist(UUID loanApplicationId);

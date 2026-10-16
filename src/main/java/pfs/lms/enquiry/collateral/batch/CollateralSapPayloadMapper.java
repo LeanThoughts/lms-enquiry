@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.collateral.batch;
 
 import org.springframework.stereotype.Component;
+import pfs.lms.enquiry.collateral.domain.CollateralItem;
 import pfs.lms.enquiry.collateral.domain.SapField;
 
 import java.lang.reflect.Field;
@@ -84,15 +85,18 @@ public class CollateralSapPayloadMapper {
 
     /**
      * Sets the portal id of the entity being sent — its own portal UUID — so SAP can refer back to the portal record:
-     * {@code PtlId} (PTL_ID) on a child record, {@code PortalId} (PORTAL_ID) on the checklist header. Both are declared
-     * not nullable in SAP. The value always reflects the entity's id (it overrides whatever the reflective mapping
-     * carried for that column).
+     * {@code PtlId} (PTL_ID) on every entity, and on the checklist header (the collateral item) additionally
+     * {@code PortalId} (PORTAL_ID), which the header declares not nullable. The value always reflects the entity's id
+     * (it overrides whatever the reflective mapping carried for those columns).
      *
-     * @param header {@code true} for the checklist header (PORTAL_ID), {@code false} for a child record (PTL_ID)
+     * @param header {@code true} for the checklist header (PTL_ID and PORTAL_ID), {@code false} for a child (PTL_ID)
      */
     public void putPortalId(Map<String, Object> payload, UUID entityId, boolean header) {
         if (entityId != null) {
-            payload.put(CollateralSapFieldNaming.propertyName(header ? PORTAL_ID : PTL_ID), entityId.toString());
+            payload.put(CollateralSapFieldNaming.propertyName(PTL_ID), entityId.toString());
+            if (header) {
+                payload.put(CollateralSapFieldNaming.propertyName(PORTAL_ID), entityId.toString());
+            }
         }
     }
 
@@ -100,6 +104,18 @@ public class CollateralSapPayloadMapper {
 
     /** The gateway entity set through which uploaded files are sent (media entity DocumentAttachment). */
     public static final String DOCUMENT_ATTACHMENT_SET = "DocumentAttachmentSet";
+
+    /**
+     * Entity set of the collateral item's long texts (entity type {@code CollateralItemLongText}): the four LONGTEXT
+     * fields of {@link pfs.lms.enquiry.collateral.domain.CollateralItem} that are too long for the header. Keyed by
+     * ZidNo only; always written with PUT after the header has been sent.
+     */
+    public static final String COLLATERAL_ITEM_LONG_TEXT_SET = "CollateralItemLongTextSet";
+    /** Long-text properties of CollateralItemLongText in gateway spelling, in SEGW order. */
+    public static final String LONG_TEXT_SECURITY_TYPE = "Securitytypetext";
+    public static final String LONG_TEXT_STIPULATED_SECURITY = "Stipulatedsecurity";
+    public static final String LONG_TEXT_COMPLIANCE_REMARKS_LEGAL = "Complianceremarkslegal";
+    public static final String LONG_TEXT_ACTION_TAKEN = "Actiontaken";
     /** Key of DocumentAttachment: the portal document id, i.e. the vault file id (PTL_DOCU_ID, Edm.String 40). */
     public static final String PTL_DOCU_ID = "PTL_DOCU_ID";
     /** The main entity the file is attached to (BUSINESS_OBJECT_NAME, Edm.String 60). */
@@ -129,6 +145,31 @@ public class CollateralSapPayloadMapper {
      * @param ownerId      the owner record's id (portal id)
      * @param fileId       the vault file id of the uploaded document (the attachment's key)
      */
+    /**
+     * Payload of {@code CollateralItemLongTextSet} for a collateral item: {@code ZidNo} (the checklist number, as on
+     * the header payload) and the four long texts {@code Securitytypetext}, {@code Stipulatedsecurity},
+     * {@code Complianceremarkslegal} and {@code Actiontaken}. Every text is always present — an empty string when the
+     * portal field is blank — so that a PUT clears a text that was removed in the portal rather than leaving the old
+     * value in SAP. Returns {@code null} when the header payload carries no ZidNo (nothing to key the text on).
+     */
+    public Map<String, Object> toLongTextPayload(CollateralItem item, Map<String, Object> headerPayload) {
+        Object zidNo = headerPayload == null ? null : headerPayload.get(CollateralSapFieldNaming.propertyName(ZID_NO));
+        if (zidNo == null || zidNo.toString().isEmpty()) {
+            return null;
+        }
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put(CollateralSapFieldNaming.propertyName(ZID_NO), zidNo.toString());
+        payload.put(LONG_TEXT_SECURITY_TYPE, text(item.getSecurityTypeText()));
+        payload.put(LONG_TEXT_STIPULATED_SECURITY, text(item.getStipulatedSecurity()));
+        payload.put(LONG_TEXT_COMPLIANCE_REMARKS_LEGAL, text(item.getComplianceRemarksLegal()));
+        payload.put(LONG_TEXT_ACTION_TAKEN, text(item.getActionTaken()));
+        return payload;
+    }
+
+    private static String text(String value) {
+        return value == null ? "" : value;
+    }
+
     public Map<String, Object> toAttachmentPayload(CollateralSapEntitySet target, Map<String, Object> ownerPayload,
                                                    UUID ownerId, UUID fileId) {
         Map<String, Object> payload = new LinkedHashMap<>();
@@ -256,16 +297,21 @@ public class CollateralSapPayloadMapper {
     }
 
     /**
-     * OData key predicate, e.g. {@code (ZidNo='0000000912',ItemId=guid'1a2b…')}. Edm.Guid keys use the {@code guid'…'}
-     * literal, Edm.String keys the quoted form. Returns {@code null} when a key value is missing.
+     * OData key predicate with every key property of the entity set, e.g.
+     * {@code (ZidNo='0000000912',ItemId=guid'1a2b…',PtlId='1a2b…')}. Edm.Guid keys use the {@code guid'…'} literal,
+     * Edm.String keys the quoted form; values are percent-encoded. A key that is empty is still sent: an Edm.String
+     * key as a space ({@code ' '}), the Edm.Guid key ItemId as the nil GUID — both arrive in SAP as an initial value.
+     * Returns {@code null} only when the checklist number (ZID_NO) itself is missing, since no row can be addressed
+     * without it.
      */
     public String keyPredicate(Map<String, Object> payload, String entitySet, String[] keyColumns) {
         StringBuilder predicate = new StringBuilder("(");
         for (int i = 0; i < keyColumns.length; i++) {
             String column = keyColumns[i];
             String property = CollateralSapFieldNaming.propertyName(column);
-            Object value = payload.get(property);
-            if (value == null || value.toString().isEmpty()) {
+            Object raw = payload.get(property);
+            String value = raw == null ? "" : raw.toString().trim();
+            if (value.isEmpty() && ZID_NO.equals(column)) {
                 return null;
             }
             if (i > 0) {
@@ -273,9 +319,9 @@ public class CollateralSapPayloadMapper {
             }
             predicate.append(property).append('=');
             if (ITEM_ID.equals(column)) {
-                predicate.append("guid'").append(value.toString().replace("'", "''")).append('\'');
+                predicate.append("guid'").append(value.isEmpty() ? NIL_GUID : percentEncode(value)).append('\'');
             } else {
-                predicate.append('\'').append(value.toString().replace("'", "''")).append('\'');
+                predicate.append('\'').append(value.isEmpty() ? "%20" : percentEncode(value.replace("'", "''"))).append('\'');
             }
         }
         return predicate.append(')').toString();

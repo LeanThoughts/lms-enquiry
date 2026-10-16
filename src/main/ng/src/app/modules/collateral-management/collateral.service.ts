@@ -56,6 +56,12 @@ export class CollateralService {
         return this.valueLists$;
     }
 
+    /** Agreement types SAP allows, keyed by collateral object type (one call per page; the dropdown switches locally). */
+    getAgreementTypesByObject(): Observable<Record<string, ValueEntry[]>> {
+        return this.http.get<Record<string, ValueEntry[]>>(this.baseUrl + '/agreement-types/by-object',
+            { context: skipBusyIndicator() });
+    }
+
     /** Agreement types allowed for a collateral object type. */
     getAgreementTypes(collateralObjectType: string | null): Observable<ValueEntry[]> {
         let params = new HttpParams();

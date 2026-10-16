@@ -14,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import pfs.lms.enquiry.sapintegrationservice.SapRestTemplates;
 import org.springframework.web.client.UnknownHttpStatusCodeException;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResource;
 import pfs.lms.enquiry.monitoring.resource.SAPLIEResourceDetails;
@@ -89,7 +90,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         }
         log.info("THE URI : "+uri.toString());
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         log.info("Headers: " + responseEntity.getHeaders());
         log.info("Result - status ("+ responseEntity.getStatusCode() + ") has body: " + responseEntity.hasBody());
@@ -125,7 +126,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
             }
         };
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         SAPLIEResourceDetails createdLIE = null;
 
         HttpEntity<SAPLIEResource> requestToPost = new HttpEntity<SAPLIEResource>(saplieResource, headers);
@@ -213,7 +214,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
             }
         };
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         HttpEntity<Object> requestToPost = new HttpEntity<Object>(resource, headers);
 
         log.info("THE REQUEST : " + requestToPost.toString());
@@ -290,10 +291,10 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         };
         headers.add("X-Csrf-Token", "Fetch ");
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         HttpEntity<Object> requestToPost = new HttpEntity<Object>(null, headers);
 
-        restTemplate = new RestTemplate();
+        restTemplate = SapRestTemplates.logged();
 
         log.info("OBJECT ID For Deletion : " + objectId);
         ResponseEntity responseEntity;
@@ -367,10 +368,10 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
         };
         headers.add("X-Csrf-Token", "Fetch ");
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         HttpEntity<Object> requestToPost = new HttpEntity<Object>(null, headers);
 
-        restTemplate = new RestTemplate();
+        restTemplate = SapRestTemplates.logged();
 
         log.info("Reference Interest ID For Deletion : " + referenceRateType + " - " + date);
         ResponseEntity responseEntity;
@@ -448,7 +449,7 @@ public class SAPLoanProcessesIntegrationService implements ISAPLoanProcessesInte
             e.printStackTrace();
         }
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
         log.info(responseEntity.getBody());
     }

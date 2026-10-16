@@ -21,6 +21,7 @@ import pfs.lms.enquiry.collateral.repository.CollateralSecuritiesPositionReposit
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
 import pfs.lms.enquiry.resource.FileResource;
+import pfs.lms.enquiry.sapintegrationservice.SapHttpLogContext;
 import pfs.lms.enquiry.service.ISAPIntegrationPointerService;
 import pfs.lms.enquiry.vault.FileStorage;
 
@@ -262,7 +263,9 @@ public class CollateralSapIntegrationService {
         String collectionUri = servicePath + "/" + target.getEntitySet();
 
         sapIntegrationPointerService.updateStatus(pointer.getId(), STATUS_IN_PROCESS);
-        try {
+        // every gateway call below is written to the SAP HTTP log with this business context
+        try (SapHttpLogContext.Scope ignored = SapHttpLogContext.open(BUSINESS_PROCESS,
+                pointer.getSubBusinessProcessName(), pointer.getBusinessObjectId(), pointer.getId())) {
             // the keyed entity path, e.g. …/CoverageSet(ZidNo='0000000912',ItemId=guid'…'); needed for update, delete
             // and for the media stream of a created entity
             String predicate = payload == null ? null
@@ -300,6 +303,11 @@ public class CollateralSapIntegrationService {
                     ok = sendAttachment(target, payload, ownerIdOf(entity), attachment.get(), pointer);
                 }
             }
+            // The collateral item's four long texts live in their own entity (CollateralItemLongText) and always
+            // follow the header: one PUT keyed by ZidNo, whether the header was created or updated.
+            if (ok && !delete && target.isHeader() && entity instanceof CollateralItem) {
+                ok = sendLongText((CollateralItem) entity, payload, pointer);
+            }
             sapIntegrationPointerService.updateStatus(pointer.getId(), ok ? STATUS_POSTED : STATUS_FAILED);
             if (ok) {
                 log.info("Collateral SAP integration: {} {} {} -> Posted ({})", mode, target.getEntitySet(),
@@ -315,6 +323,36 @@ public class CollateralSapIntegrationService {
                     pointer.getBusinessObjectId(), ex.getMessage(), ex);
             return false;
         }
+    }
+
+    /**
+     * Sends the collateral item's long texts to SAP: always
+     * {@code PUT CollateralItemLongTextSet(ZidNo='0000000912')} with Securitytypetext, Stipulatedsecurity,
+     * Complianceremarkslegal and Actiontaken in the body (blank texts as empty strings). The gateway routes a PUT to
+     * UPDATE_ENTITY, whose implementation stores the texts for the checklist number whether or not they exist yet.
+     * Called after every successful header create or update, so the texts in SAP always match the portal.
+     */
+    private boolean sendLongText(CollateralItem item, Map<String, Object> headerPayload, SAPIntegrationPointer pointer) {
+        Map<String, Object> payload = payloadMapper.toLongTextPayload(item, headerPayload);
+        if (payload == null) {
+            log.warn("Collateral SAP integration: long text of collateral item {} has no checklist number; marking failed",
+                    pointer.getBusinessObjectId());
+            return false;
+        }
+        String keyed = servicePath + "/" + CollateralSapPayloadMapper.COLLATERAL_ITEM_LONG_TEXT_SET
+                + payloadMapper.keyPredicate(payload, CollateralSapPayloadMapper.COLLATERAL_ITEM_LONG_TEXT_SET,
+                        new String[]{CollateralSapPayloadMapper.ZID_NO});
+        CollateralSapGatewayClient.Result sent = gateway.put(keyed, payload);
+        log.info("HTTP Status : " + sent.getStatus());
+        log.info("HTTP Result Body : " + sent.getBody());
+        if (sent.isSuccess()) {
+            log.info("Collateral SAP integration: long text of collateral item {} sent ({})",
+                    pointer.getBusinessObjectId(), sent);
+        } else {
+            log.warn("Collateral SAP integration: long text of collateral item {} failed ({})",
+                    pointer.getBusinessObjectId(), sent);
+        }
+        return sent.isSuccess();
     }
 
     /**
@@ -386,7 +424,7 @@ public class CollateralSapIntegrationService {
             // ChecklistHeader.ZloanNumber is not nullable in SAP: the loan contract number of the item's checklist
             // (or of the loan it belongs to) has to go with every collateral item.
             payloadMapper.putLoanNumber(payload, loanContractIdOf(item));
-            // PORTAL_ID: the portal id of the collateral item, so SAP can refer back to the portal record
+            // PTL_ID (and PORTAL_ID): the portal id of the collateral item, so SAP can refer back to the portal record
             payloadMapper.putPortalId(payload, item.getId(), true);
         }
         if (!target.isHeader() && entity instanceof CollateralChildRecord) {

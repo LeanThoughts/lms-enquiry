@@ -65,6 +65,16 @@ public class CollateralController {
         return ResponseEntity.ok(collateralService.getValueLists());
     }
 
+    /**
+     * Agreement types of every collateral object type, keyed by object type: GET /api/collaterals/agreement-types/by-object.
+     * Loaded once by the collateral screen, which then switches the dropdown locally when the object type changes.
+     */
+    @GetMapping("/collaterals/agreement-types/by-object")
+    public ResponseEntity<Map<String, List<ValueEntryDto>>> getAgreementTypesByObjectType(HttpServletRequest request) {
+        signedIn(request);
+        return ResponseEntity.ok(collateralService.getAgreementTypesByObjectType());
+    }
+
     /** Agreement types for a collateral object type, e.g. GET /api/collaterals/agreement-types?collateralObjectType=Z00007 */
     @GetMapping("/collaterals/agreement-types")
     public ResponseEntity<List<ValueEntryDto>> getAgreementTypes(@RequestParam(required = false) String collateralObjectType,

@@ -53,6 +53,36 @@ test.describe('Collateral detail', () => {
         await expect(page.getByText('Collateral 914')).toBeVisible();
     });
 
+    test('the agreement type dropdown follows the collateral object (SAP table read once with the page)', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await openList(page);
+        await page.getByRole('button', { name: 'Create' }).click();
+
+        // no object chosen yet -> nothing to choose (only the blank "clear" option)
+        const agreement = page.locator('app-collateral-field').filter({ hasText: 'Collateral Agreement Type' }).first();
+        await agreement.locator('.fd-select__control, fd-select').first().click();
+        await expect(page.locator('[role=option]')).toHaveCount(1);
+        await page.keyboard.press('Escape');
+
+        // a guarantee object offers exactly its own agreement type
+        // the table was read once with the page; changing the object does not call the server again
+        expect(api.sent('GET', /\/collaterals\/agreement-types\/by-object/)).toHaveLength(1);
+        await choose(page, 'Collateral Object', 'Z00007');
+        await agreement.locator('.fd-select__control, fd-select').first().click();
+        await expect(page.locator('[role=option]')).toHaveCount(2);
+        await expect(page.locator('[role=option]').last()).toContainText('Z00007');
+        await page.locator('[role=option]').last().click();
+
+        // changing the object reloads the list and clears a value that is no longer allowed
+        await choose(page, 'Collateral Object', 'Z30001');
+        await agreement.locator('.fd-select__control, fd-select').first().click();
+        await expect(page.locator('[role=option]')).toHaveCount(4);
+        await page.keyboard.press('Escape');
+        await expect(agreement.locator('.fd-select__control, fd-select').first()).not.toContainText('Z00007');
+        expect(api.sent('GET', /\/collaterals\/agreement-types/)).toHaveLength(1);
+    });
+
     test('display-only users get the no-edit-access message and no Change button', async ({ page }) => {
         const api = new MockApi({ role: 'ZLM014' });
         await api.install(page);

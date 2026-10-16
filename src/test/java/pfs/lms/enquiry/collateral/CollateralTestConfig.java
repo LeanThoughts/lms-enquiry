@@ -34,6 +34,12 @@ import pfs.lms.enquiry.collateral.repository.CollateralPerfectionNeslRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralPerfectionRocRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralSecuritiesPositionRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralValueRepository;
+import pfs.lms.enquiry.collateral.batch.CollateralSapGatewayClient;
+import pfs.lms.enquiry.sapintegrationservice.SapHttpLogReportService;
+import pfs.lms.enquiry.sapintegrationservice.SapHttpLogRepository;
+import pfs.lms.enquiry.sapintegrationservice.SapHttpLogService;
+import pfs.lms.enquiry.sapintegrationservice.SapHttpLoggingInterceptor;
+import pfs.lms.enquiry.sapintegrationservice.SapRestTemplates;
 import pfs.lms.enquiry.collateral.service.impl.CollateralAgreementTypeMapping;
 import pfs.lms.enquiry.collateral.service.impl.CollateralAuthorizationService;
 import pfs.lms.enquiry.collateral.service.impl.CollateralChangeDocumentService;
@@ -71,7 +77,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackageClasses = {CollateralItemRepository.class, LoanApplicationRepository.class, DocumentTypeRepository.class},
+        basePackageClasses = {CollateralItemRepository.class, LoanApplicationRepository.class, DocumentTypeRepository.class,
+                SapHttpLogRepository.class},
         includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
                 CollateralItemRepository.class, CollateralChecklistRepository.class, CollateralValueRepository.class,
                 CollateralCoverageRepository.class, CollateralPerfectionRocRepository.class,
@@ -81,11 +88,14 @@ import java.util.Properties;
                 DocumentTypeRepository.class, UnitOfMeasureRepository.class, UserRoleRepository.class,
                 UserRepository.class, ChangeDocumentRepository.class, BusinessPartnerRoleTypeRepository.class,
                 WorkflowApproverRepository.class, BupaRoleEntityFieldStatusRepository.class,
-                BupaRoleEntitySetFieldStatusRepository.class, IdentificationCategoryRepository.class}))
+                BupaRoleEntitySetFieldStatusRepository.class, IdentificationCategoryRepository.class,
+                SapHttpLogRepository.class}))
 @Import({CollateralService.class, CollateralChildService.class, CollateralPartnerService.class,
         CollateralAuthorizationService.class, CollateralAgreementTypeMapping.class, CollateralChangeDocumentService.class,
         CollateralValueInitializer.class, CollateralNumberRangeService.class, CollateralWorkflowService.class,
-        CollateralMigrationService.class, FieldStatusConfigurationService.class, BpTableService.class})
+        CollateralMigrationService.class, FieldStatusConfigurationService.class, BpTableService.class,
+        CollateralSapGatewayClient.class, SapHttpLogService.class, SapHttpLoggingInterceptor.class, SapRestTemplates.class,
+        SapHttpLogReportService.class})
 public class CollateralTestConfig {
 
     /** Entities the tests need (the collateral entities and the shared ones they refer to). */
@@ -111,6 +121,7 @@ public class CollateralTestConfig {
             "pfs.lms.enquiry.domain.User",
             "pfs.lms.enquiry.domain.EnquiryNo",
             "pfs.lms.enquiry.domain.WorkflowApprover",
+            "pfs.lms.enquiry.sapintegrationservice.SapHttpLog",
             "pfs.lms.enquiry.businesspartner.domain.DocumentType",
             "pfs.lms.enquiry.businesspartner.domain.BusinessPartnerRoleType",
             "pfs.lms.enquiry.businesspartner.domain.BupaRoleEntityFieldStatus",
