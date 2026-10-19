@@ -5,6 +5,8 @@ import { ButtonComponent, FormModule, IconComponent, MessageStripComponent } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { ReportVariantsComponent } from '../shared/report-variants.component';
+import { VariantLoad, applyParameters, variantParameters } from '../shared/report-variant.model';
 import { SelectOptionComponent } from '../shared/select-option.component';
 import { dateRangeError, describeLines } from '../shared/select-option.model';
 
@@ -31,7 +33,7 @@ import { WorkflowStatusService } from './workflow-status.service';
     selector: 'app-workflow-status-report',
     templateUrl: './workflow-status-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './workflow-status-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class WorkflowStatusReportComponent implements OnDestroy {
 
@@ -136,6 +138,17 @@ export class WorkflowStatusReportComponent implements OnDestroy {
     /** Execute: runs the SAP report for the selection. */
     toggleFilter(): void {
         this.filterOpen = !this.filterOpen;
+    }
+
+    // ---- variants: the selection screen saved under a name (not saved: nothing) ----
+    private readonly variantSkip: string[] = [];
+    readonly currentParameters = () => variantParameters(this.selection, this.variantSkip);
+
+    onVariant(load: VariantLoad): void {
+        this.selection = applyParameters({ ...DEFAULT_WORKFLOW_STATUS_SELECTION }, load.parameters, this.variantSkip);
+        if (load.run) {
+            this.execute();
+        }
     }
 
     execute(): void {

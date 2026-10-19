@@ -39,6 +39,7 @@
                     </button>
                 </h2>
                 <span class="ws-panel__hint ws-filter__hint">Mirrors the SAP selection screen. Leave a field empty to select all.</span>
+                <app-report-variants class="ws-variants" report="icc-approval" [current]="currentParameters" (variantLoaded)="onVariant($event)"></app-report-variants>
             </div>
 
             <div class="ws-filter__groups" id="ws-filter-groups">

@@ -22,7 +22,7 @@ test.describe('Reports', () => {
         await expect(modules.nth(3)).toContainText('1 report');
         await expect(page.locator('.rp-list')).toHaveCount(0);
 
-        await expect(modules.nth(0)).toContainText('2 reports');
+        await expect(modules.nth(0)).toContainText('4 reports');
         await modules.nth(1).getByRole('button', { name: 'Show reports' }).click();
         await expect(page.locator('.rp-list')).toContainText('No reports in this module yet.');
 
@@ -48,8 +48,8 @@ test.describe('Reports', () => {
         await page.locator('#ws-date-to').fill('2026-10-12');
         await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
 
-        await expect.poll(() => api.sent('GET', /\/reports\/workflow-status/).length).toBe(1);
-        const query = api.sent('GET', /\/reports\/workflow-status/)[0].query!;
+        await expect.poll(() => api.sent('GET', /\/reports\/workflow-status$/).length).toBe(1);
+        const query = api.sent('GET', /\/reports\/workflow-status$/)[0].query!;
         expect(JSON.parse(query.contract)).toEqual([{ sign: 'I', option: 'EQ', low: '0000010003814', high: '' }]);   // from only = single value
         expect(JSON.parse(query.date)).toEqual([{ sign: 'I', option: 'BT', low: '2026-09-01', high: '2026-10-12' }]);   // from + to = range
 
@@ -122,7 +122,7 @@ test.describe('Reports', () => {
         await page.locator('#icc-quarter').selectOption('3');
         await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
 
-        await expect.poll(() => api.sent('GET', /\/reports\/icc-approval/).length).toBe(1);
+        await expect.poll(() => api.sent('GET', /\/reports\/icc-approval$/).length).toBe(1);
         await expect(page.locator('tbody tr')).toHaveCount(1);                    // the mock filters by quarter
         await expect(page.locator('thead th')).toHaveCount(22);                   // every property of the entity
         await expect(page.locator('tbody tr').first()).toContainText('Himalaya Hydro Pvt Ltd');
@@ -228,8 +228,8 @@ test.describe('Reports', () => {
         await page.locator('#kyc-date-to').fill('2026-10-15');
         await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
 
-        await expect.poll(() => api.sent('GET', /\/reports\/kyc/).length).toBe(1);
-        const sent = api.sent('GET', /\/reports\/kyc/)[0].path;
+        await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(1);
+        const sent = api.sent('GET', /\/reports\/kyc$/)[0].path;
         expect(sent).toContain('/reports/kyc');
         await expect(page.locator('tbody tr')).toHaveCount(2);
         await expect(page.locator('thead th')).toHaveCount(25);                 // every output property of the entity
@@ -257,6 +257,173 @@ test.describe('Reports', () => {
         expect(exported.columns).not.toContain('PAN');
     });
 
+    test('Loans : Balance List: SAP-like selection screen, Execute sends every parameter, amounts, columns, Excel', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await page.goto('/reports');
+        await page.locator('.rp-module').nth(0).getByRole('button', { name: 'Show reports' }).click();
+        await page.locator('.rp-list__item').filter({ hasText: 'Loans : Balance List' }).getByRole('button', { name: 'Launch' }).click();
+        await expect(page).toHaveURL(/\/reports\/balance-list$/);
+        await expect(page.getByRole('heading', { name: 'Loans : Balance List' })).toBeVisible();
+
+        // the defaults of the SAP screen
+        await expect(page.locator('#bl-bukrs')).toHaveValue('PFS');
+        await expect(page.locator('#bl-bukrs')).toBeDisabled();
+        await expect(page.locator('#bl-completed')).toBeChecked();
+        await expect(page.locator('#bl-key-date')).not.toHaveValue('');
+        await expect(page.locator('#bl-nonzero')).not.toBeChecked();
+        await expect(page.getByText('Evaluate completed contracts?')).toBeVisible();
+        await expect(page.getByText('ALV List')).toHaveCount(0);
+        await expect(page.getByText('Classic List')).toHaveCount(0);
+        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Variant');
+
+        await page.locator('#bl-key-date').fill('2026-10-17');
+        await page.locator('#bl-display-currency').fill('inr');
+        await page.locator('#bl-currency-from').fill('INR');
+        await page.locator('#bl-nonzero').check();
+        await page.locator('#bl-totals-only').check();
+        await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
+
+        await expect.poll(() => api.sent('GET', /\/reports\/balance-list$/).length).toBe(1);
+        const query = api.sent('GET', /\/reports\/balance-list$/)[0].query!;
+        expect(query.keyDate).toBe('2026-10-17');
+        expect(query.displayCurrency).toBe('inr');
+        expect(query.nonZeroOnly).toBe('true');
+        expect(query.totalsOnly).toBe('true');
+        expect(query.evaluateCompleted).toBe('true');
+        expect(JSON.parse(query.currency)[0]).toMatchObject({ option: 'EQ', low: 'INR' });
+        await expect(page.locator('tbody tr')).toHaveCount(1);
+        await expect(page.locator('thead th')).toHaveCount(22);
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('1 row');
+        await expect(page.locator('tbody tr').first()).toContainText('Solar Park Phase 2');
+        await expect(page.locator('tbody tr').first()).toContainText('3,25,00,000.00');   // grouped amount
+        await expect(page.locator('.ws-filter')).toHaveClass(/ws-filter--collapsed/);
+
+        // no restriction on the currency: both contracts; sort by Nominal Capital
+        await page.getByRole('button', { name: /Selection Criteria/ }).click();
+        await page.locator('#bl-currency-from').fill('');
+        await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
+        await expect(page.locator('tbody tr')).toHaveCount(2);
+        const nominal = page.locator('thead th').filter({ hasText: 'Nominal Capital' });
+        await nominal.getByRole('button').click();
+        await expect(page.locator('tbody tr').first()).toContainText('Run-of-river');
+        await nominal.getByRole('button').click();
+        await expect(page.locator('tbody tr').first()).toContainText('Solar Park');
+
+        // hide a column; the Excel carries the visible ones
+        await page.locator('.ws-cols > button').click();
+        await page.locator('.ws-cols__panel').getByLabel('Versch.', { exact: true }).uncheck();
+        await expect(page.locator('thead th')).toHaveCount(21);
+        await page.locator('.ws-header__title').click();
+        await page.getByRole('button', { name: 'Download Excel' }).click();
+        await expect.poll(() => api.sent('POST', /\/reports\/balance-list\/export/).length).toBe(1);
+        const exported = api.sent('POST', /\/reports\/balance-list\/export/)[0].body;
+        expect(exported.columns).toHaveLength(21);
+        expect(exported.columns).not.toContain('Versch.');
+    });
+
+    test('Loans : Balance List: variants save the selection (not the key date) and load it again', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await page.goto('/reports/balance-list');
+        await page.locator('#bl-ranl-from').fill('0000010003814');
+        await page.locator('#bl-nonzero').check();
+        await page.locator('#bl-display-currency').fill('USD');
+        await page.getByRole('button', { name: 'Save as variant' }).click();
+        const dialog = page.getByRole('dialog', { name: 'Save as Variant' });
+        await dialog.getByLabel('Variant name').fill('Non-zero USD');
+        await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+        await expect(page.getByText('Variant Non-zero USD saved.')).toBeVisible();
+        expect(api.variants).toHaveLength(1);
+        const saved = api.variants[0].parameters;
+        expect(saved.contract).toEqual([{ sign: 'I', option: 'EQ', low: '0000010003814', high: '' }]);
+        expect(saved.nonZeroOnly).toBe(true);
+        expect(saved.displayCurrency).toBe('USD');
+        expect(saved.keyDate).toBeUndefined();
+        expect(saved.companyCode).toBeUndefined();
+
+        await page.locator('#bl-ranl-from').fill('');
+        await page.locator('#bl-nonzero').uncheck();
+        await page.locator('#bl-display-currency').fill('');
+        await page.locator('.rv__menu > .rv__btn').click();
+        await page.getByRole('menuitem').filter({ hasText: 'Non-zero USD' }).getByRole('button').first().click();
+        await expect(page.locator('#bl-ranl-from')).toHaveValue('0000010003814');
+        await expect(page.locator('#bl-nonzero')).toBeChecked();
+        await expect(page.locator('#bl-display-currency')).toHaveValue('USD');
+        await expect(page.locator('#bl-key-date')).not.toHaveValue('');
+    });
+
+    test('Loans : Disbursement report: selection screen, Execute sends every parameter, SAP cells shown as a table', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await page.goto('/reports');
+        await page.locator('.rp-module').nth(0).getByRole('button', { name: 'Show reports' }).click();
+        await page.locator('.rp-list__item').filter({ hasText: 'Disbursement' }).getByRole('button', { name: 'Launch' }).click();
+        await expect(page).toHaveURL(/\/reports\/disbursement$/);
+        await expect(page.getByRole('heading', { name: /Disbursement/ })).toBeVisible();
+
+        // the defaults of the SAP screen
+        await expect(page.locator('#db-bukrs')).toHaveValue('PFS');
+        await expect(page.locator('#db-mode-report')).toBeChecked();
+        await expect(page.locator('#db-mode-comparative')).not.toBeChecked();
+        await expect(page.locator('#db-fy-from')).toHaveValue(/^\d{4}$/);
+        await expect(page.locator('#db-fy-to')).toHaveValue('');
+        await expect(page.locator('#db-period')).toHaveValue('M');
+        await expect(page.locator('#db-all-loans')).toBeChecked();
+        await expect(page.locator('#db-suppress-zero')).toBeChecked();
+        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Variant');
+
+        // validation of the year
+        await page.locator('#db-fy-from').fill('26');
+        await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
+        await expect(page.getByText('Fiscal Year: 26 is not a year (yyyy).')).toBeVisible();
+        expect(api.sent('GET', /\/reports\/disbursement$/)).toHaveLength(0);
+
+        await page.locator('#db-fy-from').fill('2025');
+        await page.locator('#db-fy-to').fill('2026');
+        await page.locator('#db-mode-comparative').check();
+        await page.locator('#db-period').selectOption('Q');
+        await page.locator('#db-project-type').fill('Solar');
+        await page.locator('#db-suppress-zero').uncheck();
+        await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
+
+        await expect.poll(() => api.sent('GET', /\/reports\/disbursement$/).length).toBe(1);
+        const query = api.sent('GET', /\/reports\/disbursement$/)[0].query!;
+        expect(query).toMatchObject({ companyCode: 'PFS', mode: 'C', fiscalYearFrom: '2025', fiscalYearTo: '2026', periodType: 'Q',
+            projectType: 'Solar', allLoans: 'true', suppressZero: 'false' });
+
+        // one column per SAP Fieldlabel, one row per RowNo
+        await expect(page.locator('thead th')).toHaveCount(5);
+        await expect(page.locator('thead th').nth(2)).toContainText('Apr-2026');
+        await expect(page.locator('tbody tr')).toHaveCount(3);
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('3 rows');
+        await expect(page.locator('tbody tr').first()).toContainText('Sunrise Power Ltd');
+        await expect(page.locator('tbody tr').first().locator('td').nth(0)).toHaveText('0000010003814');   // ids keep their zeros
+        await expect(page.locator('tbody tr').nth(1).locator('td').nth(2)).toHaveText('');                 // no Value for that cell
+        await expect(page.locator('tbody tr').first().locator('td').nth(2)).toHaveClass(/ws-td--num/);
+        await expect(page.locator('tbody tr').first().locator('td').nth(0)).not.toHaveClass(/ws-td--num/);
+        await expect(page.locator('.ws-filter')).toHaveClass(/ws-filter--collapsed/);
+
+        // amounts sort as numbers: 125.25- < 250.50 < 1,000.00 < 9,500.00 in the May-2026 column
+        const may = page.locator('thead th').filter({ hasText: 'May-2026' });
+        await may.getByRole('button').click();
+        await expect(page.locator('tbody tr').first()).toContainText('Coastal Wind');
+        await may.getByRole('button').click();
+        await expect(page.locator('tbody tr').first()).toContainText('Sunrise Power');
+
+        // hide a column; the Excel carries the visible ones with their keys
+        await page.locator('.ws-cols > button').click();
+        await page.locator('.ws-cols__panel').getByLabel('Borrower', { exact: true }).uncheck();
+        await expect(page.locator('thead th')).toHaveCount(4);
+        await page.locator('.ws-header__title').click();
+        await page.getByRole('button', { name: 'Download Excel' }).click();
+        await expect.poll(() => api.sent('POST', /\/reports\/disbursement\/export/).length).toBe(1);
+        const exported = api.sent('POST', /\/reports\/disbursement\/export/)[0].body;
+        expect(exported.columns.map((c: any) => c.label)).toEqual(['Loan Contract', 'Apr-2026', 'May-2026', 'Total']);
+        expect(exported.columns[1].key).toBe('c2');
+        expect(exported.rows).toHaveLength(3);
+    });
+
     test('selection criteria section collapses and expands, and collapses after a successful run', async ({ page }) => {
         const api = new MockApi();
         await api.install(page);
@@ -272,7 +439,7 @@ test.describe('Reports', () => {
         await toggle.click();
         await expect(groups).toBeVisible();
         await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
-        await expect.poll(() => api.sent('GET', /\/reports\/kyc/).length).toBe(1);
+        await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(1);
         await expect(groups).toBeHidden();
         await toggle.click();
         await expect(groups).toBeVisible();
@@ -288,8 +455,8 @@ test.describe('Reports', () => {
         await page.locator('#kyc-ranl-to').fill('0000010003900');
         await expect(page.locator('#kyc-ranl-multi')).not.toHaveClass(/so-multi--on/);
         await execute.click();
-        await expect.poll(() => api.sent('GET', /\/reports\/kyc/).length).toBe(1);
-        expect(JSON.parse(api.sent('GET', /\/reports\/kyc/)[0].query!.contract))
+        await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(1);
+        expect(JSON.parse(api.sent('GET', /\/reports\/kyc$/)[0].query!.contract))
             .toEqual([{ sign: 'I', option: 'BT', low: '0000010003814', high: '0000010003900' }]);
         await expect(page.locator('tbody tr')).toHaveCount(2);
 
@@ -309,8 +476,8 @@ test.describe('Reports', () => {
         await expect(page.locator('.ws-chip').filter({ hasText: 'Contract' })).toContainText('excl. 0000010003900');
 
         await execute.click();
-        await expect.poll(() => api.sent('GET', /\/reports\/kyc/).length).toBe(2);
-        expect(JSON.parse(api.sent('GET', /\/reports\/kyc/)[1].query!.contract)).toEqual([
+        await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(2);
+        expect(JSON.parse(api.sent('GET', /\/reports\/kyc$/)[1].query!.contract)).toEqual([
             { sign: 'I', option: 'BT', low: '0000010003814', high: '0000010003900' },
             { sign: 'E', option: 'EQ', low: '0000010003900', high: '' }
         ]);
@@ -334,8 +501,8 @@ test.describe('Reports', () => {
         await expect(dialog).toBeHidden();
 
         await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
-        await expect.poll(() => api.sent('GET', /\/reports\/kyc/).length).toBe(1);
-        expect(JSON.parse(api.sent('GET', /\/reports\/kyc/)[0].query!.contract)).toEqual([
+        await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(1);
+        expect(JSON.parse(api.sent('GET', /\/reports\/kyc$/)[0].query!.contract)).toEqual([
             { sign: 'I', option: 'CP', low: '0000010003*', high: '' },
             { sign: 'I', option: 'GE', low: '0000010009000', high: '' }
         ]);
@@ -359,12 +526,77 @@ test.describe('Reports', () => {
         await expect(page.locator('#kyc-ranl-from')).toHaveValue('0000010003814');
     });
 
+    test('variants: save the selection under a name, load it again, default on open, run, delete', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await page.goto('/reports/kyc');
+        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Variant');
+
+        // fill in the selection and save it as the default variant
+        await page.locator('#kyc-ranl-from').fill('0000010003814');
+        await page.getByRole('button', { name: 'Save as variant' }).click();
+        const dialog = page.getByRole('dialog', { name: 'Save as Variant' });
+        await dialog.getByLabel('Variant name').fill('Sunrise only');
+        await dialog.getByLabel('Use as my default variant').check();
+        await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+        await expect(page.getByText('Variant Sunrise only saved.')).toBeVisible();
+        expect(api.variants).toHaveLength(1);
+        expect(api.variants[0].parameters.contract).toEqual([{ sign: 'I', option: 'EQ', low: '0000010003814', high: '' }]);
+        expect(api.variants[0].parameters.status).toEqual([{ sign: 'I', option: 'EQ', low: '60', high: '' }]);
+        expect(api.variants[0].parameters.runDate).toBeUndefined();          // today's date and the fixed company code are not saved
+        expect(api.variants[0].parameters.companyCode).toBeUndefined();
+        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Sunrise only');
+        await expect(page.locator('.rv__changed')).toHaveCount(0);
+
+        // changing the screen shows the variant as modified; loading it restores the saved values
+        await page.locator('#kyc-ranl-from').fill('0000010003900');
+        await expect(page.locator('.rv__changed')).toBeVisible();
+        await page.locator('.rv__menu > .rv__btn').click();
+        await page.getByRole('menuitem').filter({ hasText: 'Sunrise only' }).getByRole('button').first().click();
+        await expect(page.locator('#kyc-ranl-from')).toHaveValue('0000010003814');
+        await expect(page.locator('.rv__changed')).toHaveCount(0);
+
+        // a second variant with another selection, then reopen the report: the default variant is loaded
+        await page.locator('#kyc-ranl-from').fill('0000010003900');
+        await page.getByRole('button', { name: 'Save as variant' }).click();
+        await dialog.getByLabel('Variant name').fill('Himalaya only');
+        await dialog.getByLabel('Use as my default variant').uncheck();          // the dialog starts from the loaded variant's settings
+        await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+        expect(api.variants).toHaveLength(2);
+        await page.goto('/reports/kyc');
+        await expect(page.locator('#kyc-ranl-from')).toHaveValue('0000010003814');
+        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Sunrise only');
+
+        // saving under an existing name overwrites it
+        await page.locator('#kyc-ranl-from').fill('0000010003999');
+        await page.getByRole('button', { name: 'Save as variant' }).click();
+        await expect(dialog.getByText('replaces it')).toBeVisible();
+        await dialog.getByRole('button', { name: 'Overwrite' }).click();
+        expect(api.variants).toHaveLength(2);
+        expect(api.variants[0].parameters.contract[0].low).toBe('0000010003999');
+
+        // load and run a variant: the report runs with the saved parameters
+        await page.locator('.rv__menu > .rv__btn').click();
+        await page.getByRole('button', { name: 'Load Himalaya only and run' }).click();
+        await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(1);
+        expect(JSON.parse(api.sent('GET', /\/reports\/kyc$/)[0].query!.contract)[0].low).toBe('0000010003900');
+        await expect(page.locator('tbody tr')).toHaveCount(1);
+        await expect(page.locator('tbody tr').first()).toContainText('Himalaya Hydro');
+
+        // delete asks twice
+        await page.locator('.rv__menu > .rv__btn').click();
+        await page.getByRole('button', { name: 'Delete Himalaya only' }).click();
+        expect(api.variants).toHaveLength(2);
+        await page.getByRole('button', { name: 'Confirm delete Himalaya only' }).click();
+        await expect.poll(() => api.variants.length).toBe(1);
+    });
+
     test('Loans KYC Report is listed under Loans Management and launches', async ({ page }) => {
         const api = new MockApi();
         await api.install(page);
         await page.goto('/reports');
         await page.locator('.rp-module').nth(0).getByRole('button', { name: 'Show reports' }).click();
-        await expect(page.locator('.rp-list__item')).toHaveCount(2);
+        await expect(page.locator('.rp-list__item')).toHaveCount(4);
         await page.locator('.rp-list__item').filter({ hasText: 'Loans KYC Report' }).getByRole('button', { name: 'Launch' }).click();
         await expect(page).toHaveURL(/\/reports\/kyc$/);
     });

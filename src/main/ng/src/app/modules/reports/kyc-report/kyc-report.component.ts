@@ -5,6 +5,8 @@ import { ButtonComponent, FormModule, IconComponent, MessageStripComponent } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { ReportVariantsComponent } from '../shared/report-variants.component';
+import { VariantLoad, applyParameters, variantParameters } from '../shared/report-variant.model';
 import { SelectOptionComponent } from '../shared/select-option.component';
 import { dateRangeError, describeLines } from '../shared/select-option.model';
 
@@ -30,7 +32,7 @@ import { KycService } from './kyc.service';
     selector: 'app-kyc-report',
     templateUrl: './kyc-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './kyc-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class KycReportComponent implements OnDestroy {
 
@@ -134,6 +136,17 @@ export class KycReportComponent implements OnDestroy {
     /** Execute: runs the SAP report for the selection. */
     toggleFilter(): void {
         this.filterOpen = !this.filterOpen;
+    }
+
+    // ---- variants: the selection screen saved under a name (not saved: companyCode, runDate) ----
+    private readonly variantSkip: string[] = ['companyCode', 'runDate'];
+    readonly currentParameters = () => variantParameters(this.selection, this.variantSkip);
+
+    onVariant(load: VariantLoad): void {
+        this.selection = applyParameters({ ...defaultKycSelection(), runDate: this.selection.runDate }, load.parameters, this.variantSkip);
+        if (load.run) {
+            this.execute();
+        }
     }
 
     execute(): void {

@@ -5,6 +5,8 @@ import { ButtonComponent, FormModule, IconComponent, MessageStripComponent } fro
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { ReportVariantsComponent } from '../shared/report-variants.component';
+import { VariantLoad, applyParameters, variantParameters } from '../shared/report-variant.model';
 import { SelectOptionComponent } from '../shared/select-option.component';
 import { describeLines } from '../shared/select-option.model';
 
@@ -31,7 +33,7 @@ import { IccApprovalService } from './icc-approval.service';
     selector: 'app-icc-approval-report',
     templateUrl: './icc-approval-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './icc-approval-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class IccApprovalReportComponent implements OnDestroy {
 
@@ -136,6 +138,17 @@ export class IccApprovalReportComponent implements OnDestroy {
     /** Execute: runs the SAP report for the selection. */
     toggleFilter(): void {
         this.filterOpen = !this.filterOpen;
+    }
+
+    // ---- variants: the selection screen saved under a name (not saved: companyCode) ----
+    private readonly variantSkip: string[] = ['companyCode'];
+    readonly currentParameters = () => variantParameters(this.selection, this.variantSkip);
+
+    onVariant(load: VariantLoad): void {
+        this.selection = applyParameters({ ...DEFAULT_ICC_APPROVAL_SELECTION }, load.parameters, this.variantSkip);
+        if (load.run) {
+            this.execute();
+        }
     }
 
     execute(): void {

@@ -46,6 +46,29 @@ const ICC_APPROVAL_ROWS = [
         iccApprDate: null, ziccRemarks: null, bodDate: null, bodStatusDesc: 'Awaiting board', zboardAppRemarks: null }
 ];
 
+/** Loans Disbursement report sample: the table the portal builds from the SAP cells (RowNo, Fieldlabel, Value). */
+const DISBURSEMENT_COLUMNS = [
+    { key: 'c0', label: 'Loan Contract' }, { key: 'c1', label: 'Borrower' }, { key: 'c2', label: 'Apr-2026' },
+    { key: 'c3', label: 'May-2026' }, { key: 'c4', label: 'Total' }
+];
+const DISBURSEMENT_ROWS = [
+    { c0: '0000010003814', c1: 'Sunrise Power Ltd', c2: '1,000.00', c3: '250.50', c4: '1,250.50' },
+    { c0: '0000010003900', c1: 'Himalaya Hydro Pvt Ltd', c2: null, c3: '75.00', c4: '75.00' },
+    { c0: '0000010004100', c1: 'Coastal Wind Energy', c2: '9,500.00', c3: '125.25-', c4: '9,374.75' }
+];
+
+/** Loans Balance List sample (SAP ZFNR7Report), two loan contracts. */
+const BALANCE_ROWS = [
+    { ranl: '0000010003814', rantrag: '0000200001', bukrs: 'PFS', gsart: '100', santwhr: 'INR', rrefkont: 'REF00001',
+        moratorium: 'X', status: 'Disbursed', projectName: 'Solar Park Phase 2', anzwhr: 'INR', sanctionedAmt: '50000000.000',
+        bzusage: '0.000', nomkap: '32500000.000', effkap: '31200000.500', tilgng: '1250000.000', zinsen: '845000.250',
+        versch: '0.000', ueberz: '0.000', briwr: '0.000', bvzwr: '0.000', bvkwr: '0.000', rbear: 'SAJEEV' },
+    { ranl: '0000010003900', rantrag: '0000200002', bukrs: 'PFS', gsart: '200', santwhr: 'USD', rrefkont: 'REF00002',
+        moratorium: null, status: 'Sanctioned', projectName: 'Run-of-river 60MW', anzwhr: 'INR', sanctionedAmt: '1000000.000',
+        bzusage: '250000.000', nomkap: '0.000', effkap: '0.000', tilgng: '0.000', zinsen: '0.000',
+        versch: '0.000', ueberz: '0.000', briwr: '0.000', bvzwr: '0.000', bvkwr: '0.000', rbear: 'ADMIN' }
+];
+
 /** Loans KYC Report sample (SAP KycReportSet), two loan contracts. */
 const KYC_ROWS = [
     { contractNo: '0000010003814', status: '60', serialNo: '0001', partnerId: '0001000234', partnerName: 'Sunrise Power Ltd',
@@ -138,6 +161,8 @@ function selected(value: string, json: string | null): boolean {
 
 export class MockApi {
     readonly requests: RecordedRequest[] = [];
+    /** Report variants saved through the mocked /reports/{report}/variants API: { report, ...variant } */
+    readonly variants: any[] = [];
     readonly loan = {
         loanApplicationId: 'L1', loanContractId: '0000010003200', enquiryNo: 4711, projectName: 'Solar Park Rajasthan',
         borrowerName: 'PTC India Fin. Serv. Ltd.', borrowerNumber: '1000234', functionalStatusDescription: 'Loan Monitoring Stage'
@@ -223,6 +248,49 @@ export class MockApi {
         }
         if (path === '/collaterals/access') {
             return [200, { canWrite: this.canWrite, userName: 'test@pfs.local', role: this.role, writeRoles: WRITE_ROLES }];
+        }
+        // Report variants (saved selection screens), kept in memory for the signed-in test user
+        const variantUrl = /^\/reports\/([a-z-]+)\/variants(?:\/([\w-]+))?$/.exec(path);
+        if (variantUrl) {
+            const [, report, id] = variantUrl;
+            const dto = (v: any) => { const { report: _r, ...rest } = v; return rest; };
+            if (method === 'GET') {
+                return [200, this.variants.filter(v => v.report === report).map(dto)];
+            }
+            if (method === 'POST') {
+                let v = this.variants.find(x => x.report === report && x.name === body.name && x.mine);
+                if (!v) {
+                    v = { report, id: 'v' + (this.variants.length + 1), owner: 'tester@test.local', mine: true };
+                    this.variants.push(v);
+                }
+                if (body.defaultVariant) { this.variants.filter(x => x.report === report).forEach(x => x.defaultVariant = false); }
+                Object.assign(v, { name: body.name, description: body.description || null, shared: !!body.shared,
+                    defaultVariant: !!body.defaultVariant, parameters: body.parameters, changedOn: new Date().toISOString() });
+                return [200, dto(v)];
+            }
+            if (method === 'DELETE') {
+                const i = this.variants.findIndex(x => x.id === id);
+                if (i >= 0) { this.variants.splice(i, 1); }
+                return [204, null];
+            }
+        }
+        // Reports > Loans Management > Loans : Disbursement - Periodwise and Comparison (SAP DisbursementCompRptSet)
+        if (path === '/reports/disbursement/export') {
+            return [200, { excel: true, rows: (body?.rows ?? []).length }];
+        }
+        if (path === '/reports/disbursement') {
+            const rows = DISBURSEMENT_ROWS.filter(r => selected(r.c0, query.get('contract')));
+            return [200, { columns: DISBURSEMENT_COLUMNS, rows, total: rows.length, generatedOn: new Date().toISOString(),
+                query: 'http://sap/sap/opu/odata/sap/ZPFS_LMS_REPORTS_SRV/DisbursementCompRptSet?$format=json&$filter=…' }];
+        }
+        // Reports > Loans Management > Loans : Balance List (SAP ZPFS_LMS_REPORTS_SRV · ZFNR7Report)
+        if (path === '/reports/balance-list/export') {
+            return [200, { excel: true, rows: (body?.rows ?? []).length }];
+        }
+        if (path === '/reports/balance-list') {
+            const rows = BALANCE_ROWS.filter(r => selected(r.ranl, query.get('contract')) && selected(r.santwhr, query.get('currency')));
+            return [200, { rows, total: rows.length, generatedOn: new Date().toISOString(),
+                query: 'http://sap/sap/opu/odata/sap/ZPFS_LMS_REPORTS_SRV/ZFNR7Report?$format=json&$filter=…' }];
         }
         // Reports > Loans Management > Loans KYC Report (SAP ZPFS_LMS_REPORTS_SRV · KycReportSet)
         if (path === '/reports/kyc/export') {

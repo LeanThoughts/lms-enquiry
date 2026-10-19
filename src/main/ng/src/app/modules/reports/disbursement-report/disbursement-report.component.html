@@ -1,0 +1,233 @@
+<div class="ws">
+    <!-- Page header -->
+    <header class="ws-header">
+        <div class="ws-header__text">
+            <nav class="ws-crumbs" aria-label="Breadcrumb">
+                <a class="ws-crumbs__link" (click)="back()">Reports</a>
+                <span class="ws-crumbs__sep">›</span>
+                <span>Loans Management</span>
+            </nav>
+            <h1 class="ws-header__title">Loans : Disbursement – Periodwise &amp; Comparison</h1>
+            <div class="ws-header__subtitle">
+                <span class="ws-source"><fd-icon glyph="database" aria-hidden="true"></fd-icon> SAP · ZPFS_LMS_REPORTS_SRV</span>
+                @if (report) {
+                    <span class="ws-header__dot">·</span>
+                    <span>Last run {{ lastRun }}</span>
+                }
+            </div>
+        </div>
+        <div class="ws-header__actions">
+            <button fd-button fdType="transparent" glyph="excel-attachment" label="Download Excel"
+                [disabled]="!rows.length || exporting" (click)="exportExcel()"></button>
+            <button fd-button fdType="transparent" glyph="nav-back" label="Back to Reports" (click)="back()"></button>
+        </div>
+    </header>
+
+    <div class="ws-body">
+        @if (errorMessage) {
+            <fd-message-strip type="error" [dismissible]="true" (onDismiss)="errorMessage = ''" class="ws-strip">{{ errorMessage }}</fd-message-strip>
+        }
+
+        <!-- Selection criteria -->
+        <form class="ws-panel ws-filter" [class.ws-filter--collapsed]="!filterOpen" (ngSubmit)="execute()" novalidate aria-labelledby="ws-filter-title">
+            <div class="ws-panel__head">
+                <h2 id="ws-filter-title" class="ws-panel__title">
+                    <button type="button" class="ws-panel__toggle" (click)="toggleFilter()" [attr.aria-expanded]="filterOpen" aria-controls="ws-filter-groups"
+                            [attr.title]="filterOpen ? 'Collapse selection criteria' : 'Expand selection criteria'">
+                        <fd-icon [glyph]="filterOpen ? 'navigation-down-arrow' : 'navigation-right-arrow'" aria-hidden="true"></fd-icon>
+                        Selection Criteria
+                    </button>
+                </h2>
+                <span class="ws-panel__hint ws-filter__hint">Mirrors the SAP selection screen. Leave a field empty to select all.</span>
+                <app-report-variants class="ws-variants" report="disbursement" [current]="currentParameters" (variantLoaded)="onVariant($event)"></app-report-variants>
+                            </div>
+
+            <div class="ws-filter__groups" id="ws-filter-groups">
+                <section class="ws-group" aria-labelledby="ws-g1">
+                    <h3 id="ws-g1" class="ws-group__title"><fd-icon glyph="action-settings" aria-hidden="true"></fd-icon> Report Control Parameters</h3>
+                    <div class="ws-group__fields ws-group__fields--stack">
+                        <div class="ws-field">
+                            <label fd-form-label for="db-bukrs">Company Code</label>
+                            <input fd-form-control id="db-bukrs" class="ws-input ws-input--code" name="companyCode" maxlength="4"
+                                [(ngModel)]="selection.companyCode" autocomplete="off" />
+                        </div>
+                        <fieldset class="ws-radios">
+                            <legend class="ws-radios__legend">Type</legend>
+                            <label class="ws-check">
+                                <input type="radio" id="db-mode-report" name="mode" value="R" [(ngModel)]="selection.mode" />
+                                <span>Report</span>
+                            </label>
+                            <label class="ws-check">
+                                <input type="radio" id="db-mode-comparative" name="mode" value="C" [(ngModel)]="selection.mode" />
+                                <span>Comparative</span>
+                            </label>
+                        </fieldset>
+                        <div class="ws-pair">
+                            <div class="ws-field">
+                                <label fd-form-label for="db-fy-from">Fiscal Year</label>
+                                <input fd-form-control id="db-fy-from" class="ws-input ws-input--code" name="fiscalYearFrom" maxlength="4" inputmode="numeric"
+                                    [(ngModel)]="selection.fiscalYearFrom" autocomplete="off" />
+                            </div>
+                            <div class="ws-field">
+                                <label fd-form-label for="db-fy-to">to</label>
+                                <input fd-form-control id="db-fy-to" class="ws-input ws-input--code" name="fiscalYearTo" maxlength="4" inputmode="numeric"
+                                    [(ngModel)]="selection.fiscalYearTo" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="ws-field">
+                            <label fd-form-label for="db-period">Abstract Report</label>
+                            <select id="db-period" class="ws-input ws-select" name="periodType" [(ngModel)]="selection.periodType">
+                                @for (p of periodTypes; track p.code) {
+                                    <option [value]="p.code">{{ p.text }}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="ws-field">
+                            <label fd-form-label for="db-period-filter">Period Filter</label>
+                            <input fd-form-control id="db-period-filter" class="ws-input ws-input--code" name="periodFilter" maxlength="1"
+                                [(ngModel)]="selection.periodFilter" autocomplete="off" />
+                        </div>
+                    </div>
+                </section>
+
+                <section class="ws-group" aria-labelledby="ws-g2">
+                    <h3 id="ws-g2" class="ws-group__title"><fd-icon glyph="loan" aria-hidden="true"></fd-icon> Loans selection</h3>
+                    <div class="ws-group__fields ws-group__fields--stack">
+                        <div class="ws-field ws-field--range">
+                            <label fd-form-label for="db-ranl-from">Loan Contract</label>
+                            <app-select-option idPrefix="db-ranl" label="Loan Contract" [maxLength]="13" [(lines)]="selection.contract"></app-select-option>
+                        </div>
+                        <div class="ws-field ws-field--range">
+                            <label fd-form-label for="db-partner-from">Business Partner Id</label>
+                            <app-select-option idPrefix="db-partner" label="Business Partner Id" [maxLength]="10" [(lines)]="selection.partner"></app-select-option>
+                        </div>
+                        <div class="ws-field">
+                            <label fd-form-label for="db-project-type">Project Type</label>
+                            <input fd-form-control id="db-project-type" class="ws-input" name="projectType" maxlength="40"
+                                [(ngModel)]="selection.projectType" autocomplete="off" />
+                        </div>
+                        <label class="ws-check">
+                            <input type="checkbox" id="db-all-loans" name="allLoans" [(ngModel)]="selection.allLoans" />
+                            <span>Fetch all loans</span>
+                        </label>
+                        <label class="ws-check">
+                            <input type="checkbox" id="db-suppress-zero" name="suppressZero" [(ngModel)]="selection.suppressZero" />
+                            <span>Filter nil disbursements</span>
+                        </label>
+                    </div>
+                </section>
+            </div>
+
+            <div class="ws-filter__bar">
+                <div class="ws-filter__summary" aria-live="polite">
+                    @if (criteria.length) {
+                        @for (c of criteria; track c) {
+                            <span class="ws-chip">{{ c }}</span>
+                        }
+                    } @else {
+                        <span class="ws-filter__none">No restrictions</span>
+                    }
+                </div>
+                <div class="ws-filter__buttons">
+                    <button type="button" fd-button fdType="transparent" glyph="reset" label="Reset" [disabled]="running" (click)="reset()"></button>
+                    <button type="submit" fd-button fdType="emphasized" glyph="begin" label="Execute" [disabled]="running"></button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Result -->
+        <section class="ws-panel ws-result" aria-labelledby="ws-result-title">
+            @if (running) {
+                <div class="ws-state" role="status" aria-live="polite">
+                    <span class="ws-spinner" aria-hidden="true"></span>
+                    <div class="ws-state__title">Running the report in SAP…</div>
+                    <div class="ws-state__text">Reading DisbursementCompRptSet for the selection. This can take a moment.</div>
+                </div>
+            } @else if (report) {
+                <div class="ws-panel__head ws-result__head">
+                    <h2 id="ws-result-title" class="ws-panel__title">Result</h2>
+                    <span class="ws-badge ws-result-bar__count">{{ resultText }}</span>
+                    @if (sortLabel) {
+                        <span class="ws-result__sort"><fd-icon [glyph]="sortDirection === 'asc' ? 'sort-ascending' : 'sort-descending'" aria-hidden="true"></fd-icon>
+                            {{ sortLabel }}</span>
+                    }
+                    <div class="ws-result__tools">
+                        <div class="ws-search">
+                            <fd-icon glyph="search" class="ws-search__icon" aria-hidden="true"></fd-icon>
+                            <input fd-form-control type="search" class="ws-search__input" placeholder="Filter rows…" aria-label="Filter rows"
+                                [(ngModel)]="quickFilter" (ngModelChange)="onQuickFilter()" autocomplete="off" />
+                        </div>
+                        <div class="ws-cols">
+                            <button type="button" fd-button fdType="transparent" glyph="table-column"
+                                [label]="hiddenCount ? 'Columns (' + visibleColumns.length + '/' + columns.length + ')' : 'Columns'"
+                                [attr.aria-expanded]="columnPanelOpen" aria-haspopup="true" (click)="toggleColumnPanel($event)"></button>
+                            @if (columnPanelOpen) {
+                                <div class="ws-cols__panel" role="group" aria-label="Show or hide columns">
+                                    <div class="ws-cols__head">
+                                        <span class="ws-cols__title">Columns</span>
+                                        <span class="ws-cols__count">{{ visibleColumns.length }} of {{ columns.length }} shown</span>
+                                        <button type="button" class="ws-cols__all" [disabled]="!hiddenCount" (click)="showAllColumns()">Show all</button>
+                                    </div>
+                                    <ul class="ws-cols__list">
+                                        @for (c of columns; track c.key) {
+                                            <li>
+                                                <label class="ws-cols__item">
+                                                    <input type="checkbox" [checked]="!isHidden(c)" (change)="toggleColumn(c)"
+                                                        [disabled]="!isHidden(c) && visibleColumns.length === 1" />
+                                                    <span>{{ c.label }}</span>
+                                                </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                        <button fd-button fdType="transparent" glyph="excel-attachment" label="Excel"
+                            [disabled]="!rows.length || exporting" (click)="exportExcel()"></button>
+                    </div>
+                </div>
+                <div class="ws-table-wrap">
+                    <table class="ws-table">
+                        <thead>
+                            <tr>
+                                @for (c of visibleColumns; track c.key) {
+                                    <th class="ws-th" [class.is-sorted]="sortKey === c.key" [class.ws-th--num]="isAmountColumn(c)"
+                                        [attr.aria-sort]="ariaSort(c)" scope="col">
+                                        <button type="button" class="ws-th__button" (click)="sort(c)" [attr.title]="'Sort by ' + c.label">
+                                            <span class="ws-th__label">{{ c.label }}</span>
+                                            <fd-icon [glyph]="sortIcon(c)" class="ws-th__icon" aria-hidden="true"></fd-icon>
+                                        </button>
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (row of rows; track $index) {
+                                <tr class="ws-tr">
+                                    @for (c of visibleColumns; track c.key) {
+                                        <td class="ws-td" [class.ws-td--num]="isAmountColumn(c)" [class.is-sorted]="sortKey === c.key">
+                                            {{ cell(row, c) }}
+                                        </td>
+                                    }
+                                </tr>
+                            } @empty {
+                                <tr>
+                                    <td class="ws-td ws-td--empty" [attr.colspan]="visibleColumns.length">
+                                        {{ report.total ? 'No rows match the filter.' : 'SAP returned no rows for this selection.' }}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            } @else {
+                <div class="ws-state ws-state--empty">
+                    <span class="ws-state__icon"><fd-icon glyph="activities" aria-hidden="true"></fd-icon></span>
+                    <div class="ws-state__title">No result yet</div>
+                    <div class="ws-state__text">Enter the selection criteria above and choose Execute to run the report in SAP.</div>
+                    <button type="button" fd-button fdType="emphasized" glyph="begin" label="Execute" [disabled]="running" (click)="execute()"></button>
+                </div>
+            }
+        </section>
+    </div>
+</div>

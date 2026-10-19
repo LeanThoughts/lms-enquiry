@@ -38,6 +38,18 @@ export const REPORT_MODULES: ReportModule[] = [
                 title: 'Loans KYC Report',
                 description: 'KYC and Re-KYC status of loan contracts and business partners: compliance dates, CKYC, PAN, constitution documents and risk category',
                 source: 'SAP · ZPFS_LMS_REPORTS_SRV'
+            },
+            {
+                path: 'balance-list',
+                title: 'Loans : Balance List',
+                description: 'Balances of loan contracts at a key date: sanctioned amount, nominal and effective capital, repayments, interest and overdue amounts, with optional totals',
+                source: 'SAP · ZPFS_LMS_REPORTS_SRV'
+            },
+            {
+                path: 'disbursement',
+                title: 'Loans : Disbursement – Periodwise and Comparison',
+                description: 'Loan disbursements by month, quarter or year for a fiscal year, or compared across fiscal years, for all loans or a selection of contracts, partners and project type',
+                source: 'SAP · ZPFS_LMS_REPORTS_SRV'
             }
         ]
     },

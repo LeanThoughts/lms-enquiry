@@ -1,0 +1,18 @@
+// Loans Balance List: the page styles are shared with the other reports (../shared); only additions here.
+$label: var(--sapContent_LabelColor, #6a6d70);
+
+.ws-input[disabled] { background: var(--sapField_ReadOnly_Background, #f2f2f2); color: $label; cursor: not-allowed; }
+.ws-group__fields--stack { grid-template-columns: 1fr; }
+.ws-check {
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer; min-height: 2.25rem;
+    input { margin: 0; width: 1rem; height: 1rem; accent-color: var(--sapSelectedColor, #0a6ed1); }
+}
+
+// four groups side by side like the SAP screen; two columns on narrower screens
+.ws-filter__groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 70rem) {
+    .ws-filter__groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 40rem) {
+    .ws-filter__groups { grid-template-columns: 1fr; }
+}
