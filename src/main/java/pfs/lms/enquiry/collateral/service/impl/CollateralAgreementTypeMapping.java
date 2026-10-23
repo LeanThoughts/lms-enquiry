@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 public class CollateralAgreementTypeMapping {
 
     private static final Logger log = LoggerFactory.getLogger(CollateralAgreementTypeMapping.class);
+    private static final String DEFAULT_SERVICE_PATH = "/sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV";
 
     private final ObjectProvider<CollateralSapGatewayClient> gatewayProvider;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -62,7 +63,14 @@ public class CollateralAgreementTypeMapping {
                                           @Value("${collateral.sap.agreement-type.description-property:CagmtTypeDesc}") String descriptionProperty,
                                           @Value("${collateral.sap.agreement-type.cache-seconds:300}") long cacheSeconds) {
         this.gatewayProvider = gatewayProvider;
-        this.servicePath = servicePath == null ? "" : servicePath.trim().replaceAll("/+$", "");
+        String path = servicePath == null ? "" : servicePath.trim().replaceAll("/+$", "");
+        if (path.isEmpty()) {
+            log.warn("sap.collateralServiceUri is blank; defaulting agreement-type service path to {}", DEFAULT_SERVICE_PATH);
+            path = DEFAULT_SERVICE_PATH;
+        } else if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        this.servicePath = path;
         this.entitySet = entitySet;
         this.objectTypeProperty = objectTypeProperty;
         this.codeProperty = codeProperty;
