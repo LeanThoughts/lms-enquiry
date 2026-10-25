@@ -141,4 +141,16 @@ class ReportVariantServiceTest {
         assertThatThrownBy(() -> service.save("nope", "anna", "ok", null, false, false, params("{}"))).isInstanceOf(LmsException.class);
         assertThatThrownBy(() -> service.delete("kyc", "anna", UUID.randomUUID())).isInstanceOf(LmsException.class);
     }
+
+    @Test
+    void columnLayoutsAreStoredPerReportLikeVariants() throws Exception {
+        service.save("kyc_layout", "anna", "Slim", null, false, true, params("{\"hidden\":[\"a\",\"b\"]}"));
+        service.save("kyc", "anna", "Slim", null, false, false, params("{\"x\":1}"));
+        assertThat(service.list("kyc_layout", "anna")).hasSize(1);
+        assertThat(service.parameters(service.list("kyc_layout", "anna").get(0)).get("hidden")).hasSize(2);
+        assertThat(service.list("kyc_layout", "ben")).isEmpty();
+        assertThat(service.list("kyc", "anna")).extracting(ReportVariant::getReport).doesNotContain("kyc_layout");
+        assertThatThrownBy(() -> service.save("nope_layout", "anna", "ok", null, false, false, params("{}"))).isInstanceOf(LmsException.class);
+        assertThatThrownBy(() -> service.list("_layout", "anna")).isInstanceOf(LmsException.class);
+    }
 }

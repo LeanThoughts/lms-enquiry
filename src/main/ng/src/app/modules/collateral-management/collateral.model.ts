@@ -68,8 +68,10 @@ export interface CollateralItem {
     postExecutionDocumentName?: string | null;
     /** Document Title (SAP POST_EXEC_DOC_TITLE) */
     postExecutionDocumentTitle?: string | null;
-    /** Uploaded post execution document (portal file reference) (portal only) */
+    /** Uploaded post execution document (portal file reference) (SAP POST_EXEC_PORTAL_DOC_ID) */
     postExecutionDocumentReference?: string | null;
+    /** Post execution document BDS ID (SAP POST_EXEC_BDS_DOC_ID) */
+    postExecutionBdsDocumentId?: string | null;
     /** Security Creation Date (SAP SEC_CREATE_DATE) */
     securityCreationDate?: string | null;
     /** Security Creation Place (SAP SEC_CREATE_PLACE) */
@@ -234,6 +236,7 @@ export const ITEM_MAX_LENGTH: Record<string, number> = {
     postExecutionDocumentName: 100,
     postExecutionDocumentTitle: 100,
     postExecutionDocumentReference: 36,
+    postExecutionBdsDocumentId: 40,
     securityCreationPlace: 70,
     securityCreationRemarks: 70,
     securityProvider: 70,

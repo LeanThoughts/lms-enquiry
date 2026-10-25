@@ -17,6 +17,9 @@ import java.util.UUID;
 /**
  * Report variants: saving the selection screen of a report under a name, listing the variants a user can use
  * (own and shared) and deleting own variants. Saving under an existing name of the same user overwrites it.
+ * <p>
+ * The same store keeps the column layouts of the reports (the hidden columns, saved like a variant): a layout is a
+ * variant of the report key {@code <report>_layout}, so every report registered in {@link #REPORTS} has layouts too.
  */
 @Service
 public class ReportVariantService {
@@ -102,8 +105,14 @@ public class ReportVariantService {
         }
     }
 
+    /** Suffix of the key under which the column layout of a report is stored, e.g. kyc_layout. */
+    static final String LAYOUT_SUFFIX = "_layout";
+
+    /** A report key, or the layout key of a report ({@code <report>_layout}); layouts need no registration of their own. */
     private static String checkReport(String report) {
-        if (!REPORTS.contains(report)) {
+        String base = report != null && report.endsWith(LAYOUT_SUFFIX)
+                ? report.substring(0, report.length() - LAYOUT_SUFFIX.length()) : report;
+        if (!REPORTS.contains(base)) {
             throw new LmsException("Unknown report " + report + ".", HttpStatus.NOT_FOUND);
         }
         return report;

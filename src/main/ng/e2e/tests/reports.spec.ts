@@ -275,7 +275,7 @@ test.describe('Reports', () => {
         await expect(page.getByText('Evaluate completed contracts?')).toBeVisible();
         await expect(page.getByText('ALV List')).toHaveCount(0);
         await expect(page.getByText('Classic List')).toHaveCount(0);
-        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Variant');
+        await expect(page.locator('.ws-variants .rv__menu > .rv__btn')).toContainText('Variant');
 
         await page.locator('#bl-key-date').fill('2026-10-17');
         await page.locator('#bl-display-currency').fill('inr');
@@ -345,7 +345,7 @@ test.describe('Reports', () => {
         await page.locator('#bl-ranl-from').fill('');
         await page.locator('#bl-nonzero').uncheck();
         await page.locator('#bl-display-currency').fill('');
-        await page.locator('.rv__menu > .rv__btn').click();
+        await page.locator('.ws-variants .rv__menu > .rv__btn').click();
         await page.getByRole('menuitem').filter({ hasText: 'Non-zero USD' }).getByRole('button').first().click();
         await expect(page.locator('#bl-ranl-from')).toHaveValue('0000010003814');
         await expect(page.locator('#bl-nonzero')).toBeChecked();
@@ -371,7 +371,7 @@ test.describe('Reports', () => {
         await expect(page.locator('#db-period')).toHaveValue('M');
         await expect(page.locator('#db-all-loans')).toBeChecked();
         await expect(page.locator('#db-suppress-zero')).toBeChecked();
-        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Variant');
+        await expect(page.locator('.ws-variants .rv__menu > .rv__btn')).toContainText('Variant');
 
         // validation of the year
         await page.locator('#db-fy-from').fill('26');
@@ -530,7 +530,7 @@ test.describe('Reports', () => {
         const api = new MockApi();
         await api.install(page);
         await page.goto('/reports/kyc');
-        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Variant');
+        await expect(page.locator('.ws-variants .rv__menu > .rv__btn')).toContainText('Variant');
 
         // fill in the selection and save it as the default variant
         await page.locator('#kyc-ranl-from').fill('0000010003814');
@@ -545,13 +545,13 @@ test.describe('Reports', () => {
         expect(api.variants[0].parameters.status).toEqual([{ sign: 'I', option: 'EQ', low: '60', high: '' }]);
         expect(api.variants[0].parameters.runDate).toBeUndefined();          // today's date and the fixed company code are not saved
         expect(api.variants[0].parameters.companyCode).toBeUndefined();
-        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Sunrise only');
+        await expect(page.locator('.ws-variants .rv__menu > .rv__btn')).toContainText('Sunrise only');
         await expect(page.locator('.rv__changed')).toHaveCount(0);
 
         // changing the screen shows the variant as modified; loading it restores the saved values
         await page.locator('#kyc-ranl-from').fill('0000010003900');
         await expect(page.locator('.rv__changed')).toBeVisible();
-        await page.locator('.rv__menu > .rv__btn').click();
+        await page.locator('.ws-variants .rv__menu > .rv__btn').click();
         await page.getByRole('menuitem').filter({ hasText: 'Sunrise only' }).getByRole('button').first().click();
         await expect(page.locator('#kyc-ranl-from')).toHaveValue('0000010003814');
         await expect(page.locator('.rv__changed')).toHaveCount(0);
@@ -565,7 +565,7 @@ test.describe('Reports', () => {
         expect(api.variants).toHaveLength(2);
         await page.goto('/reports/kyc');
         await expect(page.locator('#kyc-ranl-from')).toHaveValue('0000010003814');
-        await expect(page.locator('.rv__menu > .rv__btn')).toContainText('Sunrise only');
+        await expect(page.locator('.ws-variants .rv__menu > .rv__btn')).toContainText('Sunrise only');
 
         // saving under an existing name overwrites it
         await page.locator('#kyc-ranl-from').fill('0000010003999');
@@ -576,7 +576,7 @@ test.describe('Reports', () => {
         expect(api.variants[0].parameters.contract[0].low).toBe('0000010003999');
 
         // load and run a variant: the report runs with the saved parameters
-        await page.locator('.rv__menu > .rv__btn').click();
+        await page.locator('.ws-variants .rv__menu > .rv__btn').click();
         await page.getByRole('button', { name: 'Load Himalaya only and run' }).click();
         await expect.poll(() => api.sent('GET', /\/reports\/kyc$/).length).toBe(1);
         expect(JSON.parse(api.sent('GET', /\/reports\/kyc$/)[0].query!.contract)[0].low).toBe('0000010003900');
@@ -584,7 +584,7 @@ test.describe('Reports', () => {
         await expect(page.locator('tbody tr').first()).toContainText('Himalaya Hydro');
 
         // delete asks twice
-        await page.locator('.rv__menu > .rv__btn').click();
+        await page.locator('.ws-variants .rv__menu > .rv__btn').click();
         await page.getByRole('button', { name: 'Delete Himalaya only' }).click();
         expect(api.variants).toHaveLength(2);
         await page.getByRole('button', { name: 'Confirm delete Himalaya only' }).click();
@@ -599,5 +599,35 @@ test.describe('Reports', () => {
         await expect(page.locator('.rp-list__item')).toHaveCount(4);
         await page.locator('.rp-list__item').filter({ hasText: 'Loans KYC Report' }).getByRole('button', { name: 'Launch' }).click();
         await expect(page).toHaveURL(/\/reports\/kyc$/);
+    });
+
+    test('Loans : Balance List: the column layout is saved like a variant and loaded again', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await page.goto('/reports/balance-list');
+        await page.locator('.ws-filter__buttons').getByRole('button', { name: 'Execute' }).click();
+        await expect(page.locator('tbody tr').first()).toBeVisible();
+        const allColumns = await page.locator('thead th').count();
+
+        // hide a column and save the layout (the selection variant button stays separate)
+        await page.locator('.ws-cols > button').click();
+        await page.locator('.ws-cols__panel').getByLabel('Versch.', { exact: true }).uncheck();
+        await expect(page.locator('thead th')).toHaveCount(allColumns - 1);
+        await page.locator('.ws-layouts').getByRole('button', { name: 'Save as layout' }).click();
+        const dialog = page.getByRole('dialog', { name: 'Save as Layout' });
+        await dialog.getByLabel('Layout name').fill('Slim');
+        await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+        await expect(page.getByText('Layout Slim saved.')).toBeVisible();
+        expect(api.variants).toHaveLength(1);
+        expect(api.variants[0].report).toBe('balance-list_layout');
+        expect(api.variants[0].parameters).toEqual({ hidden: ['versch'] });
+
+        // show everything again, then load the layout from the menu
+        await page.locator('.ws-cols > button').click();
+        await page.locator('.ws-cols__panel').getByRole('button', { name: 'Show all' }).click();
+        await expect(page.locator('thead th')).toHaveCount(allColumns);
+        await page.locator('.ws-layouts .rv__menu > .rv__btn').click();
+        await page.locator('.ws-layouts .rv__pick').filter({ hasText: 'Slim' }).click();
+        await expect(page.locator('thead th')).toHaveCount(allColumns - 1);
     });
 });

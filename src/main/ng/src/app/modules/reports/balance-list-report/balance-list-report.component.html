@@ -155,6 +155,7 @@
                             <input fd-form-control type="search" class="ws-search__input" placeholder="Filter rows…" aria-label="Filter rows"
                                 [(ngModel)]="quickFilter" (ngModelChange)="onQuickFilter()" autocomplete="off" />
                         </div>
+                        <app-report-variants class="ws-layouts" report="balance-list_layout" label="Layout" [runnable]="false" [current]="currentLayout" (variantLoaded)="onLayout($event)"></app-report-variants>
                         <div class="ws-cols">
                             <button type="button" fd-button fdType="transparent" glyph="table-column"
                                 [label]="hiddenCount ? 'Columns (' + visibleColumns.length + '/' + columns.length + ')' : 'Columns'"

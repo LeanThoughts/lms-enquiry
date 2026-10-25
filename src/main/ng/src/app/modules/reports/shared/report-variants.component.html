@@ -1,16 +1,16 @@
 <div class="rv">
     <div class="rv__menu">
         <button type="button" class="rv__btn" [attr.aria-expanded]="menuOpen" aria-haspopup="true" (click)="toggleMenu($event)"
-                title="Get a saved variant of the selection">
+                [attr.title]="'Get a saved ' + label().toLowerCase()">
             <fd-icon glyph="list" aria-hidden="true"></fd-icon>
-            <span class="rv__label">Variant<span class="rv__name">{{ active ? ': ' + active.name : '' }}</span>@if (changed) { <span class="rv__changed" title="The selection differs from the variant"> ●</span> }</span>
+            <span class="rv__label">{{ label() }}<span class="rv__name">{{ active ? ': ' + active.name : '' }}</span>@if (changed) { <span class="rv__changed" title="The current state differs from the saved {{ label().toLowerCase() }}"> ●</span> }</span>
             <fd-icon glyph="navigation-down-arrow" aria-hidden="true"></fd-icon>
         </button>
 
         @if (menuOpen) {
-            <div class="rv__panel" role="menu" aria-label="Variants">
+            <div class="rv__panel" role="menu" [attr.aria-label]="label() + 's'">
                 @if (!variants.length) {
-                    <div class="rv__empty">{{ loaded ? 'No variants saved yet. Fill the selection and choose Save as variant.' : 'Loading…' }}</div>
+                    <div class="rv__empty">{{ loaded ? 'No ' + label().toLowerCase() + 's saved yet. Set up the report and choose Save as ' + label().toLowerCase() + '.' : 'Loading…' }}</div>
                 }
                 @for (group of [{ title: 'My variants', items: mine }, { title: 'Shared by others', items: others }]; track group.title) {
                     @if (group.items.length) {
@@ -26,9 +26,11 @@
                                     </span>
                                     @if (v.description) { <span class="rv__desc">{{ v.description }}</span> }
                                 </button>
-                                <button type="button" class="rv__icon" [attr.aria-label]="'Load ' + v.name + ' and run'" title="Load and run" (click)="load(v, true)">
-                                    <fd-icon glyph="media-play" aria-hidden="true"></fd-icon>
-                                </button>
+                                @if (runnable()) {
+                                    <button type="button" class="rv__icon" [attr.aria-label]="'Load ' + v.name + ' and run'" title="Load and run" (click)="load(v, true)">
+                                        <fd-icon glyph="media-play" aria-hidden="true"></fd-icon>
+                                    </button>
+                                }
                                 @if (v.mine) {
                                     <button type="button" class="rv__icon" [class.rv__icon--danger]="pendingDelete === v.id"
                                             [attr.aria-label]="(pendingDelete === v.id ? 'Confirm delete ' : 'Delete ') + v.name"
@@ -44,9 +46,9 @@
         }
     </div>
 
-    <button type="button" class="rv__btn" (click)="openSave()" title="Save the selection as a variant">
+    <button type="button" class="rv__btn" (click)="openSave()" [attr.title]="'Save as ' + label().toLowerCase()">
         <fd-icon glyph="save" aria-hidden="true"></fd-icon>
-        <span class="rv__label">Save as variant</span>
+        <span class="rv__label">Save as {{ label().toLowerCase() }}</span>
     </button>
     @if (message) { <span class="rv__msg" role="status">{{ message }}</span> }
 </div>
@@ -54,17 +56,17 @@
 @if (saving) {
     <div class="rv-backdrop" (click)="saving = false"></div>
     <div class="rv-dialog" role="dialog" aria-modal="true" aria-labelledby="rv-title" (keydown.enter)="$any($event.target).tagName === 'INPUT' && $event.preventDefault()">
-        <header class="rv-dialog__head"><h3 id="rv-title" class="rv-dialog__title">Save as Variant</h3></header>
+        <header class="rv-dialog__head"><h3 id="rv-title" class="rv-dialog__title">Save as {{ label() }}</h3></header>
         <div class="rv-dialog__body">
-            <label class="rv-field">Variant name
+            <label class="rv-field">{{ label() }} name
                 <input class="rv-input" name="variantName" maxlength="40" autocomplete="off" [(ngModel)]="form.name" [ngModelOptions]="{standalone: true}" />
             </label>
             <label class="rv-field">Description <span class="rv-opt">(optional)</span>
                 <input class="rv-input" name="variantDescription" maxlength="120" autocomplete="off" [(ngModel)]="form.description" [ngModelOptions]="{standalone: true}" />
             </label>
             <label class="rv-check"><input type="checkbox" name="variantShared" [(ngModel)]="form.shared" [ngModelOptions]="{standalone: true}" /> Available to all users</label>
-            <label class="rv-check"><input type="checkbox" name="variantDefault" [(ngModel)]="form.defaultVariant" [ngModelOptions]="{standalone: true}" /> Use as my default variant (loaded when the report opens)</label>
-            @if (overwrites) { <div class="rv-note">You already have a variant with this name; saving replaces it.</div> }
+            <label class="rv-check"><input type="checkbox" name="variantDefault" [(ngModel)]="form.defaultVariant" [ngModelOptions]="{standalone: true}" /> Use as my default {{ label().toLowerCase() }} (loaded when the report opens)</label>
+            @if (overwrites) { <div class="rv-note">You already have a {{ label().toLowerCase() }} with this name; saving replaces it.</div> }
             @if (formError) { <div class="rv-error" role="alert">{{ formError }}</div> }
         </div>
         <footer class="rv-dialog__foot">

@@ -25,6 +25,10 @@ export class ReportVariantsComponent implements OnInit {
 
     /** Report key: workflow-status, icc-approval or kyc */
     readonly report = input.required<string>();
+    /** What is saved: "Variant" (the selection) or "Layout" (the column choice, report key <report>_layout) */
+    readonly label = input<string>('Variant');
+    /** Offer "load and run" (not for layouts) */
+    readonly runnable = input<boolean>(true);
     /** The parameters of the selection screen as they are now (without the ones not saved in a variant) */
     readonly current = input.required<() => Record<string, unknown>>();
     readonly variantLoaded = output<VariantLoad>();
@@ -92,7 +96,7 @@ export class ReportVariantsComponent implements OnInit {
         this.active = variant;
         this.menuOpen = false;
         this.pendingDelete = '';
-        this.variantLoaded.emit({ name: variant.name, parameters: variant.parameters, run });
+        this.variantLoaded.emit({ name: variant.name, parameters: variant.parameters, run: run && this.runnable() });
     }
 
     openSave(): void {
@@ -111,7 +115,7 @@ export class ReportVariantsComponent implements OnInit {
 
     save(): void {
         if (!this.form.name.trim()) {
-            this.formError = 'Enter a name for the variant.';
+            this.formError = `Enter a name for the ${this.label().toLowerCase()}.`;
             return;
         }
         this.busy = true;
@@ -120,12 +124,12 @@ export class ReportVariantsComponent implements OnInit {
                 next: saved => {
                     this.busy = false;
                     this.saving = false;
-                    this.message = `Variant ${saved.name} saved.`;
+                    this.message = `${this.label()} ${saved.name} saved.`;
                     this.refresh(false, saved.id);
                 },
                 error: error => {
                     this.busy = false;
-                    this.formError = this.service.errorMessage(error, 'The variant could not be saved.');
+                    this.formError = this.service.errorMessage(error, `The ${this.label().toLowerCase()} could not be saved.`);
                 }
             });
     }
@@ -143,12 +147,12 @@ export class ReportVariantsComponent implements OnInit {
                 if (this.active?.id === variant.id) {
                     this.active = null;
                 }
-                this.message = `Variant ${variant.name} deleted.`;
+                this.message = `${this.label()} ${variant.name} deleted.`;
                 this.refresh(false);
             },
             error: error => {
                 this.pendingDelete = '';
-                this.message = this.service.errorMessage(error, 'The variant could not be deleted.');
+                this.message = this.service.errorMessage(error, `The ${this.label().toLowerCase()} could not be deleted.`);
             }
         });
     }

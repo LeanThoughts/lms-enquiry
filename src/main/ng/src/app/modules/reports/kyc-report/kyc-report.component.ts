@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
 import { ReportVariantsComponent } from '../shared/report-variants.component';
-import { VariantLoad, applyParameters, variantParameters } from '../shared/report-variant.model';
+import { VariantLoad, layoutHidden, layoutParameters, applyParameters, variantParameters } from '../shared/report-variant.model';
 import { SelectOptionComponent } from '../shared/select-option.component';
 import { dateRangeError, describeLines } from '../shared/select-option.model';
 
@@ -105,6 +105,17 @@ export class KycReportComponent implements OnDestroy {
     @HostListener('document:keydown.escape')
     onEscape(): void {
         this.columnPanelOpen = false;
+    }
+
+    // ---- layouts: the column choice saved under a name, like a variant (stored as report key kyc_layout) ----
+    readonly currentLayout = () => layoutParameters(this.columns.filter(c => this.hiddenKeys.has(c.key as string)).map(c => c.key as string));
+
+    onLayout(load: VariantLoad): void {
+        const hidden = layoutHidden(load.parameters, this.columns.map(c => c.key as string));
+        if (hidden) {
+            this.hiddenKeys = new Set(hidden);
+            this.saveHidden();
+        }
     }
 
     private loadHidden(): string[] {

@@ -14,7 +14,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@Profile({"oauth", "pfsdevoauth"})
+@Profile({"oauth", "pfsdevoauth", "localpfsdevoauth"})
 public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsConfigurationSource corsConfigurationSource; // Use constructor injection

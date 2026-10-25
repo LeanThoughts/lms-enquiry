@@ -28,6 +28,26 @@ export interface VariantLoad {
     run: boolean;
 }
 
+/** The parameters of a column layout (saved as a variant of the report key <report>_layout): the hidden columns. */
+export function layoutParameters(hidden: string[]): Record<string, unknown> {
+    return { hidden };
+}
+
+/**
+ * The hidden columns of a saved layout, limited to the columns that exist now (all of them when none are known yet,
+ * as in a report whose columns come with the result). Null when the layout would hide every column.
+ */
+export function layoutHidden(saved: Record<string, unknown>, known: string[]): string[] | null {
+    const raw = saved?.['hidden'];
+    const list = Array.isArray(raw) ? raw.filter((k): k is string => typeof k === 'string') : [];
+    if (!known.length) {
+        return list;
+    }
+    const knownSet = new Set(known);
+    const hidden = list.filter(k => knownSet.has(k));
+    return hidden.length >= known.length ? null : hidden;
+}
+
 /** The selection without the keys that are not part of a variant (fixed values, today's date). */
 export function variantParameters(selection: object, skip: string[] = []): Record<string, unknown> {
     const out: Record<string, unknown> = {};

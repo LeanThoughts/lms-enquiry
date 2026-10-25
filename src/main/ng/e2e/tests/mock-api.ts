@@ -250,7 +250,7 @@ export class MockApi {
             return [200, { canWrite: this.canWrite, userName: 'test@pfs.local', role: this.role, writeRoles: WRITE_ROLES }];
         }
         // Report variants (saved selection screens), kept in memory for the signed-in test user
-        const variantUrl = /^\/reports\/([a-z-]+)\/variants(?:\/([\w-]+))?$/.exec(path);
+        const variantUrl = /^\/reports\/([a-z_-]+)\/variants(?:\/([\w-]+))?$/.exec(path);
         if (variantUrl) {
             const [, report, id] = variantUrl;
             const dto = (v: any) => { const { report: _r, ...rest } = v; return rest; };
