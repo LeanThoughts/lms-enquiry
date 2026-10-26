@@ -31,14 +31,11 @@ public class FileSystemStorage implements FileStorage {
 
     private static final String dbName = "VAULT_DB";
 
-    @Value("${vault.baseDirectory:null}")
+    @Value("${vault.baseDirectory}")
     private String baseDirectory;
 
-    @Value("${vault.dbFile:null}")
+    @Value("${vault.dbFile}")
     private String dbFile;
-
-    @Value("${user.home}")
-    private String userHome;
 
     DB db = null;
 
@@ -194,84 +191,28 @@ public class FileSystemStorage implements FileStorage {
     }
 
     @PostConstruct
-    private void postConstruct() throws IOException{
-        if(this.baseDirectory != null && !this.baseDirectory.equals("null")) {
-            try {
-                if (!Files.exists(Paths.get(this.baseDirectory))) {
-                    Files.createDirectories(Paths.get(this.baseDirectory));
-                }
-            } catch (Exception e) {
-                log.info("Could Not Create Vault File Directory From Path Specified In Properties Files, Hence Creating It In Home Directory");
-                if (!Files.exists(Paths.get(this.userHome+"/vault/files"))) {
-                    Files.createDirectories(Paths.get(this.userHome+"/vault/files"));
-                }
-            }
-        } else if(this.baseDirectory != null && this.baseDirectory.equals("null")) {
-            log.info("Could Not Load Vault File Directory Path From Properties Files, Hence Creating It In Home Directory");
-            if (!Files.exists(Paths.get(this.userHome+"/vault/files"))) {
-                Files.createDirectories(Paths.get(this.userHome+"/vault/files"));
-            }
+    private void postConstruct() throws IOException {
+        if (!Files.exists(Paths.get(this.baseDirectory))) {
+            Files.createDirectories(Paths.get(this.baseDirectory));
         }
-        if(this.dbFile != null && !this.dbFile.equals("null")) {
-            try {
-                File dbFile = new File(this.dbFile);
-                //dbFile.mkdirs();
-                if (!dbFile.getParentFile().exists()) {
-                    if (!dbFile.getParentFile().mkdirs()) {
-                        throw new IOException("Could Not Create DB File");
-                    }
-                }
-                db = DBMaker.fileDB(new File(this.dbFile))
-                        .closeOnJvmShutdown()
-                        .fileLockDisable()
-                        .fileLockHeartbeatEnable()
-                        .make();
+        log.info("Vault file directory: {}", this.baseDirectory);
 
-                // open an existing collection (or create new)
-                register = db.treeMap(dbName);
-            } catch (Exception e) {
-                log.info("Could Not Create Vault DB Directory From Path Specified In Properties Files, Hence Creating It In Home Directory");
-                File dbFile = new File(this.userHome+"/vault/db");
-                if (!dbFile.getParentFile().exists()) {
-                    if (!dbFile.getParentFile().mkdirs()) {
-                        throw new IOException("Could Not Create DB File");
-                    }
-                }
-                db = DBMaker.fileDB(new File(this.userHome+"/vault/db"))
-                        .closeOnJvmShutdown()
-                        .fileLockDisable()
-                        .fileLockHeartbeatEnable()
-                        .make();
-
-                // open existing an collection (or create new)
-                register = db.treeMap(dbName);
-            }
-        } else if(this.dbFile != null && this.dbFile.equals("null")) {
-            log.info("Could Not Load Vault DB Path From Properties Files, Hence Creating It In Home Directory");
-            File dbFile = new File(this.userHome+"/vault/db");
-            if (!dbFile.getParentFile().exists()) {
-                if (!dbFile.getParentFile().mkdirs()) {
-                    throw new IOException("Could Not Create DB File");
-                }
-            }
-            db = DBMaker.fileDB(new File(this.userHome+"/vault/db"))
-                    .closeOnJvmShutdown()
-                    .fileLockDisable()
-                    .fileLockHeartbeatEnable()
-                    .make();
-
-            // open existing an collection (or create new)
-            register = db.treeMap(dbName);
+        File database = new File(this.dbFile);
+        File parent = database.getParentFile();
+        if (parent != null && !parent.exists() && !parent.mkdirs()) {
+            throw new IOException("Could not create vault database directory: " + parent.getAbsolutePath());
         }
+        db = DBMaker.fileDB(database)
+                .closeOnJvmShutdown()
+                .fileLockDisable()
+                .fileLockHeartbeatEnable()
+                .make();
+        register = db.treeMap(dbName);
+        log.info("Vault database file: {}", database.getAbsolutePath());
     }
 
-    private String findAbsolutePath(String filename){
-        if(this.baseDirectory != null && !this.baseDirectory.equals("null")) {
-            return baseDirectory + "/" + filename;
-        } else if(this.baseDirectory != null && this.baseDirectory.equals("null")) {
-            return this.userHome+"/vault/files/" + filename;
-        }
-        return null;
+    private String findAbsolutePath(String filename) {
+        return Paths.get(this.baseDirectory, filename).toString();
     }
 }
 

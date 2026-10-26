@@ -10,6 +10,13 @@ spring:
 server:
   servlet:
     context-path: /enquiry
+vault:
+#  baseDirectory: ${user.home}/vault/files
+#  dbFile: ${user.home}/vault/db
+  baseDirectory: ${user.home}/vault/pfs/files
+  dbFile: ${user.home}/vault/pfs/db
+
+
 #logging:
 #  file:
 #    max-size: 1000 MB
