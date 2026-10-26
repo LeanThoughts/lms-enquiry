@@ -34,8 +34,9 @@ public class BpTableController {
     }
 
     @GetMapping(BASE)
-    public ResponseEntity<Overview> getOverview(HttpServletRequest request) {
-        return ResponseEntity.ok(service.getOverview(signedInUser(request)));
+    public ResponseEntity<Overview> getOverview(@RequestParam(defaultValue = BpTableDefinitions.BUSINESS_PARTNER) String module,
+                                                HttpServletRequest request) {
+        return ResponseEntity.ok(service.getOverview(module, signedInUser(request)));
     }
 
     @GetMapping(BASE + "/{table}")

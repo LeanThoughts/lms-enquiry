@@ -1,0 +1,155 @@
+spring:
+  security:
+    user:
+      name: user
+      password: password
+    oauth2:
+      client: # <--- This block is for client registrations
+        registration:
+          azure: # <--- This is your client registration ID (e.g., 'azure')
+            provider: azure # <--- ADD THIS LINE: Explicitly link to the 'azure' provider
+            client-id: cb4a1715-c35b-496f-ae5b-32b7d68a0cf6
+            client-secret: j-j8Q~zdfVY3_TX8uRw.tLIkDkW7UH6Hfjhwobl. # Ensure this is present and correct if needed
+            authorization-grant-type: authorization_code # Common for web apps (BFF)
+            # Fixed https url, the proxy forwards requests to the app over http without X-Forwarded-Proto
+            redirect-uri: "http://localhost:9000/enquiry/login/oauth2/code/{registrationId}"
+            scope: openid,profile,offline_access # Common minimal scopes for OIDC
+        provider: # <--- This block is for provider (Authorization Server) definitions
+          azure: # <--- This is your provider ID (e.g., 'azure')
+            issuer-uri: https://sts.windows.net/4a160a20-e11d-4299-ac9a-1b40a7396f46/ # <--- Make sure this has the trailing slash
+            jwk-set-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/discovery/v2.0/keys
+            # If you are using Spring Boot 2.1.x, you might also need:
+            # authorization-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/oauth2/v2.0/authorize
+            # token-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/oauth2/v2.0/token
+            # user-info-uri: https://graph.microsoft.com/oidc/userinfo # Less common for AD, but if needed
+      resourceserver: # <--- This block is for resource server (JWT validation)
+        jwt:
+          # audiences: api://f97a56c0-c602-4417-847f-6abadb8a542c
+          issuer-uri: https://sts.windows.net/4a160a20-e11d-4299-ac9a-1b40a7396f46/ # <--- This should also have the trailing slash
+          jwk-set-uri: https://login.microsoftonline.com/4a160a20-e11d-4299-ac9a-1b40a7396f46/discovery/v2.0/keys
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        tenant-id: 4a160a20-e11d-4299-ac9a-1b40a7396f46
+        client-id: cb4a1715-c35b-496f-ae5b-32b7d68a0cf6
+        # If you explicitly define client-secret in the client.registration block,
+        # you might not need it here or ensure consistency.
+        # client-secret: YOUR_AZURE_AD_APP_SECRET
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  rest:
+    basePath: /api
+  content:
+    fs:
+      filesystem-root: ${user.home}/loans/
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Dn47gh3y@
+    maximum-pool-size: 40
+    url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
+    validation-query: select 1
+    connection-test-query: select 1
+    test-while-idle: true
+    test-on-borrow: true
+    time-between-eviction-runs-millis: 60000
+    hikari:
+      connection-timeout: 6000000
+      maximum-pool-size: 20
+      validation-timeout: 5000000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+    generate-ddl: true
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    rest:
+      basePath: /api
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  mail:
+    host: us2.smtp.mailhostbox.com
+    port: 587
+    username: portal.admin@pfs-ess.com
+    password: Ess@hYYXIaN2#hYYXIaN2
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: us2.smtp.mailhostbox.com
+  activiti:
+    activiti5CompatibilityEnabled: true
+    mail-server-host: us2.smtp.mailhostbox.com
+    mail-server-port: 587
+    mail-server-user-name: portal.admin@pfs-ess.com
+    mail-server-password: Ess@hYYXIaN2#hYYXIaN2
+    mail-server-default-from: portal.admin@pfs-ess.com
+    mail-server-use-tls: true
+    database-schema-update: true
+oauth:
+  baseUrl:    http://localhost:9999/auth
+sap:
+  #postUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet?sap-client=360
+  postUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/LoanApplicationSet?sap-client=360
+  sanctionLetterUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/SanctionLetterSet?sap-client=360
+  sanctionDocumentUrl: http://192.168.1.205:8000/sap/opu/odata/sap/ZPFS_LMS_ENQ_PORTAL_LOAN_V3_SRV/DocumentSet?sap-client=360
+  baseUrl: http://192.168.1.205:8000
+  serviceUri: /sap/opu/odata/sap/ZPFS_LOAN_ENQ_PORTAL_SRV/LoanApplicationSet
+  monitorServiceUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/
+  appraisalServiceUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/
+  appraisalDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_APPRAISAL_SRV/DocumentSet
+  businessPartnerServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/
+  businessPartnerDocumentServiceUri: /sap/opu/odata/sap/ZPFS_LMS_BUSINESS_PARTNER_SRV/DocumentSet
+  lieUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LendersIndependentEngineerSet
+  lieReportAndFeeUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/LIEReportAndFeeSet
+  monitorDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/DocumentSet
+  referenceInterestRateValueUri: /sap/opu/odata/sap/ZPFS_LMS_REF_INT_RATE_SRV/ReferenceInterestRateSet
+  collateralServiceUri: /sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/
+  client: 360
+  userName: sajeev
+  password: sapsap
+#security:
+#  oauth2:
+#    client:
+#      client-id: pfs-client
+#      client-secret: pfs-secret
+#      access-token-uri: http://localhost:9999/auth/oauth/token
+#      user-authorization-uri: http://localhost:9999/auth/oauth/authorize
+#    resource:
+#      user-info-uri: http://localhost:9999/time
+#      jwt:
+#        keyValue: PfS$$$98567
+server:
+  port: 9000
+  # Use X-Forwarded-Proto/Host from the reverse proxy so {baseUrl} in the redirect-uri is https://bp-tst.pfs-ess.com
+  forward-headers-strategy: framework
+  error:
+    include-message: always
+app:
+  oauth2:
+    login-success-url: /homepage
+    logout-success-url: /login
+riskRating:
+  baseUrl: http://localhost:8090/risk/api
+batch:
+  businessPartnerMasterDataScheduledTask: 3000
+  loanApplicationsScheduledTask: 5000
+  loanMonitoringScheduledTask: 5000
+  loanAppraisalScheduledTaskCreateAndChange:  5000
+  loanAppraisalScheduledTaskDelete:  5000
+  loanAppraisalScheduledTaskUpdateLoanPartner : 5000000
+  loanAppraisalScheduledTaskUpdateLoanContractId: 5000000
+  updateMainLoanPartner: 5000000
+  initialDelay: 10000
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
+        web: INFO

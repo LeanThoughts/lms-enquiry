@@ -31,6 +31,8 @@ export interface BpTableDefinition {
     description: string;
     /** The CommandLineRunner that delivers the initial rows */
     configClass: string;
+    /** Configuration module: business-partner or loans */
+    module?: string;
     fields: BpTableField[];
     valueField: string;
     labelField: string;

@@ -7,7 +7,12 @@ import org.springframework.stereotype.Component;
 import pfs.lms.enquiry.domain.*;
  import pfs.lms.enquiry.repository.*;
 
+import org.springframework.data.repository.CrudRepository;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +20,9 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class Initializer implements CommandLineRunner {
+
+    // The tables below are maintained in Configuration > Loans. This runner only adds the delivered entries that are
+    // missing (by code); it no longer deletes and re-creates the tables, so maintained entries keep their values.
 
     private final LoanClassRepository loanClassRepository;
 
@@ -66,45 +74,40 @@ public class Initializer implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        proposalTypeRepository.deleteAll();
-        if (proposalTypeRepository.count() == 0) {
+        { // was: only when the table is empty
             ProposalType pt1 = new ProposalType("1", "Lead");
             ProposalType pt2 = new ProposalType("2", "Sole");
             ProposalType pt3 = new ProposalType("3", "Consortium");
-            proposalTypeRepository.saveAll(Arrays.asList(pt1, pt2, pt3));
+            saveMissing(proposalTypeRepository, Arrays.asList(pt1, pt2, pt3));
             log.info("Added proposal type data");
         }
 
-        iccReadinessStatusRepository.deleteAll();
-        if (iccReadinessStatusRepository.count() == 0) {
+        { // was: only when the table is empty
             ICCReadinessStatus irs1 = new ICCReadinessStatus("1", "Ready for ICC");
             ICCReadinessStatus irs2 = new ICCReadinessStatus("2", "Under Process");
-            iccReadinessStatusRepository.saveAll(Arrays.asList(irs1, irs2));
+            saveMissing(iccReadinessStatusRepository, Arrays.asList(irs1, irs2));
             log.info("Added icc readiness status data");
         }
 
-        presentedInICCRepository.deleteAll();
-        if (presentedInICCRepository.count() == 0) {
+        { // was: only when the table is empty
             PresentedInICC pii1 = new PresentedInICC("1", "Yes");
             PresentedInICC pii2 = new PresentedInICC("2", "No");
             PresentedInICC pii3 = new PresentedInICC("3", "NA");
-            presentedInICCRepository.saveAll(Arrays.asList(pii1, pii2, pii3));
+            saveMissing(presentedInICCRepository, Arrays.asList(pii1, pii2, pii3));
             log.info("Added presented in icc data");
         }
 
-        iccStatusRepository.deleteAll();
-        if (iccStatusRepository.count() == 0) {
+        { // was: only when the table is empty
             ICCStatus is1 = new ICCStatus("1", "Cleared");
             ICCStatus is2 = new ICCStatus("2", "Dropped");
             ICCStatus is3 = new ICCStatus("3", "To be Represented");
             ICCStatus is4 = new ICCStatus("4", "Deferred / On Hold");
             ICCStatus is5 = new ICCStatus("5", "Further DD");
-            iccStatusRepository.saveAll(Arrays.asList(is1, is2, is3, is4, is5));
+            saveMissing(iccStatusRepository, Arrays.asList(is1, is2, is3, is4, is5));
             log.info("Added icc status data");
         }
 
-        loanClassRepository.deleteAll();
-        if (loanClassRepository.count() == 0) {
+        { // was: only when the table is empty
             LoanClass lc1 = new LoanClass("1", "PowerGen-Convl");
             LoanClass lc2 = new LoanClass("2", "PowerGen-Renew");
             LoanClass lc3 = new LoanClass("3", "Railways");
@@ -156,7 +159,7 @@ public class Initializer implements CommandLineRunner {
 
 
 
-            loanClassRepository.saveAll(Arrays.asList(lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10,
+            saveMissing(loanClassRepository, Arrays.asList(lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10,
                     lc11, lc12, lc13, lc14, lc15, lc16, lc17, lc18, lc19, lc20, lc21, lc22,
                     lc23, lc24, lc25, lc26, lc27, lc28, lc29, lc30, lc31,lc32,
                     lc41,lc61,lc62,lc63,lc64,lc65,lc66
@@ -164,9 +167,8 @@ public class Initializer implements CommandLineRunner {
             log.info("Added loan class sample data");
         }
 
-        projectTypeRepository.deleteAll();
 
-        if (projectTypeRepository.count() == 0) {
+        { // was: only when the table is empty
             ProjectType pt1 = new ProjectType("01","Thermal-Coal.");
             ProjectType pt2 = new ProjectType("02","Thermal-Lignite");
             ProjectType pt3 = new ProjectType("03","Thermal-Gas");
@@ -241,7 +243,7 @@ public class Initializer implements CommandLineRunner {
             ProjectType pt68 = new ProjectType("68", "Data Center");
             ProjectType pt69 = new ProjectType("69", "EV Manufacturing");
 
-            projectTypeRepository.saveAll(Arrays.asList(
+            saveMissing(projectTypeRepository, Arrays.asList(
                     pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8, pt9, pt10, pt11, pt12,
                     pt13, pt14, pt15, pt16, pt17, pt18, pt19, pt20,
                     pt21, pt22, pt23, pt24, pt25, pt26, pt27, pt28, pt29, pt30, pt31, pt32,
@@ -264,14 +266,12 @@ public class Initializer implements CommandLineRunner {
             log.info("Added project types ");
         }
 
-        projectTypeCoreSectorRepository.deleteAll();
         ProjectTypeCoreSector ptcs0 = new ProjectTypeCoreSector("0","");
         ProjectTypeCoreSector ptcs1 = new ProjectTypeCoreSector("1","Infrastructure");
         ProjectTypeCoreSector ptcs2 = new ProjectTypeCoreSector("2","NonInfrastructure");
-        projectTypeCoreSectorRepository.saveAll(Arrays.asList(ptcs0,ptcs1,ptcs2));
+        saveMissing(projectTypeCoreSectorRepository, Arrays.asList(ptcs0,ptcs1,ptcs2));
 
 
-        purposeOfLoanRepository.deleteAll();
 
 //        PurposeOfLoan p1 = new PurposeOfLoan("1","Term Loan");
 //        PurposeOfLoan p2 = new PurposeOfLoan("10","Term Loan/Sub Debt");
@@ -316,28 +316,26 @@ public class Initializer implements CommandLineRunner {
         PurposeOfLoan p41 = new PurposeOfLoan("8","Term Loan/Take out financing");
         PurposeOfLoan p42 = new PurposeOfLoan("9","Term Loan/Top Up Loan");
 
-        purposeOfLoanRepository.saveAll(Arrays.asList(p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42));
+        saveMissing(purposeOfLoanRepository, Arrays.asList(p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42));
         log.info("Loan Purposes  ");
 
 
-        financingTypeRepository.deleteAll();
 
-        if (financingTypeRepository.count() == 0) {
+        { // was: only when the table is empty
             FinancingType ft1 = new FinancingType("1", "Sole Lending");
             FinancingType ft2 = new FinancingType("2", "MultipleBanking");
             FinancingType ft3 = new FinancingType("3", "ConsortiumLendg");
             FinancingType ft4 = new FinancingType("4", "Mul.Bank/St.Utl");
 
-            financingTypeRepository.saveAll(Arrays.asList(ft1, ft2, ft3,ft4));
+            saveMissing(financingTypeRepository, Arrays.asList(ft1, ft2, ft3,ft4));
             log.info("Added financing type  ");
         }
-        loanTypeRepository.deleteAll();
 
-        if (loanTypeRepository.count() == 0) {
+        { // was: only when the table is empty
             LoanType lt1 = new LoanType("001", "Term Loan");
             LoanType lt2 = new LoanType("002", "Non Fund Based");
             LoanType lt3 = new LoanType("003", "Corporate Loan");
-            loanTypeRepository.saveAll(Arrays.asList(lt1, lt2, lt3));
+            saveMissing(loanTypeRepository, Arrays.asList(lt1, lt2, lt3));
             log.info("Added Loan types  ");
         }
 
@@ -406,7 +404,6 @@ public class Initializer implements CommandLineRunner {
             documentationStatusRepository.save(documentationStatus);
         }
 
-        assistanceTypeRepository.deleteAll();
         AssistanceType at1 = assistanceTypeRepository.getAssistanceTypeByCode("D");
         if (at1 == null) {
             at1 = new AssistanceType("D", "Debt");
@@ -453,8 +450,7 @@ public class Initializer implements CommandLineRunner {
         }
 
 
-        sanctionTypeRepository.deleteAll();
-        if(sanctionTypeRepository.count() == 0){
+        { // was: only when the table is empty
             SanctionType st1 = new SanctionType(" ","Original Sanction");
             SanctionType st2 = new SanctionType("1","Change in Saction Amount");
             SanctionType st3 = new SanctionType("2","Timeline Extension");
@@ -463,12 +459,11 @@ public class Initializer implements CommandLineRunner {
             SanctionType st6 = new SanctionType("5","Change in Intt Rate");
             SanctionType st7 = new SanctionType("6","Reimbursement");
             SanctionType st8 = new SanctionType("7","Waiver of billed amt");
-            sanctionTypeRepository.saveAll(Arrays.asList(st1, st2, st3, st4, st5, st6, st7));
+            saveMissing(sanctionTypeRepository, Arrays.asList(st1, st2, st3, st4, st5, st6, st7));
             log.info("Added Sanction Types");
         }
 
-        feeTypeRepository.deleteAll();
-        if(feeTypeRepository.count() == 0){
+        { // was: only when the table is empty
             FeeType ft1 = new FeeType("9501","Application Fees");
             FeeType ft2 = new FeeType("9502","Processing Fees");
             FeeType ft3 = new FeeType("9503","Upfront Fees");
@@ -497,14 +492,13 @@ public class Initializer implements CommandLineRunner {
             FeeType ft26 = new FeeType("9532","Other Out of Pocket Exp Fees");
             FeeType ft27 = new FeeType("9533","Other Re-imbursements Fees");
 
-            feeTypeRepository.saveAll(Arrays.asList(ft1,ft2,ft3,ft4,ft5,ft6,ft7,ft8,ft9,ft10,ft11,ft12,ft13,ft14,ft15,ft16,ft17,ft18,ft19,ft20,
+            saveMissing(feeTypeRepository, Arrays.asList(ft1,ft2,ft3,ft4,ft5,ft6,ft7,ft8,ft9,ft10,ft11,ft12,ft13,ft14,ft15,ft16,ft17,ft18,ft19,ft20,
                     ft21,ft22,ft23,ft24,ft25,ft26,ft27));
             log.info("Added Fee Types");
         }
 
-        industrySectorRepository.deleteAll();
 
-        if (industrySectorRepository.count() == 0) {
+        { // was: only when the table is empty
             IndustrySector i2 = new IndustrySector("1", "Power");
             IndustrySector i3 = new IndustrySector("2", "Railways");
             IndustrySector i4 = new IndustrySector("3", "Urban Infra");
@@ -557,17 +551,17 @@ public class Initializer implements CommandLineRunner {
             IndustrySector i51 = new IndustrySector("94", "Environment");
 
 
-            industrySectorRepository.saveAll(Arrays.asList(i2, i3, i4, i5, i6, i7, i8, i9, i10));
-            industrySectorRepository.saveAll(Arrays.asList(i11, i12, i13, i14, i15, i16, i17, i18, i19, i20));
-            industrySectorRepository.saveAll(Arrays.asList(i21, i22, i23, i24, i25, i26, i27, i28, i29, i30));
-            industrySectorRepository.saveAll(Arrays.asList(i31, i32, i33, i34, i35, i36, i37, i38, i39, i40));
-            industrySectorRepository.saveAll(Arrays.asList(i41, i42, i43, i44, i45, i46, i47, i48, i49, i50, i51));
+            saveMissing(industrySectorRepository, Arrays.asList(i2, i3, i4, i5, i6, i7, i8, i9, i10));
+            saveMissing(industrySectorRepository, Arrays.asList(i11, i12, i13, i14, i15, i16, i17, i18, i19, i20));
+            saveMissing(industrySectorRepository, Arrays.asList(i21, i22, i23, i24, i25, i26, i27, i28, i29, i30));
+            saveMissing(industrySectorRepository, Arrays.asList(i31, i32, i33, i34, i35, i36, i37, i38, i39, i40));
+            saveMissing(industrySectorRepository, Arrays.asList(i41, i42, i43, i44, i45, i46, i47, i48, i49, i50, i51));
             log.info("Added Industry Sectors data");
 
 
         }
 
-        if (unitOfMeasureRepository.count() == 0) {
+        { // was: only when the table is empty
 
             UnitOfMeasure u1 = new UnitOfMeasure("MW", "Mega Watts");
             UnitOfMeasure u2 = new UnitOfMeasure("KW", "Kilo Watts");
@@ -575,11 +569,11 @@ public class Initializer implements CommandLineRunner {
             UnitOfMeasure u4 = new UnitOfMeasure("KM2", "Square Kilometers");
 
 
-            unitOfMeasureRepository.saveAll(Arrays.asList(u1, u2, u3, u4));
+            saveMissing(unitOfMeasureRepository, Arrays.asList(u1, u2, u3, u4));
             log.info("Added Unit of Measures");
         }
 
-        if (rejectionCategoryRepository.count() == 0) {
+        { // was: only when the table is empty
             RejectionCategory r1 = new RejectionCategory("1", "Rejected by Borrower");
             RejectionCategory r2 = new RejectionCategory("2", "Rejected by BD");
             RejectionCategory r3 = new RejectionCategory("3", "Rejected by ICC");
@@ -587,22 +581,22 @@ public class Initializer implements CommandLineRunner {
             RejectionCategory r5 = new RejectionCategory("5", "Rejected by Board");
 
 
-            rejectionCategoryRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
+            saveMissing(rejectionCategoryRepository, Arrays.asList(r1, r2, r3, r4, r5));
             log.info("Added Rejection Categories");
         }
 
-        if (enquiryPortalCommonConfigRepository.count() == 0) {
+        { // was: only when the table is empty
             EnquiryPortalCommonConfig e1 = new EnquiryPortalCommonConfig("DEV", "info@leanthoughts.com");
             EnquiryPortalCommonConfig e2 = new EnquiryPortalCommonConfig("QA", "naveenkverma@ptcfinancial.com");
             EnquiryPortalCommonConfig e3 = new EnquiryPortalCommonConfig("PRD", "debt@ptcfinancial.com");
             EnquiryPortalCommonConfig e4 = new EnquiryPortalCommonConfig("", "info@leanthoughts.com");
 
-            enquiryPortalCommonConfigRepository.saveAll(Arrays.asList(e1, e2, e3));
+            saveMissing(enquiryPortalCommonConfigRepository, "systemId", Arrays.asList(e1, e2, e3));
             log.info("Added Common Config.............");
 
         }
 
-        if (stateRepository.count() == 0) {
+        { // was: only when the table is empty
             State s1 = new State("01", "Andhra Pradesh");
             State s2 = new State("02", "Arunachal Pradesh");
             State s3 = new State("03", "Assam");
@@ -640,7 +634,7 @@ public class Initializer implements CommandLineRunner {
             State s35 = new State("35", "Uttaranchal");
             State s36 = new State("36", "Telangana");
 
-            stateRepository.saveAll(Arrays.asList(s1,
+            saveMissing(stateRepository, Arrays.asList(s1,
                     s2,
                     s3,
                     s4,
@@ -681,7 +675,7 @@ public class Initializer implements CommandLineRunner {
 
         }
 
-        if (customerRejectionReasonRepository.findAll().size() == 0) {
+        { // was: only when the table is empty
             CustomerRejectionReason c1 = new CustomerRejectionReason("01","Competitors' conditions better");
             CustomerRejectionReason c2 = new CustomerRejectionReason("02","Withdrawal without reason");
             CustomerRejectionReason c3 = new CustomerRejectionReason("03","Too little capital");
@@ -699,7 +693,7 @@ public class Initializer implements CommandLineRunner {
             CustomerRejectionReason c15 = new CustomerRejectionReason("15","Non-payment of processing fees");
             CustomerRejectionReason c16 = new CustomerRejectionReason("16","SCOD &/or Availability period Lapsed");
 
-            customerRejectionReasonRepository.saveAll(Arrays.asList(c1,
+            saveMissing(customerRejectionReasonRepository, Arrays.asList(c1,
                     c2,
                     c3,
                     c4,
@@ -742,131 +736,86 @@ public class Initializer implements CommandLineRunner {
 
         TRAAccountType traAccountType = new TRAAccountType();
         traAccountType = traAccountTypeRepository.findByCode("01");
-        if (traAccountType != null) {
-            traAccountType.setValue("Revenue Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("01", "Revenue Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("02");
-        if (traAccountType != null) {
-            traAccountType.setValue("Surplus Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("02", "Surplus Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("03");
-        if (traAccountType != null) {
-            traAccountType.setValue("Distribution Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("03", "Distribution Account");
             traAccountTypeRepository.save(traAccountType);
         }
         traAccountType = traAccountTypeRepository.findByCode("04");
-        if (traAccountType != null) {
-            traAccountType.setValue("Loss Proceeds Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("04", "Loss Proceeds Account");
             traAccountTypeRepository.save(traAccountType);
         }
         traAccountType = traAccountTypeRepository.findByCode("05");
-        if (traAccountType != null) {
-            traAccountType.setValue("O&M Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("05", "O&M Account");
             traAccountTypeRepository.save(traAccountType);
         }
         traAccountType = traAccountTypeRepository.findByCode("06");
-        if (traAccountType != null) {
-            traAccountType.setValue("Statutory Dues Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("06", "Statutory Dues Account");
             traAccountTypeRepository.save(traAccountType);
         }
         traAccountType = traAccountTypeRepository.findByCode("07");
-        if (traAccountType != null) {
-            traAccountType.setValue("DSRA Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("07", "DSRA Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("08");
-        if (traAccountType != null) {
-            traAccountType.setValue("Debt Service Payment Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("08", "Debt Service Payment Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("09");
-        if (traAccountType != null) {
-            traAccountType.setValue("Construction Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("09", "Construction Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("10");
-        if (traAccountType != null) {
-            traAccountType.setValue("Disbursement Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("10", "Disbursement Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("11");
-        if (traAccountType != null) {
-            traAccountType.setValue("Disputes Reserve Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("11", "Disputes Reserve Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("12");
-        if (traAccountType != null) {
-            traAccountType.setValue("Revenue Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("12", "Revenue Account");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("13");
-        if (traAccountType != null) {
-            traAccountType.setValue("Compensation and Liquidated Damagest");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("13", "Compensation and Liquidated Damages");
             traAccountTypeRepository.save(traAccountType);
         }
         traAccountType = traAccountTypeRepository.findByCode("14");
-        if (traAccountType != null) {
-            traAccountType.setValue("Enforcement Proceeds Account ");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("14", "Enforcement Proceeds Account ");
             traAccountTypeRepository.save(traAccountType);
         }
 
         traAccountType = traAccountTypeRepository.findByCode("16");
-        if (traAccountType != null) {
-            traAccountType.setValue("O&M Reserve Account");
-            traAccountTypeRepository.save(traAccountType);
-        } else {
+        if (traAccountType == null) {
             traAccountType = new TRAAccountType("16", "O&M Reserve Account");
             traAccountTypeRepository.save(traAccountType);
         }
@@ -875,4 +824,39 @@ public class Initializer implements CommandLineRunner {
     }
 
 
+
+    /** Saves the rows whose code is not in the table yet (rows already there keep their maintained values). */
+    private <T> void saveMissing(CrudRepository<T, ?> repository, List<T> rows) {
+        saveMissing(repository, "code", rows);
+    }
+
+    private <T> void saveMissing(CrudRepository<T, ?> repository, String keyField, List<T> rows) {
+        Set<Object> existing = new HashSet<>();
+        repository.findAll().forEach(row -> existing.add(key(row, keyField)));
+        List<T> missing = new ArrayList<>();
+        for (T row : rows) {
+            if (existing.add(key(row, keyField))) {
+                missing.add(row);
+            }
+        }
+        if (!missing.isEmpty()) {
+            repository.saveAll(missing);
+            log.info("Added {} missing {} entries", missing.size(), missing.get(0).getClass().getSimpleName());
+        }
+    }
+
+    private static Object key(Object row, String keyField) {
+        for (Class<?> type = row.getClass(); type != null; type = type.getSuperclass()) {
+            try {
+                Field field = type.getDeclaredField(keyField);
+                field.setAccessible(true);
+                return field.get(row);
+            } catch (NoSuchFieldException e) {
+                // look in the super class
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        throw new IllegalStateException("No field " + keyField + " in " + row.getClass().getName());
+    }
 }

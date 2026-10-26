@@ -23,9 +23,11 @@ export default [
             { path: 'bupa-entity-set-field-status', component: BupaEntitySetFieldStatusComponent },
             // Tables of the CommandLineRunner configs (BpTableDefinitions), one app each
             { path: 'bp-tables/:table', component: BpTableComponent },
+            // Loans: tables of the configInitializer CommandLineRunners (LoanTableDefinitions), same app as the BP tables
+            { path: 'loan-tables/:table', component: BpTableComponent },
             // Collaterals
             { path: 'checklist-id-number-range', component: ChecklistIdConfigComponent },
-            // Modules without apps yet (Loans, General Config)
+            // Modules without apps yet (General Config)
             { path: ':module', component: ConfigurationEmptyComponent }
         ]
     }

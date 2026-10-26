@@ -45,6 +45,9 @@ import static pfs.lms.enquiry.configuration.bptables.BpTableField.text;
  */
 public final class BpTableDefinitions {
 
+    public static final String BUSINESS_PARTNER = "business-partner";
+    public static final String LOANS = "loans";
+
     private static final Map<String, BpTableDefinition> TABLES = new LinkedHashMap<>();
 
     static {
@@ -168,6 +171,9 @@ public final class BpTableDefinitions {
                 "Sort keys (assignment field) of customer accounts",
                 "SortKeyConfig", SortKey.class, "id", "description",
                 id("id", "Sort Key", 10), text("description", "Description").required()));
+
+        // Loans module: the tables of pfs.lms.enquiry.configInitializer
+        LoanTableDefinitions.tables().forEach(table -> add(table.module(LOANS)));
     }
 
     private BpTableDefinitions() {
@@ -179,6 +185,13 @@ public final class BpTableDefinitions {
 
     public static List<BpTableDefinition> all() {
         return Collections.unmodifiableList(Arrays.asList(TABLES.values().toArray(new BpTableDefinition[0])));
+    }
+
+    /** The tables of one configuration module */
+    public static List<BpTableDefinition> all(String module) {
+        return Collections.unmodifiableList(TABLES.values().stream()
+                .filter(table -> table.getModule().equals(module))
+                .collect(java.util.stream.Collectors.toList()));
     }
 
     public static Optional<BpTableDefinition> find(String key) {

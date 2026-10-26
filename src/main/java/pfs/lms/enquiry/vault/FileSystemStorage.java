@@ -39,7 +39,6 @@ public class FileSystemStorage implements FileStorage {
 
     @Value("${user.home}")
     private String userHome;
-
     DB db = null;
 
     private ConcurrentNavigableMap<String, String> register = null;

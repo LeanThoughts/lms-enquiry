@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/** A business partner configuration table: an entity that one of the CommandLineRunner configs fills at startup. */
+/** A configuration table: an entity that one of the CommandLineRunner configs fills at startup (business partner or loans). */
 public class BpTableDefinition {
 
     private final String key;
@@ -22,6 +22,8 @@ public class BpTableDefinition {
     private final String valueField;
     /** Column with the description of a row, e.g. "value" */
     private final String labelField;
+    /** Configuration module (tab of the Configuration workspace) the table belongs to: business-partner or loans */
+    private String module = BpTableDefinitions.BUSINESS_PARTNER;
 
     public BpTableDefinition(String key, String title, String description, String configClass, Class<?> entityClass,
                              String valueField, String labelField, BpTableField... fields) {
@@ -58,4 +60,11 @@ public class BpTableDefinition {
     public List<BpTableField> getFields() { return fields; }
     public String getValueField() { return valueField; }
     public String getLabelField() { return labelField; }
+    public String getModule() { return module; }
+
+    /** Puts the table into another configuration module (default: business-partner) */
+    public BpTableDefinition module(String module) {
+        this.module = module;
+        return this;
+    }
 }

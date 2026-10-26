@@ -21,12 +21,17 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -72,8 +77,14 @@ public class BpTableService {
 
     @Transactional(readOnly = true)
     public Overview getOverview(String principalName) {
+        return getOverview(BpTableDefinitions.BUSINESS_PARTNER, principalName);
+    }
+
+    /** The tables of a configuration module (business-partner, loans) with their row counts */
+    @Transactional(readOnly = true)
+    public Overview getOverview(String module, String principalName) {
         Overview overview = new Overview();
-        overview.setTables(BpTableDefinitions.all().stream()
+        overview.setTables(BpTableDefinitions.all(module).stream()
                 .map(table -> new TableSummary(table, count(table, null)))
                 .collect(Collectors.toList()));
         User user = user(principalName);
@@ -141,6 +152,7 @@ public class BpTableService {
                     + table.getTitle() + ".", HttpStatus.CONFLICT);
         }
         checkBusinessKeyUnique(table, entity);
+        stamp(entity, true, principalName);
         entityManager.persist(entity);
         entityManager.flush();
         log.info("{}: row {} created by {}", table.getTitle(), describe(table, entity), principalName);
@@ -166,6 +178,7 @@ public class BpTableService {
             }
         }
         if (changed > 0) {
+            stamp(entity, false, principalName);
             entityManager.flush();
             log.info("{}: row {} changed by {} ({} columns)", table.getTitle(), describe(table, entity),
                     principalName, changed);
@@ -374,11 +387,15 @@ public class BpTableService {
                 && field.getOptions().stream().noneMatch(option -> value.equals(option.getValue()))) {
             throw invalid(field.getLabel() + " " + value + " is not allowed.");
         }
-        if (type == Integer.class || type == int.class) {
-            return Integer.valueOf(value);
-        }
-        if (type == Long.class || type == long.class) {
-            return Long.valueOf(value);
+        try {
+            if (type == Integer.class || type == int.class) {
+                return Integer.valueOf(value);
+            }
+            if (type == Long.class || type == long.class) {
+                return Long.valueOf(value);
+            }
+        } catch (NumberFormatException e) {
+            throw invalid(field.getLabel() + " must be a whole number.");
         }
         return value;
     }
@@ -407,7 +424,63 @@ public class BpTableService {
         if (type == Integer.class || type == int.class) {
             return Integer.valueOf(id);
         }
+        if (type == UUID.class) {
+            return UUID.fromString(id);
+        }
         return id;
+    }
+
+    /**
+     * Audit columns of the entity, where it has them: createdOn/createdAt/createdByUserName and
+     * changedOn/changedAt/changedByUserName (AggregateRoot), createdAt/updatedAt (AuditModel, not nullable).
+     */
+    private static void stamp(Object entity, boolean created, String user) {
+        if (created) {
+            stampField(entity, "createdOn", user);
+            stampField(entity, "createdAt", user);
+            stampField(entity, "createdByUserName", user);
+        }
+        stampField(entity, "updatedAt", user);
+        if (!created) {
+            stampField(entity, "changedOn", user);
+            stampField(entity, "changedAt", user);
+            stampField(entity, "changedByUserName", user);
+        }
+    }
+
+    private static void stampField(Object entity, String name, String user) {
+        Field field = null;
+        for (Class<?> current = entity.getClass(); current != null && field == null; current = current.getSuperclass()) {
+            try {
+                field = current.getDeclaredField(name);
+            } catch (NoSuchFieldException e) {
+                // look in the super class
+            }
+        }
+        if (field == null) {
+            return;
+        }
+        Class<?> type = field.getType();
+        Object value;
+        if (type == String.class) {
+            value = user;
+        } else if (type == LocalDate.class) {
+            value = LocalDate.now();
+        } else if (type == LocalTime.class) {
+            value = LocalTime.now();
+        } else if (type == LocalDateTime.class) {
+            value = LocalDateTime.now();
+        } else if (type == Date.class) {
+            value = new Date();
+        } else {
+            return;
+        }
+        try {
+            field.setAccessible(true);
+            field.set(entity, value);
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /** "Role TR0100 / Partner Group 0001" */
@@ -439,7 +512,9 @@ public class BpTableService {
 
     private static Object newInstance(BpTableDefinition table) {
         try {
-            return table.getEntityClass().getDeclaredConstructor().newInstance();
+            java.lang.reflect.Constructor<?> constructor = table.getEntityClass().getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Cannot create " + table.getEntityClass().getName(), e);
         }

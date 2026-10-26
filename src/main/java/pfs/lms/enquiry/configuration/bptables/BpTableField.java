@@ -41,6 +41,13 @@ public class BpTableField {
         return new BpTableField(name, label);
     }
 
+    public static BpTableField number(String name, String label) {
+        BpTableField field = new BpTableField(name, label);
+        field.type = Type.NUMBER;
+        field.maxLength = 18;
+        return field;
+    }
+
     public static BpTableField bool(String name, String label) {
         BpTableField field = new BpTableField(name, label);
         field.type = Type.BOOLEAN;
