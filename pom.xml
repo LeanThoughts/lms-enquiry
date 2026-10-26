@@ -265,7 +265,7 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>run build -- --configuration production</arguments>
+                            <arguments>run build -- --configuration development</arguments>
                         </configuration>
                     </execution>
                 </executions>
