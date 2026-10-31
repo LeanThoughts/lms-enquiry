@@ -13,10 +13,17 @@ export class BpTableService {
 
     constructor(private http: HttpClient) { }
 
-    getPage(table: string, page: number, size: number, search: string): Observable<BpTablePage> {
+    getPage(table: string, page: number, size: number, search: string,
+            filters: Record<string, string> = {}): Observable<BpTablePage> {
         let params = new HttpParams().set('page', page).set('size', size);
         if (search.trim()) {
             params = params.set('search', search.trim());
+        }
+        // filters go as column=value (the server only uses the filterable columns of the table)
+        for (const [column, value] of Object.entries(filters)) {
+            if (value) {
+                params = params.set(column, value);
+            }
         }
         return this.http.get<BpTablePage>(`${this.baseUrl}/${encodeURIComponent(table)}`,
             { params, context: skipBusyIndicator() });

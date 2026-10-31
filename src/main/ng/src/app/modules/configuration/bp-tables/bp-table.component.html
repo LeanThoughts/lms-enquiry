@@ -48,12 +48,27 @@
                 }
 
                 <div class="bt-filters">
+                    @for (field of filterFields; track field.name) {
+                        <label class="bt-filters__filter">
+                            <span class="bt-filters__label">{{ field.label }}</span>
+                            <select class="bt-filters__select" [attr.aria-label]="'Filter by ' + field.label"
+                                [value]="filters[field.name] || ''" (change)="setFilter(field, $any($event.target).value)">
+                                <option value="">All</option>
+                                @for (option of filterOptions(field); track option.value) {
+                                    <option [value]="option.value" [selected]="filters[field.name] === option.value">{{ option.label }}</option>
+                                }
+                            </select>
+                        </label>
+                    }
                     <input fd-form-control type="search" class="bt-filters__search" placeholder="Search"
                         [attr.aria-label]="'Search ' + data.table.title" [value]="search"
                         (input)="setSearch($any($event.target).value)" />
                     <span class="bt-filters__count" aria-live="polite">
                         @if (data.total) { {{ data.total }} {{ data.total === 1 ? 'entry' : 'entries' }} } @else { No entries }
                         @if (search) { matching “{{ search }}” }
+                        @for (field of filterFields; track field.name) {
+                            @if (filters[field.name]) { in {{ filters[field.name] }} }
+                        }
                     </span>
                     @if (loading || busy) {
                         <span class="bt-filters__busy" role="status">

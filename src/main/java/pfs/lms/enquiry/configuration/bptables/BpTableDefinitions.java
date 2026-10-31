@@ -47,6 +47,7 @@ public final class BpTableDefinitions {
 
     public static final String BUSINESS_PARTNER = "business-partner";
     public static final String LOANS = "loans";
+    public static final String COLLATERALS = "collaterals";
 
     private static final Map<String, BpTableDefinition> TABLES = new LinkedHashMap<>();
 
@@ -174,6 +175,8 @@ public final class BpTableDefinitions {
 
         // Loans module: the tables of pfs.lms.enquiry.configInitializer
         LoanTableDefinitions.tables().forEach(table -> add(table.module(LOANS)));
+        // Collaterals module: the value lists (dropdowns) of Collateral Management
+        add(CollateralTableDefinitions.collateralValues().module(COLLATERALS));
     }
 
     private BpTableDefinitions() {

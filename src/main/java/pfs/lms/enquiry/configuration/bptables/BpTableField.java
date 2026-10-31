@@ -29,6 +29,8 @@ public class BpTableField {
     private String referenceTable;
     /** The column holds the referenced entity itself (a JPA relation), not its code */
     private boolean referenceEntity;
+    /** The list can be filtered by this column (a dropdown above the table) */
+    private boolean filter;
     /** Fixed values (value + label) */
     private final List<BpTableDtos.Option> options = new ArrayList<>();
 
@@ -104,6 +106,12 @@ public class BpTableField {
         return this;
     }
 
+    /** Offers a filter on this column above the table (needs fixed values or a reference table) */
+    public BpTableField filter() {
+        this.filter = true;
+        return this;
+    }
+
     public BpTableField option(String value, String label) {
         this.options.add(new BpTableDtos.Option(value, label));
         return this;
@@ -133,4 +141,5 @@ public class BpTableField {
     public String getReferenceTable() { return referenceTable; }
     public boolean isReferenceEntity() { return referenceEntity; }
     public List<BpTableDtos.Option> getOptions() { return options; }
+    public boolean isFilter() { return filter; }
 }

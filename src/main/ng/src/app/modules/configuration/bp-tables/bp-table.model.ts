@@ -18,6 +18,8 @@ export interface BpTableField {
     referenceEntity: boolean;
     /** Fixed values */
     options: BpOption[];
+    /** The list can be filtered by this column (dropdown above the table) */
+    filter?: boolean;
     idField: boolean;
     /** Shown in the table and the dialog */
     visible: boolean;
@@ -55,6 +57,8 @@ export interface BpTablePage {
     canChange: boolean;
     userRole: string | null;
     references: Record<string, BpOption[]>;
+    /** The filters applied by the server (column = value) */
+    filters?: Record<string, string>;
 }
 
 export const BP_PAGE_SIZES = [10, 25, 50, 100];

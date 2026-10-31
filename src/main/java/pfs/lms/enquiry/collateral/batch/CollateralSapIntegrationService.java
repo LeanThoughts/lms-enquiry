@@ -125,7 +125,9 @@ public class CollateralSapIntegrationService {
         List<SAPIntegrationPointer> pointers = pendingPointers(BUSINESS_PROCESS);
         pointers.sort(Comparator.comparing(SAPIntegrationPointer::getCreationDate,
                 Comparator.nullsLast(Comparator.naturalOrder())));
-        log.info("Collateral SAP integration: {} unposted/failed pointer(s) to consider", pointers.size());
+        if ( pointers.isEmpty() == false ) {
+            log.info("Collateral SAP integration: {} unposted/failed pointer(s) to consider", pointers.size());
+        }
 
         Map<String, Boolean> approvedByChecklist = new HashMap<>();
         int posted = 0;
@@ -147,7 +149,7 @@ public class CollateralSapIntegrationService {
                 failed++;
             }
         }
-        log.info("Collateral SAP integration finished: {} posted, {} failed, {} skipped", posted, failed, skipped);
+        //log.info("Collateral SAP integration finished: {} posted, {} failed, {} skipped", posted, failed, skipped);
     }
 
     /**

@@ -17,6 +17,7 @@ import pfs.lms.enquiry.configuration.bptables.BpTableDtos.TablePage;
 import pfs.lms.enquiry.exception.LmsException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * REST API of the Configuration apps of the business partner configuration tables (under /api from
@@ -44,8 +45,10 @@ public class BpTableController {
                                              @RequestParam(required = false) Integer page,
                                              @RequestParam(required = false) Integer size,
                                              @RequestParam(required = false) String search,
+                                             @RequestParam Map<String, String> parameters,
                                              HttpServletRequest request) {
-        return ResponseEntity.ok(service.getPage(table, page, size, search, signedInUser(request)));
+        // filters are passed as column=value (only the filterable columns of the table are used)
+        return ResponseEntity.ok(service.getPage(table, page, size, search, parameters, signedInUser(request)));
     }
 
     @PostMapping(BASE + "/{table}/rows")

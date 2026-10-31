@@ -171,6 +171,11 @@ export const CONFIGURATION_MODULES: ConfigurationModule[] = [
                 path: 'checklist-id-number-range',
                 title: 'Checklist ID Number Range',
                 description: 'Numbering of the Checklist ID No. (SAP ZID_NO) of new collaterals'
+            },
+            {
+                path: 'collateral-tables/collateral-values',
+                title: 'Collateral Value Lists',
+                description: 'Dropdown values of Collateral Management (condition groups, object types, statuses, …) per value list'
             }
         ]
     },

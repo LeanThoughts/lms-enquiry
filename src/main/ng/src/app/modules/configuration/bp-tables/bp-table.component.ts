@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
     ButtonComponent,
     DialogService,
@@ -45,6 +45,8 @@ export class BpTableComponent implements OnInit, OnDestroy {
     page = 0;
     size = 25;
     search = '';
+    /** Column filters (column = value), e.g. listName of the collateral value lists; kept in the URL */
+    filters: Record<string, string> = {};
 
     /** Change mode (the Configuration workspace shows "Edit") */
     edit = false;
@@ -55,6 +57,7 @@ export class BpTableComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private service: BpTableService,
         private dialogService: DialogService,
         private messageService: MessageService
@@ -67,6 +70,7 @@ export class BpTableComponent implements OnInit, OnDestroy {
             this.data = null;
             this.page = 0;
             this.search = '';
+            this.filters = this.filtersFromUrl();
             this.edit = false;
             this.noEditAccessDismissed = false;
             this.load();
@@ -85,6 +89,46 @@ export class BpTableComponent implements OnInit, OnDestroy {
 
     get columns(): BpTableField[] {
         return this.data?.table.fields.filter(field => field.visible) ?? [];
+    }
+
+    /** Columns with a filter dropdown above the table */
+    get filterFields(): BpTableField[] {
+        return this.data?.table.fields.filter(field => field.filter) ?? [];
+    }
+
+    filterOptions(field: BpTableField) {
+        return this.data ? fieldOptions(field, this.data.references) ?? [] : [];
+    }
+
+    /** Filters the table by a column value ('' = all); the first page is shown */
+    setFilter(field: BpTableField, value: string): void {
+        const filters = { ...this.filters };
+        if (value) {
+            filters[field.name] = value;
+        } else {
+            delete filters[field.name];
+        }
+        this.filters = filters;
+        this.page = 0;
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { [field.name]: value || null },
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+        });
+        this.load();
+    }
+
+    private filtersFromUrl(): Record<string, string> {
+        const filters: Record<string, string> = {};
+        const query = this.route.snapshot.queryParamMap;
+        for (const key of query.keys) {
+            const value = query.get(key);
+            if (value && !['page', 'size', 'search'].includes(key)) {
+                filters[key] = value;
+            }
+        }
+        return filters;
     }
 
     get canChange(): boolean {
@@ -110,7 +154,7 @@ export class BpTableComponent implements OnInit, OnDestroy {
         const table = this.tableKey;
         this.loading = true;
         this.loadFailed = false;
-        this.service.getPage(table, this.page, this.size, this.search).pipe(takeUntil(this.destroy$)).subscribe({
+        this.service.getPage(table, this.page, this.size, this.search, this.filters).pipe(takeUntil(this.destroy$)).subscribe({
             next: data => {
                 if (table !== this.tableKey) {
                     return;
@@ -119,6 +163,10 @@ export class BpTableComponent implements OnInit, OnDestroy {
                 this.data = data;
                 this.page = data.page;
                 this.size = data.size;
+                if (data.filters) {
+                    // the server ignores unknown filters: show what it applied
+                    this.filters = { ...data.filters };
+                }
                 if (!data.canChange) {
                     this.edit = false;
                 }
@@ -183,7 +231,8 @@ export class BpTableComponent implements OnInit, OnDestroy {
         if (!this.data) {
             return;
         }
-        const data: BpRowDialogData = { table: this.data.table, references: this.data.references, row };
+        const data: BpRowDialogData = { table: this.data.table, references: this.data.references, row,
+            defaults: row ? undefined : { ...this.filters } };
         this.dialogService.open(BpRowDialogComponent, { data, responsivePadding: true }).afterClosed
             .pipe(takeUntil(this.destroy$))
             .subscribe({

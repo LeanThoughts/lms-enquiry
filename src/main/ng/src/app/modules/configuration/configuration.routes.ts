@@ -25,6 +25,8 @@ export default [
             { path: 'bp-tables/:table', component: BpTableComponent },
             // Loans: tables of the configInitializer CommandLineRunners (LoanTableDefinitions), same app as the BP tables
             { path: 'loan-tables/:table', component: BpTableComponent },
+            // Collaterals: value lists of Collateral Management (CollateralTableDefinitions), same app
+            { path: 'collateral-tables/:table', component: BpTableComponent },
             // Collaterals
             { path: 'checklist-id-number-range', component: ChecklistIdConfigComponent },
             // Modules without apps yet (General Config)

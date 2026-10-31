@@ -93,7 +93,11 @@ public final class BpTableDtos {
         private String userRole;
         /** Dropdown values per referenced table key */
         private Map<String, List<Option>> references = new LinkedHashMap<>();
+        /** The filters applied (column = value) */
+        private Map<String, String> filters = new LinkedHashMap<>();
 
+        public Map<String, String> getFilters() { return filters; }
+        public void setFilters(Map<String, String> filters) { this.filters = filters; }
         public BpTableDefinition getTable() { return table; }
         public void setTable(BpTableDefinition table) { this.table = table; }
         public List<Row> getRows() { return rows; }

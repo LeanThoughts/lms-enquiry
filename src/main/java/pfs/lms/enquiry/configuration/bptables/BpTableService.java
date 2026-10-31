@@ -96,18 +96,27 @@ public class BpTableService {
     /** A page (0 based) of the rows matching the search text (in any text column), sorted by key. */
     @Transactional(readOnly = true)
     public TablePage getPage(String key, Integer page, Integer size, String search, String principalName) {
+        return getPage(key, page, size, search, null, principalName);
+    }
+
+    /**
+     * A page of the rows matching the search text and the filters (column = value, only filterable columns with an
+     * allowed value are used).
+     */
+    @Transactional(readOnly = true)
+    public TablePage getPage(String key, Integer page, Integer size, String search, Map<String, String> parameters,
+                             String principalName) {
         BpTableDefinition table = table(key);
+        Map<String, String> filters = filters(table, parameters);
         int pageSize = size == null || size < 1 ? DEFAULT_PAGE_SIZE : Math.min(size, MAX_PAGE_SIZE);
         String text = search == null ? "" : search.trim();
-        long total = count(table, text);
+        long total = count(table, text, filters);
         int lastPage = total == 0 ? 0 : (int) ((total - 1) / pageSize);
         int pageIndex = page == null || page < 0 ? 0 : Math.min(page, lastPage);
 
         TypedQuery<?> query = entityManager.createQuery("select e from " + from(table)
-                + where(table, text) + orderBy(table), table.getEntityClass());
-        if (!text.isEmpty()) {
-            query.setParameter("search", "%" + text.toLowerCase() + "%");
-        }
+                + where(table, text, filters) + orderBy(table), table.getEntityClass());
+        setParameters(query, text, filters);
         query.setFirstResult(pageIndex * pageSize);
         query.setMaxResults(pageSize);
 
@@ -120,6 +129,7 @@ public class BpTableService {
         result.setSize(pageSize);
         result.setTotal(total);
         result.setSearch(text);
+        result.setFilters(filters);
         result.setReferences(references);
         User user = user(principalName);
         result.setUserRole(user != null ? user.getRole() : null);
@@ -152,6 +162,7 @@ public class BpTableService {
                     + table.getTitle() + ".", HttpStatus.CONFLICT);
         }
         checkBusinessKeyUnique(table, entity);
+        validate(table, entity);
         stamp(entity, true, principalName);
         entityManager.persist(entity);
         entityManager.flush();
@@ -178,6 +189,7 @@ public class BpTableService {
             }
         }
         if (changed > 0) {
+            validate(table, entity);
             stamp(entity, false, principalName);
             entityManager.flush();
             log.info("{}: row {} changed by {} ({} columns)", table.getTitle(), describe(table, entity),
@@ -203,13 +215,58 @@ public class BpTableService {
     // ------------------------------------------------------------------------------------------------ queries
 
     private long count(BpTableDefinition table, String search) {
+        return count(table, search, new LinkedHashMap<>());
+    }
+
+    private long count(BpTableDefinition table, String search, Map<String, String> filters) {
         String text = search == null ? "" : search.trim();
         TypedQuery<Long> query = entityManager.createQuery("select count(e) from " + from(table)
-                + where(table, text), Long.class);
+                + where(table, text, filters), Long.class);
+        setParameters(query, text, filters);
+        return query.getSingleResult();
+    }
+
+    private static void setParameters(TypedQuery<?> query, String text, Map<String, String> filters) {
         if (!text.isEmpty()) {
             query.setParameter("search", "%" + text.toLowerCase() + "%");
         }
-        return query.getSingleResult();
+        int i = 0;
+        for (String value : filters.values()) {
+            query.setParameter("f" + i++, value);
+        }
+    }
+
+    /** The filters of the request that the table offers, with an allowed value (else ignored) */
+    private Map<String, String> filters(BpTableDefinition table, Map<String, String> parameters) {
+        Map<String, String> filters = new LinkedHashMap<>();
+        if (parameters == null) {
+            return filters;
+        }
+        for (BpTableField field : table.getFields()) {
+            String value = parameters.get(field.getName());
+            if (!field.isFilter() || value == null || value.trim().isEmpty() || field.isReferenceEntity()) {
+                continue;
+            }
+            String code = value.trim();
+            boolean allowed = field.getReferenceTable() != null
+                    ? references(table).getOrDefault(field.getReferenceTable(), new ArrayList<>()).stream()
+                            .anyMatch(option -> code.equals(option.getValue()))
+                    : field.getOptions().isEmpty() || field.getOptions().stream().anyMatch(option -> code.equals(option.getValue()));
+            if (allowed) {
+                filters.put(field.getName(), code);
+            }
+        }
+        return filters;
+    }
+
+    private static void validate(BpTableDefinition table, Object entity) {
+        if (table.getValidator() == null) {
+            return;
+        }
+        String error = table.getValidator().apply(entity);
+        if (error != null && !error.isEmpty()) {
+            throw invalid(error);
+        }
     }
 
     /** "IndustryType e left join e.industrySystem r_industrySystem" */
@@ -228,8 +285,26 @@ public class BpTableService {
     }
 
     private static String where(BpTableDefinition table, String search) {
+        return where(table, search, new LinkedHashMap<>());
+    }
+
+    private static String where(BpTableDefinition table, String search, Map<String, String> filters) {
+        List<String> filterConditions = new ArrayList<>();
+        int i = 0;
+        for (String column : filters.keySet()) {
+            filterConditions.add("e." + column + " = :f" + i++);
+        }
+        String searchCondition = searchCondition(table, search);
+        if (searchCondition != null) {
+            filterConditions.add("(" + searchCondition + ")");
+        }
+        return filterConditions.isEmpty() ? "" : " where " + String.join(" and ", filterConditions);
+    }
+
+    /** "lower(e.code) like :search or …", or null without a search text */
+    private static String searchCondition(BpTableDefinition table, String search) {
         if (search == null || search.isEmpty()) {
-            return "";
+            return null;
         }
         List<String> conditions = new ArrayList<>();
         for (BpTableField field : table.getFields()) {
@@ -244,11 +319,16 @@ public class BpTableService {
                 conditions.add("lower(e." + field.getName() + ") like :search");
             }
         }
-        return conditions.isEmpty() ? "" : " where " + String.join(" or ", conditions);
+        return conditions.isEmpty() ? null : String.join(" or ", conditions);
     }
 
     private static String orderBy(BpTableDefinition table) {
         List<String> sort = new ArrayList<>();
+        if (!table.getSortFields().isEmpty()) {
+            table.getSortFields().forEach(field -> sort.add("e." + field));
+            sort.add("e." + table.getIdField().getName());
+            return " order by " + String.join(", ", sort);
+        }
         List<BpTableField> keys = new ArrayList<>(table.getBusinessKeyFields());
         // Industry types: by industry system first
         keys.sort((a, b) -> Boolean.compare(!a.isReferenceEntity(), !b.isReferenceEntity()));
