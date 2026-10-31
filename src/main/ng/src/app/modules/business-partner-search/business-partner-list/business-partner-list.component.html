@@ -1,7 +1,10 @@
 @if (businessPartners?.length) {
     <div class="bp-list__summary">
-        <span class="bp-list__count">&nbsp;{{ businessPartners.length }}</span>
-        business partner{{ businessPartners.length === 1 ? '' : 's' }} found
+        <span class="bp-list__count">&nbsp;{{ total }}</span>
+        business partner{{ total === 1 ? '' : 's' }} found
+        @if (total > businessPartners.length) {
+            <span class="bp-list__range">· showing {{ rangeText }}</span>
+        }
     </div>
 
     <div class="bp-list__table">
@@ -35,7 +38,14 @@
                             </div>
                         </td>
                         <td fd-table-cell class="bp-list__number">{{ value.partyNumber || '--' }}</td>
-                        <td fd-table-cell>{{ value.defaultPartnerRole || '--' }}</td>
+                        <td fd-table-cell>
+                            <div class="bp-role">
+                                <span>{{ value.defaultPartnerRole || '--' }}</span>
+                                @if (value.defaultPartnerRoleText) {
+                                    <span class="bp-role__text">{{ value.defaultPartnerRoleText }}</span>
+                                }
+                            </div>
+                        </td>
                         <td fd-table-cell class="bp-list__pan">{{ value.pan || '--' }}</td>
                         <td fd-table-cell>
                             <span class="bp-badge bp-category--{{ value.partnerCategory || 'none' }}">
@@ -55,11 +65,27 @@
             </tbody>
         </table>
     </div>
+
+    @if (total > pageSizes[0]) {
+        <div class="bp-list__pagination">
+            <span class="bp-list__range">{{ rangeText }}</span>
+            <fd-pagination
+                [totalItems]="total"
+                [itemsPerPage]="size"
+                [currentPage]="page + 1"
+                [itemsPerPageOptions]="pageSizes"
+                [displayTotalItems]="false"
+                (itemsPerPageChange)="onPageSize($event)"
+                (pageChangeStart)="onPage($event)"
+            ></fd-pagination>
+        </div>
+    }
 }
 @else {
     <div class="bp-list__empty">
         <fd-icon glyph="search" class="bp-list__empty-icon"></fd-icon>
-        <h3 class="bp-list__empty-title">No business partners to show</h3>
-        <p class="bp-list__empty-text">Search by name, email, business partner number or PAN to find business partners.</p>
+        <h3 class="bp-list__empty-title">{{ searched ? 'No business partners found' : 'No business partners to show' }}</h3>
+        <p class="bp-list__empty-text">{{ searched ? 'No business partner matches all of the search parameters. Change the search and try again.'
+            : 'Search by name, email, PAN, search term, partner role or business partner number to find business partners.' }}</p>
     </div>
 }

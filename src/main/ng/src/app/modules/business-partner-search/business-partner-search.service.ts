@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { BusinessPartnerSearchCriteria, BusinessPartnerSearchResult, BusinessPartnerSearchState } from './business-partner-search.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class BusinessPartnerSearchService implements Resolve<any> {
 
-    businessPartnerSearchParameters$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+    businessPartnerSearchParameters$: BehaviorSubject<BusinessPartnerSearchState | null> = new BehaviorSubject<BusinessPartnerSearchState | null>(null);
 
     selectedEntity$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
@@ -183,7 +184,23 @@ export class BusinessPartnerSearchService implements Resolve<any> {
     }
 
     /**
-     * Search business partners
+     * Search business partners: all criteria combined, one page (0 based) of the result sorted by name
+     * (GET /business-partners/search)
+     */
+    searchBusinessPartnersPaged(criteria: BusinessPartnerSearchCriteria, page: number, size: number,
+                                sort = 'name'): Observable<BusinessPartnerSearchResult> {
+        let params = new HttpParams().set('page', String(page)).set('size', String(size)).set('sort', sort);
+        Object.entries(criteria).forEach(([key, value]) => {
+            const text = value === null || value === undefined ? '' : String(value).trim();
+            if (text) {
+                params = params.set(key, text);
+            }
+        });
+        return this.http.get<BusinessPartnerSearchResult>(environment.primaryApiHost + '/business-partners/search', { params });
+    }
+
+    /**
+     * Search business partners (old search: name, email or number range, not paged)
      */
     searchBusinessPartners(requestParameters: any): Observable<any> {
         return new Observable(observer => {

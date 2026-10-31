@@ -1,6 +1,6 @@
 <fd-dynamic-page size="large" [autoResponsive]="true">
     <fd-dynamic-page-header headingLevel="2" title="Search Business Partners"
-        subtitle="Search Business Partners by Name, Email, Business Partner Number, PAN Number" [style.margin-top.rem]="1">
+        subtitle="Search Business Partners by Name, Email, PAN, Search Term, Partner Role or Business Partner Number" [style.margin-top.rem]="1">
         <!-- <fd-dynamic-page-breadcrumb>
             <fd-breadcrumb>
                 <fd-breadcrumb-item>
@@ -39,8 +39,13 @@
                                 <input id="partnerName" formControlName="partnerName" fd-form-control type="text" tabindex="1" />
                             </div>
                             <div fd-form-item>
+                                <label fd-form-label for="searchTerm">Search Term:</label>
+                                <input id="searchTerm" formControlName="searchTerm" fd-form-control type="text" tabindex="4"
+                                    title="Search term 1 or search term 2 of the business partner" />
+                            </div>
+                            <div fd-form-item>
                                 <label fd-form-label for="partnerNumberFrom">Business Partner Number From:</label>
-                                <input id="partnerNumberFrom" formControlName="partnerNumberFrom" fd-form-control type="text" tabindex="4" />
+                                <input id="partnerNumberFrom" formControlName="partnerNumberFrom" fd-form-control type="text" tabindex="6" />
                             </div>
                         </div>
                     </div>
@@ -51,8 +56,18 @@
                                 <input id="email" formControlName="email" fd-form-control type="email" tabindex="2" />
                             </div>
                             <div fd-form-item>
+                                <label fd-form-label for="partnerRole">Partner Role:</label>
+                                <select id="partnerRole" formControlName="partnerRole" class="bp-search__select" tabindex="5"
+                                    title="Default partner role of the business partner">
+                                    <option value="">All roles</option>
+                                    @for (role of partnerRoles; track role.code) {
+                                        <option [value]="role.code">{{ role.value ? role.value + ' (' + role.code + ')' : role.code }}</option>
+                                    }
+                                </select>
+                            </div>
+                            <div fd-form-item>
                                 <label fd-form-label for="partnerNumberTo">Business Partner Number To:</label>
-                                <input id="partnerNumberTo" formControlName="partnerNumberTo" fd-form-control type="text" tabindex="5" />
+                                <input id="partnerNumberTo" formControlName="partnerNumberTo" fd-form-control type="text" tabindex="7" />
                             </div>
                         </div>
                     </div>
@@ -67,8 +82,8 @@
                 </div>
                 <div fdLayoutGridRow>
                     <div [fdLayoutGridCol]="12" [style.margin-top.rem]="1">
-                        <button fd-button fdType="emphasized" label="Search" type="submit"></button>
-                        <button fd-button fdType="emphasized" label="Clear" style="margin-left: 0.5rem;"
+                        <button fd-button fdType="emphasized" label="Search" type="submit" [disabled]="searching"></button>
+                        <button fd-button fdType="emphasized" label="Clear" type="button" style="margin-left: 0.5rem;"
                             (click)="clearSearch()">
                         </button>
                     </div>
@@ -79,7 +94,9 @@
         <fd-layout-grid [noGap]="true" class="component-grid">
             <div fdLayoutGridRow style="height: auto;" [style.margin-top.rem]="1">
                 <div [fdLayoutGridCol]="12">
-                    <app-business-partner-list [businessPartners]="businessPartners"></app-business-partner-list>
+                    <app-business-partner-list [businessPartners]="businessPartners" [total]="result?.total ?? 0"
+                        [page]="page" [size]="size" [searched]="!!result"
+                        (pageChange)="goToPage($event)" (pageSizeChange)="setPageSize($event)"></app-business-partner-list>
                 </div>
             </div>
         </fd-layout-grid>
