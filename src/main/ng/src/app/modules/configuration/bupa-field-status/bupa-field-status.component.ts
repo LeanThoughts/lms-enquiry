@@ -233,6 +233,49 @@ export class BupaFieldStatusComponent implements OnInit, OnDestroy {
         this.refreshView();
     }
 
+    // ---- column sort (within each group): a header click sorts, a second reverses, a third restores the order ----
+    sortKey: 'fieldName' | 'fieldStatus' | '' = '';
+    sortDir: 'asc' | 'desc' = 'asc';
+
+    toggleSort(key: 'fieldName' | 'fieldStatus'): void {
+        if (this.sortKey !== key) {
+            this.sortKey = key;
+            this.sortDir = 'asc';
+        } else if (this.sortDir === 'asc') {
+            this.sortDir = 'desc';
+        } else {
+            this.sortKey = '';
+        }
+        this.refreshView();
+    }
+
+    sortIcon(key: 'fieldName' | 'fieldStatus'): string {
+        if (this.sortKey !== key) {
+            return 'sort';
+        }
+        return this.sortDir === 'asc' ? 'sort-ascending' : 'sort-descending';
+    }
+
+    ariaSort(key: 'fieldName' | 'fieldStatus'): string | null {
+        return this.sortKey !== key ? null : this.sortDir === 'asc' ? 'ascending' : 'descending';
+    }
+
+    private sortRows<T extends Row>(rows: T[]): T[] {
+        const key = this.sortKey;
+        if (!key) {
+            return rows;
+        }
+        const sign = this.sortDir === 'asc' ? 1 : -1;
+        return rows.sort((a, b) => {
+            const x = (a as any)[key];
+            const y = (b as any)[key];
+            const result = typeof x === 'string' || typeof y === 'string'
+                ? String(x ?? '').localeCompare(String(y ?? ''), undefined, { numeric: true, sensitivity: 'base' })
+                : Number(x ?? 0) - Number(y ?? 0);
+            return sign * result || String(a.fieldName).localeCompare(String(b.fieldName));
+        });
+    }
+
     /** Recomputes the grouped, filtered rows and the counters (called after every change, not per change detection). */
     refreshView(): void {
         const search = this.fieldSearch.trim().toLowerCase();
@@ -259,7 +302,7 @@ export class BupaFieldStatusComponent implements OnInit, OnDestroy {
                     visible++;
                 }
             }
-            this.entityGroups = Array.from(groups, ([name, rows]) => ({ name, rows }));
+            this.entityGroups = Array.from(groups, ([name, rows]) => ({ name, rows: this.sortRows(rows) }));
         } else {
             const groups = new Map<string, EntitySetField[]>();
             for (const row of this.role?.entitySetFields ?? []) {
@@ -269,7 +312,7 @@ export class BupaFieldStatusComponent implements OnInit, OnDestroy {
                     visible++;
                 }
             }
-            this.setGroups = Array.from(groups, ([name, rows]) => ({ name, rows }));
+            this.setGroups = Array.from(groups, ([name, rows]) => ({ name, rows: this.sortRows(rows) }));
         }
         this.statusCounts = counts;
         this.visibleCount = visible;

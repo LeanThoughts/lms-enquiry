@@ -59,6 +59,9 @@ export interface BpTablePage {
     references: Record<string, BpOption[]>;
     /** The filters applied by the server (column = value) */
     filters?: Record<string, string>;
+    /** Column the server sorted by (null: the table's own order) */
+    sort?: string | null;
+    sortDir?: 'asc' | 'desc' | null;
 }
 
 export const BP_PAGE_SIZES = [10, 25, 50, 100];

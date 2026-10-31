@@ -14,8 +14,11 @@ export class BpTableService {
     constructor(private http: HttpClient) { }
 
     getPage(table: string, page: number, size: number, search: string,
-            filters: Record<string, string> = {}): Observable<BpTablePage> {
+            filters: Record<string, string> = {}, sort = '', dir: 'asc' | 'desc' = 'asc'): Observable<BpTablePage> {
         let params = new HttpParams().set('page', page).set('size', size);
+        if (sort) {
+            params = params.set('sort', sort).set('dir', dir);
+        }
         if (search.trim()) {
             params = params.set('search', search.trim());
         }

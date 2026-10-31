@@ -65,6 +65,17 @@ class CollateralValueTableTest extends CollateralTestSupport {
         assertThat(stages.getTotal()).isEqualTo(5);
         assertThat(service.getPage("collateral-values", 0, 50, "release", list("DOCUMENT_STAGE"), READER).getTotal())
                 .isEqualTo(2);
+        // sortable by any column: description descending, then back to the table's order for unknown columns
+        TablePage byDescription = service.getPage("collateral-values", 0, 50, null, list("DOCUMENT_STAGE"), "description", "desc", READER);
+        assertThat(byDescription.getRows().stream().map(r -> r.getValues().get("description")).collect(Collectors.toList()))
+                .containsExactly("Release-Pre-Requisites", "Release-Final", "Perfection", "Modification", "Creation");
+        assertThat(byDescription.getSort()).isEqualTo("description");
+        assertThat(byDescription.getSortDir()).isEqualTo("desc");
+        assertThat(codes(service.getPage("collateral-values", 0, 50, null, list("DOCUMENT_STAGE"), "code", "desc", READER)))
+                .containsExactly("5", "4", "3", "2", "1");
+        TablePage unknown = service.getPage("collateral-values", 0, 50, null, list("DOCUMENT_STAGE"), "id", "asc", READER);
+        assertThat(unknown.getSort()).isNull();
+        assertThat(codes(unknown)).containsExactly("1", "2", "3", "4", "5");
         // an unknown list is ignored (all entries)
         assertThat(service.getPage("collateral-values", 0, 50, null, list("NOPE"), READER).getTotal()).isEqualTo(all.getTotal());
     }

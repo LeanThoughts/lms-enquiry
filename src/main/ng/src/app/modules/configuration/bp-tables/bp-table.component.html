@@ -82,12 +82,17 @@
                         <thead class="fd-table__header">
                             <tr class="fd-table__row">
                                 @for (field of columns; track field.name) {
-                                    <th class="fd-table__cell" [class.bt-table__center]="field.type === 'BOOLEAN'">
-                                        {{ field.label }}
-                                        @if (field.idField || field.businessKey) {
-                                            <fd-icon glyph="primary-key" class="bt-table__key" title="Key"
-                                                aria-label="Key"></fd-icon>
-                                        }
+                                    <th class="fd-table__cell" [class.bt-table__center]="field.type === 'BOOLEAN'"
+                                        [attr.aria-sort]="ariaSort(field)">
+                                        <button type="button" class="cfg-sort" [class.is-sorted]="sortField === field.name"
+                                            [title]="'Sort by ' + field.label" (click)="toggleSort(field)">
+                                            <span class="cfg-sort__label">{{ field.label }}</span>
+                                            @if (field.idField || field.businessKey) {
+                                                <fd-icon glyph="primary-key" class="bt-table__key" title="Key"
+                                                    aria-label="Key"></fd-icon>
+                                            }
+                                            <fd-icon class="cfg-sort__icon" [glyph]="sortIcon(field)" aria-hidden="true"></fd-icon>
+                                        </button>
                                     </th>
                                 }
                                 @if (edit) {

@@ -106,7 +106,20 @@ public class BpTableService {
     @Transactional(readOnly = true)
     public TablePage getPage(String key, Integer page, Integer size, String search, Map<String, String> parameters,
                              String principalName) {
+        return getPage(key, page, size, search, parameters, null, null, principalName);
+    }
+
+    /**
+     * A page of the rows matching the search text and the filters, sorted by a column (sort = column name, dir =
+     * asc or desc); without a valid sort column the table's own order is used.
+     */
+    @Transactional(readOnly = true)
+    public TablePage getPage(String key, Integer page, Integer size, String search, Map<String, String> parameters,
+                             String sort, String dir, String principalName) {
         BpTableDefinition table = table(key);
+        BpTableField sortField = sort == null ? null
+                : table.field(sort.trim()).filter(BpTableField::isVisible).orElse(null);
+        boolean descending = "desc".equalsIgnoreCase(dir == null ? "" : dir.trim());
         Map<String, String> filters = filters(table, parameters);
         int pageSize = size == null || size < 1 ? DEFAULT_PAGE_SIZE : Math.min(size, MAX_PAGE_SIZE);
         String text = search == null ? "" : search.trim();
@@ -115,7 +128,7 @@ public class BpTableService {
         int pageIndex = page == null || page < 0 ? 0 : Math.min(page, lastPage);
 
         TypedQuery<?> query = entityManager.createQuery("select e from " + from(table)
-                + where(table, text, filters) + orderBy(table), table.getEntityClass());
+                + where(table, text, filters) + orderBy(table, sortField, descending), table.getEntityClass());
         setParameters(query, text, filters);
         query.setFirstResult(pageIndex * pageSize);
         query.setMaxResults(pageSize);
@@ -130,6 +143,8 @@ public class BpTableService {
         result.setTotal(total);
         result.setSearch(text);
         result.setFilters(filters);
+        result.setSort(sortField != null ? sortField.getName() : null);
+        result.setSortDir(sortField != null ? (descending ? "desc" : "asc") : null);
         result.setReferences(references);
         User user = user(principalName);
         result.setUserRole(user != null ? user.getRole() : null);
@@ -320,6 +335,24 @@ public class BpTableService {
             }
         }
         return conditions.isEmpty() ? null : String.join(" or ", conditions);
+    }
+
+    /** The column the user sorted by first (text without case), then the table's own order */
+    private static String orderBy(BpTableDefinition table, BpTableField field, boolean descending) {
+        String order = orderBy(table);
+        if (field == null) {
+            return order;
+        }
+        String column;
+        if (field.isReferenceEntity()) {
+            column = alias(field) + "." + table(field.getReferenceTable()).getValueField();
+        } else {
+            column = "e." + field.getName();
+        }
+        if (field.getType() == BpTableField.Type.TEXT) {
+            column = "lower(" + column + ")";
+        }
+        return " order by " + column + (descending ? " desc" : " asc") + ", " + order.substring(" order by ".length());
     }
 
     private static String orderBy(BpTableDefinition table) {

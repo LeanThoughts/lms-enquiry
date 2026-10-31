@@ -95,6 +95,14 @@ public final class BpTableDtos {
         private Map<String, List<Option>> references = new LinkedHashMap<>();
         /** The filters applied (column = value) */
         private Map<String, String> filters = new LinkedHashMap<>();
+        /** Column the rows are sorted by (null: the table's own order) and asc / desc */
+        private String sort;
+        private String sortDir;
+
+        public String getSort() { return sort; }
+        public void setSort(String sort) { this.sort = sort; }
+        public String getSortDir() { return sortDir; }
+        public void setSortDir(String sortDir) { this.sortDir = sortDir; }
 
         public Map<String, String> getFilters() { return filters; }
         public void setFilters(Map<String, String> filters) { this.filters = filters; }

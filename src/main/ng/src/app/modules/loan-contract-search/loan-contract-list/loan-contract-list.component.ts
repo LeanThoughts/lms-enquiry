@@ -20,6 +20,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
+type LoanContractSortKey = 'enquiry' | 'functionalStatus' | 'borrower' | 'project' | 'loanContract' | 'projectType'
+    | 'loanClass' | 'capacity' | 'assistanceType' | 'projectCost';
+
 @Component({
     selector: 'app-loan-contract-list',
     imports: [
@@ -56,6 +59,23 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
     totalItems = 0;
 
     selectedEnquiry: SelectionModel<any> = new SelectionModel<any>(false, []);
+
+    /** Columns of the result table (labels in sentence case); a header click sorts all results, not only the page */
+    readonly columns: { key: LoanContractSortKey, label: string, numeric?: boolean }[] = [
+        { key: 'enquiry', label: 'Enquiry' },
+        { key: 'functionalStatus', label: 'Functional status' },
+        { key: 'borrower', label: 'Borrower' },
+        { key: 'project', label: 'Project' },
+        { key: 'loanContract', label: 'Loan contract' },
+        { key: 'projectType', label: 'Project type' },
+        { key: 'loanClass', label: 'Loan class' },
+        { key: 'capacity', label: 'Capacity' },
+        { key: 'assistanceType', label: 'Assistance type' },
+        { key: 'projectCost', label: 'Project cost', numeric: true }
+    ];
+    /** '' = the default order (newest enquiry first) */
+    sortKey: LoanContractSortKey | '' = '';
+    sortDir: 'asc' | 'desc' = 'asc';
 
     loanContractSearchForm!: FormGroup;
 
@@ -162,8 +182,7 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
                 }
                 else {
                     this.loanContractSearchService.searchFormValue = formValue;
-                    result.sort((a: any, b: any) => b.loanApplication.enquiryNo.id - a.loanApplication.enquiryNo.id);
-                    this.enquiries = result;
+                    this.enquiries = this.sorted(result);
                     this.totalItems = this.enquiries.length;
                     // Reset to first page when getting new results
                     this.currentPage = 1;
@@ -187,6 +206,84 @@ export class LoanContractListComponent implements OnInit, OnDestroy {
         this.totalItems = 0;
         this.currentPage = 1;
         this.updateDataSource();
+    }
+
+    /**
+     * Header click: sorts all results by the column, a second click reverses, a third returns to the default order
+     * (newest enquiry first). The first page of the sorted results is shown.
+     */
+    toggleSort(key: LoanContractSortKey): void {
+        if (this.sortKey !== key) {
+            this.sortKey = key;
+            this.sortDir = 'asc';
+        } else if (this.sortDir === 'asc') {
+            this.sortDir = 'desc';
+        } else {
+            this.sortKey = '';
+            this.sortDir = 'asc';
+        }
+        this.enquiries = this.sorted(this.enquiries);
+        this.currentPage = 1;
+        this.updateDataSource();
+    }
+
+    sortIcon(key: LoanContractSortKey): string {
+        if (this.sortKey !== key) {
+            return 'sort';
+        }
+        return this.sortDir === 'asc' ? 'sort-ascending' : 'sort-descending';
+    }
+
+    ariaSort(key: LoanContractSortKey): string | null {
+        return this.sortKey !== key ? null : this.sortDir === 'asc' ? 'ascending' : 'descending';
+    }
+
+    /** The results in the chosen order; empty values always last; ties by enquiry number (newest first) */
+    private sorted(enquiries: any[]): any[] {
+        const byEnquiry = (a: any, b: any) => (b.loanApplication?.enquiryNo?.id ?? 0) - (a.loanApplication?.enquiryNo?.id ?? 0);
+        const key = this.sortKey;
+        if (!key) {
+            return [...enquiries].sort(byEnquiry);
+        }
+        const sign = this.sortDir === 'asc' ? 1 : -1;
+        return [...enquiries].sort((a, b) => {
+            const x = this.sortValue(a, key);
+            const y = this.sortValue(b, key);
+            const emptyX = x === null || x === undefined || x === '';
+            const emptyY = y === null || y === undefined || y === '';
+            if (emptyX || emptyY) {
+                return emptyX === emptyY ? byEnquiry(a, b) : emptyX ? 1 : -1;
+            }
+            const result = typeof x === 'number' && typeof y === 'number'
+                ? x - y
+                : String(x).localeCompare(String(y), undefined, { numeric: true, sensitivity: 'base' });
+            return sign * result || byEnquiry(a, b);
+        });
+    }
+
+    /** The value a column is sorted by (what the cell shows, numbers as numbers) */
+    private sortValue(enquiry: any, key: LoanContractSortKey): string | number | null {
+        const loan = enquiry.loanApplication ?? {};
+        switch (key) {
+            case 'enquiry': return this.number(loan.enquiryNo?.id);
+            case 'functionalStatus': return loan.functionalStatusDescription || null;
+            case 'borrower': return enquiry.partner?.partyName1 || null;
+            case 'project': return loan.projectName || null;
+            case 'loanContract': return loan.loanContractId || null;
+            case 'projectType': return loan.projectType ? this.getProjectTypeDescription(loan.projectType) : null;
+            case 'loanClass': return loan.loanClass ? this.getLoanClassDescription(loan.loanClass) : null;
+            case 'capacity': return this.number(loan.projectCapacity);
+            case 'assistanceType': return loan.assistanceType ? this.getAssistanceTypeDescription(loan.assistanceType) : null;
+            case 'projectCost': return this.number(loan.projectCost);
+        }
+    }
+
+    private number(value: unknown): number | null {
+        if (value === null || value === undefined || value === '') {
+            return null;
+        }
+        const number = Number(value);
+        return isNaN(number) ? null : number;
     }
 
     /**

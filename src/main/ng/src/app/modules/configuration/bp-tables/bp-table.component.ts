@@ -47,6 +47,9 @@ export class BpTableComponent implements OnInit, OnDestroy {
     search = '';
     /** Column filters (column = value), e.g. listName of the collateral value lists; kept in the URL */
     filters: Record<string, string> = {};
+    /** Column sort chosen by clicking a header ('' = the table's own order) */
+    sortField = '';
+    sortDir: 'asc' | 'desc' = 'asc';
 
     /** Change mode (the Configuration workspace shows "Edit") */
     edit = false;
@@ -71,6 +74,8 @@ export class BpTableComponent implements OnInit, OnDestroy {
             this.page = 0;
             this.search = '';
             this.filters = this.filtersFromUrl();
+            this.sortField = '';
+            this.sortDir = 'asc';
             this.edit = false;
             this.noEditAccessDismissed = false;
             this.load();
@@ -154,7 +159,7 @@ export class BpTableComponent implements OnInit, OnDestroy {
         const table = this.tableKey;
         this.loading = true;
         this.loadFailed = false;
-        this.service.getPage(table, this.page, this.size, this.search, this.filters).pipe(takeUntil(this.destroy$)).subscribe({
+        this.service.getPage(table, this.page, this.size, this.search, this.filters, this.sortField, this.sortDir).pipe(takeUntil(this.destroy$)).subscribe({
             next: data => {
                 if (table !== this.tableKey) {
                     return;
@@ -177,6 +182,35 @@ export class BpTableComponent implements OnInit, OnDestroy {
                 this.messageService.showError(this.service.errorMessage(error, 'The configuration could not be loaded.'));
             }
         });
+    }
+
+    /** Header click: sorts by the column, a second click reverses, a third returns to the table's own order */
+    toggleSort(field: BpTableField): void {
+        if (this.sortField !== field.name) {
+            this.sortField = field.name;
+            this.sortDir = 'asc';
+        } else if (this.sortDir === 'asc') {
+            this.sortDir = 'desc';
+        } else {
+            this.sortField = '';
+            this.sortDir = 'asc';
+        }
+        this.page = 0;
+        this.load();
+    }
+
+    sortIcon(field: BpTableField): string {
+        if (this.sortField !== field.name) {
+            return 'sort';
+        }
+        return this.sortDir === 'asc' ? 'sort-ascending' : 'sort-descending';
+    }
+
+    ariaSort(field: BpTableField): string | null {
+        if (this.sortField !== field.name) {
+            return null;
+        }
+        return this.sortDir === 'asc' ? 'ascending' : 'descending';
     }
 
     setSearch(text: string): void {

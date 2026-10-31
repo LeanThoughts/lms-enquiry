@@ -232,6 +232,49 @@ export class BupaEntitySetFieldStatusComponent implements OnInit, OnDestroy {
         this.refreshView();
     }
 
+    // ---- column sort (within each group): a header click sorts, a second reverses, a third restores the order ----
+    sortKey: 'fieldName' | 'keyField' | 'minimumEntries' | 'fieldStatus' | '' = '';
+    sortDir: 'asc' | 'desc' = 'asc';
+
+    toggleSort(key: 'fieldName' | 'keyField' | 'minimumEntries' | 'fieldStatus'): void {
+        if (this.sortKey !== key) {
+            this.sortKey = key;
+            this.sortDir = 'asc';
+        } else if (this.sortDir === 'asc') {
+            this.sortDir = 'desc';
+        } else {
+            this.sortKey = '';
+        }
+        this.refreshView();
+    }
+
+    sortIcon(key: 'fieldName' | 'keyField' | 'minimumEntries' | 'fieldStatus'): string {
+        if (this.sortKey !== key) {
+            return 'sort';
+        }
+        return this.sortDir === 'asc' ? 'sort-ascending' : 'sort-descending';
+    }
+
+    ariaSort(key: 'fieldName' | 'keyField' | 'minimumEntries' | 'fieldStatus'): string | null {
+        return this.sortKey !== key ? null : this.sortDir === 'asc' ? 'ascending' : 'descending';
+    }
+
+    private sortRows<T extends EntitySetField>(rows: T[]): T[] {
+        const key = this.sortKey;
+        if (!key) {
+            return rows;
+        }
+        const sign = this.sortDir === 'asc' ? 1 : -1;
+        return rows.sort((a, b) => {
+            const x = (a as any)[key];
+            const y = (b as any)[key];
+            const result = typeof x === 'string' || typeof y === 'string'
+                ? String(x ?? '').localeCompare(String(y ?? ''), undefined, { numeric: true, sensitivity: 'base' })
+                : Number(x ?? 0) - Number(y ?? 0);
+            return sign * result || String(a.fieldName).localeCompare(String(b.fieldName));
+        });
+    }
+
     refreshView(): void {
         const search = this.fieldSearch.trim().toLowerCase();
         const counts = [0, 0, 0, 0];
@@ -253,7 +296,7 @@ export class BupaEntitySetFieldStatusComponent implements OnInit, OnDestroy {
             groups.set(row.keyFieldValue, [...(groups.get(row.keyFieldValue) ?? []), row]);
             visible++;
         }
-        this.groups = Array.from(groups, ([keyFieldValue, rows]) => ({ keyFieldValue, rows }));
+        this.groups = Array.from(groups, ([keyFieldValue, rows]) => ({ keyFieldValue, rows: this.sortRows(rows) }));
         this.statusCounts = counts;
         this.visibleCount = visible;
         this.changedCount = this.changes().length;
