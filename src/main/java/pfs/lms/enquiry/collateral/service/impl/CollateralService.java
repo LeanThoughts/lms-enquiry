@@ -147,13 +147,35 @@ public class CollateralService implements ICollateralService {
 
     @Override
     @Transactional(readOnly = true)
+    public Map<String, List<ValueEntryDto>> getAgreementTypesByObjectType() {
+        // One SAP read (CollateralObjectTypeAgreementType, cached) gives the agreement types of every collateral
+        // object, in SAP's order; a row without a description in SAP keeps the portal's own text for the code.
+        Map<String, List<ValueEntryDto>> sap = agreementTypeMapping.getAgreementTypesByObjectType();
+        if (sap == null) {
+            throw new LmsException("Collateral agreement types could not be read from SAP: "
+                    + agreementTypeMapping.getLastFailure() + ".", HttpStatus.BAD_GATEWAY);
+        }
+        Map<String, String> localDescriptions = valueRepository.findByListName(CollateralValueList.AGREEMENT_TYPE.name())
+                .stream()
+                .filter(value -> value.getDescription() != null)
+                .collect(Collectors.toMap(CollateralValue::getCode, CollateralValue::getDescription, (a, b) -> a));
+        Map<String, List<ValueEntryDto>> result = new LinkedHashMap<>();
+        sap.forEach((objectType, types) -> result.put(objectType, types.stream()
+                .map(type -> new ValueEntryDto(type.getCode(),
+                        type.getDescription() != null ? type.getDescription() : localDescriptions.get(type.getCode())))
+                .collect(Collectors.toList())));
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<ValueEntryDto> getAgreementTypes(String collateralObjectType) {
-        List<String> allowed = allowedAgreementTypes(collateralObjectType);
-        return valueRepository.findByListName(CollateralValueList.AGREEMENT_TYPE.name()).stream()
-                .filter(value -> allowed.isEmpty() || allowed.contains(value.getCode()))
-                .sorted(Comparator.comparing(value -> value.getSortOrder() == null ? Integer.MAX_VALUE : value.getSortOrder()))
-                .map(value -> new ValueEntryDto(value.getCode(), value.getDescription()))
-                .collect(Collectors.toList());
+        // Nothing to offer until a collateral object is chosen: the agreement types depend on it
+        if (collateralObjectType == null || collateralObjectType.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<ValueEntryDto> types = getAgreementTypesByObjectType().get(collateralObjectType.trim());
+        return types != null ? types : Collections.emptyList();
     }
 
     // ------------------------------------------------------------------------------------------------ reading
@@ -314,7 +336,12 @@ public class CollateralService implements ICollateralService {
         checkCode(lists, CollateralValueList.CONDITION_GROUP, item.getConditionGroup(), "conditionGroup");
         checkCode(lists, CollateralValueList.CONDITION_CATEGORY, item.getConditionCategory(), "conditionCategory");
         checkCode(lists, CollateralValueList.COLLATERAL_OBJECT_TYPE, item.getCollateralObjectType(), "collateralObjectType");
-        checkCode(lists, CollateralValueList.AGREEMENT_TYPE, item.getCollateralAgreementType(), "collateralAgreementType");
+        // the agreement type is validated against SAP's list for the object (below); only when SAP cannot be asked
+        // at save time is the portal list used, so that a value chosen from SAP's list a moment ago is not rejected
+        List<ValueEntryDto> sapAgreementTypes = agreementTypeMapping.getAgreementTypes(item.getCollateralObjectType());
+        if (sapAgreementTypes == null) {
+            checkCode(lists, CollateralValueList.AGREEMENT_TYPE, item.getCollateralAgreementType(), "collateralAgreementType");
+        }
         checkCode(lists, CollateralValueList.COMPLIANCE_STATUS, item.getComplianceStatus(), "complianceStatus");
         checkCode(lists, CollateralValueList.RESPONSIBLE_PARTY, item.getResponsibleParty(), "responsibleParty");
         checkCode(lists, CollateralValueList.ACTION_DAYS_PREFIX, item.getActionDaysPrefix(), "actionDaysPrefix");
@@ -324,12 +351,14 @@ public class CollateralService implements ICollateralService {
         checkCode(lists, CollateralValueList.CURRENCY, item.getCollateralValueCurrency(), "collateralValueCurrency");
         checkCode(lists, CollateralValueList.FREQUENCY_UNIT, item.getFrequencyOfRecurrenceUnit(), "frequencyOfRecurrenceUnit");
 
-        if (item.getCollateralAgreementType() != null) {
-            List<String> allowed = allowedAgreementTypes(item.getCollateralObjectType());
-            if (!allowed.isEmpty() && !allowed.contains(item.getCollateralAgreementType())) {
-                throw invalid("Collateral Agreement Type " + item.getCollateralAgreementType()
-                        + " is not allowed for collateral object " + item.getCollateralObjectType() + ".");
-            }
+        String sapAgreementTypeDescription = null;
+        if (item.getCollateralAgreementType() != null && sapAgreementTypes != null) {
+            sapAgreementTypeDescription = sapAgreementTypes.stream()
+                    .filter(type -> item.getCollateralAgreementType().equals(type.getCode()))
+                    .map(ValueEntryDto::getDescription)
+                    .findFirst()
+                    .orElseThrow(() -> invalid("Collateral Agreement Type " + item.getCollateralAgreementType()
+                            + " is not allowed for collateral object " + item.getCollateralObjectType() + "."));
         }
         if (item.getPostExecutionDocumentType() != null && documentTypeRepository.findAll().stream()
                 .noneMatch(type -> item.getPostExecutionDocumentType().equals(type.getCode()))) {
@@ -342,8 +371,11 @@ public class CollateralService implements ICollateralService {
 
         // Descriptions kept beside the codes, as in SAP
         item.setComplianceStatusText(description(lists, CollateralValueList.COMPLIANCE_STATUS, item.getComplianceStatus(), 60));
-        item.setCollateralAgreementTypeDescription(
-                description(lists, CollateralValueList.AGREEMENT_TYPE, item.getCollateralAgreementType(), 30));
+        String agreementTypeDescription = sapAgreementTypeDescription != null
+                ? sapAgreementTypeDescription
+                : description(lists, CollateralValueList.AGREEMENT_TYPE, item.getCollateralAgreementType(), 30);
+        item.setCollateralAgreementTypeDescription(agreementTypeDescription == null || agreementTypeDescription.length() <= 30
+                ? agreementTypeDescription : agreementTypeDescription.substring(0, 30));
         if (item.getCollateralValue() != null && item.getCollateralValueCurrency() == null) {
             item.setCollateralValueCurrency(DEFAULT_CURRENCY);
         }
@@ -448,12 +480,6 @@ public class CollateralService implements ICollateralService {
             partner.ifPresent(value -> dto.setBorrowerName(value.getPartyName1()));
         }
         return dto;
-    }
-
-    private List<String> allowedAgreementTypes(String collateralObjectType) {
-        List<String> allowed = collateralObjectType == null ? null
-                : agreementTypeMapping.getAllowedAgreementTypes(collateralObjectType);
-        return allowed == null ? Collections.emptyList() : allowed;
     }
 
     private Map<String, Map<String, String>> valueListsByCode() {

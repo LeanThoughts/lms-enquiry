@@ -174,10 +174,15 @@ public class CollateralItem extends AggregateRoot<CollateralItem> {
     @Column(length = 100)
     private String postExecutionDocumentTitle;
 
-    /** Uploaded post execution document (portal file reference) */
-    @SapField("")
+    /** Uploaded post execution document (portal file reference; SAP POST_EXEC_PORTAL_DOC_ID / PostExecPortalDocId) */
+    @SapField("POST_EXEC_PORTAL_DOC_ID")
     @Column(length = 36)
     private String postExecutionDocumentReference;
+
+    /** Post execution document BDS ID (SAP POST_EXEC_BDS_DOC_ID / PostExecBdsDocId) */
+    @SapField("POST_EXEC_BDS_DOC_ID")
+    @Column(length = 40)
+    private String postExecutionBdsDocumentId;
 
     /** Security Creation Date */
     @SapField("SEC_CREATE_DATE")
@@ -586,6 +591,8 @@ public class CollateralItem extends AggregateRoot<CollateralItem> {
     public void setPostExecutionDocumentTitle(String postExecutionDocumentTitle) { this.postExecutionDocumentTitle = postExecutionDocumentTitle; }
     public String getPostExecutionDocumentReference() { return postExecutionDocumentReference; }
     public void setPostExecutionDocumentReference(String postExecutionDocumentReference) { this.postExecutionDocumentReference = postExecutionDocumentReference; }
+    public String getPostExecutionBdsDocumentId() { return postExecutionBdsDocumentId; }
+    public void setPostExecutionBdsDocumentId(String postExecutionBdsDocumentId) { this.postExecutionBdsDocumentId = postExecutionBdsDocumentId; }
     public LocalDate getSecurityCreationDate() { return securityCreationDate; }
     public void setSecurityCreationDate(LocalDate securityCreationDate) { this.securityCreationDate = securityCreationDate; }
     public String getSecurityCreationPlace() { return securityCreationPlace; }

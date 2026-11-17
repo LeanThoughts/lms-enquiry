@@ -17,6 +17,7 @@ import pfs.lms.enquiry.configuration.bptables.BpTableDtos.TablePage;
 import pfs.lms.enquiry.exception.LmsException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * REST API of the Configuration apps of the business partner configuration tables (under /api from
@@ -34,8 +35,9 @@ public class BpTableController {
     }
 
     @GetMapping(BASE)
-    public ResponseEntity<Overview> getOverview(HttpServletRequest request) {
-        return ResponseEntity.ok(service.getOverview(signedInUser(request)));
+    public ResponseEntity<Overview> getOverview(@RequestParam(defaultValue = BpTableDefinitions.BUSINESS_PARTNER) String module,
+                                                HttpServletRequest request) {
+        return ResponseEntity.ok(service.getOverview(module, signedInUser(request)));
     }
 
     @GetMapping(BASE + "/{table}")
@@ -43,8 +45,12 @@ public class BpTableController {
                                              @RequestParam(required = false) Integer page,
                                              @RequestParam(required = false) Integer size,
                                              @RequestParam(required = false) String search,
+                                             @RequestParam(required = false) String sort,
+                                             @RequestParam(required = false) String dir,
+                                             @RequestParam Map<String, String> parameters,
                                              HttpServletRequest request) {
-        return ResponseEntity.ok(service.getPage(table, page, size, search, signedInUser(request)));
+        // filters are passed as column=value (only the filterable columns of the table are used)
+        return ResponseEntity.ok(service.getPage(table, page, size, search, parameters, sort, dir, signedInUser(request)));
     }
 
     @PostMapping(BASE + "/{table}/rows")

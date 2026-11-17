@@ -12,6 +12,8 @@ import workflowApproverRoutes from './modules/workflow-approver/workflow-approve
 import collateralManagementRoutes from './modules/collateral-management/collateral-management.routes';
 import configurationRoutes from './modules/configuration/configuration.routes';
 import outstandingApprovalsRoutes from './modules/outstanding-approvals/outstanding-approvals.routes';
+import sapIntegrationLogRoutes from './modules/sap-integration-log/sap-integration-log.routes';
+import reportsRoutes from './modules/reports/reports.routes';
 
 export const routes: Routes = [
 
@@ -39,6 +41,8 @@ export const routes: Routes = [
             ...collateralManagementRoutes,
             ...configurationRoutes,
             ...outstandingApprovalsRoutes,
+            ...sapIntegrationLogRoutes,
+            ...reportsRoutes,
         ]
     },
 

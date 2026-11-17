@@ -19,6 +19,8 @@ export interface BpRowDialogData {
     references: Record<string, BpOption[]>;
     /** The row to change; none to add a row */
     row?: BpRow;
+    /** Values of a new row (e.g. the value list the table is filtered by) */
+    defaults?: Record<string, string>;
 }
 
 /** Adds or changes a row of a business partner configuration table. Closes with the saved row. */
@@ -44,7 +46,7 @@ export class BpRowDialogComponent implements OnDestroy {
         this.data = dialogRef.data as BpRowDialogData;
         this.fields = this.data.table.fields.filter(field => field.visible);
         for (const field of this.fields) {
-            const value = this.data.row?.values[field.name];
+            const value = this.data.row ? this.data.row.values[field.name] : this.data.defaults?.[field.name];
             this.values[field.name] = field.type === 'BOOLEAN' ? value === true : value === null || value === undefined ? '' : String(value);
         }
     }

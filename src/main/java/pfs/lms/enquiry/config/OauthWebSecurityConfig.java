@@ -20,7 +20,7 @@ import java.util.Collection;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@Profile({"oauth", "pfsdevoauth"})
+@Profile({"oauth", "pfsdevoauth", "localpfsdevoauth"})
 @RequiredArgsConstructor
 public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
 

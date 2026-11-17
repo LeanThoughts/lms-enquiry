@@ -9,6 +9,7 @@ import pfs.lms.enquiry.collateral.domain.CollateralItem;
 import pfs.lms.enquiry.collateral.dto.CollateralChecklistDto;
 import pfs.lms.enquiry.collateral.dto.CollateralItemDetailDto;
 import pfs.lms.enquiry.collateral.dto.ValueEntryDto;
+import pfs.lms.enquiry.exception.LmsException;
 import pfs.lms.enquiry.collateral.service.impl.CollateralChangeDocumentService;
 import pfs.lms.enquiry.domain.Partner;
 import pfs.lms.enquiry.repository.PartnerRepository;
@@ -21,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /** Collaterals (ZPFS_T_LN_CHKLST): value lists, checklist, create / change / delete, validation, change documents. */
 @DisplayName("Collateral items")
@@ -43,7 +45,12 @@ class CollateralItemServiceTest extends CollateralTestSupport {
         assertThat(lists.get("SECURITIES_TYPE")).extracting(ValueEntryDto::getCode).contains("CCD", "NCD", "UNCALLED_SHARE_CAP");
         assertThat(lists.get("FREQUENCY_UNIT")).extracting(ValueEntryDto::getCode).containsExactly("0", "1", "2", "3");
         assertThat(lists.get("DOCUMENT_TYPE")).extracting(ValueEntryDto::getCode).containsExactly("ZPFSLM101", "ZPFSLM104");
-        assertThat(collateralService.getAgreementTypes("Z00007")).isNotEmpty();
+        // agreement types come from SAP per collateral object: nothing without an object, and an error (not the full
+        // portal list) when SAP cannot be asked — here the gateway is not configured
+        assertThat(collateralService.getAgreementTypes(null)).isEmpty();
+        assertThatThrownBy(() -> collateralService.getAgreementTypes("Z00007"))
+                .isInstanceOf(LmsException.class)
+                .hasMessageContaining("could not be read from SAP");
     }
 
     @Test

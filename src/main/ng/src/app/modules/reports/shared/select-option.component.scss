@@ -1,0 +1,80 @@
+// SAP-style select-option: From / To fields, multiple-selection button and dialog. SAP theme variables only.
+$border: var(--sapList_BorderColor, #e5e5e5);
+$label: var(--sapContent_LabelColor, #6a6d70);
+$field: var(--sapField_BorderColor, #89919a);
+
+:host { display: block; }
+
+.so { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto; align-items: center; gap: 0.375rem; }
+.so-sep { color: $label; }
+.so-cap { display: none; font-size: var(--sapFontSmallSize); color: $label; }
+// Date fields are wide: From above To, the multiple-selection button beside them
+.so--date {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    .so-sep { display: none; }
+    .so-cap { display: block; }
+    .so-multi { grid-column: 3; grid-row: 1 / span 2; }
+}
+
+.so-input {
+    width: 100%; min-height: 2.25rem; padding: 0 0.625rem; font: inherit;
+    color: var(--sapField_TextColor, var(--sapTextColor));
+    border: 1px solid $field; border-radius: 0.25rem; background-color: var(--sapField_Background, #fff);
+    transition: border-color 0.1s, box-shadow 0.1s;
+    &::placeholder { color: var(--sapField_PlaceholderTextColor, #74777a); font-style: italic; }
+    &:hover { border-color: var(--sapField_Hover_BorderColor, var(--sapSelectedColor)); }
+    &:focus { outline: none; border-color: var(--sapField_Focus_BorderColor, var(--sapSelectedColor)); box-shadow: 0 0 0 2px var(--sapContent_FocusColor, rgba(8, 84, 160, 0.25)); }
+    min-width: 0;
+    &[readonly] { cursor: pointer; background-color: var(--sapField_ReadOnly_Background, #f5f5f5); }
+}
+
+.so-multi {
+    position: relative; display: inline-flex; align-items: center; justify-content: center;
+    width: 2.25rem; height: 2.25rem; padding: 0; color: var(--sapButton_TextColor, var(--sapTextColor));
+    background: var(--sapButton_Background, #fff); border: 1px solid var(--sapButton_BorderColor, $field); border-radius: 0.25rem; cursor: pointer;
+    &:hover { background: var(--sapButton_Hover_Background, #eaf1f7); }
+    &:focus-visible { outline: 2px solid var(--sapContent_FocusColor, #0032a5); outline-offset: 1px; }
+    &--on { color: var(--sapPositiveElementColor, #107e3e); border-color: var(--sapPositiveElementColor, #107e3e); background: var(--sapSuccessBackground, #f1fdf7); }
+    &__count {
+        position: absolute; top: -0.4rem; right: -0.4rem; min-width: 1.125rem; height: 1.125rem; padding: 0 0.25rem;
+        font-size: 0.6875rem; line-height: 1.125rem; text-align: center; border-radius: 0.5625rem;
+        color: #fff; background: var(--sapPositiveElementColor, #107e3e);
+    }
+}
+
+.so-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.4); }
+.so-dialog {
+    position: fixed; z-index: 1001; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; width: min(40rem, calc(100vw - 2rem)); max-height: calc(100vh - 3rem);
+    background: var(--sapGroup_ContentBackground, #fff); color: var(--sapTextColor);
+    border-radius: 0.5rem; box-shadow: var(--sapContent_Shadow3, 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1rem 3rem rgba(0, 0, 0, 0.3));
+    &__head { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; border-bottom: 1px solid $border; }
+    &__title { margin: 0; font-size: 1rem; font-weight: 400; font-family: var(--sapFontBoldFamily, var(--sapFontFamily)); }
+    &__foot { display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; padding: 0.625rem 1.25rem; border-top: 1px solid $border; }
+}
+.so-close {
+    display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0;
+    color: $label; background: none; border: 0; border-radius: 0.25rem; cursor: pointer;
+    &:hover { background: var(--sapList_Hover_Background, rgba(0, 0, 0, 0.05)); color: var(--sapTextColor); }
+}
+
+.so-tabs { display: flex; flex-wrap: wrap; gap: 0 0.25rem; padding: 0 1rem; border-bottom: 1px solid $border; }
+.so-tab {
+    padding: 0.625rem 0.75rem; font: inherit; color: $label; background: none; border: 0; border-bottom: 3px solid transparent; cursor: pointer;
+    &:hover { color: var(--sapTextColor); }
+    &--on { color: var(--sapSelectedColor, #0a6ed1); border-bottom-color: var(--sapSelectedColor, #0a6ed1); }
+    &--excl.so-tab--on { color: var(--sapNegativeElementColor, #bb0000); border-bottom-color: var(--sapNegativeElementColor, #bb0000); }
+    &__n { margin-left: 0.375rem; padding: 0 0.375rem; font-size: 0.75rem; border-radius: 0.5rem; background: var(--sapInformationBackground, #e5f0fa); }
+}
+
+.so-body { flex: 1; overflow: auto; padding: 0.75rem 1.25rem 1rem; }
+.so-hint { margin-bottom: 0.625rem; font-size: var(--sapFontSmallSize); color: $label; }
+.so-row {
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem;
+    &--range { grid-template-columns: 11rem 1fr 1fr auto; }
+}
+.so-error { margin-right: auto; font-size: var(--sapFontSmallSize); color: var(--sapNegativeTextColor, #bb0000); }
+
+@media (max-width: 40rem) {
+    .so-row--range { grid-template-columns: 1fr 1fr auto; .so-op { grid-column: 1 / -1; } }
+}

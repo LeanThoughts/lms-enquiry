@@ -144,3 +144,28 @@ $border: var(--sapList_BorderColor, #e5e5e5);
         color: $color;
     }
 }
+
+.bp-list__range {
+    margin-left: 0.25rem;
+    color: $label;
+}
+
+.bp-list__pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.875rem;
+}
+
+.bp-role {
+    display: flex;
+    flex-direction: column;
+
+    &__text {
+        font-size: 0.75rem;
+        color: $label;
+    }
+}

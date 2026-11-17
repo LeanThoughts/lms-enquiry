@@ -16,6 +16,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import pfs.lms.enquiry.sapintegrationservice.SapRestTemplates;
 import pfs.lms.enquiry.sapintegrationservice.ISAPFileUploadIntegrationService;
 
 import java.io.File;
@@ -55,7 +56,7 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
 
     @Autowired
     public SAPFileUploadIntegrationService(RestTemplateBuilder restTemplateBuilder) {
-        RestTemplate restTemplate = restTemplateBuilder.build();
+        RestTemplate restTemplate = SapRestTemplates.logged(restTemplateBuilder);
 
 //        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 //        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
@@ -178,7 +179,7 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
          HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
 
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = SapRestTemplates.logged();
         Object response = new Object();
             try {
                  response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, String.class);
@@ -217,7 +218,7 @@ public class SAPFileUploadIntegrationService implements ISAPFileUploadIntegratio
 
         ResponseEntity<String> response = new ResponseEntity<String>(null);
         try {
-            //RestTemplate restTemplate = new RestTemplate();
+            //RestTemplate restTemplate = SapRestTemplates.logged();
             response = this.restTemplate.exchange(url, HttpMethod.PUT, requestEntity, String.class);
 
 

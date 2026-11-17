@@ -1,4 +1,5 @@
 @use 'bupa-field-status.shared';
+@use '../sortable-header';
 
 $border: var(--sapList_BorderColor, #e5e5e5);
 $surface: var(--sapList_Background, #fff);

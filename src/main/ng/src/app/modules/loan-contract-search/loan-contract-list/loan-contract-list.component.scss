@@ -52,8 +52,6 @@ $border: var(--sapList_BorderColor, #e5e5e5);
         th {
             font-size: 0.75rem;
             font-weight: 700;
-            letter-spacing: 0.03rem;
-            text-transform: uppercase;
             white-space: nowrap;
             color: $label;
         }
@@ -168,4 +166,42 @@ $border: var(--sapList_BorderColor, #e5e5e5);
         margin: 0;
         color: $label;
     }
+}
+
+// Sortable column headers: the label is a button, the icon shows the sort
+.lc-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover .lc-sort__label {
+        text-decoration: underline;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--sapContent_FocusColor, #0854a0);
+        outline-offset: 2px;
+        border-radius: 0.125rem;
+    }
+
+    &__icon {
+        font-size: 0.75rem;
+        color: var(--sapContent_IconColor, #0854a0);
+        opacity: 0.35;
+    }
+
+    &.is-sorted &__icon {
+        opacity: 1;
+    }
+}
+
+.lc-results__amount .lc-sort {
+    flex-direction: row-reverse;
 }

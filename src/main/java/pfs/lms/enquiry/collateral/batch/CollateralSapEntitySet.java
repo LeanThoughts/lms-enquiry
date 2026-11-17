@@ -24,25 +24,27 @@ import java.util.stream.Collectors;
  * {@code CollateralValue}.
  * <p>
  * {@code keyColumns} are the SAP columns that form the OData key of the entity set, used to build the key predicate for
- * update (PUT) and delete (DELETE). <b>Verify these against the service $metadata</b> — all children carry ZID_NO and
- * ITEM_ID (on {@code CollateralChildRecord}); the children add ITEM_ID (Edm.Guid, the record id).
+ * update (PUT) and delete (DELETE). <b>Verify these against the service $metadata</b> — the header is keyed by ZID_NO
+ * and PTL_ID (the collateral item's portal id), e.g. {@code ChecklistHeaderSet(ZidNo='0000000912',PtlId='…')}; the
+ * children are keyed by ZID_NO, ITEM_ID (Edm.Guid, the record id) and PTL_ID (the same record id as a string), e.g.
+ * {@code DocumentSet(ZidNo='0000001037',ItemId=guid'1589f4c0-…',PtlId='1589f4c0-…')}.
  */
 public enum CollateralSapEntitySet {
 
     HEADER("Collateral Item", "ChecklistHeaderSet", CollateralItem.class,
-            new String[]{"ZID_NO"}),
+            new String[]{"ZID_NO", "PTL_ID"}),
     COVERAGE("Collateral Coverage", "CoverageSet", CollateralCoverage.class,
-            new String[]{"ZID_NO", "ITEM_ID"}),
+            new String[]{"ZID_NO", "ITEM_ID", "PTL_ID"}),
     DOCUMENT("Collateral Documents", "DocumentSet", CollateralDocument.class,
-            new String[]{"ZID_NO", "ITEM_ID"}),
+            new String[]{"ZID_NO", "ITEM_ID", "PTL_ID"}),
     SECURITIES_POSITION("Securities Positions", "SecPositionSet", CollateralSecuritiesPosition.class,
-            new String[]{"ZID_NO", "ITEM_ID"}),
+            new String[]{"ZID_NO", "ITEM_ID", "PTL_ID"}),
     PERFECTION_ROC("Security Perfection RoC", "PerfRocSet", CollateralPerfectionRoc.class,
-            new String[]{"ZID_NO", "ITEM_ID"}),
+            new String[]{"ZID_NO", "ITEM_ID", "PTL_ID"}),
     PERFECTION_CERSAI("Security Perfection CERSAI", "PerfCersaiSet", CollateralPerfectionCersai.class,
-            new String[]{"ZID_NO", "ITEM_ID"}),
+            new String[]{"ZID_NO", "ITEM_ID", "PTL_ID"}),
     PERFECTION_NESL("Security Perfection NeSL", "PerfNeslSet", CollateralPerfectionNesl.class,
-            new String[]{"ZID_NO", "ITEM_ID"});
+            new String[]{"ZID_NO", "ITEM_ID", "PTL_ID"});
 
     private static final Map<String, CollateralSapEntitySet> BY_SUB_PROCESS =
             Arrays.stream(values()).collect(Collectors.toMap(e -> e.subProcessName, Function.identity()));

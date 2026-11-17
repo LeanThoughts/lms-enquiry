@@ -135,8 +135,20 @@
                                                         [checked]="allVisibleSelected" (change)="toggleAllVisible()" />
                                                 </th>
                                             }
-                                            <th class="fd-table__cell">Field Name</th>
-                                            <th class="fd-table__cell fs-table__status">Field Status</th>
+                                            <th class="fd-table__cell" [attr.aria-sort]="ariaSort('fieldName')">
+                                                <button type="button" class="cfg-sort" [class.is-sorted]="sortKey === 'fieldName'"
+                                                    title="Sort by Field Name" (click)="toggleSort('fieldName')">
+                                                    <span class="cfg-sort__label">Field Name</span>
+                                                    <fd-icon class="cfg-sort__icon" [glyph]="sortIcon('fieldName')" aria-hidden="true"></fd-icon>
+                                                </button>
+                                            </th>
+                                            <th class="fd-table__cell fs-table__status" [attr.aria-sort]="ariaSort('fieldStatus')">
+                                                <button type="button" class="cfg-sort" [class.is-sorted]="sortKey === 'fieldStatus'"
+                                                    title="Sort by Field Status" (click)="toggleSort('fieldStatus')">
+                                                    <span class="cfg-sort__label">Field Status</span>
+                                                    <fd-icon class="cfg-sort__icon" [glyph]="sortIcon('fieldStatus')" aria-hidden="true"></fd-icon>
+                                                </button>
+                                            </th>
                                             @if (edit) {
                                                 <th class="fd-table__cell fs-table__action"><span class="fs-sr-only">Delete</span></th>
                                             }

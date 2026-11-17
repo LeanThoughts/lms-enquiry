@@ -171,6 +171,11 @@ class BpTableServiceTest extends CollateralTestSupport {
         // search also finds industry types by their industry system
         assertThat(service.getPage("industry-types", 0, 25, "standard", WRITER).getTotal()).isEqualTo(1);
         assertThat(service.getPage("industry-types", 0, 25, null, WRITER).getTotal()).isEqualTo(2);
+        // sorted by the referenced industry system (its code), descending: system 10 first
+        TablePage bySystem = service.getPage("industry-types", 0, 25, null, null, "industrySystem", "desc", WRITER);
+        assertThat(bySystem.getRows().get(0).getLabels().get("industrySystem")).startsWith("10 ·");
+        assertThat(service.getPage("industry-types", 0, 25, null, null, "industrySystem", "asc", WRITER)
+                .getRows().get(0).getLabels().get("industrySystem")).startsWith("0001 ·");
 
         assertThat(expectError(409, () -> service.delete("industry-systems", system.getId(), WRITER)))
                 .isEqualTo("Industry System 0001 is used by other entries and cannot be deleted.");

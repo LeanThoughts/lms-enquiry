@@ -21,12 +21,17 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -72,8 +77,14 @@ public class BpTableService {
 
     @Transactional(readOnly = true)
     public Overview getOverview(String principalName) {
+        return getOverview(BpTableDefinitions.BUSINESS_PARTNER, principalName);
+    }
+
+    /** The tables of a configuration module (business-partner, loans) with their row counts */
+    @Transactional(readOnly = true)
+    public Overview getOverview(String module, String principalName) {
         Overview overview = new Overview();
-        overview.setTables(BpTableDefinitions.all().stream()
+        overview.setTables(BpTableDefinitions.all(module).stream()
                 .map(table -> new TableSummary(table, count(table, null)))
                 .collect(Collectors.toList()));
         User user = user(principalName);
@@ -85,18 +96,40 @@ public class BpTableService {
     /** A page (0 based) of the rows matching the search text (in any text column), sorted by key. */
     @Transactional(readOnly = true)
     public TablePage getPage(String key, Integer page, Integer size, String search, String principalName) {
+        return getPage(key, page, size, search, null, principalName);
+    }
+
+    /**
+     * A page of the rows matching the search text and the filters (column = value, only filterable columns with an
+     * allowed value are used).
+     */
+    @Transactional(readOnly = true)
+    public TablePage getPage(String key, Integer page, Integer size, String search, Map<String, String> parameters,
+                             String principalName) {
+        return getPage(key, page, size, search, parameters, null, null, principalName);
+    }
+
+    /**
+     * A page of the rows matching the search text and the filters, sorted by a column (sort = column name, dir =
+     * asc or desc); without a valid sort column the table's own order is used.
+     */
+    @Transactional(readOnly = true)
+    public TablePage getPage(String key, Integer page, Integer size, String search, Map<String, String> parameters,
+                             String sort, String dir, String principalName) {
         BpTableDefinition table = table(key);
+        BpTableField sortField = sort == null ? null
+                : table.field(sort.trim()).filter(BpTableField::isVisible).orElse(null);
+        boolean descending = "desc".equalsIgnoreCase(dir == null ? "" : dir.trim());
+        Map<String, String> filters = filters(table, parameters);
         int pageSize = size == null || size < 1 ? DEFAULT_PAGE_SIZE : Math.min(size, MAX_PAGE_SIZE);
         String text = search == null ? "" : search.trim();
-        long total = count(table, text);
+        long total = count(table, text, filters);
         int lastPage = total == 0 ? 0 : (int) ((total - 1) / pageSize);
         int pageIndex = page == null || page < 0 ? 0 : Math.min(page, lastPage);
 
         TypedQuery<?> query = entityManager.createQuery("select e from " + from(table)
-                + where(table, text) + orderBy(table), table.getEntityClass());
-        if (!text.isEmpty()) {
-            query.setParameter("search", "%" + text.toLowerCase() + "%");
-        }
+                + where(table, text, filters) + orderBy(table, sortField, descending), table.getEntityClass());
+        setParameters(query, text, filters);
         query.setFirstResult(pageIndex * pageSize);
         query.setMaxResults(pageSize);
 
@@ -109,6 +142,9 @@ public class BpTableService {
         result.setSize(pageSize);
         result.setTotal(total);
         result.setSearch(text);
+        result.setFilters(filters);
+        result.setSort(sortField != null ? sortField.getName() : null);
+        result.setSortDir(sortField != null ? (descending ? "desc" : "asc") : null);
         result.setReferences(references);
         User user = user(principalName);
         result.setUserRole(user != null ? user.getRole() : null);
@@ -141,6 +177,8 @@ public class BpTableService {
                     + table.getTitle() + ".", HttpStatus.CONFLICT);
         }
         checkBusinessKeyUnique(table, entity);
+        validate(table, entity);
+        stamp(entity, true, principalName);
         entityManager.persist(entity);
         entityManager.flush();
         log.info("{}: row {} created by {}", table.getTitle(), describe(table, entity), principalName);
@@ -166,6 +204,8 @@ public class BpTableService {
             }
         }
         if (changed > 0) {
+            validate(table, entity);
+            stamp(entity, false, principalName);
             entityManager.flush();
             log.info("{}: row {} changed by {} ({} columns)", table.getTitle(), describe(table, entity),
                     principalName, changed);
@@ -190,13 +230,58 @@ public class BpTableService {
     // ------------------------------------------------------------------------------------------------ queries
 
     private long count(BpTableDefinition table, String search) {
+        return count(table, search, new LinkedHashMap<>());
+    }
+
+    private long count(BpTableDefinition table, String search, Map<String, String> filters) {
         String text = search == null ? "" : search.trim();
         TypedQuery<Long> query = entityManager.createQuery("select count(e) from " + from(table)
-                + where(table, text), Long.class);
+                + where(table, text, filters), Long.class);
+        setParameters(query, text, filters);
+        return query.getSingleResult();
+    }
+
+    private static void setParameters(TypedQuery<?> query, String text, Map<String, String> filters) {
         if (!text.isEmpty()) {
             query.setParameter("search", "%" + text.toLowerCase() + "%");
         }
-        return query.getSingleResult();
+        int i = 0;
+        for (String value : filters.values()) {
+            query.setParameter("f" + i++, value);
+        }
+    }
+
+    /** The filters of the request that the table offers, with an allowed value (else ignored) */
+    private Map<String, String> filters(BpTableDefinition table, Map<String, String> parameters) {
+        Map<String, String> filters = new LinkedHashMap<>();
+        if (parameters == null) {
+            return filters;
+        }
+        for (BpTableField field : table.getFields()) {
+            String value = parameters.get(field.getName());
+            if (!field.isFilter() || value == null || value.trim().isEmpty() || field.isReferenceEntity()) {
+                continue;
+            }
+            String code = value.trim();
+            boolean allowed = field.getReferenceTable() != null
+                    ? references(table).getOrDefault(field.getReferenceTable(), new ArrayList<>()).stream()
+                            .anyMatch(option -> code.equals(option.getValue()))
+                    : field.getOptions().isEmpty() || field.getOptions().stream().anyMatch(option -> code.equals(option.getValue()));
+            if (allowed) {
+                filters.put(field.getName(), code);
+            }
+        }
+        return filters;
+    }
+
+    private static void validate(BpTableDefinition table, Object entity) {
+        if (table.getValidator() == null) {
+            return;
+        }
+        String error = table.getValidator().apply(entity);
+        if (error != null && !error.isEmpty()) {
+            throw invalid(error);
+        }
     }
 
     /** "IndustryType e left join e.industrySystem r_industrySystem" */
@@ -215,8 +300,26 @@ public class BpTableService {
     }
 
     private static String where(BpTableDefinition table, String search) {
+        return where(table, search, new LinkedHashMap<>());
+    }
+
+    private static String where(BpTableDefinition table, String search, Map<String, String> filters) {
+        List<String> filterConditions = new ArrayList<>();
+        int i = 0;
+        for (String column : filters.keySet()) {
+            filterConditions.add("e." + column + " = :f" + i++);
+        }
+        String searchCondition = searchCondition(table, search);
+        if (searchCondition != null) {
+            filterConditions.add("(" + searchCondition + ")");
+        }
+        return filterConditions.isEmpty() ? "" : " where " + String.join(" and ", filterConditions);
+    }
+
+    /** "lower(e.code) like :search or …", or null without a search text */
+    private static String searchCondition(BpTableDefinition table, String search) {
         if (search == null || search.isEmpty()) {
-            return "";
+            return null;
         }
         List<String> conditions = new ArrayList<>();
         for (BpTableField field : table.getFields()) {
@@ -231,11 +334,34 @@ public class BpTableService {
                 conditions.add("lower(e." + field.getName() + ") like :search");
             }
         }
-        return conditions.isEmpty() ? "" : " where " + String.join(" or ", conditions);
+        return conditions.isEmpty() ? null : String.join(" or ", conditions);
+    }
+
+    /** The column the user sorted by first (text without case), then the table's own order */
+    private static String orderBy(BpTableDefinition table, BpTableField field, boolean descending) {
+        String order = orderBy(table);
+        if (field == null) {
+            return order;
+        }
+        String column;
+        if (field.isReferenceEntity()) {
+            column = alias(field) + "." + table(field.getReferenceTable()).getValueField();
+        } else {
+            column = "e." + field.getName();
+        }
+        if (field.getType() == BpTableField.Type.TEXT) {
+            column = "lower(" + column + ")";
+        }
+        return " order by " + column + (descending ? " desc" : " asc") + ", " + order.substring(" order by ".length());
     }
 
     private static String orderBy(BpTableDefinition table) {
         List<String> sort = new ArrayList<>();
+        if (!table.getSortFields().isEmpty()) {
+            table.getSortFields().forEach(field -> sort.add("e." + field));
+            sort.add("e." + table.getIdField().getName());
+            return " order by " + String.join(", ", sort);
+        }
         List<BpTableField> keys = new ArrayList<>(table.getBusinessKeyFields());
         // Industry types: by industry system first
         keys.sort((a, b) -> Boolean.compare(!a.isReferenceEntity(), !b.isReferenceEntity()));
@@ -374,11 +500,15 @@ public class BpTableService {
                 && field.getOptions().stream().noneMatch(option -> value.equals(option.getValue()))) {
             throw invalid(field.getLabel() + " " + value + " is not allowed.");
         }
-        if (type == Integer.class || type == int.class) {
-            return Integer.valueOf(value);
-        }
-        if (type == Long.class || type == long.class) {
-            return Long.valueOf(value);
+        try {
+            if (type == Integer.class || type == int.class) {
+                return Integer.valueOf(value);
+            }
+            if (type == Long.class || type == long.class) {
+                return Long.valueOf(value);
+            }
+        } catch (NumberFormatException e) {
+            throw invalid(field.getLabel() + " must be a whole number.");
         }
         return value;
     }
@@ -407,7 +537,63 @@ public class BpTableService {
         if (type == Integer.class || type == int.class) {
             return Integer.valueOf(id);
         }
+        if (type == UUID.class) {
+            return UUID.fromString(id);
+        }
         return id;
+    }
+
+    /**
+     * Audit columns of the entity, where it has them: createdOn/createdAt/createdByUserName and
+     * changedOn/changedAt/changedByUserName (AggregateRoot), createdAt/updatedAt (AuditModel, not nullable).
+     */
+    private static void stamp(Object entity, boolean created, String user) {
+        if (created) {
+            stampField(entity, "createdOn", user);
+            stampField(entity, "createdAt", user);
+            stampField(entity, "createdByUserName", user);
+        }
+        stampField(entity, "updatedAt", user);
+        if (!created) {
+            stampField(entity, "changedOn", user);
+            stampField(entity, "changedAt", user);
+            stampField(entity, "changedByUserName", user);
+        }
+    }
+
+    private static void stampField(Object entity, String name, String user) {
+        Field field = null;
+        for (Class<?> current = entity.getClass(); current != null && field == null; current = current.getSuperclass()) {
+            try {
+                field = current.getDeclaredField(name);
+            } catch (NoSuchFieldException e) {
+                // look in the super class
+            }
+        }
+        if (field == null) {
+            return;
+        }
+        Class<?> type = field.getType();
+        Object value;
+        if (type == String.class) {
+            value = user;
+        } else if (type == LocalDate.class) {
+            value = LocalDate.now();
+        } else if (type == LocalTime.class) {
+            value = LocalTime.now();
+        } else if (type == LocalDateTime.class) {
+            value = LocalDateTime.now();
+        } else if (type == Date.class) {
+            value = new Date();
+        } else {
+            return;
+        }
+        try {
+            field.setAccessible(true);
+            field.set(entity, value);
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /** "Role TR0100 / Partner Group 0001" */
@@ -439,7 +625,9 @@ public class BpTableService {
 
     private static Object newInstance(BpTableDefinition table) {
         try {
-            return table.getEntityClass().getDeclaredConstructor().newInstance();
+            java.lang.reflect.Constructor<?> constructor = table.getEntityClass().getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Cannot create " + table.getEntityClass().getName(), e);
         }

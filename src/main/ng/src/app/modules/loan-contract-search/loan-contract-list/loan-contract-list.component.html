@@ -120,16 +120,15 @@
             <table fd-table aria-label="Loan contracts">
                 <thead fd-table-header>
                     <tr fd-table-row>
-                        <th fd-table-cell>Enquiry</th>
-                        <th fd-table-cell>Functional Status</th>
-                        <th fd-table-cell>Borrower</th>
-                        <th fd-table-cell>Project</th>
-                        <th fd-table-cell>Loan Contract</th>
-                        <th fd-table-cell>Project Type</th>
-                        <th fd-table-cell>Loan Class</th>
-                        <th fd-table-cell>Capacity</th>
-                        <th fd-table-cell>Assistance Type</th>
-                        <th fd-table-cell class="lc-results__amount">Project Cost (Rs Cr)</th>
+                        @for (column of columns; track column.key) {
+                            <th fd-table-cell [class.lc-results__amount]="column.numeric" [attr.aria-sort]="ariaSort(column.key)">
+                                <button type="button" class="lc-sort" [class.is-sorted]="sortKey === column.key"
+                                    [title]="'Sort by ' + column.label.toLowerCase()" (click)="toggleSort(column.key)">
+                                    <span class="lc-sort__label">{{ column.label }}</span>
+                                    <fd-icon class="lc-sort__icon" [glyph]="sortIcon(column.key)" aria-hidden="true"></fd-icon>
+                                </button>
+                            </th>
+                        }
                     </tr>
                 </thead>
                 <tbody fd-table-body>

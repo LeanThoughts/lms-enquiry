@@ -64,7 +64,12 @@ export class SideNavigationService {
             ]));
         }
 
-        const administrationItems: NestedListItem[] = [];
+        // Reports app: the catalogue of reports by module, each report launched from its module's list
+        items.push({ link: { icon: 'bar-chart', title: 'Reports', routerLink: 'reports' } });
+
+        const administrationItems: NestedListItem[] = [
+            { link: { icon: 'connected', title: 'SAP Integration Log', routerLink: 'sap-integration-log' } },
+        ];
         if (this.authService.hasModulePermission(USER_MANAGEMENT_DISPLAY)) {
             administrationItems.push({ link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } });
         }

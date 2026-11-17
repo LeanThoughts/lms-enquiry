@@ -1,0 +1,21 @@
+// Loans Disbursement Report: the page styles are shared with the other reports (../shared); only additions here.
+$label: var(--sapContent_LabelColor, #6a6d70);
+
+.ws-input[disabled] { background: var(--sapField_ReadOnly_Background, #f2f2f2); color: $label; cursor: not-allowed; }
+.ws-group__fields--stack { grid-template-columns: 1fr; }
+.ws-check {
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer; min-height: 2.25rem;
+    input { margin: 0; width: 1rem; height: 1rem; accent-color: var(--sapSelectedColor, #0a6ed1); }
+}
+
+// four groups side by side like the SAP screen; two columns on narrower screens
+.ws-filter__groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 40rem) {
+    .ws-filter__groups { grid-template-columns: 1fr; }
+}
+
+.ws-radios { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: 0 1.5rem; flex-wrap: wrap;
+    .ws-radios__legend { width: 100%; padding: 0; font-size: 0.875rem; color: $label; margin-bottom: 0.25rem; } }
+.ws-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
+.ws-select { width: 100%; }
+.ws-th--num .ws-th__button { justify-content: flex-end; }

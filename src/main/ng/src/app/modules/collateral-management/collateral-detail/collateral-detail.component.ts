@@ -90,7 +90,8 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
     workFlowStatusDescription: string | null = null;
     workFlowStatusCode: number | null = null;
     lists: ValueLists = {};
-    agreementTypes: ValueEntry[] | null = null;
+    /** Agreement types SAP allows, by collateral object type: read once when the page loads (null until then). */
+    agreementTypesByObject: Record<string, ValueEntry[]> | null = null;
     access: CollateralAccess | null = null;
     /** Rows of the child grids, keyed by GridDef.detailKey. */
     children: Record<string, Record<string, unknown>[]> = {};
@@ -123,10 +124,11 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
             this.load(itemId);
         });
 
-        // Offer the agreement types allowed for the chosen collateral object
+        // The agreement type dropdown follows the chosen collateral object (from the table loaded with the page);
+        // a selected agreement type that is not allowed for the new object is cleared
         this.form.controls['collateralObjectType'].valueChanges.pipe(takeUntil(this.destroy$)).subscribe(objectType => {
             if (this.edit) {
-                this.loadAgreementTypes(objectType);
+                this.clearDisallowedAgreementType(objectType);
             }
         });
     }
@@ -196,10 +198,14 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
         return [created, changed].filter(Boolean).join(' · ');
     }
 
-    /** Dropdown values of a select field; the agreement type list follows the collateral object. */
+    /**
+     * Dropdown values of a select field. In change mode the agreement type list is only what SAP derives for the
+     * chosen collateral object (empty until one is chosen, or while it loads); the full value list is used only to
+     * show the description of a saved value in display mode.
+     */
     options(def: FieldDef): ValueEntry[] {
-        if (def.list === 'AGREEMENT_TYPE' && this.edit && this.agreementTypes) {
-            return this.agreementTypes;
+        if (def.list === 'AGREEMENT_TYPE' && this.edit) {
+            return this.agreementTypesFor(this.form.controls['collateralObjectType'].value);
         }
         return def.list ? this.lists[def.list] ?? [] : [];
     }
@@ -231,7 +237,7 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
         }
         this.edit = true;
         this.errorMessage = '';
-        this.loadAgreementTypes(this.form.controls['collateralObjectType'].value);
+        this.clearDisallowedAgreementType(this.form.controls['collateralObjectType'].value);
     }
 
     /** Technical Info: the collateral's id and audit trail. */
@@ -367,6 +373,7 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
         this.waitMessage = this.isNew ? 'Preparing a new collateral. Please wait' : 'Loading collateral. Please wait';
         this.loadFailed = false;
         this.errorMessage = '';
+        this.loadAgreementTypes(); // one SAP read for all collateral objects, alongside the collateral itself
 
         const detail$ = itemId
             ? this.collateralService.getItem(itemId)
@@ -412,7 +419,6 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.edit = true;
-                    this.loadAgreementTypes(detail.item.collateralObjectType ?? null);
                 } else {
                     this.edit = false;
                 }
@@ -425,18 +431,41 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
         });
     }
 
-    private loadAgreementTypes(objectType: string | null): void {
-        this.collateralService.getAgreementTypes(objectType).pipe(takeUntil(this.destroy$)).subscribe({
-            next: types => {
-                this.agreementTypes = types;
-                const control = this.form.controls['collateralAgreementType'];
-                if (control.value && types.length && !types.some(type => type.code === control.value)) {
-                    control.setValue(null);
-                    control.markAsDirty();
+    /**
+     * Reads the agreement types SAP allows for every collateral object once (one SAP call on page load); the dropdown
+     * is then switched locally when the object type changes.
+     */
+    private loadAgreementTypes(): void {
+        this.collateralService.getAgreementTypesByObject().pipe(takeUntil(this.destroy$)).subscribe({
+            next: table => {
+                this.agreementTypesByObject = table;
+                if (this.edit) {
+                    this.clearDisallowedAgreementType(this.form.controls['collateralObjectType'].value);
                 }
             },
-            error: () => this.agreementTypes = null
+            error: error => {
+                this.agreementTypesByObject = {};
+                this.errorMessage = this.collateralService.errorMessage(error,
+                    'The collateral agreement types could not be read from SAP.');
+            }
         });
+    }
+
+    /** The agreement types allowed for a collateral object; empty without an object or while the table loads. */
+    private agreementTypesFor(objectType: string | null): ValueEntry[] {
+        return objectType && this.agreementTypesByObject ? this.agreementTypesByObject[objectType] ?? [] : [];
+    }
+
+    /** Clears a selected agreement type that is not allowed for the collateral object (once the table is loaded). */
+    private clearDisallowedAgreementType(objectType: string | null): void {
+        const control = this.form.controls['collateralAgreementType'];
+        if (!control.value || !this.agreementTypesByObject) {
+            return;
+        }
+        if (!this.agreementTypesFor(objectType).some(type => type.code === control.value)) {
+            control.setValue(null);
+            control.markAsDirty();
+        }
     }
 
     // ------------------------------------------------------------------------------------------- form <-> item
