@@ -13,7 +13,7 @@ spring:
             client-id: 102af103-0208-40fe-97db-4c18325eeca1
             client-secret: jge8Q~vVwJ_AorEfC41UsCdxFc442TakFaWLpc-G # Ensure this is present and correct if needed
             authorization-grant-type: authorization_code # Common for web apps (BFF)
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}" # Standard Spring Security default
+            redirect-uri: "http://localhost:9000/enquiry/login/oauth2/code/{registrationId}"
             scope: openid,profile,offline_access # Common minimal scopes for OIDC
         provider: # <--- This block is for provider (Authorization Server) definitions
           azure: # <--- This is your provider ID (e.g., 'azure')
@@ -147,6 +147,14 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+# Entra group object id -> module permission name returned by /api/me.
+app:
+  role-groups:
+    - name: BusinessPartners.Display
+      group-id: bc44367a-9b1d-4e88-aabf-7b2d32641bb7
+    - name: BusinessPartners.Edit
+      group-id: 03ef1b62-ccaa-4573-a261-fc00c231798c
 
 
 # leanthoughts

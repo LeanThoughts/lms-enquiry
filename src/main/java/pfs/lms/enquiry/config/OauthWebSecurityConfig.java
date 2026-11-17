@@ -1,5 +1,6 @@
 package pfs.lms.enquiry.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -7,19 +8,26 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collection;
 // No 'import static org.springframework.security.config.Customizer.withDefaults;' needed for 5.1.x
 
 @Slf4j
 @Configuration
 @EnableWebSecurity
 @Profile({"oauth", "pfsdevoauth"})
+@RequiredArgsConstructor
 public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsConfigurationSource corsConfigurationSource; // Use constructor injection
     private final OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver; // 1. Inject the custom resolver
     private final CustomOidcUserService customOidcUserService; // Inject your custom service
+    private final RoleGroupProperties roleGroupProperties;
 
     // Relative urls are resolved against the request host and the /enquiry context path
     @Value("${app.oauth2.login-success-url:http://localhost:9000/enquiry/homepage}")
@@ -27,16 +35,6 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${app.oauth2.logout-success-url:http://localhost:9000/enquiry/login}")
     private String logoutSuccessUrl;
-
-    // Constructor injection is preferred to avoid the "might not have been initialized" error
-    public OauthWebSecurityConfig(CorsConfigurationSource corsConfigurationSource,
-                             OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver,
-                             CustomOidcUserService customOidcUserService) {
-
-        this.corsConfigurationSource = corsConfigurationSource;
-        this.pkceAuthorizationRequestResolver = pkceAuthorizationRequestResolver;
-        this.customOidcUserService = customOidcUserService;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -84,6 +82,31 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
         // This line enables the BFF to validate JWTs if they are directly sent to it (e.g., from another service)
         // For a typical BFF, this configuration primarily validates the JWT received during the OAuth2 login flow.
         // It's already configured via application.yml, so just enabling it here is sufficient.
-        http.oauth2ResourceServer().jwt();
+        http.oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(this::jwtAuthenticationConverter);
+    }
+
+    private JwtAuthenticationToken jwtAuthenticationConverter(Jwt jwt) {
+        String name = firstClaim(jwt, "preferred_username", "email", "upn");
+        if (name == null) {
+            name = jwt.getSubject();
+        }
+        if ("gopinath@synapseware.io".equalsIgnoreCase(name)) {
+            name = "admin@gmail.com";
+        }
+        Collection<GrantedAuthority> authorities = roleGroupProperties.authoritiesFor(
+                RoleGroupProperties.strings(jwt.getClaim("groups")));
+        return new JwtAuthenticationToken(jwt, authorities, name);
+    }
+
+    private String firstClaim(Jwt jwt, String... names) {
+        for (String claim : names) {
+            String value = jwt.getClaimAsString(claim);
+            if (value != null && !value.isEmpty()) {
+                return value;
+            }
+        }
+        return null;
     }
 }

@@ -5,7 +5,9 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Setter
@@ -33,6 +35,12 @@ public class User extends AggregateRoot<User> {
     @Nullable
     private boolean departmentHead;
     private boolean passwordReset;
+
+    /** Entra module permissions for this session, for example BusinessPartners.Display. Not stored. */
+    @Getter
+    @Transient
+    @EqualsAndHashCode.Exclude
+    private List<String> modulePermissions;
 
     public User(String firstName, String lastName, String email, String role, boolean status, String userName, String sapBPNumber, String riskDepartment, boolean departmentHead, boolean riskPortalDisplayOnlyAccess) {
         this.firstName = firstName;

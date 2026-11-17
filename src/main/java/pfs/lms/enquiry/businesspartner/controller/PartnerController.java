@@ -2,10 +2,13 @@ package pfs.lms.enquiry.businesspartner.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.businesspartner.resource.BupaFICustomerVendorDetailResource;
 import pfs.lms.enquiry.config.ApiController;
+import pfs.lms.enquiry.config.RoleGroupProperties;
 import pfs.lms.enquiry.domain.Partner;
+import pfs.lms.enquiry.domain.User;
 import pfs.lms.enquiry.repository.PartnerAutoCompleteProjection;
 import pfs.lms.enquiry.repository.PartnerRepository;
 import pfs.lms.enquiry.repository.UserRepository;
@@ -31,6 +34,8 @@ public class PartnerController {
 
     private final PartnerService partnerService;
 
+    private final RoleGroupProperties roleGroupProperties;
+
     @PostMapping("/partners/create")
     public ResponseEntity<Partner> createPartner(@RequestBody Partner partner,HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(partnerService.save(partner,request.getUserPrincipal().getName()));
@@ -48,19 +53,18 @@ public class PartnerController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity getLoggedinPartner(HttpServletRequest request) {
-
-        System.out.println("----------- Get Logged in Partner ----------");
-        System.out.println(request.getUserPrincipal().getName());
-        if (request.getUserPrincipal() != null) {
-            if (request.getUserPrincipal().getName().equals("gopinath.guptha@leanthoughts.com")) {
-                System.out.println("----------- Partner Name ---------- : " + request.getUserPrincipal().getName());
-                return ResponseEntity.ok(userRepository.findByEmail("admin@gmail.com"));
-            } else
-                return ResponseEntity.ok(userRepository.findByEmail(request.getUserPrincipal().getName()));
+    public ResponseEntity<User> getLoggedinPartner(HttpServletRequest request) {
+        if (request.getUserPrincipal() == null) {
+            return ResponseEntity.noContent().build();
         }
-
-        return ResponseEntity.noContent().build();
+        String name = request.getUserPrincipal().getName();
+        String email = "gopinath.guptha@leanthoughts.com".equals(name) ? "admin@gmail.com" : name;
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            user.setModulePermissions(roleGroupProperties.permissionsOf(
+                    SecurityContextHolder.getContext().getAuthentication()));
+        }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/partners/byPrincipal")
