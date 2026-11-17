@@ -24,6 +24,7 @@ import {
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { AuthService } from '../../auth/auth.service';
 import { UserManagementService } from '../user-management.service';
 import { UserFormDialogComponent } from '../user-form-dialog/user-form-dialog.component';
 import {
@@ -93,8 +94,16 @@ export class UserListComponent implements OnInit, OnDestroy {
         private userManagementService: UserManagementService,
         private messageService: MessageService,
         private dialogService: DialogService,
+        private authService: AuthService,
         public router: Router
     ) {}
+
+    /**
+     * Create, edit and status changes require the UserManagement.Edit module permission.
+     */
+    get canEditUsers(): boolean {
+        return this.authService.hasModulePermission('UserManagement.Edit');
+    }
 
     ngOnInit(): void {
         // Master data loads in parallel with the users, so the page (and its loading message) shows at once.

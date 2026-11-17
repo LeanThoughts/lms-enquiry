@@ -13,6 +13,7 @@ import {
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { AuthService } from '../../auth/auth.service';
 import {
     ConfirmDialogComponent,
     ConfirmDialogData
@@ -57,7 +58,8 @@ export class BpTableComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private service: BpTableService,
         private dialogService: DialogService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private authService: AuthService
     ) { }
 
     ngOnInit(): void {
@@ -89,6 +91,11 @@ export class BpTableComponent implements OnInit, OnDestroy {
 
     get canChange(): boolean {
         return !!this.data?.canChange;
+    }
+
+    /** Change mode also requires the Configuration.Edit module permission. */
+    get canEdit(): boolean {
+        return this.canChange && this.authService.hasModulePermission('Configuration.Edit');
     }
 
     get noEditAccessText(): string {
@@ -153,6 +160,9 @@ export class BpTableComponent implements OnInit, OnDestroy {
     }
 
     change(): void {
+        if (!this.canEdit) {
+            return;
+        }
         this.edit = true;
     }
 

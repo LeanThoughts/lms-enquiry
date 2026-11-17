@@ -71,6 +71,13 @@ export class ReferenceInterestRateListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Create, update, delete and send for approval require the ReferenceInterestRates.Edit module permission.
+     */
+    get canEditReferenceInterestRates(): boolean {
+        return this.authService.hasModulePermission('ReferenceInterestRates.Edit');
+    }
+
+    /**
      * Id of the selected reference rate type, used by the generic list to fetch its values
      */
     get selectedReferenceRateTypeId(): string {
@@ -102,7 +109,7 @@ export class ReferenceInterestRateListComponent implements OnInit, OnDestroy {
      */
     sendForApproval(): void {
         const list = this.referenceInterestValueList;
-        if (!list?.selectedObject) return;
+        if (!this.canEditReferenceInterestRates || !list?.selectedObject) return;
 
         this.sendingForApproval = true;
         const { firstName = '', lastName = '', email = '' } = this.authService.currentUser ?? {};

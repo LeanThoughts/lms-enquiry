@@ -3,12 +3,14 @@
         [subtitle]="user ? (user.roleDescription || user.role) + ' · ' + user.email : ''" [style.margin-top.rem]="1">
         <fd-dynamic-page-global-actions>
             <fd-toolbar fdType="transparent" [clearBorder]="true">
-                <button fd-toolbar-item fd-button fdType="emphasized" glyph="edit" label="Edit"
-                    [disabled]="!user" (click)="edit()"></button>
-                @if (user) {
-                    <button fd-toolbar-item fd-button [fdType]="user.status ? 'negative' : 'positive'"
-                        [glyph]="user.status ? 'locked' : 'unlocked'"
-                        [label]="user.status ? 'Deactivate' : 'Activate'" (click)="toggleStatus()"></button>
+                @if (canEditUsers) {
+                    <button fd-toolbar-item fd-button fdType="emphasized" glyph="edit" label="Edit"
+                        [disabled]="!user" (click)="edit()"></button>
+                    @if (user) {
+                        <button fd-toolbar-item fd-button [fdType]="user.status ? 'negative' : 'positive'"
+                            [glyph]="user.status ? 'locked' : 'unlocked'"
+                            [label]="user.status ? 'Deactivate' : 'Activate'" (click)="toggleStatus()"></button>
+                    }
                 }
                 <fd-toolbar-separator></fd-toolbar-separator>
                 <button fd-button fdType="transparent" glyph="decline" aria-label="Back to user list"

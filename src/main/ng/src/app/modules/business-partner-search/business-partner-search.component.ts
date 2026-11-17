@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BusinessPartnerListComponent } from './business-partner-list/business-partner-list.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
     selector: 'app-business-partner-search',
@@ -59,8 +60,16 @@ export class BusinessPartnerSearchComponent implements OnInit, OnDestroy {
     constructor(
         private businessPartnerService: BusinessPartnerSearchService,
         private messageService: MessageService,
+        private authService: AuthService,
         public router: Router
     ) {}
+
+    /**
+     * Update is available only with the BusinessPartners.Edit module permission.
+     */
+    get canUpdateBusinessPartner(): boolean {
+        return this.authService.hasModulePermission('BusinessPartners.Edit');
+    }
 
     /**
      * On init

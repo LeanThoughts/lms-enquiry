@@ -12,6 +12,7 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { AuthService } from '../../auth/auth.service';
 import {
     ConfirmDialogComponent,
     ConfirmDialogData
@@ -90,7 +91,8 @@ export class BupaFieldStatusComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private dialogService: DialogService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private authService: AuthService
     ) {}
 
     ngOnInit(): void {
@@ -106,6 +108,11 @@ export class BupaFieldStatusComponent implements OnInit, OnDestroy {
 
     get canChange(): boolean {
         return !!this.overview?.canChange;
+    }
+
+    /** Change mode also requires the Configuration.Edit module permission. */
+    get canEdit(): boolean {
+        return this.canChange && this.authService.hasModulePermission('Configuration.Edit');
     }
 
     get noEditAccessText(): string {
@@ -280,6 +287,9 @@ export class BupaFieldStatusComponent implements OnInit, OnDestroy {
     // ------------------------------------------------------------------------------------------- editing
 
     change(): void {
+        if (!this.canEdit) {
+            return;
+        }
         this.edit = true;
     }
 

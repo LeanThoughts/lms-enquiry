@@ -11,6 +11,7 @@ import {
 } from '@fundamental-ngx/core';
 import { WorkflowApproverService } from '../workflow-approver.service';
 import { GenericListComponent } from '../../generic/generic-list/generic-list.component';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
     selector: 'app-workflow-approver-list',
@@ -41,8 +42,16 @@ export class WorkflowApproverListComponent {
      */
     constructor(
         private cdr: ChangeDetectorRef,
+        private authService: AuthService,
         public workflowApproverService: WorkflowApproverService
     ) {}
+
+    /**
+     * Create, update and delete require the WorkflowApprovers.Edit module permission.
+     */
+    get canEditWorkflowApprovers(): boolean {
+        return this.authService.hasModulePermission('WorkflowApprovers.Edit');
+    }
 
     /**
      * Filter passed to the generic list as 'departmentCode|processName'. It is never empty, so all approvers are listed

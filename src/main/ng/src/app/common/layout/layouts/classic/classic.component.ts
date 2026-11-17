@@ -91,8 +91,8 @@ export class ClassicLayoutComponent implements OnInit {
         public themingService: ThemingService,
     )
     {
-        this.productSwitcher = this.sideNavigationService.productSwitcher;
-        this.sideNavigationConfiguration = this.sideNavigationService.sideNavigationConfiguration;
+        this.productSwitcher = this.sideNavigationService.productSwitcher();
+        this.sideNavigationConfiguration = this.sideNavigationService.sideNavigationConfiguration();
         this.themes = this.themingService.getThemes();
 
     }

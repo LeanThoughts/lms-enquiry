@@ -11,7 +11,7 @@
                 } @else {
                     <button fd-button fdType="transparent" glyph="refresh" label="Refresh" [disabled]="loading"
                         (click)="load()"></button>
-                    @if (canChange) {
+                    @if (canEdit) {
                         <button fd-button fdType="emphasized" glyph="edit" label="Change" [disabled]="!data"
                             (click)="change()"></button>
                     }

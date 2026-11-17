@@ -155,6 +155,30 @@ app:
       group-id: bc44367a-9b1d-4e88-aabf-7b2d32641bb7
     - name: BusinessPartners.Edit
       group-id: 03ef1b62-ccaa-4573-a261-fc00c231798c
+    - name: OutstandingApprovals.Display
+      group-id: 8f114712-51ef-48ad-9bca-7a02e82e45f7
+    - name: OutstandingApprovals.Edit
+      group-id: af1d1eb9-9946-40e8-b80c-42ca94ba1968
+    - name: UserManagement.Display
+      group-id: ddfac7fd-34a2-4d5b-a39f-759e62a8049f
+    - name: UserManagement.Edit
+      group-id: 34c55de5-126c-41a8-95fa-4417d4f8bdc1
+    - name: WorkflowApprovers.Display
+      group-id: e7243291-d889-4919-ba79-8059721fe573
+    - name: WorkflowApprovers.Edit
+      group-id: 39fbc425-defd-49cf-bdb1-0d331382722a
+    - name: Configuration.Display
+      group-id: 63ac928c-107b-417d-9a39-a981cec6bde8
+    - name: Configuration.Edit
+      group-id: fe65e0a9-a01d-45a9-9471-897d7e6fa455
+    - name: ReferenceInterestRates.Display
+      group-id: 31e94d5b-bb0e-49ca-a417-54f59b969b39
+    - name: ReferenceInterestRates.Edit
+      group-id: 667f79ac-c931-46f8-a039-5e1c537e6f3c
+    - name: UploadLoanEnquiries.Display
+      group-id: 08f138ba-060d-47c7-901d-6db273047697
+    - name: UploadLoanEnquiries.Edit
+      group-id: 814ab64a-5316-4d5c-97bb-a06c2521bf34
 
 
 # leanthoughts

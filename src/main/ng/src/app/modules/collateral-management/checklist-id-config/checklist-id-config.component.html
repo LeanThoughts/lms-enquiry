@@ -11,7 +11,7 @@
                 } @else {
                     <button fd-button fdType="transparent" glyph="refresh" label="Refresh" [disabled]="!!waitMessage"
                         (click)="load()"></button>
-                    @if (config?.canChange) {
+                    @if (canEdit) {
                         <button fd-button fdType="emphasized" glyph="edit" label="Change"
                             [disabled]="!!waitMessage || !config" (click)="change()"></button>
                     }

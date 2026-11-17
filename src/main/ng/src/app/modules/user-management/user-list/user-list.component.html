@@ -5,8 +5,10 @@
             <fd-toolbar fdType="transparent" [clearBorder]="true">
                 <button fd-toolbar-item fd-button fdType="transparent" glyph="role" label="Manage Roles"
                     (click)="manageRoles()"></button>
-                <button fd-toolbar-item fd-button fdType="emphasized" glyph="add-employee" label="Create User"
-                    (click)="createUser()"></button>
+                @if (canEditUsers) {
+                    <button fd-toolbar-item fd-button fdType="emphasized" glyph="add-employee" label="Create User"
+                        (click)="createUser()"></button>
+                }
                 <fd-toolbar-separator></fd-toolbar-separator>
                 <button fd-button fdType="transparent" glyph="decline" aria-label="Close" title="Close"
                     (click)="router.navigate(['homepage'])"></button>
@@ -191,10 +193,12 @@
                     <div class="um-qv__actions">
                         <button fd-button fdType="emphasized" glyph="employee-lookup" label="Open Profile"
                             (click)="openProfile(user)"></button>
-                        <button fd-button fdType="standard" glyph="edit" label="Edit" (click)="editUser(user)"></button>
-                        <button fd-button [fdType]="user.status ? 'negative' : 'positive'"
-                            [glyph]="user.status ? 'locked' : 'unlocked'"
-                            [label]="user.status ? 'Deactivate' : 'Activate'" (click)="toggleStatus(user)"></button>
+                        @if (canEditUsers) {
+                            <button fd-button fdType="standard" glyph="edit" label="Edit" (click)="editUser(user)"></button>
+                            <button fd-button [fdType]="user.status ? 'negative' : 'positive'"
+                                [glyph]="user.status ? 'locked' : 'unlocked'"
+                                [label]="user.status ? 'Deactivate' : 'Activate'" (click)="toggleStatus(user)"></button>
+                        }
                     </div>
                 } @else {
                     <div class="um-empty um-empty--small">

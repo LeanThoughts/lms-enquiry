@@ -119,7 +119,18 @@ export class HomepageComponent implements OnInit, OnDestroy {
     }
 
     get visibleQuickActions(): QuickAction[] {
-        return this.isBorrower ? this.quickActions.filter(action => action.borrowerAccess) : this.quickActions;
+        return this.quickActions.filter(action => {
+            if (this.isBorrower && !action.borrowerAccess) {
+                return false;
+            }
+            if (action.label === 'Reference Interest Rates') {
+                return this.authService.hasModulePermission('ReferenceInterestRates.Display');
+            }
+            if (action.label === 'Upload Enquiries') {
+                return this.authService.hasModulePermission('UploadLoanEnquiries.Display');
+            }
+            return true;
+        });
     }
 
     get greeting(): string {

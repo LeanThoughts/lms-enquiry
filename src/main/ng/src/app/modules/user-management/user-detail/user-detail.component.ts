@@ -18,6 +18,7 @@ import { IconTabBarComponent, IconTabBarTabComponent } from '@fundamental-ngx/pl
 import { Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { AuthService } from '../../auth/auth.service';
 import { UserManagementService } from '../user-management.service';
 import { UserFormDialogComponent } from '../user-form-dialog/user-form-dialog.component';
 import { Department, formatDate, fullName, User, UserManagementResolvedData, UserRole } from '../user-management.model';
@@ -62,8 +63,16 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         private userManagementService: UserManagementService,
         private messageService: MessageService,
         private dialogService: DialogService,
+        private authService: AuthService,
         public router: Router
     ) {}
+
+    /**
+     * Edit and status changes require the UserManagement.Edit module permission.
+     */
+    get canEditUsers(): boolean {
+        return this.authService.hasModulePermission('UserManagement.Edit');
+    }
 
     ngOnInit(): void {
         this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe(data => {

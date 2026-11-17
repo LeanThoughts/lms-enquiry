@@ -11,6 +11,11 @@ export class AuthService {
 
     public currentUser: any = null;
 
+    /** Module permissions from the first successful /api/me of this session, for example BusinessPartners.Display. */
+    public modulePermissions: string[] = [];
+
+    private modulePermissionsLoaded = false;
+
     /**
      * Constructor
      */
@@ -39,6 +44,7 @@ export class AuthService {
         return this.http.get<any>(meUrl, { observe: 'response' }).pipe(
             map(response => {
                 this.currentUser = response.body;
+                this.storeModulePermissions(response.body?.modulePermissions);
                 // If the BFF returns a 200 OK, the user is authenticated.
                 return response.status === 200;
             }),
@@ -46,6 +52,7 @@ export class AuthService {
                 // If the BFF returns 401 Unauthorized, or any other error, the user is not authenticated.
                 if (error.status === 401) {
                     console.warn('Authentication check failed on BFF:', error.status, error.message);
+                    this.clearSession();
                     return of(false);
                 }
                 else if (error.status === 0  && error.statusText === 'Unknown Error') {
@@ -68,6 +75,31 @@ export class AuthService {
         // Spring Security will handle the session invalidation and then redirect the browser to the logoutSuccessUrl configured in 
         // SecurityConfig.
         console.log('Initiating direct browser redirect for logout.');
+        this.clearSession();
         window.location.href = `${environment.primaryHost}/logout`;
-    }    
+    }
+
+    /**
+     * True when the signed-in user has the named module permission from /api/me.
+     */
+    public hasModulePermission(permission: string): boolean {
+        return this.modulePermissions.includes(permission);
+    }
+
+    /**
+     * Keep module permissions from the first /api/me of this login. Later calls leave the stored list in place.
+     */
+    private storeModulePermissions(modulePermissions: string[] | null | undefined): void {
+        if (this.modulePermissionsLoaded || !Array.isArray(modulePermissions)) {
+            return;
+        }
+        this.modulePermissions = [...modulePermissions];
+        this.modulePermissionsLoaded = true;
+    }
+
+    private clearSession(): void {
+        this.currentUser = null;
+        this.modulePermissions = [];
+        this.modulePermissionsLoaded = false;
+    }
 }

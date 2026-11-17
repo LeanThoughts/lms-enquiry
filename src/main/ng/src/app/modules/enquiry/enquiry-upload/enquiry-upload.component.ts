@@ -23,6 +23,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SelectionModel } from '@angular/cdk/collections';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
     selector: 'app-enquiry-upload',
@@ -80,7 +81,8 @@ export class EnquiryUploadComponent {
         private formBuilder: FormBuilder,
         public messageStripAlertService: MessageStripAlertService, 
         private enquiryUploadService: EnquiryUploadService,
-        private datetimeAdapter: DatetimeAdapter<FdDate>) 
+        private datetimeAdapter: DatetimeAdapter<FdDate>,
+        private authService: AuthService) 
     {
         this.downloadEnquiriesForm = this.formBuilder.group({
             enquiryDateFrom: [null],
@@ -117,6 +119,13 @@ export class EnquiryUploadComponent {
     }
 
     /**
+     * Uploading and creating enquiries require the UploadLoanEnquiries.Edit module permission.
+     */
+    get canUploadEnquiries(): boolean {
+        return this.authService.hasModulePermission('UploadLoanEnquiries.Edit');
+    }
+
+    /**
      * Handle file selection
      */
     handleFileSelection(files: File[]): void {
@@ -126,6 +135,9 @@ export class EnquiryUploadComponent {
      * Preview enquiries
      */
     previewEnquiries(): void {
+        if (!this.canUploadEnquiries) {
+            return;
+        }
         if (this.files.length > 0) {
             var formData = new FormData();
             formData.append('file', this.files[0], this.files[0].name);
@@ -175,6 +187,9 @@ export class EnquiryUploadComponent {
      * Create enquiries
      */
     createEnquiries(): void {
+        if (!this.canUploadEnquiries) {
+            return;
+        }
         this.enquiryUploadService.createExcelEnquiries().subscribe(
             (response: any) => {
                 this.enquiries = response.enquiries;

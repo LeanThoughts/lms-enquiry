@@ -11,6 +11,7 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { AuthService } from '../../auth/auth.service';
 import { CollateralService } from '../collateral.service';
 import { ChecklistIdConfiguration } from '../collateral.model';
 
@@ -39,7 +40,11 @@ export class ChecklistIdConfigComponent implements OnInit, OnDestroy {
 
     readonly sapHighest = new FormControl<number | null>(null, [Validators.required, Validators.min(0)]);
 
-    constructor(private collateralService: CollateralService, private messageService: MessageService) {}
+    constructor(
+        private collateralService: CollateralService,
+        private messageService: MessageService,
+        private authService: AuthService
+    ) {}
 
     ngOnInit(): void {
         this.load();
@@ -48,6 +53,11 @@ export class ChecklistIdConfigComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    /** Change mode also requires the Configuration.Edit module permission. */
+    get canEdit(): boolean {
+        return !!this.config?.canChange && this.authService.hasModulePermission('Configuration.Edit');
     }
 
     get noEditAccessText(): string {
@@ -107,6 +117,9 @@ export class ChecklistIdConfigComponent implements OnInit, OnDestroy {
     }
 
     change(): void {
+        if (!this.canEdit) {
+            return;
+        }
         this.errorMessage = '';
         this.sapHighest.reset(this.config?.sapHighestNumber ?? null);
         this.edit = true;

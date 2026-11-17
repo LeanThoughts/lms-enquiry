@@ -4,14 +4,16 @@
         [style.margin-top.rem]="1">
         <fd-dynamic-page-global-actions>
             <fd-toolbar fdType="transparent" [clearBorder]="true">
-                <button fd-button
-                    fd-toolbar-item
-                    fdType="positive"
-                    label="Send for Approval"
-                    [disabled]="isSendForApprovalDisabled()"
-                    (click)="sendForApproval()"
-                >
-                </button>
+                @if (canEditReferenceInterestRates) {
+                    <button fd-button
+                        fd-toolbar-item
+                        fdType="positive"
+                        label="Send for Approval"
+                        [disabled]="isSendForApprovalDisabled()"
+                        (click)="sendForApproval()"
+                    >
+                    </button>
+                }
             </fd-toolbar>
         </fd-dynamic-page-global-actions>
     </fd-dynamic-page-header>
@@ -33,6 +35,7 @@
             <app-generic-list
                 [entity]="'referenceInterestRateValues'"
                 [searchString1]="selectedReferenceRateTypeId"
+                [viewModeOnly]="!canEditReferenceInterestRates"
             />
         }
         @else {

@@ -14,9 +14,11 @@
                     <button fd-toolbar-item fd-button fdCompact fdType="positive" (click)="createBusinessPartner()"
                         label="Create" title="Create">
                     </button>
-                    <button fd-toolbar-item fd-button fdCompact fdType="negative" (click)="updateBusinessPartner()"
-                        label="Update" title="Update" [disabled]="!selectedBusinessPartner">
-                    </button>
+                    @if (canUpdateBusinessPartner) {
+                        <button fd-toolbar-item fd-button fdCompact fdType="negative" (click)="updateBusinessPartner()"
+                            label="Update" title="Update" [disabled]="!selectedBusinessPartner">
+                        </button>
+                    }
                     <button fd-toolbar-item fd-button fdCompact fdType="negative" (click)="viewBusinessPartner()"
                         label="View" title="View" [disabled]="!selectedBusinessPartner">
                     </button>
