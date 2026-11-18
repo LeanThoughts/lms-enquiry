@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { FDB_NAVIGATION, FdbNavigationState } from '@fundamental-ngx/btp/navigation';
 import { 
     AvatarComponent, 
     BarComponent, 
@@ -10,13 +11,11 @@ import {
     ProductSwitchComponent, 
     ProductSwitchItem, 
     ShellbarModule, 
-    SideNavigationModel, 
-    SideNavigationModule,
     MenuModule,
     ThemingModule
 } from '@fundamental-ngx/core';
 import { LayoutGridModule } from '@fundamental-ngx/core';
-import { SideNavigationService } from './side-navigation.service';
+import { SideNavigationItem, SideNavigationService } from './side-navigation.service';
 import { 
     UserMenuBodyComponent, 
     UserMenuComponent, 
@@ -32,7 +31,7 @@ import { AuthService } from '../../../../modules/auth/auth.service';
     selector: 'app-classic-layout',
     standalone: true,
     templateUrl: './classic.component.html',
-    // styleUrl: './classic.component.scss',
+    styleUrl: './classic.component.scss',
     imports: [
         ButtonComponent,
         RouterOutlet, 
@@ -59,8 +58,8 @@ import { AuthService } from '../../../../modules/auth/auth.service';
         // UserMenuBodyComponent,
         CommonModule,
         LayoutGridModule,
-        // NgTemplateOutlet,
-        SideNavigationModule,
+        FDB_NAVIGATION,
+        RouterLink,
         BarComponent,
         BarRightDirective,
         ThemingModule
@@ -74,8 +73,11 @@ export class ClassicLayoutComponent implements OnInit {
     expanded: boolean = true;
 
     productSwitcher: ProductSwitchItem[];
-    sideNavigationConfiguration: SideNavigationModel;
-    
+    navigationItems: SideNavigationItem[];
+
+    /** BTP navigation is expanded or snapped. Selection itself follows the current route. */
+    navigationState: FdbNavigationState = 'expanded';
+
     sideNavigationExpanded: boolean = window.innerWidth > 768;
 
     themes: CompleteThemeDefinition[];
@@ -92,7 +94,7 @@ export class ClassicLayoutComponent implements OnInit {
     )
     {
         this.productSwitcher = this.sideNavigationService.productSwitcher();
-        this.sideNavigationConfiguration = this.sideNavigationService.sideNavigationConfiguration();
+        this.navigationItems = this.sideNavigationService.navigationItems();
         this.themes = this.themingService.getThemes();
 
     }

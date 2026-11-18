@@ -1,0 +1,19 @@
+.app-body {
+    flex-wrap: nowrap;
+}
+
+.app-side-nav {
+    flex: 0 0 16rem;
+    width: 16rem;
+    max-width: 16rem;
+}
+
+.app-side-nav fdb-navigation {
+    width: 100%;
+}
+
+.app-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+}

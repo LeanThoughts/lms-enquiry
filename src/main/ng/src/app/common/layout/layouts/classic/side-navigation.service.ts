@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { NestedListItem, ProductSwitchItem, SideNavigationModel } from "@fundamental-ngx/core";
+import { ProductSwitchItem } from "@fundamental-ngx/core";
 import { AuthService } from "../../../../modules/auth/auth.service";
 
 const BUSINESS_PARTNERS_DISPLAY = 'BusinessPartners.Display';
@@ -10,6 +10,17 @@ const OUTSTANDING_APPROVALS_DISPLAY = 'OutstandingApprovals.Display';
 const CONFIGURATION_DISPLAY = 'Configuration.Display';
 const REFERENCE_INTEREST_RATES_DISPLAY = 'ReferenceInterestRates.Display';
 const UPLOAD_LOAN_ENQUIRIES_DISPLAY = 'UploadLoanEnquiries.Display';
+const LOAN_CONTRACTS_DISPLAY = 'LoanContracts.Display';
+const SAP_INTEGRATION_LOG_DISPLAY = 'SapIntegrationLog.Display';
+
+/** One entry in the BTP side navigation. A parent without routerLink only expands and collapses. */
+export interface SideNavigationItem {
+    title: string;
+    icon: string;
+    routerLink?: string;
+    expanded?: boolean;
+    children?: SideNavigationItem[];
+}
 
 @Injectable({
     providedIn: 'root'
@@ -26,73 +37,94 @@ export class SideNavigationService {
 
     /**
      * Main navigation for the signed-in user. Business Partners is included only with BusinessPartners.Display.
+     * Selection follows the route, so opening Home or Inbox clears Business Partners.
      */
-    public sideNavigationConfiguration(): SideNavigationModel {
-        const items: NestedListItem[] = [
-            // Folders in menu order. A folder opens and closes when its title is clicked;
-            // the third argument is whether it is open when the application starts.
-            this.folder('Home', 'home', true, [
-                { link: { icon: 'home', title: 'Home', routerLink: 'homepage' } },
-                { link: { icon: 'inbox', title: 'Inbox', routerLink: 'inbox' } },
-            ]),
+    public navigationItems(): SideNavigationItem[] {
+        const items: SideNavigationItem[] = [
+            {
+                title: 'Home',
+                icon: 'home',
+                expanded: true,
+                children: [
+                    { title: 'Home', icon: 'home', routerLink: '/homepage' },
+                    { title: 'Inbox', icon: 'inbox', routerLink: '/inbox' },
+                ]
+            }
         ];
 
         if (this.authService.hasModulePermission(BUSINESS_PARTNERS_DISPLAY)) {
-            items.push(this.folder('Master Data', 'database', true, [
-                // { link: { icon: 'home', title: 'New Loan Enquiry', routerLink: 'homepage' } },
-                // { link: { icon: 'home', title: 'Enquiry Alerts', routerLink: 'homepage' } },
-                // { link: { icon: 'home', title: 'Enquiry List', routerLink: 'homepage' } },
-                { link: { icon: 'leads', title: 'Business Partners', routerLink: 'business-partners' } },
-            ]));
+            items.push({
+                title: 'Master Data',
+                icon: 'database',
+                expanded: true,
+                children: [
+                    { title: 'Business Partners', icon: 'leads', routerLink: '/business-partners' },
+                ]
+            });
         }
 
-        items.push(
-            this.folder('Loan Processes', 'loan', true, [
-                { link: { icon: 'loan', title: 'Loan Contracts List', routerLink: 'loan-contract-search' } },
-            ]),
-        );
+        if (this.authService.hasModulePermission(LOAN_CONTRACTS_DISPLAY)) {
+            items.push({
+                title: 'Loan Processes',
+                icon: 'loan',
+                expanded: true,
+                children: [
+                    { title: 'Loan Contracts List', icon: 'loan', routerLink: '/loan-contract-search' },
+                ]
+            });
+        }
 
         if (this.authService.hasModulePermission(UPLOAD_LOAN_ENQUIRIES_DISPLAY)) {
-            items.push(this.folder('Business Development', 'opportunities', true, [
-                { link: { icon: 'upload-to-cloud', title: 'Upload Loan Enquiries', routerLink: 'enquiry-upload' } },
-            ]));
+            items.push({
+                title: 'Business Development',
+                icon: 'opportunities',
+                expanded: true,
+                children: [
+                    { title: 'Upload Loan Enquiries', icon: 'upload-to-cloud', routerLink: '/enquiry-upload' },
+                ]
+            });
         }
 
         if (this.authService.hasModulePermission(REFERENCE_INTEREST_RATES_DISPLAY)) {
-            items.push(this.folder('Risk Department', 'trend-up', true, [
-                { link: { icon: 'trend-up', title: 'Reference Interest Rates', routerLink: 'reference-interest-rates' } },
-            ]));
+            items.push({
+                title: 'Risk Department',
+                icon: 'trend-up',
+                expanded: true,
+                children: [
+                    { title: 'Reference Interest Rates', icon: 'trend-up', routerLink: '/reference-interest-rates' },
+                ]
+            });
         }
 
-        // Reports app: the catalogue of reports by module, each report launched from its module's list
-        items.push({ link: { icon: 'bar-chart', title: 'Reports', routerLink: 'reports' } });
+        items.push({ title: 'Reports', icon: 'bar-chart', routerLink: '/reports' });
 
-        const administrationItems: NestedListItem[] = [
-            { link: { icon: 'connected', title: 'SAP Integration Log', routerLink: 'sap-integration-log' } },
-        ];
+        const administrationChildren: SideNavigationItem[] = [];
+        if (this.authService.hasModulePermission(SAP_INTEGRATION_LOG_DISPLAY)) {
+            administrationChildren.push({ title: 'SAP Integration Log', icon: 'connected', routerLink: '/sap-integration-log' });
+        }
         if (this.authService.hasModulePermission(USER_MANAGEMENT_DISPLAY)) {
-            administrationItems.push({ link: { icon: 'user-settings', title: 'User Management', routerLink: 'user-management' } });
+            administrationChildren.push({ title: 'User Management', icon: 'user-settings', routerLink: '/user-management' });
         }
         if (this.authService.hasModulePermission(WORKFLOW_APPROVERS_DISPLAY)) {
-            administrationItems.push({ link: { icon: 'workflow-tasks', title: 'Workflow Approvers', routerLink: 'workflow-approvers' } });
+            administrationChildren.push({ title: 'Workflow Approvers', icon: 'workflow-tasks', routerLink: '/workflow-approvers' });
         }
         if (this.authService.hasModulePermission(OUTSTANDING_APPROVALS_DISPLAY)) {
-            administrationItems.push({ link: { icon: 'task', title: 'Outstanding Approvals', routerLink: 'outstanding-approvals' } });
+            administrationChildren.push({ title: 'Outstanding Approvals', icon: 'task', routerLink: '/outstanding-approvals' });
         }
-        // { link: { icon: 'home', title: 'Email Events', routerLink: 'homepage' } },
-        if (administrationItems.length > 0) {
-            items.push(this.folder('Administration', 'user-settings', false, administrationItems));
+        if (administrationChildren.length > 0) {
+            items.push({
+                title: 'Administration',
+                icon: 'user-settings',
+                expanded: false,
+                children: administrationChildren
+            });
         }
 
-        // Configuration workspace: its apps are on the tabs of the workspace (by module)
         if (this.authService.hasModulePermission(CONFIGURATION_DISPLAY)) {
-            items.push({ link: { icon: 'action-settings', title: 'Configuration', routerLink: 'configuration' } });
+            items.push({ title: 'Configuration', icon: 'action-settings', routerLink: '/configuration' });
         }
 
-        return {
-            condensed: false,
-            mainNavigation: { items }
-        };
+        return items;
     }
 
     /**
@@ -122,25 +154,6 @@ export class SideNavigationService {
         }
 
         return products;
-    }
-
-    /**
-     * Menu folder: opens and closes from its arrow and from its title.
-     */
-    private folder(title: string, icon: string, expanded: boolean, items: NestedListItem[]): NestedListItem {
-        const folder: NestedListItem = {
-            link: { icon, title, callback: () => folder.expanded = !folder.expanded },
-            expanded,
-            list: { items }
-        };
-        return folder;
-    }
-
-    /**
-     * Side Navigation and Product Switcher Callback function
-     */
-    callbackFunction(message: string): void {
-        alert('Link Clicked ' + message);
     }
 
 }

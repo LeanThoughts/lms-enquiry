@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { LoanContractSearchComponent } from "./loan-contract-search.component";
 import { LoanContractSearchService } from "./loan-contract-search.service";
 import { routeInterceptor } from "../../route.interceptor";
+import { modulePermissionGuard } from "../auth/module-permission.guard";
 import { ProcessEnquiryComponent } from "./functional-stage/process-enquiry/process-enquiry.component";
 import { ProcessEnquiryService } from "./functional-stage/process-enquiry/process-enquiry.service";
 import { ProjectProposalComponent } from "./functional-stage/process-enquiry/project-proposal/project-proposal.component";
@@ -26,7 +27,8 @@ export default [
         resolve: {
             routeResolver: LoanContractSearchService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.Display' },
     },
     {
         path: 'process-enquiry/:enquiryActionId/loanApplication/:loanApplicationId',
@@ -34,7 +36,8 @@ export default [
         resolve: {
             routeResolvedData: ProcessEnquiryService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.ProcessEnquiry.Display' },
     },
     {
         path: 'process-enquiry/:enquiryActionId/loanApplication/:loanApplicationId/create-project-proposal',
@@ -42,7 +45,8 @@ export default [
         resolve: {
             routeResolvedData: ProjectProposalService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.ProcessEnquiry.Display' },
     },
     {
         path: 'process-enquiry/:enquiryActionId/loanApplication/:loanApplicationId/update-project-proposal/:projectProposalId',
@@ -50,7 +54,8 @@ export default [
         resolve: {
             routeResolvedData: ProjectProposalService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.ProcessEnquiry.Display' },
     },
     {
         path: 'process-enquiry/:enquiryActionId/loanApplication/:loanApplicationId/view-project-proposal/:projectProposalId',
@@ -58,7 +63,8 @@ export default [
         resolve: {
             routeResolvedData: ProjectProposalService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.ProcessEnquiry.Display' },
     },
     {
         path: 'icc-inprinciple-approval/:iccInprincipleApprovalId/loanApplication/:loanApplicationId',
@@ -66,7 +72,8 @@ export default [
         resolve: {
             routeResolvedData: IccInprincipleApprovalService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.IccApproval.Display' },
     },
     {
         path: 'risk-assessment/:riskAssessmentId/loanApplication/:loanApplicationId',
@@ -74,7 +81,8 @@ export default [
         resolve: {
             routeResolvedData: RiskAssessmentService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.RiskAssessment.Display' },
     },
     {
         path: 'application-fee/:applicationFeeId/loanApplication/:loanApplicationId',
@@ -82,7 +90,8 @@ export default [
         resolve: {
             routeResolvedData: ApplicationFeeService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.ApplicationFee.Display' },
     },
     {
         path: 'bmc-approval/:bmcApprovalId/loanApplication/:loanApplicationId',
@@ -90,7 +99,8 @@ export default [
         resolve: {
             routeResolvedData: BmcApprovalService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.BmcApproval.Display' },
     },
     {
         path: 'board-approval/:boardApprovalId/loanApplication/:loanApplicationId',
@@ -98,7 +108,8 @@ export default [
         resolve: {
             routeResolvedData: BoardApprovalService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.BoardApproval.Display' },
     },
     {
         path: 'sanction/:sanctionId/loanApplication/:loanApplicationId',
@@ -106,6 +117,7 @@ export default [
         resolve: {
             routeResolvedData: SanctionService
         },
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'LoanContracts.Sanction.Display' },
     },
 ] as Routes;

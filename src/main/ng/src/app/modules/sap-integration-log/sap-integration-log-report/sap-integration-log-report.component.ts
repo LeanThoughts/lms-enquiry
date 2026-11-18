@@ -14,6 +14,7 @@ import {
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../message.service';
+import { AuthService } from '../../auth/auth.service';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../collateral-management/confirm-dialog/confirm-dialog.component';
 import {
     EMPTY_SAP_LOG_FILTER,
@@ -62,7 +63,8 @@ export class SapIntegrationLogReportComponent implements OnInit, OnDestroy {
 
     constructor(private service: SapIntegrationLogService,
                 private messageService: MessageService,
-                private dialogService: DialogService) { }
+                private dialogService: DialogService,
+                private authService: AuthService) { }
 
     ngOnInit(): void {
         this.load();
@@ -79,6 +81,11 @@ export class SapIntegrationLogReportComponent implements OnInit, OnDestroy {
 
     get canView(): boolean {
         return !!this.data?.canView;
+    }
+
+    /** Delete is offered only with SapIntegrationLog.Edit, and only when the report allows a purge. */
+    get canDelete(): boolean {
+        return !!this.data?.canPurge && this.authService.hasModulePermission('SapIntegrationLog.Edit');
     }
 
     get rangeText(): string {
@@ -204,7 +211,7 @@ export class SapIntegrationLogReportComponent implements OnInit, OnDestroy {
     }
 
     purge(): void {
-        if (!this.data?.canPurge || this.purging) {
+        if (!this.canDelete || this.purging) {
             return;
         }
         const days = Math.max(0, Math.floor(this.purgeDays || 0));

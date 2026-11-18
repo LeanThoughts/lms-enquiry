@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { routeInterceptor } from '../../route.interceptor';
+import { modulePermissionGuard } from '../auth/module-permission.guard';
 import { BupaFieldStatusComponent } from './bupa-field-status/bupa-field-status.component';
 import { BupaEntitySetFieldStatusComponent } from './bupa-entity-set-field-status/bupa-entity-set-field-status.component';
 import { ChecklistIdConfigComponent } from '../collateral-management/checklist-id-config/checklist-id-config.component';
@@ -15,7 +16,8 @@ export default [
     {
         path: 'configuration',
         component: ConfigurationShellComponent,
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'Configuration.Display' },
         children: [
             { path: '', redirectTo: 'bupa-field-status', pathMatch: 'full' },
             // Business Partner

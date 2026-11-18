@@ -29,6 +29,7 @@ import { ApplicationFeeService } from './functional-stage/application-fee/applic
 import { BmcApprovalService } from './functional-stage/bmc-approval/bmc-approval.service';
 import { BoardApprovalService } from './functional-stage/board-approval/board-approval.service';
 import { SanctionService } from './functional-stage/sanction/sanction.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
     selector: 'app-loan-contract-search',
@@ -65,17 +66,24 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
 
     subtitle: string = LoanContractSearchComponent.DEFAULT_SUBTITLE;
 
-    // Functional stages that can be opened for the selected enquiry, in the order of the loan life cycle
-    readonly stages = [
-        { label: 'Process Enquiry', open: () => this.redirectToProcessEnquiry() },
-        { label: 'ICC Approval', open: () => this.redirectToICCApproval() },
-        { label: 'Risk Assessment', open: () => this.redirectToRiskAssessment() },
-        { label: 'Application Fee', open: () => this.redirectToApplicationFee() },
-        { label: 'BMC Approval', open: () => this.redirectToBmcApproval() },
-        { label: 'Board Approval', open: () => this.redirectToBoardApproval() },
-        { label: 'Sanction', open: () => this.redirectToSanction() },
-        { label: 'Collaterals', open: () => this.redirectToCollaterals() },
+    // Functional stages that can be opened for the selected enquiry, in the order of the loan life cycle.
+    // A stage with a display permission is shown only when /api/me includes that permission.
+    readonly stages: { label: string; display?: string; open: () => void }[] = [
+        { label: 'Process Enquiry', display: 'LoanContracts.ProcessEnquiry.Display', open: () => this.redirectToProcessEnquiry() },
+        { label: 'ICC Approval', display: 'LoanContracts.IccApproval.Display', open: () => this.redirectToICCApproval() },
+        { label: 'Risk Assessment', display: 'LoanContracts.RiskAssessment.Display', open: () => this.redirectToRiskAssessment() },
+        { label: 'Application Fee', display: 'LoanContracts.ApplicationFee.Display', open: () => this.redirectToApplicationFee() },
+        { label: 'BMC Approval', display: 'LoanContracts.BmcApproval.Display', open: () => this.redirectToBmcApproval() },
+        { label: 'Board Approval', display: 'LoanContracts.BoardApproval.Display', open: () => this.redirectToBoardApproval() },
+        { label: 'Sanction', display: 'LoanContracts.Sanction.Display', open: () => this.redirectToSanction() },
+        { label: 'Collaterals', display: 'LoanContracts.Collaterals.Display', open: () => this.redirectToCollaterals() },
     ];
+
+    /** Stages the signed-in user is allowed to open. */
+    get visibleStages(): { label: string; display?: string; open: () => void }[] {
+        return this.stages.filter(stage =>
+            !stage.display || this.authService.hasModulePermission(stage.display));
+    }
 
     /**
      * Constructor
@@ -89,7 +97,8 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
                 private boardApprovalService: BoardApprovalService,
                 private sanctionService: SanctionService,
                 public router: Router,
-                private messageService: MessageService)
+                private messageService: MessageService,
+                private authService: AuthService)
     {
     }
 

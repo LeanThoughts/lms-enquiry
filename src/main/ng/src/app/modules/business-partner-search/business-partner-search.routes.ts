@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { routeInterceptor } from "../../route.interceptor";
+import { modulePermissionGuard } from "../auth/module-permission.guard";
 import { BusinessPartnerUpdateComponent } from "./business-partner-update/business-partner-update.component";
 import { BusinessPartnerSearchService } from "./business-partner-search.service";
 import { BusinessPartnerSearchComponent } from "./business-partner-search.component";
@@ -9,7 +10,8 @@ export default [
     {
         path: 'business-partners',
         component: BusinessPartnerSearchComponent,
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'BusinessPartners.Display' },
         resolve: {
             routeResolvedData: BusinessPartnerSearchService
         }
@@ -17,7 +19,8 @@ export default [
     {
         path: 'business-partners/profile/create',
         component: PartnerDetailsUpdateComponent,
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'BusinessPartners.Display' },
         resolve: {
             routeResolvedData: BusinessPartnerSearchService
         }
@@ -25,7 +28,8 @@ export default [
     {
         path: 'business-partners/profile/update/:id',
         component: PartnerDetailsUpdateComponent,
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'BusinessPartners.Display' },
         resolve: {
             routeResolvedData: BusinessPartnerSearchService
         }
@@ -33,7 +37,8 @@ export default [
     {
         path: 'business-partners/:operation/:id',
         component: BusinessPartnerUpdateComponent,
-        canActivate: [routeInterceptor],
+        canActivate: [routeInterceptor, modulePermissionGuard],
+        data: { modulePermission: 'BusinessPartners.Display' },
         resolve: {
             routeResolvedData: BusinessPartnerSearchService
         }

@@ -123,6 +123,12 @@ export class HomepageComponent implements OnInit, OnDestroy {
             if (this.isBorrower && !action.borrowerAccess) {
                 return false;
             }
+            if (action.label === 'Create Business Partner') {
+                return this.authService.hasModulePermission('BusinessPartners.Display');
+            }
+            if (action.label === 'Search Loan Contracts') {
+                return this.authService.hasModulePermission('LoanContracts.Display');
+            }
             if (action.label === 'Reference Interest Rates') {
                 return this.authService.hasModulePermission('ReferenceInterestRates.Display');
             }

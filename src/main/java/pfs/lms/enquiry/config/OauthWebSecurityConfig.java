@@ -28,6 +28,7 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final OAuth2AuthorizationRequestResolver pkceAuthorizationRequestResolver; // 1. Inject the custom resolver
     private final CustomOidcUserService customOidcUserService; // Inject your custom service
     private final RoleGroupProperties roleGroupProperties;
+    private final ModuleGroupIds moduleGroupIds;
 
     // Relative urls are resolved against the request host and the /enquiry context path
     @Value("${app.oauth2.login-success-url:http://localhost:9000/enquiry/homepage}")
@@ -96,7 +97,7 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
             name = "admin@gmail.com";
         }
         Collection<GrantedAuthority> authorities = roleGroupProperties.authoritiesFor(
-                RoleGroupProperties.strings(jwt.getClaim("groups")));
+                moduleGroupIds.expand(RoleGroupProperties.strings(jwt.getClaim("groups"))));
         return new JwtAuthenticationToken(jwt, authorities, name);
     }
 

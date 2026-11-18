@@ -5,7 +5,7 @@
             <fd-toolbar fdType="transparent" [clearBorder]="true">
                 <button fd-button fdType="transparent" glyph="excel-attachment" label="Export CSV"
                     [disabled]="!data || !data.total || exporting || !canView" (click)="exportCsv()"></button>
-                @if (data?.canPurge) {
+                @if (canDelete) {
                     <span class="sl-purge">
                         <label fd-form-label for="sl-purge-days" class="sl-purge__label">Delete older than</label>
                         <input fd-form-control id="sl-purge-days" type="number" min="0" class="sl-purge__days"

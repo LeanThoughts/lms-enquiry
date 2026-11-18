@@ -3,7 +3,7 @@
         <fd-dynamic-page-global-actions>
             <fd-toolbar fdType="transparent" [clearBorder]="true">
                 <ng-container [fdCompact]="'compact'">
-                    @for (stage of stages; track stage.label) {
+                    @for (stage of visibleStages; track stage.label) {
                         <button fd-button
                             fd-toolbar-item
                             fdCompact

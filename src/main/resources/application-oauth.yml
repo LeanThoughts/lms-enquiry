@@ -49,7 +49,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: dn47gh3y
+    password: Marines1@
     maximum-pool-size: 40
     url: jdbc:mysql://localhost:3306/pfsenquiry?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Kolkata
     validation-query: select 1
@@ -150,7 +150,13 @@ logging:
         security: INFO
 
 # Entra group object id -> module permission name returned by /api/me.
+# A group on the user, such as AppraisalOfficer, may itself be a member of these
+# groups. Those memberships are read from Microsoft Graph and mapped to the names below.
+# The app registration needs the GroupMember.Read.All application permission with admin consent.
 app:
+  entra:
+    group-memberships:
+      enabled: true
   role-groups:
     - name: BusinessPartners.Display
       group-id: bc44367a-9b1d-4e88-aabf-7b2d32641bb7
@@ -180,6 +186,42 @@ app:
       group-id: 08f138ba-060d-47c7-901d-6db273047697
     - name: UploadLoanEnquiries.Edit
       group-id: 814ab64a-5316-4d5c-97bb-a06c2521bf34
+    - name: SapIntegrationLog.Display
+      group-id: 75d8c2fe-fa5f-4786-9014-2f9b31b3ac4b
+    - name: SapIntegrationLog.Edit
+      group-id: bb81292b-4c88-44c8-bd69-6aa6022c4d00
+    - name: LoanContracts.Display
+      group-id: 1d94b0f1-1875-4459-b1af-8aefae828e20
+    - name: LoanContracts.ProcessEnquiry.Display
+      group-id: 72b06008-1cae-46eb-973a-9ef298831e65
+    - name: LoanContracts.ProcessEnquiry.Edit
+      group-id: 29c589b2-d369-4e03-b605-3b2df60db768
+    - name: LoanContracts.IccApproval.Display
+      group-id: b25f7d7b-7221-4bee-addc-09f3a6062c96
+    - name: LoanContracts.IccApproval.Edit
+      group-id: c2d68771-6c02-4387-afcc-65767df13055
+    - name: LoanContracts.RiskAssessment.Display
+      group-id: e7ce49f6-ea12-4ac1-927b-860f076668b1
+    - name: LoanContracts.RiskAssessment.Edit
+      group-id: 173c0a28-e70f-4226-ae28-9e18ae33dd91
+    - name: LoanContracts.ApplicationFee.Display
+      group-id: e9b862be-d585-4122-9ccf-b528220cd1c2
+    - name: LoanContracts.ApplicationFee.Edit
+      group-id: bda38fed-8a06-43d6-8db3-611f1981f404
+    - name: LoanContracts.BmcApproval.Display
+      group-id: 4f0ede2f-b6f6-499b-a6df-26f6980e2b7e
+    - name: LoanContracts.BmcApproval.Edit
+      group-id: e388d187-6927-401d-bc53-97fcfbc17a0e
+    - name: LoanContracts.BoardApproval.Display
+      group-id: ca01e274-b6d7-4c08-a0e1-4fcbbf3cffcd
+    - name: LoanContracts.BoardApproval.Edit
+      group-id: 76100406-d6de-4a42-94d4-7d072a1c4f44
+    - name: LoanContracts.Sanction.Display
+      group-id: abe549ee-f384-4512-9827-e2a425de1f8a
+    - name: LoanContracts.Collaterals.Display
+      group-id: 42dfaac0-80a7-46c0-b8c5-80da8c93787b
+    - name: LoanContracts.Collaterals.Edit
+      group-id: 645ae6d8-94cd-4233-926e-64124007c060
 
 
 # leanthoughts

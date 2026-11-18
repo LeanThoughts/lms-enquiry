@@ -1,6 +1,9 @@
 package pfs.lms.enquiry.sapintegrationservice;
 
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,7 +30,7 @@ import java.time.LocalDate;
  * <li>{@code GET /administration/sap-http-log} — paged, filtered list with totals;</li>
  * <li>{@code GET /administration/sap-http-log/{id}} — one call with request and response;</li>
  * <li>{@code GET /administration/sap-http-log/export} — CSV of the filtered calls;</li>
- * <li>{@code DELETE /administration/sap-http-log?olderThanDays=n} — purge (role-gated).</li>
+ * <li>{@code DELETE /administration/sap-http-log?olderThanDays=n} — purge, only with SapIntegrationLog.Edit.</li>
  * </ul>
  */
 @ApiController
@@ -82,7 +85,23 @@ public class SapHttpLogController {
     @DeleteMapping(BASE)
     public ResponseEntity<PurgeResult> purge(@RequestParam(required = false) Integer olderThanDays,
                                              HttpServletRequest request) {
+        if (!hasEditPermission()) {
+            throw new LmsException("No access to purge the SAP integration log.", HttpStatus.FORBIDDEN);
+        }
         return ResponseEntity.ok(service.purge(olderThanDays, signedInUser(request)));
+    }
+
+    private static boolean hasEditPermission() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return false;
+        }
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if ("SapIntegrationLog.Edit".equals(authority.getAuthority())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Filter filter(String from, String to, String method, String outcome, String businessProcess,

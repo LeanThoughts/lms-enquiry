@@ -83,11 +83,32 @@
     </div>
 
     <!-- Side Navigation and Content (Main Router Outlet) -->
-    <div fdLayoutGridRow>
-        <div [fdLayoutGridCol]="0" [colMd]="2" *ngIf="sideNavigationExpanded">
-            <fd-side-nav [sideNavigationConfiguration]="sideNavigationConfiguration"></fd-side-nav>
+    <div fdLayoutGridRow class="app-body">
+        <div class="app-side-nav" *ngIf="sideNavigationExpanded">
+            <fdb-navigation type="vertical" [state]="navigationState" selectionMode="router" ariaLabel="Main navigation">
+                <fdb-navigation-content-start ariaLabel="Main navigation">
+                    @for (item of navigationItems; track item.title) {
+                        <fdb-navigation-list-item [expanded]="item.expanded === true">
+                            <ng-template fdbNavigationLinkRef>
+                                @if (item.routerLink) {
+                                    <a fdb-navigation-link [glyph]="item.icon" [routerLink]="item.routerLink">{{ item.title }}</a>
+                                } @else {
+                                    <button type="button" fdb-navigation-link [glyph]="item.icon">{{ item.title }}</button>
+                                }
+                            </ng-template>
+                            @for (child of item.children ?? []; track child.routerLink) {
+                                <fdb-navigation-list-item>
+                                    <ng-template fdbNavigationLinkRef>
+                                        <a fdb-navigation-link [glyph]="child.icon" [routerLink]="child.routerLink">{{ child.title }}</a>
+                                    </ng-template>
+                                </fdb-navigation-list-item>
+                            }
+                        </fdb-navigation-list-item>
+                    }
+                </fdb-navigation-content-start>
+            </fdb-navigation>
         </div>
-        <div [fdLayoutGridCol]="sideNavigationExpanded ? 10 : 12">
+        <div class="app-content">
             <router-outlet></router-outlet>
         </div>
     </div>
