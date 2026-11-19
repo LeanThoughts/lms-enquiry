@@ -47,6 +47,10 @@ export class BmcApprovalComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedBmcApproval: any;
 
+    get canEditBmcApproval(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.BmcApproval.Edit');
+    }
+
     /**
      * Constructor
      */

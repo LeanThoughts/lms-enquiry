@@ -50,6 +50,10 @@ export class ApplicationFeeComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedApplicationFee: any;
 
+    get canEditApplicationFee(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.ApplicationFee.Edit');
+    }
+
     /**
      * Constructor
      */

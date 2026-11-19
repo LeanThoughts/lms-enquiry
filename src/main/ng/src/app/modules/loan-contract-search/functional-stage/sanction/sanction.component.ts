@@ -46,6 +46,10 @@ export class SanctionComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedSanction: any;
 
+    get canEditSanction(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.Sanction.Edit');
+    }
+
     /**
      * Constructor
      */

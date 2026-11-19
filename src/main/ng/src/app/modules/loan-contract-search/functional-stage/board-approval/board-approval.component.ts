@@ -46,6 +46,10 @@ export class BoardApprovalComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedBoardApproval: any;
 
+    get canEditBoardApproval(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.BoardApproval.Edit');
+    }
+
     /**
      * Constructor
      */

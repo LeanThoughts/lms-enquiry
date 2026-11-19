@@ -6,6 +6,7 @@ import { ApplicationFeeService } from '../application-fee.service';
 import { BusinessPartnerSearchService } from '../../../../business-partner-search/business-partner-search.service';
 import { MessageService } from '../../../../../message.service';
 import { SearchPartnersDialogComponent } from '../search-partners-dialog/search-partners-dialog.component';
+import { AuthService } from '../../../../auth/auth.service';
 
 const MAIN_LOAN_PARTNER_ROLE = 'TR0100';
 
@@ -57,6 +58,10 @@ export class InvoicingDetailsComponent implements OnInit {
     invoicingDetail: any = null;
     saving: boolean = false;
 
+    get canEditApplicationFee(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.ApplicationFee.Edit');
+    }
+
     private states: any[] = [];
 
     /**
@@ -67,7 +72,8 @@ export class InvoicingDetailsComponent implements OnInit {
         private dialogService: DialogService,
         private applicationFeeService: ApplicationFeeService,
         private businessPartnerSearchService: BusinessPartnerSearchService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private authService: AuthService
     ) {
         this.states = route.snapshot.data['routeResolvedData']?.state ?? [];
     }

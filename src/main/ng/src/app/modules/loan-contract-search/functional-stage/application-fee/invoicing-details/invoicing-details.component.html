@@ -1,14 +1,16 @@
 <fd-layout-grid [noGap]="true" class="tab-component-grid">
     <div fdLayoutGridRow>
         <div fdLayoutGridCol [style.padding.rem]="1" style="background-color: white;">
-            <button fd-button
-                fdType="emphasized"
-                label="Select Partner"
-                glyph="search"
-                [disabled]="saving"
-                (click)="searchPartners()"
-            >
-            </button>
+            @if (canEditApplicationFee) {
+                <button fd-button
+                    fdType="emphasized"
+                    label="Select Partner"
+                    glyph="search"
+                    [disabled]="saving"
+                    (click)="searchPartners()"
+                >
+                </button>
+            }
         </div>
     </div>
 

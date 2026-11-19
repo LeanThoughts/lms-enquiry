@@ -47,6 +47,10 @@ export class RiskAssessmentComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedRiskAssessment: any;
 
+    get canEditRiskAssessment(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.RiskAssessment.Edit');
+    }
+
     /**
      * Constructor
      */
