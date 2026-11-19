@@ -48,6 +48,10 @@ export class ProcessEnquiryComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedEnquiryAction: any;
 
+    get canEditProcessEnquiry(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.ProcessEnquiry.Edit');
+    }
+
     /**
      * Constructor
      */

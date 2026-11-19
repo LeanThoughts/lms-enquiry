@@ -175,13 +175,15 @@
     </fd-dialog-body>
     <fd-dialog-footer>
         @if (dialogRef.data.operation !== 'View') {
-            <fd-button-bar
-                label="Save"
-                (click)="submit()"
-                fdType="emphasized"
-                ariaLabel="Save"
-            >
-            </fd-button-bar>        
+            @if (canSave) {
+                <fd-button-bar
+                    label="Save"
+                    (click)="submit()"
+                    fdType="emphasized"
+                    ariaLabel="Save"
+                >
+                </fd-button-bar>
+            }
             <fd-button-bar
                 label="Cancel"
                 (click)="dialogRef.close('Cancelled')"

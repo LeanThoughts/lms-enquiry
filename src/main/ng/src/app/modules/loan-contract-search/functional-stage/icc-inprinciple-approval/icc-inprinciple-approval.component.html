@@ -12,15 +12,17 @@
                 >
                 </button>
 
-                <button fd-button
-                    fd-toolbar-item
-                    fdType="positive"
-                    label="Send for Approval"
-                    [style.margin-left.rem]="0.1"
-                    [disabled]="(!selectedIccInprincipleApproval || selectedIccInprincipleApproval.workFlowStatusCode === 2) || disableSendForApproval === true"
-                    (click)="sendForApproval()"
-                >
-                </button>
+                @if (canEditIccApproval) {
+                    <button fd-button
+                        fd-toolbar-item
+                        fdType="positive"
+                        label="Send for Approval"
+                        [style.margin-left.rem]="0.1"
+                        [disabled]="(!selectedIccInprincipleApproval || selectedIccInprincipleApproval.workFlowStatusCode === 2) || disableSendForApproval === true"
+                        (click)="sendForApproval()"
+                    >
+                    </button>
+                }
             </fd-toolbar>
         </fd-dynamic-page-global-actions>
     </fd-dynamic-page-header>

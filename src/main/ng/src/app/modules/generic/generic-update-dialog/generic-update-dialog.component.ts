@@ -22,6 +22,8 @@ import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { CustomDialogComponent } from '../../../custom-dialog.component';
+import { AuthService } from '../../auth/auth.service';
+import { hasEntityEditPermission } from '../config/entity-edit-permissions';
 
 @Component({
     selector: 'app-generic-update-dialog',
@@ -65,8 +67,13 @@ export class GenericUpdateDialogComponent implements OnInit {
         private messageService: MessageService,
         private injector: Injector,
         private datetimeAdapter: DatetimeAdapter<FdDate>,
-        private dialogService: DialogService
+        private dialogService: DialogService,
+        private authService: AuthService
     ) {}
+
+    get canSave(): boolean {
+        return hasEntityEditPermission(this.entity, (permission) => this.authService.hasModulePermission(permission));
+    }
 
     /**
      * Initialize the component

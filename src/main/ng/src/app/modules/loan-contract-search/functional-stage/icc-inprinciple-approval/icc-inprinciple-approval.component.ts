@@ -47,6 +47,10 @@ export class ICCInprincipleApprovalComponent implements OnInit, OnDestroy {
     selectedEnquiry: any;
     selectedIccInprincipleApproval: any;
 
+    get canEditIccApproval(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.IccApproval.Edit');
+    }
+
     /**
      * Constructor
      */

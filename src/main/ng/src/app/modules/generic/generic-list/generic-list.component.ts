@@ -10,15 +10,7 @@ import { DatePipe } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { CustomDialogComponent } from '../../../custom-dialog.component';
 import { AuthService } from '../../auth/auth.service';
-
-const PROCESS_ENQUIRY_LIST_ENTITIES = new Set([
-    'processEnquiryProjectProposal',
-    'processEnquiryRejectedByPFS',
-    'processEnquiryOtherDetails',
-    'processEnquiryReasonForDelay',
-    'processEnquiryEnquiryCompletion',
-    'processEnquiryRejectedByCustomer',
-]);
+import { hasEntityEditPermission } from '../config/entity-edit-permissions';
 
 @Component({
     selector: 'app-generic-list',
@@ -112,16 +104,13 @@ export class GenericListComponent implements OnInit, OnDestroy {
     ) {}
 
     /**
-     * Create, update and delete on process enquiry lists require LoanContracts.ProcessEnquiry.Edit.
+     * Create, update and delete require Edit permission when configured for the entity.
      */
     get canShowMutatingActions(): boolean {
         if (this.viewModeOnly) {
             return false;
         }
-        if (PROCESS_ENQUIRY_LIST_ENTITIES.has(this.entity)) {
-            return this.authService.hasModulePermission('LoanContracts.ProcessEnquiry.Edit');
-        }
-        return true;
+        return hasEntityEditPermission(this.entity, (permission) => this.authService.hasModulePermission(permission));
     }
 
     /**

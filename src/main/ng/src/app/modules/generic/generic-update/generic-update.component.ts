@@ -20,6 +20,8 @@ import { Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
+import { hasEntityEditPermission } from '../config/entity-edit-permissions';
 
 @Component({
     selector: 'app-generic-update',
@@ -77,8 +79,16 @@ export class GenericUpdateComponent implements OnInit {
         private messageService: MessageService,
         private injector: Injector,
         private activatedRoute: ActivatedRoute,
-        private datetimeAdapter: DatetimeAdapter<FdDate>
+        private datetimeAdapter: DatetimeAdapter<FdDate>,
+        private authService: AuthService
     ) {}
+
+    get shouldHideSubmit(): boolean {
+        if (this.hideSubmit) {
+            return true;
+        }
+        return !hasEntityEditPermission(this.entity, (permission) => this.authService.hasModulePermission(permission));
+    }
 
     /**
      * Initialize the component
