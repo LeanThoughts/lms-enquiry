@@ -58,6 +58,7 @@ export class GenericUpdateComponent implements OnInit {
     @Input() searchString1: string = '';
     @Input() searchString2: string = '';
     @Input() selectedObject: any = {};
+    @Input() hideSubmit: boolean = false;
 
     @Output() onCreateSuccess: EventEmitter<any> = new EventEmitter<any>();
     @Output() onUpdateSuccess: EventEmitter<any> = new EventEmitter<any>();

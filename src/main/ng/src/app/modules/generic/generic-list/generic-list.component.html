@@ -11,7 +11,7 @@
     <div fdLayoutGridRow>
         <div fdLayoutGridCol [style.padding.rem]="0.5" style="background-color: white;">
             <fd-toolbar fdType="transparent" [clearBorder]="true">
-                @if (config.createButton && !viewModeOnly) {
+                @if (config.createButton && canShowMutatingActions) {
                     <!-- Create button -->
                     <button fd-button
                         fd-toolbar-item
@@ -23,7 +23,7 @@
                     >
                     </button>
                 }
-                @if (config.updateButton && !viewModeOnly) {
+                @if (config.updateButton && canShowMutatingActions) {
                     <!-- Update button -->
                     <button fd-button
                         fd-toolbar-item
@@ -35,7 +35,7 @@
                     >
                     </button>
                 }
-                @if (config.deleteButton && !viewModeOnly) {
+                @if (config.deleteButton && canShowMutatingActions) {
                     <!-- Delete button -->
                     <button fd-button
                         fd-toolbar-item

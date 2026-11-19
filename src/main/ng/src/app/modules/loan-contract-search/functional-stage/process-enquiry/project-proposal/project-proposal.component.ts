@@ -66,6 +66,10 @@ export class ProjectProposalComponent implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
+    get canEditProcessEnquiry(): boolean {
+        return this.authService.hasModulePermission('LoanContracts.ProcessEnquiry.Edit');
+    }
+
     constructor(private route: ActivatedRoute,
                 public router: Router,
                 private loanContractSearchService: LoanContractSearchService,

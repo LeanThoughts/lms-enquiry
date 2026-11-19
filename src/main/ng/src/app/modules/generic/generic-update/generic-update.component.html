@@ -106,19 +106,19 @@
                 </div>
             }
             <!-- } -->
-            <div fdLayoutGridRow style="height: auto;" [style.padding-top.rem]="1">
-                <div fdLayoutGridCol>
-                    <!-- @if (operation !== 'View') { -->
-                    <button
-                        fd-button
-                        label="Submit"
-                        (click)="submit()"
-                        fdType="emphasized"
-                    >
-                    </button>
-                    <!-- } -->
+            @if (!hideSubmit) {
+                <div fdLayoutGridRow style="height: auto;" [style.padding-top.rem]="1">
+                    <div fdLayoutGridCol>
+                        <button
+                            fd-button
+                            label="Submit"
+                            (click)="submit()"
+                            fdType="emphasized"
+                        >
+                        </button>
+                    </div>
                 </div>
-            </div>
+            }
         </form>
     }
     @else {

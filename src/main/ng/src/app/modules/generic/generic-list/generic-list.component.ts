@@ -9,6 +9,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { CustomDialogComponent } from '../../../custom-dialog.component';
+import { AuthService } from '../../auth/auth.service';
+
+const PROCESS_ENQUIRY_LIST_ENTITIES = new Set([
+    'processEnquiryProjectProposal',
+    'processEnquiryRejectedByPFS',
+    'processEnquiryOtherDetails',
+    'processEnquiryReasonForDelay',
+    'processEnquiryEnquiryCompletion',
+    'processEnquiryRejectedByCustomer',
+]);
 
 @Component({
     selector: 'app-generic-list',
@@ -97,8 +107,22 @@ export class GenericListComponent implements OnInit, OnDestroy {
         private injector: Injector,
         private messageService: MessageService,
         private cdr: ChangeDetectorRef, // Inject ChangeDetectorRef
-        private router: Router
+        private router: Router,
+        private authService: AuthService
     ) {}
+
+    /**
+     * Create, update and delete on process enquiry lists require LoanContracts.ProcessEnquiry.Edit.
+     */
+    get canShowMutatingActions(): boolean {
+        if (this.viewModeOnly) {
+            return false;
+        }
+        if (PROCESS_ENQUIRY_LIST_ENTITIES.has(this.entity)) {
+            return this.authService.hasModulePermission('LoanContracts.ProcessEnquiry.Edit');
+        }
+        return true;
+    }
 
     /**
      * Initialize the component
