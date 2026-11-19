@@ -97,7 +97,8 @@ public class OauthWebSecurityConfig extends WebSecurityConfigurerAdapter {
             name = "admin@gmail.com";
         }
         Collection<GrantedAuthority> authorities = roleGroupProperties.authoritiesFor(
-                moduleGroupIds.expand(RoleGroupProperties.strings(jwt.getClaim("groups"))));
+                moduleGroupIds.forSignIn(jwt.getClaimAsString("oid"),
+                        RoleGroupProperties.strings(jwt.getClaim("groups"))));
         return new JwtAuthenticationToken(jwt, authorities, name);
     }
 

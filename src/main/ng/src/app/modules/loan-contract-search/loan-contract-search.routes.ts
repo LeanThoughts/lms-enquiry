@@ -28,7 +28,19 @@ export default [
             routeResolver: LoanContractSearchService
         },
         canActivate: [routeInterceptor, modulePermissionGuard],
-        data: { modulePermission: 'LoanContracts.Display' },
+        data: {
+            modulePermissions: [
+                'LoanContracts.Display',
+                'LoanContracts.ProcessEnquiry.Display',
+                'LoanContracts.IccApproval.Display',
+                'LoanContracts.RiskAssessment.Display',
+                'LoanContracts.ApplicationFee.Display',
+                'LoanContracts.BmcApproval.Display',
+                'LoanContracts.BoardApproval.Display',
+                'LoanContracts.Sanction.Display',
+                'LoanContracts.Collaterals.Display'
+            ]
+        },
     },
     {
         path: 'process-enquiry/:enquiryActionId/loanApplication/:loanApplicationId',

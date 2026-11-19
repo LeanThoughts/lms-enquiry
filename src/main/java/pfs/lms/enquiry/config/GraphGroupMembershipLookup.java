@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
@@ -99,6 +100,38 @@ public class GraphGroupMembershipLookup implements GroupMembershipLookup {
         return found;
     }
 
+    @Override
+    public Optional<Collection<String>> groupsOfUser(String userObjectId) {
+        if (!configured() || userObjectId == null || !GUID.matcher(userObjectId.trim()).matches()) {
+            return Optional.empty();
+        }
+        String token = accessToken();
+        if (token == null) {
+            return Optional.empty();
+        }
+        String userId = userObjectId.trim();
+        String key = "user:" + userId.toLowerCase(Locale.ROOT);
+        long now = System.currentTimeMillis();
+        CacheEntry cached = cache.get(key);
+        if (cached != null && now < cached.expiresAt) {
+            return Optional.of(cached.ids);
+        }
+        String url = "https://graph.microsoft.com/v1.0/users/" + userId
+                + "/transitiveMemberOf/microsoft.graph.group?$select=id";
+        try {
+            List<String> ids = readPages(url, token);
+            cache.put(key, new CacheEntry(ids, now + SUCCESS_TTL_MS));
+            log.info("Entra user {} belongs to {}", userId, ids);
+            return Optional.of(ids);
+        } catch (RestClientResponseException ex) {
+            log.warn("Entra user group lookup failed for {}: HTTP {}", userId, ex.getRawStatusCode());
+            return Optional.empty();
+        } catch (RestClientException ex) {
+            log.warn("Entra user group lookup failed for {}: {}", userId, ex.getMessage());
+            return Optional.empty();
+        }
+    }
+
     private boolean configured() {
         if (enabled && !tenantId.isEmpty() && !clientId.isEmpty() && !clientSecret.isEmpty()) {
             return true;
@@ -135,6 +168,10 @@ public class GraphGroupMembershipLookup implements GroupMembershipLookup {
     private List<String> readMemberships(String groupId, String token) {
         String url = "https://graph.microsoft.com/v1.0/groups/" + groupId
                 + "/transitiveMemberOf/microsoft.graph.group?$select=id";
+        return readPages(url, token);
+    }
+
+    private List<String> readPages(String url, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));

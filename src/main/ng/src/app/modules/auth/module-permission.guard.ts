@@ -8,8 +8,13 @@ import { AuthService } from './auth.service';
  * The route's data.modulePermission must be one of those permissions.
  */
 export const modulePermissionGuard = (route: ActivatedRouteSnapshot): boolean | UrlTree => {
+    const authService = inject(AuthService);
     const permission = route.data['modulePermission'] as string | undefined;
-    if (permission && inject(AuthService).hasModulePermission(permission)) {
+    const anyPermission = route.data['modulePermissions'] as string[] | undefined;
+    if (permission && authService.hasModulePermission(permission)) {
+        return true;
+    }
+    if (anyPermission?.some(item => authService.hasModulePermission(item))) {
         return true;
     }
     inject(MessageService).showError('You are not authorised to open this page.');

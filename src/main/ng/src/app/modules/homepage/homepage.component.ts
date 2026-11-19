@@ -127,7 +127,17 @@ export class HomepageComponent implements OnInit, OnDestroy {
                 return this.authService.hasModulePermission('BusinessPartners.Display');
             }
             if (action.label === 'Search Loan Contracts') {
-                return this.authService.hasModulePermission('LoanContracts.Display');
+                return [
+                    'LoanContracts.Display',
+                    'LoanContracts.ProcessEnquiry.Display',
+                    'LoanContracts.IccApproval.Display',
+                    'LoanContracts.RiskAssessment.Display',
+                    'LoanContracts.ApplicationFee.Display',
+                    'LoanContracts.BmcApproval.Display',
+                    'LoanContracts.BoardApproval.Display',
+                    'LoanContracts.Sanction.Display',
+                    'LoanContracts.Collaterals.Display'
+                ].some(permission => this.authService.hasModulePermission(permission));
             }
             if (action.label === 'Reference Interest Rates') {
                 return this.authService.hasModulePermission('ReferenceInterestRates.Display');

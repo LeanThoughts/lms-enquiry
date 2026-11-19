@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,6 +36,31 @@ class ModuleGroupIdsTest {
 
         assertThat(properties.permissionsFor(moduleGroupIds.expand(List.of(APPRAISAL_OFFICER))))
                 .containsExactly("BusinessPartners.Display", "BusinessPartners.Edit");
+    }
+
+    @Test
+    void usesOnlyTheGroupsTheUserBelongsTo() {
+        String processEnquiry = "72b06008-1cae-46eb-973a-9ef298831e65";
+        String iccApproval = "b25f7d7b-7221-4bee-addc-09f3a6062c96";
+        RoleGroupProperties properties = new RoleGroupProperties();
+        properties.setRoleGroups(List.of(
+                mapping("LoanContracts.ProcessEnquiry.Display", processEnquiry),
+                mapping("LoanContracts.IccApproval.Display", iccApproval)));
+        ModuleGroupIds moduleGroupIds = new ModuleGroupIds(new GroupMembershipLookup() {
+            @Override
+            public Collection<String> memberGroupIds(Collection<String> groupIds) {
+                return List.of(processEnquiry, iccApproval);
+            }
+
+            @Override
+            public Optional<Collection<String>> groupsOfUser(String userObjectId) {
+                return Optional.of(List.of(processEnquiry));
+            }
+        });
+
+        assertThat(properties.permissionsFor(moduleGroupIds.forSignIn(
+                "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", List.of(processEnquiry, iccApproval))))
+                .containsExactly("LoanContracts.ProcessEnquiry.Display");
     }
 
     @Test

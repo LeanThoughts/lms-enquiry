@@ -79,10 +79,10 @@ export class LoanContractSearchComponent implements OnInit, OnDestroy {
         { label: 'Collaterals', display: 'LoanContracts.Collaterals.Display', open: () => this.redirectToCollaterals() },
     ];
 
-    /** Stages the signed-in user is allowed to open. */
+    /** One button per Display permission on /api/me. Process Enquiry does not reveal the other stages. */
     get visibleStages(): { label: string; display?: string; open: () => void }[] {
         return this.stages.filter(stage =>
-            !stage.display || this.authService.hasModulePermission(stage.display));
+            !!stage.display && this.authService.hasModulePermission(stage.display));
     }
 
     /**

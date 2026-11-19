@@ -28,7 +28,8 @@ public class CustomOidcUserService extends OidcUserService {
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = super.loadUser(userRequest);
-        List<String> groupIds = moduleGroupIds.expand(
+        List<String> groupIds = moduleGroupIds.forSignIn(
+                oidcUser.getClaim("oid"),
                 groupIds(oidcUser, userRequest.getAccessToken().getTokenValue()));
         Collection<GrantedAuthority> authorities = roleGroupProperties.authoritiesFor(groupIds);
         List<String> permissions = roleGroupProperties.permissionsFor(groupIds);

@@ -63,7 +63,7 @@ export class SideNavigationService {
             });
         }
 
-        if (this.authService.hasModulePermission(LOAN_CONTRACTS_DISPLAY)) {
+        if (this.hasLoanContractAccess()) {
             items.push({
                 title: 'Loan Processes',
                 icon: 'loan',
@@ -154,6 +154,21 @@ export class SideNavigationService {
         }
 
         return products;
+    }
+
+    /** The loan list is available with LoanContracts.Display or any one stage Display permission. */
+    private hasLoanContractAccess(): boolean {
+        return [
+            LOAN_CONTRACTS_DISPLAY,
+            'LoanContracts.ProcessEnquiry.Display',
+            'LoanContracts.IccApproval.Display',
+            'LoanContracts.RiskAssessment.Display',
+            'LoanContracts.ApplicationFee.Display',
+            'LoanContracts.BmcApproval.Display',
+            'LoanContracts.BoardApproval.Display',
+            'LoanContracts.Sanction.Display',
+            'LoanContracts.Collaterals.Display'
+        ].some(permission => this.authService.hasModulePermission(permission));
     }
 
 }
