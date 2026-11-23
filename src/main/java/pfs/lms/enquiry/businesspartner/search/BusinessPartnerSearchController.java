@@ -1,6 +1,7 @@
 package pfs.lms.enquiry.businesspartner.search;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pfs.lms.enquiry.config.ApiController;
@@ -19,6 +20,7 @@ public class BusinessPartnerSearchController {
         this.service = service;
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Display')")
     @GetMapping("/business-partners/search")
     public ResponseEntity<BusinessPartnerSearchResult> search(@RequestParam(required = false) String name,
                                                               @RequestParam(required = false) String email,

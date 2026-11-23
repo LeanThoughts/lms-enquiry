@@ -3,6 +3,7 @@ package pfs.lms.enquiry.collateral.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,12 +28,14 @@ public class CollateralConfigurationController {
     }
 
     /** GET /api/collaterals/configuration/checklist-id */
+    @PreAuthorize("hasAuthority('LoanContracts.Collaterals.Display')")
     @GetMapping("/collaterals/configuration/checklist-id")
     public ResponseEntity<ChecklistIdConfigurationDto> getChecklistIdConfiguration(HttpServletRequest request) {
         return ResponseEntity.ok(numberRangeService.getConfiguration(signedInUser(request)));
     }
 
     /** PUT /api/collaterals/configuration/checklist-id with body {"sapHighestNumber": 912000} */
+    @PreAuthorize("hasAuthority('LoanContracts.Collaterals.Edit')")
     @PutMapping("/collaterals/configuration/checklist-id")
     public ResponseEntity<ChecklistIdConfigurationDto> setSapHighestNumber(@RequestBody JsonNode body,
                                                                            HttpServletRequest request) {

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,18 +17,21 @@ public class PaymentReceiptPostSanctionController {
 
     private final PaymentReceiptPostSanctionService service;
 
+    @PreAuthorize("hasAuthority('LoanContracts.Sanction.Edit')")
     @PostMapping("/paymentReceiptPostSanctions/create")
     public ResponseEntity<PaymentReceiptPostSanction> createPaymentReceipt(@RequestBody PaymentReceiptPostSanctionResource resource,
                                                                            HttpServletRequest request) {
         return ResponseEntity.ok(service.createPaymentReceipt(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.Sanction.Edit')")
     @PutMapping("/paymentReceiptPostSanctions/update")
     public ResponseEntity<PaymentReceiptPostSanction> updatePaymentReceipt(@RequestBody PaymentReceiptPostSanctionResource resource,
                                                                            HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(service.updatePaymentReceipt(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.Sanction.Edit')")
     @DeleteMapping("/paymentReceiptPostSanctions/delete/{id}")
     public ResponseEntity<PaymentReceiptPostSanction> updatePaymentReceipt(@PathVariable("id") UUID id,
                                                                            HttpServletRequest request) throws CloneNotSupportedException {

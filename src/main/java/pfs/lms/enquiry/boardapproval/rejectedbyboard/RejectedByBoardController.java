@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,18 +17,21 @@ public class RejectedByBoardController {
 
     private final RejectedByBoardService service;
 
+    @PreAuthorize("hasAuthority('LoanContracts.BoardApproval.Edit')")
     @PostMapping("/rejectedByBoards/create")
     public ResponseEntity<RejectedByBoard> create(@RequestBody RejectedByBoardResource resource,
                                                   HttpServletRequest request) {
         return ResponseEntity.ok(service.create(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BoardApproval.Edit')")
     @PutMapping("/rejectedByBoards/update")
     public ResponseEntity<RejectedByBoard> update(@RequestBody RejectedByBoardResource resource,
                                                   HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(service.update(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BoardApproval.Edit')")
     @DeleteMapping("/rejectedByBoards/delete/{id}")
     public ResponseEntity<RejectedByBoard> update(@PathVariable("id") UUID id,
                                                   HttpServletRequest request) throws CloneNotSupportedException {

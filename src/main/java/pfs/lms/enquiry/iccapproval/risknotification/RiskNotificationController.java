@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class RiskNotificationController {
 
     private final IRiskNotificationService iRiskNotificationService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PostMapping("/riskNotifications/create")
     public ResponseEntity<RiskNotification> create(@RequestBody RiskNotificationResource riskNotificationResource,
                                                    HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class RiskNotificationController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PutMapping("/riskNotifications/update")
     public ResponseEntity<RiskNotification> update(@RequestBody RiskNotificationResource riskNotificationResource,
                                                    HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class RiskNotificationController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @DeleteMapping("/riskNotifications/delete/{id}")
     public ResponseEntity<RiskNotification> delete(@PathVariable("id") UUID riskNotificationId, HttpServletRequest request) {
         RiskNotification riskNotification = iRiskNotificationService.delete(riskNotificationId,
@@ -39,6 +43,7 @@ public class RiskNotificationController {
         return ResponseEntity.ok(riskNotification);
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PutMapping("/riskNotifications/send")
     public ResponseEntity<RiskNotification> sendNotification(@RequestBody RiskNotificationResource riskNotificationResource, HttpServletRequest request) throws Exception {
 

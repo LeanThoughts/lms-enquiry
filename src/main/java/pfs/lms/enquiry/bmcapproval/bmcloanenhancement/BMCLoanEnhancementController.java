@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class BMCLoanEnhancementController {
 
     private final IBMCLoanEnhancementService ibmcLoanEnhancementService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PostMapping("/bmcLoanEnhancements/create")
     public ResponseEntity<BmcLoanEnhancement> create(@RequestBody BMCLoanEnhancementResource bmcLoanEnhancementResource,
                                                      HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class BMCLoanEnhancementController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PutMapping("/bmcLoanEnhancements/update")
     public ResponseEntity<BmcLoanEnhancement> update(@RequestBody BMCLoanEnhancementResource bmcLoanEnhancementResource,
                                                      HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class BMCLoanEnhancementController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @DeleteMapping("/bmcLoanEnhancements/delete/{id}")
     public ResponseEntity<BmcLoanEnhancement> delete(@PathVariable("id") UUID bmcLoanEnhancementId, HttpServletRequest request) {
         BmcLoanEnhancement BMCLoanEnhancement = ibmcLoanEnhancementService.delete(bmcLoanEnhancementId,

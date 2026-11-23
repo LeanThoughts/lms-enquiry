@@ -3,6 +3,7 @@ package pfs.lms.enquiry.businesspartner.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ public class BusinessPartnerLoanContactController {
 
     private final IBusinessPartnerLoanContactService businessPartnerLoanContactService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerLoanContacts/create")
     public ResponseEntity<BusinessPartnerLoanContact> create(
             @RequestBody BusinessPartnerLoanContactResource businessPartnerLoanContactResource,
@@ -31,6 +33,7 @@ public class BusinessPartnerLoanContactController {
         return ResponseEntity.ok(businessPartnerLoanContactService.create(businessPartnerLoanContactResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerLoanContacts/update")
     public ResponseEntity<BusinessPartnerLoanContact> update(
             @RequestBody BusinessPartnerLoanContactResource businessPartnerLoanContactResource,
@@ -40,6 +43,7 @@ public class BusinessPartnerLoanContactController {
     }
 
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerLoanContacts/migrate")
     public ResponseEntity<BusinessPartnerLoanContact> migrate(
             @RequestBody BusinessPartnerLoanContactMigrationResource businessPartnerLoanContactResource,

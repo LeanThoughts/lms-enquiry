@@ -7,6 +7,7 @@ import pfs.lms.enquiry.domain.Partner;
 
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ public class InvoicingDetailController {
 
     private final IInvoicingDetailService invoicingDetailService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/invoicingDetails/create")
     public ResponseEntity<InvoicingDetail> create(@RequestBody InvoicingDetailResource invoicingDetailResource,
                                                   HttpServletRequest request) throws CloneNotSupportedException {
@@ -28,6 +30,7 @@ public class InvoicingDetailController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PutMapping("/invoicingDetails/update")
     public ResponseEntity<InvoicingDetail> update(@RequestBody InvoicingDetailResource invoicingDetailResource,
                                                   HttpServletRequest request) throws CloneNotSupportedException {
@@ -36,6 +39,7 @@ public class InvoicingDetailController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Display')")
     @GetMapping("/invoicingDetails/meetingNumbers/{loanApplicationId}")
     public ResponseEntity<List<MeetingNumber>> getMeetingNumbers(@PathVariable UUID loanApplicationId,
                                                          HttpServletRequest request) throws CloneNotSupportedException {
@@ -43,6 +47,7 @@ public class InvoicingDetailController {
         return ResponseEntity.ok(invoicingDetailService.getICCMeetingNumbers(loanApplicationId));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/invoicingDetails/searchPartners")
     public ResponseEntity<List<Partner>> searchPartners(@RequestBody PartnerSearchResource partnerSearchResource,
                                                         HttpServletRequest request) {
@@ -55,6 +60,7 @@ public class InvoicingDetailController {
 //        invoicingDetailService.saveLoanApplication(loanApplicationId, partnerId, request.getUserPrincipal().getName());
 //    }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/invoicingDetails/updateLoanApplication")
     public ResponseEntity<LoanApplication> updateLoanApplication(@RequestBody InvoicingDetailResource invoicingDetailResource,
                                                                  HttpServletRequest request) throws CloneNotSupportedException {

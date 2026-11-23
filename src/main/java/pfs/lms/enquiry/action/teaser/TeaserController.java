@@ -3,6 +3,7 @@ package pfs.lms.enquiry.action.teaser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pfs.lms.enquiry.config.ApiController;
@@ -23,6 +24,7 @@ public class TeaserController {
 
     private final ITeaserService teaserService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Display')")
     @GetMapping(value = "/teaser/excelv1")
     public void generateTeaserExcel(){
 
@@ -30,6 +32,7 @@ public class TeaserController {
 
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Display')")
     @GetMapping("/teaser/excel/generate")
     public void generateTeaserExcel(
             HttpServletResponse response,

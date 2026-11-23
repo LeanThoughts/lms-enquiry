@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class FormalRequestController {
 
     private final IFormalRequestService formalRequestService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/formalRequests/create")
     public ResponseEntity<FormalRequest> create(@RequestBody FormalRequestResource formalRequestResource,
                                                 HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class FormalRequestController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PutMapping("/formalRequests/update")
     public ResponseEntity<FormalRequest> update(@RequestBody FormalRequestResource formalRequestResource,
                                                 HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class FormalRequestController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @DeleteMapping("/formalRequests/delete/{id}")
     public ResponseEntity<FormalRequest> delete(@PathVariable("id") UUID loanEnhancementId, HttpServletRequest request) {
         FormalRequest formalRequest = formalRequestService.delete(loanEnhancementId,

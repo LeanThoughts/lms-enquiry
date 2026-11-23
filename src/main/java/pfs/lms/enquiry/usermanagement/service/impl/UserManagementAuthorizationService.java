@@ -59,4 +59,5 @@ public class UserManagementAuthorizationService implements IUserManagementAuthor
             throw new LmsException("You are not authorised to maintain users.", HttpStatus.FORBIDDEN);
         }
     }
+
 }

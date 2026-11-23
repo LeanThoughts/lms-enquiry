@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +18,14 @@ public class CollateralDetailController {
 
     private final ICollateralDetailService collateralDetailService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @PostMapping("/collateralDetails/create")
     public ResponseEntity<CollateralDetail> create(@RequestBody CollateralDetailResource resource,
                                                                              HttpServletRequest request) {
         return ResponseEntity.ok(collateralDetailService.create(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @PutMapping("/collateralDetails/update")
     public ResponseEntity<CollateralDetail> update(@RequestBody CollateralDetailResource resource,
                                                                 HttpServletRequest request) throws CloneNotSupportedException {

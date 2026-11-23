@@ -3,6 +3,7 @@ package pfs.lms.enquiry.businesspartner.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIndustry;
 import pfs.lms.enquiry.businesspartner.resource.BusinessPartnerIndustryMigrationResource;
@@ -19,6 +20,7 @@ public class BusinessPartnerIndustryController {
 
     private final IBusinessPartnerIndustryService businessPartnerIndustryService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerIndustries/create")
     public ResponseEntity<BusinessPartnerIndustry> create(
             @RequestBody BusinessPartnerIndustryResource businessPartnerIndustryResource,
@@ -29,6 +31,7 @@ public class BusinessPartnerIndustryController {
         return ResponseEntity.ok(businessPartnerIndustryService.create(businessPartnerIndustryResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerIndustries/update")
     public ResponseEntity<BusinessPartnerIndustry> update(
             @RequestBody BusinessPartnerIndustryResource businessPartnerIndustryResource,
@@ -37,6 +40,7 @@ public class BusinessPartnerIndustryController {
         return ResponseEntity.ok(businessPartnerIndustryService.update(businessPartnerIndustryResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerIndustries/migrate")
     public ResponseEntity<BusinessPartnerIndustry> migrate(
             @RequestBody BusinessPartnerIndustryMigrationResource businessPartnerIndustryResource,
@@ -45,6 +49,7 @@ public class BusinessPartnerIndustryController {
         return ResponseEntity.ok(businessPartnerIndustryService.migrate(businessPartnerIndustryResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Display')")
     @GetMapping("/businessPartnerIndustries/findByPartnerId")
     public ResponseEntity<List<BusinessPartnerIndustryResource>> findByPartnerId(
             @RequestParam UUID partnerId)

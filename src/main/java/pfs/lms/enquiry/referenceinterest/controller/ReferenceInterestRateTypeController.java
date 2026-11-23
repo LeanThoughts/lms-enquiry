@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRate;
@@ -19,6 +20,7 @@ public class ReferenceInterestRateTypeController {
     @Autowired
     private ReferenceInterestRateRepository referenceInterestRateRepository;
 
+    @PreAuthorize("hasAuthority('ReferenceInterestRates.Display')")
     @GetMapping("/refinterestratetypes")
     public ResponseEntity getReferenceIntersestRateTypes() {
 

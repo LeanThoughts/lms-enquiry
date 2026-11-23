@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class TermSheetController {
 
     private final ITermSheetService termSheetService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/termSheets/create")
     public ResponseEntity<TermSheet> create(@RequestBody TermSheetResource termSheetResource,
                                             HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class TermSheetController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PutMapping("/termSheets/update")
     public ResponseEntity<TermSheet> update(@RequestBody TermSheetResource termSheetResource,
                                             HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class TermSheetController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @DeleteMapping("/termSheets/delete/{id}")
     public ResponseEntity<TermSheet> delete(@PathVariable("id") UUID loanEnhancementId, HttpServletRequest request) {
         TermSheet termSheet = termSheetService.delete(loanEnhancementId,

@@ -2,6 +2,7 @@ package pfs.lms.enquiry.usermanagement.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,13 +48,13 @@ public class UserManagementController {
     }
 
     /** List / search users, e.g. GET /api/usermanagement/users?query=iyer&role=ZLM023&status=true */
+    @PreAuthorize("hasAuthority('UserManagement.Display')")
     @GetMapping("/usermanagement/users")
     public ResponseEntity<List<UserDto>> search(@RequestParam(required = false) String query,
                                                 @RequestParam(required = false) String role,
                                                 @RequestParam(required = false) String riskDepartment,
                                                 @RequestParam(required = false) Boolean status,
                                                 HttpServletRequest request) {
-        authorizationService.checkAccess(currentUser(request));
         return ResponseEntity.ok(userManagementService.search(query, role, riskDepartment, status));
     }
 
@@ -63,29 +64,29 @@ public class UserManagementController {
         return ResponseEntity.ok(userManagementService.getById(id));
     }
 
+    @PreAuthorize("hasAuthority('UserManagement.Edit')")
     @PostMapping("/usermanagement/users")
     public ResponseEntity<UserDto> create(@Valid @RequestBody UserRequestDto body, HttpServletRequest request) {
         String username = currentUser(request);
-        authorizationService.checkAccess(username);
         return ResponseEntity.status(HttpStatus.CREATED).body(userManagementService.create(body, username));
     }
 
+    @PreAuthorize("hasAuthority('UserManagement.Edit')")
     @PutMapping("/usermanagement/users/{id}")
     public ResponseEntity<UserDto> update(@PathVariable UUID id,
                                           @Valid @RequestBody UserRequestDto body,
                                           HttpServletRequest request) {
         String username = currentUser(request);
-        authorizationService.checkAccess(username);
         return ResponseEntity.ok(userManagementService.update(id, body, username));
     }
 
     /** Activate / deactivate, e.g. PATCH /api/usermanagement/users/{id}/status?active=false */
+    @PreAuthorize("hasAuthority('UserManagement.Edit')")
     @PatchMapping("/usermanagement/users/{id}/status")
     public ResponseEntity<UserDto> updateStatus(@PathVariable UUID id,
                                                 @RequestParam boolean active,
                                                 HttpServletRequest request) {
         String username = currentUser(request);
-        authorizationService.checkAccess(username);
         return ResponseEntity.ok(userManagementService.updateStatus(id, active, username));
     }
 

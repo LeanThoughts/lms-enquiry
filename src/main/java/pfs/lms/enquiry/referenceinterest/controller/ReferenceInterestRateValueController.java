@@ -3,6 +3,7 @@ package pfs.lms.enquiry.referenceinterest.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.referenceinterest.domain.ReferenceInterestRateValue;
@@ -23,6 +24,7 @@ public class ReferenceInterestRateValueController {
     private final ReferenceInterestRateValueRepository referenceInterestRateValueRepository;
     private final IReferenceInterestRateValueService referenceInterestRateValueService;
 
+    @PreAuthorize("hasAuthority('ReferenceInterestRates.Display')")
     @GetMapping("/referenceInterestRateValues/referenceInterestRateType/{referenceInterestRateId}")
     public ResponseEntity<List<ReferenceInterestRateValue>> getReferenceInterestRateValues(@PathVariable Long referenceInterestRateId) {
 
@@ -31,6 +33,7 @@ public class ReferenceInterestRateValueController {
         return ResponseEntity.ok(referenceInterestRateValues);
     }
 
+    @PreAuthorize("hasAuthority('ReferenceInterestRates.Edit')")
     @PostMapping("/referenceInterestRateValues/create")
     public ResponseEntity<ReferenceInterestRateValue> create(
             @RequestBody ReferenceInterestValueResource referenceInterestValueResource,
@@ -45,6 +48,7 @@ public class ReferenceInterestRateValueController {
             return ResponseEntity.ok(referenceInterestRateValue);
     }
 
+    @PreAuthorize("hasAuthority('ReferenceInterestRates.Edit')")
     @PutMapping("/referenceInterestRateValues/update")
     public ResponseEntity<ReferenceInterestRateValue> update(
             @RequestBody ReferenceInterestValueResource referenceInterestValueResource,
@@ -55,6 +59,7 @@ public class ReferenceInterestRateValueController {
         return ResponseEntity.ok(referenceInterestRateValue);
     }
 
+    @PreAuthorize("hasAuthority('ReferenceInterestRates.Edit')")
     @DeleteMapping("/referenceInterestRateValues/delete/{referenceInterestValueId}")
     public void delete(
             @PathVariable UUID referenceInterestValueId,

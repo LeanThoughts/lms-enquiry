@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class PreliminaryRiskAssessmentController {
 
     private final IPreliminaryRiskAssessmentService preliminaryRiskAssessmentService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.RiskAssessment.Edit')")
     @PostMapping("/preliminaryRiskAssessments/create")
     public ResponseEntity<PreliminaryRiskAssessment> create(@RequestBody PreliminaryRiskAssessmentResource preliminaryRiskAssessmentResource,
                                                             HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class PreliminaryRiskAssessmentController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.RiskAssessment.Edit')")
     @PutMapping("/preliminaryRiskAssessments/update")
     public ResponseEntity<PreliminaryRiskAssessment> update(@RequestBody PreliminaryRiskAssessmentResource preliminaryRiskAssessmentResource,
                                                             HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class PreliminaryRiskAssessmentController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.RiskAssessment.Edit')")
     @DeleteMapping("/preliminaryRiskAssessments/delete/{id}")
     public ResponseEntity<PreliminaryRiskAssessment> delete(@PathVariable("id") UUID preliminaryRiskAssessmentId, HttpServletRequest request) {
         PreliminaryRiskAssessment preliminaryRiskAssessment = preliminaryRiskAssessmentService.delete(preliminaryRiskAssessmentId,

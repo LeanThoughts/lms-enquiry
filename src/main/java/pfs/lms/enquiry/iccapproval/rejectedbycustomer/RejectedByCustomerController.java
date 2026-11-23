@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class RejectedByCustomerController {
 
     private final IRejectedByCustomerService rejectedByCustomerService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PostMapping("/rejectedByCustomers/create")
     public ResponseEntity<RejectedByCustomer> create(@RequestBody RejectedByCustomerResource rejectedByCustomerResource,
                                                      HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class RejectedByCustomerController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PutMapping("/rejectedByCustomers/update")
     public ResponseEntity<RejectedByCustomer> update(@RequestBody RejectedByCustomerResource rejectedByCustomerResource,
                                                      HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class RejectedByCustomerController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @DeleteMapping("/rejectedByCustomers/delete/{id}")
     public ResponseEntity<RejectedByCustomer> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
         RejectedByCustomer rejectedByCustomer = rejectedByCustomerService.delete(iccFurtherDetailId,

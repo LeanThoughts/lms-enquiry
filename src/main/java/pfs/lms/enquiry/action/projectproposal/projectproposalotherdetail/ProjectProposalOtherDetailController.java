@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +18,14 @@ public class ProjectProposalOtherDetailController {
 
     private final IProjectProposalOtherDetailService projectProposalOtherDetailService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @PostMapping("/projectProposalOtherDetails/create")
     public ResponseEntity<ProjectProposalOtherDetail> create(@RequestBody ProjectProposalOtherDetailResource resource,
                                                              HttpServletRequest request) {
         return ResponseEntity.ok(projectProposalOtherDetailService.create(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @PutMapping("/projectProposalOtherDetails/update")
     public ResponseEntity<ProjectProposalOtherDetail> update(@RequestBody ProjectProposalOtherDetailResource resource,
                                                              HttpServletRequest request) throws CloneNotSupportedException {

@@ -3,6 +3,7 @@ package pfs.lms.enquiry.bmcapproval;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,7 @@ public class BMCICCApprovalController {
     private final BMCICCReasonForDelayRepository BMCICCReasonForDelayRepository;
     private final IWorkflowService workflowService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PostMapping("/api/bmcIccApprovals/sendForApproval")
     public ResponseEntity<Object> process(@RequestBody WorkflowRequestResource workflowRequestResource,
                                           HttpServletRequest request) throws Exception {

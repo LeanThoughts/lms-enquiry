@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class BMCApprovalByICCController {
 
     private final IBMCApprovalByICCService approvalByICCService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PostMapping("/bmcApprovalByIccs/create")
     public ResponseEntity<BmcApprovalByIcc> create(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
                                                    HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class BMCApprovalByICCController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PutMapping("/bmcApprovalByIccs/update")
     public ResponseEntity<BmcApprovalByIcc> update(@RequestBody BMCApprovalByICCResource BMCApprovalByIccResource,
                                                    HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class BMCApprovalByICCController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @DeleteMapping("/bmcApprovalByIccs/delete/{id}")
     public ResponseEntity<BmcApprovalByIcc> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
         BmcApprovalByIcc BMCApprovalByIcc = approvalByICCService.delete(iccFurtherDetailId,

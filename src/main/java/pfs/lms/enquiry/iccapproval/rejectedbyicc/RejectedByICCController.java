@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class RejectedByICCController {
 
     private final IRejectedByICCService rejectedByICCService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PostMapping("/rejectedByICCs/create")
     public ResponseEntity<RejectedByICC> create(@RequestBody RejectedByICCResource rejectedByIccResource,
                                                 HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class RejectedByICCController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PutMapping("/rejectedByICCs/update")
     public ResponseEntity<RejectedByICC> update(@RequestBody RejectedByICCResource rejectedByIccResource,
                                                 HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class RejectedByICCController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @DeleteMapping("/rejectedByICCs/delete/{id}")
     public ResponseEntity<RejectedByICC> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
         RejectedByICC rejectedByIcc = rejectedByICCService.delete(iccFurtherDetailId,

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,18 +17,21 @@ public class SanctionReasonForDelayController {
 
     private final SanctionReasonForDelayService service;
 
+    @PreAuthorize("hasAuthority('LoanContracts.Sanction.Edit')")
     @PostMapping("/sanctionReasonForDelays/create")
     public ResponseEntity<SanctionReasonForDelay> createReasonForDelay(@RequestBody SanctionReasonForDelayResource resource,
                                                                        HttpServletRequest request) {
         return ResponseEntity.ok(service.createReasonForDelay(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.Sanction.Edit')")
     @PutMapping("/sanctionReasonForDelays/update")
     public ResponseEntity<SanctionReasonForDelay> updateReasonForDelay(@RequestBody SanctionReasonForDelayResource resource,
                                                                        HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(service.updateReasonForDelay(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.Sanction.Edit')")
     @DeleteMapping("/sanctionReasonForDelays/delete/{id}")
     public ResponseEntity<SanctionReasonForDelay> updateReasonForDelay(@PathVariable("id") UUID id,
                                                                        HttpServletRequest request) throws CloneNotSupportedException {

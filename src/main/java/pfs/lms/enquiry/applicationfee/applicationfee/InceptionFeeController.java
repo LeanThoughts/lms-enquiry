@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.applicationfee.ApplicationFee;
@@ -27,6 +28,7 @@ public class InceptionFeeController {
     private final IInceptionFeeService inceptionFeeService;
     private final InceptionFeeRepository inceptionFeeRepository;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/inceptionFees/create")
     public ResponseEntity<InceptionFee> create(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                HttpServletRequest request) {
@@ -36,6 +38,7 @@ public class InceptionFeeController {
     }
 
     //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/inceptionFees/sapInceptionFees/create")
     public ResponseEntity<InceptionFee> createFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                       HttpServletRequest request) throws CloneNotSupportedException {
@@ -90,6 +93,7 @@ public class InceptionFeeController {
     }
 
     //@RequestMapping(value = "/sapInceptionFees/create", method = RequestMethod.POST, produces = "application/json")
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/inceptionFees/sapInceptionFees/reverse")
     public ResponseEntity<InceptionFee> reverseFromSAP(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                        HttpServletRequest request) throws CloneNotSupportedException {
@@ -114,6 +118,7 @@ public class InceptionFeeController {
     }
 
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PutMapping("/inceptionFees/update")
     public ResponseEntity<InceptionFee> update(@RequestBody InceptionFeeResource inceptionFeeResource,
                                                HttpServletRequest request) throws CloneNotSupportedException {
@@ -122,6 +127,7 @@ public class InceptionFeeController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @DeleteMapping("/inceptionFees/delete/{id}")
     public ResponseEntity<InceptionFee> delete(@PathVariable("id") UUID inceptionFeeId, HttpServletRequest request) {
         InceptionFee inceptionFee = inceptionFeeService.delete(inceptionFeeId,
@@ -129,6 +135,7 @@ public class InceptionFeeController {
         return ResponseEntity.ok(inceptionFee);
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Display')")
     @GetMapping("/inceptionFees/{id}")
     public ResponseEntity<List<InceptionFee>> get(@PathVariable("id") String applicationFeeId){
 

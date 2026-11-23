@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerFinancial;
 import pfs.lms.enquiry.businesspartner.domain.BusinessPartnerIdentification;
@@ -21,6 +22,7 @@ public class BusinessPartnerFinancialController {
 
     private final IBusinessPartnerFinancialService iBusinessPartnerFinancialService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerFinancials/create")
     public ResponseEntity<BusinessPartnerFinancial> create(
             @RequestBody BusinessPartnerFinancialResource businessPartnerFinancialResource,
@@ -31,6 +33,7 @@ public class BusinessPartnerFinancialController {
         return ResponseEntity.ok(iBusinessPartnerFinancialService.create(businessPartnerFinancialResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerFinancials/update")
     public ResponseEntity<BusinessPartnerFinancial> update(
             @RequestBody BusinessPartnerFinancialResource businessPartnerFinancialResource,

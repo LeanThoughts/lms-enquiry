@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class LoanEnhancementController {
 
     private final ILoanEnhancementService loanEnhancementService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PostMapping("/loanEnhancements/create")
     public ResponseEntity<LoanEnhancement> create(@RequestBody LoanEnhancementResource loanEnhancementResource,
                                                   HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class LoanEnhancementController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @PutMapping("/loanEnhancements/update")
     public ResponseEntity<LoanEnhancement> update(@RequestBody LoanEnhancementResource loanEnhancementResource,
                                                   HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class LoanEnhancementController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.IccApproval.Edit')")
     @DeleteMapping("/loanEnhancements/delete/{id}")
     public ResponseEntity<LoanEnhancement> delete(@PathVariable("id") UUID loanEnhancementId, HttpServletRequest request) {
         LoanEnhancement loanEnhancement = loanEnhancementService.delete(loanEnhancementId,

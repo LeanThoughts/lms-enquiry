@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pfs.lms.enquiry.action.projectproposal.otherdetailsdocument.OtherDetailsDocument;
 
@@ -17,18 +18,21 @@ public class CreditRatingController {
 
     private final ICreditRatingService creditRatingService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @PostMapping("/creditRatings/create")
     public ResponseEntity<CreditRating> create(@RequestBody CreditRatingResource resource,
                                                HttpServletRequest request) {
         return ResponseEntity.ok(creditRatingService.create(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @PutMapping("/creditRatings/update")
     public ResponseEntity<CreditRating> update(@RequestBody CreditRatingResource resource,
                                                HttpServletRequest request) throws CloneNotSupportedException {
         return ResponseEntity.ok(creditRatingService.update(resource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ProcessEnquiry.Edit')")
     @DeleteMapping("/creditRatings/delete/{id}")
     public ResponseEntity<CreditRating> delete(@PathVariable("id") UUID creditRatingId,
                                                        HttpServletRequest request) {

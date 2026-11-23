@@ -1,10 +1,10 @@
 package pfs.lms.enquiry.collateral.workflow;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import pfs.lms.enquiry.collateral.dto.CollateralChecklistDto;
-import pfs.lms.enquiry.collateral.service.ICollateralAuthorizationService;
 import pfs.lms.enquiry.config.ApiController;
 import pfs.lms.enquiry.exception.LmsException;
 import org.springframework.http.HttpStatus;
@@ -20,24 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 public class CollateralWorkFlowController {
 
     private final ICollateralWorkflowService workflowService;
-    private final ICollateralAuthorizationService authorizationService;
 
-    public CollateralWorkFlowController(ICollateralWorkflowService workflowService,
-                                        ICollateralAuthorizationService authorizationService) {
+    public CollateralWorkFlowController(ICollateralWorkflowService workflowService) {
         this.workflowService = workflowService;
-        this.authorizationService = authorizationService;
     }
 
     /** Send for Approval: PUT /api/collaterals/workflow/startprocess { "businessProcessId": checklist id } */
+    @PreAuthorize("hasAuthority('LoanContracts.Collaterals.Edit')")
     @PutMapping("/collaterals/workflow/startprocess")
     public ResponseEntity<CollateralChecklistDto> startProcess(@RequestBody CollateralWorkflowRequest request,
                                                                HttpServletRequest httpServletRequest) {
         String user = currentUser(httpServletRequest);
-        authorizationService.checkWriteAccess(user);
         return ResponseEntity.ok(workflowService.startWorkflowProcessInstance(request.getBusinessProcessId(), user));
     }
 
     /** Approve: PUT /api/collaterals/workflow/approvetask { businessProcessId, processInstanceId (or task id) } */
+    @PreAuthorize("hasAuthority('LoanContracts.Collaterals.Edit')")
     @PutMapping("/collaterals/workflow/approvetask")
     public ResponseEntity<CollateralChecklistDto> approveTask(@RequestBody CollateralWorkflowRequest request,
                                                               HttpServletRequest httpServletRequest) {
@@ -46,6 +44,7 @@ public class CollateralWorkFlowController {
     }
 
     /** Reject: PUT /api/collaterals/workflow/rejecttask { businessProcessId, processInstanceId, rejectionReason } */
+    @PreAuthorize("hasAuthority('LoanContracts.Collaterals.Edit')")
     @PutMapping("/collaterals/workflow/rejecttask")
     public ResponseEntity<CollateralChecklistDto> rejectTask(@RequestBody CollateralWorkflowRequest request,
                                                              HttpServletRequest httpServletRequest) {

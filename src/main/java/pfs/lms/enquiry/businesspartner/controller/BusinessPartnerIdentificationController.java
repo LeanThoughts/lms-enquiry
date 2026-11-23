@@ -28,6 +28,7 @@ public class BusinessPartnerIdentificationController {
 
     private final IBusinessPartnerIdentificationService businessPartnerIdentificationService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerIdentifications/create")
     public ResponseEntity<BusinessPartnerIdentification> create(
             @RequestBody BusinessPartnerIdentificationResource businessPartnerIdentificationResource,
@@ -38,6 +39,7 @@ public class BusinessPartnerIdentificationController {
         return ResponseEntity.ok(businessPartnerIdentificationService.create(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerIdentifications/update")
     public ResponseEntity<BusinessPartnerIdentification> update(
             @RequestBody BusinessPartnerIdentificationResource businessPartnerIdentificationResource,
@@ -46,6 +48,7 @@ public class BusinessPartnerIdentificationController {
         return ResponseEntity.ok(businessPartnerIdentificationService.update(businessPartnerIdentificationResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerIdentifications/migrate")
     public ResponseEntity<BusinessPartnerIdentification> migrate(
             @RequestBody BusinessPartnerIdentificationMigrationResource businessPartnerIdentificationResource,
@@ -56,6 +59,7 @@ public class BusinessPartnerIdentificationController {
         return responseEntity;
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Display')")
     @GetMapping("/businessPartnerIdentifications/findByPartnerId")
     public ResponseEntity<List<BusinessPartnerIdentificationResource>> findByPartnerId(
             @RequestParam UUID partnerId) {

@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ public class BusinessPartnerBankDetailController {
 
     private final IBusinessPartnerBankDetailService businessPartnerBankDetailService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerBankDetails/create")
     public ResponseEntity<BusinessPartnerBankDetail> create(
             @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource,
@@ -35,6 +37,7 @@ public class BusinessPartnerBankDetailController {
         return ResponseEntity.ok(businessPartnerBankDetailService.create(businessPartnerBankDetailResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerBankDetails/update")
     public ResponseEntity<BusinessPartnerBankDetail> update(
             @RequestBody BusinessPartnerBankDetailResource businessPartnerBankDetailResource,
@@ -43,6 +46,7 @@ public class BusinessPartnerBankDetailController {
         return ResponseEntity.ok(businessPartnerBankDetailService.update(businessPartnerBankDetailResource,request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerBankDetails/migrate")
     public ResponseEntity<BusinessPartnerBankDetail> migrate(
             @RequestBody BusinessPartnerBankDetailMigrationResource businessPartnerBankDetailResource,

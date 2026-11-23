@@ -2,6 +2,7 @@ package pfs.lms.enquiry.businesspartner.controller;
 
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,14 @@ public class BusinessPartnerRoleController {
 
     private final IBusinessPartnerRoleService businessPartnerRoleService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerRoles/create")
     public ResponseEntity<BusinessPartnerRole> create(@RequestBody BusinessPartnerRoleResource businessPartnerRoleResource, HttpServletRequest request) {
 
         return ResponseEntity.ok(businessPartnerRoleService.create(businessPartnerRoleResource, request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerRoles/migrate")
     public ResponseEntity<BusinessPartnerRole> migrate(@RequestBody BusinessPartnerRoleMigrationResource businessPartnerRoleResource, HttpServletRequest request) {
 

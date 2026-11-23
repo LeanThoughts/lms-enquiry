@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class BMCRejectedByCustomerController {
 
     private final IBMCRejectedByCustomerService ibmcRejectedByCustomerService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PostMapping("/bmcRejectedByCustomers/create")
     public ResponseEntity<BmcRejectedByCustomer> create(@RequestBody BMCRejectedByCustomerResource bmcRejectedByCustomerResource,
                                                         HttpServletRequest request) {
@@ -24,6 +26,7 @@ public class BMCRejectedByCustomerController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @PutMapping("/bmcRejectedByCustomers/update")
     public ResponseEntity<BmcRejectedByCustomer> update(@RequestBody BMCRejectedByCustomerResource bmcRejectedByCustomerResource,
                                                         HttpServletRequest request) throws CloneNotSupportedException {
@@ -32,6 +35,7 @@ public class BMCRejectedByCustomerController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('LoanContracts.BmcApproval.Edit')")
     @DeleteMapping("/bmcRejectedByCustomers/delete/{id}")
     public ResponseEntity<BmcRejectedByCustomer> delete(@PathVariable("id") UUID iccFurtherDetailId, HttpServletRequest request) {
         BmcRejectedByCustomer BMCRejectedByCustomer = ibmcRejectedByCustomerService.delete(iccFurtherDetailId,

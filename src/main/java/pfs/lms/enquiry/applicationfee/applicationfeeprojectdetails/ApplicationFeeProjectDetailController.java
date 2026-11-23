@@ -3,6 +3,7 @@ package pfs.lms.enquiry.applicationfee.applicationfeeprojectdetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ApplicationFeeProjectDetailController {
     private final IApplicationFeeProjectDetailService applicationFeeProjectDetailService;
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PostMapping("/applicationFeeProjectDetails/create")
     public ResponseEntity<ApplicationFeeProjectDetail> createApplicationFeeProjectDetail(
             @RequestBody ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource,
@@ -28,6 +30,7 @@ public class ApplicationFeeProjectDetailController {
 //        return ResponseEntity.ok(applicationFeeProjectDetailService.getApplicationFeeProjectDetail(applicationFeeId));
 //    }
 
+    @PreAuthorize("hasAuthority('LoanContracts.ApplicationFee.Edit')")
     @PutMapping("/applicationFeeProjectDetails/update")
     public ResponseEntity<ApplicationFeeProjectDetail> updateApplicationFeeProjectDetail(
             @RequestBody ApplicationFeeProjectDetailResource applicationFeeProjectDetailResource,

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ public class BusinessPartnerKYCDetailController {
 
     private final IBusinessPartnerKYCDetailService businessPartnerKYCDetailService;
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PostMapping("/businessPartnerKYCDetails/create")
     public ResponseEntity<BusinessPartnerKYCDetail> create(
             @RequestBody BusinessPartnerKYCDetailResource businessPartnerKYCDetailResource,
@@ -33,6 +35,7 @@ public class BusinessPartnerKYCDetailController {
                 request.getUserPrincipal().getName()));
     }
 
+    @PreAuthorize("hasAuthority('BusinessPartners.Edit')")
     @PutMapping("/businessPartnerKYCDetails/update")
     public ResponseEntity<BusinessPartnerKYCDetail> update(
             @RequestBody BusinessPartnerKYCDetailResource businessPartnerKYCDetailResource,
