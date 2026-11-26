@@ -112,7 +112,7 @@ sap:
   monitorDocumentUri: /sap/opu/odata/sap/ZPFS_LMS_MONITOR_V1_SRV/DocumentSet
   referenceInterestRateValueUri: /sap/opu/odata/sap/ZPFS_LMS_REF_INT_RATE_SRV/ReferenceInterestRateSet
   collateralServiceUri: /sap/opu/odata/sap/ZPFS_LMS_COLLATERAL_SRV/
-  client: 300
+  client: 360
   userName: sajeev
   password: sapsap
 #security:
