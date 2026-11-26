@@ -136,6 +136,75 @@ app:
   oauth2:
     login-success-url: /homepage
     logout-success-url: /login
+  entra:
+    group-memberships:
+      enabled: true
+  role-groups:
+    - name: BusinessPartners.Display
+      group-id: 48e13b06-952d-4daa-a3cc-3c1e6546cada
+    - name: BusinessPartners.Edit
+      group-id: 1642e852-2c9b-4df9-8ecd-7faf0c17f97d
+    - name: OutstandingApprovals.Display
+      group-id: 
+    - name: OutstandingApprovals.Edit
+      group-id: 
+    - name: UserManagement.Display
+      group-id: 
+    - name: UserManagement.Edit
+      group-id: 
+    - name: WorkflowApprovers.Display
+      group-id: 
+    - name: WorkflowApprovers.Edit
+      group-id: 
+    - name: Configuration.Display
+      group-id: 
+    - name: Configuration.Edit
+      group-id: 
+    - name: ReferenceInterestRates.Display
+      group-id: 
+    - name: ReferenceInterestRates.Edit
+      group-id: 
+    - name: UploadLoanEnquiries.Display
+      group-id: 
+    - name: UploadLoanEnquiries.Edit
+      group-id: 
+    - name: SapIntegrationLog.Display
+      group-id: 
+    - name: SapIntegrationLog.Edit
+      group-id: 
+    - name: LoanContracts.Display
+      group-id: 
+    - name: LoanContracts.ProcessEnquiry.Display
+      group-id: 
+    - name: LoanContracts.ProcessEnquiry.Edit
+      group-id: 
+    - name: LoanContracts.IccApproval.Display
+      group-id: 
+    - name: LoanContracts.IccApproval.Edit
+      group-id: 
+    - name: LoanContracts.RiskAssessment.Display
+      group-id: 
+    - name: LoanContracts.RiskAssessment.Edit
+      group-id: 
+    - name: LoanContracts.ApplicationFee.Display
+      group-id: 
+    - name: LoanContracts.ApplicationFee.Edit
+      group-id: 
+    - name: LoanContracts.BmcApproval.Display
+      group-id: 
+    - name: LoanContracts.BmcApproval.Edit
+      group-id: 
+    - name: LoanContracts.BoardApproval.Display
+      group-id: 
+    - name: LoanContracts.BoardApproval.Edit
+      group-id: 
+    - name: LoanContracts.Sanction.Display
+      group-id: 
+    - name: LoanContracts.Collaterals.Display
+      group-id: 
+    - name: LoanContracts.Collaterals.Edit
+      group-id: 
+
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:
