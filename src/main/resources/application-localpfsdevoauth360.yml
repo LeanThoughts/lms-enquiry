@@ -135,6 +135,76 @@ app:
   oauth2:
     login-success-url: /homepage
     logout-success-url: /login
+  entra:
+    group-memberships:
+      enabled: true
+  role-groups:
+    - name: BusinessPartners.Display
+      group-id: 48e13b06-952d-4daa-a3cc-3c1e6546cada
+    - name: BusinessPartners.Edit
+      group-id: 1642e852-2c9b-4df9-8ecd-7faf0c17f97d
+    - name: OutstandingApprovals.Display
+      group-id: be7de9d4-3b33-4758-bc99-25c8bd43bc19
+    - name: OutstandingApprovals.Edit
+      group-id: fd4f4873-8045-45d9-83c3-8619e4906110
+    - name: UserManagement.Display
+      group-id: 474c5558-c0f4-4e64-b1a1-89edc5e760f6
+    - name: UserManagement.Edit
+      group-id: 33f6b541-46b3-4e5e-8283-5091f4c42bca
+    - name: WorkflowApprovers.Display
+      group-id: 945c974d-a584-481d-9695-8119dccf25fe
+    - name: WorkflowApprovers.Edit
+      group-id: 95e6cb43-958d-4b3f-b19b-669d0e66936b
+    - name: Configuration.Display
+      group-id: 11319709-03cb-4b85-abed-17082d5f3d21
+    - name: Configuration.Edit
+      group-id: 12b851af-9bb9-43e0-88b2-9feb0a6b5edb
+    - name: ReferenceInterestRates.Display
+      group-id: 7046402b-78a1-417a-8bfd-c04d790bdca8
+    - name: ReferenceInterestRates.Edit
+      group-id: c27f5178-40fd-4f64-a2d9-9b000bfaf72a
+    - name: UploadLoanEnquiries.Display
+      group-id: c9503089-dfb5-452d-9bd4-99496e203bb2
+    - name: UploadLoanEnquiries.Edit
+      group-id: c163b756-9b18-4618-9223-7c74d4f39529
+    - name: SapIntegrationLog.Display
+      group-id: 98964e78-3f1a-405a-a18b-8948d236925a
+    - name: SapIntegrationLog.Edit
+      group-id: fb8cdbf4-6d2c-4e64-a659-01a3efccd702
+    - name: LoanContracts.Display
+      group-id: 5f1770ca-1ce3-4d1b-9c8c-e18ab8aebd2d
+    - name: LoanContracts.ProcessEnquiry.Display
+      group-id: 8231063f-821b-4675-a237-29e9f74c81b1
+    - name: LoanContracts.ProcessEnquiry.Edit
+      group-id: b0a8ac9d-ac0e-437c-99df-5640acb72234
+    - name: LoanContracts.IccApproval.Display
+      group-id: 4dfdd75b-d327-4c2f-abd5-7488e2c2cee6
+    - name: LoanContracts.IccApproval.Edit
+      group-id: 4fbb96d1-c3c0-46b2-ab7f-0750853f7c61
+    - name: LoanContracts.RiskAssessment.Display
+      group-id: fd7b5d73-06b5-4b5a-aa2c-ce051d0f8c3b
+    - name: LoanContracts.RiskAssessment.Edit
+      group-id: ae5924ac-17b3-4612-a219-5a37a5cc9283
+    - name: LoanContracts.ApplicationFee.Display
+      group-id: 5cac3bc5-5ad4-4d25-b42b-c0cf99d6e99d
+    - name: LoanContracts.ApplicationFee.Edit
+      group-id: c5dc7b30-12b4-4e09-95a3-e4911d42e4f8
+    - name: LoanContracts.BmcApproval.Display
+      group-id: 308c652b-04e9-457d-9ec1-8296fe6e1ca5
+    - name: LoanContracts.BmcApproval.Edit
+      group-id: 81de2904-a39f-4035-aefa-ae2af0cab578
+    - name: LoanContracts.BoardApproval.Display
+      group-id: 76753248-c2b3-44d6-b8f8-d93482e970eb
+    - name: LoanContracts.BoardApproval.Edit
+      group-id: 82ab8b9e-5372-47b6-a9e1-b670a14bb2a5
+    - name: LoanContracts.Sanction.Display
+      group-id: f841e433-b5b8-4c2a-9e7e-4cd101596647
+    - name: LoanContracts.Sanction.Edit
+      group-id: 1f5ec60e-d916-4dfe-a381-964ab3afe04c
+    - name: LoanContracts.Collaterals.Display
+      group-id: 98543068-8cbf-4646-b47e-917222332ea3
+    - name: LoanContracts.Collaterals.Edit
+      group-id: 7ebc161d-2ec3-4b8d-9235-564dd192cc86
 riskRating:
   baseUrl: http://localhost:8090/risk/api
 batch:
