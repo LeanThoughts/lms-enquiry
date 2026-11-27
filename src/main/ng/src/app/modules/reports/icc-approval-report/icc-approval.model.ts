@@ -1,6 +1,7 @@
 import { SelectOptionLine } from '../shared/select-option.model';
 
 import { compareCells, displayDate } from '../workflow-status-report/workflow-status.model';
+import { ReportTiming } from '../shared/report-timing';
 
 export { compareCells, displayDate };
 
@@ -42,6 +43,8 @@ export interface IccApprovalRow {
 export interface IccApprovalReport {
     rows: IccApprovalRow[];
     total: number;
+    /** Run time (browser stopwatch and server headers), set by the service */
+    timing?: ReportTiming;
     generatedOn: string;
     query: string;
 }

@@ -17,6 +17,8 @@ public class MigrationResultDto {
     private int itemsCreated;
     private int itemsUpdated;
     private int itemsSkipped;
+    /** Collaterals of the portal that SAP did not send for the loan, deleted with their child rows */
+    private int itemsDeleted;
     private int childRowsCreated;
     private int childRowsUpdated;
     private int childRowsDeleted;
@@ -61,6 +63,11 @@ public class MigrationResultDto {
         }
     }
 
+    /** A note that does not change the status (e.g. a collateral deleted because SAP no longer has it) */
+    void info(String checklistIdNo, String text) {
+        messages.add(new Message("INFO", checklistIdNo, text));
+    }
+
     void failed(String text) {
         messages.add(new Message("ERROR", null, text));
         status = Status.FAILED;
@@ -84,6 +91,8 @@ public class MigrationResultDto {
     public int getItemsUpdated() { return itemsUpdated; }
     public void setItemsUpdated(int itemsUpdated) { this.itemsUpdated = itemsUpdated; }
 
+    public int getItemsDeleted() { return itemsDeleted; }
+    public void setItemsDeleted(int itemsDeleted) { this.itemsDeleted = itemsDeleted; }
     public int getItemsSkipped() { return itemsSkipped; }
     public void setItemsSkipped(int itemsSkipped) { this.itemsSkipped = itemsSkipped; }
 

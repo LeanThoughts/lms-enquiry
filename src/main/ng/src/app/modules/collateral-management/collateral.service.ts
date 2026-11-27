@@ -14,7 +14,8 @@ import {
     PartnerSearchCriteria,
     PartnerSearchResult,
     ValueEntry,
-    ValueLists
+    ValueLists,
+    ProjectEvaluationData
 } from './collateral.model';
 
 /**
@@ -104,12 +105,27 @@ export class CollateralService {
     }
 
     /** Creates a row of a child table (coverages, roc, cersai, nesl) of a collateral. */
-    createChild<T>(type: ChildType, itemId: string, row: T): Observable<T> {
-        return this.http.post<T>(`${this.baseUrl}/items/${itemId}/${type}`, row, { context: skipBusyIndicator() });
+    /** Creates a row of a collateral (parent 'item') or of a loan (parent 'loan', project valuations). */
+    createChild<T>(type: ChildType, parentId: string, row: T, parent: 'item' | 'loan' = 'item'): Observable<T> {
+        const owner = parent === 'loan' ? 'loans' : 'items';
+        return this.http.post<T>(`${this.baseUrl}/${owner}/${parentId}/${type}`, row, { context: skipBusyIndicator() });
     }
 
     updateChild<T>(type: ChildType, id: string, row: T): Observable<T> {
         return this.http.put<T>(`${this.baseUrl}/${type}/${id}`, row, { context: skipBusyIndicator() });
+    }
+
+    /** Project Valuation of a loan: Major Collateral Type and valuations. */
+    getProjectEvaluations(loanApplicationId: string): Observable<ProjectEvaluationData> {
+        return this.http.get<ProjectEvaluationData>(`${this.baseUrl}/loans/${loanApplicationId}/project-evaluations`,
+            { context: skipBusyIndicator() });
+    }
+
+    /** Sets the Major Collateral Type of a loan (null clears it). */
+    setMajorCollateralType(loanApplicationId: string, majorCollateralType: string | null): Observable<ProjectEvaluationData> {
+        return this.http.put<ProjectEvaluationData>(
+            `${this.baseUrl}/loans/${loanApplicationId}/project-evaluations/major-collateral-type`,
+            { majorCollateralType }, { context: skipBusyIndicator() });
     }
 
     deleteChild(type: ChildType, id: string): Observable<void> {

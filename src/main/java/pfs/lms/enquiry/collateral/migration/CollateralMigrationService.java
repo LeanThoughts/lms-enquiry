@@ -12,17 +12,9 @@ import pfs.lms.enquiry.collateral.domain.CollateralChildRecord;
 import pfs.lms.enquiry.collateral.domain.CollateralChildType;
 import pfs.lms.enquiry.collateral.domain.CollateralCoverage;
 import pfs.lms.enquiry.collateral.domain.CollateralItem;
-import pfs.lms.enquiry.collateral.domain.CollateralValue;
+import pfs.lms.enquiry.collateral.domain.CollateralAttributesValueList;
 import pfs.lms.enquiry.collateral.domain.CollateralValueList;
-import pfs.lms.enquiry.collateral.repository.CollateralChecklistRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralCoverageRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralDocumentRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralSecuritiesPositionRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralItemRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralPerfectionCersaiRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralPerfectionNeslRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralPerfectionRocRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralValueRepository;
+import pfs.lms.enquiry.collateral.repository.*;
 import pfs.lms.enquiry.collateral.service.impl.CollateralNumberRangeService;
 import pfs.lms.enquiry.domain.LoanApplication;
 import pfs.lms.enquiry.repository.LoanApplicationRepository;
@@ -43,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Loads collateral checklists from SAP (sent by the ABAP migration program) into the portal.
@@ -50,7 +43,9 @@ import java.util.function.Function;
  * Each loan is saved in its own transaction. The load is idempotent: a checklist is found by loan contract,
  * a collateral by its Checklist ID (ZID_NO), a child row by its SAP row GUID (ITEM_ID); reruns update instead of
  * duplicating. A child table that is sent replaces the SAP rows of that table (rows created in the portal, without
- * ITEM_ID, are kept); a child table that is not sent is left as it is. Collaterals not sent are left as they are.
+ * ITEM_ID, are kept); a child table that is not sent is left as it is. When the items of a loan are sent, SAP's list is
+ * complete: collaterals of the portal that SAP did not send are deleted with their child rows (not when the items key
+ * is missing, and not when a sent collateral could not be identified because its ZID_NO is missing or invalid).
  * <p>
  * The data comes from SAP, the system of record, so no change documents and no SAP integration pointers are
  * written, and the portal's business validation is not applied: only values that do not fit a column are skipped.
@@ -65,6 +60,9 @@ public class CollateralMigrationService {
 
     /** Keys of the item record that hold child tables; values are the accepted spellings. */
     private static final Map<CollateralChildType, String[]> CHILD_KEYS = new EnumMap<>(CollateralChildType.class);
+
+    /** Accepted spellings of the key of the collateral list of a loan */
+    private static final String[] ITEM_KEYS = {"items", "ZPFS_T_LN_CHKLST"};
 
     static {
         CHILD_KEYS.put(CollateralChildType.COVERAGE, new String[]{"coverages", "ZCOL_COV"});
@@ -98,7 +96,7 @@ public class CollateralMigrationService {
 
     private final CollateralChecklistRepository checklistRepository;
     private final CollateralItemRepository itemRepository;
-    private final CollateralValueRepository valueRepository;
+    private final CollateralAttributesValueListRepository valueRepository;
     private final LoanApplicationRepository loanApplicationRepository;
     private final TransactionTemplate transactionTemplate;
 
@@ -111,7 +109,7 @@ public class CollateralMigrationService {
 
     public CollateralMigrationService(CollateralChecklistRepository checklistRepository,
                                       CollateralItemRepository itemRepository,
-                                      CollateralValueRepository valueRepository,
+                                      CollateralAttributesValueListRepository valueRepository,
                                       LoanApplicationRepository loanApplicationRepository,
                                       CollateralCoverageRepository coverageRepository,
                                       CollateralPerfectionRocRepository rocRepository,
@@ -177,15 +175,17 @@ public class CollateralMigrationService {
             log.error("Collateral migration of loan {} failed", loanContractId, ex);
             result.setItemsCreated(0);
             result.setItemsUpdated(0);
+            result.setItemsDeleted(0);
             result.setChildRowsCreated(0);
             result.setChildRowsUpdated(0);
             result.setChildRowsDeleted(0);
             result.setChecklistId(null);
             result.failed("Nothing saved for this loan: " + rootMessage(ex));
         }
-        log.info("Collateral migration of loan {}: {}{} – items created {}, updated {}, skipped {}; child rows created {}, "
-                        + "updated {}, deleted {}", loanContractId, result.getStatus(), dryRun ? " (dry run)" : "",
-                result.getItemsCreated(), result.getItemsUpdated(), result.getItemsSkipped(), result.getChildRowsCreated(),
+        log.info("Collateral migration of loan {}: {}{} – items created {}, updated {}, deleted {}, skipped {}; child rows "
+                        + "created {}, updated {}, deleted {}", loanContractId, result.getStatus(), dryRun ? " (dry run)" : "",
+                result.getItemsCreated(), result.getItemsUpdated(), result.getItemsDeleted(), result.getItemsSkipped(),
+                result.getChildRowsCreated(),
                 result.getChildRowsUpdated(), result.getChildRowsDeleted());
         return result;
     }
@@ -234,9 +234,11 @@ public class CollateralMigrationService {
         CHILD_KEYS.values().forEach(keys -> Arrays.stream(keys).forEach(key -> childKeys.add(key.toUpperCase(Locale.ROOT))));
 
         Set<Long> seen = new HashSet<>();
-        for (JsonNode itemNode : SapRecordMapper.array(node, "items", "ZPFS_T_LN_CHKLST")) {
+        boolean unidentified = false;
+        for (JsonNode itemNode : SapRecordMapper.array(node, ITEM_KEYS)) {
             String sentIdNo = alphaOut(SapRecordMapper.text(itemNode, "ZID_NO", "checklistIdNo"));
             if (sentIdNo == null) {
+                unidentified = true;
                 result.setItemsSkipped(result.getItemsSkipped() + 1);
                 result.error(null, "A collateral without ZID_NO was skipped.");
                 continue;
@@ -244,6 +246,7 @@ public class CollateralMigrationService {
             Long checklistIdNo = checklistNumber(sentIdNo);
             String idNo = sentIdNo;
             if (checklistIdNo == null) {
+                unidentified = true;
                 result.setItemsSkipped(result.getItemsSkipped() + 1);
                 result.error(idNo, "ZID_NO '" + sentIdNo + "' is not a number between 1 and "
                         + CollateralNumberRangeService.MAX_CHECKLIST_ID + "; the collateral was skipped.");
@@ -300,6 +303,50 @@ public class CollateralMigrationService {
                     migrateChildren(type, item, loan, SapRecordMapper.array(itemNode, CHILD_KEYS.get(type)), lists, result);
                 }
             }
+        }
+
+        if (hasKey(node, ITEM_KEYS)) {
+            deleteItemsNotSent(existing, seen, unidentified, result);
+        }
+    }
+
+    /**
+     * SAP sent the complete list of collaterals of the loan: the portal's collaterals that are not in it are deleted with
+     * their child rows. Nothing is deleted when a sent collateral could not be identified (missing or invalid ZID_NO),
+     * because it might be one of them. No change documents and no SAP integration pointers are written: SAP is the
+     * system of record and already lacks these collaterals.
+     */
+    private void deleteItemsNotSent(Map<Long, CollateralItem> existing, Set<Long> seen, boolean unidentified,
+                                    MigrationResultDto result) {
+        List<CollateralItem> notSent = new ArrayList<>();
+        existing.forEach((checklistIdNo, item) -> {
+            if (!seen.contains(checklistIdNo)) {
+                notSent.add(item);
+            }
+        });
+        if (notSent.isEmpty()) {
+            return;
+        }
+        notSent.sort(java.util.Comparator.comparing(CollateralItem::getChecklistIdNo));
+        if (unidentified) {
+            result.warning(null, notSent.size() + " collateral(s) of the portal not sent by SAP ("
+                    + notSent.stream().map(item -> String.valueOf(item.getChecklistIdNo())).collect(Collectors.joining(", "))
+                    + ") were not deleted, because a sent collateral has no valid ZID_NO.");
+            return;
+        }
+        for (CollateralItem item : notSent) {
+            int childRows = 0;
+            for (CollateralChildType type : CollateralChildType.values()) {
+                for (CollateralChildRecord<?> row : new ArrayList<>(childFinders.get(type).apply(item.getId()))) {
+                    delete(type, row);
+                    childRows++;
+                }
+            }
+            itemRepository.delete(item);
+            result.setItemsDeleted(result.getItemsDeleted() + 1);
+            result.setChildRowsDeleted(result.getChildRowsDeleted() + childRows);
+            result.info(String.valueOf(item.getChecklistIdNo()), "Deleted: not sent by SAP"
+                    + (childRows > 0 ? " (with " + childRows + " child row" + (childRows == 1 ? "" : "s") + ")" : "") + ".");
         }
     }
 
@@ -497,7 +544,7 @@ public class CollateralMigrationService {
 
     private Map<String, Map<String, String>> valueLists() {
         Map<String, Map<String, String>> lists = new LinkedHashMap<>();
-        for (CollateralValue value : valueRepository.findAll()) {
+        for (CollateralAttributesValueList value : valueRepository.findAll()) {
             lists.computeIfAbsent(value.getListName(), name -> new LinkedHashMap<>())
                     .put(value.getCode(), value.getDescription());
         }

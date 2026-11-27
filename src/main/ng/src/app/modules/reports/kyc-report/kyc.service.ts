@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { toParams } from '../shared/select-option.model';
+import { timedGet } from '../shared/report-timing';
 import { skipBusyIndicator } from '../../../busy-indicator.service';
 import { KycReport, KycRow, KycSelection } from './kyc.model';
 
@@ -16,7 +17,7 @@ export class KycService {
 
     run(selection: KycSelection): Observable<KycReport> {
         const params = toParams(selection, ['companyCode']);
-        return this.http.get<KycReport>(this.url, { params, context: skipBusyIndicator() });
+        return timedGet<KycReport>(this.http, this.url, { params, context: skipBusyIndicator() });
     }
 
     /** Excel of the rows and visible columns as shown (sorted / filtered); no second SAP call. */

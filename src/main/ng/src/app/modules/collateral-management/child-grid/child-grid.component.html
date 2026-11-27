@@ -3,9 +3,9 @@
         <h3 class="cm-grid-table__title">{{ grid.title }} ({{ rows.length }})</h3>
         <span class="cm-grid-table__spacer"></span>
         @if (canChange) {
-            <button fd-button fdType="emphasized" glyph="add" label="Create" (click)="create()"></button>
-            <button fd-button fdType="standard" glyph="edit" label="Change" [disabled]="!selected" (click)="change()"></button>
-            <button fd-button fdType="standard" glyph="delete" label="Delete" [disabled]="!selected || deleting"
+            <button fd-button fdType="emphasized" glyph="add" [label]="grid.actionLabels?.create ?? 'Create'" (click)="create()"></button>
+            <button fd-button fdType="standard" glyph="edit" [label]="grid.actionLabels?.change ?? 'Change'" [disabled]="!selected" (click)="change()"></button>
+            <button fd-button fdType="standard" glyph="delete" [label]="grid.actionLabels?.delete ?? 'Delete'" [disabled]="!selected || deleting"
                 (click)="remove()"></button>
         }
         <button fd-button fdType="transparent" glyph="display" label="Display" [disabled]="!selected || !itemId"
@@ -66,7 +66,7 @@
             <fd-icon [glyph]="grid.icon" aria-hidden="true"></fd-icon>
             <span>
                 No {{ grid.title }} entries yet.
-                {{ canChange ? grid.emptyText : (canWrite ? 'Choose Change on the collateral to add entries.' : '') }}
+                {{ canChange ? grid.emptyText : (canWrite ? (grid.parent === 'loan' ? 'Entries cannot be added while the checklist waits for approval.' : 'Choose Change on the collateral to add entries.') : '') }}
             </span>
         </div>
     }

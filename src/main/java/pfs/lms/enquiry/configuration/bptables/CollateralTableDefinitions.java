@@ -1,6 +1,6 @@
 package pfs.lms.enquiry.configuration.bptables;
 
-import pfs.lms.enquiry.collateral.domain.CollateralValue;
+import pfs.lms.enquiry.collateral.domain.CollateralAttributesValueList;
 import pfs.lms.enquiry.collateral.domain.CollateralValueList;
 
 import java.util.EnumMap;
@@ -13,7 +13,7 @@ import static pfs.lms.enquiry.configuration.bptables.BpTableField.text;
 /**
  * The value lists (dropdowns) of Collateral Management, table collateral_value: one app in the Collaterals module of
  * the Configuration workspace (route /configuration/collateral-tables/collateral-values), filtered by value list.
- * CollateralValueInitializer only adds delivered entries that are missing, so entries changed here keep their values.
+ * CollateralAttributesValueListInitializer only adds delivered entries that are missing, so entries changed here keep their values.
  */
 final class CollateralTableDefinitions {
 
@@ -52,7 +52,7 @@ final class CollateralTableDefinitions {
         }
         return new BpTableDefinition("collateral-values", "Collateral Value Lists",
                 "Dropdown values of Collateral Management (condition groups, collateral object types, statuses, …) per value list",
-                "CollateralValueInitializer", CollateralValue.class, "code", "description",
+                "CollateralAttributesValueListInitializer", CollateralAttributesValueList.class, "code", "description",
                 generatedId(), list, text("code", "Code").key().max(20),
                 text("description", "Description").required().max(100), number("sortOrder", "Sort Order"))
                 .sortBy("listName", "sortOrder", "code")
@@ -61,7 +61,7 @@ final class CollateralTableDefinitions {
 
     /** The code must fit into the collateral column of its value list */
     static String checkCode(Object row) {
-        CollateralValue value = (CollateralValue) row;
+        CollateralAttributesValueList value = (CollateralAttributesValueList) row;
         if (value.getListName() == null || value.getCode() == null) {
             return null;
         }

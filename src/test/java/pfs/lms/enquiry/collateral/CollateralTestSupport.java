@@ -12,7 +12,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import pfs.lms.enquiry.businesspartner.domain.DocumentType;
 import pfs.lms.enquiry.businesspartner.repository.DocumentTypeRepository;
-import pfs.lms.enquiry.collateral.config.CollateralValueInitializer;
+import pfs.lms.enquiry.collateral.config.CollateralAttributesValueListInitializer;
 import pfs.lms.enquiry.collateral.domain.CollateralItem;
 import pfs.lms.enquiry.collateral.service.ICollateralChildService;
 import pfs.lms.enquiry.collateral.service.ICollateralService;
@@ -82,7 +82,7 @@ public abstract class CollateralTestSupport {
         collateralService = context.getBean(ICollateralService.class);
         childService = context.getBean(ICollateralChildService.class);
 
-        context.getBean(CollateralValueInitializer.class).run();
+        context.getBean(CollateralAttributesValueListInitializer.class).run();
         DocumentTypeRepository documentTypes = context.getBean(DocumentTypeRepository.class);
         documentTypes.save(new DocumentType(null, "ZPFSLM101", "Legal Counsel Report", "BUS2049"));
         documentTypes.save(new DocumentType(null, "ZPFSLM104", "List of Loan Documents executed with Borrower and others", "BUS2049"));

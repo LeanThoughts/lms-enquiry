@@ -3,6 +3,10 @@ import { routeInterceptor } from '../../route.interceptor';
 import { ReportsHomeComponent } from './reports-home/reports-home.component';
 import { BalanceListReportComponent } from './balance-list-report/balance-list-report.component';
 import { DisbursementReportComponent } from './disbursement-report/disbursement-report.component';
+import { CollateralSecuritiesReportComponent } from './collateral-securities-report/collateral-securities-report.component';
+import { PortfolioExposureReportComponent } from './portfolio-exposure-report/portfolio-exposure-report.component';
+import { CovenantsReportComponent } from './covenants-report/covenants-report.component';
+import { PortfolioDebtReportComponent } from './portfolio-debt-report/portfolio-debt-report.component';
 import { IccApprovalReportComponent } from './icc-approval-report/icc-approval-report.component';
 import { KycReportComponent } from './kyc-report/kyc-report.component';
 import { WorkflowStatusReportComponent } from './workflow-status-report/workflow-status-report.component';
@@ -18,6 +22,11 @@ export default [
     { path: 'reports/kyc', component: KycReportComponent, canActivate: [routeInterceptor] },
     { path: 'reports/balance-list', component: BalanceListReportComponent, canActivate: [routeInterceptor] },
     { path: 'reports/disbursement', component: DisbursementReportComponent, canActivate: [routeInterceptor] },
+    { path: 'reports/portfolio-debt-listing', component: PortfolioDebtReportComponent, canActivate: [routeInterceptor] },
+    { path: 'reports/portfolio-exposure', component: PortfolioExposureReportComponent, canActivate: [routeInterceptor] },
+    { path: 'reports/covenants', component: CovenantsReportComponent, canActivate: [routeInterceptor] },
+    // Collaterals
+    { path: 'reports/collateral-securities', component: CollateralSecuritiesReportComponent, canActivate: [routeInterceptor] },
     // Miscellaneous
     { path: 'reports/workflow-status', component: WorkflowStatusReportComponent, canActivate: [routeInterceptor] }
 ] as Routes;

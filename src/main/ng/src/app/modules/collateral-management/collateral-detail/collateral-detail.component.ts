@@ -404,7 +404,8 @@ export class CollateralDetailComponent implements OnInit, OnDestroy {
                     cersaiEvents: rows['cersaiEvents'] ?? [],
                     neslEvents: rows['neslEvents'] ?? [],
                     documents: rows['documents'] ?? [],
-                    securitiesPositions: rows['securitiesPositions'] ?? []
+                    securitiesPositions: rows['securitiesPositions'] ?? [],
+                    valuations: rows['valuations'] ?? []
                 };
                 this.partnerNames = { ...((detail as { partnerNames?: Record<string, string> }).partnerNames ?? {}) };
                 this.patchForm(detail.item);

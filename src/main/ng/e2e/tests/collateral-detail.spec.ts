@@ -4,14 +4,15 @@ import { MockApi } from './mock-api';
 
 test.describe('Collateral detail', () => {
 
-    test('shows the header block and the 14 tabs in display mode', async ({ page }) => {
+    test('shows the header block and the 15 tabs in display mode', async ({ page }) => {
         const api = new MockApi();
         await api.install(page);
         await openCollateral912(page);
 
         await expect(page.getByText('Collateral 912')).toBeVisible();
-        await expect(page.locator('.cm-tabs__tab')).toHaveCount(14);
-        for (const tab of ['Applicability', 'Sec. Creation', 'Resp. Parties', 'Post Exec', 'Documents', 'Sec. Specific']) {
+        await expect(page.locator('.cm-tabs__tab')).toHaveCount(15);
+        await expect(page.locator('.cm-tabs__tab').nth(5)).toContainText('Valuation');
+        for (const tab of ['Applicability', 'Sec. Creation', 'Valuation', 'Resp. Parties', 'Post Exec', 'Documents', 'Sec. Specific']) {
             await expect(page.locator('.cm-tabs__tab').filter({ hasText: tab })).toHaveCount(1);
         }
         await expect(page.getByRole('button', { name: 'Change' })).toBeVisible();

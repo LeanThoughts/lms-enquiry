@@ -52,6 +52,38 @@ test.describe('Collateral child tables', () => {
         await expect(grid.locator('a.cm-grid-table__file')).toContainText('Deed_of_Pledge_912.pdf');
     });
 
+    test('Valuation (6th tab): rows of ZCOL_VALUATION; a new valuation needs a date, gets the next serial number and INR', async ({ page }) => {
+        const api = new MockApi();
+        await api.install(page);
+        await openCollateral912(page);
+        await openTab(page, 'Valuation');
+
+        const grid = page.locator('app-collateral-child-grid');
+        await expect(grid.locator('thead th')).toContainText(['Serial Number', 'Entered Value', 'Valuation Date', 'Currency', 'Remarks']);
+        await expect(grid.locator('thead th').filter({ hasText: 'Nominal value' })).toHaveCount(0);
+        await expect(grid.locator('tbody tr')).toHaveCount(1);
+        await expect(grid.locator('tbody tr').first()).toContainText('1,50,000.00');
+        await expect(grid.locator('tbody tr').first()).toContainText('01.01.2026');
+
+        await page.getByRole('button', { name: 'Change' }).click();
+        await grid.getByRole('button', { name: 'Create' }).click();
+        await dialog(page).getByRole('button', { name: 'Save' }).click();
+        await expect(dialog(page)).toContainText('Check the highlighted fields.');
+
+        await input(dialog(page), 'Valuation Date').fill('6/30/2026');
+        await expect(dialog(page).locator('app-collateral-field').filter({ hasText: 'Nominal value' })).toHaveCount(0);
+        await input(dialog(page), 'Entered Value').fill('950000.50');
+        await input(dialog(page), 'Remarks').fill('Independent valuer');
+        await dialog(page).getByRole('button', { name: 'Save' }).click();
+
+        await expect(grid.locator('tbody tr')).toHaveCount(2);
+        const sent = api.sent('POST', /\/items\/I912\/valuations$/)[0].body;
+        expect(sent).toMatchObject({ valuationDate: '2026-06-30', nominalValueCurrency: 'INR', remarks: 'Independent valuer' });
+        expect(Number(sent.enteredAmount)).toBe(950000.5);
+        await expect(grid.locator('tbody tr').nth(1)).toContainText('2');
+        await expect(grid.locator('tbody tr').nth(1)).toContainText('9,50,000.50');
+    });
+
     test('Sec. Specific: the currency is proposed as INR', async ({ page }) => {
         const api = new MockApi();
         await api.install(page);

@@ -21,6 +21,7 @@ public class CollateralItemDetailDto {
     private List<? extends CollateralChildRecord<?>> neslEvents = new ArrayList<>();
     private List<? extends CollateralChildRecord<?>> documents = new ArrayList<>();
     private List<? extends CollateralChildRecord<?>> securitiesPositions = new ArrayList<>();
+    private List<? extends CollateralChildRecord<?>> valuations = new ArrayList<>();
     /** Names of the partners in Security Trustee, Security Agent and Custodian, keyed by party number. */
     private Map<String, String> partnerNames = new LinkedHashMap<>();
 
@@ -67,4 +68,6 @@ public class CollateralItemDetailDto {
 
     public List<? extends CollateralChildRecord<?>> getSecuritiesPositions() { return securitiesPositions; }
     public void setSecuritiesPositions(List<? extends CollateralChildRecord<?>> securitiesPositions) { this.securitiesPositions = securitiesPositions; }
+    public List<? extends CollateralChildRecord<?>> getValuations() { return valuations; }
+    public void setValuations(List<? extends CollateralChildRecord<?>> valuations) { this.valuations = valuations; }
 }

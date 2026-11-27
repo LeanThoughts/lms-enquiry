@@ -17,6 +17,7 @@ import pfs.lms.enquiry.collateral.domain.CollateralChecklist;
 import pfs.lms.enquiry.collateral.dto.CollateralChecklistDto;
 import pfs.lms.enquiry.collateral.repository.CollateralChecklistRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralItemRepository;
+import pfs.lms.enquiry.collateral.repository.ProjectEvaluationRepository;
 import pfs.lms.enquiry.collateral.service.ICollateralService;
 import pfs.lms.enquiry.collateral.service.impl.CollateralChangeDocumentService;
 import pfs.lms.enquiry.domain.LoanApplication;
@@ -52,6 +53,7 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
     private final ProcessEngine processEngine;
     private final CollateralChecklistRepository checklistRepository;
     private final CollateralItemRepository itemRepository;
+    private final ProjectEvaluationRepository projectEvaluationRepository;
     private final WorkflowApproverRepository workflowApproverRepository;
     private final UserRepository userRepository;
     private final ICollateralService collateralService;
@@ -62,6 +64,7 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
     public CollateralWorkflowService(ProcessEngine processEngine,
                                      CollateralChecklistRepository checklistRepository,
                                      CollateralItemRepository itemRepository,
+                                     ProjectEvaluationRepository projectEvaluationRepository,
                                      WorkflowApproverRepository workflowApproverRepository,
                                      UserRepository userRepository,
                                      ICollateralService collateralService,
@@ -71,6 +74,7 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
         this.processEngine = processEngine;
         this.checklistRepository = checklistRepository;
         this.itemRepository = itemRepository;
+        this.projectEvaluationRepository = projectEvaluationRepository;
         this.workflowApproverRepository = workflowApproverRepository;
         this.userRepository = userRepository;
         this.collateralService = collateralService;
@@ -85,9 +89,11 @@ public class CollateralWorkflowService implements ICollateralWorkflowService {
         if (checklist.isInApproval()) {
             throw new LmsException("The collateral checklist is already waiting for approval.", HttpStatus.CONFLICT);
         }
-        if (itemRepository.countByChecklist_Id(checklist.getId()) == 0) {
-            throw new LmsException("Create at least one collateral before sending the checklist for approval.",
-                    HttpStatus.PRECONDITION_FAILED);
+        // The checklist carries the collaterals and the project valuations of the loan; either is enough to send it
+        if (itemRepository.countByChecklist_Id(checklist.getId()) == 0
+                && projectEvaluationRepository.countByLoanApplication_Id(checklist.getLoanApplicationId()) == 0) {
+            throw new LmsException("Create at least one collateral or project valuation before sending the checklist "
+                    + "for approval.", HttpStatus.PRECONDITION_FAILED);
         }
 
         User user = requestorEmail == null ? null : userRepository.findByEmail(requestorEmail);

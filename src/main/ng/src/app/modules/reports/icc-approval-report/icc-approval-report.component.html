@@ -101,13 +101,14 @@
             @if (running) {
                 <div class="ws-state" role="status" aria-live="polite">
                     <span class="ws-spinner" aria-hidden="true"></span>
-                    <div class="ws-state__title">Running the report in SAP…</div>
+                    <div class="ws-state__title">Running the report in SAP… <app-report-elapsed /></div>
                     <div class="ws-state__text">Reading MISIccApprovalStatRptSet for the selection. This can take a moment.</div>
                 </div>
             } @else if (report) {
                 <div class="ws-panel__head ws-result__head">
                     <h2 id="ws-result-title" class="ws-panel__title">Result</h2>
                     <span class="ws-badge ws-result-bar__count">{{ resultText }}</span>
+                    <app-report-run-stats [timing]="report.timing" />
                     @if (sortLabel) {
                         <span class="ws-result__sort"><fd-icon [glyph]="sortDirection === 'asc' ? 'sort-ascending' : 'sort-descending'" aria-hidden="true"></fd-icon>
                             {{ sortLabel }}</span>

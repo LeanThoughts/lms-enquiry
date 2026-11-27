@@ -154,6 +154,39 @@ class CollateralMigrationServiceTest extends CollateralTestSupport {
         assertThat(off.migrate(json("{'RANL':'999'}"), false).getStatusCodeValue()).isEqualTo(404);
     }
 
+    @Test
+    @Order(6)
+    @DisplayName("collaterals of the portal that SAP no longer sends are deleted with their child rows")
+    void deleteNotSent() {
+        // 912 (with child rows) and 913 come from the earlier runs; one more is created in the portal
+        CollateralItem portal = createItem(loanId, "Z00007");
+        assertThat(collateralService.getChecklist(loanId).getItems()).hasSize(3);
+        String only913 = "{'RANL':'10003500','items':[{'ZID_NO':'913','ZCONDITION_GRP':'04','ZCOND_CAT':'04',"
+                + "'ZCOLLATERAL_TYPE':'ZRE001'}]}";
+
+        // a collateral without ZID_NO might be one of them: nothing is deleted, a warning says so
+        MigrationResultDto guarded = migrate(only913.replace("]}", ",{'ZCONDITION_GRP':'04'}]}"), false).get(0);
+        assertThat(guarded.getItemsDeleted()).isZero();
+        assertThat(messages(guarded)).anySatisfy(text -> assertThat(text).contains("were not deleted"));
+        // without the items key nothing is compared or deleted
+        assertThat(migrate("{'RANL':'10003500','workFlowStatusCode':'1'}", false).get(0).getItemsDeleted()).isZero();
+
+        // a dry run reports the deletions and keeps everything
+        MigrationResultDto dryRun = migrate(only913, true).get(0);
+        assertThat(dryRun.getItemsDeleted()).isEqualTo(2);
+        assertThat(collateralService.getChecklist(loanId).getItems()).hasSize(3);
+
+        MigrationResultDto result = migrate(only913, false).get(0);
+        assertThat(result.getItemsUpdated()).isEqualTo(1);
+        assertThat(result.getItemsDeleted()).isEqualTo(2);
+        assertThat(result.getChildRowsDeleted()).isEqualTo(4);      // 912: coverage, RoC, document, securities position
+        assertThat(messages(result)).anySatisfy(text -> assertThat(text).isEqualTo("INFO Deleted: not sent by SAP (with 4 child rows)."));
+        assertThat(collateralService.getChecklist(loanId).getItems()).extracting(CollateralItem::getChecklistIdNo)
+                .containsExactly(913L);
+        assertThat(collateralService.getChecklist(loanId).getItems()).extracting(CollateralItem::getId)
+                .doesNotContain(portal.getId());
+    }
+
     private List<MigrationResultDto> migrate(String body, boolean dryRun) {
         JsonNode node = json(body);
         List<JsonNode> checklists = new java.util.ArrayList<>();

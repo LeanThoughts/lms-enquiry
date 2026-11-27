@@ -1,0 +1,123 @@
+<fd-dynamic-page size="large" [autoResponsive]="true">
+    <fd-dynamic-page-header headingLevel="2"
+        [title]="loanLabel ? 'Project Valuation of Loan ' + loanLabel : 'Project Valuation'"
+        [subtitle]="loan ? (loan.borrowerName || 'Borrower ' + (loan.borrowerNumber || '–')) + ' · ' + (loan.projectName || '–') : ''"
+        [style.margin-top.rem]="1">
+        <fd-dynamic-page-global-actions>
+            <fd-toolbar fdType="transparent" [clearBorder]="true">
+                <button fd-button fdType="transparent" glyph="refresh" label="Refresh"
+                    [disabled]="!!waitMessage" (click)="load()"></button>
+                @if (canWrite) {
+                    <button fd-button fdType="standard" glyph="paper-plane" label="Send for Approval"
+                        [disabled]="!canSendForApproval || !!waitMessage || loadFailed"
+                        [title]="inApproval ? 'Already waiting for approval' : (evaluations.length ? 'Send the valuations for approval with the collateral checklist' : 'Create a valuation first')"
+                        (click)="sendForApproval()"></button>
+                }
+                <button fd-button fdType="transparent" glyph="hint" label="Technical Info"
+                    [title]="data?.checklistId ? 'The collateral checklist the valuations are approved with' : 'Created with the first valuation'"
+                    [disabled]="!data?.checklistId || !!waitMessage" (click)="technicalInfo()"></button>
+                <fd-toolbar-separator></fd-toolbar-separator>
+                <button fd-button fdType="transparent" glyph="decline" aria-label="Back to the collaterals of the loan"
+                    title="Back to the collaterals of the loan" (click)="back()"></button>
+            </fd-toolbar>
+        </fd-dynamic-page-global-actions>
+    </fd-dynamic-page-header>
+
+    <fd-dynamic-page-content cdkScrollable>
+        @if (loan) {
+            <div class="cm-facts">
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Loan Contract</span>
+                    <span class="cm-fact__value cm-fact__value--strong">{{ loan.loanContractId || '–' }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Enquiry</span>
+                    <span class="cm-fact__value">{{ loan.enquiryNo || '–' }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Borrower</span>
+                    <span class="cm-fact__value">{{ loan.borrowerName || '–' }} · BP {{ loan.borrowerNumber || '–' }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Checklist Workflow Status</span>
+                    <span class="cm-fact__value">
+                        @if (data?.checklistId) {
+                            <span fd-object-status [status]="workflowState"
+                                [label]="data?.checklistWorkFlowStatusDescription || '–'"></span>
+                        } @else {
+                            No checklist yet
+                        }
+                    </span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Valuations</span>
+                    <span class="cm-fact__value cm-fact__value--kpi">{{ evaluations.length }}</span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Latest Valuation</span>
+                    <span class="cm-fact__value" data-testid="pv-latest">
+                        @if (latest; as last) {
+                            <span class="cm-fact__value--kpi cm-fact__value--positive">{{ formatAmount(last.netValuationAmount, last.currency) }}</span>
+                            <span class="cm-muted pv-latest__when">{{ formatDate(last.valuationDate) }} · {{ text('VALUATION_BY', last.valuationBy) }}</span>
+                        } @else {
+                            None yet
+                        }
+                    </span>
+                </div>
+                <div class="cm-fact">
+                    <span class="cm-fact__label">Your Access</span>
+                    <span class="cm-fact__value">
+                        <fd-icon [glyph]="canWrite ? 'edit' : 'display'" aria-hidden="true"></fd-icon>
+                        {{ canWrite ? 'Create, change and delete' : 'Display only' }}
+                    </span>
+                </div>
+            </div>
+        }
+
+        @if (inApproval) {
+            <fd-message-strip type="information" [dismissible]="false" class="pv-strip">
+                The collateral checklist of this loan is waiting for approval. Valuations and the Major Collateral Type
+                cannot be changed until the approver approves or rejects it.
+            </fd-message-strip>
+        }
+
+        @if (waitMessage) {
+            <div class="cm-wait" role="status" aria-live="polite">
+                <fd-icon glyph="lateness" class="cm-hourglass" aria-hidden="true"></fd-icon>
+                <span class="cm-wait__text">{{ waitMessage }}</span>
+            </div>
+        } @else if (loadFailed) {
+            <div class="cm-empty">
+                <fd-icon glyph="message-error" class="cm-empty__icon"></fd-icon>
+                <h3 class="cm-empty__title">The project valuation could not be loaded</h3>
+                <button fd-button fdType="emphasized" glyph="refresh" label="Try again" (click)="load()"></button>
+            </div>
+        } @else {
+            <section class="pv-header" aria-label="Major Collateral Type">
+                <div class="pv-header__field">
+                    <app-collateral-field [def]="majorTypeDef" [form]="majorTypeForm"
+                        [edit]="canChange && !savingMajorType && evaluations.length > 0"
+                        [options]="lists['MAJOR_COLLATERAL_TYPE'] || []"></app-collateral-field>
+                </div>
+                <span class="pv-header__hint" role="status">
+                    @if (savingMajorType) {
+                        Saving…
+                    } @else if (!evaluations.length) {
+                        Set once the first valuation exists; one value for the loan, kept on every valuation in SAP.
+                    } @else {
+                        One value for the loan, saved as soon as it is changed and kept on every valuation in SAP.
+                    }
+                </span>
+            </section>
+
+            <app-collateral-child-grid [grid]="grid" [rows]="evaluations" [lists]="lists"
+                [itemId]="loanApplicationId" [editable]="canChange" [canWrite]="canWrite"
+                (rowsChange)="onRowsChange($event)"></app-collateral-child-grid>
+
+            <p class="cm-muted pv-footnote">
+                Valuations are approved with the loan's collateral checklist (Send for Approval) and posted to SAP once
+                it is approved.
+            </p>
+        }
+    </fd-dynamic-page-content>
+</fd-dynamic-page>

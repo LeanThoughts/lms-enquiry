@@ -7,7 +7,7 @@ const field = (name: string, label: string, extra: Record<string, unknown> = {})
     referenceEntity: false, options: [], filter: false, idField: false, visible: true, changeable: true, ...extra });
 
 const TABLE = {
-    key: 'collateral-values', title: 'Collateral Value Lists', module: 'collaterals', configClass: 'CollateralValueInitializer',
+    key: 'collateral-values', title: 'Collateral Value Lists', module: 'collaterals', configClass: 'CollateralAttributesValueListInitializer',
     description: 'Dropdown values of Collateral Management', valueField: 'code', labelField: 'description',
     fields: [
         field('id', 'ID', { type: 'NUMBER', idKind: 'GENERATED_ID', idField: true, visible: false, changeable: false }),

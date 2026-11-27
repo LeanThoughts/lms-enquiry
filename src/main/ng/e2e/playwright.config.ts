@@ -24,7 +24,7 @@ export default defineConfig({
     },
     projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } }],
     webServer: process.env['E2E_BASE_URL'] ? undefined : {
-        command: 'npx ng serve --port 4300',
+        command: 'npx ng serve --port 4300 --configuration e2e',
         cwd: '..',
         url: 'http://localhost:4300',
         timeout: 240_000,

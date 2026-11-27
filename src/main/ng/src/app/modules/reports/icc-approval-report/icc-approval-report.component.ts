@@ -22,6 +22,8 @@ import {
     displayDate
 } from './icc-approval.model';
 import { IccApprovalService } from './icc-approval.service';
+import { ReportElapsedComponent, ReportRunStatsComponent } from '../shared/report-run-stats.component';
+import { recordCountText } from '../shared/report-timing';
 
 /**
  * ICC Approval Status Report (Reports › Loans Management): the selection screen of the SAP report "Loans : ICC
@@ -33,7 +35,7 @@ import { IccApprovalService } from './icc-approval.service';
     selector: 'app-icc-approval-report',
     templateUrl: './icc-approval-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './icc-approval-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ReportRunStatsComponent, ReportElapsedComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class IccApprovalReportComponent implements OnDestroy {
 
@@ -276,7 +278,7 @@ export class IccApprovalReportComponent implements OnDestroy {
         }
         const shown = this.rows.length;
         const total = this.report.total;
-        return shown === total ? `${total} ${total === 1 ? 'row' : 'rows'}` : `${shown} of ${total} rows`;
+        return recordCountText(shown, total);
     }
 
     /** Excel download of the report as shown: the rows in their current order and filter. */

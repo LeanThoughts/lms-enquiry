@@ -24,7 +24,8 @@ import java.util.UUID;
 @Service
 public class ReportVariantService {
 
-    static final Set<String> REPORTS = new HashSet<>(Arrays.asList("workflow-status", "icc-approval", "kyc", "balance-list", "disbursement"));
+    static final Set<String> REPORTS = new HashSet<>(Arrays.asList("workflow-status", "icc-approval", "kyc", "balance-list", "disbursement",
+            "portfolio-debt-listing", "collateral-securities", "portfolio-exposure", "covenants"));
     static final int MAX_PARAMETERS = 50_000;
 
     private final ReportVariantRepository repository;

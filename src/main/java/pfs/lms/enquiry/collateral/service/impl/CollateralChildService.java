@@ -14,19 +14,13 @@ import pfs.lms.enquiry.collateral.domain.CollateralCoverage;
 import pfs.lms.enquiry.collateral.domain.CollateralDocument;
 import pfs.lms.enquiry.collateral.domain.CollateralItem;
 import pfs.lms.enquiry.collateral.domain.CollateralSecuritiesPosition;
-import pfs.lms.enquiry.collateral.domain.CollateralValue;
+import pfs.lms.enquiry.collateral.domain.CollateralValuation;
+import pfs.lms.enquiry.collateral.domain.CollateralAttributesValueList;
 import pfs.lms.enquiry.collateral.domain.CollateralValueList;
 import pfs.lms.enquiry.collateral.domain.SapField;
 import pfs.lms.enquiry.businesspartner.domain.DocumentType;
 import pfs.lms.enquiry.businesspartner.repository.DocumentTypeRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralCoverageRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralDocumentRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralItemRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralPerfectionCersaiRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralPerfectionNeslRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralPerfectionRocRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralSecuritiesPositionRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralValueRepository;
+import pfs.lms.enquiry.collateral.repository.*;
 import pfs.lms.enquiry.collateral.service.ICollateralChildService;
 import pfs.lms.enquiry.exception.LmsException;
 
@@ -115,6 +109,9 @@ public class CollateralChildService implements ICollateralChildService {
         LABELS.put("numberOfUnits", "No of Units");
         LABELS.put("nominalValue", "Nominal Value");
         LABELS.put("nominalValueCurrency", "Currency");
+        LABELS.put("assetValue", "Value");
+        LABELS.put("enteredAmount", "Entered Value");
+        LABELS.put("valuationDate", "Valuation Date");
         LABELS.put("holdingPercentage", "Holding %");
     }
 
@@ -125,7 +122,7 @@ public class CollateralChildService implements ICollateralChildService {
     private final Map<Class<?>, List<Field>> fields = new HashMap<>();
 
     private final CollateralItemRepository itemRepository;
-    private final CollateralValueRepository valueRepository;
+    private final CollateralAttributesValueListRepository valueRepository;
     private final DocumentTypeRepository documentTypeRepository;
     private final CollateralChangeDocumentService changeDocumentService;
     private final ObjectMapper objectMapper;
@@ -136,8 +133,9 @@ public class CollateralChildService implements ICollateralChildService {
                                   CollateralPerfectionNeslRepository neslRepository,
                                   CollateralDocumentRepository documentRepository,
                                   CollateralSecuritiesPositionRepository securitiesPositionRepository,
+                                  CollateralValuationRepository valuationRepository,
                                   CollateralItemRepository itemRepository,
-                                  CollateralValueRepository valueRepository,
+                                  CollateralAttributesValueListRepository valueRepository,
                                   DocumentTypeRepository documentTypeRepository,
                                   CollateralChangeDocumentService changeDocumentService,
                                   ObjectMapper objectMapper) {
@@ -153,12 +151,14 @@ public class CollateralChildService implements ICollateralChildService {
         repositories.put(CollateralChildType.NESL, neslRepository);
         repositories.put(CollateralChildType.DOCUMENT, documentRepository);
         repositories.put(CollateralChildType.SECURITIES_POSITION, securitiesPositionRepository);
+        repositories.put(CollateralChildType.VALUATION, valuationRepository);
         finders.put(CollateralChildType.COVERAGE, coverageRepository::findByItem_Id);
         finders.put(CollateralChildType.ROC, rocRepository::findByItem_Id);
         finders.put(CollateralChildType.CERSAI, cersaiRepository::findByItem_Id);
         finders.put(CollateralChildType.NESL, neslRepository::findByItem_Id);
         finders.put(CollateralChildType.DOCUMENT, documentRepository::findByItem_Id);
         finders.put(CollateralChildType.SECURITIES_POSITION, securitiesPositionRepository::findByItem_Id);
+        finders.put(CollateralChildType.VALUATION, valuationRepository::findByItem_Id);
 
         for (CollateralChildType type : CollateralChildType.values()) {
             fields.put(type.getEntityClass(), Collections.unmodifiableList(
@@ -290,6 +290,8 @@ public class CollateralChildService implements ICollateralChildService {
             validateDocument((CollateralDocument) row);
         } else if (row instanceof CollateralSecuritiesPosition) {
             validateSecuritiesPosition((CollateralSecuritiesPosition) row);
+        } else if (row instanceof CollateralValuation) {
+            validateValuation((CollateralValuation) row);
         } else if (row instanceof CollateralCoverage) {
             CollateralCoverage coverage = (CollateralCoverage) row;
             if (coverage.getEffectiveFromDate() == null) {
@@ -332,6 +334,8 @@ public class CollateralChildService implements ICollateralChildService {
             CollateralSecuritiesPosition position = (CollateralSecuritiesPosition) row;
             position.setSecuritiesShortName(truncate(
                     description(lists, CollateralValueList.SECURITIES_TYPE, position.getSecuritiesType()), 40));
+        } else if (row instanceof CollateralValuation) {
+            // no description columns on ZCOL_VALUATION
         } else if (row instanceof CollateralCoverage) {
             CollateralCoverage coverage = (CollateralCoverage) row;
             coverage.setCoverageBasisDescription(
@@ -368,6 +372,22 @@ public class CollateralChildService implements ICollateralChildService {
         checkPercentage(position.getHoldingPercentage(), "holdingPercentage");
         checkNotNegative(position.getNumberOfUnits(), "numberOfUnits");
         checkNotNegative(position.getNominalValue(), "nominalValue");
+    }
+
+    /** Valuation (ZCOL_VALUATION): a valuation date, non-negative values, INR when no currency is given. */
+    private void validateValuation(CollateralValuation valuation) {
+        if (valuation.getValuationDate() == null) {
+            throw invalid(label("valuationDate") + " is required.");
+        }
+        if (valuation.getValuationDate().isAfter(LocalDate.now())) {
+            throw invalid(label("valuationDate") + " cannot be in the future.");
+        }
+        if (valuation.getNominalValueCurrency() == null) {
+            valuation.setNominalValueCurrency(DEFAULT_CURRENCY);
+        }
+        checkNotNegative(valuation.getNominalValue(), "nominalValue");
+        checkNotNegative(valuation.getAssetValue(), "assetValue");
+        checkNotNegative(valuation.getEnteredAmount(), "enteredAmount");
     }
 
     /**
@@ -541,7 +561,7 @@ public class CollateralChildService implements ICollateralChildService {
 
     private Map<String, Map<String, String>> valueListsByCode() {
         Map<String, Map<String, String>> lists = new LinkedHashMap<>();
-        for (CollateralValue value : valueRepository.findAll()) {
+        for (CollateralAttributesValueList value : valueRepository.findAll()) {
             lists.computeIfAbsent(value.getListName(), name -> new LinkedHashMap<>())
                     .put(value.getCode(), value.getDescription());
         }

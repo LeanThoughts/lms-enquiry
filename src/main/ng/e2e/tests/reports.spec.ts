@@ -22,8 +22,11 @@ test.describe('Reports', () => {
         await expect(modules.nth(3)).toContainText('1 report');
         await expect(page.locator('.rp-list')).toHaveCount(0);
 
-        await expect(modules.nth(0)).toContainText('4 reports');
+        await expect(modules.nth(0)).toContainText('7 reports');
+        await expect(modules.nth(1)).toContainText('1 report');
         await modules.nth(1).getByRole('button', { name: 'Show reports' }).click();
+        await expect(page.locator('.rp-list__item')).toContainText('Collateral Securities Report');
+        await modules.nth(2).getByRole('button', { name: 'Show reports' }).click();
         await expect(page.locator('.rp-list')).toContainText('No reports in this module yet.');
 
         await modules.nth(3).getByRole('button', { name: 'Show reports' }).click();
@@ -55,7 +58,7 @@ test.describe('Reports', () => {
 
         // the mock filters by contract number: two of the three rows
         await expect(page.locator('tbody tr')).toHaveCount(2);
-        await expect(page.locator('.ws-result-bar__count')).toHaveText('2 rows');
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('2 records');
         await expect(page.locator('thead th')).toHaveCount(25);                 // every property of the entity
         await expect(page.locator('thead th').nth(15)).toContainText('Work Item');
 
@@ -78,7 +81,7 @@ test.describe('Reports', () => {
         // quick filter
         await page.getByLabel('Filter rows').fill('interest');
         await expect(page.locator('tbody tr')).toHaveCount(1);
-        await expect(page.locator('.ws-result-bar__count')).toHaveText('1 of 2 rows');
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('1 of 2 records');
         await expect(page.locator('tbody tr').first()).toContainText('Rejected');
 
         // Excel: the rows as shown (the one filtered row) are posted to the export
@@ -233,7 +236,7 @@ test.describe('Reports', () => {
         expect(sent).toContain('/reports/kyc');
         await expect(page.locator('tbody tr')).toHaveCount(2);
         await expect(page.locator('thead th')).toHaveCount(25);                 // every output property of the entity
-        await expect(page.locator('.ws-result-bar__count')).toHaveText('2 rows');
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('2 records');
         await expect(page.locator('tbody tr').first()).toContainText('Sunrise Power Ltd');
         await expect(page.locator('.ws-status').first()).toContainText('Compliant');
 
@@ -294,7 +297,7 @@ test.describe('Reports', () => {
         expect(JSON.parse(query.currency)[0]).toMatchObject({ option: 'EQ', low: 'INR' });
         await expect(page.locator('tbody tr')).toHaveCount(1);
         await expect(page.locator('thead th')).toHaveCount(22);
-        await expect(page.locator('.ws-result-bar__count')).toHaveText('1 row');
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('1 record');
         await expect(page.locator('tbody tr').first()).toContainText('Solar Park Phase 2');
         await expect(page.locator('tbody tr').first()).toContainText('3,25,00,000.00');   // grouped amount
         await expect(page.locator('.ws-filter')).toHaveClass(/ws-filter--collapsed/);
@@ -358,7 +361,7 @@ test.describe('Reports', () => {
         await api.install(page);
         await page.goto('/reports');
         await page.locator('.rp-module').nth(0).getByRole('button', { name: 'Show reports' }).click();
-        await page.locator('.rp-list__item').filter({ hasText: 'Disbursement' }).getByRole('button', { name: 'Launch' }).click();
+        await page.locator('.rp-list__item').filter({ hasText: 'Loans : Disbursement' }).getByRole('button', { name: 'Launch' }).click();
         await expect(page).toHaveURL(/\/reports\/disbursement$/);
         await expect(page.getByRole('heading', { name: /Disbursement/ })).toBeVisible();
 
@@ -396,7 +399,7 @@ test.describe('Reports', () => {
         await expect(page.locator('thead th')).toHaveCount(5);
         await expect(page.locator('thead th').nth(2)).toContainText('Apr-2026');
         await expect(page.locator('tbody tr')).toHaveCount(3);
-        await expect(page.locator('.ws-result-bar__count')).toHaveText('3 rows');
+        await expect(page.locator('.ws-result-bar__count')).toHaveText('3 records');
         await expect(page.locator('tbody tr').first()).toContainText('Sunrise Power Ltd');
         await expect(page.locator('tbody tr').first().locator('td').nth(0)).toHaveText('0000010003814');   // ids keep their zeros
         await expect(page.locator('tbody tr').nth(1).locator('td').nth(2)).toHaveText('');                 // no Value for that cell
@@ -572,8 +575,8 @@ test.describe('Reports', () => {
         await page.getByRole('button', { name: 'Save as variant' }).click();
         await expect(dialog.getByText('replaces it')).toBeVisible();
         await dialog.getByRole('button', { name: 'Overwrite' }).click();
+        await expect.poll(() => api.variants[0].parameters.contract[0].low).toBe('0000010003999');
         expect(api.variants).toHaveLength(2);
-        expect(api.variants[0].parameters.contract[0].low).toBe('0000010003999');
 
         // load and run a variant: the report runs with the saved parameters
         await page.locator('.ws-variants .rv__menu > .rv__btn').click();
@@ -596,7 +599,7 @@ test.describe('Reports', () => {
         await api.install(page);
         await page.goto('/reports');
         await page.locator('.rp-module').nth(0).getByRole('button', { name: 'Show reports' }).click();
-        await expect(page.locator('.rp-list__item')).toHaveCount(4);
+        await expect(page.locator('.rp-list__item')).toHaveCount(7);
         await page.locator('.rp-list__item').filter({ hasText: 'Loans KYC Report' }).getByRole('button', { name: 'Launch' }).click();
         await expect(page).toHaveURL(/\/reports\/kyc$/);
     });

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { toParams } from '../shared/select-option.model';
+import { timedGet } from '../shared/report-timing';
 import { skipBusyIndicator } from '../../../busy-indicator.service';
 import { DisbursementColumn, DisbursementReport, DisbursementRow, DisbursementSelection } from './disbursement.model';
 
@@ -16,7 +17,7 @@ export class DisbursementService {
 
     run(selection: DisbursementSelection): Observable<DisbursementReport> {
         const params = toParams(selection);
-        return this.http.get<DisbursementReport>(this.url, { params, context: skipBusyIndicator() });
+        return timedGet<DisbursementReport>(this.http, this.url, { params, context: skipBusyIndicator() });
     }
 
     /** Excel of the rows and visible columns as shown (sorted / filtered); no second SAP call. */

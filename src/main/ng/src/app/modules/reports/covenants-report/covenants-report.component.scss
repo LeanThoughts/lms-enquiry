@@ -1,0 +1,13 @@
+// Covenants Report: the page styles are shared with the other reports (../shared); only additions here.
+$label: var(--sapContent_LabelColor, #6a6d70);
+
+.ws-input[disabled] { background: var(--sapField_ReadOnly_Background, #f2f2f2); color: $label; cursor: not-allowed; }
+.ws-group__fields--stack { grid-template-columns: 1fr; }
+
+// company code and selection criteria side by side; one column on narrow screens
+.ws-filter__groups { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+@media (max-width: 60rem) {
+    .ws-filter__groups { grid-template-columns: 1fr; }
+}
+
+.ws-th--num .ws-th__button { justify-content: flex-end; }

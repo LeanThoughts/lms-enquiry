@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { toParams } from '../shared/select-option.model';
+import { timedGet } from '../shared/report-timing';
 import { skipBusyIndicator } from '../../../busy-indicator.service';
 import { WorkflowStatusReport, WorkflowStatusRow, WorkflowStatusSelection } from './workflow-status.model';
 
@@ -16,7 +17,7 @@ export class WorkflowStatusService {
 
     run(selection: WorkflowStatusSelection): Observable<WorkflowStatusReport> {
         const params = toParams(selection);
-        return this.http.get<WorkflowStatusReport>(this.url, { params, context: skipBusyIndicator() });
+        return timedGet<WorkflowStatusReport>(this.http, this.url, { params, context: skipBusyIndicator() });
     }
 
     /** Excel of the rows and visible columns as shown (sorted / filtered); built by the portal from the rows, no second SAP call. */

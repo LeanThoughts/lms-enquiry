@@ -13,6 +13,7 @@ import pfs.lms.enquiry.collateral.domain.CollateralDocument;
 import pfs.lms.enquiry.collateral.domain.CollateralItem;
 import pfs.lms.enquiry.collateral.domain.CollateralPerfectionRoc;
 import pfs.lms.enquiry.collateral.domain.CollateralSecuritiesPosition;
+import pfs.lms.enquiry.collateral.domain.CollateralValuation;
 import pfs.lms.enquiry.collateral.dto.CollateralItemDetailDto;
 
 import java.util.List;
@@ -142,6 +143,35 @@ class CollateralChildServiceTest extends CollateralTestSupport {
 
     @Test
     @Order(5)
+    @DisplayName("valuations (ZCOL_VALUATION) are numbered, need a past valuation date, default INR and check the values")
+    void valuations() {
+        POINTERS.clear();
+        CollateralValuation first = (CollateralValuation) create(CollateralChildType.VALUATION,
+                "{'valuationDate':'2026-01-01','enteredAmount':150000,'remarks':'Valuation on 01.01.2026'}");
+        assertThat(first.getSerialNumber()).isEqualTo(1);
+        assertThat(first.getNominalValueCurrency()).isEqualTo("INR");
+        assertThat(first.getEnteredAmount()).isEqualByComparingTo("150000");
+        assertThat(first.getChecklistIdNo()).isEqualTo(checklistIdNo);
+        assertThat(POINTERS).containsExactly("Collateral Management/Collateral Valuation/C");
+
+        CollateralValuation second = (CollateralValuation) create(CollateralChildType.VALUATION,
+                "{'valuationDate':'2026-06-30','nominalValue':1000,'assetValue':900,'nominalValueCurrency':'USD'}");
+        assertThat(second.getSerialNumber()).isEqualTo(2);
+        CollateralValuation changed = (CollateralValuation) childService.update(CollateralChildType.VALUATION,
+                second.getId(), json("{'valuationDate':'2026-06-30','assetValue':950,'remarks':'Revised'}"), LEGAL);
+        assertThat(changed.getAssetValue()).isEqualByComparingTo("950");
+        assertThat(changed.getSerialNumber()).isEqualTo(2);
+        assertThat(collateralService.getItem(itemId).getValuations()).hasSize(2);
+
+        expectError(412, () -> create(CollateralChildType.VALUATION, "{'enteredAmount':1}"));
+        expectError(412, () -> create(CollateralChildType.VALUATION, "{'valuationDate':'2999-01-01'}"));
+        expectError(412, () -> create(CollateralChildType.VALUATION, "{'valuationDate':'2026-01-01','assetValue':-1}"));
+        expectError(412, () -> create(CollateralChildType.VALUATION, "{'valuationDate':'2026-01-01','nominalValueCurrency':'XXX'}"));
+        expectError(412, () -> create(CollateralChildType.VALUATION, "{'valuationDate':'2026-01-01','remarks':'" + "r".repeat(61) + "'}"));
+    }
+
+    @Test
+    @Order(6)
     @DisplayName("the detail of a collateral holds all child rows; deleting a row writes a change document")
     void detailAndDelete() {
         CollateralCoverage extra = (CollateralCoverage) create(CollateralChildType.COVERAGE, "{'effectiveFromDate':'2003-01-01'}");

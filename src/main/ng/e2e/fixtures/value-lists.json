@@ -678,5 +678,21 @@
    "code": "HAR",
    "description": "Hectare"
   }
+ ],
+ "VALUATION_BY": [
+  {
+   "code": "1",
+   "description": "Credit Team"
+  },
+  {
+   "code": "2",
+   "description": "Valuer"
+  }
+ ],
+ "MAJOR_COLLATERAL_TYPE": [
+  {
+   "code": "1",
+   "description": "Others"
+  }
  ]
 }

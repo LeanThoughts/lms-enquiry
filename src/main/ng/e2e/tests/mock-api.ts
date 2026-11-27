@@ -23,7 +23,7 @@ type Row = Record<string, any>;
 const WRITE_ROLES = ['ZLM023', 'ZLM018', 'ZLM035'];
 const CHILD_KEYS: Record<string, string> = {
     coverages: 'coverages', roc: 'rocEvents', cersai: 'cersaiEvents', nesl: 'neslEvents',
-    documents: 'documents', securities: 'securitiesPositions'
+    documents: 'documents', securities: 'securitiesPositions', valuations: 'valuations'
 };
 
 /**
@@ -174,6 +174,16 @@ export class MockApi {
         sapHighestNumber: null, nextNumber: 914, highestNumberInPortal: 913, highestMigratedNumber: 913,
         startNumber: 1, maximumNumber: 9999999999, changedBy: null, changedAt: null
     };
+    /** Project valuations of loan L1 (SAP ZLMS_COLL_EVAL) and its Major Collateral Type. */
+    readonly evaluations: Row[] = [
+        { id: 'PV1', itemNumber: 1, valuationBy: '1', valuationDate: '2005-01-01', totalLoanAsset: 100000,
+            totalCurrentLiabilities: 200000, netValuationAmount: 121212, currency: 'INR', remarks: 'Remarks', majorCollateralType: '1',
+            createdOn: '2026-11-01', createdAt: '10:00:00', createdByUserName: 'writer@pfs.local' },
+        { id: 'PV2', itemNumber: 2, valuationBy: '2', valuationDate: '2003-01-01', totalLoanAsset: 100000,
+            totalCurrentLiabilities: 200000, netValuationAmount: 633, currency: 'INR', remarks: null, majorCollateralType: '1' }
+    ];
+    majorCollateralType: string | null = '1';
+    private lastValuationItem = 2;
     private nextId = 100;
     private readonly role: string;
 
@@ -203,7 +213,9 @@ export class MockApi {
             documents: [{ id: 'D1', serialNumber: 1, documentType: 'ZPFSLM101', documentTypeDescription: 'Legal Counsel Report',
                 documentStage: '2', documentStageDescription: 'Perfection', documentTitle: 'LLC opinion',
                 bdsDocumentId: '005056A1B2C31EDFAB000000ABCDEF01' }],
-            securitiesPositions: []
+            securitiesPositions: [],
+            valuations: [{ id: 'V1', serialNumber: 1, nominalValue: 0, assetValue: 0, enteredAmount: 150000,
+                valuationDate: '2026-01-01', nominalValueCurrency: 'INR', remarks: 'Valuation on 01.01.2026' }]
         });
         this.children.set('I913', emptyChildren());
     }
@@ -359,6 +371,10 @@ export class MockApi {
                 loggingEnabled: true, retentionDays: 90, userRole: this.role
             }];
         }
+        if (path === '/collaterals/loans/L1/project-evaluations' || path.startsWith('/collaterals/project-evaluations/')
+            || path === '/collaterals/loans/L1/project-evaluations/major-collateral-type') {
+            return this.evaluationCall(method, path, body);
+        }
         if (path === '/collaterals/value-lists') {
             return [200, valueLists];
         }
@@ -408,10 +424,10 @@ export class MockApi {
         if ((match = path.match(/^\/collaterals\/loans\/L1\/items$/)) && method === 'POST') {
             return this.createItem(body);
         }
-        if ((match = path.match(/^\/collaterals\/items\/([^/]+)\/(coverages|roc|cersai|nesl|documents|securities)$/)) && method === 'POST') {
+        if ((match = path.match(/^\/collaterals\/items\/([^/]+)\/(coverages|roc|cersai|nesl|documents|securities|valuations)$/)) && method === 'POST') {
             return this.createChild(match[1], match[2], body);
         }
-        if ((match = path.match(/^\/collaterals\/(coverages|roc|cersai|nesl|documents|securities)\/([^/]+)$/))) {
+        if ((match = path.match(/^\/collaterals\/(coverages|roc|cersai|nesl|documents|securities|valuations)\/([^/]+)$/))) {
             return this.childCall(method, match[1], match[2], body);
         }
         if (path === '/upload' && method === 'POST') {
@@ -468,6 +484,50 @@ export class MockApi {
         return [405, null];
     }
 
+    private evaluationCall(method: string, path: string, body: any): [number, any] {
+        const inApproval = this.checklist['workFlowStatusCode'] === 2;
+        const data = () => ({ loanApplicationId: 'L1', loanContractId: this.loan.loanContractId, loan: this.loan,
+            majorCollateralType: this.majorCollateralType, checklistId: this.checklist['id'],
+            checklistWorkFlowStatusCode: this.checklist['workFlowStatusCode'],
+            checklistWorkFlowStatusDescription: this.checklist['workFlowStatusDescription'],
+            changeable: !inApproval, evaluations: this.evaluations });
+        if (method !== 'GET' && !this.canWrite) {
+            return [403, { message: 'You are not authorised to create, change or delete collaterals (display only).' }];
+        }
+        if (method !== 'GET' && inApproval) {
+            return [409, { message: 'The collateral checklist of this loan is waiting for approval and cannot be changed.' }];
+        }
+        if (path.endsWith('/major-collateral-type')) {
+            this.majorCollateralType = body?.majorCollateralType || null;
+            this.evaluations.forEach(row => row['majorCollateralType'] = this.majorCollateralType);
+            return [200, data()];
+        }
+        if (path === '/collaterals/loans/L1/project-evaluations') {
+            if (method === 'GET') {
+                return [200, data()];
+            }
+            if (!body?.valuationBy || !body?.valuationDate) {
+                return [412, { message: 'Enter who made the valuation (Valuation By).' }];
+            }
+            const id = 'PV' + (this.nextId++);
+            const created = { ...body, id, itemNumber: ++this.lastValuationItem, contractNumber: this.loan.loanContractId,
+                majorCollateralType: this.majorCollateralType };
+            this.evaluations.push(created);
+            return [201, created];
+        }
+        const id = path.split('/').pop();
+        const index = this.evaluations.findIndex(row => row['id'] === id);
+        if (index < 0) {
+            return [404, { message: 'Project valuation not found.' }];
+        }
+        if (method === 'DELETE') {
+            this.evaluations.splice(index, 1);
+            return [204, null];
+        }
+        this.evaluations[index] = { ...this.evaluations[index], ...body, id, itemNumber: this.evaluations[index]['itemNumber'] };
+        return [200, this.evaluations[index]];
+    }
+
     private createItem(body: any): [number, any] {
         if (this.locked()) {
             return [409, { message: 'The checklist is waiting for approval.' }];
@@ -494,11 +554,14 @@ export class MockApi {
             return [412, { message: 'Document Stage and Document Type are required.' }];
         }
         const row: Row = { ...body, id: `R${this.nextId++}` };
-        if (['coverages', 'documents', 'securities'].includes(type)) {
+        if (['coverages', 'documents', 'securities', 'valuations'].includes(type)) {
             row['serialNumber'] = rows.length + 1;
         }
-        if (type === 'securities') {
+        if (type === 'securities' || type === 'valuations') {
             row['nominalValueCurrency'] = row['nominalValueCurrency'] ?? 'INR';
+        }
+        if (type === 'valuations' && !body?.valuationDate) {
+            return [412, { message: 'Valuation Date is required.' }];
         }
         rows.push(row);
         return [201, row];
@@ -546,7 +609,7 @@ function item(id: string, checklistIdNo: number, values: Row): Row {
 }
 
 function emptyChildren(): Record<string, Row[]> {
-    return { coverages: [], rocEvents: [], cersaiEvents: [], neslEvents: [], documents: [], securitiesPositions: [] };
+    return { coverages: [], rocEvents: [], cersaiEvents: [], neslEvents: [], documents: [], securitiesPositions: [], valuations: [] };
 }
 
 function required(body: any): string | null {

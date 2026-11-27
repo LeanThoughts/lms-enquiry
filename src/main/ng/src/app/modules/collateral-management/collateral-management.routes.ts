@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { routeInterceptor } from '../../route.interceptor';
 import { CollateralListComponent } from './collateral-list/collateral-list.component';
 import { CollateralDetailComponent } from './collateral-detail/collateral-detail.component';
+import { ProjectEvaluationComponent } from './project-evaluation/project-evaluation.component';
 
 /**
  * Collateral Management (SAP "PFS Check List"). Opened from Loan Contract Search with the "Collaterals" action.
@@ -22,6 +23,12 @@ export default [
     {
         path: 'collateral-management/loan/:loanApplicationId/item/new',
         component: CollateralDetailComponent,
+        canActivate: [routeInterceptor]
+    },
+    {
+        // Maintain Project Valuation (SAP tab Project(Coll.) Valuation, table ZLMS_COLL_EVAL)
+        path: 'collateral-management/loan/:loanApplicationId/project-evaluation',
+        component: ProjectEvaluationComponent,
         canActivate: [routeInterceptor]
     },
     {

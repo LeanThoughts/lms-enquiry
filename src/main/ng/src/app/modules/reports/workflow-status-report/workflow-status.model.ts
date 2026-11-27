@@ -1,4 +1,5 @@
 import { SelectOptionLine } from '../shared/select-option.model';
+import { ReportTiming } from '../shared/report-timing';
 
 /** Workflow Status Report (Reports › Miscellaneous): the SAP report "Loans: Workflow Status Report". */
 
@@ -42,6 +43,8 @@ export interface WorkflowStatusRow {
 export interface WorkflowStatusReport {
     rows: WorkflowStatusRow[];
     total: number;
+    /** Run time (browser stopwatch and server headers), set by the service */
+    timing?: ReportTiming;
     generatedOn: string;
     query: string;
 }

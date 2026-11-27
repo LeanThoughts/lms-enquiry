@@ -5,11 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pfs.lms.enquiry.collateral.domain.CollateralChecklist;
 import pfs.lms.enquiry.collateral.domain.CollateralChildRecord;
 import pfs.lms.enquiry.collateral.domain.CollateralItem;
+import pfs.lms.enquiry.collateral.domain.ProjectEvaluation;
 import pfs.lms.enquiry.collateral.repository.CollateralChecklistRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralCoverageRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralDocumentRepository;
@@ -18,6 +20,8 @@ import pfs.lms.enquiry.collateral.repository.CollateralPerfectionCersaiRepositor
 import pfs.lms.enquiry.collateral.repository.CollateralPerfectionNeslRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralPerfectionRocRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralSecuritiesPositionRepository;
+import pfs.lms.enquiry.collateral.repository.CollateralValuationRepository;
+import pfs.lms.enquiry.collateral.repository.ProjectEvaluationRepository;
 import pfs.lms.enquiry.domain.SAPIntegrationPointer;
 import pfs.lms.enquiry.repository.SAPIntegrationRepository;
 import pfs.lms.enquiry.resource.FileResource;
@@ -92,6 +96,8 @@ public class CollateralSapIntegrationService {
                                            CollateralPerfectionRocRepository rocRepository,
                                            CollateralPerfectionCersaiRepository cersaiRepository,
                                            CollateralPerfectionNeslRepository neslRepository,
+                                           CollateralValuationRepository valuationRepository,
+                                           ProjectEvaluationRepository projectEvaluationRepository,
                                            CollateralSapPayloadMapper payloadMapper,
                                            @Value("${sap.collateralServiceUri:}") String servicePath) {
         this.sapIntegrationRepository = sapIntegrationRepository;
@@ -108,6 +114,8 @@ public class CollateralSapIntegrationService {
         repositories.put(CollateralSapEntitySet.PERFECTION_ROC, rocRepository);
         repositories.put(CollateralSapEntitySet.PERFECTION_CERSAI, cersaiRepository);
         repositories.put(CollateralSapEntitySet.PERFECTION_NESL, neslRepository);
+        repositories.put(CollateralSapEntitySet.VALUATION, valuationRepository);
+        repositories.put(CollateralSapEntitySet.PROJECT_EVALUATION, projectEvaluationRepository);
     }
 
     /**
@@ -283,6 +291,13 @@ public class CollateralSapIntegrationService {
             CollateralSapGatewayClient.Result result;
             if (create) {
                 result = gateway.post(collectionUri, payload);
+            } else if (target.isPortalIdInHeader()) {
+                // ProjectEvaluationSet is keyed by Bukrs + Ranl only: the row is identified by the portal id (the
+                // record's id), sent in the body on PUT and in the X-Portal-Id header on PUT and DELETE
+                HttpHeaders portalId = new HttpHeaders();
+                portalId.set(CollateralSapEntitySet.PORTAL_ID_HEADER, pointer.getBusinessObjectId());
+                result = delete ? gateway.delete(collectionUri + predicate, portalId)
+                        : gateway.put(collectionUri + predicate, payload, portalId);
             } else if (delete) {
                 result = gateway.delete(collectionUri + predicate);
             } else {
@@ -416,6 +431,9 @@ public class CollateralSapIntegrationService {
         if (entity instanceof CollateralChildRecord) {
             return ((CollateralChildRecord<?>) entity).getId();
         }
+        if (entity instanceof ProjectEvaluation) {
+            return ((ProjectEvaluation) entity).getId();
+        }
         return null;
     }
 
@@ -437,6 +455,11 @@ public class CollateralSapIntegrationService {
             payloadMapper.putItemId(payload, child.getId() != null ? child.getId().toString() : null);
             // PTL_ID: the portal id of this record (not nullable in SAP)
             payloadMapper.putPortalId(payload, child.getId(), false);
+        }
+        if (entity instanceof ProjectEvaluation) {
+            // ProjectEvaluation (ZLMS_COLL_EVAL) hangs off the loan: Bukrs and Ranl come from the entity itself, and
+            // PTL_ID — the key SAP finds the row by for update and delete — is the evaluation's own id
+            payloadMapper.putPortalId(payload, ((ProjectEvaluation) entity).getId(), false);
         }
         return payload;
     }

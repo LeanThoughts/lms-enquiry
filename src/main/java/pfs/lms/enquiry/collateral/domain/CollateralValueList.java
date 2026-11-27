@@ -207,6 +207,17 @@ public enum CollateralValueList {
             "2", "Month",
             "3", "Year"),
 
+    /** Valuation By of a project (collateral) valuation (ZPROJ_VAL_BY) */
+    VALUATION_BY("Valuation By of a project valuation (ZPROJ_VAL_BY)",
+            "1", "Credit Team",
+            "2", "Valuer"),
+
+    /** Major Collateral Type of the project valuation (ZLMS_COLL_EVAL-MAJOR_COLL_TYPE) */
+    MAJOR_COLLATERAL_TYPE("Major Collateral Type of the project valuation",
+            "1", "Others",
+            "2", "CRE (Commercial Real Estate)",
+            "3", "CRE-RH (Residential Housing)"),
+
     /** Currency of collateral value (ZCOL_VALUE_CURR) */
     CURRENCY("Currency of collateral value (ZCOL_VALUE_CURR)",
             "INR", "Indian Rupee",

@@ -21,6 +21,7 @@ import { TechnicalInfoDialogComponent, TechnicalInfoDialogData } from '../techni
 /** Data passed to {@link ChildDialogComponent}. */
 export interface ChildDialogData {
     grid: GridDef;
+    /** Id of the collateral, or of the loan for rows that belong to the loan (grid.parent 'loan'). */
     itemId: string;
     /** The row to display or change; null to create one. */
     row: Record<string, unknown> | null;
@@ -176,7 +177,7 @@ export class ChildDialogComponent implements OnDestroy {
         }
         const { type } = this.data.grid;
         const request$: Observable<Record<string, unknown>> = this.isNew
-            ? this.collateralService.createChild(type, this.data.itemId, row)
+            ? this.collateralService.createChild(type, this.data.itemId, row, this.data.grid.parent ?? 'item')
             : this.collateralService.updateChild(type, String(this.data.row!['id']), row);
         request$.pipe(takeUntil(this.destroy$)).subscribe({
             next: saved => {

@@ -13,7 +13,8 @@ public enum CollateralChildType {
     CERSAI("cersai", CollateralPerfectionCersai.class, "Security Perfection CERSAI", "CERSAI event"),
     NESL("nesl", CollateralPerfectionNesl.class, "Security Perfection NeSL", "NeSL event"),
     DOCUMENT("documents", CollateralDocument.class, "Collateral Documents", "Document"),
-    SECURITIES_POSITION("securities", CollateralSecuritiesPosition.class, "Securities Positions", "Securities position");
+    SECURITIES_POSITION("securities", CollateralSecuritiesPosition.class, "Securities Positions", "Securities position"),
+    VALUATION("valuations", CollateralValuation.class, "Collateral Valuation", "Valuation");
 
     private final String path;
     private final Class<? extends CollateralChildRecord<?>> entityClass;

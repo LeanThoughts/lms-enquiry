@@ -1,0 +1,73 @@
+package pfs.lms.enquiry.reports.portfolioexposure;
+
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import pfs.lms.enquiry.config.ApiController;
+import pfs.lms.enquiry.exception.LmsException;
+import pfs.lms.enquiry.reports.SelectOptions;
+import pfs.lms.enquiry.reports.portfolioexposure.PortfolioExposureDtos.ExportRequest;
+import pfs.lms.enquiry.reports.portfolioexposure.PortfolioExposureDtos.Report;
+import pfs.lms.enquiry.reports.portfolioexposure.PortfolioExposureDtos.Selection;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+
+/**
+ * REST API of the Portfolio Exposure Report (Reports › Loans Management), under /api:
+ * {@code GET /reports/portfolio-exposure?contract=[…]&runDate=2026-11-01&skipDrawdowns=true} runs the SAP report through
+ * ZPFS_LMS_REPORTS_SRV (PortfolioExposureReportSet); {@code POST /reports/portfolio-exposure/export} returns the
+ * rows as shown as Excel.
+ */
+@ApiController
+public class PortfolioExposureController {
+
+    private static final String XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+    private final PortfolioExposureService service;
+    private final PortfolioExposureExcelWriter excelWriter;
+
+    public PortfolioExposureController(PortfolioExposureService service, PortfolioExposureExcelWriter excelWriter) {
+        this.service = service;
+        this.excelWriter = excelWriter;
+    }
+
+    @GetMapping("/reports/portfolio-exposure")
+    public ResponseEntity<Report> run(@RequestParam(defaultValue = "PFS") String companyCode,
+                                      @RequestParam(required = false) String contract,
+                                      @RequestParam(required = false) String runDate,
+                                      @RequestParam(defaultValue = "true") boolean skipDrawdowns,
+                                      HttpServletRequest request) {
+        signedIn(request);
+        Selection selection = new Selection();
+        selection.companyCode = companyCode;
+        selection.contract = SelectOptions.parse(contract);
+        selection.runDate = runDate;
+        selection.skipDrawdowns = skipDrawdowns;
+        return ResponseEntity.ok(service.run(selection));
+    }
+
+    @PostMapping(value = "/reports/portfolio-exposure/export", produces = XLSX)
+    public ResponseEntity<Resource> export(@RequestBody ExportRequest export, HttpServletRequest request) {
+        signedIn(request);
+        byte[] bytes = excelWriter.write(export.getSelection(), export.getRows(), export.getColumns());
+        String fileName = "portfolio-exposure-" + LocalDate.now() + ".xlsx";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.parseMediaType(XLSX))
+                .body(new ByteArrayResource(bytes));
+    }
+
+    private static void signedIn(HttpServletRequest request) {
+        if (request.getUserPrincipal() == null) {
+            throw new LmsException("Please sign in.", HttpStatus.UNAUTHORIZED);
+        }
+    }
+}

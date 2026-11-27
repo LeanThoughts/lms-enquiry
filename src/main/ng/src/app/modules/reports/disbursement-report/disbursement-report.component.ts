@@ -23,6 +23,8 @@ import {
     isAmount
 } from './disbursement.model';
 import { DisbursementService } from './disbursement.service';
+import { ReportElapsedComponent, ReportRunStatsComponent } from '../shared/report-run-stats.component';
+import { recordCountText } from '../shared/report-timing';
 
 /**
  * Loans Disbursement - Periodwise and Comparison Report (Reports › Loans Management): the selection screen of the SAP
@@ -36,7 +38,7 @@ import { DisbursementService } from './disbursement.service';
     selector: 'app-disbursement-report',
     templateUrl: './disbursement-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './disbursement-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ReportRunStatsComponent, ReportElapsedComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class DisbursementReportComponent implements OnDestroy {
 
@@ -293,7 +295,7 @@ export class DisbursementReportComponent implements OnDestroy {
         }
         const shown = this.rows.length;
         const total = this.report.total;
-        return shown === total ? `${total} ${total === 1 ? 'row' : 'rows'}` : `${shown} of ${total} rows`;
+        return recordCountText(shown, total);
     }
 
     /** Excel download of the report as shown: the rows in their current order and filter. */

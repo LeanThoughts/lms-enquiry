@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pfs.lms.enquiry.collateral.domain.CollateralValue;
+import pfs.lms.enquiry.collateral.domain.CollateralAttributesValueList;
 import pfs.lms.enquiry.collateral.domain.CollateralValueList;
-import pfs.lms.enquiry.collateral.repository.CollateralValueRepository;
+import pfs.lms.enquiry.collateral.repository.CollateralAttributesValueListRepository;
 import pfs.lms.enquiry.domain.UserRole;
 import pfs.lms.enquiry.repository.UserRoleRepository;
 
@@ -20,17 +20,17 @@ import java.util.stream.Collectors;
  * Only missing entries are added: values that were changed in the database are kept. Safe to run on every start.
  */
 @Component
-public class CollateralValueInitializer implements CommandLineRunner {
+public class CollateralAttributesValueListInitializer implements CommandLineRunner {
 
     static final String LEGAL_FUNCTIONAL_HEAD_ROLE = "ZLM035";
     static final String LEGAL_FUNCTIONAL_HEAD_TEXT = "Legal-Functional Head";
 
-    private static final Logger log = LoggerFactory.getLogger(CollateralValueInitializer.class);
+    private static final Logger log = LoggerFactory.getLogger(CollateralAttributesValueListInitializer.class);
 
-    private final CollateralValueRepository valueRepository;
+    private final CollateralAttributesValueListRepository valueRepository;
     private final UserRoleRepository userRoleRepository;
 
-    public CollateralValueInitializer(CollateralValueRepository valueRepository, UserRoleRepository userRoleRepository) {
+    public CollateralAttributesValueListInitializer(CollateralAttributesValueListRepository valueRepository, UserRoleRepository userRoleRepository) {
         this.valueRepository = valueRepository;
         this.userRoleRepository = userRoleRepository;
     }
@@ -49,12 +49,12 @@ public class CollateralValueInitializer implements CommandLineRunner {
         Set<String> existing = valueRepository.findAll().stream()
                 .map(value -> value.getListName() + "|" + value.getCode())
                 .collect(Collectors.toSet());
-        List<CollateralValue> missing = new ArrayList<>();
+        List<CollateralAttributesValueList> missing = new ArrayList<>();
         for (CollateralValueList list : CollateralValueList.values()) {
             int sortOrder = 1;
             for (String[] value : list.getValues()) {
                 if (!existing.contains(list.name() + "|" + value[0])) {
-                    missing.add(new CollateralValue(list.name(), value[0], value[1], sortOrder));
+                    missing.add(new CollateralAttributesValueList(list.name(), value[0], value[1], sortOrder));
                 }
                 sortOrder++;
             }

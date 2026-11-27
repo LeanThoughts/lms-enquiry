@@ -459,6 +459,23 @@ export interface CollateralDocument extends CollateralChildBase {
 }
 
 /** Securities position (SAP ZCOL_SEC_POS) */
+/** Collateral Valuation (SAP ZCOL_VALUATION), tab Valuation; a child of the collateral like the coverages. */
+export interface Valuation extends CollateralChildBase {
+    /** Serial Number (SERIAL_NO) */
+    serialNumber?: number | null;
+    /** Nominal Value of the Asset (NOM_VALUE) */
+    nominalValue?: number | null;
+    /** Final Asset Value (AST_VALUE) */
+    assetValue?: number | null;
+    /** Entered Value (ENTERED_AMOUNT) */
+    enteredAmount?: number | null;
+    /** Valuation Date (VAL_DATE) */
+    valuationDate?: string | null;
+    /** Currency (NOM_VALUE_CURR) */
+    nominalValueCurrency?: string | null;
+    remarks?: string | null;
+}
+
 export interface SecuritiesPosition extends CollateralChildBase {
     /** Serial Number (SERIAL_NO) */
     serialNumber?: number | null;
@@ -572,6 +589,7 @@ export interface CollateralItemDetail {
     rocEvents?: PerfectionRoc[];
     cersaiEvents?: PerfectionCersai[];
     neslEvents?: PerfectionNesl[];
+    valuations?: Valuation[];
     /** Names of the partners in Security Trustee, Security Agent and Custodian, keyed by party number. */
     partnerNames?: Record<string, string>;
     loan: LoanSummary;
@@ -639,7 +657,7 @@ export interface TabDef {
 }
 
 /** Child tables of a collateral; the value is the URL segment of the backend. */
-export type ChildType = 'coverages' | 'roc' | 'cersai' | 'nesl' | 'documents' | 'securities';
+export type ChildType = 'coverages' | 'roc' | 'cersai' | 'nesl' | 'documents' | 'securities' | 'valuations' | 'project-evaluations';
 
 /** A column of a child grid. */
 export interface GridColumn {
@@ -656,7 +674,8 @@ export interface GridColumn {
 export interface GridDef {
     type: ChildType;
     /** Property of the detail response that holds the rows. */
-    detailKey: 'coverages' | 'rocEvents' | 'cersaiEvents' | 'neslEvents' | 'documents' | 'securitiesPositions';
+    detailKey: 'coverages' | 'rocEvents' | 'cersaiEvents' | 'neslEvents' | 'documents' | 'securitiesPositions' | 'valuations'
+        | 'evaluations';
     title: string;
     /** Name of one row in messages and the dialog title, e.g. "Coverage". */
     rowLabel: string;
@@ -670,6 +689,10 @@ export interface GridDef {
     upload?: boolean;
     /** Values proposed for a new row, e.g. the currency. */
     defaults?: Record<string, unknown>;
+    /** What the rows belong to: a collateral (default) or the loan (project valuations); decides where a new row is posted. */
+    parent?: 'item' | 'loan';
+    /** Labels of the grid's buttons, when not Create / Change / Delete (e.g. "New Valuation"). */
+    actionLabels?: { create: string; change: string; delete: string };
 }
 
 /** Fields of the header block, visible above every tab. */
@@ -818,10 +841,90 @@ export const GRIDS: Record<ChildType, GridDef> = {
             { key: 'remarks', label: 'Remarks', type: 'text', span: 8, maxLength: 60 }
         ],
         emptyText: 'Record the securities positions (pledged shares, debentures and other securities).'
+    },
+    valuations: {
+        type: 'valuations', detailKey: 'valuations', title: 'Valuations', rowLabel: 'valuation',
+        dialogTitle: 'Valuation', icon: 'lead', defaults: { nominalValueCurrency: 'INR' },
+        columns: [
+            // Nominal value (NOM_VALUE) and Value (AST_VALUE) are kept on the record and sent to SAP but not shown
+            { key: 'serialNumber', label: 'Serial Number', type: 'number', decimals: 0 },
+            { key: 'enteredAmount', label: 'Entered Value', type: 'number', decimals: 2 },
+            { key: 'valuationDate', label: 'Valuation Date', type: 'date' },
+            { key: 'nominalValueCurrency', label: 'Currency' },
+            { key: 'remarks', label: 'Remarks' }
+        ],
+        fields: [
+            { key: 'serialNumber', label: 'Serial Number', type: 'readonly', span: 4, emptyText: 'Assigned on save' },
+            { key: 'valuationDate', label: 'Valuation Date', type: 'date', required: true, span: 4 },
+            { key: 'enteredAmount', label: 'Entered Value', type: 'number', decimals: 2, span: 4 },
+            { key: 'nominalValueCurrency', label: 'Currency', type: 'select', list: 'CURRENCY', span: 4 },
+            { key: 'remarks', label: 'Remarks', type: 'text', span: 12, maxLength: 60 }
+        ],
+        emptyText: 'Record the valuations of the collateral (nominal value, value and entered value on a date).'
+    },
+    'project-evaluations': {
+        type: 'project-evaluations', detailKey: 'evaluations', title: 'Valuations', rowLabel: 'valuation',
+        dialogTitle: 'Valuation', icon: 'lead', parent: 'loan',
+        actionLabels: { create: 'New Valuation', change: 'Change Valuation', delete: 'Delete Valuation' },
+        columns: [
+            { key: 'itemNumber', label: 'Line Item No.', type: 'number', decimals: 0 },
+            { key: 'valuationBy', label: 'Valuation By', type: 'code', list: 'VALUATION_BY' },
+            { key: 'valuationDate', label: 'Valuation Date', type: 'date' },
+            { key: 'totalLoanAsset', label: 'Total Loan Asset', type: 'number', decimals: 2 },
+            { key: 'totalCurrentLiabilities', label: 'Total Current Liabilities', type: 'number', decimals: 2 },
+            { key: 'netValuationAmount', label: 'Net (Valuation Amount)', type: 'number', decimals: 2 },
+            { key: 'currency', label: 'Currency' },
+            { key: 'remarks', label: 'Remarks' }
+        ],
+        fields: [
+            { key: 'itemNumber', label: 'Line Item No.', type: 'readonly', span: 4, emptyText: 'Assigned on save' },
+            { key: 'valuationBy', label: 'Valuation By', type: 'select', list: 'VALUATION_BY', required: true, span: 4 },
+            { key: 'valuationDate', label: 'Valuation Date', type: 'date', required: true, span: 4 },
+            { key: 'totalLoanAsset', label: 'Total Loan Asset', type: 'number', decimals: 2, span: 4 },
+            { key: 'totalCurrentLiabilities', label: 'Total Current Liabilities', type: 'number', decimals: 2, span: 4 },
+            { key: 'netValuationAmount', label: 'Net (Valuation Amount)', type: 'number', decimals: 2, span: 4 },
+            { key: 'currency', label: 'Currency', type: 'select', list: 'CURRENCY', required: true, span: 4 },
+            { key: 'remarks', label: 'Remarks', type: 'text', span: 8, maxLength: 60 }
+        ],
+        defaults: { currency: 'INR' },
+        emptyText: 'Use New Valuation to record the first valuation of the project.'
     }
 };
 
-/** The 14 tabs of the detail page, in the order of the SAP screen. */
+/** A project (collateral) evaluation of a loan (SAP ZLMS_COLL_EVAL); its id is the portal id (PTL_ID) in SAP. */
+export interface ProjectEvaluation {
+    id?: string;
+    itemNumber?: number | null;
+    majorCollateralType?: string | null;
+    valuationBy?: string | null;
+    valuationDate?: string | null;
+    totalLoanAsset?: number | null;
+    totalCurrentLiabilities?: number | null;
+    netValuationAmount?: number | null;
+    currency?: string | null;
+    remarks?: string | null;
+    contractNumber?: string | null;
+    [key: string]: unknown;
+}
+
+/**
+ * The Project(Coll.) Valuation screen of a loan: the loan, its Major Collateral Type, the evaluations by line item
+ * number, the collateral checklist they are approved with, and whether they may be changed right now.
+ */
+export interface ProjectEvaluationData {
+    loanApplicationId: string;
+    loanContractId?: string | null;
+    loan?: LoanSummary | null;
+    majorCollateralType?: string | null;
+    checklistId?: string | null;
+    checklistWorkFlowStatusCode?: number | null;
+    checklistWorkFlowStatusDescription?: string | null;
+    /** False while the checklist waits for approval. */
+    changeable: boolean;
+    evaluations: ProjectEvaluation[];
+}
+
+/** The 15 tabs of the detail page, in the order of the SAP screen. */
 export const TABS: TabDef[] = [
     {
         id: 'applicability', label: 'Applicability', icon: 'checklist-item', sections: [
@@ -888,6 +991,7 @@ export const TABS: TabDef[] = [
             ] }
         ]
     },
+    { id: 'valuation', label: 'Valuation', icon: 'lead', grid: GRIDS.valuations, sections: [] },
     {
         id: 'responsible-parties', label: 'Resp. Parties', icon: 'group', sections: [
             { title: 'Responsible Party', fields: [

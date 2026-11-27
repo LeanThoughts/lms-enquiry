@@ -7,16 +7,16 @@ import pfs.lms.enquiry.businesspartner.domain.DocumentType;
 import pfs.lms.enquiry.businesspartner.repository.DocumentTypeRepository;
 import pfs.lms.enquiry.collateral.domain.CollateralChecklist;
 import pfs.lms.enquiry.collateral.domain.CollateralItem;
-import pfs.lms.enquiry.collateral.domain.CollateralValue;
+import pfs.lms.enquiry.collateral.domain.CollateralAttributesValueList;
 import pfs.lms.enquiry.collateral.domain.CollateralValueList;
 import pfs.lms.enquiry.collateral.domain.SapField;
 import pfs.lms.enquiry.collateral.dto.CollateralChecklistDto;
 import pfs.lms.enquiry.collateral.dto.CollateralItemDetailDto;
 import pfs.lms.enquiry.collateral.dto.LoanSummaryDto;
 import pfs.lms.enquiry.collateral.dto.ValueEntryDto;
+import pfs.lms.enquiry.collateral.repository.CollateralAttributesValueListRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralChecklistRepository;
 import pfs.lms.enquiry.collateral.repository.CollateralItemRepository;
-import pfs.lms.enquiry.collateral.repository.CollateralValueRepository;
 import pfs.lms.enquiry.collateral.domain.CollateralChildType;
 import pfs.lms.enquiry.collateral.service.ICollateralChildService;
 import pfs.lms.enquiry.collateral.service.ICollateralPartnerService;
@@ -79,7 +79,7 @@ public class CollateralService implements ICollateralService {
 
     private final CollateralChecklistRepository checklistRepository;
     private final CollateralItemRepository itemRepository;
-    private final CollateralValueRepository valueRepository;
+    private final CollateralAttributesValueListRepository valueRepository;
     private final LoanApplicationRepository loanApplicationRepository;
     private final PartnerRepository partnerRepository;
     private final DocumentTypeRepository documentTypeRepository;
@@ -92,7 +92,7 @@ public class CollateralService implements ICollateralService {
 
     public CollateralService(CollateralChecklistRepository checklistRepository,
                              CollateralItemRepository itemRepository,
-                             CollateralValueRepository valueRepository,
+                             CollateralAttributesValueListRepository valueRepository,
                              LoanApplicationRepository loanApplicationRepository,
                              PartnerRepository partnerRepository,
                              DocumentTypeRepository documentTypeRepository,
@@ -126,9 +126,9 @@ public class CollateralService implements ICollateralService {
             lists.put(list.name(), new ArrayList<>());
         }
         valueRepository.findAll().stream()
-                .sorted(Comparator.comparing(CollateralValue::getListName)
+                .sorted(Comparator.comparing(CollateralAttributesValueList::getListName)
                         .thenComparing(value -> value.getSortOrder() == null ? Integer.MAX_VALUE : value.getSortOrder())
-                        .thenComparing(CollateralValue::getCode))
+                        .thenComparing(CollateralAttributesValueList::getCode))
                 .forEach(value -> lists.computeIfAbsent(value.getListName(), name -> new ArrayList<>())
                         .add(new ValueEntryDto(value.getCode(), value.getDescription())));
 
@@ -158,7 +158,7 @@ public class CollateralService implements ICollateralService {
         Map<String, String> localDescriptions = valueRepository.findByListName(CollateralValueList.AGREEMENT_TYPE.name())
                 .stream()
                 .filter(value -> value.getDescription() != null)
-                .collect(Collectors.toMap(CollateralValue::getCode, CollateralValue::getDescription, (a, b) -> a));
+                .collect(Collectors.toMap(CollateralAttributesValueList::getCode, CollateralAttributesValueList::getDescription, (a, b) -> a));
         Map<String, List<ValueEntryDto>> result = new LinkedHashMap<>();
         sap.forEach((objectType, types) -> result.put(objectType, types.stream()
                 .map(type -> new ValueEntryDto(type.getCode(),
@@ -226,6 +226,7 @@ public class CollateralService implements ICollateralService {
         detail.setNeslEvents(childService.list(CollateralChildType.NESL, itemId));
         detail.setDocuments(childService.list(CollateralChildType.DOCUMENT, itemId));
         detail.setSecuritiesPositions(childService.list(CollateralChildType.SECURITIES_POSITION, itemId));
+        detail.setValuations(childService.list(CollateralChildType.VALUATION, itemId));
         detail.setPartnerNames(partnerService.getNames(Arrays.asList(item.getSecurityTrustee(), item.getSecurityAgent(),
                 item.getCustodian()).stream().filter(Objects::nonNull).distinct().collect(Collectors.toList())));
         return detail;
@@ -484,7 +485,7 @@ public class CollateralService implements ICollateralService {
 
     private Map<String, Map<String, String>> valueListsByCode() {
         Map<String, Map<String, String>> lists = new LinkedHashMap<>();
-        for (CollateralValue value : valueRepository.findAll()) {
+        for (CollateralAttributesValueList value : valueRepository.findAll()) {
             lists.computeIfAbsent(value.getListName(), name -> new LinkedHashMap<>())
                     .put(value.getCode(), value.getDescription());
         }

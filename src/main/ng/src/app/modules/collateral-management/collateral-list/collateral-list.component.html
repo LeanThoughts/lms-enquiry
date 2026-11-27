@@ -19,6 +19,10 @@
                     <button fd-button fdType="emphasized" glyph="add" label="Create"
                         [disabled]="!!waitMessage || loadFailed" (click)="create()"></button>
                 }
+                <button fd-button fdType="standard" glyph="lead" label="Maintain Project Valuation"
+                    [disabled]="!!waitMessage || loadFailed || !loanApplicationId"
+                    title="Valuations of the project and its Major Collateral Type"
+                    (click)="projectValuation()"></button>
                 <button fd-button fdType="transparent" glyph="hint" label="Technical Info"
                     [title]="checklist?.id ? 'Id and audit trail of this checklist' : 'Created with the first collateral'"
                     [disabled]="!checklist?.id || !!waitMessage" (click)="technicalInfo()"></button>

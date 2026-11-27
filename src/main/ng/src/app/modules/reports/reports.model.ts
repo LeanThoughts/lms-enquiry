@@ -50,6 +50,24 @@ export const REPORT_MODULES: ReportModule[] = [
                 title: 'Loans : Disbursement – Periodwise and Comparison',
                 description: 'Loan disbursements by month, quarter or year for a fiscal year, or compared across fiscal years, for all loans or a selection of contracts, partners and project type',
                 source: 'SAP · ZPFS_LMS_REPORTS_SRV'
+            },
+            {
+                path: 'portfolio-debt-listing',
+                title: 'Portfolio Debt Listing',
+                description: 'Debt portfolio at a run date, one row per loan: sanction, disbursements by quarter, outstanding amounts, group and promoter, sector, compliance status and risk grades',
+                source: 'SAP · ZPFS_LMS_REPORTS_SRV'
+            },
+            {
+                path: 'portfolio-exposure',
+                title: 'Portfolio Exposure Report',
+                description: 'Exposure of the loan portfolio at a run date, one row per loan: net and effective sanction, contract capital, exposure, outstanding and disbursed amounts, HML sector, REC / DISCOM ratings and risk grades',
+                source: 'SAP · ZPFS_LMS_REPORTS_SRV'
+            },
+            {
+                path: 'covenants',
+                title: 'Covenants Report',
+                description: 'Covenants of the loans: type and category, key figure with operator and values, validity, consequence, penal charges and the last / next invocation dates',
+                source: 'SAP · ZPFS_LMS_REPORTS_SRV'
             }
         ]
     },
@@ -58,7 +76,14 @@ export const REPORT_MODULES: ReportModule[] = [
         title: 'Collaterals',
         description: 'Collateral checklists, security creation and perfection',
         icon: 'shield',
-        reports: []
+        reports: [
+            {
+                path: 'collateral-securities',
+                title: 'Collateral Securities Report',
+                description: 'Collateral conditions of the loans with their compliance status, timelines and events, satisfaction and perfection dates, penal charges and security details',
+                source: 'SAP · ZPFS_LMS_REPORTS_SRV'
+            }
+        ]
     },
     {
         id: 'business-partner',

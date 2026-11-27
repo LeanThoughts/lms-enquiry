@@ -22,6 +22,8 @@ import {
     displayDate
 } from './balance-list.model';
 import { BalanceListService } from './balance-list.service';
+import { ReportElapsedComponent, ReportRunStatsComponent } from '../shared/report-run-stats.component';
+import { recordCountText } from '../shared/report-timing';
 
 /**
  * Loans Balance List (Reports › Loans Management): the selection screen of the SAP report "Balance List" (FNR7) —
@@ -34,7 +36,7 @@ import { BalanceListService } from './balance-list.service';
     selector: 'app-balance-list-report',
     templateUrl: './balance-list-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './balance-list-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ReportRunStatsComponent, ReportElapsedComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class BalanceListReportComponent implements OnDestroy {
 
@@ -269,7 +271,7 @@ export class BalanceListReportComponent implements OnDestroy {
         }
         const shown = this.rows.length;
         const total = this.report.total;
-        return shown === total ? `${total} ${total === 1 ? 'row' : 'rows'}` : `${shown} of ${total} rows`;
+        return recordCountText(shown, total);
     }
 
     /** Excel download of the report as shown: the rows in their current order and filter. */

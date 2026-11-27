@@ -22,6 +22,8 @@ import {
     displayDate
 } from './workflow-status.model';
 import { WorkflowStatusService } from './workflow-status.service';
+import { ReportElapsedComponent, ReportRunStatsComponent } from '../shared/report-run-stats.component';
+import { recordCountText } from '../shared/report-timing';
 
 /**
  * Workflow Status Report (Reports › Miscellaneous): the selection screen of the SAP report "Loans: Workflow Status
@@ -33,7 +35,7 @@ import { WorkflowStatusService } from './workflow-status.service';
     selector: 'app-workflow-status-report',
     templateUrl: './workflow-status-report.component.html',
     styleUrls: ['../shared/report-page.base.scss', '../shared/report-page.result.scss', './workflow-status-report.component.scss'],
-    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
+    imports: [FormsModule, SelectOptionComponent, ReportVariantsComponent, ReportRunStatsComponent, ReportElapsedComponent, ButtonComponent, IconComponent, MessageStripComponent, FormModule]
 })
 export class WorkflowStatusReportComponent implements OnDestroy {
 
@@ -270,7 +272,7 @@ export class WorkflowStatusReportComponent implements OnDestroy {
         }
         const shown = this.rows.length;
         const total = this.report.total;
-        return shown === total ? `${total} ${total === 1 ? 'row' : 'rows'}` : `${shown} of ${total} rows`;
+        return recordCountText(shown, total);
     }
 
     /** Excel download of the report as shown: the rows in their current order and filter. */

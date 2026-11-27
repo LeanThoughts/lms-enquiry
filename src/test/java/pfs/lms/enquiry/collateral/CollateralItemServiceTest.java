@@ -36,7 +36,7 @@ class CollateralItemServiceTest extends CollateralTestSupport {
     @Order(1)
     @DisplayName("value lists are seeded once and offered with the portal masters")
     void valueLists() {
-        bean(pfs.lms.enquiry.collateral.config.CollateralValueInitializer.class).run(); // a second run adds nothing
+        bean(pfs.lms.enquiry.collateral.config.CollateralAttributesValueListInitializer.class).run(); // a second run adds nothing
         Map<String, List<ValueEntryDto>> lists = collateralService.getValueLists();
 
         assertThat(lists.get("CONDITION_GROUP")).extracting(ValueEntryDto::getCode)

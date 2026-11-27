@@ -10,6 +10,7 @@ replaced by an in-memory mock (`tests/mock-api.ts`): the tests need only the Ang
 | `tests/collateral-child-tables.spec.ts` | Coverage dialog, Documents with upload, Securities with INR default |
 | `tests/checklist-id-configuration.spec.ts` | Configuration > Checklist ID Number Range |
 | `tests/technical-info.spec.ts` | Technical Info (id and audit trail) on the list, the detail screen and a child dialog |
+| `tests/project-evaluation.spec.ts` | Maintain Project Valuation: Major Collateral Type, New / Change / Delete Valuation, lock during approval, display only |
 
 ## Run
 
@@ -17,7 +18,7 @@ replaced by an in-memory mock (`tests/mock-api.ts`): the tests need only the Ang
 cd src/main/ng/e2e
 npm install
 npx playwright install chromium     # once
-npm test                            # starts `ng serve --port 4300` from src/main/ng and runs the tests
+npm test                            # starts `ng serve --port 4300 --configuration e2e` (base href /) from src/main/ng and runs the tests
 ```
 
 To test an app that is already running: `E2E_BASE_URL=http://localhost:4200 npm test`.

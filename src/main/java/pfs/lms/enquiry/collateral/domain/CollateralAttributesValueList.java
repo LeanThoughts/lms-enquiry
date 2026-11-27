@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "collateral_value",
         uniqueConstraints = @UniqueConstraint(name = "uk_collateral_value_list_code", columnNames = {"list_name", "code"}))
-public class CollateralValue {
+public class CollateralAttributesValueList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +33,10 @@ public class CollateralValue {
 
     private Integer sortOrder;
 
-    public CollateralValue() {
+    public CollateralAttributesValueList() {
     }
 
-    public CollateralValue(String listName, String code, String description, Integer sortOrder) {
+    public CollateralAttributesValueList(String listName, String code, String description, Integer sortOrder) {
         this.listName = listName;
         this.code = code;
         this.description = description;

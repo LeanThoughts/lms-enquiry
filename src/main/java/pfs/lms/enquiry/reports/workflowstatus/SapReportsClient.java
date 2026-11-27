@@ -16,6 +16,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import pfs.lms.enquiry.exception.LmsException;
+import pfs.lms.enquiry.reports.timing.ReportTiming;
 import pfs.lms.enquiry.sapintegrationservice.SapRestTemplates;
 
 import java.io.IOException;
@@ -88,16 +89,23 @@ public class SapReportsClient {
         headers.add("X-Requested-With", "X");
         log.info("SAP reports: GET {}", url);
         String body;
+        long started = System.nanoTime();
         try {
             ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET,
                     new HttpEntity<>(headers), String.class);
             body = response.getBody();
+            long nanos = System.nanoTime() - started;
+            ReportTiming.recordSap(nanos);
+            log.info("SAP reports: GET {} -> {} bytes in {} ms", entitySet, body == null ? 0 : body.length(),
+                    Math.round(nanos / 1_000_000d));
         } catch (HttpStatusCodeException ex) {
+            ReportTiming.recordSap(System.nanoTime() - started);
             String message = sapError(ex.getResponseBodyAsString());
             log.error("SAP reports: GET {} -> HTTP {} {}: {}", url, ex.getRawStatusCode(), ex.getStatusText(), message);
             throw new LmsException("SAP answered HTTP " + ex.getRawStatusCode() + " " + ex.getStatusText()
                     + (message.isEmpty() ? "" : ": " + message), HttpStatus.BAD_GATEWAY);
         } catch (RestClientException ex) {
+            ReportTiming.recordSap(System.nanoTime() - started);
             log.error("SAP reports: GET {} failed: {}", url, ex.getMessage());
             throw new LmsException("SAP could not be reached: " + ex.getMessage(), HttpStatus.BAD_GATEWAY);
         }

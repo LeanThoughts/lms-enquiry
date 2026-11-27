@@ -109,6 +109,16 @@ public class CollateralSapGatewayClient {
         return exchange(HttpMethod.DELETE, entityPath, null);
     }
 
+    /** PUT with additional request headers (e.g. the portal id of a project evaluation). */
+    public Result put(String entityPath, Object payload, HttpHeaders extra) {
+        return exchange(HttpMethod.PUT, entityPath, payload, extra);
+    }
+
+    /** DELETE with additional request headers: a DELETE has no body, so a non-key identifier travels as a header. */
+    public Result delete(String entityPath, HttpHeaders extra) {
+        return exchange(HttpMethod.DELETE, entityPath, null, extra);
+    }
+
     /**
      * Sends a file as the media stream of a keyed entity: {@code PUT <entityPath>/$value} with the raw bytes as body,
      * the file's content type and the {@code Slug} header. On the gateway this is {@code UPDATE_STREAM}: the key from

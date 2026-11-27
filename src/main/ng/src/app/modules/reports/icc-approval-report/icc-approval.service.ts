@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { toParams } from '../shared/select-option.model';
+import { timedGet } from '../shared/report-timing';
 import { skipBusyIndicator } from '../../../busy-indicator.service';
 import { IccApprovalReport, IccApprovalRow, IccApprovalSelection } from './icc-approval.model';
 
@@ -16,7 +17,7 @@ export class IccApprovalService {
 
     run(selection: IccApprovalSelection): Observable<IccApprovalReport> {
         const params = toParams(selection);
-        return this.http.get<IccApprovalReport>(this.url, { params, context: skipBusyIndicator() });
+        return timedGet<IccApprovalReport>(this.http, this.url, { params, context: skipBusyIndicator() });
     }
 
     /** Excel of the rows and visible columns as shown (sorted / filtered); built by the portal from the rows, no second SAP call. */

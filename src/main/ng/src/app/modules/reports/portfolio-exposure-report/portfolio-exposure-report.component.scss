@@ -1,0 +1,17 @@
+// Portfolio Exposure Report: the page styles are shared with the other reports (../shared); only additions here.
+$label: var(--sapContent_LabelColor, #6a6d70);
+
+.ws-input[disabled] { background: var(--sapField_ReadOnly_Background, #f2f2f2); color: $label; cursor: not-allowed; }
+.ws-group__fields--stack { grid-template-columns: 1fr; }
+.ws-check {
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer; min-height: 2rem;
+    input { margin: 0; width: 1rem; height: 1rem; accent-color: var(--sapSelectedColor, #0a6ed1); }
+}
+
+// the three groups of the SAP screen side by side; one column on narrow screens
+.ws-filter__groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 60rem) {
+    .ws-filter__groups { grid-template-columns: 1fr; }
+}
+
+.ws-th--num .ws-th__button { justify-content: flex-end; }

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Configuration > Collaterals > Collateral Value Lists: the collateral_value table, filtered by value list. */
 @DisplayName("Configuration: collateral value lists")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CollateralValueTableTest extends CollateralTestSupport {
+class CollateralAttributesValueListTableTest extends CollateralTestSupport {
 
     private BpTableService service;
 

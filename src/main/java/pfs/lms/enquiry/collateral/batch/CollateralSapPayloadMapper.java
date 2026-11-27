@@ -20,7 +20,7 @@ import java.util.UUID;
  *   <li>property name: {@link CollateralSapFieldNaming#propertyName(String)} (ZID_NO → ZidNo, …);</li>
  *   <li>dates (Edm.DateTime): OData V2 {@code /Date(ms)/} at UTC midnight;</li>
  *   <li>flags: real Edm.Boolean properties as {@code true}/{@code false}, the 1-char Edm.String flags as "X" / "";</li>
- *   <li>decimals: plain string; ZID_NO (Edm.String, length 10): zero-padded.</li>
+ *   <li>decimals: plain string; ZID_NO (Edm.String, length 10) and ITEM_NO (NUMC 6): zero-padded.</li>
  * </ul>
  * Fields without a {@code @SapField}, with an empty SAP name, or marked {@code longText} are left out; {@code null}
  * values are omitted (booleans are always sent).
@@ -30,12 +30,20 @@ public class CollateralSapPayloadMapper {
 
     public static final String ZID_NO = "ZID_NO";
     public static final String ITEM_ID = "ITEM_ID";
+    /** Line item number of a project evaluation (ZLMS_COLL_EVAL-ITEM_NO, NUMC 6): sent zero-padded. */
+    public static final String ITEM_NO = "ITEM_NO";
     /** Loan contract number on the checklist header (ChecklistHeader.ZloanNumber, Edm.String 13, not nullable). */
     public static final String ZLOAN_NUMBER = "ZLOAN_NUMBER";
     /** Portal id of a child record (PtlId on Document, Coverage, SecPosition, Perf*; Edm.String 40, not nullable). */
     public static final String PTL_ID = "PTL_ID";
     /** Portal id of the collateral item on the header (ChecklistHeader.PortalId; Edm.String 40, not nullable). */
     public static final String PORTAL_ID = "PORTAL_ID";
+    /**
+     * Not sent to SAP: the DPC_EXT defaults SOURCEOFENTRY to 'PORTAL' when it is empty (set_admin_fields and the
+     * create methods), and not every entity type declares the property (a payload with an unknown property is
+     * rejected with "Property 'Sourceofentry' is invalid").
+     */
+    public static final String SOURCE_OF_ENTRY = "SOURCEOFENTRY";
     /** SAP checklist-number width (Edm.String, MaxLength 10). */
     private static final int ZID_NO_WIDTH = 10;
 
@@ -44,7 +52,8 @@ public class CollateralSapPayloadMapper {
         for (Class<?> type = entity.getClass(); type != null && type != Object.class; type = type.getSuperclass()) {
             for (Field field : type.getDeclaredFields()) {
                 SapField sapField = field.getAnnotation(SapField.class);
-                if (sapField == null || sapField.longText() || sapField.value().isEmpty()) {
+                if (sapField == null || sapField.longText() || sapField.value().isEmpty()
+                        || SOURCE_OF_ENTRY.equals(sapField.value())) {
                     continue;
                 }
                 String property = CollateralSapFieldNaming.propertyName(sapField.value());
@@ -349,6 +358,9 @@ public class CollateralSapPayloadMapper {
         }
         if (ZID_NO.equals(sapColumn)) {
             return padZidNo(value.toString().trim());
+        }
+        if (ITEM_NO.equals(sapColumn) && value instanceof Number) {
+            return String.format("%06d", ((Number) value).longValue());
         }
         if (value instanceof LocalDate) {
             return sapDate(((LocalDate) value).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli());

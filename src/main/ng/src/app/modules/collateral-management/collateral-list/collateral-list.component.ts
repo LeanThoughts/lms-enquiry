@@ -165,6 +165,13 @@ export class CollateralListComponent implements OnInit, OnDestroy {
         this.router.navigate(['/collateral-management/loan', this.loanApplicationId, 'item', 'new']);
     }
 
+    /** Maintain Project Valuation: the valuations of the loan's project (SAP tab Project(Coll.) Valuation). */
+    projectValuation(): void {
+        if (this.loanApplicationId) {
+            this.router.navigate(['/collateral-management/loan', this.loanApplicationId, 'project-evaluation']);
+        }
+    }
+
     /** Technical Info: the checklist's id and audit trail (the checklist exists once the first collateral is created). */
     technicalInfo(): void {
         if (!this.checklist?.id) {
