@@ -1,7 +1,6 @@
-// Management Dashboard. SAP theme variables (Fundamental NGX / Fiori) so the page follows the selected theme.
 $border: var(--sapList_BorderColor, #e5e5e5);
 $label: var(--sapContent_LabelColor, #6a6d70);
-$mono: var(--sapFontMonoFamily, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+$mono: var(--sapFontMonoFamily, Menlo, Consolas, monospace);
 $accent: #0e7c86;
 
 .md {
@@ -21,16 +20,16 @@ $accent: #0e7c86;
     justify-content: space-between;
     gap: 1rem;
     padding: 0.875rem 2rem 1rem;
-    background: var(--sapObjectHeader_Background, #fff);
-    border-bottom: 1px solid var(--sapObjectHeader_BorderColor, $border);
+    background: var(--sapObjectHeader_Background);
+    border-bottom: 1px solid var(--sapObjectHeader_BorderColor);
     box-shadow: var(--sapContent_HeaderShadow);
 
     &__title {
         margin: 0.125rem 0 0.25rem;
-        font-family: var(--sapFontHeaderFamily, var(--sapFontFamily));
+        font-family: var(--sapFontHeaderFamily);
         font-size: var(--sapFontHeader3Size, 1.5rem);
         font-weight: 400;
-        color: var(--sapGroup_TitleTextColor, var(--sapTextColor));
+        color: var(--sapGroup_TitleTextColor);
     }
 
     &__subtitle {
@@ -62,7 +61,7 @@ $accent: #0e7c86;
     border-radius: 0.75rem;
     font-family: $mono;
     font-size: 0.75rem;
-    color: var(--sapNeutralTextColor, var(--sapTextColor));
+    color: var(--sapNeutralTextColor);
     background: var(--sapNeutralBackground, #eaecee);
 }
 
@@ -82,14 +81,10 @@ $accent: #0e7c86;
         border: 1px solid var(--sapField_BorderColor, #89919a);
         border-radius: var(--sapField_BorderCornerRadius, 0.25rem);
         background: var(--sapField_Background, #fff);
-        color: var(--sapField_TextColor, var(--sapTextColor));
+        color: var(--sapField_TextColor);
         font: inherit;
         font-size: 0.875rem;
 
-        &:focus-visible {
-            outline: 2px solid var(--sapContent_FocusColor, #0032a5);
-            outline-offset: -2px;
-        }
     }
 }
 
@@ -109,21 +104,19 @@ $accent: #0e7c86;
         font-size: 0.875rem;
         cursor: pointer;
 
-        &:hover {
-            background: var(--sapButton_Hover_Background, #ebf5fe);
-        }
-
         &--on,
         &--on:hover {
             background: var(--sapButton_Selected_Background, #0a6ed1);
             color: var(--sapButton_Selected_TextColor, #fff);
         }
 
-        &:focus-visible {
-            outline: 2px solid var(--sapContent_FocusColor, #0032a5);
-            outline-offset: -3px;
-        }
     }
+}
+
+.md-filter__input:focus-visible,
+.md-unit__button:focus-visible {
+    outline: 2px solid var(--sapContent_FocusColor, #0032a5);
+    outline-offset: -2px;
 }
 
 // ----------------------------------------------------------------------------------------------- body
@@ -141,8 +134,6 @@ $accent: #0e7c86;
     flex-direction: column;
     gap: 1rem;
     padding: 1.25rem 2rem 2rem;
-    transition: opacity 0.2s;
-
     &--stale {
         opacity: 0.55;
         pointer-events: none;
@@ -216,12 +207,7 @@ $accent: #0e7c86;
     }
 
     @media (max-width: 1100px) {
-        &--3-wide,
-        &--2-wide,
-        &--2,
-        &--3 {
-            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-        }
+        &--3-wide, &--2-wide, &--2, &--3 { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
     }
 }
 
@@ -242,6 +228,5 @@ $accent: #0e7c86;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-family: $mono;
     }
 }

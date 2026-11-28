@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sap.pfs</groupId>
-    <artifactId>lms-enquiry</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>loans-management-portal</artifactId>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
-    <name>lms-enquiry</name>
-    <description>LMS Enquiry Spring Boot Project</description>
+    <name>loans-management-portal</name>
+    <description>Loans Management Portal </description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
