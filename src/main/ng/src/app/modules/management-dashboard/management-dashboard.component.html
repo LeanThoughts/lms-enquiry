@@ -1,0 +1,133 @@
+<div class="md">
+    <header class="md-header">
+        <div class="md-header__text">
+            <h1 class="md-header__title">Management Dashboard</h1>
+            <div class="md-header__subtitle" data-testid="md-subtitle">
+                @if (dashboard) {
+                    @if (dashboard.fiscalYearFull || dashboard.fiscalYear) {
+                        <span>FY {{ dashboard.fiscalYearFull || dashboard.fiscalYear }}</span>
+                    }
+                    @if (dashboard.reportingMonth) {
+                        <span class="md-header__dot">·</span><span>Reporting month {{ dashboard.reportingMonth }}</span>
+                    }
+                    @if (dashboard.dashboardId) {
+                        <span class="md-header__dot">·</span><span>Snapshot {{ dashboard.dashboardId }}</span>
+                    }
+                    @if (dashboard.updatedOn) {
+                        <span class="md-header__dot">·</span><span>Updated in SAP {{ dashboard.updatedOn | date:'dd.MM.yyyy HH:mm' }}</span>
+                    }
+                } @else {
+                    <span class="md-source"><fd-icon glyph="database" aria-hidden="true"></fd-icon> SAP · ZPFS_LMS_DASHBOARD_SRV</span>
+                }
+            </div>
+        </div>
+
+        <form class="md-header__filters" (ngSubmit)="load()" novalidate aria-label="Dashboard selection">
+            <label class="md-filter">
+                <span class="md-filter__label">Run date</span>
+                <input class="md-filter__input" type="date" name="runDate" [(ngModel)]="runDate" required data-testid="md-run-date">
+            </label>
+            <div class="md-unit" role="radiogroup" aria-label="Amount unit">
+                <button type="button" class="md-unit__button" [class.md-unit__button--on]="amountInCrore" role="radio"
+                    [attr.aria-checked]="amountInCrore" (click)="setUnit(true)">₹ Crore</button>
+                <button type="button" class="md-unit__button" [class.md-unit__button--on]="!amountInCrore" role="radio"
+                    [attr.aria-checked]="!amountInCrore" (click)="setUnit(false)">₹</button>
+            </div>
+            <button fd-button fdType="standard" glyph="refresh" label="Refresh" type="submit" [disabled]="loading"></button>
+        </form>
+    </header>
+
+    @if (errorMessage) {
+        <fd-message-strip type="error" [dismissible]="false" class="md-strip" data-testid="md-error">{{ errorMessage }}</fd-message-strip>
+    }
+
+    @if (loading && !dashboard) {
+        <p class="md-loading" role="status">Reading the dashboard from SAP…</p>
+    }
+
+    @if (dashboard) {
+        <div class="md-body" [class.md-body--stale]="loading">
+
+            <!-- KPI strip: latest quarter of the loan book -->
+            @if (kpis.length) {
+                <section class="md-kpis" [attr.aria-label]="'Loan book ' + latestQuarter?.quarter" data-testid="md-kpis">
+                    @for (kpi of kpis; track kpi.label) {
+                        <div class="md-kpi">
+                            <span class="md-kpi__label">{{ kpi.label }}</span>
+                            <span class="md-kpi__value">{{ kpi.value }}</span>
+                            @if (kpi.detail) {
+                                <span class="md-kpi__detail" [class.md-kpi__detail--up]="kpi.tone === 'up'" [class.md-kpi__detail--down]="kpi.tone === 'down'">{{ kpi.detail }}</span>
+                            }
+                        </div>
+                    }
+                </section>
+            }
+
+            <!-- Loan book · Budget vs actual · Liquidity -->
+            <section class="md-row md-row--3-wide">
+                <app-dashboard-section-card cardId="loan-book" title="Loan Book by Quarter" [subtitle]="unit + ' (columns) · NPA % (lines)'"
+                    [rows]="dashboard.loanBook" [columns]="loanBookColumns">
+                    <app-md-column-chart [categories]="loanBookCategories" [series]="loanBookSeries" [tooltips]="loanBookTooltips" [width]="460" [height]="250"
+                        ariaLabel="Loan book by quarter: gross and net of provisions as columns, gross and net NPA percentage as lines"></app-md-column-chart>
+                </app-dashboard-section-card>
+
+                <app-dashboard-section-card cardId="budget-actual" title="Budget vs Actual" [subtitle]="unit" [rows]="dashboard.budgetActual" [columns]="budgetColumns">
+                    <app-md-bar-chart [rows]="budgetRows" labelWidth="8rem"></app-md-bar-chart>
+                </app-dashboard-section-card>
+
+                <app-dashboard-section-card cardId="liquidity" title="Liquidity" [subtitle]="unit" [rows]="dashboard.liquidity" [columns]="liquidityColumns">
+                    <app-md-bar-chart [rows]="liquidityRows" labelWidth="9rem"></app-md-bar-chart>
+                </app-dashboard-section-card>
+            </section>
+
+            <!-- Cash flow · Collection efficiency -->
+            <section class="md-row md-row--2-wide">
+                <app-dashboard-section-card cardId="cash-flow" title="Cash Flow" [subtitle]="unit + ' · projected'" [rows]="dashboard.cashFlow" [columns]="cashFlowColumns">
+                    <app-md-column-chart [categories]="cashFlowCategories" [series]="cashFlowSeries" [notes]="cashFlowNotes" [tooltips]="cashFlowTooltips"
+                        [height]="220" ariaLabel="Cash flow by evaluation period: total inflow, total outflow and net flow"></app-md-column-chart>
+                </app-dashboard-section-card>
+
+                <app-dashboard-section-card cardId="collection-efficiency" title="Collection Efficiency" subtitle="% per month"
+                    [rows]="dashboard.collectionEfficiency" [columns]="collectionColumns">
+                    <app-md-column-chart [categories]="collectionCategories" [series]="collectionSeries" [width]="420" [height]="220" rightSuffix=""
+                        ariaLabel="Collection efficiency per month in percent"></app-md-column-chart>
+                </app-dashboard-section-card>
+            </section>
+
+            <!-- SMA · ECL -->
+            <section class="md-row md-row--2">
+                <app-dashboard-section-card cardId="sma-overdue" title="SMA Overdue" [subtitle]="unit + ' · as on ' + (dashboard.runDate | date:'dd.MM.yyyy')"
+                    [rows]="dashboard.smaOverdue" [columns]="smaColumns">
+                    <app-md-bar-chart [rows]="smaRows" [legend]="overdueLegend" labelWidth="8rem"></app-md-bar-chart>
+                </app-dashboard-section-card>
+
+                <app-dashboard-section-card cardId="ecl-overdue" title="ECL Overdue" [subtitle]="unit + ' · by stage'" [rows]="dashboard.eclOverdue" [columns]="eclColumns">
+                    <app-md-bar-chart [rows]="eclRows" [legend]="overdueLegend" labelWidth="8rem"></app-md-bar-chart>
+                </app-dashboard-section-card>
+            </section>
+
+            <!-- Interest rates · Ratings · Proposals -->
+            <section class="md-row md-row--3">
+                <app-dashboard-section-card cardId="interest-rates" title="Interest Rates" subtitle="% p.a." [rows]="dashboard.interestRates"
+                    [columns]="interestRateColumns" [switchable]="false"></app-dashboard-section-card>
+
+                <app-dashboard-section-card cardId="ratings" title="Credit Ratings" subtitle="CRISIL · ICRA" [rows]="dashboard.ratings"
+                    [columns]="ratingColumns" [switchable]="false"></app-dashboard-section-card>
+
+                <app-dashboard-section-card cardId="proposals" title="Loan Proposals" [subtitle]="'count · ' + unit" [rows]="dashboard.proposals" [columns]="proposalColumns">
+                    <app-md-bar-chart [rows]="proposalRows" labelWidth="9rem"></app-md-bar-chart>
+                </app-dashboard-section-card>
+            </section>
+
+            <footer class="md-footer">
+                <span><fd-icon glyph="database" aria-hidden="true"></fd-icon> SAP · ZPFS_LMS_DASHBOARD_SRV</span>
+                @if (fetchedAt) {
+                    <span class="md-header__dot">·</span><span>Fetched {{ fetchedAt | date:'dd.MM.yyyy HH:mm:ss' }}</span>
+                }
+                @if (dashboard.source) {
+                    <span class="md-header__dot">·</span><span class="md-footer__source" [title]="dashboard.source">{{ dashboard.source }}</span>
+                }
+            </footer>
+        </div>
+    }
+</div>

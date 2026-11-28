@@ -47,6 +47,7 @@ export class SideNavigationService {
                 expanded: true,
                 children: [
                     { title: 'Home', icon: 'home', routerLink: '/homepage' },
+                    { title: 'Management Dashboard', icon: 'business-objects-experience', routerLink: '/management-dashboard' },
                     { title: 'Inbox', icon: 'inbox', routerLink: '/inbox' },
                 ]
             }

@@ -1,0 +1,95 @@
+$label: var(--sapContent_LabelColor, #556b82);
+
+:host {
+    display: block;
+    min-width: 0;
+}
+
+.hbar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__row {
+        display: grid;
+        grid-template-columns: var(--label-width, 9.5rem) minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.8125rem;
+
+        &--emphasis {
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--sapList_BorderColor, #e5e5e5);
+            font-weight: 600;
+        }
+
+        &--negative .hbar__segment {
+            background-color: #e9730c !important;
+        }
+    }
+
+    &__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__track-area {
+        display: block;
+        min-width: 0;
+    }
+
+    &__track {
+        display: flex;
+        height: 0.85rem;
+        min-width: 2px;
+        border-radius: 0.25rem;
+        overflow: hidden;
+        background-color: transparent;
+
+        &--reference {
+            background-color: #eef1f4;
+        }
+    }
+
+    &__segment {
+        display: block;
+        height: 100%;
+    }
+
+    &__figure {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        min-width: 3.5rem;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__note {
+        font-size: 0.7rem;
+        color: $label;
+        font-weight: 400;
+    }
+
+    &__legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 0.7rem;
+        font-size: 0.7rem;
+        color: $label;
+    }
+
+    &__legend-item i {
+        display: inline-block;
+        width: 0.6rem;
+        height: 0.6rem;
+        margin-right: 0.3rem;
+        border-radius: 0.15rem;
+        vertical-align: -1px;
+    }
+}

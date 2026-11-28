@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import homepageRoutes from './modules/homepage/homepage.routes';
+import managementDashboardRoutes from './modules/management-dashboard/management-dashboard.routes';
 import enquiryRoutes from './modules/enquiry/enquiry.routes';
 import { LayoutComponent } from './common/layout/layout.component';
 import loginRoutes from './modules/login/login.routes';
@@ -31,6 +32,7 @@ export const routes: Routes = [
         component: LayoutComponent,
         children: [
             ...homepageRoutes,
+            ...managementDashboardRoutes,
             ...enquiryRoutes,
             ...loanContractSearchRoutes,
             ...inboxRoutes,

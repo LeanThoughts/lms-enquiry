@@ -1,0 +1,60 @@
+<section class="md-card" [attr.data-testid]="'md-card-' + cardId">
+    <header class="md-card__header">
+        <h3 class="md-card__title">{{ title }}</h3>
+        <div class="md-card__tools">
+            @if (subtitle) {
+                <span class="md-card__subtitle">{{ subtitle }}</span>
+            }
+            @if (switchable) {
+                <div class="md-card__switch" role="group" [attr.aria-label]="'View of ' + title">
+                    <button type="button" class="md-card__switch-button" [class.md-card__switch-button--on]="view === 'graph'"
+                        [attr.aria-pressed]="view === 'graph'" title="Graph" aria-label="Graph view" (click)="setView('graph')">
+                        <fd-icon glyph="vertical-bar-chart"></fd-icon>
+                    </button>
+                    <button type="button" class="md-card__switch-button" [class.md-card__switch-button--on]="view === 'table'"
+                        [attr.aria-pressed]="view === 'table'" title="Table" aria-label="Table view" (click)="setView('table')">
+                        <fd-icon glyph="table-view"></fd-icon>
+                    </button>
+                </div>
+            }
+        </div>
+    </header>
+
+    <div class="md-card__body">
+        @if (!rows.length) {
+            <p class="md-card__empty">{{ emptyText }}</p>
+        }
+        @else if (view === 'graph') {
+            <ng-content></ng-content>
+        }
+        @else {
+            <div class="md-card__table-wrap">
+                <table class="md-table">
+                    <thead>
+                        <tr>
+                            @for (column of columns; track column.header) {
+                                <th [class.md-table__num]="column.align === 'end'">{{ column.header }}</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (row of rows; track $index) {
+                            <tr>
+                                @for (column of columns; track column.header) {
+                                    @let value = column.value(row);
+                                    <td [class.md-table__num]="column.align === 'end' || isNumber(value)">
+                                        @if (isNumber(value)) {
+                                            {{ value | number:(column.format || '1.2-2') }}
+                                        } @else {
+                                            {{ value ?? '' }}
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>

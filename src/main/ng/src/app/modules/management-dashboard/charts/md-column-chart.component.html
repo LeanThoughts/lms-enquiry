@@ -1,0 +1,60 @@
+<svg class="colchart" [attr.viewBox]="'0 0 ' + width + ' ' + height" width="100%" role="img"
+    [attr.aria-label]="ariaLabel" preserveAspectRatio="xMidYMid meet">
+    <!-- grid and left axis -->
+    @for (tick of leftTicks; track tick.y) {
+        <line class="colchart__grid" [attr.x1]="padLeft" [attr.x2]="width - padRight" [attr.y1]="tick.y" [attr.y2]="tick.y"
+            [class.colchart__grid--base]="$first"></line>
+        <text class="colchart__tick" [attr.x]="padLeft - 6" [attr.y]="tick.y + 4" text-anchor="end">{{ tick.text }}</text>
+    }
+    <!-- right axis -->
+    @for (tick of rightTicks; track tick.y) {
+        <text class="colchart__tick" [attr.x]="width - padRight + 6" [attr.y]="tick.y + 4" text-anchor="start">{{ tick.text }}</text>
+    }
+
+    <!-- categories: placeholder for missing ones, label, note, tooltip -->
+    @for (cat of cats; track cat.label) {
+        <g>
+            <title>{{ cat.tooltip }}</title>
+            <rect class="colchart__hit" [attr.x]="cat.x - cat.width / 2 - 6" [attr.y]="padTop" [attr.width]="cat.width + 12"
+                [attr.height]="plotBottom - padTop"></rect>
+            @if (cat.missing) {
+                <rect class="colchart__missing" [attr.x]="cat.x - cat.width / 2" [attr.y]="plotBottom - 36" [attr.width]="cat.width" height="36" rx="3"></rect>
+                <text class="colchart__missing-text" [attr.x]="cat.x" [attr.y]="plotBottom - 14" text-anchor="middle">n/a</text>
+            }
+            <text class="colchart__category" [attr.x]="cat.x" [attr.y]="plotBottom + 18" text-anchor="middle">{{ cat.label }}</text>
+            @if (cat.note) {
+                <text class="colchart__note" [attr.x]="cat.x" [attr.y]="padTop - 8" text-anchor="middle" [attr.fill]="cat.noteColor">{{ cat.note }}</text>
+            }
+        </g>
+    }
+
+    <!-- columns -->
+    @for (column of columns; track $index) {
+        <rect class="colchart__column" [attr.x]="column.x" [attr.y]="column.y" [attr.width]="column.width" [attr.height]="column.height"
+            [attr.fill]="column.color" rx="2"></rect>
+        @if (column.label) {
+            <text class="colchart__value" [class.colchart__value--inside]="column.inside" [attr.x]="column.x + column.width / 2"
+                [attr.y]="column.inside ? column.y + 13 : column.y - 4" text-anchor="middle">{{ column.label }}</text>
+        }
+    }
+
+    <!-- lines on the right axis -->
+    @for (line of lines; track $index) {
+        <polyline [attr.points]="line.points" fill="none" [attr.stroke]="line.color" stroke-width="2"
+            [attr.stroke-dasharray]="line.dashed ? '5 3' : null"></polyline>
+        @for (dot of line.dots; track $index) {
+            <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#fff" [attr.stroke]="dot.color" stroke-width="2"></circle>
+            @if (dot.label) {
+                <text class="colchart__point" [attr.x]="dot.x + 7" [attr.y]="dot.y - 6" text-anchor="start" [attr.fill]="dot.color" stroke="#fff" stroke-width="3" paint-order="stroke">{{ dot.label }}</text>
+            }
+        }
+    }
+
+    <!-- legend -->
+    @for (item of legend; track item.name) {
+        <g [attr.transform]="'translate(' + item.x + ',' + (height - 10 - (legendRows - 1) * 14 + item.y) + ')'">
+            <rect width="10" height="10" rx="2" [attr.fill]="item.color" y="-9"></rect>
+            <text class="colchart__legend" x="15">{{ item.name }}</text>
+        </g>
+    }
+</svg>

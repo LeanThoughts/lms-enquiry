@@ -134,7 +134,7 @@ public class CollateralSapIntegrationService {
         pointers.sort(Comparator.comparing(SAPIntegrationPointer::getCreationDate,
                 Comparator.nullsLast(Comparator.naturalOrder())));
         if ( pointers.isEmpty() == false ) {
-            log.info("Collateral SAP integration: {} unposted/failed pointer(s) to consider", pointers.size());
+           // log.info("Collateral SAP integration: {} unposted/failed pointer(s) to consider", pointers.size());
         }
 
         Map<String, Boolean> approvedByChecklist = new HashMap<>();

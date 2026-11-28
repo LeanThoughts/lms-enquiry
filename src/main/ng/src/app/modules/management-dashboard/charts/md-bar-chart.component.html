@@ -1,0 +1,32 @@
+<ul class="hbar" [style.--label-width]="labelWidth" role="list">
+    @for (row of rows; track row.label) {
+        <li class="hbar__row" [class.hbar__row--emphasis]="row.emphasis" [class.hbar__row--negative]="row.negative" [title]="row.tooltip || ''">
+            <span class="hbar__label" [title]="row.label">{{ row.label }}</span>
+            <span class="hbar__track-area">
+                <span class="hbar__track" [style.width.%]="trackWidth(row)" [class.hbar__track--reference]="row.reference != null">
+                    @for (segment of row.segments; track $index) {
+                        <span class="hbar__segment" [style.width.%]="segmentWidth(row, segment)" [style.background-color]="segment.color"></span>
+                    }
+                </span>
+            </span>
+            <span class="hbar__figure">
+                @let value = displayValue(row);
+                @if (value != null) {
+                    <strong>{{ value | number:(row.displayFormat || format) }}</strong>
+                } @else {
+                    <strong>–</strong>
+                }
+                @if (row.note) {
+                    <span class="hbar__note">{{ row.note }}</span>
+                }
+            </span>
+        </li>
+    }
+</ul>
+@if (legend.length) {
+    <div class="hbar__legend">
+        @for (item of legend; track item.name) {
+            <span class="hbar__legend-item"><i [style.background-color]="item.color"></i>{{ item.name }}</span>
+        }
+    </div>
+}

@@ -21,6 +21,70 @@ export interface MockOptions {
 type Row = Record<string, any>;
 
 const WRITE_ROLES = ['ZLM023', 'ZLM018', 'ZLM035'];
+/** Management Dashboard (SAP ZPFS_LMS_DASHBOARD_SRV, DashboardSet with $expand) as the portal API returns it. */
+export const MANAGEMENT_DASHBOARD = {
+    runDate: '2026-11-28', amountInCrore: true, dashboardId: 'DB-20261128', fiscalYear: '2026', reportingMonth: '11',
+    fiscalYearFull: '2026-27', updatedOn: '2026-11-28T09:12:00',
+    source: 'http://sap/sap/opu/odata/sap/ZPFS_LMS_DASHBOARD_SRV/DashboardSet(RunDate=datetime\'2026-11-28T00:00:00\',AmtInCr=true)?$expand=…',
+    budgetActual: [
+        { particulars: 'Sanctions', budget: 4500, actual: 3120 }, { particulars: 'Disbursements', budget: 3200, actual: 2480 },
+        { particulars: 'Interest Income', budget: 1850, actual: 1214 }, { particulars: 'Recoveries', budget: 2100, actual: 1902 }
+    ],
+    interestRates: [
+        { particulars: 'PFS Benchmark Rate', percentage: 10.25, effectiveFrom: '2026-10-01' },
+        { particulars: 'RBI Repo Rate', percentage: 6.25, effectiveFrom: '2026-08-09' }
+    ],
+    ratings: [
+        { ratingTypeDesc: 'Long-term Bank Facilities', crisilRating: 'AA- / Stable', icraRating: 'AA- / Stable' },
+        { ratingTypeDesc: 'Commercial Paper', crisilRating: 'A1+', icraRating: 'A1+' }
+    ],
+    smaOverdue: [
+        { smaCategory: '0', particulars: 'SMA-0 (1-30 days)', principalOverdue: 42.1, interestOverdue: 18.6, overdue: 60.7, outstanding: 980 },
+        { smaCategory: '1', particulars: 'SMA-1 (31-60 days)', principalOverdue: 27.4, interestOverdue: 11.9, overdue: 39.3, outstanding: 455.2 },
+        { smaCategory: '2', particulars: 'SMA-2 (61-90 days)', principalOverdue: 15, interestOverdue: 9.8, overdue: 24.8, outstanding: 312.6 }
+    ],
+    eclOverdue: [
+        { eclClassification: '1', particulars: 'Stage 1', principalOverdue: 12.3, interestOverdue: 6.1, overdue: 18.4, effectiveCapital: 16120 },
+        { eclClassification: '2', particulars: 'Stage 2', principalOverdue: 38.7, interestOverdue: 21.4, overdue: 60.1, effectiveCapital: 1910 },
+        { eclClassification: '3', particulars: 'Stage 3', principalOverdue: 214.6, interestOverdue: 96.2, overdue: 310.8, effectiveCapital: 612 }
+    ],
+    loanBook: [
+        { fiscalYear: '2026', quarter: 'Q1', loanBookGross: 18030, loanBookNetOfProvisions: 17310, grossNpa: 629, grossNpaPercent: '3.49',
+            netNpa: 236, netNpaPercent: '1.31', provisionAllLoans: 720, provisionNpaLoans: 393, provisionCoverageRatio: 3.99,
+            provisionCoverageRatioNpa: 62.5, costOfFunds: 7.9, yieldPercent: '10.40' },
+        { fiscalYear: '2026', quarter: 'Q2', loanBookGross: 18642, loanBookNetOfProvisions: 17905, grossNpa: 612, grossNpaPercent: '3.28',
+            netNpa: 214, netNpaPercent: '1.19', provisionAllLoans: 737, provisionNpaLoans: 398, provisionCoverageRatio: 3.95,
+            provisionCoverageRatioNpa: 65, costOfFunds: 7.82, yieldPercent: '10.46' },
+        { fiscalYear: '2026', quarter: 'Q3', loanBookGross: null, loanBookNetOfProvisions: null, grossNpa: null, grossNpaPercent: null,
+            netNpa: null, netNpaPercent: null, provisionAllLoans: null, provisionNpaLoans: null, provisionCoverageRatio: null,
+            provisionCoverageRatioNpa: null, costOfFunds: null, yieldPercent: null },
+        { fiscalYear: '2026', quarter: 'Q4', loanBookGross: null, loanBookNetOfProvisions: null, grossNpa: null, grossNpaPercent: null,
+            netNpa: null, netNpaPercent: null, provisionAllLoans: null, provisionNpaLoans: null, provisionCoverageRatio: null,
+            provisionCoverageRatioNpa: null, costOfFunds: null, yieldPercent: null }
+    ],
+    cashFlow: [
+        { evaluationPeriod: 'M', periodDesc: 'Next month', inflowPrincipal: 186, inflowInterest: 142, inflowPrepayment: 20, outflowPrincipal: 95,
+            outflowInterest: 88, outflowDisbursement: 210, totalInflow: 348, totalOutflow: 393, netFlow: -45 },
+        { evaluationPeriod: 'Q', periodDesc: 'Next quarter', inflowPrincipal: 560, inflowInterest: 430, inflowPrepayment: 75, outflowPrincipal: 310,
+            outflowInterest: 265, outflowDisbursement: 640, totalInflow: 1065, totalOutflow: 1215, netFlow: -150 },
+        { evaluationPeriod: 'Y', periodDesc: 'Next year', inflowPrincipal: 2310, inflowInterest: 1690, inflowPrepayment: 260, outflowPrincipal: 1240,
+            outflowInterest: 1060, outflowDisbursement: 1900, totalInflow: 4260, totalOutflow: 4200, netFlow: 60 }
+    ],
+    collectionEfficiency: [
+        { monthNumber: '04', monthName: 'April', collectionEfficiency: '97.2' }, { monthNumber: '05', monthName: 'May', collectionEfficiency: '95.0' },
+        { monthNumber: '06', monthName: 'June', collectionEfficiency: '99.1' }, { monthNumber: '07', monthName: 'July', collectionEfficiency: '92.4' }
+    ],
+    liquidity: [
+        { particulars: 'Cash & Bank Balances', amount: 412 }, { particulars: 'Liquid Investments', amount: 1150 },
+        { particulars: 'Undrawn Bank Lines', amount: 2300 }, { particulars: 'Commitments (next 90 days)', amount: -1640 },
+        { particulars: 'Net Liquidity', amount: 2222 }
+    ],
+    proposals: [
+        { particulars: 'Enquiries received', enquiryCount: '38', amount: 9450 }, { particulars: 'Under appraisal', enquiryCount: '14', amount: 4120 },
+        { particulars: 'Sanctioned (YTD)', enquiryCount: '11', amount: 3120 }
+    ]
+};
+
 const CHILD_KEYS: Record<string, string> = {
     coverages: 'coverages', roc: 'rocEvents', cersai: 'cersaiEvents', nesl: 'neslEvents',
     documents: 'documents', securities: 'securitiesPositions', valuations: 'valuations'
@@ -255,6 +319,14 @@ export class MockApi {
 
     private respond(method: string, path: string, body: any, query: URLSearchParams): [number, any] {
         let match: RegExpMatchArray | null;
+        // Management Dashboard (SAP ZPFS_LMS_DASHBOARD_SRV): no snapshot before 2026-01-01
+        if (path === '/management-dashboard') {
+            const runDate = query.get('runDate') ?? '';
+            if (runDate < '2026-01-01') {
+                return [404, { message: 'No dashboard data found for ' + runDate + '.' }];
+            }
+            return [200, { ...MANAGEMENT_DASHBOARD, runDate, amountInCrore: query.get('amountInCrore') !== 'false' }];
+        }
         if (path === '/me') {
             return [200, { firstName: 'Test', lastName: 'User', email: 'test@pfs.local', role: this.role }];
         }
